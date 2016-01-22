@@ -1,0 +1,42 @@
+dn: ou=apps,dc=hf,dc=org
+objectclass: top
+objectclass: organizationalUnit
+ou: apps
+
+dn: ou=people,dc=hf,dc=org
+objectclass: top
+objectclass: organizationalUnit
+ou: people
+
+dn: uid=admin,ou=people,dc=hf,dc=org
+objectclass: top
+objectclass: person
+objectclass: organizationalPerson
+objectclass: inetOrgPerson
+cn: Rod Johnson
+sn: Johnson
+uid: admin
+userPassword: password
+
+dn: uid=user,ou=people,dc=hf,dc=org
+objectclass: top
+objectclass: person
+objectclass: organizationalPerson
+objectclass: inetOrgPerson
+cn: Dianne Emu
+sn: Emu
+uid: user
+userPassword: password
+
+dn: cn=user,ou=apps,dc=hf,dc=org
+objectclass: top
+objectclass: groupOfNames
+cn: user
+uniqueMember: uid=admin,ou=people,dc=hf,dc=org
+uniqueMember: uid=user,ou=people,dc=hf,dc=org
+
+dn: cn=admin,ou=apps,dc=hf,dc=org
+objectclass: top
+objectclass: groupOfNames
+cn: admin
+uniqueMember: uid=admin,ou=people,dc=hf,dc=org

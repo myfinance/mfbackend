@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>de.hf.marketDataProvider</groupId>
+    <artifactId>marketDataProvider</artifactId>
+    <version>0.2.7-SNAPSHOT</version>
+    <packaging>pom</packaging>
+    <properties>
+         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+         <!-- wird von aussen übergeben <targetRepository>file://repository/</targetRepository>-->
+    </properties> 
+    
+    <scm>
+        <!--<developerConnection>scm:hg:file:///Q://marketDataProvider</developerConnection>-->
+        <!--<developerConnection>scm:git:http://myserver:8081/r/gitauthtest.git</developerConnection>-->
+        <developerConnection>scm:git:ssh://192.168.178.20:122/volume1/Data/workspace/repos/MarketDataProvider</developerConnection>
+
+	<tag>HEAD</tag>
+    </scm>
+  
+    <modules>
+        <module>master</module>
+        <module>bootstrapper</module>
+        <module>domain</module>
+    </modules>
+    <build>
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-release-plugin</artifactId>
+                    <version>2.5.2</version>
+                    <configuration>
+                        <autoVersionSubmodules>true</autoVersionSubmodules>
+                        <arguments>-DtargetRepository=${targetRepository} -Dmaven.test.skip=true</arguments>
+                        <preparationGoals>clean install</preparationGoals>
+                        <!--<releaseProfiles>release</releaseProfiles>-->
+                        <localCheckout>true</localCheckout>
+                        <tagNameFormat>@{project.artifactId}-@{project.version}</tagNameFormat>
+                        <useReleaseProfile>true</useReleaseProfile>
+                        <goals>deploy</goals>
+                        <pushChanges>false</pushChanges>
+                    </configuration>
+            </plugin>
+        </plugins>
+    </pluginManagement>
+  </build>
+    <distributionManagement>
+    <repository>
+      <id>poet-devel</id>
+      <name>poet-devel</name>
+      <!--  <url>http://dfrvevms15.dzbank.vrnet:8181/nexus/content/repositories/poet-devel/</url>-->
+      <url>${targetRepository}</url>
+    </repository>
+  </distributionManagement>
+  
+</project>

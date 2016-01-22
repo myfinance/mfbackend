@@ -1,0 +1,59 @@
+<settings xmlns="http://maven.apache.org/SETTINGS/1.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/SETTINGS/1.0.0                       http://maven.apache.org/xsd/settings-1.0.0.xsd">
+  <!-- LOCAL BUILD  -->
+  <localRepository>D:\repository</localRepository>
+
+  <proxies>
+	<proxy>
+	  <id>myproxy</id>
+	  <active>true</active>
+	  <protocol>http</protocol>
+	  <host>dfsprx01.dzbank.vrnet</host>
+	  <port>8080</port>
+	  <username>xn01598</username>
+	  <password>XN01598</password>
+	  <nonProxyHosts>*.dzbank.com|*.dzbank.de|*.vrnet</nonProxyHosts>
+	</proxy>
+  </proxies>
+
+  <profiles>
+    <profile>
+      <id>nexus</id>
+      <repositories>
+        <!--<repository>
+          <id>central</id>
+          <url>http://central</url>
+          <releases><enabled>true</enabled></releases>
+          <snapshots><enabled>true</enabled></snapshots>
+        </repository>-->
+		    <repository>
+      <id>central</id>
+      <url>http://central.maven.org/maven2/</url>
+    </repository>
+        <repository>
+          <id>dznexus-lisa</id>
+          <url>http://dfrvevms15.dzbank.vrnet:8181/nexus/content/repositories/lisa-devel</url>
+          <releases><enabled>true</enabled></releases>
+          <snapshots><enabled>true</enabled></snapshots>
+        </repository>
+        <repository>
+          <id>dznexus-jboss</id>
+          <url>http://dfrvevms15.dzbank.vrnet:8181/nexus/content/repositories/jboss-eap-6.2.3</url>
+          <releases><enabled>true</enabled></releases>
+          <snapshots><enabled>true</enabled></snapshots>
+        </repository>			
+      </repositories>
+     <!--<pluginRepositories>
+        <pluginRepository>
+          <id>central</id>
+          <url>http://central</url>
+          <releases><enabled>true</enabled></releases>
+          <snapshots><enabled>true</enabled></snapshots>
+        </pluginRepository>
+      </pluginRepositories>-->
+    </profile>
+  </profiles>
+  <activeProfiles>
+   <activeProfile>nexus</activeProfile>
+  </activeProfiles>  
+
+ </settings>
