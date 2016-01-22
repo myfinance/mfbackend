@@ -1,6 +1,0 @@
-vorgehen db-Anpassung:
-
-1. hibernateobjecte im code anpassen
-2. h2dev laufen lassen in entwicklungsumgebung (start mit h2dev profile in application.properties) -> db wird mit dem korrekten model erzeugt
-3. mit ../tools/generateDiff2InMem.cmd die diff-skripte zwischen pro (z.b. postgres-db) und dev erzeugen
-4. diff-skripte anpassen
