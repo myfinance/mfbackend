@@ -4,7 +4,7 @@
     <parent>
         <groupId>de.hf.marketDataProvider</groupId>
         <artifactId>master</artifactId>
-        <version>0.2.7-SNAPSHOT</version>
+        <version>0.2.7</version>
         <relativePath>../master</relativePath>
     </parent>
     <groupId>de.hf.marketDataProvider</groupId>
