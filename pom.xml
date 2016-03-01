@@ -32,7 +32,7 @@
                     <version>2.5.2</version>
                     <configuration>
                         <autoVersionSubmodules>true</autoVersionSubmodules>
-                        <arguments>-DtargetRepository=${targetRepository} -Dmaven.test.skip=true</arguments>
+                        <arguments>-DtargetRepository=${targetRepository}</arguments>
                         <preparationGoals>clean install</preparationGoals>
                         <!--<releaseProfiles>release</releaseProfiles>-->
                         <localCheckout>true</localCheckout>
@@ -47,9 +47,8 @@
   </build>
     <distributionManagement>
     <repository>
-      <id>poet-devel</id>
-      <name>poet-devel</name>
-      <!--  <url>http://dfrvevms15.dzbank.vrnet:8181/nexus/content/repositories/poet-devel/</url>-->
+      <id>localRepo</id>
+      <name>localRepo</name>
       <url>${targetRepository}</url>
     </repository>
   </distributionManagement>
