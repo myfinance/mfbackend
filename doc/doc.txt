@@ -1,2 +1,9 @@
 Releae bauen: mvn -U --batch-mode -DtargetRepository=file:m2repo/ release:prepare release:perform -DdevelopmentVersion=0.2.8-SNAPSHOT -DreleaseVersion=0.2.7
 run: java -jar bootstrapper-0.2.7.jar --spring.config.location=application.properties 
+
+vorgehen db-Anpassung:
+
+1. hibernateobject im code anpassen
+2. h2dev laufen lassen in entwicklungsumgebung (start mit h2dev profile in application.properties) -> db wird mit dem korrekten model erzeugt
+3. mit ../tools/generateDiff2InMem.cmd die diff-skripte zwischen pro (z.b. postgres-db) und dev erzeugen
+4. diff-skripte anpassen
