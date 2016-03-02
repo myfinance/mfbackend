@@ -44,6 +44,53 @@
             </plugin>
         </plugins>
     </pluginManagement>
+    <plugins>
+        <plugin>
+            <artifactId>maven-clean-plugin</artifactId>
+            <version>2.5</version>
+            <executions>
+                <execution>
+                    <id>auto-clean</id>
+                    <phase>initialize</phase>
+                    <goals>
+                        <goal>clean</goal>
+                    </goals>
+                    <configuration>
+                        <filesets>
+                            <fileset>
+                                <directory>${basedir}/../marketdata_bin/</directory>
+                            </fileset>
+                        </filesets>
+                    </configuration>
+                </execution>
+            </executions>
+        </plugin>
+            <plugin>
+                <artifactId>maven-resources-plugin</artifactId>
+                <version>2.7</version>
+                <executions>
+                    <execution>
+                        <id>copy-resources</id>
+                        <!-- here the phase you need -->
+                        <phase>deploy</phase>
+                        <goals>
+                            <goal>copy-resources</goal>
+                        </goals>
+                        <configuration>
+                            <outputDirectory>${basedir}/../marketdata_bin/</outputDirectory>
+                            <resources>
+                                <resource>
+                                    <directory>${basedir}/bootstrapper/target</directory>
+                                    <includes>
+                                        <include>*.jar</include>
+                                    </includes>
+                                </resource>
+                            </resources>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+    </plugins>
   </build>
     <distributionManagement>
     <repository>
