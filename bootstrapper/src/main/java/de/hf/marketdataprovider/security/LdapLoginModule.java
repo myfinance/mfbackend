@@ -27,7 +27,6 @@ import javax.security.auth.login.LoginException;
  * @author xn01598
  */
 public class LdapLoginModule {
-    protected Map<String, ?> options;
     private Principal identity = null;
     private String roleCtxDN;
     private String roleFilter;
@@ -35,33 +34,20 @@ public class LdapLoginModule {
     private String permissionAttributeID;
     private String roleAttributeID;
     private boolean roleAttributeIsDN;
-    private Group roles = null;
-    private Group permissions = null;
     private final String principalClassName = "de.hf.marketdataprovider.security.CompanyPrincipal";
-    
-    public boolean login(String username, String password) throws LoginException {
+
+    public boolean login(String username) throws LoginException {
         
         if (identity == null) {
             try {
                 identity = createIdentity(username);
             } catch (Exception e) {
-                /*if (debug) {
-                    LOG.info("Failed to create principal for user '{}'", username);
-                }*/
                 throw new LoginException("Failed to create principal: " + e.getMessage());
             }
 
-            if (!validatePassword(password)) {
-                throw new FailedLoginException("Password incorrect/Password required");
-            }
-            char[] credential = password.toCharArray();
-
-            roles = new SimpleGroup("Roles");
-            permissions = new SimpleGroup("Permissions");
             try {
-                createLdapInitContext(identity.getName(), credential);
+                createLdapInitContext(identity.getName());
             } catch (Exception e) {
-                //LOG.error("Failed LDAP login.", e);
                 throw new FailedLoginException(e.getMessage());
             }
 
@@ -69,31 +55,8 @@ public class LdapLoginModule {
 
         return true;
     }
-    
-    private boolean validatePassword(String password) throws LoginException {
-        boolean valid = false;
 
-        if (password != null) {
-            // See if this is an empty password that should be disallowed
-            if (password.length() == 0) {
-                 return false;
-            }
-
-            try {
-                // Validate the password by trying to create an initial context
-                //das funktioniert leider nicht da keine zugriffs berechtigung existiert auf die pw. 
-                //im lisa code wird dieser teil auch nie ausgeführt, da die prüfung bereits an anderer stelle passiert
-                //valid = createLdapInitContext(identity.getName(), password);
-            } catch (Exception e) {
-                LoginException le = new LoginException("Could not authenticate user");
-                le.initCause(e);
-                throw le;
-            }
-        }
-        return valid;
-    }
-    
-    private boolean createLdapInitContext(String username, Object credential) throws Exception {
+    private boolean createLdapInitContext(String username) throws Exception {
         String bindDN = "uid=eigenentwicklungen_lesend,ou=Eigenentwicklungen,ou=Special Users,dc=dzbank,dc=vrnet";
         String bindCredential = "eigen310511";
 
@@ -122,7 +85,7 @@ public class LdapLoginModule {
 
 
 
-            String userDN = bindDNAuthentication(ctx, username, credential, baseDN, baseFilter, searchTimeLimit);
+            String userDN = bindDNAuthentication(ctx, username, baseDN, baseFilter, searchTimeLimit);
 
             // Query for roles matching the role filter
             SearchControls constraints = new SearchControls();
@@ -143,7 +106,6 @@ public class LdapLoginModule {
     
     private  InitialLdapContext constructInitialLdapContext(String dn, Object credential) throws NamingException {
         Properties env = new Properties();
-        //jboss.security.security_domain=POETITEB, 
         env.put("permissionAttributeID", "dzpermissions");
         env.put("debug", "true");
         env.put("searchScope", "ONELEVEL_SCOPE");
@@ -197,7 +159,7 @@ public class LdapLoginModule {
 
     }
     
-    protected String bindDNAuthentication(InitialLdapContext ctx, String user, Object credential, String baseDN, String filter, int limit)
+    protected String bindDNAuthentication(InitialLdapContext ctx, String user, String baseDN, String filter, int limit)
         throws NamingException {
         SearchControls searchConstraints = new SearchControls();
         searchConstraints.setSearchScope(SearchControls.SUBTREE_SCOPE);
@@ -208,34 +170,26 @@ public class LdapLoginModule {
 
         // if we're using a CompanyPrincipal, gather additional info
         if (extendedUserAttrs) {
-            String definedUserAttributes = null;
-            if (definedUserAttributes == null) {
-                // use default attributes
-                attrs = new String[] { "sn", "givenName", "mail", "dzdepartment", "dzkst", "cn", "dzuid", "dzanrede", "dzarbeitsplatz", "dzani",
-                    "dzbereich", "dzfaxNumber", "dztelNumber", "dzlokkurz", "dzraum", "dzetage", "dzgebaeude", "dzpnrleit", "l", "dzkstdn",
-                    "dzksthierarchy", "dzdepartmentlong", "dzgeschlecht", "initials", "employeeNumber", "uid" };
-            } else {
-                attrs = definedUserAttributes.split(",");
-            }
+            attrs = new String[] { "sn", "givenName", "mail", "dzdepartment", "dzkst", "cn", "dzuid", "dzanrede", "dzarbeitsplatz", "dzani",
+                "dzbereich", "dzfaxNumber", "dztelNumber", "dzlokkurz", "dzraum", "dzetage", "dzgebaeude", "dzpnrleit", "l", "dzkstdn",
+                "dzksthierarchy", "dzdepartmentlong", "dzgeschlecht", "initials", "employeeNumber", "uid" };
         } else {
             // return no attributes
             attrs = new String[0];
         }
         searchConstraints.setReturningAttributes(attrs);
 
-        NamingEnumeration<SearchResult> results = null;
-
         Object[] filterArgs = { user };
-        results = ctx.search(baseDN, filter, filterArgs, searchConstraints);
-        if (results.hasMore() == false) {
+        NamingEnumeration<SearchResult> results = ctx.search(baseDN, filter, filterArgs, searchConstraints);
+        if (!results.hasMore()) {
             results.close();
             throw new NamingException("Search of baseDN(" + baseDN + ") found no matches");
         }
 
         SearchResult sr = results.next();
         String name = sr.getName();
-        String userDN = null;
-        if (sr.isRelative() == true) {
+        String userDN;
+        if (sr.isRelative()) {
             userDN = name + "," + baseDN;
         } else {
             throw new NamingException("Can't follow referal for authentication: " + name);
@@ -246,7 +200,6 @@ public class LdapLoginModule {
         }
 
         results.close();
-        results = null;
 
         return userDN;
     }
@@ -332,10 +285,10 @@ public class LdapLoginModule {
                     if (roles2 != null) {
                         for (int m = 0; m < roles2.size(); m++) {
                             String roleName = (String) roles2.get(m);
-                            addRole(roleName);
+                            ((SimplePrincipal)identity).addRole(roleName);
                         }
                     }
-                    addPermission(result2.get(permissionAttributeID));
+                    ((SimplePrincipal)identity).addPermission(result2.get(permissionAttributeID));
 
                 }
 
@@ -357,18 +310,18 @@ public class LdapLoginModule {
                                 if (roles2 != null) {
                                     for (int m = 0; m < roles2.size(); m++) {
                                         roleName = (String) roles2.get(m);
-                                        addRole(roleName);
+                                        ((SimplePrincipal)identity).addRole(roleName);
                                     }
                                 }
-                                addPermission(result2.get(permissionAttributeID));
+                                ((SimplePrincipal)identity).addPermission(result2.get(permissionAttributeID));
 
                             } catch (NamingException e) {
                                 //LOG.info("", e);
                             }
                         } else {
                             // The role attribute value is the role name
-                            addRole(roleName);
-                            addPermission(result.get(permissionAttributeID));
+                            ((SimplePrincipal)identity).addRole(roleName);
+                            ((SimplePrincipal)identity).addPermission(result.get(permissionAttributeID));
                         }
                     }
                 }
@@ -387,7 +340,7 @@ public class LdapLoginModule {
     
         // JBAS-3438 : Handle "/" correctly
     private String canonicalize(String searchResult) {
-        String result = searchResult;
+        String result;
         int len = searchResult.length();
 
         if (searchResult.endsWith("\"")) {
@@ -398,49 +351,17 @@ public class LdapLoginModule {
         return result;
     }
     
-    private void addRole(String theRoleName) {
-        if (theRoleName != null) {
-            /*if (debug) {
-                LOG.info("Adding role: {}", theRoleName);
-            }*/
 
-            try {
-                roles.addMember(new SimplePrincipal(theRoleName));
-            } catch (Exception e) {
-                //LOG.info("", e);
-            }
-        }
-    }
-    
-    private void addPermission(Attribute thePermissions) {
-        if (thePermissions != null) {
-            for (int m = 0; m < thePermissions.size(); m++) {
-                try {
-                    String permission = (String) thePermissions.get(m);
-                    /*if (debug) {
-                        LOG.info("Adding permission: {}", permission);
-                    }*/
-
-                    permissions.addMember(new SimplePrincipal(permission));
-                } catch (Exception e) {
-                    //LOG.info("", e);
-                }
-            }
-        }
-    }
-    
     protected Principal createIdentity(String name) throws Exception {
-        Principal p = null;
-        if (principalClassName == null) {
-            p = new SimplePrincipal(name);
-        } else {
-            ClassLoader loader = Thread.currentThread().getContextClassLoader();
-            Class<?> clazz = loader.loadClass(principalClassName);
-            Class<?>[] ctorSig = { String.class };
-            Constructor<?> ctor = clazz.getConstructor(ctorSig);
-            Object[] ctorArgs = { name };
-            p = (Principal) ctor.newInstance(ctorArgs);
-        }
-        return p;
+        ClassLoader loader = Thread.currentThread().getContextClassLoader();
+        Class<?> clazz = loader.loadClass(principalClassName);
+        Class<?>[] ctorSig = { String.class };
+        Constructor<?> ctor = clazz.getConstructor(ctorSig);
+        Object[] ctorArgs = { name };
+        return (Principal) ctor.newInstance(ctorArgs);
+    }
+
+    public Principal getIdentity() {
+        return identity;
     }
 }

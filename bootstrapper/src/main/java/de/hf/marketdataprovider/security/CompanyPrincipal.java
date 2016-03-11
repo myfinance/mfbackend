@@ -10,7 +10,6 @@ package de.hf.marketdataprovider.security;
  * @author xn01598
  */
 public class CompanyPrincipal extends SimplePrincipal {
-    public static final String WHAT = "$Id$";
 
     private static final long serialVersionUID = -2093165888366191998L;
 

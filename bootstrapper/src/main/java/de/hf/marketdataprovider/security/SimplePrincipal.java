@@ -5,38 +5,71 @@
  */
 package de.hf.marketdataprovider.security;
 
-import java.io.Serializable;
-import java.security.Principal;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
+import javax.naming.directory.Attribute;
+import java.util.Collection;
 
-public class SimplePrincipal implements Principal, Serializable {
-    public static final String WHAT = "$Id$";
+public class SimplePrincipal extends BasePrincipal implements UserDetails {
+
+    private static final Logger LOG = LoggerFactory.getLogger(AuthorityGroup.class);
 
     private static final long serialVersionUID = -277583078436504038L;
 
     private String name;
+
+    private AuthorityGroup roles;
+    private AuthorityGroup permissions;
 
     /**
      * The default constructor.
      * @param theName the name
      */
     public SimplePrincipal(String theName) {
-        this.name = theName;
+        super(theName);
+        permissions = new AuthorityGroup("Permissions");
+        roles = new AuthorityGroup("Roles");
     }
 
     @Override
-    public boolean equals(Object object) {
-        if (this == object) {
-            return true;
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return roles.memberCollection();
+    }
+
+    public void addRole(String theRoleName) {
+        if (theRoleName != null) {
+            try {
+                getRoles().addMember(new GrantedAuthorityImpl(theRoleName));
+            } catch (Exception e) {
+                LOG.warn("", e);
+            }
         }
+    }
 
-        if (!(object instanceof SimplePrincipal)) {
-            return false;
+    public void addPermission(Attribute thePermissions) {
+        if (thePermissions != null) {
+            for (int m = 0; m < thePermissions.size(); m++) {
+                try {
+                    String permission = (String) thePermissions.get(m);
+
+                    permissions.addMember(new GrantedAuthorityImpl(permission));
+                } catch (Exception e) {
+                    LOG.warn("", e);
+                }
+            }
         }
+    }
 
-        String n = ((Principal) object).getName();
+    public AuthorityGroup getRoles() {
+        return roles;
+    }
 
-        return ((name == null && n == null) || (name != null && name.equals(n)));
+    @Override
+    public String getPassword() {
+        return null;
     }
 
     /**
@@ -44,18 +77,29 @@ public class SimplePrincipal implements Principal, Serializable {
      *
      * @return principal name
      */
-    public String getName() {
-        return name;
+    @Override
+    public String getUsername() {
+        return getName();
     }
 
     @Override
-    public String toString() {
-        return name;
+    public boolean isAccountNonExpired() {
+        return true;
     }
 
     @Override
-    public int hashCode() {
-        return (name == null ? 0 : name.hashCode());
+    public boolean isAccountNonLocked() {
+        return true;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return true;
     }
 }
 

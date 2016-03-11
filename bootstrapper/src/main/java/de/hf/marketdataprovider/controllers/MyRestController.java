@@ -13,7 +13,10 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -49,11 +52,9 @@ public class MyRestController {
     
     @RequestMapping("/getProducts")
     List<Product> getProducts(Principal principal) {
-        //getUserRoles(principal);
+        getUserRoles(principal);
         List<Product> products = controller.getProducts();
-        products.stream().forEach((product) -> {
-            System.out.println(product.getDescription());
-        });
+        products.stream().forEach((product) -> System.out.println(product.getDescription()));
         return products;
     }  
     
@@ -64,9 +65,7 @@ public class MyRestController {
             Set<String> roles = new HashSet<String>();
             final UserDetails currentUser = (UserDetails) ((Authentication) principal).getPrincipal();
             Collection<? extends GrantedAuthority> authorities = currentUser.getAuthorities();
-            for (GrantedAuthority grantedAuthority : authorities) {
-                roles.add(grantedAuthority.getAuthority());
-            }
+            roles.addAll(authorities.stream().map(GrantedAuthority::getAuthority).collect(Collectors.toList()));
             return roles;
         }
     }    
