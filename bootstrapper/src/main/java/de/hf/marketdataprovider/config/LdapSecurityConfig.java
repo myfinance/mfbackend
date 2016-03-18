@@ -18,6 +18,7 @@
 package de.hf.marketdataprovider.config;
 
 import de.hf.marketdataprovider.security.LdapLoginModule;
+import de.hf.marketdataprovider.security.LdapProperties;
 import de.hf.marketdataprovider.security.SimplePrincipal;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -39,9 +40,9 @@ public class LdapSecurityConfig  extends GlobalAuthenticationConfigurerAdapter {
 
     @Override
     public void init(AuthenticationManagerBuilder auth) throws Exception {
-        //aus den Parametern werden noch nicht die richtigen werte gelesen
-        /*auth
+        auth
             .ldapAuthentication()
+            .userDetailsContextMapper(userDetailsContextMapper())
             .userSearchFilter(userSearchFilter)
             .userSearchBase(userSearchBase)
             .groupSearchFilter(groupSearchFilter)
@@ -50,19 +51,7 @@ public class LdapSecurityConfig  extends GlobalAuthenticationConfigurerAdapter {
             .contextSource().url(ldapurl)
             .root(root)
             .managerDn(managerDn)
-            .managerPassword(managerPassword);*/
-        auth
-            .ldapAuthentication()
-            .userDetailsContextMapper(userDetailsContextMapper())
-            .userSearchFilter("(sAMAccountName={0})")
-            .userSearchBase("ou=Accounts,dc=dzag,dc=vrnet")
-            .groupSearchFilter("(sAMAccountName={0})")
-            .groupSearchBase("ou=FR,ou=Accounts,dc=dzag,dc=vrnet")
-            .groupRoleAttribute("memberOf")
-            .contextSource().url("ldap://dzag.vrnet:389")
-            .root("dc=dzag,dc=vrnet")
-            .managerDn("cn=XNMEE01,ou=FR,ou=Accounts,dc=dzag,dc=vrnet")
-            .managerPassword("Ready2Work11#");
+            .managerPassword(managerPassword);
     }
 
     /**
@@ -75,7 +64,20 @@ public class LdapSecurityConfig  extends GlobalAuthenticationConfigurerAdapter {
         return new LdapUserDetailsMapper() {
             @Override
             public UserDetails mapUserFromContext(DirContextOperations ctx, String username, Collection<? extends GrantedAuthority> authorities) {
-                LdapLoginModule ldap = new LdapLoginModule();
+                LdapProperties prop = new LdapProperties();
+                prop.setUrl(authorisationUrl);
+                prop.setBindDN(authorisationManagerDn);
+                prop.setBindCredential(authorisationManagerPassword);
+                prop.setBaseFilter(authorisationBaseFilter);
+                prop.setRoleFilter(authorisationRoleFilter);
+                prop.setRoleAttributeID(authorisationRoleAttributeID);
+                prop.setPermissionAttributeID(authorisationPermissionAttributeID);
+                prop.setRoleCtxDN(authorisationRoleCtxDN);
+                prop.setBaseCtxDN(authorisationBaseCtxDN);
+                prop.setRoleAttributeIsDN(authorisationRoleAttributeIsDN);
+                prop.setUserAttr(authorisationUserAttr);
+
+                LdapLoginModule ldap = new LdapLoginModule(prop);
                 try {
                     ldap.login(username);
                 } catch(Exception e) {
@@ -117,4 +119,36 @@ public class LdapSecurityConfig  extends GlobalAuthenticationConfigurerAdapter {
     @Value("${managerPassword}")
     private String managerPassword;
 
+    @Value("${authorisationUrl}")
+    private String authorisationUrl;
+
+    @Value("${authorisationManagerDn}")
+    private String authorisationManagerDn;
+
+    @Value("${authorisationManagerPassword}")
+    private String authorisationManagerPassword;
+
+    @Value("${authorisationBaseFilter}")
+    private String authorisationBaseFilter;
+
+    @Value("${authorisationRoleFilter}")
+    private String authorisationRoleFilter;
+
+    @Value("${authorisationRoleAttributeID}")
+    private String authorisationRoleAttributeID;
+
+    @Value("${authorisationPermissionAttributeID}")
+    private String authorisationPermissionAttributeID;
+
+    @Value("${authorisationRoleCtxDN}")
+    private String authorisationRoleCtxDN;
+
+    @Value("${authorisationBaseCtxDN}")
+    private String authorisationBaseCtxDN;
+
+    @Value("${authorisationRoleAttributeIsDN}")
+    private Boolean authorisationRoleAttributeIsDN;
+
+    @Value("${authorisationUserAttr}")
+    private String authorisationUserAttr;
 }

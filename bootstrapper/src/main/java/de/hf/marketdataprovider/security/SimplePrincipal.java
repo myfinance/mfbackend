@@ -19,8 +19,6 @@ public class SimplePrincipal extends BasePrincipal implements UserDetails {
 
     private static final long serialVersionUID = -277583078436504038L;
 
-    private String name;
-
     private AuthorityGroup roles;
     private AuthorityGroup permissions;
 
