@@ -8,9 +8,6 @@ package de.hf.marketdataprovider.security;
 
 import java.lang.reflect.Constructor;
 import java.security.Principal;
-import java.security.acl.Group;
-import java.util.ArrayList;
-import java.util.Map;
 import java.util.Properties;
 import javax.naming.Context;
 import javax.naming.NamingEnumeration;

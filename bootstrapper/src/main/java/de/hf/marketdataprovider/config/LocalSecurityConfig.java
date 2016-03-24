@@ -33,9 +33,7 @@ public class LocalSecurityConfig extends GlobalAuthenticationConfigurerAdapter {
             .ldapAuthentication()
             .userDnPatterns("uid={0},ou=people")
             .groupSearchBase("ou=apps")
-            //.userSearchFilter("(uid={0})").userSearchBase("ou=people,dc=springframework,dc=org")
             .groupRoleAttribute("cn").groupSearchFilter("uniqueMember={0}")
-            //.contextSource().url("ldaps://ldap.xxxx.yyy:636/cn=cw-grpreader,ou=people,dc=xxx,dc=xxxx,dc=xxx")
             .contextSource().ldif("classpath:test-server.ldif").root("dc=hf,dc=org");
     }
 }

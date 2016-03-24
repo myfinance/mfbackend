@@ -64,15 +64,17 @@ public class CommonConfig extends WebSecurityConfigurerAdapter {
     
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http
-            .authorizeRequests()
+        if(isScurityEnabled()) {
+            http
+                .authorizeRequests()
                 //.antMatchers("/", "/home").permitAll() ((erlaubte Seiten
                 //.anyRequest().authenticated() //alle anderen müssen sich erst authentifizieren
                 .anyRequest().hasAnyRole("ADMIN")//alle anderen müssen sich erst authentifizieren
                 .and()
-            .formLogin() //definiert loginscreen
+                .formLogin() //definiert loginscreen
                 //.loginPage("/login") //individuelle Login page sonst standard
                 .permitAll(); //jeder ist berechtigt den Login screen aufzurufen
+        }
     }
 
     @Value("${name}")
@@ -80,6 +82,13 @@ public class CommonConfig extends WebSecurityConfigurerAdapter {
     
     public String getName(){
         return name;
+    }
+
+    @Value("${securityEnabled}")
+    private Boolean securityEnabled;
+
+    public Boolean isScurityEnabled(){
+        return securityEnabled;
     }
 
 }
