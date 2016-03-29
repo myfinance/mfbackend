@@ -15,7 +15,7 @@
  * ----------------------------------------------------------------------------
  */
 
-package de.hf.marketdataprovider.config;
+package de.hf.marketdataprovider.config.security;
 
 import de.hf.marketdataprovider.security.LdapLoginModule;
 import de.hf.marketdataprovider.security.LdapProperties;

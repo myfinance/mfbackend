@@ -6,6 +6,8 @@
 package de.hf.marketdataprovider.services;
 
 import de.hf.marketdataprovider.domain.Product;
+import org.springframework.security.access.prepost.PreAuthorize;
+
 import java.util.List;
 
 /**
@@ -13,6 +15,7 @@ import java.util.List;
  * @author surak
  */
 public interface ProductService {
+    @PreAuthorize("hasRole('keinerolle')")
     List<Product> listProducts();
     
 }

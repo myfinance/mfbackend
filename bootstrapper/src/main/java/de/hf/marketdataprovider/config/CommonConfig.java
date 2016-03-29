@@ -14,6 +14,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
@@ -34,9 +35,8 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 @Configuration
 //to Enable Swagger: http://localhost:8080/swagger-ui.html
 @EnableSwagger2
-@EnableWebSecurity
 @PropertySource("classpath:application.properties")
-public class CommonConfig extends WebSecurityConfigurerAdapter {
+public class CommonConfig {
     
     //Swagger Config
     @Bean
@@ -61,21 +61,6 @@ public class CommonConfig extends WebSecurityConfigurerAdapter {
                     //.enableUrlTemplating(true)
                     ;
     }  
-    
-    @Override
-    protected void configure(HttpSecurity http) throws Exception {
-        if(isScurityEnabled()) {
-            http
-                .authorizeRequests()
-                //.antMatchers("/", "/home").permitAll() ((erlaubte Seiten
-                //.anyRequest().authenticated() //alle anderen müssen sich erst authentifizieren
-                .anyRequest().hasAnyRole("ADMIN")//alle anderen müssen sich erst authentifizieren
-                .and()
-                .formLogin() //definiert loginscreen
-                //.loginPage("/login") //individuelle Login page sonst standard
-                .permitAll(); //jeder ist berechtigt den Login screen aufzurufen
-        }
-    }
 
     @Value("${name}")
     private String name;
@@ -83,12 +68,4 @@ public class CommonConfig extends WebSecurityConfigurerAdapter {
     public String getName(){
         return name;
     }
-
-    @Value("${securityEnabled}")
-    private Boolean securityEnabled;
-
-    public Boolean isScurityEnabled(){
-        return securityEnabled;
-    }
-
 }
