@@ -98,6 +98,10 @@ public class AuthorityGroup extends BasePrincipal implements Cloneable, Serializ
         return p != null;
     }
 
+    public void clearMembers() {
+        members.clear();
+    }
+
     @Override
     public String toString() {
         StringBuffer buf = new StringBuffer(getName());

@@ -36,7 +36,7 @@ import java.util.Collection;
 
 @Configuration
 @Profile({"serversecurity"})
-public class LdapSecurityConfig  extends GlobalAuthenticationConfigurerAdapter {
+public class LdapSecurityConfig  extends AbsSecurityConfig {
 
     @Override
     public void init(AuthenticationManagerBuilder auth) throws Exception {
@@ -57,6 +57,10 @@ public class LdapSecurityConfig  extends GlobalAuthenticationConfigurerAdapter {
     /**
      * Override Standard Userdetail functionality of the Spring-LDAP-Authentication, because the authentication LDAP contains no roles for authorisation.
      * Another LDAP-Server has to be connected for authorisation. The Authorisation-Server is connected via a special class "LdapLoginModule" due to company specific roll and permission mapping
+     *
+     * Role-mapping if enabled(useRoleMapping in properties). Necessary to handle new security-Requirement more flexible and without code change.
+     * Internal Roles/Permissions should be more specific to simply map new external roles (e.G. a new user group in LDAP) instead of changing
+     * annotations in code
      * @return
      */
     @Bean
@@ -85,9 +89,9 @@ public class LdapSecurityConfig  extends GlobalAuthenticationConfigurerAdapter {
                     return null;
                 }
 
-                ((SimplePrincipal)ldap.getIdentity()).addRole("ROLE_ADMIN");
+                SimplePrincipal principal = (SimplePrincipal)ldap.getIdentity();
 
-                return (SimplePrincipal)ldap.getIdentity();
+                return mapRoles(principal, principal.getPermissions().memberCollection());
             }
         };
     }

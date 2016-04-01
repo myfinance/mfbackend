@@ -47,6 +47,10 @@ public class SimplePrincipal extends BasePrincipal implements UserDetails {
         }
     }
 
+    public void clearRoles() {
+        getRoles().clearMembers();
+    }
+
     public void addPermission(Attribute thePermissions) {
         if (thePermissions != null) {
             for (int m = 0; m < thePermissions.size(); m++) {
@@ -63,6 +67,10 @@ public class SimplePrincipal extends BasePrincipal implements UserDetails {
 
     public AuthorityGroup getRoles() {
         return roles;
+    }
+
+    public AuthorityGroup getPermissions() {
+        return permissions;
     }
 
     @Override

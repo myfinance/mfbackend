@@ -15,7 +15,7 @@ import java.util.List;
  * @author surak
  */
 public interface ProductService {
-    @PreAuthorize("hasRole('keinerolle')")
+    @PreAuthorize("hasRole('READ')")
     List<Product> listProducts();
     
 }
