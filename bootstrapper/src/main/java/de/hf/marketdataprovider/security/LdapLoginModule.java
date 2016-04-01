@@ -6,6 +6,9 @@
 package de.hf.marketdataprovider.security;
 
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.lang.reflect.Constructor;
 import java.security.Principal;
 import java.util.Properties;
@@ -25,6 +28,7 @@ import javax.security.auth.login.LoginException;
  * @author xn01598
  */
 public class LdapLoginModule {
+    private static final Logger log = LoggerFactory.getLogger(LdapLoginModule.class);
     private Principal identity = null;
     private final String principalClassName = "de.hf.marketdataprovider.security.CompanyPrincipal";
     private LdapProperties prop;
@@ -76,9 +80,7 @@ public class LdapLoginModule {
             constraints.setSearchScope(searchScope);
             constraints.setReturningAttributes(new String[0]);
             constraints.setTimeLimit(searchTimeLimit);
-            /*if (debug) {
-                LOG.info("Querying roles");
-            }*/
+
             rolesSearch(ctx, constraints, username, userDN, recursion, 0);
         } finally {
             if (ctx != null) {
@@ -129,13 +131,13 @@ public class LdapLoginModule {
         try {
             ctx = new InitialLdapContext(env, null);
         } catch (Exception e) {
-            //LOG.error("Failed creating initial LDAP context.", e);
+            log.error("Failed creating initial LDAP context.", e);
             if (e instanceof NamingException) {
                 throw (NamingException) e;
             }
         }
 
-        //LOG.info("Initial LDAP Context constructed.");
+        log.info("Initial LDAP Context constructed.");
 
         return ctx;
 
@@ -243,7 +245,7 @@ public class LdapLoginModule {
                                 ((SimplePrincipal)identity).addPermission(result2.get(prop.getPermissionAttributeID()));
 
                             } catch (NamingException e) {
-                                //LOG.info("", e);
+                                log.info("", e);
                             }
                         } else {
                             // The role attribute value is the role name

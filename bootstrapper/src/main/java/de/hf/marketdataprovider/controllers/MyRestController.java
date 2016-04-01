@@ -15,6 +15,8 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -31,6 +33,7 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @RestController 
 public class MyRestController {
+    private static final Logger log = LoggerFactory.getLogger(MyRestController.class);
     private MyController controller;
     private String name;
         
@@ -54,7 +57,7 @@ public class MyRestController {
     List<Product> getProducts(Principal principal) {
         getUserRoles(principal);
         List<Product> products = controller.getProducts();
-        products.stream().forEach((product) -> System.out.println(product.getDescription()));
+        products.stream().forEach((product) -> log.info(product.getDescription()));
         return products;
     }  
     

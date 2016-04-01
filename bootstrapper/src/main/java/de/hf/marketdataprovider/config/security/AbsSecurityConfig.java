@@ -18,6 +18,8 @@
 package de.hf.marketdataprovider.config.security;
 
 import de.hf.marketdataprovider.security.SimplePrincipal;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.config.annotation.authentication.configurers.GlobalAuthenticationConfigurerAdapter;
 import org.springframework.security.core.GrantedAuthority;
@@ -30,6 +32,8 @@ import java.util.Map;
 import java.util.StringTokenizer;
 
 public abstract class AbsSecurityConfig extends GlobalAuthenticationConfigurerAdapter {
+
+    private static final Logger log = LoggerFactory.getLogger(AbsSecurityConfig.class);
 
     private Map<String,List<String>> internalRoleMap = null;
 
@@ -53,7 +57,7 @@ public abstract class AbsSecurityConfig extends GlobalAuthenticationConfigurerAd
                     String value = keyValueTokenizer.nextToken();
                     List<String> values;
                     if(!internalRoleMap.containsKey(key)) {
-                        values = new ArrayList<String>();
+                        values = new ArrayList<>();
                     } else {
                         values = internalRoleMap.get(key);
                     }
@@ -61,6 +65,7 @@ public abstract class AbsSecurityConfig extends GlobalAuthenticationConfigurerAd
                     internalRoleMap.put(key, values);
                 }
                 catch (Exception e) {
+                    log.error("malformed role mapping in property file");
                     throw e;
                 }
             }
@@ -75,7 +80,8 @@ public abstract class AbsSecurityConfig extends GlobalAuthenticationConfigurerAd
         }
         Map<String,List<String>> roleMapping = getInternalRoleMapping();
         principal.clearRoles();
-        authorities.stream().filter(s -> roleMapping.containsKey(s.getAuthority())).map(s -> roleMapping.get(s.getAuthority())).forEach(s -> s.stream().forEach(v -> principal.addRole(v)));
+        authorities.stream().filter(s -> roleMapping.containsKey(s.getAuthority())).map(s -> roleMapping.get(s.getAuthority())).forEach(s -> s.stream().forEach(
+            principal::addRole));
 
         return principal;
     }

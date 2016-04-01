@@ -20,6 +20,8 @@ package de.hf.marketdataprovider.config.security;
 import de.hf.marketdataprovider.security.LdapLoginModule;
 import de.hf.marketdataprovider.security.LdapProperties;
 import de.hf.marketdataprovider.security.SimplePrincipal;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -37,6 +39,8 @@ import java.util.Collection;
 @Configuration
 @Profile({"serversecurity"})
 public class LdapSecurityConfig  extends AbsSecurityConfig {
+
+    private static final Logger log = LoggerFactory.getLogger(LdapSecurityConfig.class);
 
     @Override
     public void init(AuthenticationManagerBuilder auth) throws Exception {
@@ -85,7 +89,7 @@ public class LdapSecurityConfig  extends AbsSecurityConfig {
                 try {
                     ldap.login(username);
                 } catch(Exception e) {
-                    System.out.print(e);
+                    log.error(e.getMessage());
                     return null;
                 }
 

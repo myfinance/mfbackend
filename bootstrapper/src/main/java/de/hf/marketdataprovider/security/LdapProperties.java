@@ -30,10 +30,8 @@ public class LdapProperties {
     private String roleAttributeID;
     private String permissionAttributeID;
     private String roleCtxDN;
-    //für parseUser muss noch eine lösung gefunden werden
     private String baseCtxDN;
     private String url;
-    // Is user's role attribute a DN or the role name?
     private boolean roleAttributeIsDN;
     private List<String> userAttr;
 

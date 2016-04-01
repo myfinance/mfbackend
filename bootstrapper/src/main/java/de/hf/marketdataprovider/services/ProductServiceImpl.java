@@ -9,6 +9,9 @@ import de.hf.marketdataprovider.domain.Product;
 import de.hf.marketdataprovider.repositories.ProductRepository;
 import java.util.ArrayList;
 import java.util.List;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -18,6 +21,8 @@ import org.springframework.stereotype.Service;
  */
 @Service
 public class ProductServiceImpl implements ProductService {
+
+    private static final Logger log = LoggerFactory.getLogger(ProductServiceImpl.class);
     
     private ProductRepository productRepository;
  
@@ -41,7 +46,7 @@ public class ProductServiceImpl implements ProductService {
         
         //fetch from DB
         Product fetchedProduct = productRepository.findOne(p1.getId());
-        System.out.println("test:"+fetchedProduct.getId());
+        log.debug("test:"+fetchedProduct.getId());
         
         return products;
     }

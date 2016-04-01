@@ -20,8 +20,7 @@ import org.springframework.context.annotation.ComponentScan;
 //die Controller unter de.hf.marketdataprovider.controllers werden ebenfalls registriert
 @ComponentScan("de.hf.marketdataprovider")  
 public class Bootstrapper {
-      
-           
+
     public static void main(String[] args) throws Exception {
         ApplicationContext ctx = SpringApplication.run(Bootstrapper.class, args);
         //MyController controller = (MyController) ctx.getBean("myController");

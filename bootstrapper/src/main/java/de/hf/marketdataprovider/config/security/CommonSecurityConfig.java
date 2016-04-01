@@ -33,13 +33,13 @@ public class CommonSecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http
             .authorizeRequests()
-            //.antMatchers("/", "/home").permitAll() //erlaubte Seiten
-            .anyRequest().authenticated() //alle anderen müssen sich erst authentifizieren
-            //.anyRequest().hasAnyRole("ADMIN")//alle anderen müssen sich erst authentifizieren
+            //.antMatchers("/", "/home").permitAll() // permit all to root and home page
+            .anyRequest().authenticated() //for other pages is at least authentication necessary
+            //.anyRequest().hasAnyRole("ADMIN")//permit only users with Role admin
             .and()
-            .formLogin() //definiert loginscreen
-            //.loginPage("/login") //individuelle Login page sonst standard
-            .permitAll(); //jeder ist berechtigt den Login screen aufzurufen
+            .formLogin() //define login form
+            //.loginPage("/login") //add non standard login page
+            .permitAll(); //permit all to access login page
 
     }
 }

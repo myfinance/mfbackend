@@ -18,22 +18,22 @@ sn: Holger
 uid: holger
 userPassword: password
 
-dn: uid=other,ou=people,dc=hf,dc=org
+dn: uid=guest,ou=people,dc=hf,dc=org
 objectclass: top
 objectclass: person
 objectclass: organizationalPerson
 objectclass: inetOrgPerson
-cn: other Person
+cn: other
 sn: other
-uid: user
+uid: guest
 userPassword: password
 
-dn: cn=user,ou=apps,dc=hf,dc=org
+dn: cn=read,ou=apps,dc=hf,dc=org
 objectclass: top
 objectclass: groupOfNames
 cn: READ
 uniqueMember: uid=holger,ou=people,dc=hf,dc=org
-uniqueMember: uid=other,ou=people,dc=hf,dc=org
+uniqueMember: uid=guest,ou=people,dc=hf,dc=org
 
 dn: cn=admin,ou=apps,dc=hf,dc=org
 objectclass: top

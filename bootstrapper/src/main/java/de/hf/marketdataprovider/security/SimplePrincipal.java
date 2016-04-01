@@ -15,7 +15,7 @@ import java.util.Collection;
 
 public class SimplePrincipal extends BasePrincipal implements UserDetails {
 
-    private static final Logger LOG = LoggerFactory.getLogger(AuthorityGroup.class);
+    private static final Logger LOG = LoggerFactory.getLogger(SimplePrincipal.class);
 
     private static final long serialVersionUID = -277583078436504038L;
 
