@@ -5,9 +5,9 @@ module.exports = function (grunt) {
             pkg: grunt.file.readJSON('package.json'),
             jasmine: {
                 unit: {
-                    src: ['src/main/**/*.js'],
+                    src: ['js/main/**/*.js'],
                     options: {
-                        specs: 'src/test/**/*Spec.js',
+                        specs: 'js/test/**/*Spec.js',
                         vendor: [
                             'bower_components/angular/*min.js',
                             'bower_components/angular-mocks/angular-mocks.js'
@@ -19,17 +19,30 @@ module.exports = function (grunt) {
             typescript: {
                 base: {
                     src: ['src/main/**/*.ts', 'src/test/**/*.ts'],
+                    dest: 'js',
                     options: {
                         target: 'es5',
                         sourceMap: true
                     }
                 }
+            },
+            copy: {
+                    main: {
+                        files: [
+                        {
+                            cwd: 'js/main/ts',
+                            expand: true,
+                            src: ['**'],
+                            dest: 'src/main/resources/js/'
+                        }]
+                    }
             }
-        }
+    }
     )
 
     grunt.loadNpmTasks('grunt-typescript');
     grunt.loadNpmTasks('grunt-contrib-jasmine');
+    grunt.loadNpmTasks('grunt-contrib-copy');
 
-    grunt.registerTask('default', ['typescript:base', 'jasmine']);
+    grunt.registerTask('default', ['typescript:base', 'jasmine','copy:main']);
 }
