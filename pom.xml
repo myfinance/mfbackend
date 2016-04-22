@@ -22,6 +22,7 @@
         <module>master</module>
         <module>bootstrapper</module>
         <module>domain</module>
+        <module>angular</module>
     </modules>
     <build>
         <pluginManagement>

@@ -1,0 +1,11 @@
+{
+  "name": "angular-client",
+  "version": "0.1.0",
+  "description": "angular-client",
+  "dependencies": {
+    "angular": "1.5.3",
+    "angular-mocks": "1.5.3",
+    "bootstrap": "3.3.6"
+  },
+  "devDependencies": {}
+}
