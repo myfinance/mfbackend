@@ -33,7 +33,7 @@ module.exports = function (grunt) {
                             cwd: 'js/main/ts',
                             expand: true,
                             src: ['**'],
-                            dest: 'src/main/resources/js/'
+                            dest: 'src/main/js/'
                         }]
                     }
             }
