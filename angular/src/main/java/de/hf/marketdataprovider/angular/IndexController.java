@@ -27,5 +27,8 @@ public class IndexController {
         return "index";
     }
 
-
+    @RequestMapping("/hello")
+    String hello(){
+        return "angular-hello";
+    }
 }

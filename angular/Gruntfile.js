@@ -9,8 +9,8 @@ module.exports = function (grunt) {
                     options: {
                         specs: 'js/test/**/*Spec.js',
                         vendor: [
-                            'bower_components/angular/*min.js',
-                            'bower_components/angular-mocks/angular-mocks.js'
+                            'src/main/resources/static/bower/angular/*min.js',
+                            'src/main/resources/static/bower/angular-mocks/angular-mocks.js'
                         ],
                         keepRunner: true
                     }
@@ -25,24 +25,12 @@ module.exports = function (grunt) {
                         sourceMap: true
                     }
                 }
-            },
-            copy: {
-                    main: {
-                        files: [
-                        {
-                            cwd: 'js/main/ts',
-                            expand: true,
-                            src: ['**'],
-                            dest: 'src/main/js/'
-                        }]
-                    }
             }
     }
     )
 
     grunt.loadNpmTasks('grunt-typescript');
     grunt.loadNpmTasks('grunt-contrib-jasmine');
-    grunt.loadNpmTasks('grunt-contrib-copy');
 
-    grunt.registerTask('default', ['typescript:base', 'jasmine','copy:main']);
+    grunt.registerTask('default', ['typescript:base', 'jasmine']);
 }
