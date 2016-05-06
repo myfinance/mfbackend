@@ -3,7 +3,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>de.hf.marketDataProvider</groupId>
     <artifactId>marketDataProvider</artifactId>
-    <version>0.2.12-SNAPSHOT</version>
+    <version>0.2.11</version>
     <packaging>pom</packaging>
     <properties>
          <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -15,7 +15,7 @@
         <!--<developerConnection>scm:git:http://myserver:8081/r/gitauthtest.git</developerConnection>-->
         <developerConnection>scm:git:ssh://192.168.178.20:122/volume1/Data/workspace/repos/MarketDataProvider</developerConnection>
 
-	<tag>marketDataProvider-0.2.7</tag>
+	<tag>marketDataProvider-0.2.12-SNAPSHOT</tag>
     </scm>
   
     <modules>
