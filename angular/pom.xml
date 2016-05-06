@@ -9,7 +9,6 @@
         <relativePath>../master</relativePath>
     </parent>
     <modelVersion>4.0.0</modelVersion>
-    <groupId>de.hf.marketDataProvider</groupId>
     <artifactId>angular</artifactId>
 
     <packaging>jar</packaging>
@@ -53,6 +52,25 @@
                             </resources>
                         </configuration>
                     </execution>
+                    <execution>
+                        <id>copy-bower</id>
+                        <!-- here the phase you need -->
+                        <phase>validate</phase>
+                        <goals>
+                            <goal>copy-resources</goal>
+                        </goals>
+                        <configuration>
+                            <outputDirectory>${basedir}/target</outputDirectory>
+                            <resources>
+                                <resource>
+                                    <directory>${basedir}</directory>
+									<includes>
+										<include>bower.json</include>
+									</includes>									
+                                </resource>
+                            </resources>
+                        </configuration>
+                    </execution>					
                 </executions>
             </plugin>
             <plugin>
@@ -70,10 +88,16 @@
                 <groupId>pl.allegro</groupId>
                 <artifactId>grunt-maven-plugin</artifactId>
                 <version>1.4.1</version>
+
+				<configuration>
+                    <gruntBuildDirectory>${project.basedir}</gruntBuildDirectory>
+				</configuration>				
                 <executions>
                     <execution>
+                        <phase>validate</phase>
                         <goals>
                             <goal>npm</goal>
+                            <goal>bower</goal>
                             <goal>grunt</goal>
                         </goals>
                     </execution>

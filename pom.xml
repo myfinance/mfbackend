@@ -7,7 +7,7 @@
     <packaging>pom</packaging>
     <properties>
          <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-         <!-- wird von aussen übergeben <targetRepository>file://repository/</targetRepository>-->
+        <targetRepository>file:m2repo/</targetRepository>
     </properties> 
     
     <scm>
@@ -20,8 +20,8 @@
   
     <modules>
         <module>master</module>
-        <module>bootstrapper</module>
         <module>domain</module>
+        <module>bootstrapper</module>
         <module>angular</module>
     </modules>
     <build>
@@ -37,7 +37,7 @@
                         <preparationGoals>clean install</preparationGoals>
                         <!--<releaseProfiles>release</releaseProfiles>-->
                         <localCheckout>true</localCheckout>
-                        <tagNameFormat>@{project.artifactId}-@{project.version}</tagNameFormat>
+                        <tagNameFormat>${project.artifactId}-${project.version}</tagNameFormat>
                         <useReleaseProfile>true</useReleaseProfile>
                         <goals>deploy</goals>
                         <pushChanges>false</pushChanges>
