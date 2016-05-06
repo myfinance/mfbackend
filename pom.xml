@@ -37,7 +37,7 @@
                         <preparationGoals>clean install</preparationGoals>
                         <!--<releaseProfiles>release</releaseProfiles>-->
                         <localCheckout>true</localCheckout>
-                        <tagNameFormat>${project.artifactId}-${project.version}</tagNameFormat>
+                        <tagNameFormat>${project.artifactId}-@{project.version}</tagNameFormat>
                         <useReleaseProfile>true</useReleaseProfile>
                         <goals>deploy</goals>
                         <pushChanges>false</pushChanges>
