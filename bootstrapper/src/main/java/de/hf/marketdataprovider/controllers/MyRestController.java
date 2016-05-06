@@ -18,7 +18,7 @@ import java.util.stream.Collectors;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -52,15 +52,16 @@ public class MyRestController {
         
         return "Hello: " + name;
     }
-    
+
+    @CrossOrigin(origins = "http://localhost:8081")
     @RequestMapping("/getProducts")
     List<Product> getProducts(Principal principal) {
         getUserRoles(principal);
         List<Product> products = controller.getProducts();
         products.stream().forEach((product) -> log.info(product.getDescription()));
         return products;
-    }  
-    
+    }
+
     private Collection<String> getUserRoles(Principal principal) {
         if (principal == null) {
             return Arrays.asList("none");

@@ -10,7 +10,8 @@ module.exports = function (grunt) {
                         specs: 'js/test/**/*Spec.js',
                         vendor: [
                             'src/main/resources/static/bower/angular/*min.js',
-                            'src/main/resources/static/bower/angular-mocks/angular-mocks.js'
+                            'src/main/resources/static/bower/angular-mocks/angular-mocks.js',
+                            'src/main/resources/static/bower/angular-resource/*min.js'
                         ],
                         keepRunner: true
                     }
