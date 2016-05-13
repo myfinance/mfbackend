@@ -62,6 +62,15 @@ public class MyRestController {
         return products;
     }
 
+    @CrossOrigin(origins = "http://localhost:8081")
+    @RequestMapping("/getFirstProduct")
+    Product getFirstProduct(Principal principal) {
+        getUserRoles(principal);
+        List<Product> products = controller.getProducts();
+        log.info("first:"+products.get(0).getDescription());
+        return products.get(0);
+    }
+
     private Collection<String> getUserRoles(Principal principal) {
         if (principal == null) {
             return Arrays.asList("none");

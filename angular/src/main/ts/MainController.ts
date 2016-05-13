@@ -1,21 +1,28 @@
 /// <reference path="../../../typings/angularjs/angular.d.ts" />
 /// <reference path="WebAppScope.ts"/>
 /// <reference path="Application.ts"/>
-/// <reference path="SimpleUser.ts"/>
+/// <reference path="Product.ts"/>
+/// <reference path="ProductService.ts"/>
 
 module hf.marketdataprovider {
     export class MainController {
-        static $inject = ['$scope'];
+       static $inject = ['$scope', 'hf.marketdataprovider.productService'];
 
-        constructor($scope:WebAppScope) {
-            var users:User[] = [];
-            var testUser1:User = new SimpleUser("kai", "kai@toedter.com", "Kai Toedter");
-            users.push(testUser1)
-            var testUser2:User = new SimpleUser("john", "john@doe.com", "John Doe");
-            users.push(testUser2)
-            var testUser3:User = new SimpleUser("jane", "jane@doe.com", "Jane Doe");
-            users.push(testUser3)
-            $scope.users = users;
+        constructor(private $scope:WebAppScope, private productService:ProductService) {
+            this.refreshProducts();
+
+            $scope.refreshProducts = () => {
+                this.refreshProducts();
+            }
+        }
+
+        private refreshProducts() {
+              this.productService.getAllProducts(
+                  (products:hf.marketdataprovider.Product[]) => {
+                      this.$scope.products = products;
+                  }
+              );
+
         }
     }
 }

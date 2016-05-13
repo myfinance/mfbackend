@@ -1,11 +1,11 @@
-///<reference path="User.ts"/>
-///<reference path="SimpleUser.ts"/>
+///<reference path="Product.ts"/>
+///<reference path="SimpleProduct.ts"/>
 
 module hf.marketdataprovider {
-    export function createTestUsers():User[] {
-        var users:User[] = [];
-        var testUser1:User = new SimpleUser("user1", "user1@test.com", "User 1");
-        users.push(testUser1)
-        return users;
+    export function createTestProducts():Product[] {
+        var products:Product[] = [];
+        var testProduct1:Product = new SimpleProduct("11", "bla", "100,99");
+        products.push(testProduct1)
+        return products;
     }
 }

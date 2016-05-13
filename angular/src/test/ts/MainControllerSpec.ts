@@ -1,9 +1,10 @@
 /// <reference path="../../../typings/jasmine/jasmine.d.ts" />
 /// <reference path="../../../typings/angularjs/angular.d.ts" />
 /// <reference path="../../../typings/angularjs/angular-mocks.d.ts" />
-/// <reference path="../../main/ts/User.ts" />
-/// <reference path="../../main/ts/SimpleUser.ts" />
 /// <reference path="../../main/ts/MainController.ts" />
+/// <reference path="../../main/ts/Product.ts" />
+/// <reference path="../../main/ts/SimpleProduct.ts" />
+/// <reference path="../../main/ts/ProductService.ts" />
 
 describe('Main Controller', () => {
     var scope: hf.marketdataprovider.WebAppScope;
@@ -14,11 +15,19 @@ describe('Main Controller', () => {
         })
     });
 
-    it('should have scope with initialized users', () => {
-        var controller:hf.marketdataprovider.MainController = new hf.marketdataprovider.MainController(scope);
+    it('should have scope with initialized products', () => {
+
+        var productServiceMock: hf.marketdataprovider.ProductService = {
+            getAllProducts(callback:(products: hf.marketdataprovider.Product[]) => void) {
+                var products: hf.marketdataprovider.Product[] = [];
+                callback(products);
+            }
+        }
+
+        var controller:hf.marketdataprovider.MainController = new hf.marketdataprovider.MainController(scope, productServiceMock);
         expect(controller).toBeDefined();
         expect(scope).toBeDefined();
-        expect(scope.users).toBeDefined();
-        expect(scope.users.length).toBe(3);
+        expect(scope.products).toBeDefined();
+        expect(scope.products.length).toBe(0);
     });
 });
