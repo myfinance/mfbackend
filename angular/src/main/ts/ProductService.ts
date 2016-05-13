@@ -21,12 +21,6 @@ module hf.marketdataprovider {
            products = <hf.marketdataprovider.ProductResource[]>this.apiResource.query(function() {
                 console.log(products);
               });
-              /*var data = json[0];
-              console.log("test");
-              console.log(data.id);
-              var product:hf.marketdataprovider.Product=new SimpleProduct(json[0][0], json[0][1], json[0][2]);
-              products.push(product)
-              console.log(product);*/
               callback(products);
             /*this.apiResource.get((api:any) => {
                 var productsResource:hf.marketdataprovider.ProductsResource = this.getProductsResource(api);
