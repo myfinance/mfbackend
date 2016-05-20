@@ -23,7 +23,19 @@
         <dependency>
             <groupId>de.hf.marketDataProvider</groupId>
             <artifactId>domain</artifactId>
-        </dependency>   
+        </dependency>
+        <dependency>
+            <groupId>de.hf.marketDataProvider</groupId>
+            <artifactId>common</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>de.hf.marketDataProvider</groupId>
+            <artifactId>springcommon</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>de.hf.marketDataProvider</groupId>
+            <artifactId>service</artifactId>
+        </dependency>
         <dependency>
             <groupId>com.h2database</groupId>
             <artifactId>h2</artifactId>
@@ -32,7 +44,7 @@
             <groupId>postgresql</groupId>
             <artifactId>postgresql</artifactId>
         </dependency> 
-	<dependency>
+	    <dependency>
             <groupId>org.liquibase</groupId>
             <artifactId>liquibase-core</artifactId>
         </dependency> 
@@ -56,7 +68,7 @@
         <dependency>
             <groupId>org.apache.directory.server</groupId>
             <artifactId>apacheds-server-jndi</artifactId>
-        </dependency>                            
+        </dependency>
     </dependencies>
     
     <!-- um eine Fat-Jar mit mvn package zu bauen. die genaue definition kommt aus dem Spring-Parent.pom -->

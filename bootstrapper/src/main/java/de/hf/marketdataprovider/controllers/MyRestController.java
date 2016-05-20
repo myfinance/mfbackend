@@ -5,7 +5,8 @@
  */
 package de.hf.marketdataprovider.controllers;
 
-import de.hf.marketdataprovider.config.CommonConfig;
+import de.hf.marketdataprovider.service.ProductService;
+import de.hf.marketdataprovider.springcommon.config.CommonConfig;
 import de.hf.marketdataprovider.domain.Product;
 import java.security.Principal;
 import java.util.Arrays;
@@ -27,21 +28,35 @@ import org.springframework.web.bind.annotation.RestController;
 
 
 
-/**
+/** Rest methods
+ *
+ * Authorization is handeled via annotations on the service controller. It can not handled here because:
+ * "A common problem with using PrePost annotations on controllers is that Spring method security is based on Spring AOP, which is by default implemented with JDK proxies.
+ * That means that it works fine on the service layer which is injected in controller layer as interfaces,
+ * but it is ignored on controller layer because controller generally do not implement interfaces"
+ * and its not working on an RestControllerinterface:
+ * "Put them on the class not an interface (basically inheritance of annotations from interfaces to classes isn't supported, spring uses a work around to make it work, interfaces
+ * ike this use proxies which in turn lead to issues with the request mapping. You need to force the use of class based proxies instead of interface based proxies to make it work"
  *
  * @author xn01598
  */
-@RestController 
+@RestController
 public class MyRestController {
     private static final Logger log = LoggerFactory.getLogger(MyRestController.class);
     private MyController controller;
     private String name;
+    private ProductService productService;
+
+    @Autowired
+    public void setProductService(ProductService productService) {
+        this.productService =productService;
+    }
         
     @Autowired
     public void setName(CommonConfig config) {
         this.name = config.getName();
     }
-    
+
     @Autowired
     public void setController(MyController controller) {
         this.controller = controller;
@@ -53,22 +68,18 @@ public class MyRestController {
         return "Hello: " + name;
     }
 
+
     @CrossOrigin(origins = "http://localhost:8081")
     @RequestMapping("/getProducts")
-    List<Product> getProducts(Principal principal) {
-        getUserRoles(principal);
-        List<Product> products = controller.getProducts();
-        products.stream().forEach((product) -> log.info(product.getDescription()));
-        return products;
+    public List<Product> getProducts() {
+        return controller.getProducts();
     }
 
     @CrossOrigin(origins = "http://localhost:8081")
-    @RequestMapping("/getFirstProduct")
-    Product getFirstProduct(Principal principal) {
+    @RequestMapping("/getRoles")
+    public Collection<String> getRoles(Principal principal) {
         getUserRoles(principal);
-        List<Product> products = controller.getProducts();
-        log.info("first:"+products.get(0).getDescription());
-        return products.get(0);
+        return getUserRoles(principal);
     }
 
     private Collection<String> getUserRoles(Principal principal) {

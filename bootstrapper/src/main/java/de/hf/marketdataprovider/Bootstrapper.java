@@ -9,6 +9,7 @@ import org.springframework.boot.*;
 import org.springframework.boot.autoconfigure.*;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.ComponentScan;
+import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
 /**
  *
@@ -18,12 +19,12 @@ import org.springframework.context.annotation.ComponentScan;
 @SpringBootApplication
 //verwendet alle mit Configuration annotierten Klassen im Package zur konfiguration des Appcontext. 
 //die Controller unter de.hf.marketdataprovider.controllers werden ebenfalls registriert
-@ComponentScan("de.hf.marketdataprovider")  
+@ComponentScan("de.hf.marketdataprovider,de.hf.marketdataprovider.persistence.repositories")
+@EnableJpaRepositories("de.hf.marketdataprovider.persistence.repositories")
 public class Bootstrapper {
 
     public static void main(String[] args) throws Exception {
         ApplicationContext ctx = SpringApplication.run(Bootstrapper.class, args);
-        //MyController controller = (MyController) ctx.getBean("myController");
     }
     
 }

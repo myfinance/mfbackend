@@ -23,6 +23,10 @@
         <module>domain</module>
         <module>bootstrapper</module>
         <module>angular</module>
+        <module>service</module>
+        <module>persistence</module>
+        <module>common</module>
+        <module>springcommon</module>
     </modules>
     <build>
         <pluginManagement>

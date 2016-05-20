@@ -1,9 +1,10 @@
 package de.hf.marketdataprovider.controllers;
 
 import de.hf.marketdataprovider.domain.Product;
-import de.hf.marketdataprovider.services.ProductService;
+import de.hf.marketdataprovider.service.ProductService;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 
 /**
@@ -18,7 +19,8 @@ public class MyController {
     public void setProductService(ProductService productService) {
         this.productService =productService;
     }
-    
+
+    @PreAuthorize("hasRole('READ')")
     public List<Product> getProducts() {
         return productService.listProducts();
     }
