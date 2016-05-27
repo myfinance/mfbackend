@@ -43,7 +43,6 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class MyRestController {
     private static final Logger log = LoggerFactory.getLogger(MyRestController.class);
-    private MyController controller;
     private String name;
     private ProductService productService;
 
@@ -57,11 +56,6 @@ public class MyRestController {
         this.name = config.getName();
     }
 
-    @Autowired
-    public void setController(MyController controller) {
-        this.controller = controller;
-    }
-    
     @RequestMapping("/")
     String home() {
         
@@ -70,13 +64,13 @@ public class MyRestController {
 
 
     @CrossOrigin(origins = "http://localhost:8081")
-    @RequestMapping("/getProducts")
+    @RequestMapping("/get/products")
     public List<Product> getProducts() {
-        return controller.getProducts();
+        return productService.listProducts();
     }
 
     @CrossOrigin(origins = "http://localhost:8081")
-    @RequestMapping("/getRoles")
+    @RequestMapping("/get/roles")
     public Collection<String> getRoles(Principal principal) {
         getUserRoles(principal);
         return getUserRoles(principal);

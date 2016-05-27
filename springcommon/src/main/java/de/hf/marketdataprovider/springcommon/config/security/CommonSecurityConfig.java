@@ -33,8 +33,9 @@ public class CommonSecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http
             .authorizeRequests()
-            //.antMatchers("/", "/home").permitAll() // permit all to root and home page
-            .anyRequest().authenticated() //for other pages is at least authentication necessary
+            .antMatchers("/", "/home").permitAll() // permit all to root and home page
+            //.anyRequest().authenticated() //for other pages is at least authentication necessary
+            .and().authorizeRequests().antMatchers("/get/**").hasAnyRole("READ")
             //.anyRequest().hasAnyRole("ADMIN")//permit only users with Role admin
             //.and().authorizeRequests().antMatchers("/console/**").permitAll()
             .and()
