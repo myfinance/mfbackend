@@ -6,20 +6,19 @@
  *
  *  Project     : marketDataProvider
  *
- *  File        : CommonSecurityConfig.java
+ *  File        : SecurityConfig.java
  *
  *  Author(s)   : xn01598
  *
- *  Created     : 29.03.2016
+ *  Created     : 27.05.2016
  *
  * ----------------------------------------------------------------------------
  */
 
-package de.hf.marketdataprovider.springcommon.config.security;
+package de.hf.marketdataprovider.config;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
-import org.springframework.core.annotation.Order;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -28,14 +27,17 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 @Configuration
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled=true)
-@Order(value=200)
 @Profile({"!nosecurity"})
-public class CommonSecurityConfig extends WebSecurityConfigurerAdapter {
+public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
             .authorizeRequests()
-            .anyRequest().authenticated() //for other pages is at least authentication necessary
+            .antMatchers("/", "/home").permitAll() // permit all to root and home page
+            //.anyRequest().authenticated() //for other pages is at least authentication necessary
+            .and().authorizeRequests().antMatchers("/get/**").hasAnyRole("READ")
+            //.anyRequest().hasAnyRole("ADMIN")//permit only users with Role admin
+            //.and().authorizeRequests().antMatchers("/console/**").permitAll()
             .and()
             .formLogin() //define login form
             //.loginPage("/login") //add non standard login page
