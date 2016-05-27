@@ -31,6 +31,25 @@
                 <artifactId>logback-classic</artifactId>
                 <version>1.1.5</version>
             </dependency>
+
+            <!--Usertype can persist both JSR 310 and Joda Time based dates and times to a database using Hibernate.-->
+            <dependency>
+                <groupId>org.jadira.usertype</groupId>
+                <artifactId>usertype.core</artifactId>
+                <version>5.0.0.GA</version>
+            </dependency>
+            <dependency>
+                <groupId>org.jadira.usertype</groupId>
+                <artifactId>usertype.extended</artifactId>
+                <version>5.0.0.GA</version>
+            </dependency>
+            <!-- Usertype end -->
+
+            <dependency>
+                <groupId>org.projectlombok</groupId>
+                <artifactId>lombok</artifactId>
+                <version>1.16.8</version>
+            </dependency>
             <dependency>
                 <groupId>postgresql</groupId>
                 <artifactId>postgresql</artifactId>

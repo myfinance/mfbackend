@@ -5,10 +5,15 @@
  */
 package de.hf.marketdataprovider.controllers;
 
+import de.hf.marketdataprovider.domain.EndOfDayPrice;
+import de.hf.marketdataprovider.domain.Instrument;
+import de.hf.marketdataprovider.service.InstrumentService;
 import de.hf.marketdataprovider.service.ProductService;
 import de.hf.marketdataprovider.springcommon.config.CommonConfig;
 import de.hf.marketdataprovider.domain.Product;
 import java.security.Principal;
+import java.time.Instant;
+import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashSet;
@@ -16,8 +21,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.security.core.Authentication;
@@ -41,16 +45,16 @@ import org.springframework.web.bind.annotation.RestController;
  * @author xn01598
  */
 @RestController
+@Slf4j
 public class MyRestController {
-    private static final Logger log = LoggerFactory.getLogger(MyRestController.class);
     private String name;
+    @Autowired
+    private InstrumentService instrumentService;
     private ProductService productService;
 
     @Autowired
-    public void setProductService(ProductService productService) {
-        this.productService =productService;
-    }
-        
+    public void setProductService(ProductService productService) {this.productService =productService;    }
+
     @Autowired
     public void setName(CommonConfig config) {
         this.name = config.getName();
@@ -58,10 +62,15 @@ public class MyRestController {
 
     @RequestMapping("/")
     String home() {
-        
+        log.debug("hello");
         return "Hello: " + name;
     }
 
+    @CrossOrigin(origins = "http://localhost:8081")
+    @RequestMapping("/instrument")
+    public List<Instrument> getInstrumentss() {
+        return instrumentService.listInstruments();
+    }
 
     @CrossOrigin(origins = "http://localhost:8081")
     @RequestMapping("/get/products")

@@ -22,8 +22,7 @@ import de.hf.marketdataprovider.persistence.repositories.ProductRepository;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -32,9 +31,8 @@ import org.springframework.stereotype.Service;
  * @author surak
  */
 @Service
+@Slf4j
 public class ProductServiceImpl implements ProductService {
-
-    private static final Logger log = LoggerFactory.getLogger(ProductServiceImpl.class);
 
     private ProductRepository productRepository;
 
