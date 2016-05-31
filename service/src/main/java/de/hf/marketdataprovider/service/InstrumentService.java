@@ -20,10 +20,12 @@ package de.hf.marketdataprovider.service;
 import de.hf.marketdataprovider.domain.EndOfDayPrice;
 import de.hf.marketdataprovider.domain.Instrument;
 
+import java.util.Collection;
 import java.util.List;
 
 public interface InstrumentService {
     List<Instrument> listInstruments();
+    List<EndOfDayPrice> listPrices(String isin);
     Instrument saveInstrument(Instrument instrument);
     EndOfDayPrice savePrice(EndOfDayPrice price);
 }

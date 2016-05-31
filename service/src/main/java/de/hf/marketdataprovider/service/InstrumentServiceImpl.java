@@ -25,6 +25,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 @Service
@@ -41,6 +42,11 @@ public class InstrumentServiceImpl implements InstrumentService {
         List<Instrument> instruments = new ArrayList<>();
         instrumentRepository.findAll().forEach(i->instruments.add(i));
         return instruments;
+    }
+
+    @Override
+    public List<EndOfDayPrice> listPrices(String isin) {
+        return endOfDayPriceRepository.findByInstrumentIsin(isin);
     }
 
     @Override

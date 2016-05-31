@@ -67,9 +67,15 @@ public class MyRestController {
     }
 
     @CrossOrigin(origins = "http://localhost:8081")
-    @RequestMapping("/instrument")
-    public List<Instrument> getInstrumentss() {
+    @RequestMapping("/instruments")
+    public List<Instrument> getInstruments() {
         return instrumentService.listInstruments();
+    }
+
+    @CrossOrigin(origins = "http://localhost:8081")
+    @RequestMapping("/instruments/PP0123456789/Prices")
+    public List<EndOfDayPrice> getPrices() {
+        return instrumentService.listPrices("PP0123456789");
     }
 
     @CrossOrigin(origins = "http://localhost:8081")

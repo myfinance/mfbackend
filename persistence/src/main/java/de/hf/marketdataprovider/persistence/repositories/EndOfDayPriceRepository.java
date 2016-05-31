@@ -19,8 +19,7 @@ package de.hf.marketdataprovider.persistence.repositories;
 
 import de.hf.marketdataprovider.domain.EndOfDayPrice;
 import org.springframework.data.repository.CrudRepository;
-
-import java.util.Collection;
+import java.util.List;
 
 /**
  * The Spring Data JPA CRUD Repository is a feature of Spring Data JPA.
@@ -32,5 +31,5 @@ import java.util.Collection;
  * @author xn01598
  */
 public interface EndOfDayPriceRepository extends CrudRepository<EndOfDayPrice, Integer> {
-    Collection<EndOfDayPrice> findByInstrumentIsin(String isin);
+    List<EndOfDayPrice> findByInstrumentIsin (String isin);
 }
