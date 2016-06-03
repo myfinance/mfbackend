@@ -22,31 +22,7 @@ module hf.marketdataprovider {
                 console.log(products);
               });
               callback(products);
-            /*this.apiResource.get((api:any) => {
-                var productsResource:hf.marketdataprovider.ProductsResource = this.getProductsResource(api);
-                if (productsResource) {
-                    productsResource.get((result:any) => {
-                        var products:hf.marketdataprovider.Product[] = [];
-                        if (result.hasOwnProperty("_embedded") && result._embedded.hasOwnProperty(this.productsContract)) {
-                            products = result._embedded['products'];
-                        }
-                        callback(products);
-                    });
-                }
-            });*/
         }
-
-        /*private getProductsResource(apiResource:any):hf.marketdataprovider.ProductsResource {
-            if (apiResource.hasOwnProperty("_links") && apiResource._links.hasOwnProperty(this.productsContract)) {
-                var href:string = apiResource._links[this.productsContract].href;
-                // remove template parameters
-                href = href.replace(/{.*}/g, '');
-
-                var productsResource:hf.marketdataprovider.ProductsResource =
-                    <hf.marketdataprovider.ProductsResource> this.$resource(href + '/:id', {id: '@id'}, {});
-                return productsResource;
-            }
-        }*/
     }
 }
 

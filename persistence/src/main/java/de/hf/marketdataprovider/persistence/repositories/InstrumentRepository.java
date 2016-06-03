@@ -20,6 +20,7 @@ package de.hf.marketdataprovider.persistence.repositories;
 import de.hf.marketdataprovider.domain.Instrument;
 import org.springframework.data.repository.CrudRepository;
 
+import java.util.List;
 import java.util.Optional;
 
 /**

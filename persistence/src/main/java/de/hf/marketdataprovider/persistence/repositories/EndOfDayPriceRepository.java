@@ -19,6 +19,7 @@ package de.hf.marketdataprovider.persistence.repositories;
 
 import de.hf.marketdataprovider.domain.EndOfDayPrice;
 import org.springframework.data.repository.CrudRepository;
+
 import java.util.List;
 
 /**
