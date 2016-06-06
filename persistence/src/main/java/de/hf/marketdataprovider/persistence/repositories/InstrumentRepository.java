@@ -33,5 +33,5 @@ import java.util.Optional;
  * @author xn01598
  */
 public interface InstrumentRepository extends CrudRepository<Instrument, Integer> {
-    Optional<Instrument> findByIsin(String username);
+    Optional<Instrument> findByIsin(String isin);
 }

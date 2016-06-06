@@ -17,22 +17,17 @@
 
 package de.hf.marketdataprovider.controllers;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonUnwrapped;
 import de.hf.marketdataprovider.domain.EndOfDayPrice;
 import de.hf.marketdataprovider.domain.Instrument;
 import de.hf.marketdataprovider.persistence.repositories.EndOfDayPriceRepository;
 import de.hf.marketdataprovider.persistence.repositories.InstrumentRepository;
+import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.Link;
-import org.springframework.hateoas.Resource;
 import org.springframework.hateoas.ResourceSupport;
-import org.springframework.hateoas.Resources;
-import org.springframework.hateoas.core.EmbeddedWrapper;
-import org.springframework.hateoas.core.EmbeddedWrappers;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -44,18 +39,15 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-import javax.persistence.Embedded;
-
 import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
 import static org.springframework.hateoas.mvc.ControllerLinkBuilder.methodOn;
 
 import java.net.URI;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
+
 
 @RestController
 @Slf4j
@@ -75,6 +67,12 @@ public class InstrumentController {
         return new InstrumentsResource(instruments);
     }
 
+    @RequestMapping(value = "/{isin}", method = RequestMethod.GET)
+    InstrumentResource readInstrument(@PathVariable String isin) {
+        this.validateIsin(isin);
+        return new InstrumentResource(this.instrumentRepository.findByIsin(isin).get());
+    }
+
     @RequestMapping(value = "/{isin}/Prices", method = RequestMethod.POST)
     ResponseEntity<?> add(@PathVariable String isin, @RequestBody EndOfDayPrice input) {
         this.validateIsin(isin);
@@ -91,20 +89,16 @@ public class InstrumentController {
 
     }
 
-    @RequestMapping(value = "/{isin}/Prices/{priceId}", method = RequestMethod.GET)
-    PriceResource readPrice(@PathVariable String isin, @PathVariable Integer priceId) {
-        this.validateIsin(isin);
+    @RequestMapping(value = "/Prices/{priceId}", method = RequestMethod.GET)
+    PriceResource readPrice(@PathVariable Integer priceId) {
+        this.validatePriceId(priceId);
         return new PriceResource(this.priceRepository.findOne(priceId));
     }
 
     @RequestMapping(value = "/{isin}/Prices", method = RequestMethod.GET)
-    Resources<PriceResource> readPrices(@PathVariable String isin) {
+    PricesResource readPrices(@PathVariable String isin) {
         this.validateIsin(isin);
-        List<PriceResource> priceResourceList = priceRepository.findByInstrumentIsin(isin)
-            .stream()
-            .map(PriceResource::new)
-            .collect(Collectors.toList());
-        return new Resources<>(priceResourceList);
+        return new PricesResource(priceRepository.findByInstrumentIsin(isin), isin);
     }
 
     @Autowired
@@ -118,6 +112,11 @@ public class InstrumentController {
         this.instrumentRepository.findByIsin(isin).orElseThrow(
             () -> new IsinNotFoundException(isin));
     }
+
+    private void validatePriceId(int priceId) {
+        if(this.priceRepository.findOne(priceId)==null)
+            throw new PriceNotFoundException(priceId);
+    }
 }
 
 @ResponseStatus(HttpStatus.NOT_FOUND)
@@ -128,76 +127,90 @@ class IsinNotFoundException extends RuntimeException {
     }
 }
 
-class PriceResource extends ResourceSupport {
+@ResponseStatus(HttpStatus.NOT_FOUND)
+class PriceNotFoundException extends RuntimeException {
 
+    public PriceNotFoundException(int id) {
+        super("could not find Price with Id '" + id + "'.");
+    }
+}
+
+class PriceResource extends HALResource {
+
+    @Getter
     private final EndOfDayPrice price;
 
     public PriceResource(EndOfDayPrice price) {
-        String isin = price.getInstrument().getIsin();
         this.price = price;
-        this.add(new Link(price.getDayOfPrice().toString(), "day of Price"));
-        this.add(linkTo(InstrumentController.class, isin).withRel("prices"));
-        this.add(linkTo(methodOn(InstrumentController.class, isin).readPrice(isin, price.getId())).withSelfRel());
-    }
 
-    public EndOfDayPrice getPrice() {
-        return price;
+        //set links
+        this.add(linkTo(methodOn(InstrumentController.class, price.getId()).readPrice(price.getId())).withSelfRel());
+        this.add(linkTo(methodOn(InstrumentController.class, price.getInstrument().getIsin()).readInstrument(price.getInstrument().getIsin())).withRel("Instrument"));
     }
 }
 
 
-class InstrumentResource extends ResourceSupport {
+class InstrumentResource extends HALResource {
 
+    @Getter
     private final Instrument instrument;
 
-    @JsonCreator
-    public InstrumentResource(@JsonProperty("content") Instrument instrument) {
+    public InstrumentResource(Instrument instrument) {
         this.instrument = instrument;
-    }
 
-    public Instrument getInstrument() {
-        return instrument;
+        //set links
+        this.add(linkTo(methodOn(InstrumentController.class, instrument.getIsin()).readInstrument(instrument.getIsin())).withSelfRel());
+        this.add(linkTo(methodOn(InstrumentController.class, instrument.getIsin()).readPrices(instrument.getIsin())).withRel("prices"));
+
+    }
+}
+
+class PricesResource extends HALResource {
+
+    @Getter
+    private final int numberOfPrices;
+    @Getter
+    private final String isin;
+
+    public PricesResource(List<EndOfDayPrice> prices, String isin) {
+        //set Properties
+        this.numberOfPrices = prices.size();
+        this.isin=isin;
+
+        //set links
+        this.add(linkTo(methodOn(InstrumentController.class, isin).readPrices(isin)).withSelfRel());
+        this.add(linkTo(methodOn(InstrumentController.class, isin).readInstrument(isin)).withRel("instrument"));
+        prices.forEach(p->this.add(linkTo(methodOn(InstrumentController.class, p.getId()).readPrice(p.getId())).withRel("prices")));
+
+        //set embeded Resources
+        /*List<PriceResource> priceResources = new ArrayList<>();
+        prices.forEach(i->priceResources.add(new PriceResource(i)));
+        embedResource("prices", priceResources);*/
+
+
     }
 }
 
 class InstrumentsResource extends HALResource {
 
+    @Getter
     private final int numberOfInstruments;
-    //private List<Resource<InstrumentResource>> embendedResources;
-    /*@JsonUnwrapped
-    private final List<EmbeddedWrapper> embeddeds;*/
 
     public InstrumentsResource(List<Instrument> instruments) {
+        //set Properties
         this.numberOfInstruments = instruments.size();
-        Link link = new Link("http://example.com/products/");
 
+        //set links
+        this.add(linkTo(InstrumentController.class).withSelfRel());
+        instruments.forEach(i->this.add(linkTo(methodOn(InstrumentController.class, i.getIsin()).readInstrument(i.getIsin())).withRel("instruments")));
+
+        //set embeded Resources
         List<InstrumentResource> instrumentResources = new ArrayList<>();
         instruments.forEach(i->instrumentResources.add(new InstrumentResource(i)));
-
-        //resources = new Resources<>(instrumentResources, link);
-        //embedResource("instuments", new Resources<>(instrumentResources, link));
         embedResource("instuments", instrumentResources);
 
 
-        /*EmbeddedWrappers wrappers = new EmbeddedWrappers(true);
-        embeddeds = new ArrayList<>();
-        instruments.forEach(i->embeddeds.add(wrappers.wrap(new InstrumentResource(i))));*/
-
-        /*embendedResources = new ArrayList<>();
-        instruments.forEach(i->embendedResources.add(new Resource<>(new InstrumentResource(i))));*/
     }
-
-    public int getNumberOfInstruments() {
-        return numberOfInstruments;
-    }
-
-    /*public List<EmbeddedWrapper> getEmbeddeds() {
-        return embeddeds;
-    }*/
-
-    /*public List<Resource<InstrumentResource>> getInstruments() {
-        return embendedResources;
-    }*/
 }
 
 abstract class HALResource extends ResourceSupport {
