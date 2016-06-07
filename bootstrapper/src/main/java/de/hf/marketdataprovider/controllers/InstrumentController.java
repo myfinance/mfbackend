@@ -205,7 +205,7 @@ class InstrumentsResource extends HALResource {
         instruments.forEach(i->this.add(linkTo(methodOn(InstrumentController.class, i.getIsin()).readInstrument(i.getIsin())).withRel("instruments")));
 
         //set embeded Resources
-        List<InstrumentResource> instrumentResources = new ArrayList<>();
+        List<ResourceSupport> instrumentResources = new ArrayList<>();
         instruments.forEach(i->instrumentResources.add(new InstrumentResource(i)));
         embedResource("instuments", instrumentResources);
 
@@ -215,15 +215,15 @@ class InstrumentsResource extends HALResource {
 
 abstract class HALResource extends ResourceSupport {
 
-    private final Map<String, List<InstrumentResource>> embedded = new HashMap<>();
+    private final Map<String, List<ResourceSupport>> embedded = new HashMap<>();
 
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonProperty("_embedded")
-    public Map<String, List<InstrumentResource>> getEmbeddedResources() {
+    public Map<String, List<ResourceSupport>> getEmbeddedResources() {
         return embedded;
     }
 
-    public void embedResource(String relationship, List<InstrumentResource> resources) {
+    public void embedResource(String relationship, List<ResourceSupport> resources) {
 
         embedded.put(relationship, resources);
     }
