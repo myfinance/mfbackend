@@ -4,7 +4,7 @@
     <parent>
         <groupId>de.hf.marketDataProvider</groupId>
         <artifactId>marketDataProvider</artifactId>
-        <version>0.3.0</version>
+        <version>0.3.1-SNAPSHOT</version>
     </parent>
     <groupId>de.hf.marketDataProvider</groupId>
     <artifactId>master</artifactId>
@@ -68,27 +68,27 @@
             <dependency>
                 <groupId>de.hf.marketDataProvider</groupId>
                 <artifactId>common</artifactId>
-                <version>0.3.0</version>
+                <version>0.3.1-SNAPSHOT</version>
             </dependency>
             <dependency>
                 <groupId>de.hf.marketDataProvider</groupId>
                 <artifactId>springcommon</artifactId>
-                <version>0.3.0</version>
+                <version>0.3.1-SNAPSHOT</version>
             </dependency>
             <dependency>
                 <groupId>de.hf.marketDataProvider</groupId>
                 <artifactId>domain</artifactId>
-                <version>0.3.0</version>
+                <version>0.3.1-SNAPSHOT</version>
             </dependency>
             <dependency>
                 <groupId>de.hf.marketDataProvider</groupId>
                 <artifactId>service</artifactId>
-                <version>0.3.0</version>
+                <version>0.3.1-SNAPSHOT</version>
             </dependency>
             <dependency>
                 <groupId>de.hf.marketDataProvider</groupId>
                 <artifactId>persistence</artifactId>
-                <version>0.3.0</version>
+                <version>0.3.1-SNAPSHOT</version>
             </dependency>
             <!--ldap request-->
             <dependency>
