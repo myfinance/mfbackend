@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<databaseChangeLog
+  xmlns="http://www.liquibase.org/xml/ns/dbchangelog/1.9"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog/1.9
+         http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-1.9.xsd">
+    <preConditions>
+        <or>
+            <dbms type="postgresql" />
+            <dbms type="h2" />
+        </or>
+    </preConditions>    
+    <changeSet id="1.0.1" author="XN01598 (generated)">
+        <createTable tableName="PERSON">
+            <column autoIncrement="true" name="ID" type="INT(10)">
+                <constraints primaryKey="true" primaryKeyName="PK_PERSON"/>
+            </column>
+            <column name="FIRST_NAME" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="LAST_NAME" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet id="1.0.2" author="XN01598 (generated)">
+        <createTable tableName="PRODUCT">
+            <column autoIncrement="true" name="ID" type="INT(10)">
+                <constraints primaryKey="true" primaryKeyName="CONSTRAINT_1"/>
+            </column>
+            <column name="DESCRIPTION" type="VARCHAR(255)"/>
+            <column name="DETAILS" type="DECIMAL(19, 2)"/>
+            <column name="IMAGE_URL" type="VARCHAR(255)"/>
+            <column name="PRICE" type="DECIMAL(19, 2)"/>
+            <column name="PRODUCT_ID" type="VARCHAR(255)"/>
+            <column name="VERSION" type="INT"/>
+        </createTable>
+    </changeSet>
+</databaseChangeLog>

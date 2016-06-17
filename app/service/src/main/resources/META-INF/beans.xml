@@ -1,0 +1,26 @@
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+           http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
+           http://www.springframework.org/schema/aop
+           http://www.springframework.org/schema/aop/spring-aop-2.5.xsd
+           http://www.springframework.org/schema/context
+           http://www.springframework.org/schema/context/spring-context-2.5.xsd">
+
+    <bean id="productRepository" class="de.hf.marketdataprovider.persistence.repositories.ProductRepository" />
+    <bean id="ProductService" class="de.hf.marketdataprovider.service.ProductServiceImpl">
+        <property name="productRepository" ref="productRepository" />
+    </bean>
+
+
+    <bean id="instrumentRepository" class="de.hf.marketdataprovider.persistence.repositories.InstrumentRepository" />
+    <bean id="endOfDayPriceRepository" class="de.hf.marketdataprovider.persistence.repositories.EndOfDayPriceRepository" />
+
+    <bean id="InstrumentService" class="de.hf.marketdataprovider.service.InstrumentServiceImpl">
+        <property name="instrumentRepository" ref="instrumentRepository" />
+        <property name="endOfDayPriceRepository" ref="endOfDayPriceRepository" />
+    </bean>
+
+</beans>
