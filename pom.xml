@@ -37,7 +37,7 @@
     <modules>
         <module>app</module>
         <module>bootstrapper</module>
-        <module>angular</module>
+        <module>client</module>
         <module>utils</module>
     </modules>
 
