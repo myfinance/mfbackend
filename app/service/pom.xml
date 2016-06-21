@@ -19,7 +19,6 @@
             <groupId>de.hf.marketDataProvider</groupId>
             <artifactId>persistence</artifactId>
         </dependency>
-        <!-- http://mvnrepository.com/artifact/javax.inject/javax.inject -->
         <dependency>
             <groupId>javax.inject</groupId>
             <artifactId>javax.inject</artifactId>
