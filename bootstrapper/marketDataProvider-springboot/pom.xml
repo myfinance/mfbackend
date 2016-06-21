@@ -8,7 +8,7 @@
         <relativePath>../</relativePath>
     </parent>
     <groupId>de.hf.marketDataProvider</groupId>
-    <artifactId>springboot</artifactId>
+    <artifactId>marketDataProvider-springboot</artifactId>
     <packaging>jar</packaging>
 
     <dependencies>    

@@ -8,6 +8,7 @@ package de.hf.marketdataprovider.persistence.repositories;
 import de.hf.marketdataprovider.domain.Product;
 import org.springframework.data.repository.CrudRepository;
 
+
 /**
  * The Spring Data JPA CRUD Repository is a feature of Spring Data JPA. 
  * Similar to coding with a Spring Integration Gateway, you can just define an interface. 
@@ -19,3 +20,7 @@ import org.springframework.data.repository.CrudRepository;
  */
 public interface ProductRepository extends CrudRepository<Product, Integer>{
 }
+
+
+
+

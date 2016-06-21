@@ -26,14 +26,10 @@ import lombok.Data;
 import java.util.ArrayList;
 import java.util.List;
 
-//@Service
 @Data
 public class InstrumentServiceImpl implements InstrumentService {
 
-
-    //@Autowired
     private InstrumentRepository instrumentRepository;
-    //@Autowired
     private EndOfDayPriceRepository endOfDayPriceRepository;
 
     @Override

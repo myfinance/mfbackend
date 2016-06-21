@@ -42,10 +42,8 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public List<Product> listProducts() {
-        Product p1 = new Product("Product 1 desc");
-        p1.setProductId("1234");
-        Product p2 = new Product("Product 2 desc");
-        p1.setProductId("1235");
+        Product p1 = new Product("1234", "Product 1 desc");
+        Product p2 = new Product("1235", "Product 2 desc");
         ArrayList<Product> products = new ArrayList<>(2);
         products.add(p1);
         products.add(p2);
@@ -54,8 +52,8 @@ public class ProductServiceImpl implements ProductService {
 
 
         //fetch from DB
-        Product fetchedProduct = productRepository.findOne(p1.getId());
-        log.debug("test:"+fetchedProduct.getId());
+        //Product fetchedProduct = productRepository.findOne(p1.getId());
+        //log.debug("test:"+fetchedProduct.getId());
 
         return products;
     }

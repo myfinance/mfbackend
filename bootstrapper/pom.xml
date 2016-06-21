@@ -11,6 +11,7 @@
     <artifactId>bootstrapper</artifactId>
     <packaging>pom</packaging>
     <modules>
-        <module>springboot</module>
+        <module>marketDataProvider-springboot</module>
+        <module>marketDataProvider-wildfly</module>
     </modules>
 </project>

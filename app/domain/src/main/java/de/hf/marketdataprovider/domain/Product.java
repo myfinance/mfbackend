@@ -5,6 +5,11 @@
  */
 package de.hf.marketdataprovider.domain;
 
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
+
 import java.io.Serializable;
 import javax.persistence.*;
 import java.math.BigDecimal;
@@ -14,6 +19,9 @@ import java.math.BigDecimal;
  * @author surak
  */
 @Entity
+@Data
+@NoArgsConstructor
+@RequiredArgsConstructor
 public class Product implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
@@ -22,73 +30,10 @@ public class Product implements Serializable {
  
     @Version
     private Integer version;
- 
+    @NonNull
     private String productId;
+    @NonNull
     private String description;
     private String imageUrl;
-    private BigDecimal price;   
-    //private BigDecimal details; 
-
-    public Product() {
-    }
-    
-    public Product(String description) {
-        this.description=description;
-    }
-            
-    public String getDescription() {
-        return description;
-    }
-    
-    public void setDescription(String description) {
-        this.description=description;
-    }
-    
-    public Integer getVersion() {
-        return version;
-    }
- 
-    public void setVersion(Integer version) {
-        this.version = version;
-    }
- 
-    public Integer getId() {
-        return id;
-    }
- 
-    public void setId(Integer id) {
-        this.id = id;
-    }
- 
-    public String getProductId() {
-        return productId;
-    }
- 
-    public void setProductId(String productId) {
-        this.productId = productId;
-    }
- 
-    public String getImageUrl() {
-        return imageUrl;
-    }
- 
-    public void setImageUrl(String imageUrl) {
-        this.imageUrl = imageUrl;
-    }
- 
-    public BigDecimal getPrice() {
-        return price;
-    }
- 
-    public void setPrice(BigDecimal price) {
-        this.price = price;
-    }  
-    
-    /*public BigDecimal getDetails() {
-        return details;
-    }
- 
-    public void setDetails(BigDecimal details) {
-        this.details = details;
-    }      */
+    private BigDecimal price;
 }
