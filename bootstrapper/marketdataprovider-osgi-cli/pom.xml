@@ -60,13 +60,19 @@
         </dependency>
         <dependency>
             <groupId>de.hf.marketDataProvider.features</groupId>
-            <artifactId>http</artifactId>
+            <artifactId>marketDataProvider.features.http</artifactId>
             <version>${project.version}</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>de.hf.marketDataProvider.features</groupId>
-            <artifactId>webconsole</artifactId>
+            <artifactId>marketDataProvider.features.webconsole</artifactId>
+            <version>${project.version}</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>de.hf.marketDataProvider.features</groupId>
+            <artifactId>marketDataProvider.features.cdi</artifactId>
             <version>${project.version}</version>
             <scope>provided</scope>
         </dependency>
@@ -78,7 +84,7 @@
         </dependency>-->
        <dependency>
             <groupId>de.hf.marketDataProvider.features</groupId>
-            <artifactId>remoteconsole</artifactId>
+            <artifactId>marketDataProvider.features.remoteconsole</artifactId>
             <version>${project.version}</version>
             <scope>provided</scope>
         </dependency>

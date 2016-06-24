@@ -17,6 +17,7 @@
         <module>logging</module>
         <module>remoteconsole</module>
         <module>webconsole</module>
+        <module>cdi</module>
     </modules>
 
     <build>
