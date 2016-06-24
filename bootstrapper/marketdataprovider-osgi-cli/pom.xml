@@ -37,13 +37,13 @@
 
         <!-- Bundles -->
 
-        <!--<dependency>
-            <groupId>com.github.osx2000.how</groupId>
-            <artifactId>com.github.osx2000.how.service</artifactId>
+        <dependency>
+            <groupId>de.hf.marketDataProvider</groupId>
+            <artifactId>restservice</artifactId>
             <version>${project.version}</version>
             <scope>provided</scope>
         </dependency>
--->
+
 
         <!-- Own features -->
         <dependency>

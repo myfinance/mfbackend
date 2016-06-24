@@ -1,0 +1,3 @@
+-dsannotations : *
+Export-Package: de.hf.marketdataprovider.restservice
+Bundle-SymbolicName: ${project.artifactId}
