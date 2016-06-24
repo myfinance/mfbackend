@@ -12,6 +12,7 @@
     <packaging>pom</packaging>
     <modules>
         <module>marketDataProvider-springboot</module>
-        <module>marketDataProvider-wildfly</module>
+        <!--<module>marketDataProvider-wildfly</module>-->
+        <module>marketdataprovider-osgi-cli</module>
     </modules>
 </project>

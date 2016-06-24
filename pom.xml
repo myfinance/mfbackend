@@ -19,7 +19,7 @@
         <springfox-swagger.version>2.0.2</springfox-swagger.version><!-- generate docs and clients for Rest via spring boot-->
 
         <apacheds-server-jndi.version>1.5.5</apacheds-server-jndi.version><!-- connect to ldap -->
-        <logback.version>1.1.5</logback.version><!-- logging slf impl-->
+        <slf4j.version>1.7.21</slf4j.version><!-- logging slf impl-->
         <lombok.version>1.16.8</lombok.version><!-- generate constructor, getter, setter via annotation-->
         <inject.version>1</inject.version><!-- inject annotation api for multiple di containers-->
         <usertype.version>5.0.0.GA</usertype.version><!-- Usertype can persist both JSR 310 and Joda Time based dates and times to a database using Hibernate-->
@@ -40,8 +40,9 @@
     <modules>
         <module>app</module>
         <module>bootstrapper</module>
-        <module>client</module>
+        <!--<module>client</module>-->
         <module>utils</module>
+        <module>features</module>
     </modules>
 
 
@@ -74,22 +75,11 @@
             </dependency>
 
             <dependency>
-                <groupId>ch.qos.logback</groupId>
-                <artifactId>logback-classic</artifactId>
-                <version>${logback.version}</version>
-            </dependency>
-            <dependency>
                 <groupId>org.projectlombok</groupId>
                 <artifactId>lombok</artifactId>
                 <version>${lombok.version}</version>
             </dependency>
-            <dependency>
-                <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-dependencies</artifactId>
-                <type>pom</type>
-                <version>${spring.boot.version}</version>
-                <scope>import</scope>
-            </dependency>
+
             <dependency>
                 <groupId>postgresql</groupId>
                 <artifactId>postgresql</artifactId>
