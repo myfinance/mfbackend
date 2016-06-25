@@ -18,6 +18,7 @@
         <module>remoteconsole</module>
         <module>webconsole</module>
         <module>cdi</module>
+        <module>persistence</module>
     </modules>
 
     <build>
