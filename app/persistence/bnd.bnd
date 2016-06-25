@@ -1,0 +1,3 @@
+-dsannotations : *
+Export-Package: de.hf.marketdataprovider.persistence
+Bundle-SymbolicName: ${project.artifactId}

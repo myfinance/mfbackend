@@ -39,6 +39,12 @@
 
         <dependency>
             <groupId>de.hf.marketDataProvider</groupId>
+            <artifactId>domain</artifactId>
+            <version>${project.version}</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>de.hf.marketDataProvider</groupId>
             <artifactId>restservice</artifactId>
             <version>${project.version}</version>
             <scope>provided</scope>
@@ -70,18 +76,18 @@
             <version>${project.version}</version>
             <scope>provided</scope>
         </dependency>
-        <dependency>
+        <!--<dependency>
             <groupId>de.hf.marketDataProvider.features</groupId>
             <artifactId>marketDataProvider.features.cdi</artifactId>
             <version>${project.version}</version>
             <scope>provided</scope>
-        </dependency>
-        <!--<dependency>
+        </dependency>-->
+        <dependency>
             <groupId>de.hf.marketDataProvider.features</groupId>
-            <artifactId>persistence</artifactId>
+            <artifactId>arketDataProvider.features.persistence</artifactId>
             <version>${project.version}</version>
             <scope>provided</scope>
-        </dependency>-->
+        </dependency>
        <dependency>
             <groupId>de.hf.marketDataProvider.features</groupId>
             <artifactId>marketDataProvider.features.remoteconsole</artifactId>
