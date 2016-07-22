@@ -27,6 +27,11 @@
             <scope>provided</scope>
         </dependency>
 
+        <dependency>
+            <groupId>de.hf.marketDataProvider</groupId>
+            <artifactId>service</artifactId>
+        </dependency>
+
     </dependencies>
 
 

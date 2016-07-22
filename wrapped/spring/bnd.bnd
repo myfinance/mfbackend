@@ -1,0 +1,78 @@
+-dsannotations: *
+-metatype: *
+Export-Package: \
+org.springframework.asm,version=4.1.1.RELEASE, \
+org.springframework.cglib,version=4.1.1.RELEASE, \
+org.springframework.cglib.beans,version=4.1.1.RELEASE, \
+org.springframework.cglib.core,version=4.1.1.RELEASE, \
+org.springframework.cglib.proxy,version=4.1.1.RELEASE, \
+org.springframework.cglib.reflect,version=4.1.1.RELEASE, \
+org.springframework.cglib.transform,version=4.1.1.RELEASE, \
+org.springframework.cglib.transform.impl,version=4.1.1.RELEASE, \
+org.springframework.cglib.util,version=4.1.1.RELEASE, \
+org.springframework.core,version=4.1.1.RELEASE, \
+org.springframework.core.annotation,version=4.1.1.RELEASE, \
+org.springframework.core.convert,version=4.1.1.RELEASE, \
+org.springframework.core.convert.converter,version=4.1.1.RELEASE, \
+org.springframework.core.convert.support,version=4.1.1.RELEASE, \
+org.springframework.core.env,version=4.1.1.RELEASE, \
+org.springframework.core.io,version=4.1.1.RELEASE, \
+org.springframework.core.io.support,version=4.1.1.RELEASE, \
+org.springframework.core.serializer,version=4.1.1.RELEASE, \
+org.springframework.core.serializer.support,version=4.1.1.RELEASE, \
+org.springframework.core.style,version=4.1.1.RELEASE, \
+org.springframework.core.task,version=4.1.1.RELEASE, \
+org.springframework.core.task.support,version=4.1.1.RELEASE, \
+org.springframework.core.type,version=4.1.1.RELEASE, \
+org.springframework.core.type.classreading,version=4.1.1.RELEASE, \
+org.springframework.core.type.filter,version=4.1.1.RELEASE, \
+org.springframework.lang,version=4.1.1.RELEASE, \
+org.springframework.objenesis,version=4.1.1.RELEASE, \
+org.springframework.objenesis.instantiator,version=4.1.1.RELEASE, \
+org.springframework.objenesis.instantiator.android,version=4.1.1.RELEASE, \
+org.springframework.objenesis.instantiator.basic,version=4.1.1.RELEASE, \
+org.springframework.objenesis.instantiator.gcj,version=4.1.1.RELEASE, \
+org.springframework.objenesis.instantiator.jrockit,version=4.1.1.RELEASE, \
+org.springframework.objenesis.instantiator.perc,version=4.1.1.RELEASE, \
+org.springframework.objenesis.instantiator.sun,version=4.1.1.RELEASE
+org.springframework.objenesis.strategy,version=4.1.1.RELEASE, \
+org.springframework.util,version=4.1.1.RELEASE, \
+org.springframework.util.backoff,version=4.1.1.RELEASE, \
+org.springframework.util.comparator,version=4.1.1.RELEASE, \
+org.springframework.util.concurrent,version=4.1.1.RELEASE, \
+org.springframework.util.xml,version=4.1.1.RELEASE
+Include-Resource: @target/deps/java-client.jar, \
+	@target/deps/core-io.jar, \
+	@target/deps/alpn-api.jar, \
+	@target/deps/npn-api.jar, \
+	@target/deps/jboss-marshalling.jar, \
+	@target/deps/jboss-modules.jar, \
+	@target/deps/tomcat-apr.jar, \
+	@target/deps/tomcat-jni.jar, \
+	@target/deps/junit.jar
+
+Import-Package: !com.puppycrawl*, \
+	org.junit.runner.notification.*;resolution=optional, \
+	*
+
+#Import-Package: com.barchart.udt;resolution=optional, \
+                #com.barchart.udt.nio;resolution=optional, \
+                #com.google.protobuf;resolution=optional, \
+                #com.jcraft.jzlib;resolution=optional, \
+                #com.puppycrawl.tools.checkstyle.api;resolution=optional, \
+                #com.sun.management;resolution=optional, \
+                #com.sun.nio.sctp;resolution=optional, \
+                #gnu.io;resolution=optional, \
+                #org.apache.tomcat.jni;resolution=optional, \
+                #org.bouncycastle.asn1.x500;resolution=optional, \
+                #org.bouncycastle.cert;resolution=optional, \
+                #org.bouncycastle.cert.jcajce;resolution=optional, \
+                #org.bouncycastle.jce.provider;resolution=optional, \
+                #org.bouncycastle.operator;resolution=optional, \
+                #org.bouncycastle.operator.jcajce;resolution=optional, \
+                #org.eclipse.jetty.alpn;resolution=optional, \
+                #org.eclipse.jetty.npn;resolution=optional, \
+                #org.jboss.marshalling;resolution=optional, \
+                #org.junit.runner.notification;resolution=optional, \
+
+Bundle-ClassPath: .

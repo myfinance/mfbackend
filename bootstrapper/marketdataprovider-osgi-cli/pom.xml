@@ -37,12 +37,12 @@
 
         <!-- Bundles -->
 
-        <dependency>
+        <!--<dependency>
             <groupId>de.hf.marketDataProvider</groupId>
             <artifactId>domain</artifactId>
             <version>${project.version}</version>
             <scope>provided</scope>
-        </dependency>
+        </dependency>-->
         <dependency>
             <groupId>de.hf.marketDataProvider</groupId>
             <artifactId>restservice</artifactId>

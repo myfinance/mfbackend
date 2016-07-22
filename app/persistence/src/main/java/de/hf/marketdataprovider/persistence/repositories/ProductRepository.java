@@ -6,7 +6,8 @@
 package de.hf.marketdataprovider.persistence.repositories;
 
 import de.hf.marketdataprovider.domain.Product;
-//import org.osgi.service.component.annotations.Component;
+import org.osgi.service.component.annotations.Component;
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.repository.CrudRepository;
 
 
@@ -19,8 +20,7 @@ import org.springframework.data.repository.CrudRepository;
  * They are used for the domain class the repository is supporting, and the type of the id declared of the domain class.
  * @author xn01598
  */
-//@Component
-public interface ProductRepository extends CrudRepository<Product, Integer>{
+public interface ProductRepository extends JpaRepository<Product, Integer> {
 }
 
 

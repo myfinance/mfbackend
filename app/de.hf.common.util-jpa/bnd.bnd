@@ -1,0 +1,11 @@
+-dsannotations : *
+Export-Package: de.hf.common.util.jpa, de.hf.common.util.jpa.repositories
+Import-Package:org.postgresql, \
+    de.hf.marketdataprovider.domain, \
+	javax.persistence*;version=1.2.0, \
+	org.hibernate.core*;version="[5.2,6)", \
+	org.hibernate.query*;version="[5.2,6)", \
+	org.hibernate.transform*;version="[5.2,6)", \
+	org.hibernate.type*;version="[5.2,6)", \
+    *
+Bundle-SymbolicName: ${project.artifactId}

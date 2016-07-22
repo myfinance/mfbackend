@@ -17,11 +17,38 @@
         </dependency>
         <dependency>
             <groupId>de.hf.marketDataProvider</groupId>
+            <artifactId>de.hf.common.util-jpa</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>de.hf.marketDataProvider</groupId>
             <artifactId>persistence</artifactId>
         </dependency>
         <dependency>
             <groupId>javax.inject</groupId>
             <artifactId>javax.inject</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.osgi</groupId>
+            <artifactId>osgi.cmpn</artifactId>
+            <version>6.0.0</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.h2database</groupId>
+            <artifactId>h2</artifactId>
+            <version>1.4.192</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.osgi</groupId>
+            <artifactId>org.osgi.core</artifactId>
+            <version>6.0.0</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.jboss.narayana.osgi</groupId>
+            <artifactId>narayana-osgi-jta</artifactId>
+            <version>5.3.3.Final</version>
         </dependency>
     </dependencies>
 

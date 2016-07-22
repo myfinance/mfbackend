@@ -14,5 +14,6 @@
         <module>marketDataProvider-springboot</module>
         <!--<module>marketDataProvider-wildfly</module>-->
         <module>marketdataprovider-osgi-cli</module>
+        <module>marketdataprovider-karaf</module>
     </modules>
 </project>

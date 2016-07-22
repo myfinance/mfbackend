@@ -17,30 +17,61 @@
 
 package de.hf.marketdataprovider.service;
 
+import de.hf.common.util.jpa.DatabaseInfo;
+import de.hf.common.util.jpa.EntityManagerFactorySetup;
+import de.hf.marketdataprovider.domain.Instrument;
 import de.hf.marketdataprovider.domain.Product;
 import de.hf.marketdataprovider.persistence.repositories.ProductRepository;
+
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Properties;
 
 import lombok.extern.slf4j.Slf4j;
+import org.osgi.framework.FrameworkUtil;
+import org.osgi.framework.wiring.BundleWiring;
+import org.osgi.service.component.annotations.Reference;
+import org.osgi.service.component.annotations.Component;
+import org.osgi.service.component.annotations.ReferenceCardinality;
+import org.osgi.service.component.annotations.ReferencePolicy;
+import org.springframework.data.jpa.repository.support.JpaRepositoryFactory;
 
 import javax.inject.Inject;
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.TypedQuery;
+import javax.transaction.Transactional;
+
+import org.osgi.framework.Bundle;
 
 /**
  *
  * @author surak
  */
 @Slf4j
+@Component(service = ProductService.class)
 public class ProductServiceImpl implements ProductService {
 
     private ProductRepository productRepository;
+
+    //private NewProductRepository newProductRepository;
 
     @Inject
     public void setProductRepository(ProductRepository productRepository) {
         this.productRepository = productRepository;
     }
 
+    EntityManagerFactorySetup efs;
+    @Reference(cardinality = ReferenceCardinality.MANDATORY,
+        policy = ReferencePolicy.STATIC)
+    protected void setEntityManagerFactorySetup(EntityManagerFactorySetup efs) {
+        this.efs = efs;
+    }
+
+
     @Override
+    @Transactional
     public List<Product> listProducts() {
         Product p1 = new Product("1234", "Product 1 desc");
         Product p2 = new Product("1235", "Product 2 desc");
@@ -48,8 +79,38 @@ public class ProductServiceImpl implements ProductService {
         products.add(p1);
         products.add(p2);
 
-        productRepository.save(products);
+        Properties properties = new Properties();
 
+        DatabaseInfo db = new DatabaseInfo("jdbc:postgresql://localhost:5432/marketdata", "postgres", "vulkan", "org.postgresql.Driver");
+
+        Class<?>[] entities = new Class<?>[]{Product.class, Instrument.class};
+        EntityManager em = null;
+        EntityManagerFactory sdbFactory=null;
+        try {
+            sdbFactory = efs.buildEntityManagerFactory("ServiceConfiguration", entities, db,null );
+            em = sdbFactory.createEntityManager();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        JpaRepositoryFactory factory = new JpaRepositoryFactory(em);
+        final Bundle bundle = FrameworkUtil.getBundle(ProductRepository.class);
+        final ClassLoader classLoader = bundle.adapt(BundleWiring.class).getClassLoader();
+        factory.setBeanClassLoader(classLoader);
+
+        //newProductRepository = factory.getRepository(NewProductRepository.class);
+        //List oldproductsRepo=newProductRepository.findAll();
+
+        productRepository = factory.getRepository(ProductRepository.class);
+        List oldproductsRepo=productRepository.findAll();
+
+        List savedObjects = productRepository.save(products);
+
+
+        TypedQuery<Product> query = em.createNamedQuery(Product.findAll, Product.class);
+        List oldproducts=query.getResultList();
+
+        em.persist(p1);
 
         //fetch from DB
         //Product fetchedProduct = productRepository.findOne(p1.getId());

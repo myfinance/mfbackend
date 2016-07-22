@@ -18,22 +18,26 @@ import java.math.BigDecimal;
  *
  * @author surak
  */
+@NamedQueries({
+    @NamedQuery(name=Product.findAll,query="SELECT a FROM Product a")
+})
 @Entity
 @Data
 @NoArgsConstructor
 @RequiredArgsConstructor
 public class Product implements Serializable {
+    public static final String findAll = "Product.findAll";
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer id;
  
-    @Version
+    //@Version
     private Integer version;
     @NonNull
-    private String productId;
+    private String product_Id;
     @NonNull
     private String description;
-    private String imageUrl;
+    private String image_url;
     private BigDecimal price;
 }
