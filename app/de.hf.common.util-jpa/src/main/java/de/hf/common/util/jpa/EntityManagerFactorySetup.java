@@ -138,6 +138,7 @@ public class EntityManagerFactorySetup {
         } else if(db.getDriver().matches("oracle.jdbc.OracleDriver")) {
             dialect = "org.hibernate.dialect.Oracle10gDialect";
         } else if(db.getDriver().matches("org.postgresql.Driver")) {
+            dataSource = postgresDataSourceFactory.createDataSource(getJdbcProps());
             dialect = "org.hibernate.dialect.PostgreSQLDialect";
         } else if(db.getDriver().matches("org.h2.Driver")) {
             dialect = "org.hibernate.dialect.H2Dialect";
@@ -145,6 +146,12 @@ public class EntityManagerFactorySetup {
             throw new IllegalArgumentException("Unhandled Driver " + driver);
         }
         props = getDBProperties(persistenceUnit,entities,url,user,password, jtaPlatform, driver, dialect);
+        //props.put("javax.persistence.JtaDataSource",dataSource); //String vergelich funzt nicht. deshalb:
+        /* mit diesen Zeilen wird die Datasource gesetzt aber mit dieser kann keine Verbindung aufgebaut werden da die Properties nicht gesetzt werden
+        dazu muss getJdbcProps mit logik versehen werden. dann funbzt es aber immer noch nicht da mein aktueller windows user satt der übergebene user verwendet wird
+        props.put(EntityManagerFactoryBuilderImpl.JAVAX_PERSISTENCE_JTA_DATASOURCE,dataSource);
+        props.put(EntityManagerFactoryBuilderImpl.JAVAX_PERSISTENCE_NON_JTA_DATASOURCE,dataSource);
+        */
         return efb.createEntityManagerFactory(props);
 
     }
