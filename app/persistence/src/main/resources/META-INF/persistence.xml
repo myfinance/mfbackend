@@ -4,12 +4,17 @@
              xsi:schemaLocation="
         http://java.sun.com/xml/ns/persistence
         http://java.sun.com/xml/ns/persistence/persistence_2_0.xsd">
-    <persistence-unit name="primary">
-        <class>de.hf.marketdataprovider.domain.Product</class>
+    <persistence-unit name="marketdatapostgres" transaction-type="JTA">
+
         <!--<jar-file>domain-0.3.1-SNAPSHOT.jar</jar-file>-->
+        <provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
+        <jta-data-source>osgi:service/javax.sql.DataSource/(osgi.jndi.service.name=marketdatapostgres)</jta-data-source>
+        <!-- Only used when transaction-type=RESOURCE_LOCAL -->
+        <non-jta-data-source>osgi:service/javax.sql.DataSource/(osgi.jndi.service.name=marketdatapostgres)</non-jta-data-source>
+        <class>de.hf.marketdataprovider.domain.Product</class>
         <properties>
             <!-- Properties for Hibernate -->
-           <!-- <property name="hibernate.hbm2ddl.auto" value="none" />-->
+           <!-- <property name="hibernate.hbm2ddl.auto" value="none" />
             <property name="hibernate.hbm2ddl.auto" value="create-drop" />
 
             <property name="hibernate.show_sql" value="true" />
@@ -18,7 +23,9 @@
                       value="jdbc:h2:file:./h2dev;AUTO_SERVER=TRUE"/>
             <property name="javax.persistence.jdbc.user" value="sa"/>
             <property name="javax.persistence.jdbc.password" value=""/>
-            <property name="javax.persistence.jdbc.driver" value="org.h2.Driver"/>
+            <property name="javax.persistence.jdbc.driver" value="org.h2.Driver"/>-->
+            <property name="hibernate.dialect" value="org.hibernate.dialect.PostgreSQL82Dialect"/>
+            <property name="hibernate.hbm2ddl.auto" value="create-drop" />
         </properties>
     </persistence-unit>
 </persistence>

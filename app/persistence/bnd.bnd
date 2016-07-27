@@ -1,3 +1,5 @@
+Meta-Persistence: \
+    META-INF/persistence.xml
 -dsannotations : *
 Export-Package: de.hf.marketdataprovider.persistence,de.hf.marketdataprovider.persistence.repositories
 Import-Package:org.postgresql, \

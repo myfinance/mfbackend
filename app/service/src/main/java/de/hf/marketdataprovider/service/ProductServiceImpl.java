@@ -29,6 +29,8 @@ import java.util.List;
 import java.util.Properties;
 
 import lombok.extern.slf4j.Slf4j;
+import org.apache.aries.jpa.template.JpaTemplate;
+import org.apache.aries.jpa.template.TransactionType;
 import org.osgi.framework.FrameworkUtil;
 import org.osgi.framework.wiring.BundleWiring;
 import org.osgi.service.component.annotations.Reference;
@@ -41,6 +43,7 @@ import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.TypedQuery;
+
 import javax.transaction.Transactional;
 
 import org.osgi.framework.Bundle;
@@ -51,11 +54,11 @@ import org.osgi.framework.Bundle;
  */
 @Slf4j
 @Component(service = ProductService.class)
+@Transactional
 public class ProductServiceImpl implements ProductService {
 
     private ProductRepository productRepository;
 
-    //private NewProductRepository newProductRepository;
 
     @Inject
     public void setProductRepository(ProductRepository productRepository) {
@@ -69,9 +72,17 @@ public class ProductServiceImpl implements ProductService {
         this.efs = efs;
     }
 
+    @Reference(target = "(osgi.unit.name=marketdatapostgres)")
+    JpaTemplate jpa;
+
+
+    /*DataSource dataSource;
+    @Reference(target = "(dataSourceName=marketdatapostgres)")
+    public void setDataSource(DataSource dataSource) {
+        this.dataSource = dataSource;
+    }*/
 
     @Override
-    @Transactional
     public List<Product> listProducts() {
         Product p1 = new Product("1234", "Product 1 desc");
         Product p2 = new Product("1235", "Product 2 desc");
@@ -93,24 +104,26 @@ public class ProductServiceImpl implements ProductService {
             e.printStackTrace();
         }
 
-        JpaRepositoryFactory factory = new JpaRepositoryFactory(em);
-        final Bundle bundle = FrameworkUtil.getBundle(ProductRepository.class);
-        final ClassLoader classLoader = bundle.adapt(BundleWiring.class).getClassLoader();
-        factory.setBeanClassLoader(classLoader);
-
-        //newProductRepository = factory.getRepository(NewProductRepository.class);
-        //List oldproductsRepo=newProductRepository.findAll();
-
-        productRepository = factory.getRepository(ProductRepository.class);
-        List oldproductsRepo=productRepository.findAll();
-
-        List savedObjects = productRepository.save(products);
 
 
         TypedQuery<Product> query = em.createNamedQuery(Product.findAll, Product.class);
         List oldproducts=query.getResultList();
 
-        em.persist(p1);
+
+        jpa.tx(TransactionType.Required,   ema -> {
+            ema.persist(p1);
+            ema.flush();
+
+            JpaRepositoryFactory factory = new JpaRepositoryFactory(ema);
+            final Bundle bundle = FrameworkUtil.getBundle(ProductRepository.class);
+            final ClassLoader classLoader = bundle.adapt(BundleWiring.class).getClassLoader();
+            factory.setBeanClassLoader(classLoader);
+
+            productRepository = factory.getRepository(ProductRepository.class);
+            List oldproductsRepo=productRepository.findAll();
+
+            List savedObjects = productRepository.save(products);
+        });
 
         //fetch from DB
         //Product fetchedProduct = productRepository.findOne(p1.getId());
