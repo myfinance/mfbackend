@@ -41,7 +41,6 @@ import org.springframework.data.jpa.repository.support.JpaRepositoryFactory;
 
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
 import javax.persistence.TypedQuery;
 
 import javax.transaction.Transactional;
@@ -75,6 +74,9 @@ public class ProductServiceImpl implements ProductService {
     @Reference(target = "(osgi.unit.name=marketdatapostgres)")
     JpaTemplate jpa;
 
+    @Reference(target = "(component.name=de.hf.common.util.jpa.GenericEntityManager)")
+    EntityManager em;
+
 
     /*DataSource dataSource;
     @Reference(target = "(dataSourceName=marketdatapostgres)")
@@ -91,20 +93,6 @@ public class ProductServiceImpl implements ProductService {
         products.add(p2);
 
         Properties properties = new Properties();
-
-        DatabaseInfo db = new DatabaseInfo("jdbc:postgresql://localhost:5432/marketdata", "postgres", "vulkan", "org.postgresql.Driver");
-
-        Class<?>[] entities = new Class<?>[]{Product.class, Instrument.class};
-        EntityManager em = null;
-        EntityManagerFactory sdbFactory=null;
-        try {
-            sdbFactory = efs.buildEntityManagerFactory("ServiceConfiguration", entities, db,null );
-            em = sdbFactory.createEntityManager();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-
-
 
         TypedQuery<Product> query = em.createNamedQuery(Product.findAll, Product.class);
         List oldproducts=query.getResultList();

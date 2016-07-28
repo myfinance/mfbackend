@@ -47,13 +47,13 @@ public class EntityManagerFactorySetup {
         this.efb = efb;
     }
 
-    DataSourceFactory postgresDataSourceFactory;
+    /*DataSourceFactory postgresDataSourceFactory;
     @Reference(cardinality = ReferenceCardinality.MANDATORY,
         policy = ReferencePolicy.STATIC,
         target = "(osgi.jdbc.driver.name=PostgreSQL JDBC Driver)")
     protected void setPostgresDataSourceFactory(DataSourceFactory dsf) {
         this.postgresDataSourceFactory = dsf;
-    }
+    }*/
 
     /*@H2Qualifier
     DataSourceFactory h2DataSourceFactory;
@@ -155,7 +155,7 @@ public class EntityManagerFactorySetup {
         props = getDBProperties(persistenceUnit,entities,url,user,password, jtaPlatform, driver, dialect);
         //props.put("javax.persistence.JtaDataSource",dataSource); //String vergelich funzt nicht. deshalb:
         /* mit diesen Zeilen wird die Datasource gesetzt aber mit dieser kann keine Verbindung aufgebaut werden da die Properties nicht gesetzt werden
-        dazu muss getJdbcProps mit logik versehen werden. dann funbzt es aber immer noch nicht da mein aktueller windows user satt der übergebene user verwendet wird
+        dazu muss getJdbcProps mit logik versehen werden. dann funbzt es aber immer noch nicht da mein aktueller windows user statt der übergebene user verwendet wird
         */
         //props.put(EntityManagerFactoryBuilderImpl.JAVAX_PERSISTENCE_JTA_DATASOURCE,dataSource);
         //props.put(EntityManagerFactoryBuilderImpl.JAVAX_PERSISTENCE_NON_JTA_DATASOURCE,dataSource);
