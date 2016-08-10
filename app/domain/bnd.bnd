@@ -1,3 +1,9 @@
 -dsannotations : *
 Export-Package: de.hf.marketdataprovider.domain
+Meta-Persistence: \
+    META-INF/persistence.xml
+Import-Package: \
+    org.hibernate.proxy, \
+    javassist.util.proxy, \
+    *
 Bundle-SymbolicName: ${project.artifactId}

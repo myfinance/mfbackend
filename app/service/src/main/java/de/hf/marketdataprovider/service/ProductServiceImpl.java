@@ -41,6 +41,7 @@ import org.springframework.data.jpa.repository.support.JpaRepositoryFactory;
 
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 
 import javax.transaction.Transactional;
@@ -76,6 +77,9 @@ public class ProductServiceImpl implements ProductService {
 
     @Reference(target = "(component.name=de.hf.common.util.jpa.GenericEntityManager)")
     EntityManager em;
+
+    @PersistenceContext(unitName="tasklist")
+    EntityManager emTest;
 
 
     /*DataSource dataSource;

@@ -15,5 +15,6 @@
         <!--<module>marketDataProvider-wildfly</module>-->
         <module>marketdataprovider-osgi-cli</module>
         <module>marketdataprovider-karaf</module>
+        <module>karaf-stable</module>
     </modules>
 </project>
