@@ -37,7 +37,7 @@ import java.util.Dictionary;
 import java.util.Hashtable;
 
 @Component
-public class EntityManagerActivator implements BundleActivator {
+public class EntityManagerActivator {//implements BundleActivator {
 
     private ServiceRegistration registration;
 
@@ -48,7 +48,7 @@ public class EntityManagerActivator implements BundleActivator {
         this.efs = efs;
     }*/
 
-    @Override
+    /*@Override
     public void start(BundleContext bundleContext) throws Exception {
         DatabaseInfo db = new DatabaseInfo("jdbc:postgresql://localhost:5432/marketdata", "postgres", "vulkan", "org.postgresql.Driver");
         Class<?>[] entities = new Class<?>[]{Product.class, Instrument.class};
@@ -73,5 +73,5 @@ public class EntityManagerActivator implements BundleActivator {
     @Override
     public void stop(BundleContext bundleContext) throws Exception {
         registration.unregister();
-    }
+    }*/
 }

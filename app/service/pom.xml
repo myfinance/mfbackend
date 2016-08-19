@@ -45,11 +45,11 @@
             <version>6.0.0</version>
             <scope>provided</scope>
         </dependency>
-        <dependency>
+        <!--<dependency>
             <groupId>org.jboss.narayana.osgi</groupId>
             <artifactId>narayana-osgi-jta</artifactId>
             <version>5.3.3.Final</version>
-        </dependency>
+        </dependency>-->
         <dependency>
             <groupId>org.apache.aries.jpa</groupId>
             <artifactId>org.apache.aries.jpa.api</artifactId>

@@ -1,4 +1,3 @@
 -dsannotations : *
 Export-Package: de.hf.marketdataprovider.service
 Bundle-SymbolicName: ${project.artifactId}
-Bundle-Activator: de.hf.marketdataprovider.service.EntityManagerActivator

@@ -44,7 +44,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 
-import javax.transaction.Transactional;
+//import javax.transaction.Transactional;
 
 import org.osgi.framework.Bundle;
 
@@ -54,7 +54,7 @@ import org.osgi.framework.Bundle;
  */
 @Slf4j
 @Component(service = ProductService.class)
-@Transactional
+//@Transactional
 public class ProductServiceImpl implements ProductService {
 
     private ProductRepository productRepository;
@@ -75,11 +75,11 @@ public class ProductServiceImpl implements ProductService {
     @Reference(target = "(osgi.unit.name=marketdatapostgres)")
     JpaTemplate jpa;
 
-    @Reference(target = "(component.name=de.hf.common.util.jpa.GenericEntityManager)")
-    EntityManager em;
+    //@Reference(target = "(component.name=de.hf.common.util.jpa.GenericEntityManager)")
+    //EntityManager em;
 
-    @PersistenceContext(unitName="tasklist")
-    EntityManager emTest;
+    /*@PersistenceContext(unitName="tasklist")
+    EntityManager emTest;*/
 
 
     /*DataSource dataSource;
@@ -98,8 +98,8 @@ public class ProductServiceImpl implements ProductService {
 
         Properties properties = new Properties();
 
-        TypedQuery<Product> query = em.createNamedQuery(Product.findAll, Product.class);
-        List oldproducts=query.getResultList();
+       // TypedQuery<Product> query = em.createNamedQuery(Product.findAll, Product.class);
+        //List oldproducts=query.getResultList();
 
 
         jpa.tx(TransactionType.Required,   ema -> {
