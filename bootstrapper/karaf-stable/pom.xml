@@ -11,6 +11,8 @@
 
     <artifactId>karaf-stable</artifactId>
     <packaging>karaf-assembly</packaging>
+
+
     <properties>
         <karaf.version>4.0.5</karaf.version>
     </properties>
@@ -32,7 +34,6 @@
             <version>${karaf.version}</version>
             <type>xml</type>
             <!--<scope>runtime</scope>-->
-            <!--<scope>runtime</scope>-->
         </dependency>
         <dependency>
             <groupId>org.apache.karaf.features</groupId>
@@ -42,11 +43,35 @@
             <type>xml</type>
             <scope>runtime</scope>
         </dependency>
+        <dependency>
+            <groupId>de.hf.marketDataProvider</groupId>
+            <artifactId>appfeatures</artifactId>
+            <type>xml</type>
+            <classifier>features</classifier>
+            <version>${project.version}</version>
+            <scope>runtime</scope>
+        </dependency>
+        <dependency>
+            <groupId>de.hf.marketDataProvider</groupId>
+            <artifactId>appkar</artifactId>
+            <type>kar</type>
+            <version>${project.version}</version>
+        </dependency>
+
 
 
     </dependencies>
 
     <build>
+        <resources>
+            <resource>
+                <directory>cfg/etc</directory>
+                <filtering>false</filtering>
+                <includes>
+                    <include>**/*</include>
+                </includes>
+            </resource>
+        </resources>
         <pluginManagement>
             <plugins>
                 <plugin>
@@ -59,73 +84,51 @@
         </pluginManagement>
         <plugins>
             <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-resources-plugin</artifactId>
+                <version>2.6</version>
+                <executions>
+                    <execution>
+                        <id>process-resources</id>
+                        <goals>
+                            <goal>resources</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
                 <groupId>org.apache.karaf.tooling</groupId>
                 <artifactId>karaf-maven-plugin</artifactId>
 
                 <configuration>
-                    <!--<addTransitiveFeatures>true</addTransitiveFeatures>
-                    <resolveDefinedRepositoriesRecursively>true</resolveDefinedRepositoriesRecursively>-->
                     <startupFeatures>
                         <feature>eventadmin</feature>
-                        <!--for publish subscribe between bundles. needed? resposible for Unknown protocol: mvn error. Why? -> can not be an bootfeature -->
-                    </startupFeatures>
-                    <bootFeatures>
-                        <feature>standard</feature>
-                        <!--<feature>wrap</feature>
-                        <feature>aries-blueprint</feature>
-                        <feature>shell</feature>
-                        <feature>shell-compat</feature>
-                        <feature>feature</feature>
-                        <feature>jaas</feature>
-                        <feature>ssh</feature>
-                        <feature>management</feature>
-                        <feature>bundle</feature>
-                        <feature>config</feature>
-                        <feature>deployer</feature>
-                        <feature>diagnostic</feature>
-                        <feature>feature</feature>
-                        <feature>instance</feature>
-                        <feature>kar</feature>
-                        <feature>log</feature>
-                        <feature>package</feature>
-                        <feature>service</feature>
-                        <feature>system</feature>-->
+                        <!--for publish subscribe between bundles. needed for transactionhandling? resposible for Unknown protocol: mvn error. Why? -> can not be an bootfeature -->
 
+                        <!--<feature>hibernate-orm</feature>-->
+                    </startupFeatures>
+
+                    <bootFeatures>
+
+                        <feature>standard</feature>
 
                         <!-- non-standard -->
-                        <feature>webconsole</feature>
                         <feature>http</feature>
-
                         <feature>scr</feature>
-
+                        <feature>webconsole</feature>
                         <!-- enterprise -->
 
                         <feature>hibernate-envers</feature>
-                        <feature>hibernate-validator</feature>
+                        <!-- <feature>hibernate-validator</feature> wozu?-->
                         <feature>jpa</feature>
+
+                        <!--<feature>appfeatures</feature>-->
+
+
                     </bootFeatures>
                     <!--<installedFeatures>
                     </installedFeatures>-->
                 </configuration>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-dependency-plugin</artifactId>
-                <inherited>false</inherited>
-                <executions>
-                    <execution>
-                        <id>copy-own-bundles</id>
-                        <phase>prepare-package</phase>
-                        <goals>
-                            <goal>copy-dependencies</goal>
-                        </goals>
-                        <configuration>
-                            <includeScope>provided</includeScope>
-                            <includeTypes>jar</includeTypes>
-                            <outputDirectory>target/assembly/deploy</outputDirectory>
-                        </configuration>
-                    </execution>
-                </executions>
             </plugin>
         </plugins>
     </build>

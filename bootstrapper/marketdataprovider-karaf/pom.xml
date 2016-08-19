@@ -263,7 +263,7 @@
 
                         <!-- enterprise -->
 
-                        <feature>hibernate-envers</feature>
+                       <feature>hibernate-envers</feature>
                     <!-- <feature>hibernate-validator</feature> wozu?-->
                      <feature>jpa</feature>
 
