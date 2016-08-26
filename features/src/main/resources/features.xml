@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<features name="tasklist-cdi-1.0.0-SNAPSHOT" xmlns="http://karaf.apache.org/xmlns/features/v1.3.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://karaf.apache.org/xmlns/features/v1.3.0 http://karaf.apache.org/xmlns/features/v1.3.0">
+    <!--<repository>mvn:org.ops4j.pax.cdi/pax-cdi-features/0.12.0/xml/features</repository>
+    <repository>mvn:org.ops4j.pax.jdbc/pax-jdbc-features/${pax.jdbc.version}/xml/features</repository>
+    <repository>mvn:org.apache.karaf.features/standard/4.0.5/xml/features</repository>-->
+
+    <feature name="marketdata-features" version="${pom.version}">
+        <!--<feature>standard</feature>
+        <feature>pax-cdi</feature>-->
+        <!--<bundle>mvn:org.ops4j.pax.logging/pax-logging-service/1.8.5</bundle>
+        <bundle>mvn:de.hf.marketDataProvider/domain/0.3.1-SNAPSHOT</bundle>-->
+        <bundle>mvn:de.hf.marketDataProvider/service-api/0.3.1-SNAPSHOT</bundle>
+        <!--<bundle>mvn:org.apache.servicemix.bundles/org.apache.servicemix.bundles.spring-core/4.2.6.RELEASE_1</bundle>
+        <bundle>mvn:org.apache.servicemix.bundles/org.apache.servicemix.bundles.spring-context/4.2.6.RELEASE_1</bundle>
+        <bundle>mvn:org.apache.servicemix.bundles/org.apache.servicemix.bundles.spring-beans/4.2.6.RELEASE_1</bundle>
+        <bundle>mvn:org.apache.servicemix.bundles/org.apache.servicemix.bundles.aopalliance/1.0_6</bundle>
+        <bundle>mvn:org.apache.servicemix.bundles/org.apache.servicemix.bundles.spring-expression/4.2.6.RELEASE_1</bundle>
+        <bundle>mvn:org.apache.servicemix.bundles/org.apache.servicemix.bundles.spring-aop/4.2.6.RELEASE_1</bundle>
+        <bundle>mvn:org.apache.servicemix.bundles/org.apache.servicemix.bundles.spring-orm/4.2.6.RELEASE_1</bundle>
+        <bundle>mvn:org.apache.servicemix.bundles/org.apache.servicemix.bundles.spring-tx/4.2.6.RELEASE_1</bundle>
+        <bundle>mvn:org.apache.servicemix.bundles/org.apache.servicemix.bundles.spring-jdbc/4.2.6.RELEASE_1</bundle>-->
+        <!--<bundle>mvn:org.ops4j.pax.cdi/pax-cdi-api/0.12.0</bundle>
+        <bundle>mvn:org.osgi/org.osgi.core/4.3.1</bundle>
+        <bundle>mvn:org.osgi/org.osgi.compendium/4.3.1</bundle>
+        <bundle>mvn:javax.enterprise/cdi-api/1.2</bundle>
+        <bundle>mvn:javax.el/javax.el-api/3.0.0</bundle>
+        <bundle>mvn:javax.interceptor/javax.interceptor-api/1.2</bundle>
+        <bundle>mvn:org.apache.servicemix.bundles/org.apache.servicemix.bundles.javax-inject/1_2</bundle>-->
+    </feature>
+</features>

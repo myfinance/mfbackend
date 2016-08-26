@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <parent>
+        <artifactId>bootstrapper</artifactId>
+        <groupId>de.hf.marketDataProvider</groupId>
+        <version>0.3.1-SNAPSHOT</version>
+    </parent>
+    <modelVersion>4.0.0</modelVersion>
+
+    <artifactId>appkar</artifactId>
+    <packaging>kar</packaging>
+    <properties>
+        <karaf.version>4.0.5</karaf.version>
+    </properties>
+
+
+    <dependencies>
+
+        <dependency>
+            <groupId>de.hf.marketDataProvider</groupId>
+            <artifactId>features</artifactId>
+            <version>${project.version}</version>
+            <type>xml</type>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <groupId>org.apache.karaf.tooling</groupId>
+                    <artifactId>karaf-maven-plugin</artifactId>
+                    <version>${karaf.version}</version>
+                    <extensions>true</extensions>
+                </plugin>
+            </plugins>
+        </pluginManagement>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.karaf.tooling</groupId>
+                <artifactId>karaf-maven-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>features-add-to-repo</id>
+                        <phase>generate-resources</phase>
+                        <goals>
+                            <goal>features-add-to-repository</goal>
+                        </goals>
+                        <configuration>
+                            <descriptors>
+                                <!--<descriptor>mvn:org.apache.karaf.features/standard/${karaf.version}/xml/features</descriptor>-->
+                                <descriptor>mvn:de.hf.marketDataProvider/features/${project.version}/xml</descriptor>
+                            </descriptors>
+                            <features>
+                                <!--<feature>standard</feature>-->
+
+                                <!-- non-standard -->
+                                <!--<feature>http</feature>
+                                <feature>scr</feature>
+                                <feature>webconsole</feature>-->
+                                <feature>marketdata-features</feature>
+                            </features>
+                            <repository>target/classes/repository</repository>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+
+        </plugins>
+    </build>
+
+</project>

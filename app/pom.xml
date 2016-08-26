@@ -16,6 +16,7 @@
         <module>service</module>
         <module>restservice</module>
         <module>de.hf.common.util-jpa</module>
+        <module>service-api</module>
     </modules>
 
     <build>

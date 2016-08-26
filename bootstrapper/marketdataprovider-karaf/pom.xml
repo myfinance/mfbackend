@@ -247,7 +247,7 @@
                     <repository>mvn:org.hibernate/hibernate-osgi/5.1.0.Final/xml/karaf</repository>
                     <startupFeatures>
                         <feature>eventadmin</feature>
-                        <!--for publish subscribe between bundles. needed for transactionhandling? resposible for Unknown protocol: mvn error. Why? -> can not be an bootfeature -->
+                        <!--for publish subscribe between bundles. needed for transactionhandling? responsible for Unknown protocol: mvn error. Why? -> can not be an bootfeature -->
 
                         <!--<feature>hibernate-orm</feature>-->
                     </startupFeatures>
