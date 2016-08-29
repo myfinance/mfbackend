@@ -14,7 +14,7 @@
     <dependencies>
         <dependency>
             <groupId>de.hf.marketDataProvider</groupId>
-            <artifactId>domain</artifactId>
+            <artifactId>de.hf.marketDataProvider.domain</artifactId>
         </dependency>
 
         <dependency>

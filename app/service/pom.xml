@@ -8,12 +8,12 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>service</artifactId>
+    <artifactId>de.hf.marketDataProvider.service</artifactId>
 
     <dependencies>
         <dependency>
             <groupId>de.hf.marketDataProvider</groupId>
-            <artifactId>domain</artifactId>
+            <artifactId>de.hf.marketDataProvider.domain</artifactId>
         </dependency>
         <dependency>
             <groupId>de.hf.marketDataProvider</groupId>
@@ -21,7 +21,7 @@
         </dependency>
         <dependency>
             <groupId>de.hf.marketDataProvider</groupId>
-            <artifactId>persistence</artifactId>
+            <artifactId>de.hf.marketDataProvider.persistence</artifactId>
         </dependency>
         <dependency>
             <groupId>javax.inject</groupId>

@@ -43,19 +43,20 @@
             <type>xml</type>
             <scope>runtime</scope>
         </dependency>
-        <dependency>
+        <!--<dependency>
             <groupId>de.hf.marketDataProvider</groupId>
             <artifactId>appkar</artifactId>
             <type>kar</type>
             <version>${project.version}</version>
-        </dependency>
-        <!--<dependency>
+        </dependency>-->
+        <dependency>
             <groupId>de.hf.marketDataProvider</groupId>
             <artifactId>features</artifactId>
             <version>${project.version}</version>
             <type>xml</type>
             <scope>runtime</scope>
-        </dependency>-->
+            <classifier>features</classifier>
+        </dependency>
 
     </dependencies>
 
@@ -115,9 +116,8 @@
                         <feature>webconsole</feature>
                         <!-- enterprise -->
 
-                        <feature>hibernate-envers</feature>
-                        <!-- <feature>hibernate-validator</feature> wozu?-->
-                        <feature>jpa</feature>
+                        <!--<feature>hibernate-envers</feature>
+                        <feature>jpa</feature>-->
 
                         <!--<feature>marketdata-features</feature>-->
 

@@ -9,7 +9,7 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>restservice</artifactId>
+    <artifactId>de.hf.marketDataProvider.restservice</artifactId>
 
     <dependencies>
 
@@ -29,7 +29,7 @@
 
         <dependency>
             <groupId>de.hf.marketDataProvider</groupId>
-            <artifactId>service</artifactId>
+            <artifactId>de.hf.marketDataProvider.service</artifactId>
         </dependency>
 
     </dependencies>

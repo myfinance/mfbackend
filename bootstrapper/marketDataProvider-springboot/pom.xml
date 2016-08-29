@@ -40,7 +40,7 @@
         </dependency>
         <dependency>
             <groupId>de.hf.marketDataProvider</groupId>
-            <artifactId>domain</artifactId>
+            <artifactId>de.hf.marketDataProvider.domain</artifactId>
         </dependency>
         <dependency>
             <groupId>de.hf.marketDataProvider</groupId>
@@ -48,7 +48,7 @@
         </dependency>
         <dependency>
             <groupId>de.hf.marketDataProvider</groupId>
-            <artifactId>service</artifactId>
+            <artifactId>de.hf.marketDataProvider.service</artifactId>
         </dependency>
         <dependency>
             <groupId>com.h2database</groupId>

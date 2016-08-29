@@ -21,14 +21,14 @@
     <dependencies>
         <dependency>
             <groupId>de.hf.marketDataProvider</groupId>
-            <artifactId>restservice</artifactId>
+            <artifactId>de.hf.marketDataProvider.restservice</artifactId>
             <version>${project.version}</version>
             <scope>provided</scope>
         </dependency>
 
         <dependency>
             <groupId>de.hf.marketDataProvider</groupId>
-            <artifactId>service</artifactId>
+            <artifactId>de.hf.marketDataProvider.service</artifactId>
             <version>${project.version}</version>
             <scope>provided</scope>
         </dependency>

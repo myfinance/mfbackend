@@ -20,75 +20,19 @@
 
         <dependency>
             <groupId>de.hf.marketDataProvider</groupId>
-            <artifactId>domain</artifactId>
+            <artifactId>service-api</artifactId>
             <version>${project.version}</version>
-            <exclusions>
-                <exclusion>
-                    <groupId>org.jadira.usertype</groupId>
-                    <artifactId>usertype.core</artifactId>
-                </exclusion>
-                <exclusion>
-                    <groupId>org.jadira.usertype</groupId>
-                    <artifactId>usertype.extended</artifactId>
-                </exclusion>
-                <exclusion>
-                    <groupId>org.jadira.usertype</groupId>
-                    <artifactId>usertype.spi</artifactId>
-                </exclusion>
-                <exclusion>
-                    <groupId>org.projectlombok</groupId>
-                    <artifactId>lombok</artifactId>
-                </exclusion>
-                <exclusion>
-                    <groupId>org.springframework</groupId>
-                    <artifactId>spring-orm</artifactId>
-                </exclusion>
-                <exclusion>
-                    <groupId>org.springframework</groupId>
-                    <artifactId>spring-jdbc</artifactId>
-                </exclusion>
-                <exclusion>
-                    <groupId>org.springframework</groupId>
-                    <artifactId>spring-context</artifactId>
-                </exclusion>
-                <exclusion>
-                    <groupId>org.springframework</groupId>
-                    <artifactId>spring-expression</artifactId>
-                </exclusion>
-                <exclusion>
-                    <groupId>org.springframework</groupId>
-                    <artifactId>spring-aop</artifactId>
-                </exclusion>
-                <exclusion>
-                    <groupId>org.springframework</groupId>
-                    <artifactId>spring-tx</artifactId>
-                </exclusion>
-                <exclusion>
-                    <groupId>org.springframework</groupId>
-                    <artifactId>spring-beans</artifactId>
-                </exclusion>
-                <exclusion>
-                    <groupId>org.springframework</groupId>
-                    <artifactId>spring-core</artifactId>
-                </exclusion>
-                <exclusion>
-                    <groupId>aopalliance</groupId>
-                    <artifactId>aopalliance</artifactId>
-                </exclusion>
-                <exclusion>
-                    <groupId>org.aspectj</groupId>
-                    <artifactId>aspectjrt</artifactId>
-                </exclusion>
-                <exclusion>
-                    <groupId>javax.inject</groupId>
-                    <artifactId>javax.inject</artifactId>
-                </exclusion>
-            </exclusions>
+        </dependency>
+
+        <dependency>
+            <groupId>de.hf.marketDataProvider</groupId>
+            <artifactId>de.hf.common.util-jpa</artifactId>
+            <version>${project.version}</version>
         </dependency>
 
 
         <!-- start Spring Data dependencies -->
-        <dependency>
+        <!--<dependency>
             <groupId>org.apache.servicemix.bundles</groupId>
             <artifactId>org.apache.servicemix.bundles.spring-core</artifactId>
             <version>4.2.6.RELEASE_1</version>
@@ -132,7 +76,7 @@
             <groupId>org.apache.servicemix.bundles</groupId>
             <artifactId>org.apache.servicemix.bundles.spring-jdbc</artifactId>
             <version>4.2.6.RELEASE_1</version>
-        </dependency>
+        </dependency>-->
 
         <!--<dependency>
             <groupId>org.springframework.data</groupId>
@@ -142,7 +86,7 @@
 
         <!-- end Spring Data dependencies -->
 
-        <dependency>
+        <!--<dependency>
             <groupId>org.ops4j.pax.cdi</groupId>
             <artifactId>pax-cdi-api</artifactId>
             <version>0.12.0</version>
@@ -164,7 +108,7 @@
             <groupId>org.apache.servicemix.bundles</groupId>
             <artifactId>org.apache.servicemix.bundles.javax-inject</artifactId>
             <version>1_2</version>
-        </dependency>
+        </dependency>-->
 
     </dependencies>
 
@@ -176,6 +120,9 @@
                     <artifactId>karaf-maven-plugin</artifactId>
                     <version>${karaf.version}</version>
                     <extensions>true</extensions>
+                    <configuration>
+                        <aggregateFeatures>false</aggregateFeatures>
+                    </configuration>
                 </plugin>
             </plugins>
         </pluginManagement>

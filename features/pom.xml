@@ -13,6 +13,7 @@
     <packaging>pom</packaging>
 
     <build>
+
         <resources>
             <resource>
                 <directory>src/main/resources</directory>
@@ -50,6 +51,7 @@
                                 <artifact>
                                     <file>target/classes/features.xml</file>
                                     <type>xml</type>
+                                    <classifier>features</classifier>
                                 </artifact>
                             </artifacts>
                         </configuration>

@@ -65,22 +65,17 @@
             </dependency>
             <dependency>
                 <groupId>de.hf.marketDataProvider</groupId>
-                <artifactId>springcommon</artifactId>
+                <artifactId>de.hf.marketDataProvider.domain</artifactId>
                 <version>0.3.1-SNAPSHOT</version>
             </dependency>
             <dependency>
                 <groupId>de.hf.marketDataProvider</groupId>
-                <artifactId>domain</artifactId>
+                <artifactId>de.hf.marketDataProvider.service</artifactId>
                 <version>0.3.1-SNAPSHOT</version>
             </dependency>
             <dependency>
                 <groupId>de.hf.marketDataProvider</groupId>
-                <artifactId>service</artifactId>
-                <version>0.3.1-SNAPSHOT</version>
-            </dependency>
-            <dependency>
-                <groupId>de.hf.marketDataProvider</groupId>
-                <artifactId>persistence</artifactId>
+                <artifactId>de.hf.marketDataProvider.persistence</artifactId>
                 <version>0.3.1-SNAPSHOT</version>
             </dependency>
 
