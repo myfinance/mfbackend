@@ -35,14 +35,6 @@
             <type>xml</type>
             <!--<scope>runtime</scope>-->
         </dependency>
-        <dependency>
-            <groupId>org.apache.karaf.features</groupId>
-            <artifactId>enterprise</artifactId>
-            <classifier>features</classifier>
-            <version>${karaf.version}</version>
-            <type>xml</type>
-            <scope>runtime</scope>
-        </dependency>
         <!--<dependency>
             <groupId>de.hf.marketDataProvider</groupId>
             <artifactId>appkar</artifactId>
@@ -61,15 +53,6 @@
     </dependencies>
 
     <build>
-        <resources>
-            <resource>
-                <directory>cfg/etc</directory>
-                <filtering>false</filtering>
-                <includes>
-                    <include>**/*</include>
-                </includes>
-            </resource>
-        </resources>
         <pluginManagement>
             <plugins>
                 <plugin>
@@ -81,19 +64,6 @@
             </plugins>
         </pluginManagement>
         <plugins>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-resources-plugin</artifactId>
-                <version>2.6</version>
-                <executions>
-                    <execution>
-                        <id>process-resources</id>
-                        <goals>
-                            <goal>resources</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
             <plugin>
                 <groupId>org.apache.karaf.tooling</groupId>
                 <artifactId>karaf-maven-plugin</artifactId>
@@ -114,18 +84,39 @@
                         <feature>http</feature>
                         <feature>scr</feature>
                         <feature>webconsole</feature>
-                        <!-- enterprise -->
 
-                        <!--<feature>hibernate-envers</feature>
-                        <feature>jpa</feature>-->
+                        <!-- the application -->
 
-                        <!--<feature>marketdata-features</feature>-->
+                        <feature>marketdata-features</feature>
+
 
 
                     </bootFeatures>
                     <!--<installedFeatures>
                     </installedFeatures>-->
                 </configuration>
+            </plugin>
+            <plugin>
+                <artifactId>maven-resources-plugin</artifactId>
+                <version>3.0.1</version>
+                <executions>
+                    <execution>
+                        <id>copy-cfg-etc</id>
+                        <phase>prepare-package</phase>
+                        <goals>
+                            <goal>copy-resources</goal>
+                        </goals>
+                        <configuration>
+                            <outputDirectory>${basedir}/target/assembly/etc</outputDirectory>
+                            <resources>
+                                <resource>
+                                    <directory>cfg/etc</directory>
+                                    <filtering>true</filtering>
+                                </resource>
+                            </resources>
+                        </configuration>
+                    </execution>
+                </executions>
             </plugin>
         </plugins>
     </build>

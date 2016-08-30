@@ -6,6 +6,7 @@
 
     <feature name="marketdata-domain-feature" version="${pom.version}">
         <feature>hibernate-envers</feature>
+        <feature>jpa</feature>
         <capability>osgi.service;effective:=active;objectClass=javax.persistence.spi.PersistenceProvider</capability>
         <bundle>mvn:org.jboss.logging/jboss-logging/3.3.0.Final</bundle>
         <bundle>mvn:org.hibernate.common/hibernate-commons-annotations/5.0.1.Final</bundle>
@@ -25,20 +26,20 @@
         <bundle>mvn:org.apache.servicemix.bundles/org.apache.servicemix.bundles.spring-tx/4.2.6.RELEASE_1</bundle>
     </feature>
 
-    <feature name="myspringdata-feature" version="4.2.6.RELEASE_1">
+    <feature name="myspringdata-feature" version="/1.9.4.RELEASE">
         <feature>myspring-feature</feature>
         <bundle>mvn:org.springframework.data/spring-data-commons/1.11.4.RELEASE</bundle>
         <bundle>mvn:org.springframework.data/spring-data-jpa/1.9.4.RELEASE</bundle>
     </feature>
 
-    <feature name="marketdata-persistence-feature" version="4.2.6.RELEASE_1">
+    <feature name="marketdata-persistence-feature" version="${pom.version}">
         <feature>marketdata-domain-feature</feature>
         <feature>myspringdata-feature</feature>
         <bundle>mvn:org.postgresql/postgresql/9.4.1209</bundle>
         <bundle>mvn:de.hf.marketDataProvider/de.hf.marketDataProvider.persistence/0.3.1-SNAPSHOT</bundle>
     </feature>
 
-    <feature name="marketdata-datasourcefactory" version="4.2.6.RELEASE_1">
+    <feature name="marketdata-datasourcefactory" version="${pom.version}">
         <bundle>mvn:org.postgresql/postgresql/9.4.1209</bundle>
 
         <!-- erstellt Datasource mit hilfe von Datasourcefactory entsprechend etc/org.ops4j.datasource-xxx.cfg -->
@@ -48,7 +49,7 @@
         <capability>osgi.service;effective:=active;objectClass=org.osgi.service.jdbc.DataSourceFactory</capability>
     </feature>
 
-    <feature name="marketdata-pooleddatasourcefactory" version="4.2.6.RELEASE_1">
+    <feature name="marketdata-pooleddatasourcefactory" version="${pom.version}">
         <bundle>mvn:org.postgresql/postgresql/9.4.1209</bundle>
 
         <!-- zum wrappen von Datasourcefactories fuer pooled connections -->
@@ -60,7 +61,7 @@
         <capability>osgi.service;effective:=active;objectClass=org.osgi.service.jdbc.DataSourceFactory</capability>
     </feature>
 
-    <feature name="marketdata-datasource" version="4.2.6.RELEASE_1">
+    <feature name="marketdata-datasource" version="${pom.version}">
         <!--<feature>marketdata-datasourcefactory</feature>-->
         <feature>marketdata-pooleddatasourcefactory</feature>
 
@@ -68,32 +69,47 @@
         <bundle  start-level="80">wrap:mvn:org.jasypt/jasypt/1.9.2</bundle>
         <bundle  start-level="80">mvn:org.ops4j.pax.jdbc/pax-jdbc-config/0.9.0</bundle>
         <bundle  start-level="80">mvn:org.osgi/org.osgi.service.jdbc/1.0.0</bundle>
+        <capability>osgi.service;effective:=active;objectClass=javax.sql.DataSource</capability>
     </feature>
 
-    <feature name="marketdata-jdbc" version="4.2.6.RELEASE_1">
+    <feature name="marketdata-jdbc" version="${pom.version}">
 
         <feature>marketdata-datasource</feature>
 
         <!-- for JPA Template to handle transactions with declarative services-->
-        <bundle  start-level="80">mvn:org.apache.aries.jpa/org.apache.aries.jpa.api/2.4.0</bundle>
+        <bundle>mvn:org.apache.aries.jpa/org.apache.aries.jpa.api/2.4.0</bundle>
+        <bundle>mvn:org.apache.aries.jpa/org.apache.aries.jpa.container/2.4.0</bundle>
+        <capability>osgi.service;effective:=active;objectClass=org.apache.aries.jpa.template.JpaTemplate</capability>
 
         <!--creates xa-datasourcefactory means datasources for distributed transactions-->
         <bundle>mvn:org.apache.aries.transaction/org.apache.aries.transaction.manager/1.3.0</bundle>
     </feature>
 
-    <feature name="marketdata-util-jpa-feature" version="4.2.6.RELEASE_1">
+    <feature name="marketdata-util-jpa-feature" version="${pom.version}">
         <feature>marketdata-domain-feature</feature>
         <feature>marketdata-jdbc</feature>
-
-
         <capability>de.hf.common.util.jpa.EntityManagerFactorySetup</capability>
-
         <bundle  start-level="85">mvn:de.hf.marketDataProvider/de.hf.common.util-jpa/0.3.1-SNAPSHOT</bundle>
+    </feature>
+
+    <feature name="marketdata-service-feature" version="${pom.version}">
+        <feature>marketdata-util-jpa-feature</feature>
+        <feature>marketdata-persistence-feature</feature>
+        <bundle>mvn:org.apache.servicemix.bundles/org.apache.servicemix.bundles.javax-inject/1_2</bundle>
+        <bundle>mvn:de.hf.marketDataProvider/de.hf.marketDataProvider.service/0.3.1-SNAPSHOT</bundle>
+    </feature>
+
+    <feature name="marketdata-restservice-feature" version="${pom.version}">
+        <feature>marketdata-service-feature</feature>
+        <bundle>mvn:com.eclipsesource.jaxrs/jersey-all/2.22.2</bundle>
+        <bundle>mvn:com.eclipsesource.jaxrs/publisher/5.3.1</bundle>
+        <!-- for rest response, serialization-->
+        <bundle>mvn:com.google.code.gson/gson/2.7</bundle>
+        <bundle>mvn:de.hf.marketDataProvider/de.hf.marketDataProvider.restservice/0.3.1-SNAPSHOT</bundle>
     </feature>
 
     <feature name="marketdata-features" version="${pom.version}">
         <bundle>mvn:de.hf.marketDataProvider/de.hf.marketDataProvider.service-api/0.3.1-SNAPSHOT</bundle>
-        <feature>marketdata-persistence-feature</feature>
-        <feature>marketdata-util-jpa-feature</feature>
+        <feature>marketdata-restservice-feature</feature>
     </feature>
 </features>
