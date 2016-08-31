@@ -50,6 +50,16 @@
             <classifier>features</classifier>
         </dependency>
 
+        <dependency>
+            <groupId>de.hf.marketDataProvider</groupId>
+            <artifactId>appfeatures</artifactId>
+            <version>${project.version}</version>
+            <type>xml</type>
+            <scope>runtime</scope>
+            <classifier>features</classifier>
+        </dependency>
+
+
     </dependencies>
 
     <build>
@@ -86,8 +96,8 @@
                         <feature>webconsole</feature>
 
                         <!-- the application -->
-
-                        <feature>marketdata-features</feature>
+                        <feature>myspringdata-feature</feature>
+                        <!--<feature>marketdata-features</feature>-->
 
 
 

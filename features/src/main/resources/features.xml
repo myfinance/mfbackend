@@ -15,6 +15,8 @@
     </feature>
 
     <feature name="myspring-feature" version="4.2.6.RELEASE_1">
+        <feature>hibernate-envers</feature>
+        <feature>jpa</feature>
         <bundle>mvn:org.apache.servicemix.bundles/org.apache.servicemix.bundles.spring-core/4.2.6.RELEASE_1</bundle>
         <bundle>mvn:org.apache.servicemix.bundles/org.apache.servicemix.bundles.spring-beans/4.2.6.RELEASE_1</bundle>
         <bundle>mvn:org.apache.servicemix.bundles/org.apache.servicemix.bundles.spring-expression/4.2.6.RELEASE_1</bundle>
@@ -26,7 +28,7 @@
         <bundle>mvn:org.apache.servicemix.bundles/org.apache.servicemix.bundles.spring-tx/4.2.6.RELEASE_1</bundle>
     </feature>
 
-    <feature name="myspringdata-feature" version="/1.9.4.RELEASE">
+    <feature name="myspringdata-feature" version="1.9.4.RELEASE">
         <feature>myspring-feature</feature>
         <bundle>mvn:org.springframework.data/spring-data-commons/1.11.4.RELEASE</bundle>
         <bundle>mvn:org.springframework.data/spring-data-jpa/1.9.4.RELEASE</bundle>
