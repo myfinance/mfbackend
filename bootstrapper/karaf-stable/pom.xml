@@ -12,12 +12,6 @@
     <artifactId>karaf-stable</artifactId>
     <packaging>karaf-assembly</packaging>
 
-
-    <properties>
-        <karaf.version>4.0.5</karaf.version>
-    </properties>
-
-
     <dependencies>
 
         <dependency>
@@ -42,8 +36,8 @@
             <version>${project.version}</version>
         </dependency>-->
         <dependency>
-            <groupId>de.hf.marketDataProvider</groupId>
-            <artifactId>features</artifactId>
+            <groupId>de.hf.marketDataProvider.features</groupId>
+            <artifactId>marketdata-service-features</artifactId>
             <version>${project.version}</version>
             <type>xml</type>
             <scope>runtime</scope>
@@ -96,8 +90,9 @@
                         <feature>webconsole</feature>
 
                         <!-- the application -->
-                        <feature>myspringdata-feature</feature>
-                        <!--<feature>marketdata-features</feature>-->
+                        <!-- <feature>myspringdata-feature</feature>
+                         <feature>marketdata-features</feature>-->
+                        <feature>marketdata-service-features</feature>
 
 
 

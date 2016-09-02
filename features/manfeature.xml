@@ -1,3 +1,4 @@
+
 <?xml version="1.0" encoding="UTF-8"?>
 <features name="marketDataProvider" xmlns="http://karaf.apache.org/xmlns/features/v1.3.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://karaf.apache.org/xmlns/features/v1.3.0 http://karaf.apache.org/xmlns/features/v1.3.0">
     <!--<repository>mvn:org.ops4j.pax.cdi/pax-cdi-features/0.12.0/xml/features</repository>
@@ -114,4 +115,5 @@
         <bundle>mvn:de.hf.marketDataProvider/de.hf.marketDataProvider.service-api/0.3.1-SNAPSHOT</bundle>
         <feature>marketdata-restservice-feature</feature>
     </feature>
-</features>
+
+

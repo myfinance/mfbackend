@@ -7,57 +7,32 @@
         <groupId>de.hf.marketDataProvider</groupId>
         <version>0.3.1-SNAPSHOT</version>
     </parent>
+    <groupId>de.hf.marketDataProvider.features</groupId>
     <modelVersion>4.0.0</modelVersion>
-    <groupId>de.hf.marketDataProvider</groupId>
-    <artifactId>features</artifactId>
     <packaging>pom</packaging>
-
+    <modules>
+        <module>marketdata-domain-features</module>
+        <module>marketdata-spring-features</module>
+        <module>marketdata-persistence-features</module>
+        <module>marketdata-jdbc-features</module>
+        <module>marketdata-util-jpa-features</module>
+        <module>marketdata-service-features</module>
+        <module>marketdata-restservice-features</module>
+    </modules>
+    <artifactId>features</artifactId>
     <build>
-
-        <resources>
-            <resource>
-                <directory>src/main/resources</directory>
-                <filtering>true</filtering>
-            </resource>
-        </resources>
-        <plugins>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-resources-plugin</artifactId>
-                <version>2.7</version>
-                <executions>
-                    <execution>
-                        <id>filter</id>
-                        <phase>generate-resources</phase>
-                        <goals>
-                            <goal>resources</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
-            <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>build-helper-maven-plugin</artifactId>
-                <version>1.9.1</version>
-                <executions>
-                    <execution>
-                        <id>attach-artifacts</id>
-                        <phase>package</phase>
-                        <goals>
-                            <goal>attach-artifact</goal>
-                        </goals>
-                        <configuration>
-                            <artifacts>
-                                <artifact>
-                                    <file>target/classes/features.xml</file>
-                                    <type>xml</type>
-                                    <classifier>features</classifier>
-                                </artifact>
-                            </artifacts>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
-        </plugins>
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <groupId>org.apache.karaf.tooling</groupId>
+                    <artifactId>karaf-maven-plugin</artifactId>
+                    <version>${karaf.version}</version>
+                    <extensions>true</extensions>
+                    <configuration>
+                        <aggregateFeatures>true</aggregateFeatures>
+                    </configuration>
+                </plugin>
+            </plugins>
+        </pluginManagement>
     </build>
 </project>

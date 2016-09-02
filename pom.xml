@@ -13,6 +13,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <targetRepository>file:m2repo/</targetRepository>
 
+        <karaf.version>4.0.5</karaf.version>
         <postgresql.version>9.1-901.jdbc4</postgresql.version><!-- DB-->
         <commons-cli.version>1.2</commons-cli.version><!-- parsing commandline options in Module common-->
 

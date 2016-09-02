@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<features name="marketdata-restservice-features" xmlns="http://karaf.apache.org/xmlns/features/v1.3.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://karaf.apache.org/xmlns/features/v1.3.0 http://karaf.apache.org/xmlns/features/v1.3.0">
+    <repository>mvn:de.hf.marketDataProvider.features/marketdata-service-features/${project.version}/xml/features</repository>
+
+    <feature name="marketdata-restservice-features" version="${pom.version}">
+        <feature>marketdata-service-features</feature>
+        <bundle>mvn:de.hf.marketDataProvider/de.hf.marketDataProvider.restservice/${project.version}</bundle>
+        <bundle>mvn:com.eclipsesource.jaxrs/jersey-all/2.22.2</bundle>
+        <bundle>mvn:com.eclipsesource.jaxrs/publisher/5.3.1</bundle>
+        <!-- for rest response, serialization-->
+        <bundle>mvn:com.google.code.gson/gson/2.7</bundle>
+    </feature>
+
+</features>

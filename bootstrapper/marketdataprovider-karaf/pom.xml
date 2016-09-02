@@ -12,12 +12,6 @@
     <artifactId>marketdataprovider-karaf</artifactId>
     <packaging>karaf-assembly</packaging>
 
-
-    <properties>
-        <karaf.version>4.0.5</karaf.version>
-    </properties>
-
-
     <dependencies>
         <dependency>
             <groupId>de.hf.marketDataProvider</groupId>
