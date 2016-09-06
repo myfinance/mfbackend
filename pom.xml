@@ -13,7 +13,6 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <targetRepository>file:m2repo/</targetRepository>
 
-        <karaf.version>4.0.5</karaf.version>
         <postgresql.version>9.1-901.jdbc4</postgresql.version><!-- DB-->
         <commons-cli.version>1.2</commons-cli.version><!-- parsing commandline options in Module common-->
 
@@ -27,9 +26,9 @@
         <inject.version>1</inject.version><!-- inject annotation api for multiple di containers-->
         <usertype.version>5.0.0.GA
         </usertype.version><!-- Usertype can persist both JSR 310 and Joda Time based dates and times to a database using Hibernate-->
-        <jpa-api2.1.version>1.0.0.Final
-        </jpa-api2.1.version><!-- jpa-api, the implementation is provided by the app-server like JBoss or SpringBoot-->
-
+        <jpa-api2.1.version>1.0.0.Final</jpa-api2.1.version><!-- jpa-api, the implementation is provided by the app-server like JBoss or SpringBoot-->
+        <hibernate.version>5.2.2.Final</hibernate.version>
+        <karaf.version>4.0.6</karaf.version>
 
     </properties>
 

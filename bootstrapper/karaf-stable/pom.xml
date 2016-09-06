@@ -27,32 +27,15 @@
             <classifier>features</classifier>
             <version>${karaf.version}</version>
             <type>xml</type>
-            <!--<scope>runtime</scope>-->
         </dependency>
-        <!--<dependency>
-            <groupId>de.hf.marketDataProvider</groupId>
-            <artifactId>appkar</artifactId>
-            <type>kar</type>
-            <version>${project.version}</version>
-        </dependency>-->
         <dependency>
             <groupId>de.hf.marketDataProvider.features</groupId>
-            <artifactId>marketdata-service-features</artifactId>
+            <artifactId>marketdata-restservice-features</artifactId>
             <version>${project.version}</version>
             <type>xml</type>
             <scope>runtime</scope>
             <classifier>features</classifier>
         </dependency>
-
-        <dependency>
-            <groupId>de.hf.marketDataProvider</groupId>
-            <artifactId>appfeatures</artifactId>
-            <version>${project.version}</version>
-            <type>xml</type>
-            <scope>runtime</scope>
-            <classifier>features</classifier>
-        </dependency>
-
 
     </dependencies>
 
@@ -90,15 +73,11 @@
                         <feature>webconsole</feature>
 
                         <!-- the application -->
-                        <!-- <feature>myspringdata-feature</feature>
-                         <feature>marketdata-features</feature>-->
-                        <feature>marketdata-service-features</feature>
+                        <feature>marketdata-restservice-features</feature>
 
 
 
                     </bootFeatures>
-                    <!--<installedFeatures>
-                    </installedFeatures>-->
                 </configuration>
             </plugin>
             <plugin>

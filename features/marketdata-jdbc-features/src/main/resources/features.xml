@@ -1,8 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <features name="marketdata-jdbc-features" xmlns="http://karaf.apache.org/xmlns/features/v1.3.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://karaf.apache.org/xmlns/features/v1.3.0 http://karaf.apache.org/xmlns/features/v1.3.0">
 
-    <repository>mvn:org.apache.karaf.features/enterprise/4.0.5/xml/features</repository>
-
     <feature name="marketdata-datasourcefactory" version="${pom.version}">
         <!-- erstellt Datasource mit hilfe von Datasourcefactory entsprechend etc/org.ops4j.datasource-xxx.cfg -->
         <bundle  start-level="80">wrap:mvn:org.jasypt/jasypt/1.9.2</bundle>

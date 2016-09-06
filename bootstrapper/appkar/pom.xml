@@ -11,31 +11,75 @@
 
     <artifactId>appkar</artifactId>
     <packaging>kar</packaging>
-    <properties>
-        <karaf.version>4.0.5</karaf.version>
-    </properties>
-
 
     <dependencies>
 
-        <!--<dependency>
-          <groupId>de.hf.marketDataProvider</groupId>
-          <artifactId>appfeatures</artifactId>
-          <version>${project.version}</version>
-          <classifier>features</classifier>
-          <type>xml</type>
-      </dependency>
-
-    -->
         <dependency>
-            <groupId>de.hf.marketDataProvider</groupId>
-            <artifactId>features</artifactId>
+            <groupId>org.hibernate</groupId>
+            <artifactId>hibernate-osgi</artifactId>
+            <version>${hibernate.version}</version>
+            <type>xml</type>
+            <classifier>karaf</classifier>
+        </dependency>
+
+        <dependency>
+            <groupId>de.hf.marketDataProvider.features</groupId>
+            <artifactId>marketdata-domain-features</artifactId>
             <version>${project.version}</version>
             <type>xml</type>
             <classifier>features</classifier>
-            <scope>runtime</scope>
         </dependency>
+
+        <dependency>
+            <groupId>de.hf.marketDataProvider.features</groupId>
+            <artifactId>marketdata-spring-features</artifactId>
+            <version>${project.version}</version>
+            <type>xml</type>
+            <classifier>features</classifier>
+        </dependency>
+
+        <dependency>
+            <groupId>de.hf.marketDataProvider.features</groupId>
+            <artifactId>marketdata-jdbc-features</artifactId>
+            <version>${project.version}</version>
+            <type>xml</type>
+            <classifier>features</classifier>
+        </dependency>
+
+        <dependency>
+            <groupId>de.hf.marketDataProvider.features</groupId>
+            <artifactId>marketdata-util-jpa-features</artifactId>
+            <version>${project.version}</version>
+            <type>xml</type>
+            <classifier>features</classifier>
+        </dependency>
+
+        <dependency>
+            <groupId>de.hf.marketDataProvider.features</groupId>
+            <artifactId>marketdata-persistence-features</artifactId>
+            <version>${project.version}</version>
+            <type>xml</type>
+            <classifier>features</classifier>
+        </dependency>
+
+        <dependency>
+            <groupId>de.hf.marketDataProvider.features</groupId>
+            <artifactId>marketdata-service-features</artifactId>
+            <version>${project.version}</version>
+            <type>xml</type>
+            <classifier>features</classifier>
+        </dependency>
+
+        <dependency>
+            <groupId>de.hf.marketDataProvider.features</groupId>
+            <artifactId>marketdata-restservice-features</artifactId>
+            <version>${project.version}</version>
+            <type>xml</type>
+            <classifier>features</classifier>
+        </dependency>
+
     </dependencies>
+
 
     <build>
         <pluginManagement>
@@ -52,19 +96,6 @@
             <plugin>
                 <groupId>org.apache.karaf.tooling</groupId>
                 <artifactId>karaf-maven-plugin</artifactId>
-                <!--<executions>
-                    <execution>
-                        <id>document-commands</id>
-                        <phase>generate-resources</phase>
-                        <goals>
-                            <goal>commands-generate-help</goal>
-                        </goals>
-                        <configuration>
-                            <targetFolder>${project.build.directory}/docbook/sources</targetFolder>
-                            <format>asciidoc</format>
-                        </configuration>
-                    </execution>
-                </executions>-->
             </plugin>
 
         </plugins>

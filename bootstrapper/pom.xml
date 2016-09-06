@@ -15,7 +15,6 @@
         <!--<module>marketDataProvider-wildfly</module>-->
         <module>marketdataprovider-karaf</module>
         <module>karaf-stable</module>
-        <module>appfeatures</module>
         <module>appkar</module>
     </modules>
 </project>
