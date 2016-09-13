@@ -1,0 +1,21 @@
+Manifest-Version: 1.0
+Bnd-LastModified: 1473759929407
+Bundle-ManifestVersion: 2
+Bundle-Name: de.hf.marketDataProvider.persistence
+Bundle-SymbolicName: de.hf.marketDataProvider.persistence
+Bundle-Version: 0.3.1.201609130945
+Created-By: 1.8.0_92 (Oracle Corporation)
+Export-Package: de.hf.marketdataprovider.persistence.repositories;uses
+ :="de.hf.marketdataprovider.domain,org.springframework.data.jpa.repos
+ itory,org.springframework.data.repository";version="0.3.1",de.hf.mark
+ etdataprovider.persistence;version="0.3.1"
+Import-Package: de.hf.marketdataprovider.domain;version="[0.3,1)",org.
+ springframework.data.repository;version="[1.11,2)",org.springframewor
+ k.data.jpa.repository;version="[1.9,2)",org.postgresql,org.springfram
+ ework.data.repository.support;version="[1.11,2)",org.springframework.
+ data.jpa.repository.support;version="[1.9,2)",org.springframework.aop
+ .framework,org.springframework.aop,org.aopalliance.aop,org.springfram
+ ework.data.domain;version="[1.11,2)",org.springframework.data.reposit
+ ory.core.support;version="[1.11,2)"
+Require-Capability: osgi.ee;filter:="(&(osgi.ee=JavaSE)(version=1.8))"
+Tool: Bnd-3.1.0.201512181341

@@ -6,8 +6,7 @@
 
     <feature name="marketdata-util-jpa-features" version="${pom.version}">
         <feature>marketdata-domain-features</feature>
-        <feature>marketdata-jdbc</feature>
-        <capability>de.hf.common.util.jpa.EntityManagerFactorySetup</capability>
+        <feature>marketdata-jdbc-features</feature>
         <bundle>mvn:de.hf.marketDataProvider/de.hf.common.util-jpa/${project.version}</bundle>
     </feature>
 

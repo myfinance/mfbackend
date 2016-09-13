@@ -1,0 +1,6 @@
+Export-Package: de.hf.marketdataprovider.domain
+Import-Package: \
+    org.hibernate.proxy, \
+    javassist.util.proxy, \
+    *
+Bundle-SymbolicName: ${project.artifactId}

@@ -72,8 +72,10 @@
                         <feature>scr</feature>
                         <feature>webconsole</feature>
 
+                        <feature>http-whiteboard</feature>
+
                         <!-- the application -->
-                        <feature>marketdata-restservice-features</feature>
+                       <!--<feature>marketdata-restservice-features</feature>-->
 
 
 

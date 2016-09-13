@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.1.0" name="de.hf.common.util.jpa.GenericEntityManager" activate="activate">
+  <implementation class="de.hf.common.util.jpa.GenericEntityManager"/>
+  <service>
+    <provide interface="javax.persistence.EntityManager"/>
+  </service>
+  <reference name="EntityManagerFactorySetup" cardinality="1..1" policy="static" interface="de.hf.common.util.jpa.EntityManagerFactorySetup" bind="setEntityManagerFactorySetup"/>
+</scr:component>

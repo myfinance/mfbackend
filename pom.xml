@@ -24,11 +24,14 @@
         <slf4j.version>1.7.21</slf4j.version><!-- logging slf impl-->
         <lombok.version>1.16.8</lombok.version><!-- generate constructor, getter, setter via annotation-->
         <inject.version>1</inject.version><!-- inject annotation api for multiple di containers-->
+        <pax-cdi-api.version>0.12.0</pax-cdi-api.version>
         <usertype.version>5.0.0.GA
         </usertype.version><!-- Usertype can persist both JSR 310 and Joda Time based dates and times to a database using Hibernate-->
         <jpa-api2.1.version>1.0.0.Final</jpa-api2.1.version><!-- jpa-api, the implementation is provided by the app-server like JBoss or SpringBoot-->
         <hibernate.version>5.2.2.Final</hibernate.version>
         <karaf.version>4.0.6</karaf.version>
+        <pax-jdbc.version>0.9.0</pax-jdbc.version><!--feature to create Datasources -->
+        <apache-cxf.version>3.1.7</apache-cxf.version>
 
     </properties>
 
@@ -42,7 +45,7 @@
     </scm>
 
     <modules>
-        <module>app</module>
+        <module>bundles</module>
         <module>bootstrapper</module>
         <!--<module>client</module>-->
         <module>utils</module>
@@ -78,11 +81,28 @@
                 <artifactId>de.hf.marketDataProvider.persistence</artifactId>
                 <version>0.3.1-SNAPSHOT</version>
             </dependency>
+            <dependency>
+                <groupId>de.hf.marketDataProvider.api</groupId>
+                <artifactId>de.hf.marketDataProvider.api.io</artifactId>
+                <version>0.3.1-SNAPSHOT</version>
+            </dependency>
+            <dependency>
+                <groupId>de.hf.marketDataProvider.api</groupId>
+                <artifactId>de.hf.marketDataProvider.api.service</artifactId>
+                <version>0.3.1-SNAPSHOT</version>
+            </dependency>
 
             <dependency>
                 <groupId>org.projectlombok</groupId>
                 <artifactId>lombok</artifactId>
                 <version>${lombok.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.ops4j.pax.cdi</groupId>
+                <artifactId>pax-cdi-api</artifactId>
+                <version>${pax-cdi-api.version}</version>
+                <scope>provided</scope>
             </dependency>
 
             <dependency>

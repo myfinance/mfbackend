@@ -1,14 +1,36 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <features name="marketdata-restservice-features" xmlns="http://karaf.apache.org/xmlns/features/v1.3.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://karaf.apache.org/xmlns/features/v1.3.0 http://karaf.apache.org/xmlns/features/v1.3.0">
     <repository>mvn:de.hf.marketDataProvider.features/marketdata-service-features/${project.version}/xml/features</repository>
+    <repository>mvn:org.apache.cxf.karaf/apache-cxf/${apache-cxf.version}/xml/features</repository>
+
+    <feature name="marketdata-jackson" version="${pom.version}">
+        <!-- Not 2.8.* because of ElasticSearch embedded incompat -->
+        <bundle>mvn:com.fasterxml.jackson.core/jackson-core/2.7.2</bundle>
+        <bundle>mvn:com.fasterxml.jackson.core/jackson-annotations/2.7.2</bundle>
+        <bundle>mvn:com.fasterxml.jackson.core/jackson-databind/2.7.2</bundle>
+        <bundle>mvn:com.fasterxml.jackson.jaxrs/jackson-jaxrs-base/2.7.2</bundle>
+        <bundle>mvn:com.fasterxml.jackson.jaxrs/jackson-jaxrs-json-provider/2.7.2</bundle>
+    </feature>
 
     <feature name="marketdata-restservice-features" version="${pom.version}">
+        <feature>cxf-specs</feature>
+        <feature>cxf-core</feature>
+        <feature>cxf-jaxrs</feature>
+        <feature>pax-cdi-1.2</feature>
+        <feature>marketdata-jackson</feature>
+        <!--
+
+        <feature prerequisite="true">pax-cdi-1.2-web-weld</feature>
+        <feature>cxf-jaxrs-cdi</feature>
+
+        <feature>cxf-rs-description-swagger2</feature>-->
+
         <feature>marketdata-service-features</feature>
         <bundle>mvn:de.hf.marketDataProvider/de.hf.marketDataProvider.restservice/${project.version}</bundle>
-        <bundle>mvn:com.eclipsesource.jaxrs/jersey-all/2.22.2</bundle>
-        <bundle>mvn:com.eclipsesource.jaxrs/publisher/5.3.1</bundle>
+        <!--<bundle>mvn:com.eclipsesource.jaxrs/jersey-all/2.22.2</bundle>
+        <bundle>mvn:com.eclipsesource.jaxrs/publisher/5.3.1</bundle>-->
         <!-- for rest response, serialization-->
-        <bundle>mvn:com.google.code.gson/gson/2.7</bundle>
+        <!--<bundle>mvn:com.google.code.gson/gson/2.7</bundle>-->
     </feature>
 
 </features>

@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component name="de.hf.common.util.jpa.EntityManagerFactorySetup">
+  <implementation class="de.hf.common.util.jpa.EntityManagerFactorySetup"/>
+  <service>
+    <provide interface="de.hf.common.util.jpa.EntityManagerFactorySetup"/>
+  </service>
+  <reference name="EntityManagerFactoryBuilder" cardinality="1..1" policy="static" interface="org.osgi.service.jpa.EntityManagerFactoryBuilder" bind="setEntityManagerFactoryBuilder"/>
+</component>

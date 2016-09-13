@@ -24,7 +24,7 @@
 
         <dependency>
             <groupId>de.hf.marketDataProvider.features</groupId>
-            <artifactId>marketdata-spring-features</artifactId>
+            <artifactId>marketdata-io-features</artifactId>
             <version>${project.version}</version>
             <type>xml</type>
             <scope>provided</scope>
@@ -32,9 +32,12 @@
         </dependency>
 
         <dependency>
-            <groupId>org.postgresql</groupId>
-            <artifactId>postgresql</artifactId>
-            <version>9.4.1209</version>
+            <groupId>de.hf.marketDataProvider.features</groupId>
+            <artifactId>marketdata-spring-features</artifactId>
+            <version>${project.version}</version>
+            <type>xml</type>
+            <scope>provided</scope>
+            <classifier>features</classifier>
         </dependency>
 
     </dependencies>

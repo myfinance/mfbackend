@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<features name="marketdata-jdbc-features" xmlns="http://karaf.apache.org/xmlns/features/v1.3.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://karaf.apache.org/xmlns/features/v1.3.0 http://karaf.apache.org/xmlns/features/v1.3.0">
+    <repository>mvn:org.apache.karaf.features/enterprise/${karaf.version}/xml/features</repository>
+    <repository>mvn:org.hibernate/hibernate-osgi/${hibernate.version}/xml/karaf</repository>
+    <repository>mvn:org.ops4j.pax.jdbc/pax-jdbc-features/${pax-jdbc.version}/xml/features</repository>
+
+    <feature name="marketdata-datasourcefactory" version="${pom.version}">
+        <!-- erstellt Datasource mit hilfe von Datasourcefactory entsprechend etc/org.ops4j.datasource-xxx.cfg -->
+        <bundle  start-level="80">wrap:mvn:org.jasypt/jasypt/1.9.2</bundle>
+        <bundle  start-level="80">mvn:org.ops4j.pax.jdbc/pax-jdbc-config/0.9.0</bundle>
+        <bundle  start-level="80">mvn:org.osgi/org.osgi.service.jdbc/1.0.0</bundle>
+        <capability>osgi.service;effective:=active;objectClass=org.osgi.service.jdbc.DataSourceFactory</capability>
+    </feature>
+
+    <feature name="marketdata-pooleddatasourcefactory" version="${pom.version}">
+        <!-- zum wrappen von Datasourcefactories fuer pooled connections -->
+        <bundle  start-level="80">mvn:org.osgi/org.osgi.service.jdbc/1.0.0</bundle>
+        <bundle start-level="80">mvn:org.ops4j.pax.jdbc/pax-jdbc-pool-common/0.9.0</bundle>
+        <bundle start-level="80">mvn:org.apache.commons/commons-pool2/2.4.1</bundle>
+        <bundle start-level="80">mvn:org.apache.commons/commons-dbcp2/2.1</bundle>
+        <bundle start-level="80">mvn:org.ops4j.pax.jdbc/pax-jdbc-pool-dbcp2/0.9.0</bundle>
+        <capability>osgi.service;effective:=active;objectClass=org.osgi.service.jdbc.DataSourceFactory</capability>
+    </feature>
+
+    <feature name="marketdata-datasource" version="${pom.version}">
+        <!--<feature>marketdata-datasourcefactory</feature>-->
+        <feature>marketdata-pooleddatasourcefactory</feature>
+        <!-- erstellt Datasource mit hilfe von Datasourcefactory entsprechend etc/org.ops4j.datasource-xxx.cfg -->
+        <bundle  start-level="80">wrap:mvn:org.jasypt/jasypt/1.9.2</bundle>
+        <bundle  start-level="80">mvn:org.ops4j.pax.jdbc/pax-jdbc-config/0.9.0</bundle>
+        <bundle  start-level="80">mvn:org.osgi/org.osgi.service.jdbc/1.0.0</bundle>
+        <capability>osgi.service;effective:=active;objectClass=javax.sql.DataSource</capability>
+
+    </feature>
+
+    <feature name="marketdata-aries-jpa" version="${pom.version}">
+        <feature version='${hibernate.version}'>hibernate-envers</feature>
+        <feature>jpa</feature>
+        <capability>osgi.service;effective:=active;objectClass=javax.persistence.spi.PersistenceProvider</capability><!--von aris -Jpacontainer benötigt-->
+        <capability>osgi.service;effective:=active;objectClass=org.apache.aries.jpa.template.JpaTemplate</capability>
+        <!-- for JPA Template to handle transactions with declarative services-->
+        <bundle>mvn:org.apache.aries.jpa/org.apache.aries.jpa.api/2.4.0</bundle>
+        <bundle>mvn:org.apache.aries.jpa/org.apache.aries.jpa.container/2.4.0</bundle>
+    </feature>
+
+    <feature name="postgres" version="${pom.version}">
+        <bundle>mvn:org.postgresql/postgresql/9.4.1209</bundle>
+        <feature>transaction</feature>
+    </feature>
+
+    <feature name="marketdata-jdbc-features" version="${pom.version}">
+        <!--<feature>marketdata-datasource</feature>
+        <feature>marketdata-aries-jpa</feature>-->
+
+
+        <!--<feature>pax-jdbc</feature>-->
+        <feature>postgres</feature>
+        <feature>pax-jdbc-config</feature>
+        <feature>pax-jdbc-pool-dbcp2</feature>
+
+        <feature>pax-jdbc-pool-aries</feature>
+        <feature>marketdata-aries-jpa</feature>
+
+
+        <!--<feature>pax-jdbc</feature>--> <!--Provides common JDBC Service support -->
+        <!--<feature>pax-jdbc-config</feature> --><!-- Provides JDBC Config support --><!-- erstellt Datasource mit hilfe von Datasourcefactory entsprechend etc/org.ops4j.datasource-xxx.cfg -->
+        <!--<feature>pax-jdbc-pool-dbcp2</feature>--> <!--Provides JDBC Pooling DataSourceFactory--><!-- zum wrappen von Datasourcefactories fuer pooled connections -->
+        <!--<feature>pax-jdbc-h2</feature>
+        <feature>pax-jdbc-postgresql</feature>
+        <feature>pax-jdbc-oracle</feature>-->
+        <!--creates xa-datasourcefactory means datasources for distributed transactions-->
+        <!--<feature>pax-jdbc-pool-aries</feature>--><!--alternative pax-jdbc-pool-narayana -->
+
+        <!-- for JPA Template to handle transactions with declarative services-->
+        <!--<bundle>mvn:org.apache.aries.jpa/org.apache.aries.jpa.api/2.4.0</bundle>
+        <bundle>mvn:org.apache.aries.jpa/org.apache.aries.jpa.container/2.4.0</bundle>-->
+    </feature>
+</features>

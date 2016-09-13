@@ -1,3 +1,0 @@
--dsannotations : *
-Export-Package: de.hf.marketdataprovider.service.api
-Bundle-SymbolicName: ${project.artifactId}

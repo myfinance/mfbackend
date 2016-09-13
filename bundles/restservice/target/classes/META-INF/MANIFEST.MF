@@ -1,0 +1,15 @@
+Manifest-Version: 1.0
+Bnd-LastModified: 1473759934382
+Bundle-ManifestVersion: 2
+Bundle-Name: de.hf.marketDataProvider.restservice
+Bundle-SymbolicName: de.hf.marketDataProvider.restservice
+Bundle-Version: 0.3.1.201609130945
+Created-By: 1.8.0_92 (Oracle Corporation)
+Export-Package: de.hf.marketdataprovider.restservice;uses:="javax.inje
+ ct,javax.ws.rs,javax.ws.rs.container";version="0.3.1"
+Import-Package: javax.ws.rs;version="[2.0,3)",javax.ws.rs.core;version
+ ="[2.0,3)",javax.ws.rs.container;version="[2.0,3)",de.hf.marketdatapr
+ ovider.api.service;version="[0.3,1)",javax.inject,org.ops4j.pax.cdi.a
+ pi;version="[0.12,1)"
+Require-Capability: osgi.ee;filter:="(&(osgi.ee=JavaSE)(version=1.8))"
+Tool: Bnd-3.1.0.201512181341

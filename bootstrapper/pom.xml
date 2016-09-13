@@ -11,10 +11,10 @@
     <artifactId>bootstrapper</artifactId>
     <packaging>pom</packaging>
     <modules>
-        <module>marketDataProvider-springboot</module>
-        <!--<module>marketDataProvider-wildfly</module>-->
-        <module>marketdataprovider-karaf</module>
-        <module>karaf-stable</module>
+        <!--<module>marketDataProvider-springboot</module>
+        <module>marketDataProvider-wildfly</module>
         <module>appkar</module>
+        <module>marketdataprovider-karaf</module>-->
+        <module>karaf-stable</module>
     </modules>
 </project>

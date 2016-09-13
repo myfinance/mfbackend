@@ -18,6 +18,7 @@
         <module>marketdata-util-jpa-features</module>
         <module>marketdata-service-features</module>
         <module>marketdata-restservice-features</module>
+        <module>marketdata-io-features</module>
     </modules>
     <artifactId>features</artifactId>
     <build>

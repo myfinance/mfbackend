@@ -7,9 +7,10 @@
 
 
     <feature name="marketdata-domain-features" version="${pom.version}">
-        <feature version='${hibernate.version}'>hibernate-envers</feature>
-        <feature>jpa</feature>
-        <capability>osgi.service;effective:=active;objectClass=javax.persistence.spi.PersistenceProvider</capability><!--von aris -Jpacontainer benötigt-->
+        <feature prerequisite="true" dependency="false">wrap</feature>
+        <feature version="${hibernate.version}" prerequisite="false" dependency="false">hibernate-envers</feature>
+        <bundle>mvn:org.hibernate.javax.persistence/hibernate-jpa-2.1-api/1.0.0.Final</bundle>
+        <!--<capability>osgi.service;effective:=active;objectClass=javax.persistence.spi.PersistenceProvider</capability>--><!--von aris -Jpacontainer benötigt-->
         <bundle>mvn:de.hf.marketDataProvider/de.hf.marketDataProvider.domain/${project.version}</bundle>
     </feature>
 
