@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<component name="de.hf.common.util.jpa.impl.EntityManagerFactoryBuilderImpl">
-  <implementation class="de.hf.common.util.jpa.impl.EntityManagerFactoryBuilderImpl"/>
-  <service>
-    <provide interface="org.osgi.service.jpa.EntityManagerFactoryBuilder"/>
-  </service>
-  <reference name="PersistenceProvider" cardinality="1..1" policy="static" interface="javax.persistence.spi.PersistenceProvider" bind="setPersistenceProvider"/>
-</component>

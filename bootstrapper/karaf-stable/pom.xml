@@ -71,11 +71,15 @@
                         <feature>http</feature>
                         <feature>scr</feature>
                         <feature>webconsole</feature>
+                        <feature>wrap</feature>
 
-                        <feature>http-whiteboard</feature>
+                        <!--<feature>http-whiteboard</feature>
+                        <feature>hibernate-orm</feature>-->
 
+                        <!--<feature>marketdata-restservice-features</feature>-->
+                        <!--<feature>marketdata-h2-feature</feature>-->
                         <!-- the application -->
-                       <!--<feature>marketdata-restservice-features</feature>-->
+                       <feature>marketdata-restservice-features</feature>
 
 
 

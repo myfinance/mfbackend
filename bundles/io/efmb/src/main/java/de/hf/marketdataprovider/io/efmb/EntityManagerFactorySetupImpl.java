@@ -50,7 +50,7 @@ public class EntityManagerFactorySetupImpl implements EntityManagerFactorySetup 
     //@Inject @OsgiService(filter = "(&(osgi.jdbc.driver.class=oracle.jdbc.OracleDriver))" )
     DataSourceFactory oracleDataSourceFactory;
 
-    //@Inject @OsgiService(filter = "(&(osgi.jdbc.driver.class=org.h2.Driver))" )
+    @Inject @OsgiService(filter = "(&(osgi.jdbc.driver.class=org.h2.Driver))" )
     DataSourceFactory h2Embedded;
 
     @Inject @OsgiService(filter = "(&(osgi.jdbc.driver.class=org.postgresql.Driver))" )

@@ -9,6 +9,11 @@
 
     </feature>
 
+    <feature name="marketdata-h2-feature" version="${pom.version}">
+        <feature prerequisite="true">wrap</feature>
+        <bundle>mvn:com.h2database/h2/1.4.186</bundle>
+    </feature>
+
     <feature name="marketdata-cdi-feature"  version="${pom.version}">
         <bundle>mvn:org.ops4j.pax.cdi/pax-cdi-api/0.12.0</bundle>
         <!--<bundle>mvn:javax.enterprise/cdi-api/1.2</bundle>
@@ -21,8 +26,8 @@
         <feature prerequisite="true">wrap</feature>
         <feature prerequisite="true">marketdata-cdi-feature</feature>
         <feature prerequisite="true">postgres</feature>
+        <feature prerequisite="true">marketdata-h2-feature</feature>
         <bundle>mvn:org.osgi/org.osgi.service.jdbc/1.0.0</bundle>
-        <bundle>mvn:com.h2database/h2/1.4.186</bundle>
         <bundle>mvn:de.hf.marketDataProvider.api/de.hf.marketDataProvider.api.io/${project.version}</bundle>
         <bundle>mvn:de.hf.marketDataProvider.io/de.hf.marketDataProvider.io.efmb/${project.version}</bundle>
         <bundle>mvn:org.eclipse.persistence/javax.persistence/2.1.1</bundle>

@@ -32,6 +32,7 @@
         <karaf.version>4.0.6</karaf.version>
         <pax-jdbc.version>0.9.0</pax-jdbc.version><!--feature to create Datasources -->
         <apache-cxf.version>3.1.7</apache-cxf.version>
+        <junit.version>4.12</junit.version>
 
     </properties>
 
@@ -50,6 +51,7 @@
         <!--<module>client</module>-->
         <module>utils</module>
         <module>features</module>
+        <module>pax-exam-test</module>
         <!--<module>wrapped</module>-->
     </modules>
 
@@ -74,6 +76,11 @@
             <dependency>
                 <groupId>de.hf.marketDataProvider</groupId>
                 <artifactId>de.hf.marketDataProvider.service</artifactId>
+                <version>0.3.1-SNAPSHOT</version>
+            </dependency>
+            <dependency>
+                <groupId>de.hf.marketDataProvider</groupId>
+                <artifactId>de.hf.marketDataProvider.restservice</artifactId>
                 <version>0.3.1-SNAPSHOT</version>
             </dependency>
             <dependency>
@@ -152,6 +159,14 @@
                 <groupId>commons-cli</groupId>
                 <artifactId>commons-cli</artifactId>
                 <version>${commons-cli.version}</version>
+            </dependency>
+
+            <!--test-->
+            <dependency>
+                <groupId>junit</groupId>
+                <artifactId>junit</artifactId>
+                <version>${junit.version}</version>
+                <scope>test</scope>
             </dependency>
         </dependencies>
     </dependencyManagement>

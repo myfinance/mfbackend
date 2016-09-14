@@ -117,7 +117,7 @@ public class ProductServiceImpl implements ProductService {
         UserTransaction utx = null;
         try {
 
-            testunit = emfb.buildEntityManagerFactory("testunit", new Class[] { Product.class }, new ClassLoader[] {Product.class.getClassLoader()}, dbi);
+            testunit = emfb.buildEntityManagerFactory("testunit", new Class[] { Product.class }, new ClassLoader[] {}, dbi);
             EntityManager entityManager = testunit.createEntityManager();
             utx = (UserTransaction) bundleContext.getService(bundleContext.getServiceReference(UserTransaction.class.getName()));
             utx.begin();

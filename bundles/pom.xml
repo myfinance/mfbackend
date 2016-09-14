@@ -20,7 +20,6 @@
         <module>persistence</module>
         <module>service</module>
         <module>restservice</module>
-        <module>de.hf.common.util-jpa</module>
         <module>io</module>
         <module>api</module>
     </modules>
