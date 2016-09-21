@@ -34,10 +34,10 @@ import javax.transaction.SystemException;
 import javax.transaction.UserTransaction;
 
 import de.hf.marketDataProvider.paxexam.support.PAXExamTestSetup;
-import de.hf.marketdataprovider.api.io.DatabaseInfo;
-import de.hf.marketdataprovider.api.io.EntityManagerFactorySetup;
-import de.hf.marketdataprovider.api.service.ProductService;
-import de.hf.marketdataprovider.domain.Product;
+import de.hf.dac.api.io.DatabaseInfo;
+import de.hf.dac.api.io.EntityManagerFactorySetup;
+import de.hf.dac.marketdataprovider.api.service.ProductService;
+import de.hf.dac.marketdataprovider.api.domain.Product;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;

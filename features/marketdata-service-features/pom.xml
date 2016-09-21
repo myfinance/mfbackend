@@ -4,7 +4,7 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
         <artifactId>features</artifactId>
-        <groupId>de.hf.marketDataProvider.features</groupId>
+        <groupId>de.hf.dac.features</groupId>
         <version>0.3.1-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
@@ -15,16 +15,7 @@
     <dependencies>
 
         <dependency>
-            <groupId>de.hf.marketDataProvider.features</groupId>
-            <artifactId>marketdata-util-jpa-features</artifactId>
-            <version>${project.version}</version>
-            <type>xml</type>
-            <scope>provided</scope>
-            <classifier>features</classifier>
-        </dependency>
-
-        <dependency>
-            <groupId>de.hf.marketDataProvider.features</groupId>
+            <groupId>de.hf.dac.features</groupId>
             <artifactId>marketdata-persistence-features</artifactId>
             <version>${project.version}</version>
             <type>xml</type>

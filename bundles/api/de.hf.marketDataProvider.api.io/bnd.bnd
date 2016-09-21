@@ -1,5 +1,0 @@
--metatype: *
-Export-Package: \
-	de.hf.marketdataprovider.api.io
-
-Bundle-SymbolicName: ${project.artifactId}

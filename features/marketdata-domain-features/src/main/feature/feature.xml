@@ -11,7 +11,7 @@
         <feature version="${hibernate.version}" prerequisite="false" dependency="false">hibernate-envers</feature>
         <bundle>mvn:org.hibernate.javax.persistence/hibernate-jpa-2.1-api/1.0.0.Final</bundle>
         <!--<capability>osgi.service;effective:=active;objectClass=javax.persistence.spi.PersistenceProvider</capability>--><!--von aris -Jpacontainer benötigt-->
-        <bundle>mvn:de.hf.marketDataProvider/de.hf.marketDataProvider.domain/${project.version}</bundle>
+        <bundle>mvn:de.hf.dac.marketdataprovider.api/de.hf.dac.marketdataprovider.api.domain/${project.version}</bundle>
     </feature>
 
 </features>

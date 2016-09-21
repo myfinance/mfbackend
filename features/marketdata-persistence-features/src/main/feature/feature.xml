@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <features name="marketdata-persistence-features" xmlns="http://karaf.apache.org/xmlns/features/v1.3.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://karaf.apache.org/xmlns/features/v1.3.0 http://karaf.apache.org/xmlns/features/v1.3.0">
 
-    <repository>mvn:de.hf.marketDataProvider.features/marketdata-spring-features/${project.version}/xml/features</repository>
-    <repository>mvn:de.hf.marketDataProvider.features/marketdata-io-features/${project.version}/xml/features</repository>
+    <repository>mvn:de.hf.dac.features/dac-spring-features/${project.version}/xml/features</repository>
+    <repository>mvn:de.hf.dac.features/dac-io-features/${project.version}/xml/features</repository>
 
 
 
     <feature name="marketdata-persistence-features" version="${pom.version}">
-        <feature>marketdata-springdata-feature</feature>
-        <feature>marketdata-io-features</feature>
-        <bundle>mvn:de.hf.marketDataProvider/de.hf.marketDataProvider.persistence/0.3.1-SNAPSHOT</bundle>
+        <feature>dac-springdata-feature</feature>
+        <feature>dac-io-features</feature>
+        <bundle>mvn:de.hf.dac.marketdataprovider/de.hf.dac.marketdataprovider.persistence/0.3.1-SNAPSHOT</bundle>
         <!--<bundle>mvn:de.hf.marketDataProvider/de.hf.common.util-jpa/0.3.1-SNAPSHOT</bundle>-->
     </feature>
 

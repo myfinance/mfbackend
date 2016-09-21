@@ -1,0 +1,9 @@
+-metatype: *
+Export-Package: \
+  de.hf.dac.io.emfb
+
+Bundle-SymbolicName: de.hf.dac.io.efmb
+
+Import-Package: org.postgresql, \
+    de.hf.dac.marketdataprovider.api.domain, \
+	*

@@ -3,21 +3,20 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
-        <artifactId>marketDataProvider</artifactId>
-        <groupId>de.hf.marketDataProvider</groupId>
+        <artifactId>root</artifactId>
+        <groupId>de.hf.dac</groupId>
         <version>0.3.1-SNAPSHOT</version>
     </parent>
-    <groupId>de.hf.marketDataProvider.features</groupId>
+    <groupId>de.hf.dac.features</groupId>
     <modelVersion>4.0.0</modelVersion>
     <packaging>pom</packaging>
     <modules>
         <module>marketdata-domain-features</module>
-        <module>marketdata-spring-features</module>
+        <module>dac-io-features</module>
+        <module>dac-spring-features</module>
         <module>marketdata-persistence-features</module>
-        <module>marketdata-jdbc-features</module>
         <module>marketdata-service-features</module>
         <module>marketdata-restservice-features</module>
-        <module>marketdata-io-features</module>
     </modules>
     <artifactId>features</artifactId>
     <build>

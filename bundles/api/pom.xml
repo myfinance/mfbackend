@@ -4,18 +4,17 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
         <artifactId>bundles</artifactId>
-        <groupId>de.hf.marketDataProvider</groupId>
+        <groupId>de.hf.dac</groupId>
         <version>0.3.1-SNAPSHOT</version>
         <relativePath>../</relativePath>
     </parent>
     <modelVersion>4.0.0</modelVersion>
-    <groupId>de.hf.marketDataProvider.api</groupId>
+    <groupId>de.hf.dac.api</groupId>
 
     <artifactId>api</artifactId>
     <packaging>pom</packaging>
     <modules>
-        <module>de.hf.marketDataProvider.api.io</module>
-        <module>de.hf.marketDataProvider.api.service</module>
+        <module>de.hf.dac.api.io</module>
     </modules>
 
 

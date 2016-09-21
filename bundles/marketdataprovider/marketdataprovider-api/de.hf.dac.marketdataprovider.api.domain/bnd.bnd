@@ -1,0 +1,9 @@
+-metatype: *
+Export-Package: \
+ de.hf.dac.marketdataprovider.api.domain
+Import-Package: \
+    javax.persistence, \
+    org.hibernate.proxy, \
+    javassist.util.proxy, \
+    *
+Bundle-SymbolicName: ${project.artifactId}

@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<features name="dac-spring-features" xmlns="http://karaf.apache.org/xmlns/features/v1.3.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://karaf.apache.org/xmlns/features/v1.3.0 http://karaf.apache.org/xmlns/features/v1.3.0">
+
+    <repository>mvn:org.apache.karaf.features/enterprise/${karaf.version}/xml/features</repository>
+
+    <feature name="dac-spring-feature" version="${spring.version}">
+        <feature>hibernate-envers</feature>
+        <feature>jpa</feature>
+        <bundle>mvn:org.apache.servicemix.bundles/org.apache.servicemix.bundles.spring-core/${spring.version}</bundle>
+        <bundle>mvn:org.apache.servicemix.bundles/org.apache.servicemix.bundles.spring-beans/${spring.version}</bundle>
+        <bundle>mvn:org.apache.servicemix.bundles/org.apache.servicemix.bundles.spring-expression/${spring.version}</bundle>
+        <bundle>mvn:org.apache.servicemix.bundles/org.apache.servicemix.bundles.aopalliance/${aopalliance.version}</bundle>
+        <bundle>mvn:org.apache.servicemix.bundles/org.apache.servicemix.bundles.spring-aop/${spring.version}</bundle>
+        <bundle>mvn:org.apache.servicemix.bundles/org.apache.servicemix.bundles.spring-context/${spring.version}</bundle>
+        <bundle>mvn:org.apache.servicemix.bundles/org.apache.servicemix.bundles.spring-orm/${spring.version}</bundle>
+        <bundle>mvn:org.apache.servicemix.bundles/org.apache.servicemix.bundles.spring-jdbc/${spring.version}</bundle>
+        <bundle>mvn:org.apache.servicemix.bundles/org.apache.servicemix.bundles.spring-tx/${spring.version}</bundle>
+    </feature>
+
+    <feature name="dac-springdata-feature" version="1.9.4.RELEASE">
+        <feature>dac-spring-feature</feature>
+        <bundle>mvn:org.springframework.data/spring-data-commons/${spring-data-commons.version}</bundle>
+        <bundle>mvn:org.springframework.data/spring-data-jpa/${spring-data.version}</bundle>
+    </feature>
+</features>

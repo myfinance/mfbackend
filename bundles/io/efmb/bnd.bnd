@@ -1,9 +1,0 @@
--metatype: *
-Export-Package: \
-  de.dzbank.poet.dac.io.emfb
-
-Bundle-SymbolicName: de.hf.marketDataProvider.io.efmb
-
-Import-Package: org.postgresql, \
-    de.hf.marketdataprovider.domain, \
-	*

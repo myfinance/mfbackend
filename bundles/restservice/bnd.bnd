@@ -1,8 +1,0 @@
--dsannotations : *
-Export-Package: de.hf.marketdataprovider.restservice
-Bundle-SymbolicName: ${project.artifactId}
-Import-Package: \
-    javax.ws.rs,\
-    javax.ws.rs.core,\
-    javax.ws.rs.container,\
-    *

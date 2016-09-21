@@ -2,8 +2,8 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
-    <groupId>de.hf.marketDataProvider</groupId>
-    <artifactId>marketDataProvider</artifactId>
+    <groupId>de.hf.dac</groupId>
+    <artifactId>root</artifactId>
     <version>0.3.1-SNAPSHOT</version>
     <packaging>pom</packaging>
     <properties>
@@ -31,71 +31,66 @@
         <hibernate.version>5.2.2.Final</hibernate.version>
         <karaf.version>4.0.6</karaf.version>
         <pax-jdbc.version>0.9.0</pax-jdbc.version><!--feature to create Datasources -->
-        <apache-cxf.version>3.1.7</apache-cxf.version>
+        <apache-cxf.version>3.1.7</apache-cxf.version><!-- rest für osgi -->
         <junit.version>4.12</junit.version>
+
+        <spring.version>4.2.6.RELEASE_1</spring.version>
+        <aopalliance.version>1.0_6</aopalliance.version><!--von spring benötigt-->
+        <spring-data-commons.version>1.11.4.RELEASE</spring-data-commons.version>
+        <spring-data.version>1.9.4.RELEASE</spring-data.version>
 
     </properties>
 
     <scm>
-        <!--<developerConnection>scm:hg:file:///Q://marketDataProvider</developerConnection>-->
-        <!--<developerConnection>scm:git:http://myserver:8081/r/gitauthtest.git</developerConnection>-->
-        <developerConnection>scm:git:ssh://192.168.178.20:122/volume1/Data/workspace/repos/MarketDataProvider
-        </developerConnection>
-
-        <tag>marketDataProvider-0.2.7</tag>
+        <!--<developerConnection>scm:git:ssh://192.168.178.20:122/volume1/Data/workspace/repos/MarketDataProvider</developerConnection>-->
+        <developerConnection>scm:git:https://holgerfischer@bitbucket.org/holgerfischer/dac.git</developerConnection>
+        <tag>dac-0.3.1</tag>
     </scm>
 
     <modules>
         <module>bundles</module>
         <module>bootstrapper</module>
         <!--<module>client</module>-->
-        <module>utils</module>
         <module>features</module>
         <module>pax-exam-test</module>
-        <!--<module>wrapped</module>-->
     </modules>
 
 
     <dependencyManagement>
         <dependencies>
             <dependency>
-                <groupId>de.hf.marketDataProvider</groupId>
-                <artifactId>common</artifactId>
+                <groupId>de.hf.dac</groupId>
+                <artifactId>de.hf.dac.security</artifactId>
                 <version>0.3.1-SNAPSHOT</version>
             </dependency>
             <dependency>
-                <groupId>de.hf.marketDataProvider</groupId>
-                <artifactId>de.hf.common.util-jpa</artifactId>
+                <groupId>de.hf.dac.marketdataprovider.api</groupId>
+                <artifactId>de.hf.dac.marketdataprovider.api.domain</artifactId>
                 <version>0.3.1-SNAPSHOT</version>
             </dependency>
             <dependency>
-                <groupId>de.hf.marketDataProvider</groupId>
-                <artifactId>de.hf.marketDataProvider.domain</artifactId>
+                <groupId>de.hf.dac.marketdataprovider</groupId>
+                <artifactId>de.hf.dac.marketdataprovider.service</artifactId>
                 <version>0.3.1-SNAPSHOT</version>
             </dependency>
             <dependency>
-                <groupId>de.hf.marketDataProvider</groupId>
-                <artifactId>de.hf.marketDataProvider.service</artifactId>
+                <groupId>de.hf.dac.marketdataprovider</groupId>
+                <artifactId>de.hf.dac.marketdataprovider.restservice</artifactId>
                 <version>0.3.1-SNAPSHOT</version>
             </dependency>
             <dependency>
-                <groupId>de.hf.marketDataProvider</groupId>
-                <artifactId>de.hf.marketDataProvider.restservice</artifactId>
+                <groupId>de.hf.dac.marketdataprovider</groupId>
+                <artifactId>de.hf.dac.marketdataprovider.persistence</artifactId>
                 <version>0.3.1-SNAPSHOT</version>
             </dependency>
             <dependency>
-                <groupId>de.hf.marketDataProvider</groupId>
-                <artifactId>de.hf.marketDataProvider.persistence</artifactId>
+                <groupId>de.hf.dac.api</groupId>
+                <artifactId>de.hf.dac.api.io</artifactId>
                 <version>0.3.1-SNAPSHOT</version>
             </dependency>
             <dependency>
-                <groupId>de.hf.marketDataProvider.api</groupId>
-                <artifactId>de.hf.marketDataProvider.api.io</artifactId>
-                <version>0.3.1-SNAPSHOT</version>
-            </dependency>
-            <dependency>
-                <groupId>de.hf.marketDataProvider.api</groupId>
-                <artifactId>de.hf.marketDataProvider.api.service</artifactId>
+                <groupId>de.hf.dac.marketdataprovider.api</groupId>
+                <artifactId>de.hf.dac.marketdataprovider.api.service</artifactId>
                 <version>0.3.1-SNAPSHOT</version>
             </dependency>
 

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <features name="marketdata-restservice-features" xmlns="http://karaf.apache.org/xmlns/features/v1.3.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://karaf.apache.org/xmlns/features/v1.3.0 http://karaf.apache.org/xmlns/features/v1.3.0">
-    <repository>mvn:de.hf.marketDataProvider.features/marketdata-service-features/${project.version}/xml/features</repository>
+    <repository>mvn:de.hf.dac.features/marketdata-service-features/${project.version}/xml/features</repository>
     <repository>mvn:org.apache.cxf.karaf/apache-cxf/${apache-cxf.version}/xml/features</repository>
 
     <feature name="marketdata-jackson" version="${pom.version}">
@@ -26,7 +26,7 @@
         <feature>cxf-rs-description-swagger2</feature>-->
 
         <feature>marketdata-service-features</feature>
-        <bundle>mvn:de.hf.marketDataProvider/de.hf.marketDataProvider.restservice/${project.version}</bundle>
+        <bundle>mvn:de.hf.dac.marketdataprovider/de.hf.dac.marketdataprovider.restservice/${project.version}</bundle>
         <!--<bundle>mvn:com.eclipsesource.jaxrs/jersey-all/2.22.2</bundle>
         <bundle>mvn:com.eclipsesource.jaxrs/publisher/5.3.1</bundle>-->
         <!-- for rest response, serialization-->

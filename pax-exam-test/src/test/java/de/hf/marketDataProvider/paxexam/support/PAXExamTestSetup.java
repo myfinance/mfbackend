@@ -17,7 +17,7 @@
 
 package de.hf.marketDataProvider.paxexam.support;
 
-import de.hf.marketdataprovider.api.io.DatabaseInfo;
+import de.hf.dac.api.io.DatabaseInfo;
 import org.ops4j.pax.exam.Configuration;
 import org.ops4j.pax.exam.Option;
 import org.ops4j.pax.exam.karaf.options.KarafDistributionOption;
@@ -48,8 +48,8 @@ abstract public class PAXExamTestSetup {
 
 
     public Option embeddedH2Option() {
-        return features(maven().groupId("de.hf.marketDataProvider.features").artifactId("marketdata-io-features").type("xml").classifier("features").versionAsInProject(),
-            "marketdata-h2-feature");
+        return features(maven().groupId("de.hf.dac.features").artifactId("dac-io-features").type("xml").classifier("features").versionAsInProject(),
+            "dac-h2-feature");
     }
 
 
@@ -91,14 +91,14 @@ abstract public class PAXExamTestSetup {
 
     public Option ioFeatures() {
         return composite(
-            features(maven().groupId("de.hf.marketDataProvider.features").artifactId("marketdata-io-features").type("xml").classifier("features").versionAsInProject(),
-                "marketdata-io-features")
+            features(maven().groupId("de.hf.dac.features").artifactId("dac-io-features").type("xml").classifier("features").versionAsInProject(),
+                "dac-io-features")
         );
     }
 
     public Option restFeatures() {
         return composite(
-            features(maven().groupId("de.hf.marketDataProvider.features").artifactId("marketdata-restservice-features").type("xml").classifier("features").versionAsInProject(),
+            features(maven().groupId("de.hf.dac.features").artifactId("marketdata-restservice-features").type("xml").classifier("features").versionAsInProject(),
                 "marketdata-restservice-features")
         );
     }

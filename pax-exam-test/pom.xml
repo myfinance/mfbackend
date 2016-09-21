@@ -3,8 +3,8 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
-        <artifactId>marketDataProvider</artifactId>
-        <groupId>de.hf.marketDataProvider</groupId>
+        <artifactId>root</artifactId>
+        <groupId>de.hf.dac</groupId>
         <version>0.3.1-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
@@ -48,24 +48,24 @@
     <dependencies>
 
         <dependency>
-            <groupId>de.hf.marketDataProvider.api</groupId>
-            <artifactId>de.hf.marketDataProvider.api.io</artifactId>
+            <groupId>de.hf.dac.api</groupId>
+            <artifactId>de.hf.dac.api.io</artifactId>
         </dependency>
 
         <dependency>
-            <groupId>de.hf.marketDataProvider.api</groupId>
-            <artifactId>de.hf.marketDataProvider.api.service</artifactId>
+            <groupId>de.hf.dac.marketdataprovider.api</groupId>
+            <artifactId>de.hf.dac.marketdataprovider.api.service</artifactId>
         </dependency>
 
         <dependency>
-            <groupId>de.hf.marketDataProvider</groupId>
-            <artifactId>de.hf.marketDataProvider.domain</artifactId>
+            <groupId>de.hf.dac.marketdataprovider.api</groupId>
+            <artifactId>de.hf.dac.marketdataprovider.api.domain</artifactId>
         </dependency>
 
 
         <dependency>
-            <groupId>de.hf.marketDataProvider</groupId>
-            <artifactId>de.hf.marketDataProvider.restservice</artifactId>
+            <groupId>de.hf.dac.marketdataprovider</groupId>
+            <artifactId>de.hf.dac.marketdataprovider.restservice</artifactId>
         </dependency>
 
         <!-- Pax Exam -->
@@ -163,8 +163,8 @@
         </dependency>
 
         <dependency>
-            <groupId>de.hf.marketDataProvider.features</groupId>
-            <artifactId>marketdata-io-features</artifactId>
+            <groupId>de.hf.dac.features</groupId>
+            <artifactId>dac-io-features</artifactId>
             <version>${project.version}</version>
             <type>xml</type>
             <scope>runtime</scope>
@@ -172,7 +172,7 @@
         </dependency>
 
         <dependency>
-            <groupId>de.hf.marketDataProvider.features</groupId>
+            <groupId>de.hf.dac.features</groupId>
             <artifactId>marketdata-restservice-features</artifactId>
             <version>${project.version}</version>
             <type>xml</type>
