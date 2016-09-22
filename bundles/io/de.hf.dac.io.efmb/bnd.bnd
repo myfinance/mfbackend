@@ -5,5 +5,4 @@ Export-Package: \
 Bundle-SymbolicName: de.hf.dac.io.efmb
 
 Import-Package: org.postgresql, \
-    de.hf.dac.marketdataprovider.api.domain, \
 	*

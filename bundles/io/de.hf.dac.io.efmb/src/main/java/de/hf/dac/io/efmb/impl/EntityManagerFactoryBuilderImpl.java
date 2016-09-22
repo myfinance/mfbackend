@@ -122,6 +122,12 @@ public class EntityManagerFactoryBuilderImpl implements EntityManagerFactoryBuil
             props.remove(JAVAX_PERSISTENCE_NON_JTA_DATASOURCE);
         }
 
+        o = props.get("joinedClassloader");
+        if(o instanceof ClassLoader) {
+            persistenceUnitInfoImpl.classLoader = (ClassLoader)o;
+            props.remove("joinedClassloader");
+        }
+
         o = props.get(JAVAX_PERSISTENCE_TX_TYPE);
         if(o instanceof PersistenceUnitTransactionType) {
             persistenceUnitInfoImpl.setTransactionType((PersistenceUnitTransactionType) o);

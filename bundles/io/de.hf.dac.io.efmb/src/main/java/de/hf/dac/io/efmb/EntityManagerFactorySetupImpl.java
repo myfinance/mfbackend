@@ -58,9 +58,9 @@ public class EntityManagerFactorySetupImpl implements EntityManagerFactorySetup 
 
 
 
-    private Map<String,Object> getDBProperties(String persistenceUnit, Class<?>[] entities, ClassLoader[] classLoaders, String jdbcUrl, String user,
+    private Map<String,Object> buildDBProperties(String persistenceUnit, Class<?>[] entities, ClassLoader[] classLoaders, String jdbcUrl, String user,
         String password, String jtaPlatform, String driverClass, String databaseDialectClass, Properties extraHibernateProperties)
-        throws SQLException {
+            throws SQLException {
         Map<String, Object> props = new HashMap<String, Object>();
         props.put(EntityManagerFactoryBuilderImpl.persistenceUnitName,persistenceUnit);
         List<String> managedClasses = new ArrayList<>();
@@ -71,8 +71,14 @@ public class EntityManagerFactorySetupImpl implements EntityManagerFactorySetup 
         Properties persistenceUnitProperties = new Properties();
         persistenceUnitProperties.put("hibernate.dialect", databaseDialectClass);
         persistenceUnitProperties.put("hibernate.transaction.jta.platform",jtaPlatform);
+
+        List<ClassLoader> all = new ArrayList<>();
+        all.addAll(Arrays.asList(classLoaders));
+        all.add(this.getClass().getClassLoader());
+
         if(classLoaders != null) {
-            persistenceUnitProperties.put("hibernate.classloaders", new HashSet<>(Arrays.asList(classLoaders)));
+            persistenceUnitProperties.put("hibernate.classloaders", new HashSet<>(all));
+            props.put("joinedClassloader", classLoaders[0]);
         }
 
         persistenceUnitProperties.put("hibernate.connection.url",jdbcUrl);
@@ -156,7 +162,7 @@ public class EntityManagerFactorySetupImpl implements EntityManagerFactorySetup 
             throw new IllegalArgumentException("Unhandled Driver " + driver);
         }
 
-        Map<String,Object> props = getDBProperties(persistenceUnit,entities,classLoaders,url,user,password, jtaPlatform, driver, dialect, dbi.getExtraHibernateProperties());
+        Map<String,Object> props = buildDBProperties(persistenceUnit,entities,classLoaders,url,user,password, jtaPlatform, driver, dialect, dbi.getExtraHibernateProperties());
 
         props.put("javax.persistence.JtaDataSource",dataSource);
         return efb.createEntityManagerFactory(props);
