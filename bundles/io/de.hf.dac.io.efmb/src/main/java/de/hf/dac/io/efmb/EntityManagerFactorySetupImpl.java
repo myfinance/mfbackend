@@ -153,13 +153,17 @@ public class EntityManagerFactorySetupImpl implements EntityManagerFactorySetup 
             dialect = "org.hibernate.dialect.Oracle10gDialect";
             dataSource = oracleDataSourceFactory.createDataSource(getJdbcProps());
         } else if (db.getDriver().matches("org.h2.Driver")) {
-            dialect = db.getDialect();
+            dialect = "org.hibernate.dialect.H2Dialect";
             dataSource = h2Embedded.createDataSource(getJdbcProps());
         } else if (db.getDriver().matches("org.postgresql.Driver")) {
-            dialect = db.getDialect();
+            dialect = "org.hibernate.dialect.PostgreSQL82Dialect";
             dataSource = postgresDataSourceFactory.createDataSource(getJdbcProps());
         } else {
             throw new IllegalArgumentException("Unhandled Driver " + driver);
+        }
+
+        if(db.getDialect()!=null){
+            dialect = db.getDialect();
         }
 
         Map<String,Object> props = buildDBProperties(persistenceUnit,entities,classLoaders,url,user,password, jtaPlatform, driver, dialect, dbi.getExtraHibernateProperties());

@@ -4,5 +4,10 @@ Export-Package: \
 	de.hf.dac.api.io.efmb, \
 	de.hf.dac.api.io.env, \
 	de.hf.dac.api.io.env.domain
+Import-Package: \
+    javax.persistence, \
+    org.hibernate.proxy, \
+    javassist.util.proxy, \
+    *
 
 Bundle-SymbolicName: ${project.artifactId}

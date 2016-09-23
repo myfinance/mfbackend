@@ -34,7 +34,7 @@ public class EnvironmentDAO {
     public List<DacEnvironmentConfiguration> getAllEnvironments() {
         EntityManager em = emf.createEntityManager();
 
-        Query query = em.createQuery("SELECT c FROM CCRServiceConfiguration c");
+        Query query = em.createQuery("SELECT c FROM DacEnvironmentConfiguration c");
 
         return query.getResultList();
     }
@@ -43,7 +43,7 @@ public class EnvironmentDAO {
         EntityManager em = emf.createEntityManager();
         String ret = null;
 
-        Query query = em.createQuery("SELECT c.environment FROM CCRServiceConfiguration c where identifier=:clientId" +
+        Query query = em.createQuery("SELECT c.environment FROM DacEnvironmentConfiguration c where identifier=:clientId" +
             " and target='ClientId'");
 
         query.setParameter("clientId",clientId);
@@ -55,7 +55,7 @@ public class EnvironmentDAO {
     private String getConfigurationId(EntityManager em, final String environment, final String target, final String type) {
         List<String> ret = null;
 
-        Query query = em.createQuery("SELECT DISTINCT(c.identifier) FROM CCRServiceConfiguration c WHERE " +
+        Query query = em.createQuery("SELECT DISTINCT(c.identifier) FROM DacEnvironmentConfiguration c WHERE " +
             "c.target = :target and c.environment = :environment and c.type = :type");
 
         query.setParameter("environment",environment);
