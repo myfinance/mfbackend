@@ -17,7 +17,7 @@
 
 package de.hf.marketDataProvider.paxexam.support;
 
-import de.hf.dac.api.io.DatabaseInfo;
+import de.hf.dac.api.io.efmb.DatabaseInfo;
 import org.ops4j.pax.exam.Configuration;
 import org.ops4j.pax.exam.Option;
 import org.ops4j.pax.exam.karaf.options.KarafDistributionOption;

@@ -15,7 +15,7 @@
  * ----------------------------------------------------------------------------
  */
 
-package de.hf.dac.api.io;
+package de.hf.dac.api.io.efmb;
 
 import java.util.Properties;
 

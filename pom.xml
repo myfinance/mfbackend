@@ -39,6 +39,8 @@
         <spring-data-commons.version>1.11.4.RELEASE</spring-data-commons.version>
         <spring-data.version>1.9.4.RELEASE</spring-data.version>
 
+        <apache-commons-lang3.version>3.4</apache-commons-lang3.version><!--Equalsbuilder wirklich benötigt? Was kann das Paket noch-->
+
     </properties>
 
     <scm>
@@ -92,6 +94,12 @@
                 <groupId>de.hf.dac.marketdataprovider.api</groupId>
                 <artifactId>de.hf.dac.marketdataprovider.api.service</artifactId>
                 <version>0.3.1-SNAPSHOT</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.apache.commons</groupId>
+                <artifactId>commons-lang3</artifactId>
+                <version>${apache-commons-lang3.version}</version>
             </dependency>
 
             <dependency>

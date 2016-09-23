@@ -20,8 +20,8 @@ package de.hf.dac.marketdataprovider.service;
 /*import de.hf.common.util.jpa.DatabaseInfo;
 import de.hf.common.util.jpa.EntityManagerFactorySetup;*/
 import de.hf.dac.marketdataprovider.api.service.ProductService;
-import de.hf.dac.api.io.DatabaseInfo;
-import de.hf.dac.api.io.EntityManagerFactorySetup;
+import de.hf.dac.api.io.efmb.DatabaseInfo;
+import de.hf.dac.api.io.efmb.EntityManagerFactorySetup;
 import de.hf.dac.marketdataprovider.api.domain.Product;
 //import de.hf.marketdataprovider.persistence.repositories.ProductRepository;
 

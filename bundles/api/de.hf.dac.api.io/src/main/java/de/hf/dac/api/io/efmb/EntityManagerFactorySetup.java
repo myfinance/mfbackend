@@ -15,7 +15,7 @@
  * ----------------------------------------------------------------------------
  */
 
-package de.hf.dac.api.io;
+package de.hf.dac.api.io.efmb;
 
 import javax.persistence.EntityManagerFactory;
 import java.sql.SQLException;

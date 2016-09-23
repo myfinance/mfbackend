@@ -17,8 +17,8 @@
 
 package de.hf.dac.io.efmb;
 
-import de.hf.dac.api.io.DatabaseInfo;
-import de.hf.dac.api.io.EntityManagerFactorySetup;
+import de.hf.dac.api.io.efmb.DatabaseInfo;
+import de.hf.dac.api.io.efmb.EntityManagerFactorySetup;
 import de.hf.dac.io.efmb.impl.EntityManagerFactoryBuilderImpl;
 import org.ops4j.pax.cdi.api.OsgiService;
 import org.ops4j.pax.cdi.api.OsgiServiceProvider;

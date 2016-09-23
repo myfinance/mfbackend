@@ -28,6 +28,7 @@
         <feature prerequisite="true">postgres</feature>
         <feature prerequisite="true">dac-h2-feature</feature>
         <bundle>mvn:org.osgi/org.osgi.service.jdbc/1.0.0</bundle>
+        <bundle>mvn:org.apache.commons/commons-lang3/${apache-commons-lang3.version}</bundle><!--necessary for api.io-->
         <bundle>mvn:de.hf.dac.api/de.hf.dac.api.io/${project.version}</bundle>
         <bundle>mvn:de.hf.dac.io/de.hf.dac.io.efmb/${project.version}</bundle>
         <bundle>mvn:org.eclipse.persistence/javax.persistence/2.1.1</bundle>
@@ -36,7 +37,6 @@
 
     <feature name="dac-io-features" version="${pom.version}">
         <feature prerequisite="true">wrap</feature>
-        <feature>marketdata-domain-features</feature>
         <feature>dac-io-jpa-feature</feature>
     </feature>
 </features>

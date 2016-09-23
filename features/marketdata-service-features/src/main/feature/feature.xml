@@ -6,6 +6,7 @@
 
     <feature name="marketdata-service-features" version="${pom.version}">
         <feature>dac-io-features</feature>
+        <feature>marketdata-persistence-features</feature>
         <!--<capability>de.hf.common.util.jpa.EntityManagerFactorySetup</capability>-->
         <bundle>mvn:de.hf.dac.marketdataprovider.api/de.hf.dac.marketdataprovider.api.service/${project.version}</bundle>
         <bundle>mvn:de.hf.dac.marketdataprovider/de.hf.dac.marketdataprovider.service/${project.version}</bundle>

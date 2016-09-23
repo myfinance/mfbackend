@@ -1,5 +1,8 @@
 -metatype: *
 Export-Package: \
-	de.hf.dac.api.io
+	de.hf.dac.api.io, \
+	de.hf.dac.api.io.efmb, \
+	de.hf.dac.api.io.env, \
+	de.hf.dac.api.io.env.domain
 
 Bundle-SymbolicName: ${project.artifactId}

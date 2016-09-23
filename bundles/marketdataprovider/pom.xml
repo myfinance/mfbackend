@@ -15,9 +15,9 @@
     <packaging>pom</packaging>
     <modules>
         <module>marketdataprovider-api</module>
-        <module>persistence</module>
-        <module>restservice</module>
-        <module>service</module>
+        <module>de.hf.dac.marketdataprovider.persistence</module>
+        <module>de.hf.dac.marketdataprovider.restservice</module>
+        <module>de.hf.dac.marketdataprovider.service</module>
     </modules>
 
 

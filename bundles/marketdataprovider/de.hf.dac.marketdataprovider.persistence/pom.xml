@@ -8,7 +8,7 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>de.hf.dac.persistence</artifactId>
+    <artifactId>de.hf.dac.marketdataprovider.persistence</artifactId>
 
     <dependencies>
         <dependency>

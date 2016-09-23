@@ -19,7 +19,6 @@ package de.hf.marketDataProvider.paxexam.io.emfb;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -34,11 +33,10 @@ import javax.transaction.SystemException;
 import javax.transaction.UserTransaction;
 
 import de.hf.marketDataProvider.paxexam.support.PAXExamTestSetup;
-import de.hf.dac.api.io.DatabaseInfo;
-import de.hf.dac.api.io.EntityManagerFactorySetup;
+import de.hf.dac.api.io.efmb.DatabaseInfo;
+import de.hf.dac.api.io.efmb.EntityManagerFactorySetup;
 import de.hf.dac.marketdataprovider.api.service.ProductService;
 import de.hf.dac.marketdataprovider.api.domain.Product;
-import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.ops4j.pax.cdi.api.OsgiService;
@@ -47,8 +45,6 @@ import org.ops4j.pax.exam.Option;
 import org.ops4j.pax.exam.junit.PaxExam;
 
 import static org.junit.Assert.assertNotNull;
-import static org.ops4j.pax.exam.CoreOptions.composite;
-import static org.ops4j.pax.exam.CoreOptions.vmOption;
 
 @RunWith(PaxExam.class)
 public class EntityManagerSetupTest extends PAXExamTestSetup {
