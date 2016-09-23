@@ -19,6 +19,8 @@ package de.hf.dac.marketdataprovider.service;
 
 /*import de.hf.common.util.jpa.DatabaseInfo;
 import de.hf.common.util.jpa.EntityManagerFactorySetup;*/
+import de.hf.dac.api.io.env.EnvironmentService;
+import de.hf.dac.api.io.env.EnvironmentTargetInfo;
 import de.hf.dac.marketdataprovider.api.service.ProductService;
 import de.hf.dac.api.io.efmb.DatabaseInfo;
 import de.hf.dac.api.io.efmb.EntityManagerFactorySetup;
@@ -75,6 +77,10 @@ public class ProductServiceImpl implements ProductService {
     EntityManagerFactorySetup emfb;
 
     @Inject
+    @OsgiService
+    protected EnvironmentService envService;
+
+    @Inject
     protected BundleContext bundleContext;
 
    /* EntityManagerFactorySetup efs;
@@ -107,6 +113,14 @@ public class ProductServiceImpl implements ProductService {
         ArrayList<Product> products = new ArrayList<>(2);
         products.add(p1);
         products.add(p2);
+
+        /*try{
+            EnvironmentTargetInfo requestedTarget = envService.getTarget("env", "target");
+        }
+        catch(Exception e)
+        {
+            e.printStackTrace();
+        }*/
 
 
         DatabaseInfo dbi = new DatabaseInfo("jdbc:postgresql://localhost:5432/marketdata","postgres", "vulkan", "org.postgresql.Driver");

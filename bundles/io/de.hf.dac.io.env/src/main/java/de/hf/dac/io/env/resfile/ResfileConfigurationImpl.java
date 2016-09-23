@@ -42,14 +42,20 @@ public class ResfileConfigurationImpl implements EnvironmentConfiguration {
     private ResFileParser resFileParser = new ResFileParser();
 
     public static final String DEVPROPS_FILENAME = "dev.res";
-    public static final String POET_RES_FILENAME = "poet.res";
-    public static final String CAD_LOGIN_INFO = "CAD_LOGIN_INFO";
-    public static final String CAD_RES_PATH_ENV = "CAD_RES_PATH";
+    public static final String DAC_RES_FILENAME = "dac.res";
+    public static final String DAC_LOGIN_INFO = "DAC_LOGIN_INFO";
+    public static final String DAC_RES_PATH_ENV = "CAD_RES_PATH";
 
     private List<String> knownResFiles = new ArrayList<>();
 
+    /**
+     * 1. get path to a res.file with login informations from Environment variable - only admin should have read access to this file
+     * 2. get path to dac.res - resfile for an environment like UAT or Production - with all informations even 3rd level support are allowed to read
+     * 3. get dac.res from target/.. directory for development use
+     * 4. get dev.res from target/.. directory for local overrides from a single developer (never check this in)
+     */
     private static ResFileLocation[] resFileSearchOrder =
-        new ResFileLocation[] {ResFileLocation.CAD_LOGIN_INFO_FILE, ResFileLocation.CAD_RES_PATH_ENV_FILE, ResFileLocation.DEVELOPER_POET_RES, ResFileLocation.DEVELOPER_RES_FILE, ResFileLocation.DEVELOPER_LOCAL_RES,
+        new ResFileLocation[] {ResFileLocation.DAC_LOGIN_INFO_FILE, ResFileLocation.DAC_RES_PATH_ENV_FILE, ResFileLocation.DEVELOPER_DAC_RES, ResFileLocation.DEVELOPER_LOCAL_RES,
         };
 
     public ResfileConfigurationImpl(ResFileParser parser) {
@@ -105,10 +111,9 @@ public class ResfileConfigurationImpl implements EnvironmentConfiguration {
     }
 
     private enum ResFileLocation {
-        DEVELOPER_RES_FILE(ResFileType.RELATIVE_PATH, "../", DEVPROPS_FILENAME ),
-        CAD_LOGIN_INFO_FILE(ResFileType.SYSTEM_PROPERTY_ABSOLUTEPATH, CAD_LOGIN_INFO, null),
-        CAD_RES_PATH_ENV_FILE(ResFileType.SYSTEM_PROPERTY_PATH, CAD_RES_PATH_ENV, POET_RES_FILENAME)
-        ,DEVELOPER_POET_RES(ResFileType.RELATIVE_PATH, "../", POET_RES_FILENAME)
+        DEVELOPER_RES_FILE(ResFileType.RELATIVE_PATH, "../", DEVPROPS_FILENAME ), DAC_LOGIN_INFO_FILE(ResFileType.SYSTEM_PROPERTY_ABSOLUTEPATH, DAC_LOGIN_INFO, null),
+        DAC_RES_PATH_ENV_FILE(ResFileType.SYSTEM_PROPERTY_PATH, DAC_RES_PATH_ENV, DAC_RES_FILENAME)
+        , DEVELOPER_DAC_RES(ResFileType.RELATIVE_PATH, "../..", DAC_RES_FILENAME)
         ,DEVELOPER_LOCAL_RES(ResFileType.RELATIVE_PATH, "../..", DEVPROPS_FILENAME)
         ;
 

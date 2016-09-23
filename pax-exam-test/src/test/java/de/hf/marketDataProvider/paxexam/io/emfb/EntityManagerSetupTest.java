@@ -35,7 +35,6 @@ import javax.transaction.UserTransaction;
 import de.hf.marketDataProvider.paxexam.support.PAXExamTestSetup;
 import de.hf.dac.api.io.efmb.DatabaseInfo;
 import de.hf.dac.api.io.efmb.EntityManagerFactorySetup;
-import de.hf.dac.marketdataprovider.api.service.ProductService;
 import de.hf.dac.marketdataprovider.api.domain.Product;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -54,10 +53,6 @@ public class EntityManagerSetupTest extends PAXExamTestSetup {
     @OsgiService
     EntityManagerFactorySetup emfb;
 
-    @OsgiService
-    @Inject
-    ProductService productService;
-
 
     @Configuration
     public Option[] config() {
@@ -68,7 +63,7 @@ public class EntityManagerSetupTest extends PAXExamTestSetup {
             //     getDebugOption(),
             // enable this to be able to debug
             // first start this unit test, and then connect using remote debugging.
-            restFeatures(), embeddedH2Option()}; //, composite(vmOption("-Xrunjdwp:transport=dt_socket,server=y,suspend=y,address=5005")) };
+            restFeatures()}; //, composite(vmOption("-Xrunjdwp:transport=dt_socket,server=y,suspend=y,address=5005")) };
     }
 
 
@@ -79,7 +74,7 @@ public class EntityManagerSetupTest extends PAXExamTestSetup {
         assertNotNull(emfb);
 
         //DatabaseInfo dbi = inMemoryH2DatabaseInfo();
-        DatabaseInfo dbi = postgresDatabaseInfo();
+        DatabaseInfo dbi = inMemoryH2DatabaseInfo();
 
         EntityManagerFactory testunit = emfb.buildEntityManagerFactory("testunit", new Class[] { Product.class }, new ClassLoader[] {Product.class.getClassLoader()}, dbi);
         EntityManager entityManager = testunit.createEntityManager();

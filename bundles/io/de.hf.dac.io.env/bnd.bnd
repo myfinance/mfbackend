@@ -1,0 +1,6 @@
+-metatype: *
+Bundle-SymbolicName: ${project.artifactId}
+Export-Package: \
+  de.hf.dac.io.env, \
+  de.hf.dac.io.env.resfile
+
