@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<databaseChangeLog
+  xmlns="http://www.liquibase.org/xml/ns/dbchangelog/1.9"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog/1.9
+         http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-1.9.xsd">
+    <preConditions>
+        <or>
+            <dbms type="postgresql" />
+            <dbms type="h2" />
+        </or>
+    </preConditions>    
+    <changeSet id="1.0.1" author="hf">
+        <createTable tableName="dacenvironmentconfiguration">
+            <column name="environment" type="VARCHAR(20)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="target" type="VARCHAR(20)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="envtype" type="VARCHAR(25)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="identifier" type="VARCHAR(40)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="jdbcurl" type="VARCHAR(100)"/>
+            <column name="jndiurl" type="VARCHAR(50)"/>
+        </createTable>
+        <addPrimaryKey columnNames="environment, target"
+                       constraintName="pk_envconv"
+                       tableName="dacenvironmentconfiguration"/>
+    </changeSet>
+</databaseChangeLog>

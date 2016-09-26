@@ -127,14 +127,12 @@ public class BootstrapConfiguration implements Serializable {
                 "Database Key " + loginInfoAlias + " not found in Environment. Please check all ResFiles/Configurations");
         }
         String[] parts = aliasLine.split("\\s*,\\s*");
-        String dbUrl = null;
-        String dbServer = parts[0];
-        if (dbServer == null) {
-            throw new RuntimeException("Server not found not for DB " + loginInfoAlias + " in res files");
+        String dbUrl = parts[0];
+        if (dbUrl == null) {
+            throw new RuntimeException("Url not found not for DB " + loginInfoAlias + " in res files");
         }
-        String dbName = parts[1];
-        String dbUser = parts[2];
-        String dbPasswd = conf.decrypt(parts[3]);
+        String dbUser = parts[1];
+        String dbPasswd = conf.decrypt(parts[2]);
 
         if (dbUser == null) {
             throw new RuntimeException("User not found not for DB " + loginInfoAlias + " in res files");
@@ -143,18 +141,11 @@ public class BootstrapConfiguration implements Serializable {
             throw new RuntimeException("Password not found for DB " + loginInfoAlias + " in res files");
         }
 
-        Properties properties = conf.getProperties(CONFIGDB_BOOTSTRAP_SECTION);
-
-        String dbdriver = properties.getProperty(PROPERTY_NAMES.BOOTSTRAP_DRIVER.name());
-        // if not set use default
-        if (dbdriver == null || dbdriver.length() == 0) {
-            dbdriver = COM_SYBASE_JDBC4_JDBC_SYB_DRIVER;
+        String dbdriver = parts[3];
+        if (dbUrl == null) {
+            throw new RuntimeException("dbdriver not found not for DB " + loginInfoAlias + " in res files");
         }
-
-        dbUrl =  "jdbc:sybase:jndi:file://" + properties.get(PROPERTY_NAMES.SQL_INI_FILE.name()) + "?" + dbServer+ "&DATABASE=" + dbName
-            + "&HOMOGENEOUS_BATCH=false";//  "&ENABLE_BULK_LOAD=ARRAYINSERT" does not work TooManyRowsAffectedException
-
-        return new DatabaseInfo(dbUrl, dbUser, dbPasswd, dbdriver, dbServer, dbName);
+        return new DatabaseInfo(dbUrl, dbUser, dbPasswd, dbdriver, null, null);
     }
 }
 

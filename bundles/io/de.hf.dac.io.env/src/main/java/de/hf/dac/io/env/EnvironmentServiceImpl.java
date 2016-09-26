@@ -98,9 +98,9 @@ public class EnvironmentServiceImpl implements EnvironmentService {
         List<DacEnvironmentConfiguration> envs = environmentDAO.getAllEnvironments();
         for (DacEnvironmentConfiguration env : envs) {
             EnvironmentTargetInfo savedEnv = null;
-            if ("DB".equals(env.getType())) {
+            if ("db".equals(env.getEnvtype())) {
                 savedEnv = createDBEnvironentInfo(properties, env);
-            } else if ("Cache".equals(env.getType())) {
+            } else if ("cache".equals(env.getEnvtype())) {
                 //savedEnv = createCacheEnvironentInfo(env);
             }
             if (savedEnv != null) {
@@ -127,7 +127,7 @@ public class EnvironmentServiceImpl implements EnvironmentService {
     }*/
 
     private EnvironmentTargetInfo createDBEnvironentInfo(Properties properties, DacEnvironmentConfiguration env) {
-        EnvironmentTargetInfo<DatabaseInfo> savedEnv = new EnvironmentTargetInfo<>(env.getEnvironment(), env.getTarget(), env.getType());
+        EnvironmentTargetInfo<DatabaseInfo> savedEnv = new EnvironmentTargetInfo<>(env.getEnvironment(), env.getTarget(), env.getEnvtype());
         // look up database info from ResFile
         if (properties.containsKey(env.getIdentifier())) {
             DatabaseInfo dbi = BootstrapConfiguration.extractDatabaseInfoFromConfig(this.configuration, env.getIdentifier());

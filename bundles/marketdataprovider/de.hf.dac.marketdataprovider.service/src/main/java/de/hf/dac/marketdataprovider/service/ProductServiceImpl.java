@@ -114,24 +114,13 @@ public class ProductServiceImpl implements ProductService {
         products.add(p1);
         products.add(p2);
 
-        /*try{
-            EnvironmentTargetInfo requestedTarget = envService.getTarget("env", "target");
-        }
-        catch(Exception e)
-        {
-            e.printStackTrace();
-        }*/
+        EnvironmentTargetInfo requestedTarget = envService.getTarget("dev", "marketdata");
 
-
-        DatabaseInfo dbi = new DatabaseInfo("jdbc:postgresql://localhost:5432/marketdata","postgres", "vulkan", "org.postgresql.Driver");
-        dbi.setDialect("org.hibernate.dialect.PostgreSQL82Dialect");
-        // force schema / table creation
-        dbi.getExtraHibernateProperties().put("hibernate.hbm2ddl.auto","create-drop");
         EntityManagerFactory testunit = null;
         UserTransaction utx = null;
         try {
 
-            testunit = emfb.buildEntityManagerFactory("testunit", new Class[] { Product.class }, new ClassLoader[] {Product.class.getClassLoader()}, dbi);
+            testunit = emfb.buildEntityManagerFactory("testunit", new Class[] { Product.class }, new ClassLoader[] {Product.class.getClassLoader()}, (DatabaseInfo)requestedTarget.getTargetDetails());
             EntityManager entityManager = testunit.createEntityManager();
             utx = (UserTransaction) bundleContext.getService(bundleContext.getServiceReference(UserTransaction.class.getName()));
             utx.begin();

@@ -72,7 +72,7 @@ abstract public class PAXExamTestSetup {
     }
 
     public Option karafContainerSetup() {
-        return composite(karafDistributionConfiguration().frameworkUrl(maven().groupId("org.apache.karaf").artifactId("apache-karaf").type("zip"))
+        return composite(karafDistributionConfiguration().frameworkUrl(maven().groupId("org.apache.karaf").artifactId("apache-karaf").versionAsInProject().type("zip"))
                 .useDeployFolder(false).unpackDirectory(new File("target/paxexam/unpack/")),
 
             KarafDistributionOption.editConfigurationFilePut("etc/org.ops4j.pax.url.mvn.cfg", "org.ops4j.pax.url.mvn.proxySupport", "true"),

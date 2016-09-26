@@ -24,7 +24,7 @@ import javax.persistence.Table;
 import java.util.Objects;
 
 @Entity
-@Table(name="DacEnvironmentConfiguration" )
+@Table(name="dacenvironmentconfiguration" )
 public class DacEnvironmentConfiguration implements java.io.Serializable {
 
     @Id
@@ -35,16 +35,17 @@ public class DacEnvironmentConfiguration implements java.io.Serializable {
     @Column(name = "target", nullable = false,length = 20)
     private String target;
 
-    @Column(name = "type", nullable = false,length = 25)
-    private String type;
+    @Column(name = "envtype", nullable = false,length = 25)
+    private String envtype;
 
     @Column(name = "identifier", nullable = false,length = 40)
     private String identifier;
 
-    @Column(name = "jdbcUrl", nullable = false,length = 50)
+    @Column(name = "jdbcurl", nullable = false,length = 100)
     private String jdbcUrl;
 
-    @Column(name = "jndiUrl", nullable = false,length = 50)
+
+    @Column(name = "jndiurl", nullable = false,length = 50)
     private String jndiUrl;
 
     public DacEnvironmentConfiguration() {
@@ -58,8 +59,8 @@ public class DacEnvironmentConfiguration implements java.io.Serializable {
         return target;
     }
 
-    public String getType() {
-        return type;
+    public String getEnvtype() {
+        return envtype;
     }
 
     public String getIdentifier() {
@@ -81,7 +82,7 @@ public class DacEnvironmentConfiguration implements java.io.Serializable {
         DacEnvironmentConfiguration that = (DacEnvironmentConfiguration) o;
         return Objects.equals(getEnvironment(), that.getEnvironment()) &&
             getTarget() == that.getTarget() &&
-            getType() == that.getType() &&
+            getEnvtype() == that.getEnvtype() &&
             Objects.equals(getIdentifier(), that.getIdentifier()) &&
             Objects.equals(getJndiUrl(), that.getJndiUrl()) &&
             Objects.equals(getJdbcUrl(), that.getJdbcUrl());
@@ -89,6 +90,6 @@ public class DacEnvironmentConfiguration implements java.io.Serializable {
 
     @Override
     public int hashCode() {
-        return Objects.hash(getEnvironment(), getTarget(), getType(), getIdentifier(), getJdbcUrl(),getJndiUrl());
+        return Objects.hash(getEnvironment(), getTarget(), getEnvtype(), getIdentifier(), getJdbcUrl(),getJndiUrl());
     }
 }
