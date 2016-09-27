@@ -22,6 +22,8 @@ import de.hf.dac.api.io.efmb.EntityManagerFactorySetup;
 import de.hf.dac.io.efmb.impl.EntityManagerFactoryBuilderImpl;
 import org.ops4j.pax.cdi.api.OsgiService;
 import org.ops4j.pax.cdi.api.OsgiServiceProvider;
+import org.osgi.framework.Bundle;
+import org.osgi.framework.BundleReference;
 import org.osgi.service.jdbc.DataSourceFactory;
 import org.osgi.service.jpa.EntityManagerFactoryBuilder;
 
@@ -64,8 +66,10 @@ public class EntityManagerFactorySetupImpl implements EntityManagerFactorySetup 
         Map<String, Object> props = new HashMap<String, Object>();
         props.put(EntityManagerFactoryBuilderImpl.persistenceUnitName,persistenceUnit);
         List<String> managedClasses = new ArrayList<>();
-        for(Class<?> c : entities) {
-            managedClasses.add(c.getCanonicalName());
+        if(entities!=null) {
+            for(Class<?> c : entities) {
+                managedClasses.add(c.getCanonicalName());
+            }
         }
         props.put(EntityManagerFactoryBuilderImpl.managedClassNames,managedClasses);
         Properties persistenceUnitProperties = new Properties();
@@ -79,6 +83,16 @@ public class EntityManagerFactorySetupImpl implements EntityManagerFactorySetup 
         if(classLoaders != null) {
             persistenceUnitProperties.put("hibernate.classloaders", new HashSet<>(all));
             props.put("joinedClassloader", classLoaders[0]);
+
+            // look for compile time generated list of javax.persistence.Entity annotatedClasses
+            Bundle bundle = ((BundleReference) classLoaders[0]).getBundle();
+            String annotatedDomainClasses = bundle.getHeaders().get("AnnotatedDomainClasses");
+            if (annotatedDomainClasses != null) {
+                String[] classNames = annotatedDomainClasses.split(",");
+                for (String className : classNames) {
+                    managedClasses.add(className);
+                }
+            }
         }
 
         persistenceUnitProperties.put("hibernate.connection.url",jdbcUrl);
@@ -112,6 +126,13 @@ public class EntityManagerFactorySetupImpl implements EntityManagerFactorySetup 
             throw new RuntimeException(e);
         }
         return ds;
+    }
+
+    @Override
+    public EntityManagerFactory buildEntityManagerFactory(String persistenceUnit,
+        ClassLoader[] classLoaders,
+        DatabaseInfo dbi) throws SQLException {
+        return buildEntityManagerFactory(persistenceUnit, null, classLoaders, dbi);
     }
 
     @Override
@@ -204,16 +225,16 @@ public class EntityManagerFactorySetupImpl implements EntityManagerFactorySetup 
             Iterable<Field> fields = getFieldsUpTo(connectionFactory.getClass(),Object.class);
             for(Field field : fields) {
                 field.setAccessible(true);
-                if(field.getName() == "connectionURL") {
+                if(field.getName().equals("connectionURL")) {
                     url = (String)field.get(connectionFactory);
                 }
-                if(field.getName() == "password") {
+                if(field.getName().equals("password")) {
                     password = (String)field.get(connectionFactory);
                 }
-                if(field.getName() == "userName") {
+                if(field.getName().equals("userName")) {
                     user = (String)field.get(connectionFactory);
                 }
-                if(field.getName() == "driverClass") {
+                if(field.getName().equals("driverClass")) {
                     driver = (String)field.get(connectionFactory);
                 }
             }

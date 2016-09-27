@@ -30,7 +30,6 @@ import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
-import org.hibernate.annotations.Type;
 import lombok.Data;
 
 @Entity
@@ -48,12 +47,10 @@ public class EndOfDayPrice implements Serializable {
     private Instrument instrument;
     @NonNull
     private double endOfDayPrice;
-    @Type(type = "org.jadira.usertype.dateandtime.threeten.PersistentLocalDate")
     @NonNull
     private LocalDate dayOfPrice;
     @NonNull
     private int currencyId;
-    @Type(type = "org.jadira.usertype.dateandtime.threeten.PersistentInstantAsTimestamp")
     private Instant lastChanged;
 
     public EndOfDayPrice(Instrument instrument, double endOfDayPrice, LocalDate dayOfPrice) {

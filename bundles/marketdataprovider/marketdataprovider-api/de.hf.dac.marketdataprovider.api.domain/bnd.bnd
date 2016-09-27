@@ -7,3 +7,4 @@ Import-Package: \
     javassist.util.proxy, \
     *
 Bundle-SymbolicName: ${project.artifactId}
+AnnotatedDomainClasses: ${classes;CONCRETE;ANNOTATION;javax.persistence.Entity}

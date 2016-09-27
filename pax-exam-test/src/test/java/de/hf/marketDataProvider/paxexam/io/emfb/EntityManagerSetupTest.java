@@ -73,10 +73,9 @@ public class EntityManagerSetupTest extends PAXExamTestSetup {
         throws SQLException, SystemException, NotSupportedException, HeuristicRollbackException, HeuristicMixedException, RollbackException {
         assertNotNull(emfb);
 
-        //DatabaseInfo dbi = inMemoryH2DatabaseInfo();
         DatabaseInfo dbi = inMemoryH2DatabaseInfo();
 
-        EntityManagerFactory testunit = emfb.buildEntityManagerFactory("testunit", new Class[] { Product.class }, new ClassLoader[] {Product.class.getClassLoader()}, dbi);
+        EntityManagerFactory testunit = emfb.buildEntityManagerFactory("testunit", new ClassLoader[] {Product.class.getClassLoader()}, dbi);
         EntityManager entityManager = testunit.createEntityManager();
 
         UserTransaction utx = (UserTransaction) bundleContext.getService(bundleContext.getServiceReference(UserTransaction.class.getName()));

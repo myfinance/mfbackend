@@ -28,7 +28,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
-import org.hibernate.annotations.Type;
 
 @Entity
 @Data
@@ -49,7 +48,6 @@ public class Instrument implements Serializable {
     private String wkn;
     private String ticker;
     private String description;
-    @Type(type = "org.jadira.usertype.dateandtime.threeten.PersistentInstantAsTimestamp")
     private Instant treeLastChanged;
     private int homeTradingCurrencyId;
 }

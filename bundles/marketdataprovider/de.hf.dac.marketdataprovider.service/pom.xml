@@ -43,6 +43,11 @@
             <version>1.4.192</version>
             <scope>provided</scope>
         </dependency>
+        <dependency>
+            <groupId>javax.transaction</groupId>
+            <artifactId>javax.transaction-api</artifactId>
+            <version>1.2</version>
+        </dependency>
         <!--<dependency>
             <groupId>org.jboss.narayana.osgi</groupId>
             <artifactId>narayana-osgi-jta</artifactId>
