@@ -8,3 +8,4 @@ Import-Package: \
     *
 Bundle-SymbolicName: ${project.artifactId}
 AnnotatedDomainClasses: ${classes;CONCRETE;ANNOTATION;javax.persistence.Entity}
+AnnotatedDomainSuperClasses: ${classes;CONCRETE;ANNOTATION;javax.persistence.MappedSuperclass}

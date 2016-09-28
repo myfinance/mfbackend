@@ -86,11 +86,14 @@ public class EntityManagerFactorySetupImpl implements EntityManagerFactorySetup 
 
             // look for compile time generated list of javax.persistence.Entity annotatedClasses
             Bundle bundle = ((BundleReference) classLoaders[0]).getBundle();
-            String annotatedDomainClasses = bundle.getHeaders().get("AnnotatedDomainClasses");
-            if (annotatedDomainClasses != null) {
-                String[] classNames = annotatedDomainClasses.split(",");
-                for (String className : classNames) {
-                    managedClasses.add(className);
+            String[] annotatedDomainClasses = new String[] {bundle.getHeaders().get("AnnotatedDomainClasses"), bundle.getHeaders().get("AnnotatedDomainSuperClasses")};
+
+            for (String annotatedDomainClass : annotatedDomainClasses) {
+                if (annotatedDomainClass != null && annotatedDomainClass.length() != 0 ) {
+                    String[] classNames = annotatedDomainClass.split(",");
+                    for (String className : classNames) {
+                        managedClasses.add(className);
+                    }
                 }
             }
         }
