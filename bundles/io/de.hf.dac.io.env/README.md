@@ -15,3 +15,5 @@ The service reads for each combination of environment and target an Identifiert 
 Why are the details in the res-file again and not in the database? Because the res-file is a central resource in our case which is used by many components, so we don't want to define each connection twice.
 But it is planed to implement the possibility to read the connection instead of the identifier from the table.
 
+Each Command/service needs an Environment so one software can handle multiple environments/databases
+To separate Prod-Environment from the multiple test and dev env. you must defined a bootstrap-Database for Prod and one for all the other environments.

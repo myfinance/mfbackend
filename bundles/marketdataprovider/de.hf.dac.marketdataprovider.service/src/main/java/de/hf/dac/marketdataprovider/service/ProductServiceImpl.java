@@ -19,6 +19,7 @@ package de.hf.dac.marketdataprovider.service;
 
 /*import de.hf.common.util.jpa.DatabaseInfo;
 import de.hf.common.util.jpa.EntityManagerFactorySetup;*/
+import com.google.inject.Inject;
 import de.hf.dac.api.io.env.EnvironmentService;
 import de.hf.dac.api.io.env.EnvironmentTargetInfo;
 import de.hf.dac.marketdataprovider.api.service.ProductService;
@@ -43,7 +44,7 @@ import org.osgi.framework.BundleContext;
 import org.osgi.service.component.annotations.ReferencePolicy;
 import org.springframework.data.jpa.repository.support.JpaRepositoryFactory;*/
 
-import javax.inject.Inject;
+//import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.transaction.SystemException;
@@ -61,10 +62,8 @@ import javax.inject.Singleton;
  * @author surak
  */
 @Slf4j
-//@Component(service = ProductService.class)
-//@Transactional
-@OsgiServiceProvider(classes = {ProductService.class})
-@Singleton
+//@OsgiServiceProvider(classes = {ProductService.class})
+//@Singleton
 public class ProductServiceImpl implements ProductService {
 
     //private ProductRepository productRepository;
@@ -73,38 +72,20 @@ public class ProductServiceImpl implements ProductService {
     //@Inject @OsgiService
     //public void setProductRepository(ProductRepository productRepository) {this.productRepository = productRepository; }
 
-    @Inject @OsgiService
+    /*@Inject @OsgiService
     EntityManagerFactorySetup emfb;
 
     @Inject
     @OsgiService
     protected EnvironmentService envService;
-
+*/
     @Inject
     protected BundleContext bundleContext;
 
-   /* EntityManagerFactorySetup efs;
-    @Reference(cardinality = ReferenceCardinality.MANDATORY,
-        policy = ReferencePolicy.STATIC)
-    protected void setEntityManagerFactorySetup(EntityManagerFactorySetup efs) {
-        this.efs = efs;
-    }
-
-    @Reference(target = "(osgi.unit.name=marketdatapostgres)")
-    JpaTemplate jpa;*/
-
-    //@Reference(target = "(component.name=de.hf.common.util.jpa.GenericEntityManager)")
-    //EntityManager em;
-
-    /*@PersistenceContext(unitName="tasklist")
-    EntityManager emTest;*/
+    @Inject
+    EntityManagerFactory marketDataEmf;
 
 
-    /*DataSource dataSource;
-    @Reference(target = "(dataSourceName=marketdatapostgres)")
-    public void setDataSource(DataSource dataSource) {
-        this.dataSource = dataSource;
-    }*/
 
     @Override
     public List<Product> listProducts() {
@@ -114,7 +95,31 @@ public class ProductServiceImpl implements ProductService {
         products.add(p1);
         products.add(p2);
 
-        EnvironmentTargetInfo requestedTarget = envService.getTarget("dev", "marketdata");
+        UserTransaction utx = null;
+        try {
+
+            EntityManager entityManager = marketDataEmf.createEntityManager();
+            utx = (UserTransaction) bundleContext.getService(bundleContext.getServiceReference(UserTransaction.class.getName()));
+            utx.begin();
+
+
+            entityManager.persist(p1);
+            entityManager.persist(p2);
+
+
+            utx.commit();
+        } catch (Exception e) {
+            e.printStackTrace();
+            if(utx!=null) {
+                try {
+                    utx.rollback();
+                } catch (SystemException e1) {
+                    e1.printStackTrace();
+                }
+            }
+        }
+
+        /*EnvironmentTargetInfo requestedTarget = envService.getTarget("dev", "marketdata");
 
         EntityManagerFactory testunit = null;
         UserTransaction utx = null;
@@ -140,7 +145,7 @@ public class ProductServiceImpl implements ProductService {
                     e1.printStackTrace();
                 }
             }
-        }
+        }*/
 
 
 

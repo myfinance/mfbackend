@@ -38,6 +38,9 @@
         <spring-data.version>1.9.4.RELEASE</spring-data.version>
 
         <apache-commons-lang3.version>3.4</apache-commons-lang3.version><!--Equalsbuilder wirklich benötigt? Was kann das Paket noch-->
+        <felix-commands.version>0.4.0</felix-commands.version>
+        <karaf-shell.version>4.0.6</karaf-shell.version>
+        <guice.version>4.1.0</guice.version>
 
     </properties>
 
@@ -143,6 +146,22 @@
                 <artifactId>hibernate-jpa-2.1-api</artifactId>
                 <version>${jpa-api2.1.version}</version>
             </dependency>
+            <dependency>
+                <groupId>org.apache.felix.gogo</groupId>
+                <artifactId>org.apache.felix.gogo.commands</artifactId>
+                <version>${felix-commands.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.karaf.shell</groupId>
+                <artifactId>org.apache.karaf.shell.console</artifactId>
+                <version>${karaf-shell.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.google.inject</groupId>
+                <artifactId>guice</artifactId>
+                <version>${guice.version}</version>
+            </dependency>
+
             <!--Apache Options für Optionparser in Common -->
             <dependency>
                 <groupId>commons-cli</groupId>

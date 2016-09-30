@@ -38,10 +38,9 @@ import org.ops4j.pax.cdi.api.OsgiService;
 @Singleton
 public class MyHello {
 
-    //@Reference
-    @OsgiService
+    /*@OsgiService
     @Inject
-    private ProductService productService;
+    private ProductService productService;*/
 
     @GET
     public String getHello() {
@@ -54,7 +53,7 @@ public class MyHello {
     //public List<Product> getProducts() {
     public String getProducts() {
 
-        return productService.listProducts().toString();
-        //return "test";
+        //return productService.listProducts().toString();
+        return "test";
     }
 }

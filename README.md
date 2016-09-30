@@ -60,4 +60,10 @@ How we run our functionality. We need to start the OSGi Framework, collect and l
 These modules just collect bundles which are necessary to provide certain high-level features - like persistence, rest services, consoles to control our apps at runtime.
 This is conceptionally related to Karaf-Features.
 
+### Felix Commands ###
+
+DAC uses Felix-GOGO-commands to start batch-jobs via ssh. Often it is necessary to autowire a lot of components depending on the batch job parameters. 
+Blueprint is a static DI and can not do this, so google guice is used.
+
+
 
