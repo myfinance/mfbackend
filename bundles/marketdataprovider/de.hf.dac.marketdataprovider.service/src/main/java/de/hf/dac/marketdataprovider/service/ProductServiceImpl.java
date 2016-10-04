@@ -17,84 +17,60 @@
 
 package de.hf.dac.marketdataprovider.service;
 
-/*import de.hf.common.util.jpa.DatabaseInfo;
-import de.hf.common.util.jpa.EntityManagerFactorySetup;*/
 import com.google.inject.Inject;
-import de.hf.dac.api.io.env.EnvironmentService;
-import de.hf.dac.api.io.env.EnvironmentTargetInfo;
+import de.hf.dac.marketdataprovider.api.persistence.RepositoryService;
+import de.hf.dac.marketdataprovider.api.persistence.repositories.ProductRepository;
 import de.hf.dac.marketdataprovider.api.service.ProductService;
-import de.hf.dac.api.io.efmb.DatabaseInfo;
-import de.hf.dac.api.io.efmb.EntityManagerFactorySetup;
 import de.hf.dac.marketdataprovider.api.domain.Product;
-//import de.hf.marketdataprovider.persistence.repositories.ProductRepository;
-
-import java.util.ArrayList;
 import java.util.List;
 
 import lombok.extern.slf4j.Slf4j;
-/*import org.apache.aries.jpa.template.JpaTemplate;
-import org.apache.aries.jpa.template.TransactionType;
-import org.osgi.framework.FrameworkUtil;
-import org.osgi.framework.wiring.BundleWiring;
-import org.osgi.service.component.annotations.Reference;*/
-import org.ops4j.pax.cdi.api.OsgiService;
-import org.ops4j.pax.cdi.api.OsgiServiceProvider;
 import org.osgi.framework.BundleContext;
-/*import org.osgi.service.component.annotations.ReferenceCardinality;
-import org.osgi.service.component.annotations.ReferencePolicy;
-import org.springframework.data.jpa.repository.support.JpaRepositoryFactory;*/
-
-//import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
+import javax.persistence.TypedQuery;
 import javax.transaction.SystemException;
 import javax.transaction.UserTransaction;
-/*import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
-import javax.persistence.TypedQuery;*/
-
-//import javax.transaction.Transactional;
-
-import javax.inject.Singleton;
 
 /**
  *
  * @author surak
  */
 @Slf4j
-//@OsgiServiceProvider(classes = {ProductService.class})
-//@Singleton
 public class ProductServiceImpl implements ProductService {
 
-    //private ProductRepository productRepository;
-
-
-    //@Inject @OsgiService
-    //public void setProductRepository(ProductRepository productRepository) {this.productRepository = productRepository; }
-
-    /*@Inject @OsgiService
-    EntityManagerFactorySetup emfb;
-
-    @Inject
-    @OsgiService
-    protected EnvironmentService envService;
-*/
     @Inject
     protected BundleContext bundleContext;
 
     @Inject
     EntityManagerFactory marketDataEmf;
 
-
+    @Inject
+    protected RepositoryService repositoryService;
 
     @Override
     public List<Product> listProducts() {
-        Product p1 = new Product("1234", "Product 1 desc");
-        Product p2 = new Product("1235", "Product 2 desc");
-        ArrayList<Product> products = new ArrayList<>(2);
-        products.add(p1);
-        products.add(p2);
+        List products = null;
+        try {
 
+            EntityManager entityManager = marketDataEmf.createEntityManager();
+            //TypedQuery<Product> query = entityManager.createNamedQuery(Product.findAll, Product.class);
+            //products=query.getResultList();
+            ProductRepository productRepository = repositoryService.buildProductRepository(entityManager);
+            products = productRepository.findAll();
+
+            //List savedObjects = productRepository.save(products);
+            //Product fetchedProduct = productRepository.findOne(p1.getId());
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return products;
+    }
+
+    @Override
+    public void saveProduct(Product product) {
         UserTransaction utx = null;
         try {
 
@@ -102,9 +78,9 @@ public class ProductServiceImpl implements ProductService {
             utx = (UserTransaction) bundleContext.getService(bundleContext.getServiceReference(UserTransaction.class.getName()));
             utx.begin();
 
-
-            entityManager.persist(p1);
-            entityManager.persist(p2);
+            //ProductRepository productRepository = repositoryService.buildProductRepository(entityManager);
+            //productRepository.save(product);
+            entityManager.persist(product);
 
 
             utx.commit();
@@ -118,61 +94,5 @@ public class ProductServiceImpl implements ProductService {
                 }
             }
         }
-
-        /*EnvironmentTargetInfo requestedTarget = envService.getTarget("dev", "marketdata");
-
-        EntityManagerFactory testunit = null;
-        UserTransaction utx = null;
-        try {
-
-            testunit = emfb.buildEntityManagerFactory("testunit", new ClassLoader[] {Product.class.getClassLoader()}, (DatabaseInfo)requestedTarget.getTargetDetails());
-            EntityManager entityManager = testunit.createEntityManager();
-            utx = (UserTransaction) bundleContext.getService(bundleContext.getServiceReference(UserTransaction.class.getName()));
-            utx.begin();
-
-
-            entityManager.persist(p1);
-            entityManager.persist(p2);
-
-
-            utx.commit();
-        } catch (Exception e) {
-            e.printStackTrace();
-            if(utx!=null) {
-                try {
-                    utx.rollback();
-                } catch (SystemException e1) {
-                    e1.printStackTrace();
-                }
-            }
-        }*/
-
-
-
-
-       // TypedQuery<Product> query = em.createNamedQuery(Product.findAll, Product.class);
-        //List oldproducts=query.getResultList();
-
-
-        /*jpa.tx(TransactionType.Required,   ema -> {
-            ema.persist(p1);
-            ema.flush();
-
-            JpaRepositoryFactory factory = new JpaRepositoryFactory(ema);
-            final Bundle bundle = FrameworkUtil.getBundle(ProductRepository.class);
-            final ClassLoader classLoader = bundle.adapt(BundleWiring.class).getClassLoader();
-            factory.setBeanClassLoader(classLoader);
-
-            productRepository = factory.getRepository(ProductRepository.class);
-            List oldproductsRepo=productRepository.findAll();
-
-            List savedObjects = productRepository.save(products);
-        });*/
-
-        //fetch from DB
-        //Product fetchedProduct = productRepository.findOne(p1.getId());
-        //log.debug("test:"+fetchedProduct.getId());
-
-        return products;
     }
 }

@@ -41,6 +41,7 @@
         <felix-commands.version>0.4.0</felix-commands.version>
         <karaf-shell.version>4.0.6</karaf-shell.version>
         <guice.version>4.1.0</guice.version>
+        <osgi-cmpn.version>6.0.0</osgi-cmpn.version>
 
     </properties>
 
@@ -69,6 +70,11 @@
             <dependency>
                 <groupId>de.hf.dac.marketdataprovider.api</groupId>
                 <artifactId>de.hf.dac.marketdataprovider.api.domain</artifactId>
+                <version>0.3.1-SNAPSHOT</version>
+            </dependency>
+            <dependency>
+                <groupId>de.hf.dac.marketdataprovider.api</groupId>
+                <artifactId>de.hf.dac.marketdataprovider.api.persistence</artifactId>
                 <version>0.3.1-SNAPSHOT</version>
             </dependency>
             <dependency>
@@ -160,6 +166,19 @@
                 <groupId>com.google.inject</groupId>
                 <artifactId>guice</artifactId>
                 <version>${guice.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.springframework.data</groupId>
+                <artifactId>spring-data-jpa</artifactId>
+                <version>${spring-data.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.osgi</groupId>
+                <artifactId>osgi.cmpn</artifactId>
+                <version>${osgi-cmpn.version}</version>
+                <scope>provided</scope>
             </dependency>
 
             <!--Apache Options für Optionparser in Common -->

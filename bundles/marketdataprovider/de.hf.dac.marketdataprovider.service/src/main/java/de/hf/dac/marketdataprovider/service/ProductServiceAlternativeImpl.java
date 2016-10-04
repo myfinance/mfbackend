@@ -24,4 +24,9 @@ public class ProductServiceAlternativeImpl implements ProductService {
         products.add(new Product("2", "Product alternative 2 desc"));
         return products;
     }
+
+    @Override
+    public void saveProduct(Product product) {
+
+    }
 }

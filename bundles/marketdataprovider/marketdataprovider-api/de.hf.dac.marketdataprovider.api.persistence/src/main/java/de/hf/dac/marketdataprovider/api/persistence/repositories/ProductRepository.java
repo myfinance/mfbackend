@@ -3,13 +3,10 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package de.hf.dac.marketdataprovider.persistence.repositories;
+package de.hf.dac.marketdataprovider.api.persistence.repositories;
 
 import de.hf.dac.marketdataprovider.api.domain.Product;
-import org.osgi.service.component.annotations.Component;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.repository.CrudRepository;
-
 
 /**
  * The Spring Data JPA CRUD Repository is a feature of Spring Data JPA. 
@@ -20,7 +17,7 @@ import org.springframework.data.repository.CrudRepository;
  * They are used for the domain class the repository is supporting, and the type of the id declared of the domain class.
  * @author xn01598
  */
-public interface ProductRepository extends JpaRepository<Product, Integer> {
+public interface ProductRepository  extends JpaRepository<Product, Integer> {
 }
 
 

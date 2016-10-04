@@ -24,6 +24,7 @@ import de.hf.dac.api.io.efmb.EntityManagerFactorySetup;
 import de.hf.dac.api.io.env.EnvironmentService;
 import de.hf.dac.api.io.env.EnvironmentTargetInfo;
 import de.hf.dac.marketdataprovider.api.domain.Product;
+import de.hf.dac.marketdataprovider.api.persistence.RepositoryService;
 import de.hf.dac.marketdataprovider.api.service.ProductService;
 import org.osgi.framework.BundleContext;
 
@@ -34,12 +35,14 @@ public class ProductServiceBuilderModule extends AbstractModule {
     private EntityManagerFactorySetup emfb;
     private EnvironmentService envService;
     private BundleContext bundleContext;
+    private RepositoryService repositoryService;
     private String env;
 
-    public ProductServiceBuilderModule(EntityManagerFactorySetup emfb, EnvironmentService envService, BundleContext bundleContext, String env){
+    public ProductServiceBuilderModule(EntityManagerFactorySetup emfb, EnvironmentService envService, BundleContext bundleContext, RepositoryService repositoryService, String env){
         this.emfb=emfb;
         this.envService=envService;
         this.bundleContext=bundleContext;
+        this.repositoryService = repositoryService;
         this.env=env;
     }
 
@@ -47,6 +50,7 @@ public class ProductServiceBuilderModule extends AbstractModule {
     protected void configure() {
         bind(ProductService.class).to(ProductServiceImpl.class);
         bind(BundleContext.class).toInstance(bundleContext);
+        bind(RepositoryService.class).toInstance(repositoryService);
         //bind(EntityManagerFactory.class).toProvider(this);
     }
 
