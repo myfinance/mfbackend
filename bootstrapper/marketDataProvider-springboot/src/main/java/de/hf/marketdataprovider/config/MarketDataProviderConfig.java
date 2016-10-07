@@ -18,7 +18,7 @@ import org.springframework.context.annotation.Profile;
  */
 @Configuration
 @Profile("production")
-//@ImportResource("classpath:META-INF/beans.xml")
+@ImportResource("classpath:META-INF/beans.xml")
 public class MarketDataProviderConfig {
    @Bean 
    public ProductService productService(){

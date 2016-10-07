@@ -55,6 +55,10 @@
             <artifactId>de.hf.dac.marketdataprovider.service</artifactId>
         </dependency>
         <dependency>
+            <groupId>de.hf.dac.marketdataprovider</groupId>
+            <artifactId>de.hf.dac.marketdataprovider.persistence</artifactId>
+        </dependency>
+        <dependency>
             <groupId>com.h2database</groupId>
             <artifactId>h2</artifactId>
         </dependency> 

@@ -7,7 +7,12 @@ package de.hf.marketdataprovider;
 
 import de.hf.dac.marketdataprovider.api.domain.EndOfDayPrice;
 import de.hf.dac.marketdataprovider.api.domain.Instrument;
+import de.hf.dac.marketdataprovider.api.domain.Product;
+import de.hf.dac.marketdataprovider.persistence.RepositoryServiceImpl;
+import de.hf.dac.marketdataprovider.persistence.RepositoryServiceNoOSGIImpl;
 import de.hf.dac.marketdataprovider.service.InstrumentService;
+import de.hf.marketdataprovider.config.CommonConfig;
+import de.hf.marketdataprovider.controllers.MyRestController;
 import org.springframework.boot.*;
 import org.springframework.boot.autoconfigure.*;
 import org.springframework.context.ApplicationContext;
@@ -26,7 +31,8 @@ import java.util.Arrays;
 @SpringBootApplication
 //verwendet alle mit Configuration annotierten Klassen im Package zur konfiguration des Appcontext. 
 //die Controller unter de.hf.marketdataprovider.controllers werden ebenfalls registriert
-//@ComponentScan({"de.hf.dac.marketdataprovider.api.persistence.repositories", "de.hf.dac.marketdataprovider.api.domain"})
+//@ComponentScan({"de.hf.dac.marketdataprovider.persistence", "de.hf.marketdataprovider.config"})
+@ComponentScan(basePackageClasses = {CommonConfig.class, Product.class, RepositoryServiceNoOSGIImpl.class, MyRestController.class})
 //@EnableJpaRepositories("de.hf.dac.marketdataprovider.api.persistence.repositories")
 public class Bootstrapper {
 

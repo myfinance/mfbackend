@@ -36,11 +36,19 @@ import javax.persistence.TypedQuery;
 @Slf4j
 public class ProductServiceImpl implements ProductService {
 
+
+    private EntityManagerFactory marketDataEmf;
     @Inject
-    EntityManagerFactory marketDataEmf;
+    public void setMarketDataEmf(EntityManagerFactory marketDataEmf){
+        this.marketDataEmf = marketDataEmf;
+    }
 
     @Inject
-    protected RepositoryService repositoryService;
+    private RepositoryService repositoryService;
+    @Inject
+    public void setRepositoryService(RepositoryService repositoryService) {
+        this.repositoryService = repositoryService;
+    }
 
     @Override
     public List<Product> listProducts() {
