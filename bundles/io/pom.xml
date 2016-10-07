@@ -16,6 +16,7 @@
     <modules>
         <module>de.hf.dac.io.efmb</module>
         <module>de.hf.dac.io.env</module>
+        <module>de.hf.dac.io.configuration</module>
     </modules>
 
 

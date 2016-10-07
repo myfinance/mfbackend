@@ -6,3 +6,6 @@ BOOTSTRAP_DRIVER=org.postgresql.Driver
 
 [LOGIN_INFO]
 DEVPOSTGRES=jdbc:postgresql://localhost:5432/marketdata,postgres,vulkan,org.postgresql.Driver
+
+[EMFB]
+POOL_SIZE=20

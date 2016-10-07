@@ -7,18 +7,21 @@
            http://www.springframework.org/schema/context
            http://www.springframework.org/schema/context/spring-context-2.5.xsd">
 
-    <bean id="productRepository" class="de.hf.marketdataprovider.persistence.repositories.ProductRepository" />
-    <bean id="ProductService" class="de.hf.marketdataprovider.service.ProductServiceImpl">
+    <bean id="product" class="de.hf.dac.marketdataprovider.api.domain.Product" />
+    <bean id="productRepository" class="de.hf.dac.marketdataprovider.api.persistence.repositories.ProductRepository" >
+        <property name="product" ref="product" />
+    </bean>
+    <bean id="ProductService" class="de.hf.dac.marketdataprovider.service.ProductServiceImpl">
         <property name="productRepository" ref="productRepository" />
     </bean>
 
 
-    <bean id="instrumentRepository" class="de.hf.marketdataprovider.persistence.repositories.InstrumentRepository" />
-    <bean id="endOfDayPriceRepository" class="de.hf.marketdataprovider.persistence.repositories.EndOfDayPriceRepository" />
+    <bean id="instrumentRepository" class="de.hf.dac.marketdataprovider.api.persistence.repositories.InstrumentRepository" />
+    <bean id="endOfDayPriceRepository" class="de.hf.dac.marketdataprovider.api.persistence.repositories.EndOfDayPriceRepository" />
 
-    <bean id="InstrumentService" class="de.hf.marketdataprovider.service.InstrumentServiceImpl">
+    <!--<bean id="InstrumentService" class="de.hf.dac.marketdataprovider.service.InstrumentServiceImpl">
         <property name="instrumentRepository" ref="instrumentRepository" />
         <property name="endOfDayPriceRepository" ref="endOfDayPriceRepository" />
-    </bean>
+    </bean>-->
 
 </beans>

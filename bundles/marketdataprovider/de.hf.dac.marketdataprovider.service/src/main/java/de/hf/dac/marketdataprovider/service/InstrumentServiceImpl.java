@@ -29,6 +29,10 @@ import java.util.List;
 @Data
 public class InstrumentServiceImpl implements InstrumentService {
 
+    public InstrumentServiceImpl(){
+
+    }
+
     /*private InstrumentRepository instrumentRepository;
     private EndOfDayPriceRepository endOfDayPriceRepository;
 */

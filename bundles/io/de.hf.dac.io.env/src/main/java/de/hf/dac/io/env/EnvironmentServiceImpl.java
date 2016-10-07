@@ -46,6 +46,7 @@ public class EnvironmentServiceImpl implements EnvironmentService {
     private static final Logger LOG = Logger.getLogger(EnvironmentServiceImpl.class.getName());
 
     @Inject
+    @OsgiService
     EnvironmentConfiguration configuration;
 
     @Inject

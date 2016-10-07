@@ -15,7 +15,7 @@
  * ----------------------------------------------------------------------------
  */
 
-package de.hf.dac.io.env.resfile;
+package de.hf.dac.io.config.resfile;
 
 import java.io.FileReader;
 import java.io.IOException;

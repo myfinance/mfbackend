@@ -2,7 +2,7 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <parent>
-        <groupId>de.hf.marketDataProvider</groupId>
+        <groupId>de.hf.dac</groupId>
         <artifactId>bootstrapper</artifactId>
         <version>0.3.1-SNAPSHOT</version>
         <relativePath>../</relativePath>
@@ -39,16 +39,20 @@
             <artifactId>spring-data-jpa</artifactId>
         </dependency>
         <dependency>
-            <groupId>de.hf.marketDataProvider</groupId>
-            <artifactId>de.hf.marketDataProvider.domain</artifactId>
+            <groupId>de.hf.dac.marketdataprovider.api</groupId>
+            <artifactId>de.hf.dac.marketdataprovider.api.service</artifactId>
         </dependency>
         <dependency>
-            <groupId>de.hf.marketDataProvider</groupId>
-            <artifactId>common</artifactId>
+            <groupId>de.hf.dac.marketdataprovider.api</groupId>
+            <artifactId>de.hf.dac.marketdataprovider.api.domain</artifactId>
         </dependency>
         <dependency>
-            <groupId>de.hf.marketDataProvider</groupId>
-            <artifactId>de.hf.marketDataProvider.service</artifactId>
+            <groupId>de.hf.dac</groupId>
+            <artifactId>de.hf.dac.security</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>de.hf.dac.marketdataprovider</groupId>
+            <artifactId>de.hf.dac.marketdataprovider.service</artifactId>
         </dependency>
         <dependency>
             <groupId>com.h2database</groupId>

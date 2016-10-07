@@ -8,7 +8,7 @@
  *
  *  File        : InstrumentController.java
  *
- *  Author(s)   : xn01598
+ *  Author(s)   : hf
  *
  *  Created     : 03.06.2016
  *
@@ -19,10 +19,10 @@ package de.hf.marketdataprovider.controllers;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import de.hf.marketdataprovider.domain.EndOfDayPrice;
-import de.hf.marketdataprovider.domain.Instrument;
-import de.hf.marketdataprovider.persistence.repositories.EndOfDayPriceRepository;
-import de.hf.marketdataprovider.persistence.repositories.InstrumentRepository;
+import de.hf.dac.marketdataprovider.api.domain.EndOfDayPrice;
+import de.hf.dac.marketdataprovider.api.domain.Instrument;
+import de.hf.dac.marketdataprovider.api.persistence.repositories.EndOfDayPriceRepository;
+import de.hf.dac.marketdataprovider.api.persistence.repositories.InstrumentRepository;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -49,7 +49,7 @@ import java.util.List;
 import java.util.Map;
 
 
-@RestController
+//@RestController
 @Slf4j
 @RequestMapping(value = "/instruments", produces= MediaType.APPLICATION_JSON_VALUE)
 public class InstrumentController {
@@ -101,7 +101,7 @@ public class InstrumentController {
         return new PricesResource(priceRepository.findByInstrumentIsin(isin), isin);
     }
 
-    @Autowired
+    //@Autowired
     InstrumentController(EndOfDayPriceRepository priceRepository,
         InstrumentRepository instrumentRepository) {
         this.priceRepository = priceRepository;

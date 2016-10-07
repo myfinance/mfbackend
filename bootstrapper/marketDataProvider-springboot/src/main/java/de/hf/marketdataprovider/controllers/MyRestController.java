@@ -5,10 +5,10 @@
  */
 package de.hf.marketdataprovider.controllers;
 
+import de.hf.dac.marketdataprovider.api.domain.Product;
+import de.hf.dac.marketdataprovider.api.service.ProductService;
+import de.hf.dac.marketdataprovider.service.InstrumentService;
 import de.hf.marketdataprovider.config.CommonConfig;
-import de.hf.marketdataprovider.service.InstrumentService;
-import de.hf.marketdataprovider.service.ProductService;
-import de.hf.marketdataprovider.domain.Product;
 import java.security.Principal;
 import java.util.Arrays;
 import java.util.Collection;
@@ -43,7 +43,7 @@ import org.springframework.web.bind.annotation.RestController;
 @Slf4j
 public class MyRestController {
     private String name;
-    @Autowired
+    //@Autowired
     private InstrumentService instrumentService;
     private ProductService productService;
 

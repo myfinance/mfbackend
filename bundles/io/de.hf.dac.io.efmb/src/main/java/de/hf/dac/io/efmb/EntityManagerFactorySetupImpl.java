@@ -19,6 +19,7 @@ package de.hf.dac.io.efmb;
 
 import de.hf.dac.api.io.efmb.DatabaseInfo;
 import de.hf.dac.api.io.efmb.EntityManagerFactorySetup;
+import de.hf.dac.api.io.env.EnvironmentConfiguration;
 import de.hf.dac.io.efmb.impl.EntityManagerFactoryBuilderImpl;
 import org.ops4j.pax.cdi.api.OsgiService;
 import org.ops4j.pax.cdi.api.OsgiServiceProvider;
@@ -52,11 +53,14 @@ public class EntityManagerFactorySetupImpl implements EntityManagerFactorySetup 
     //@Inject @OsgiService(filter = "(&(osgi.jdbc.driver.class=oracle.jdbc.OracleDriver))" )
     DataSourceFactory oracleDataSourceFactory;
 
-    @Inject @OsgiService(filter = "(&(osgi.jdbc.driver.class=org.h2.Driver))" )
+    @Inject @OsgiService(filter = "(&(osgi.jdbc.driver.class=org.h2.Driver-pool-xa))" )
     DataSourceFactory h2Embedded;
 
-    @Inject @OsgiService(filter = "(&(osgi.jdbc.driver.class=org.postgresql.Driver))" )
+    @Inject @OsgiService(filter = "(&(osgi.jdbc.driver.class=org.postgresql.Driver-pool-xa))" )
     DataSourceFactory postgresDataSourceFactory;
+
+    @Inject @OsgiService
+    EnvironmentConfiguration configuration;
 
 
 
@@ -102,6 +106,9 @@ public class EntityManagerFactorySetupImpl implements EntityManagerFactorySetup 
         persistenceUnitProperties.put("hibernate.connection.user",user);
         persistenceUnitProperties.put("hibernate.connection.password",password);
         persistenceUnitProperties.put("hibernate.connection.driver_class", driverClass);
+        persistenceUnitProperties.put("hibernate.connection.pool_size", getPoolSizeConfigValue());
+        persistenceUnitProperties.put("connection.release_mode", "after_statement");
+        persistenceUnitProperties.put("transaction.auto_close_session", true);
 
         if (extraHibernateProperties != null) {
             persistenceUnitProperties.putAll(extraHibernateProperties);
@@ -112,6 +119,10 @@ public class EntityManagerFactorySetupImpl implements EntityManagerFactorySetup 
         props.put("javax.persistence.transactionType", JTA.name());
 
         return props;
+    }
+
+    private int getPoolSizeConfigValue() {
+        return Integer.parseInt(configuration.getString("EMFB", "POOL_SIZE", "50"));
     }
 
     private static Properties getJdbcProps() {

@@ -10,8 +10,8 @@
  */
 package de.hf.marketdataprovider.config;
 
-import de.hf.marketdataprovider.service.ProductService;
-import de.hf.marketdataprovider.service.ProductServiceAlternativeImpl;
+import de.hf.dac.marketdataprovider.api.service.ProductService;
+import de.hf.dac.marketdataprovider.service.ProductServiceAlternativeImpl;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;

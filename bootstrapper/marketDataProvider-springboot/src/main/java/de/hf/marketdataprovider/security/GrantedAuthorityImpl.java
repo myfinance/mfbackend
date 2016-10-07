@@ -1,6 +1,6 @@
 /** ----------------------------------------------------------------------------
  *
- * ---          DZ Bank FfM - Application Development                       ---
+ * ---          HF - Application Development                       ---
  *              Copyright (c) 2014, ... All Rights Reserved
  *
  *
@@ -8,7 +8,7 @@
  *
  *  File        : GrantedAuthorityImpl.java
  *
- *  Author(s)   : xn01598
+ *  Author(s)   : hf
  *
  *  Created     : 11.03.2016
  *
@@ -17,8 +17,8 @@
 
 package de.hf.marketdataprovider.security;
 
+import de.hf.dac.security.BasePrincipal;
 import org.springframework.security.core.GrantedAuthority;
-import de.hf.marketDataProvider.common.security.BasePrincipal;
 
 public class GrantedAuthorityImpl extends BasePrincipal implements GrantedAuthority {
 

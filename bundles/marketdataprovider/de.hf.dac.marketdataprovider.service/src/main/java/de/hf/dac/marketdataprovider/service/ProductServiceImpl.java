@@ -75,6 +75,7 @@ public class ProductServiceImpl implements ProductService {
         try {
 
             EntityManager entityManager = marketDataEmf.createEntityManager();
+            //utx = (UserTransaction) entityManager.getTransaction();
             utx = (UserTransaction) bundleContext.getService(bundleContext.getServiceReference(UserTransaction.class.getName()));
             utx.begin();
 

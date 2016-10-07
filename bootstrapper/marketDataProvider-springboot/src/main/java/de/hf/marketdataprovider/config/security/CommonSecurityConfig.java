@@ -8,7 +8,7 @@
  *
  *  File        : CommonSecurityConfig.java
  *
- *  Author(s)   : xn01598
+ *  Author(s)   : hf
  *
  *  Created     : 29.03.2016
  *

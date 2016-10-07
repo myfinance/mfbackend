@@ -2,6 +2,9 @@
 <features name="dac-io-features" xmlns="http://karaf.apache.org/xmlns/features/v1.3.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://karaf.apache.org/xmlns/features/v1.3.0 http://karaf.apache.org/xmlns/features/v1.3.0">
 
     <repository>mvn:org.hibernate/hibernate-osgi/${hibernate.version}/xml/karaf</repository>
+    <repository>mvn:org.ops4j.pax.jdbc/pax-jdbc-features/${pax-jdbc.version}/xml/features</repository>
+
+
 
     <feature name="postgres" version="${pom.version}">
         <feature>transaction</feature> <!-- enterprise-4.0.6                | OSGi Transaction Manager-->
@@ -39,12 +42,14 @@
         <feature prerequisite="true">dac-cdi-feature</feature>
         <feature prerequisite="true">postgres</feature>
         <feature prerequisite="true">dac-h2-feature</feature>
+        <feature>pax-jdbc-pool-dbcp2</feature>
         <feature>hibernate-orm</feature>
         <bundle>mvn:org.osgi/org.osgi.service.jdbc/1.0.0</bundle>
         <bundle>mvn:org.apache.commons/commons-lang3/${apache-commons-lang3.version}</bundle><!--necessary for api.io-->
         <bundle>mvn:de.hf.dac.api/de.hf.dac.api.io/${project.version}</bundle>
         <bundle>mvn:de.hf.dac.io/de.hf.dac.io.efmb/${project.version}</bundle>
         <bundle>mvn:de.hf.dac.io/de.hf.dac.io.env/${project.version}</bundle>
+        <bundle>mvn:de.hf.dac.io/de.hf.dac.io.configuration/${project.version}</bundle>
         <bundle>mvn:org.eclipse.persistence/javax.persistence/2.1.1</bundle>
         <bundle>mvn:org.jboss.narayana.osgi/narayana-osgi-jta/5.3.4.Final</bundle>
         <bundle>mvn:org.apache.geronimo.specs/geronimo-jta_1.1_spec/1.1.1</bundle>

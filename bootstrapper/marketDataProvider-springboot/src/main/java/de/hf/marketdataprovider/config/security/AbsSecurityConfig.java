@@ -8,7 +8,7 @@
  *
  *  File        : AbsSecurityConfig.java
  *
- *  Author(s)   : xn01598
+ *  Author(s)   : hf
  *
  *  Created     : 31.03.2016
  *

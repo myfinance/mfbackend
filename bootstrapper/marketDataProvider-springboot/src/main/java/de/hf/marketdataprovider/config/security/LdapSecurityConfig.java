@@ -8,7 +8,7 @@
  *
  *  File        : LdapSecurityConfig.java
  *
- *  Author(s)   : xn01598
+ *  Author(s)   : hf
  *
  *  Created     : 11.03.2016
  *
@@ -17,7 +17,7 @@
 
 package de.hf.marketdataprovider.config.security;
 
-import de.hf.marketDataProvider.common.security.LdapProperties;
+import de.hf.dac.security.LdapProperties;
 import de.hf.marketdataprovider.security.LdapLoginModule;
 import de.hf.marketdataprovider.security.SimplePrincipal;
 import org.slf4j.Logger;

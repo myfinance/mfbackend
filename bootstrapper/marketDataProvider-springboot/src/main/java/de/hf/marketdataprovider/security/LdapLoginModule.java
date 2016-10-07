@@ -6,10 +6,8 @@
 package de.hf.marketdataprovider.security;
 
 
-import de.hf.marketDataProvider.common.security.LdapProperties;
+import de.hf.dac.security.LdapProperties;
 import lombok.extern.slf4j.Slf4j;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.lang.reflect.Constructor;
 import java.security.Principal;

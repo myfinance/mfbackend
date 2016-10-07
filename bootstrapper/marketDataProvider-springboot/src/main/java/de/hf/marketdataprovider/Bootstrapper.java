@@ -5,9 +5,9 @@
  */
 package de.hf.marketdataprovider;
 
-import de.hf.marketdataprovider.domain.EndOfDayPrice;
-import de.hf.marketdataprovider.domain.Instrument;
-import de.hf.marketdataprovider.service.InstrumentService;
+import de.hf.dac.marketdataprovider.api.domain.EndOfDayPrice;
+import de.hf.dac.marketdataprovider.api.domain.Instrument;
+import de.hf.dac.marketdataprovider.service.InstrumentService;
 import org.springframework.boot.*;
 import org.springframework.boot.autoconfigure.*;
 import org.springframework.context.ApplicationContext;
@@ -26,8 +26,8 @@ import java.util.Arrays;
 @SpringBootApplication
 //verwendet alle mit Configuration annotierten Klassen im Package zur konfiguration des Appcontext. 
 //die Controller unter de.hf.marketdataprovider.controllers werden ebenfalls registriert
-@ComponentScan("de.hf.marketdataprovider,de.hf.marketdataprovider.persistence.repositories")
-@EnableJpaRepositories("de.hf.marketdataprovider.persistence.repositories")
+//@ComponentScan({"de.hf.dac.marketdataprovider.api.persistence.repositories", "de.hf.dac.marketdataprovider.api.domain"})
+//@EnableJpaRepositories("de.hf.dac.marketdataprovider.api.persistence.repositories")
 public class Bootstrapper {
 
     /**
@@ -35,7 +35,7 @@ public class Bootstrapper {
      * @param instrumentService
      * @return
      */
-    @Bean
+    /*@Bean
     CommandLineRunner init(InstrumentService instrumentService) {
         return (evt) -> Arrays.asList(
             "PP0123456789,PP0000000001".split(","))
@@ -45,7 +45,7 @@ public class Bootstrapper {
                     instrumentService.savePrice(new EndOfDayPrice(instrument, 100, LocalDate.now()));
                     instrumentService.savePrice(new EndOfDayPrice(instrument, 100, LocalDate.now().minusDays(1)));
                 });
-    }
+    }*/
 
     public static void main(String[] args) throws Exception {
         ApplicationContext ctx = SpringApplication.run(Bootstrapper.class, args);

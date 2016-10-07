@@ -8,7 +8,7 @@
  *
  *  File        : LocalSecurityConfig.java
  *
- *  Author(s)   : xn01598
+ *  Author(s)   : hf
  *
  *  Created     : 11.03.2016
  *

@@ -15,7 +15,7 @@
  * ----------------------------------------------------------------------------
  */
 
-package de.hf.dac.io.env.resfile;
+package de.hf.dac.io.config.resfile;
 
 import de.hf.dac.api.io.env.EnvironmentConfiguration;
 import org.ops4j.pax.cdi.api.OsgiServiceProvider;
@@ -27,7 +27,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 import java.util.logging.Logger;
-
 
 /**
  * Environment Configuration based on Res Files located on
@@ -55,7 +54,7 @@ public class ResfileConfigurationImpl implements EnvironmentConfiguration {
      * 4. get dev.res from target/.. directory for local overrides from a single developer (never check this in)
      */
     private static ResFileLocation[] resFileSearchOrder =
-        new ResFileLocation[] {ResFileLocation.DAC_LOGIN_INFO_FILE, ResFileLocation.DAC_RES_PATH_ENV_FILE, ResFileLocation.DEVELOPER_DAC_RES, ResFileLocation.DEVELOPER_LOCAL_RES,
+        new ResFileLocation[] { ResFileLocation.DAC_LOGIN_INFO_FILE, ResFileLocation.DAC_RES_PATH_ENV_FILE, ResFileLocation.DEVELOPER_DAC_RES, ResFileLocation.DEVELOPER_LOCAL_RES,
         };
 
     public ResfileConfigurationImpl(ResFileParser parser) {
