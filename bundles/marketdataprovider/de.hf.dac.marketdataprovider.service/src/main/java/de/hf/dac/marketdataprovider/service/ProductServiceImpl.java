@@ -17,7 +17,7 @@
 
 package de.hf.dac.marketdataprovider.service;
 
-import com.google.inject.Inject;
+import javax.inject.Inject;
 import de.hf.dac.marketdataprovider.api.persistence.RepositoryService;
 import de.hf.dac.marketdataprovider.api.persistence.repositories.ProductRepository;
 import de.hf.dac.marketdataprovider.api.service.ProductService;
@@ -25,22 +25,16 @@ import de.hf.dac.marketdataprovider.api.domain.Product;
 import java.util.List;
 
 import lombok.extern.slf4j.Slf4j;
-import org.osgi.framework.BundleContext;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.TypedQuery;
-import javax.transaction.SystemException;
-import javax.transaction.UserTransaction;
 
 /**
  *
- * @author surak
+ * @author hf
  */
 @Slf4j
 public class ProductServiceImpl implements ProductService {
-
-    @Inject
-    protected BundleContext bundleContext;
 
     @Inject
     EntityManagerFactory marketDataEmf;
@@ -51,6 +45,7 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public List<Product> listProducts() {
         List products = null;
+
         try {
 
             EntityManager entityManager = marketDataEmf.createEntityManager();
@@ -71,28 +66,20 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public void saveProduct(Product product) {
-        UserTransaction utx = null;
+        EntityManager em = null;
         try {
 
-            EntityManager entityManager = marketDataEmf.createEntityManager();
-            //utx = (UserTransaction) entityManager.getTransaction();
-            utx = (UserTransaction) bundleContext.getService(bundleContext.getServiceReference(UserTransaction.class.getName()));
-            utx.begin();
-
-            //ProductRepository productRepository = repositoryService.buildProductRepository(entityManager);
+            em = marketDataEmf.createEntityManager();
+            em.getTransaction().begin();
+            //ProductRepository productRepository = repositoryService.buildProductRepository(em);
             //productRepository.save(product);
-            entityManager.persist(product);
+            em.persist(product);
+            em.getTransaction().commit();
 
-
-            utx.commit();
         } catch (Exception e) {
             e.printStackTrace();
-            if(utx!=null) {
-                try {
-                    utx.rollback();
-                } catch (SystemException e1) {
-                    e1.printStackTrace();
-                }
+            if(em!=null && em.getTransaction().isActive()) {
+                em.getTransaction().rollback();
             }
         }
     }
