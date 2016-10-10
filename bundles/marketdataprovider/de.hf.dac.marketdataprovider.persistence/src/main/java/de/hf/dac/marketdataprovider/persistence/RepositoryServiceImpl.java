@@ -36,9 +36,11 @@ public class RepositoryServiceImpl implements RepositoryService{
     public ProductRepository buildProductRepository(EntityManager entityManager) {
         JpaRepositoryFactory factory = new JpaRepositoryFactory(entityManager);
         final Bundle bundle = FrameworkUtil.getBundle(ProductRepository.class);
-        final ClassLoader classLoader = bundle.adapt(BundleWiring.class).getClassLoader();
-        factory.setBeanClassLoader(classLoader);
-
+        //OSGI-Context?
+        if(bundle!=null) {
+            final ClassLoader classLoader = bundle.adapt(BundleWiring.class).getClassLoader();
+            factory.setBeanClassLoader(classLoader);
+        }
         return factory.getRepository(ProductRepository.class);
     }
 }

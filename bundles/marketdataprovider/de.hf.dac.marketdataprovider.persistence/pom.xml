@@ -30,7 +30,12 @@
         <dependency>
             <groupId>org.osgi</groupId>
             <artifactId>osgi.cmpn</artifactId>
-            <scope>provided</scope>
+        </dependency>
+        <!--to get classloader via bundle-context with frameworkutil. even necessary for non OSGI-Container to check if OSGI environment or not.
+        This can not be provided->Non OSGI-Container have no osgi.core-package-->
+        <dependency>
+            <groupId>org.osgi</groupId>
+            <artifactId>org.osgi.core</artifactId>
         </dependency>
 
 

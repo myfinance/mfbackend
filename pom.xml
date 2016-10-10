@@ -189,6 +189,12 @@
                 <scope>provided</scope>
             </dependency>
 
+            <dependency>
+                <groupId>org.osgi</groupId>
+                <artifactId>org.osgi.core</artifactId>
+                <version>${osgi-cmpn.version}</version>
+            </dependency>
+
             <!--Apache Options für Optionparser in Common -->
             <dependency>
                 <groupId>commons-cli</groupId>
