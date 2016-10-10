@@ -6,7 +6,7 @@
     <parent>
         <artifactId>bundles</artifactId>
         <groupId>de.hf.dac</groupId>
-        <version>0.3.1-SNAPSHOT</version>
+        <version>0.3.2</version>
         <relativePath>../</relativePath>
     </parent>
 
