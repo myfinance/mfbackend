@@ -3,7 +3,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>de.hf.dac</groupId>
     <artifactId>root</artifactId>
-    <version>0.3.2</version>
+    <version>0.3.3-SNAPSHOT</version>
     <packaging>pom</packaging>
     <properties>
         <java.version>1.8</java.version>
@@ -51,7 +51,7 @@
     <scm>
         <!--<developerConnection>scm:git:ssh://192.168.178.20:122/volume1/Data/workspace/repos/MarketDataProvider</developerConnection>-->
         <developerConnection>scm:git:https://holgerfischer@bitbucket.org/holgerfischer/dac.git</developerConnection>
-        <tag>root-0.3.2</tag>
+        <tag>dac-0.3.1</tag>
     </scm>
 
     <modules>
@@ -68,42 +68,42 @@
             <dependency>
                 <groupId>de.hf.dac</groupId>
                 <artifactId>de.hf.dac.security</artifactId>
-                <version>0.3.2</version>
+                <version>0.3.3-SNAPSHOT</version>
             </dependency>
             <dependency>
                 <groupId>de.hf.dac.marketdataprovider.api</groupId>
                 <artifactId>de.hf.dac.marketdataprovider.api.domain</artifactId>
-                <version>0.3.2</version>
+                <version>0.3.3-SNAPSHOT</version>
             </dependency>
             <dependency>
                 <groupId>de.hf.dac.marketdataprovider.api</groupId>
                 <artifactId>de.hf.dac.marketdataprovider.api.persistence</artifactId>
-                <version>0.3.2</version>
+                <version>0.3.3-SNAPSHOT</version>
             </dependency>
             <dependency>
                 <groupId>de.hf.dac.marketdataprovider</groupId>
                 <artifactId>de.hf.dac.marketdataprovider.service</artifactId>
-                <version>0.3.2</version>
+                <version>0.3.3-SNAPSHOT</version>
             </dependency>
             <dependency>
                 <groupId>de.hf.dac.marketdataprovider</groupId>
                 <artifactId>de.hf.dac.marketdataprovider.restservice</artifactId>
-                <version>0.3.2</version>
+                <version>0.3.3-SNAPSHOT</version>
             </dependency>
             <dependency>
                 <groupId>de.hf.dac.marketdataprovider</groupId>
                 <artifactId>de.hf.dac.marketdataprovider.persistence</artifactId>
-                <version>0.3.2</version>
+                <version>0.3.3-SNAPSHOT</version>
             </dependency>
             <dependency>
                 <groupId>de.hf.dac.api</groupId>
                 <artifactId>de.hf.dac.api.io</artifactId>
-                <version>0.3.2</version>
+                <version>0.3.3-SNAPSHOT</version>
             </dependency>
             <dependency>
                 <groupId>de.hf.dac.marketdataprovider.api</groupId>
                 <artifactId>de.hf.dac.marketdataprovider.api.service</artifactId>
-                <version>0.3.2</version>
+                <version>0.3.3-SNAPSHOT</version>
             </dependency>
 
             <dependency>

@@ -4,7 +4,7 @@
     <parent>
         <groupId>de.hf.dac</groupId>
         <artifactId>bootstrapper</artifactId>
-        <version>0.3.2</version>
+        <version>0.3.3-SNAPSHOT</version>
         <relativePath>../</relativePath>
     </parent>
     <groupId>de.hf.marketDataProvider</groupId>
