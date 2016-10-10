@@ -38,7 +38,7 @@ import java.util.Arrays;
 //@EnableJpaRepositories("de.hf.dac.marketdataprovider.api.persistence.repositories")
 public class Bootstrapper {
 
-    /**
+    /*
      * for initialization
      * @param instrumentService
      * @return
@@ -55,6 +55,11 @@ public class Bootstrapper {
                 });
     }*/
 
+    /**
+     *
+     * @param args
+     * @throws Exception
+     */
     public static void main(String[] args) throws Exception {
         ApplicationContext ctx = SpringApplication.run(Bootstrapper.class, args);
     }
