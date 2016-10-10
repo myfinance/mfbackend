@@ -3,7 +3,7 @@
     <parent>
         <artifactId>io</artifactId>
         <groupId>de.hf.dac.io</groupId>
-        <version>0.3.3-SNAPSHOT</version>
+        <version>0.4.0</version>
         <relativePath>../</relativePath>
     </parent>
     <modelVersion>4.0.0</modelVersion>
@@ -13,7 +13,7 @@
         <dependency>
             <groupId>de.hf.dac.api</groupId>
             <artifactId>de.hf.dac.api.io</artifactId>
-            <version>0.3.3-SNAPSHOT</version>
+            <version>0.4.0</version>
         </dependency>
 
 
