@@ -15,6 +15,7 @@ import de.hf.marketdataprovider.config.CommonConfig;
 import de.hf.marketdataprovider.controllers.MyRestController;
 import org.springframework.boot.*;
 import org.springframework.boot.autoconfigure.*;
+import org.springframework.boot.orm.jpa.EntityScan;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
@@ -33,6 +34,7 @@ import java.util.Arrays;
 //die Controller unter de.hf.marketdataprovider.controllers werden ebenfalls registriert
 //@ComponentScan({"de.hf.dac.marketdataprovider.persistence", "de.hf.marketdataprovider.config"})
 @ComponentScan(basePackageClasses = {CommonConfig.class, Product.class, RepositoryServiceNoOSGIImpl.class, MyRestController.class})
+@EntityScan("de.hf.dac.marketdataprovider.api.domain")
 //@EnableJpaRepositories("de.hf.dac.marketdataprovider.api.persistence.repositories")
 public class Bootstrapper {
 

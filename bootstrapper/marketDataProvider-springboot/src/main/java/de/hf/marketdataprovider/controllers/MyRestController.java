@@ -24,6 +24,7 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -80,6 +81,12 @@ public class MyRestController {
     public List<Product> getProducts() {
 
         return productService.listProducts();
+    }
+
+    @RequestMapping("/set/products/{isin}")
+    public void getProducts(@PathVariable String isin) {
+        Product product = new Product(isin, "test");
+        productService.saveProduct(product);
     }
 
     @CrossOrigin(origins = "http://localhost:8081")

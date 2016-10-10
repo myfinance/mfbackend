@@ -17,7 +17,6 @@
 
 package de.hf.dac.marketdataprovider.persistence;
 
-import de.hf.dac.marketdataprovider.api.domain.Product;
 import de.hf.dac.marketdataprovider.api.persistence.RepositoryService;
 import de.hf.dac.marketdataprovider.api.persistence.repositories.ProductRepository;
 import org.springframework.data.jpa.repository.support.JpaRepositoryFactory;
@@ -29,7 +28,7 @@ public class RepositoryServiceNoOSGIImpl  implements RepositoryService {
     @Override
     public ProductRepository buildProductRepository(EntityManager entityManager) {
         JpaRepositoryFactory factory = new JpaRepositoryFactory(entityManager);
-        factory.setBeanClassLoader(ProductRepository.class.getClassLoader());
+        //factory.setBeanClassLoader(ProductRepository.class.getClassLoader());
         return factory.getRepository(ProductRepository.class);
     }
 }
