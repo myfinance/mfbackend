@@ -6,38 +6,39 @@
  *
  *  Project     : dac
  *
- *  File        : ProductServiceBuilderImpl.java
+ *  File        : DaoBuilderImpl.java
  *
  *  Author(s)   : hf
  *
- *  Created     : 29.09.2016
+ *  Created     : 11.10.2016
  *
  * ----------------------------------------------------------------------------
  */
 
-package de.hf.dac.marketdataprovider.service;
+package de.hf.dac.marketdataprovider.persistence;
 
 import de.hf.dac.api.io.env.context.ApplicationContext;
-import de.hf.dac.marketdataprovider.api.service.ProductService;
-import de.hf.dac.marketdataprovider.api.service.ProductServiceBuilder;
-import de.hf.dac.marketdataprovider.api.service.ProductServiceContextBuilder;
+import de.hf.dac.marketdataprovider.api.persistence.DaoBuilder;
+import de.hf.dac.marketdataprovider.api.persistence.DaoContextBuilder;
+import de.hf.dac.marketdataprovider.api.persistence.dao.ProductDao;
 import org.ops4j.pax.cdi.api.OsgiServiceProvider;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
+import javax.persistence.EntityManagerFactory;
 import java.sql.SQLException;
 
-@OsgiServiceProvider(classes = {ProductServiceBuilder.class})
+@OsgiServiceProvider(classes = { DaoBuilder.class })
 @Singleton
-public class ProductServiceBuilderImpl implements ProductServiceBuilder {
+public class DaoBuilderImpl implements DaoBuilder {
 
     @Inject
-    ProductServiceContextBuilder contextBuilder;
+    DaoContextBuilder contextBuilder;
 
     @Override
-    public ProductService build(String env) throws SQLException {
+    public ProductDao buildProductDao(String env) throws SQLException {
         // create autowire applicationContext
         ApplicationContext applicationContext = contextBuilder.build(env);
-        return applicationContext.autowire(ProductService.class);
+        return applicationContext.autowire(ProductDao.class);
     }
 }

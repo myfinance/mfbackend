@@ -33,7 +33,6 @@ import javax.ws.rs.core.MediaType;
 //import org.osgi.service.component.annotations.Reference;
 import de.hf.dac.marketdataprovider.api.domain.Product;
 import de.hf.dac.marketdataprovider.api.service.ProductService;
-import de.hf.dac.marketdataprovider.api.service.ProductServiceBuilder;
 import org.ops4j.pax.cdi.api.OsgiService;
 
 import java.sql.SQLException;
@@ -46,7 +45,7 @@ public class MyHello {
 
     @OsgiService
     @Inject
-    protected ProductServiceBuilder productServiceBuilder;
+    protected ProductService productService;
 
     @GET
     public String getHello() {
@@ -60,8 +59,7 @@ public class MyHello {
     public String getProducts() {
         String returnvalue = "No Products";
         try {
-            ProductService productService = productServiceBuilder.build("dev");
-            returnvalue = productService.listProducts().toString();
+            returnvalue = productService.listProducts("dev").toString();
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -74,12 +72,23 @@ public class MyHello {
     public String addProduct(@QueryParam("productId") String productId, @QueryParam("description") String description) {
         Product p = new Product(productId, description);
         try {
-            ProductService productService = productServiceBuilder.build("dev");
-            productService.saveProduct(p);
+            productService.saveProduct(p, "dev");
         } catch (SQLException e) {
             e.printStackTrace();
             return "not Saved";
         }
         return "saved";
+    }
+
+    @GET
+    @Path("/dosomework")
+    @Produces(MediaType.APPLICATION_JSON)
+    public String cal(@QueryParam("env") String env) {
+        try {
+            return productService.doSomeWork(env).toString();
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return "error";
+        }
     }
 }

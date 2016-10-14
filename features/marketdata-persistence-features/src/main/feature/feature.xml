@@ -11,7 +11,7 @@
         <feature>dac-io-features</feature>
         <feature>marketdata-domain-features</feature>
         <bundle>mvn:de.hf.dac.marketdataprovider.api/de.hf.dac.marketdataprovider.api.persistence/${project.version}</bundle>
-        <bundle>mvn:de.hf.dac.marketdataprovider/de.hf.dac.marketdataprovider.persistence/0.3.1-SNAPSHOT</bundle>
+        <bundle>mvn:de.hf.dac.marketdataprovider/de.hf.dac.marketdataprovider.persistence/${project.version}</bundle>
         <!--<bundle>mvn:de.hf.marketDataProvider/de.hf.common.util-jpa/0.3.1-SNAPSHOT</bundle>-->
     </feature>
 

@@ -44,6 +44,10 @@
         </dependency>
         <dependency>
             <groupId>de.hf.dac.marketdataprovider.api</groupId>
+            <artifactId>de.hf.dac.marketdataprovider.api.persistence</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>de.hf.dac.marketdataprovider.api</groupId>
             <artifactId>de.hf.dac.marketdataprovider.api.domain</artifactId>
         </dependency>
         <dependency>

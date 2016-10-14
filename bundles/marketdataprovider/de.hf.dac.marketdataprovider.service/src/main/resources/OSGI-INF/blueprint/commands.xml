@@ -4,7 +4,7 @@
 
         <command name="marketdata/listproduct">
             <action class="de.hf.dac.marketdataprovider.service.commands.ProductListCommand">
-                <property name="productServiceBuilder" ref="productServiceBuilderImpl" />
+                <property name="productService" ref="productServiceImpl" />
             </action>
         </command>
     </command-bundle>

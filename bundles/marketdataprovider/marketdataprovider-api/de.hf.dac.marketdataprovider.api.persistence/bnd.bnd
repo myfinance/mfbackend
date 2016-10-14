@@ -1,7 +1,8 @@
 -metatype: *
 Export-Package: \
 	de.hf.dac.marketdataprovider.api.persistence, \
-	de.hf.dac.marketdataprovider.api.persistence.repositories
+	de.hf.dac.marketdataprovider.api.persistence.repositories, \
+	de.hf.dac.marketdataprovider.api.persistence.dao
 Import-Package:de.hf.dac.marketdataprovider.api.domain, \
     org.springframework.data.repository, \
     org.springframework.data.repository.support, \

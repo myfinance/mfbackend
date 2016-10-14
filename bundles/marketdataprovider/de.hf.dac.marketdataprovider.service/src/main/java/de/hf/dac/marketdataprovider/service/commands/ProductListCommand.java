@@ -19,9 +19,9 @@ package de.hf.dac.marketdataprovider.service.commands;
 
 import de.hf.dac.marketdataprovider.api.domain.Product;
 import de.hf.dac.marketdataprovider.api.service.ProductService;
-import de.hf.dac.marketdataprovider.api.service.ProductServiceBuilder;
 import org.apache.felix.gogo.commands.Command;
 import org.apache.felix.service.command.CommandSession;
+import org.ops4j.pax.cdi.api.OsgiService;
 
 import javax.inject.Inject;
 import java.sql.SQLException;
@@ -30,30 +30,18 @@ import java.util.List;
 @Command(scope = "marketdata", name = "listproduct")
 public class ProductListCommand extends EnvironmentBasedCommand<ProductService>{
 
+    protected ProductService productService;
     @Inject
-    protected ProductServiceBuilder productServiceBuilder;
-
-    public ProductServiceBuilder getProductServiceBuilder() {
-        return productServiceBuilder;
-    }
-    public void setProductServiceBuilder(ProductServiceBuilder productServiceBuilder) {
-        this.productServiceBuilder = productServiceBuilder;
+    public void setProductService(ProductService productService){
+        this.productService=productService;
     }
 
     @Override
     public Object execute(CommandSession commandSession) throws Exception {
-        ProductService build = build();
-        List<Product> products = build.listProducts();
+        List<Product> products = productService.listProducts(env);
         for (Product product : products) {
             System.out.println(product);
         }
         return "OK";
     }
-
-    @Override
-    protected ProductService build() throws SQLException {
-        return productServiceBuilder.build(env);
-    }
-
-
 }

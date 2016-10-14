@@ -9,13 +9,14 @@
 
     <!--<bean id="product" class="de.hf.dac.marketdataprovider.api.domain.Product" />-->
     <!--<bean id="repositoryService" class="de.hf.dac.marketdataprovider.persistence.RepositoryServiceNoOSGIImpl" />-->
-    <bean id="repositoryService" class="de.hf.dac.marketdataprovider.persistence.RepositoryServiceImpl" />
+    <!--<bean id="repositoryService" class="de.hf.dac.marketdataprovider.persistence.RepositoryService" />-->
+    <bean id="productDao" class="de.hf.dac.marketdataprovider.persistence.ProductDaoImpl" />
 
     <!--<bean id="productRepository" class="de.hf.dac.marketdataprovider.api.persistence.repositories.ProductRepository" >
         <property name="product" ref="product" />
     </bean>-->
     <bean id="ProductService" class="de.hf.dac.marketdataprovider.service.ProductServiceImpl">
-        <property name="repositoryService" ref="repositoryService" />
+        <property name="productDao" ref="productDao" />
     </bean>
 
 

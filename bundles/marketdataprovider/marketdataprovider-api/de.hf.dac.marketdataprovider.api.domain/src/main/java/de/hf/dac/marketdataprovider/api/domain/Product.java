@@ -35,7 +35,8 @@ public class Product implements Serializable {
     //@Version
     private Integer version;
     @NonNull
-    private String product_Id;
+    @Column(name = "product_Id")
+    private String productId;
     @NonNull
     private String description;
     private String image_url;

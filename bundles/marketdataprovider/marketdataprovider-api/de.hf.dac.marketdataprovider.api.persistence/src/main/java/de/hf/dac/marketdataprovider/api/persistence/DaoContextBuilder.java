@@ -6,18 +6,20 @@
  *
  *  Project     : dac
  *
- *  File        : ProductServiceBuilder.java
+ *  File        : DaoContextBuilder.java
  *
  *  Author(s)   : hf
  *
- *  Created     : 29.09.2016
+ *  Created     : 13.10.2016
  *
  * ----------------------------------------------------------------------------
  */
 
-package de.hf.dac.marketdataprovider.api.service;
+package de.hf.dac.marketdataprovider.api.persistence;
 
 import de.hf.dac.api.io.env.EnvironmentBasedBuilder;
+import de.hf.dac.api.io.env.context.ApplicationContext;
 
-public interface ProductServiceBuilder extends EnvironmentBasedBuilder<ProductService> {
+public interface DaoContextBuilder extends EnvironmentBasedBuilder<ApplicationContext> {
 }
+

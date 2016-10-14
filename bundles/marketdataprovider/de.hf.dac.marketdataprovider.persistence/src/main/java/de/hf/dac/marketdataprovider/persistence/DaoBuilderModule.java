@@ -6,16 +6,16 @@
  *
  *  Project     : dac
  *
- *  File        : ProductServiceBuilderModule.java
+ *  File        : DaoBuilderModule.java
  *
  *  Author(s)   : hf
  *
- *  Created     : 30.09.2016
+ *  Created     : 13.10.2016
  *
  * ----------------------------------------------------------------------------
  */
 
-package de.hf.dac.marketdataprovider.service;
+package de.hf.dac.marketdataprovider.persistence;
 
 import com.google.inject.AbstractModule;
 import com.google.inject.Provides;
@@ -25,35 +25,34 @@ import de.hf.dac.api.io.efmb.tx.WrappedEntityManagerFactory;
 import de.hf.dac.api.io.env.EnvironmentService;
 import de.hf.dac.api.io.env.EnvironmentTargetInfo;
 import de.hf.dac.marketdataprovider.api.domain.Product;
-import de.hf.dac.marketdataprovider.api.persistence.RepositoryService;
-import de.hf.dac.marketdataprovider.api.service.ProductService;
-import org.osgi.framework.BundleContext;
+import de.hf.dac.marketdataprovider.api.persistence.DaoBuilder;
+import de.hf.dac.marketdataprovider.api.persistence.dao.ProductDao;
 
 import javax.persistence.EntityManagerFactory;
 import javax.transaction.TransactionManager;
 
-public class ProductServiceBuilderModule extends AbstractModule {
+public class DaoBuilderModule extends AbstractModule {
 
     private EntityManagerFactorySetup emfb;
     private EnvironmentService envService;
     private TransactionManager jtaManager;
-    private RepositoryService repositoryService;
     private String env;
 
-    public ProductServiceBuilderModule(EntityManagerFactorySetup emfb, EnvironmentService envService, TransactionManager jtaManager, RepositoryService repositoryService, String env){
+    public DaoBuilderModule(EntityManagerFactorySetup emfb, EnvironmentService envService, TransactionManager jtaManager, String env){
         this.emfb=emfb;
         this.envService=envService;
         this.jtaManager=jtaManager;
-        this.repositoryService = repositoryService;
         this.env=env;
     }
 
     @Override
     protected void configure() {
-        bind(ProductService.class).to(ProductServiceImpl.class);
-        bind(RepositoryService.class).toInstance(repositoryService);
-        //bind(EntityManagerFactory.class).toProvider(this);
+        //bind(ProductDao.class).to(ProductDaoImpl.class);
+        //Singleton
+        EntityManagerFactory entityManagerFactory = provideEntityManagerFactory();
+        bind(ProductDao.class).toInstance(new ProductDaoImpl(entityManagerFactory));
     }
+
 
     @Provides
     EntityManagerFactory provideEntityManagerFactory() {

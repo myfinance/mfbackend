@@ -10,6 +10,7 @@ import de.hf.dac.marketdataprovider.api.service.ProductService;
 import de.hf.dac.marketdataprovider.service.InstrumentService;
 import de.hf.marketdataprovider.config.CommonConfig;
 import java.security.Principal;
+import java.sql.SQLException;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashSet;
@@ -80,13 +81,22 @@ public class MyRestController {
     @RequestMapping("/get/products")
     public List<Product> getProducts() {
 
-        return productService.listProducts();
+        try {
+            return productService.listProducts("dev");
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
     @RequestMapping("/set/products/{isin}")
     public void getProducts(@PathVariable String isin) {
         Product product = new Product(isin, "test");
-        productService.saveProduct(product);
+        try {
+            productService.saveProduct(product,"dev");
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 
     @CrossOrigin(origins = "http://localhost:8081")

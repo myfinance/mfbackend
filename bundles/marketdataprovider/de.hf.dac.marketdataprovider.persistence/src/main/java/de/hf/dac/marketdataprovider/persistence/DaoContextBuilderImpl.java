@@ -6,35 +6,34 @@
  *
  *  Project     : dac
  *
- *  File        : ProductServiceContextBuilderImpl.java
+ *  File        : DaoContextBuilderImpl.java
  *
  *  Author(s)   : hf
  *
- *  Created     : 07.10.2016
+ *  Created     : 13.10.2016
  *
  * ----------------------------------------------------------------------------
  */
 
-package de.hf.dac.marketdataprovider.service;
+package de.hf.dac.marketdataprovider.persistence;
 
+import com.google.inject.Module;
 import de.hf.dac.api.io.efmb.EntityManagerFactorySetup;
 import de.hf.dac.api.io.env.EnvironmentService;
 import de.hf.dac.api.io.env.context.ApplicationContext;
 import de.hf.dac.api.io.env.context.ContextBuilder;
-import de.hf.dac.marketdataprovider.api.persistence.RepositoryService;
-import de.hf.dac.marketdataprovider.api.service.ProductServiceContextBuilder;
+import de.hf.dac.marketdataprovider.api.persistence.DaoContextBuilder;
 import org.ops4j.pax.cdi.api.OsgiService;
-import com.google.inject.Module;
 import org.ops4j.pax.cdi.api.OsgiServiceProvider;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
 import javax.transaction.TransactionManager;
+import java.sql.SQLException;
 
-@OsgiServiceProvider(classes = { ProductServiceContextBuilder.class })
+@OsgiServiceProvider(classes = { DaoContextBuilder.class })
 @Singleton
-public class ProductServiceContextBuilderImpl implements ProductServiceContextBuilder {
-
+public class DaoContextBuilderImpl implements DaoContextBuilder {
     @Inject
     @OsgiService
     ContextBuilder contextBuilder;
@@ -49,20 +48,15 @@ public class ProductServiceContextBuilderImpl implements ProductServiceContextBu
 
     @Inject
     @OsgiService
-    RepositoryService repositoryService;
-
-    @Inject
-    @OsgiService
     TransactionManager jtaManager;
 
     @Override
-    public ApplicationContext build(String env) {
-        ProductServiceBuilderModule productServiceModule //
-            = new ProductServiceBuilderModule(emfb, //
+    public ApplicationContext build(String env) throws SQLException {
+        DaoBuilderModule daoBuilderModule //
+            = new DaoBuilderModule(emfb, //
             envService, //
             jtaManager, //
-            repositoryService, //
             env);
-        return contextBuilder.build("productservice/" + env, new Module[] { productServiceModule });
+        return contextBuilder.build("daobuilder/" + env, new Module[] { daoBuilderModule });
     }
 }

@@ -6,19 +6,22 @@
  *
  *  Project     : dac
  *
- *  File        : ProductServiceContextBuilder.java
+ *  File        : DaoBuilder.java
  *
  *  Author(s)   : hf
  *
- *  Created     : 07.10.2016
+ *  Created     : 11.10.2016
  *
  * ----------------------------------------------------------------------------
  */
 
-package de.hf.dac.marketdataprovider.api.service;
+package de.hf.dac.marketdataprovider.api.persistence;
 
-import de.hf.dac.api.io.env.EnvironmentBasedBuilder;
-import de.hf.dac.api.io.env.context.ApplicationContext;
+import de.hf.dac.marketdataprovider.api.persistence.dao.ProductDao;
 
-public interface ProductServiceContextBuilder extends EnvironmentBasedBuilder<ApplicationContext> {
+import javax.persistence.EntityManagerFactory;
+import java.sql.SQLException;
+
+public interface DaoBuilder {
+    ProductDao buildProductDao(String env) throws SQLException;
 }

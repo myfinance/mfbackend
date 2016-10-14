@@ -7,18 +7,18 @@ package de.hf.dac.marketdataprovider.service;
 
 import de.hf.dac.marketdataprovider.api.service.ProductService;
 import de.hf.dac.marketdataprovider.api.domain.Product;
+
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-//import org.springframework.stereotype.Service;
 
 /**
  *
  * @author surak
  */
-//@Service
 public class ProductServiceAlternativeImpl implements ProductService {
     @Override
-    public List<Product> listProducts() {
+    public List<Product> listProducts(String env) throws SQLException {
         ArrayList<Product> products = new ArrayList<>(2);
         products.add(new Product("1", "Product alternative  1 desc"));
         products.add(new Product("2", "Product alternative 2 desc"));
@@ -26,7 +26,12 @@ public class ProductServiceAlternativeImpl implements ProductService {
     }
 
     @Override
-    public void saveProduct(Product product) {
+    public void saveProduct(Product product, String env) throws SQLException {
 
+    }
+
+    @Override
+    public List<Product> doSomeWork(String env) throws SQLException {
+        return null;
     }
 }

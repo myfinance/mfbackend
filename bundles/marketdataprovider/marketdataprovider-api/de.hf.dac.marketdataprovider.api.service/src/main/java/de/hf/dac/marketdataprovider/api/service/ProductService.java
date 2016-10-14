@@ -7,6 +7,7 @@ package de.hf.dac.marketdataprovider.api.service;
 
 import de.hf.dac.marketdataprovider.api.domain.Product;
 
+import java.sql.SQLException;
 import java.util.List;
 
 /**
@@ -15,7 +16,7 @@ import java.util.List;
  */
 public interface ProductService {
 
-    List<Product> listProducts();
-    void saveProduct(Product product);
-    
+    List<Product> listProducts(String env) throws SQLException;
+    void saveProduct(Product product, String env) throws SQLException;
+    List<Product> doSomeWork(String env) throws SQLException;
 }

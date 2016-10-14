@@ -28,5 +28,5 @@ abstract public class EnvironmentBasedCommand<T> implements Action {
     //@Argument(name= "target", description = "which target", multiValued = false, required = true, index = 1)
     //protected String target;
 
-    abstract protected T build() throws java.sql.SQLException;
+    //abstract protected T build() throws java.sql.SQLException;
 }
