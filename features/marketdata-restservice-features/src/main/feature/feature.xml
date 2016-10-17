@@ -17,6 +17,12 @@
         <feature>cxf-core</feature>
         <feature>cxf-jaxrs</feature>
         <feature>pax-cdi-1.2</feature>
+        <feature>cxf-jaxrs-cdi</feature>
+        <feature>cxf-rs-description-swagger2</feature>
+        <feature>cxf-commands</feature>
+        <feature>cxf-features-logging</feature>
+
+
         <feature>marketdata-jackson</feature>
         <!--
 

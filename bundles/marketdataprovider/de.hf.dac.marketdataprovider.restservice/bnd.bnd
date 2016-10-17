@@ -5,4 +5,7 @@ Import-Package: \
     javax.ws.rs,\
     javax.ws.rs.core,\
     javax.ws.rs.container,\
+    com.fasterxml.jackson.jaxrs.base,\
+    com.fasterxml.jackson.jaxrs.json,\
+    org.apache.cxf.jaxrs.provider,\
     *

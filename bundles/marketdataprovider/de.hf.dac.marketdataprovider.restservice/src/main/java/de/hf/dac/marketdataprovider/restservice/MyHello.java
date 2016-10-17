@@ -36,6 +36,7 @@ import de.hf.dac.marketdataprovider.api.service.ProductService;
 import org.ops4j.pax.cdi.api.OsgiService;
 
 import java.sql.SQLException;
+import java.util.List;
 
 //@Component(service = MyHello.class)
 //@OsgiServiceProvider(classes = {MyHello.class})
@@ -60,6 +61,19 @@ public class MyHello {
         String returnvalue = "No Products";
         try {
             returnvalue = productService.listProducts("dev").toString();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return returnvalue;
+    }
+
+    @GET
+    @Path("/productobjectss")
+    @Produces(MediaType.APPLICATION_JSON)
+    public List<Product> getProductObjects() {
+        List<Product> returnvalue = null;
+        try {
+            returnvalue = productService.listProducts("dev");
         } catch (SQLException e) {
             e.printStackTrace();
         }

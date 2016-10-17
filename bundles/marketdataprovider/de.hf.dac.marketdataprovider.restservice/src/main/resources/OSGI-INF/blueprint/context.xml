@@ -31,10 +31,9 @@
 
 
     <!-- JAXRS providers -->
-    <!--<bean id="jsonProvider" class="com.fasterxml.jackson.jaxrs.json.JacksonJsonProvider" />
-                                   com.fasterxml.jackson.jaxrs.jackson-jaxrs-json-provider-->
-    <!--<bean id="multipartProvider" class="org.apache.cxf.jaxrs.provider.MultipartProvider" />
-    <bean id="originFilter" class="de.hf.marketdataprovider.restservice.ApiOriginFilter" />-->
+    <bean id="jsonProvider" class="com.fasterxml.jackson.jaxrs.json.JacksonJsonProvider" />
+    <bean id="multipartProvider" class="org.apache.cxf.jaxrs.provider.MultipartProvider" />
+    <!--<bean id="originFilter" class="de.hf.marketdataprovider.restservice.ApiOriginFilter" />-->
 
 
     <!-- CXF Swagger2Feature -->
@@ -55,11 +54,11 @@
         <jaxrs:serviceBeans>
             <ref component-id="myHello" />
         </jaxrs:serviceBeans>
-        <!--<jaxrs:providers>
+        <jaxrs:providers>
             <ref component-id="jsonProvider" />
             <ref component-id="multipartProvider" />
-            <ref component-id="originFilter" />
-        </jaxrs:providers>-->
+            <!--<ref component-id="originFilter" />-->
+        </jaxrs:providers>
     </jaxrs:server>
 
 
