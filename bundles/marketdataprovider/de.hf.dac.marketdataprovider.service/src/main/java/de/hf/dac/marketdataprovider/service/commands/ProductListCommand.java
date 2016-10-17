@@ -21,10 +21,8 @@ import de.hf.dac.marketdataprovider.api.domain.Product;
 import de.hf.dac.marketdataprovider.api.service.ProductService;
 import org.apache.felix.gogo.commands.Command;
 import org.apache.felix.service.command.CommandSession;
-import org.ops4j.pax.cdi.api.OsgiService;
 
 import javax.inject.Inject;
-import java.sql.SQLException;
 import java.util.List;
 
 @Command(scope = "marketdata", name = "listproduct")

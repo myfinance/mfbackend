@@ -62,8 +62,6 @@ public class EntityManagerFactorySetupImpl implements EntityManagerFactorySetup 
     @Inject @OsgiService
     EnvironmentConfiguration configuration;
 
-
-
     private Map<String,Object> buildDBProperties(String persistenceUnit, Class<?>[] entities, ClassLoader[] classLoaders, String jdbcUrl, String user,
         String password, String jtaPlatform, String driverClass, String databaseDialectClass, Properties extraHibernateProperties)
             throws SQLException {

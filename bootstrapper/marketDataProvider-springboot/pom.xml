@@ -63,6 +63,26 @@
             <artifactId>de.hf.dac.marketdataprovider.persistence</artifactId>
         </dependency>
         <dependency>
+            <groupId>de.hf.dac.io</groupId>
+            <artifactId>de.hf.dac.io.env</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>de.hf.dac.io</groupId>
+            <artifactId>de.hf.dac.io.configuration</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>de.hf.dac.io</groupId>
+            <artifactId>de.hf.dac.io.efmb</artifactId>
+        </dependency>
+
+
+        <dependency>
+            <groupId>org.eclipse.persistence</groupId>
+            <artifactId>javax.persistence</artifactId>
+            <version>2.1.1</version>
+        </dependency>
+
+        <dependency>
             <groupId>com.h2database</groupId>
             <artifactId>h2</artifactId>
         </dependency> 

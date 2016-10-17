@@ -5,6 +5,10 @@
  */
 package de.hf.marketdataprovider;
 
+import de.hf.dac.io.config.resfile.ResfileConfigurationImpl;
+import de.hf.dac.io.efmb.EntityManagerFactorySetupImpl;
+import de.hf.dac.io.efmb.impl.EntityManagerFactoryBuilderImpl;
+import de.hf.dac.io.env.EnvironmentServiceImpl;
 import de.hf.dac.marketdataprovider.api.domain.Product;
 import de.hf.dac.marketdataprovider.persistence.ProductDaoImpl;
 import de.hf.marketdataprovider.config.CommonConfig;
@@ -23,9 +27,8 @@ import org.springframework.context.annotation.ComponentScan;
 @SpringBootApplication
 //verwendet alle mit Configuration annotierten Klassen im Package zur konfiguration des Appcontext. 
 //die Controller unter de.hf.marketdataprovider.controllers werden ebenfalls registriert
-//@ComponentScan({"de.hf.dac.marketdataprovider.persistence", "de.hf.marketdataprovider.config"})
-@ComponentScan(basePackageClasses = {CommonConfig.class, Product.class, ProductDaoImpl.class, MyRestController.class})
 @EntityScan("de.hf.dac.marketdataprovider.api.domain")
+@ComponentScan(basePackageClasses = {CommonConfig.class, Product.class, MyRestController.class })
 //@EnableJpaRepositories("de.hf.dac.marketdataprovider.api.persistence.repositories")
 public class Bootstrapper {
 

@@ -25,7 +25,6 @@ import org.ops4j.pax.cdi.api.OsgiServiceProvider;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
-import javax.persistence.EntityManagerFactory;
 import java.sql.SQLException;
 
 @OsgiServiceProvider(classes = { DaoBuilder.class })

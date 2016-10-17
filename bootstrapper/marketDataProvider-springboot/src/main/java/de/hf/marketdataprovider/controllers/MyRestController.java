@@ -5,9 +5,11 @@
  */
 package de.hf.marketdataprovider.controllers;
 
+
 import de.hf.dac.marketdataprovider.api.domain.Product;
 import de.hf.dac.marketdataprovider.api.service.ProductService;
 import de.hf.dac.marketdataprovider.service.InstrumentService;
+import de.hf.dac.marketdataprovider.service.ProductServiceImpl;
 import de.hf.marketdataprovider.config.CommonConfig;
 import java.security.Principal;
 import java.sql.SQLException;
@@ -49,8 +51,9 @@ public class MyRestController {
     private String name;
     //@Autowired
     private InstrumentService instrumentService;
-    private ProductService productService;
 
+
+    private ProductService productService;
     @Autowired
     public void setProductService(ProductService productService) {this.productService =productService;    }
 
@@ -62,6 +65,7 @@ public class MyRestController {
     @RequestMapping("/")
     String home() {
         log.debug("hello");
+
         return "Hello: " + name;
     }
 
@@ -80,7 +84,6 @@ public class MyRestController {
     @CrossOrigin(origins = "http://localhost:8081")
     @RequestMapping("/get/products")
     public List<Product> getProducts() {
-
         try {
             return productService.listProducts("dev");
         } catch (SQLException e) {

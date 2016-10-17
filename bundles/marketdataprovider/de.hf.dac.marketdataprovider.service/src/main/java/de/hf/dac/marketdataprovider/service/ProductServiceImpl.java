@@ -17,6 +17,7 @@
 
 package de.hf.dac.marketdataprovider.service;
 
+import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 

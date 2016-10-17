@@ -6,54 +6,48 @@
  *
  *  Project     : dac
  *
- *  File        : DaoBuilderModule.java
+ *  File        : SpringDaoBuilderImpl.java
  *
  *  Author(s)   : hf
  *
- *  Created     : 13.10.2016
+ *  Created     : 17.10.2016
  *
  * ----------------------------------------------------------------------------
  */
 
-package de.hf.dac.marketdataprovider.persistence;
+package de.hf.marketdataprovider.config;
 
-import com.google.inject.AbstractModule;
-import com.google.inject.Provides;
 import de.hf.dac.api.io.efmb.DatabaseInfo;
 import de.hf.dac.api.io.efmb.EntityManagerFactorySetup;
 import de.hf.dac.api.io.efmb.tx.WrappedEntityManagerFactory;
-import de.hf.dac.api.io.env.EnvironmentService;
+import de.hf.dac.api.io.env.EnvironmentConfiguration;
 import de.hf.dac.api.io.env.EnvironmentTargetInfo;
+import de.hf.dac.io.config.resfile.ResfileConfigurationImpl;
+import de.hf.dac.io.efmb.EntityManagerFactorySetupImpl;
 import de.hf.dac.marketdataprovider.api.domain.Product;
 import de.hf.dac.marketdataprovider.api.persistence.DaoBuilder;
 import de.hf.dac.marketdataprovider.api.persistence.dao.ProductDao;
+import de.hf.dac.marketdataprovider.persistence.ProductDaoImpl;
 
+import javax.inject.Inject;
 import javax.persistence.EntityManagerFactory;
-import javax.transaction.TransactionManager;
+import java.sql.SQLException;
 
-public class DaoBuilderModule extends AbstractModule {
+public class SpringDaoBuilderImpl implements DaoBuilder {
 
-    private EntityManagerFactorySetup emfb;
-    private EnvironmentService envService;
-    private TransactionManager jtaManager;
-    private String env;
-
-    public DaoBuilderModule(EntityManagerFactorySetup emfb, EnvironmentService envService, TransactionManager jtaManager, String env){
-        this.emfb=emfb;
-        this.envService=envService;
-        this.jtaManager=jtaManager;
-        this.env=env;
-    }
+    /*private DataSourceFactory dataSourceFactory;
+    public void setDataSourceFactory(DataSourceFactory dataSourceFactory){
+        this.dataSourceFactory=dataSourceFactory;
+    }*/
+    @Inject
+    EntityManagerFactory emf;
 
     @Override
-    protected void configure() {
-        EntityManagerFactory entityManagerFactory = provideEntityManagerFactory();
-        bind(ProductDao.class).toInstance(new ProductDaoImpl(entityManagerFactory));
-    }
-
-
-    @Provides
-    EntityManagerFactory provideEntityManagerFactory() {
+    public ProductDao buildProductDao(String env) throws SQLException {
+        /*EnvironmentConfiguration config = new ResfileConfigurationImpl();
+        EntityManagerFactorySetupImpl emfs = new EntityManagerFactorySetupImpl();
+        emfs.setConfiguration(config);
+        emfs.setPostgresDataSourceFactory(dataSourceFactory);
         EnvironmentTargetInfo marketDataTargetInfo = envService.getTarget(env, "marketdata");
         DatabaseInfo dbi = (DatabaseInfo) marketDataTargetInfo.getTargetDetails();
         WrappedEntityManagerFactory emf = null;
@@ -62,7 +56,7 @@ public class DaoBuilderModule extends AbstractModule {
         }
         catch (Exception ex) {
             throw new RuntimeException(ex);
-        }
-        return emf;
+        }*/
+        return new ProductDaoImpl(emf);
     }
 }
