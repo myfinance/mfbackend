@@ -20,6 +20,7 @@
         <module>io</module>
         <module>api</module>
         <module>marketdataprovider</module>
+        <module>web</module>
     </modules>
 
 

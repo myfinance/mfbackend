@@ -32,6 +32,8 @@
         <feature>cxf-rs-description-swagger2</feature>-->
 
         <feature>marketdata-service-features</feature>
+        <bundle>mvn:io.swagger/swagger-annotations/${swagger.version}</bundle>
+        <bundle>mvn:de.hf.dac.web/de.hf.dac.web.swaggerui/${project.version}</bundle>
         <bundle>mvn:de.hf.dac.marketdataprovider/de.hf.dac.marketdataprovider.restservice/${project.version}</bundle>
         <!--<bundle>mvn:com.eclipsesource.jaxrs/jersey-all/2.22.2</bundle>
         <bundle>mvn:com.eclipsesource.jaxrs/publisher/5.3.1</bundle>-->

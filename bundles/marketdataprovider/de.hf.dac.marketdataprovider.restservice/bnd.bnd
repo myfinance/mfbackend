@@ -8,4 +8,5 @@ Import-Package: \
     com.fasterxml.jackson.jaxrs.base,\
     com.fasterxml.jackson.jaxrs.json,\
     org.apache.cxf.jaxrs.provider,\
+    org.apache.cxf.jaxrs.swagger,\
     *

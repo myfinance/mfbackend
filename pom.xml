@@ -43,6 +43,8 @@
         <guice.version>4.1.0</guice.version>
         <guava.version>19.0</guava.version> <!--von guice benötigt-->
         <osgi-cmpn.version>6.0.0</osgi-cmpn.version>
+        <rs-api.version>2.0.1</rs-api.version>
+        <swagger.version>1.5.10</swagger.version>
 
 
 
@@ -208,6 +210,20 @@
                 <groupId>org.osgi</groupId>
                 <artifactId>org.osgi.core</artifactId>
                 <version>${osgi-cmpn.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>javax.ws.rs</groupId>
+                <artifactId>javax.ws.rs-api</artifactId>
+                <version>${rs-api.version}</version>
+                <scope>provided</scope>
+            </dependency>
+
+            <dependency>
+                <groupId>io.swagger</groupId>
+                <artifactId>swagger-annotations</artifactId>
+                <version>${swagger.version}</version>
+                <scope>provided</scope>
             </dependency>
 
             <!--Apache Options für Optionparser in Common -->

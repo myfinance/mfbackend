@@ -22,25 +22,23 @@ import javax.inject.Singleton;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
-//import org.ops4j.pax.cdi.api.OsgiServiceProvider;
-//import org.osgi.service.component.annotations.Component;
-
-//import ProductService;
-//import org.osgi.service.component.annotations.Reference;
 import de.hf.dac.marketdataprovider.api.domain.Product;
 import de.hf.dac.marketdataprovider.api.service.ProductService;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import org.ops4j.pax.cdi.api.OsgiService;
 
 import java.sql.SQLException;
 import java.util.List;
 
-//@Component(service = MyHello.class)
-//@OsgiServiceProvider(classes = {MyHello.class})
 @Path("/hello")
+@Api(value = "hello")
 @Singleton
 public class MyHello {
 
@@ -56,6 +54,8 @@ public class MyHello {
     @GET
     @Path("/products")
     @Produces(MediaType.APPLICATION_JSON)
+    @ApiOperation(value = "get Products",
+        response = String.class)
     //public List<Product> getProducts() {
     public String getProducts() {
         String returnvalue = "No Products";
@@ -68,8 +68,10 @@ public class MyHello {
     }
 
     @GET
-    @Path("/productobjectss")
+    @Path("/productobjects")
     @Produces(MediaType.APPLICATION_JSON)
+    @ApiOperation(value = "get ProductObjects",
+        response = List.class)
     public List<Product> getProductObjects() {
         List<Product> returnvalue = null;
         try {
@@ -83,7 +85,10 @@ public class MyHello {
     @GET
     @Path("/addproduct")
     @Produces(MediaType.APPLICATION_JSON)
-    public String addProduct(@QueryParam("productId") String productId, @QueryParam("description") String description) {
+    @ApiOperation(value = "save Product",
+        response = String.class)
+    public String addProduct(@QueryParam("productId") @ApiParam(value="the isin") String productId,
+            @QueryParam("description") @ApiParam(value="description") String description) {
         Product p = new Product(productId, description);
         try {
             productService.saveProduct(p, "dev");
@@ -97,7 +102,9 @@ public class MyHello {
     @GET
     @Path("/dosomework")
     @Produces(MediaType.APPLICATION_JSON)
-    public String cal(@QueryParam("env") String env) {
+    @ApiOperation(value = "doSomeWork",
+        response = String.class)
+    public String cal(@PathParam("env") @ApiParam(value="The Service Environment") String env) {
         try {
             return productService.doSomeWork(env).toString();
         } catch (SQLException e) {
