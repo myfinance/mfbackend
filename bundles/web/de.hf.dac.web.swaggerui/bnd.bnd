@@ -1,0 +1,11 @@
+-metatype: *
+Web-ContextPath: api-docs
+Webapp-Context: api-docs
+Bundle-SymbolicName: ${project.artifactId}
+
+Import-Package: javax.servlet, \
+javax.servlet.http, \
+org.osgi.framework, \
+org.osgi.service.http, \
+org.osgi.util.tracker, \
+	*

@@ -1,0 +1,192 @@
+
+
+/* header */
+body {
+    padding-top: 53px;
+}
+/* header */
+#header, .swagger-section #header {
+    width:100%;
+    /*background-color:#003f69;*/
+
+    position:fixed;
+    top:0;
+    left:0;
+    padding:0;
+    margin:0;
+
+    z-index: 99;
+
+    background-color: black;
+    font-family: "helveticaneue medium", helveticaneue, "helvitica neue", "helvitica-neue", helvitica, arial,  sans-serif;
+    font-weight: 600; /* gives the correct "medium" weight with regular helvitica neue, has no effect on arial. */
+    font-size: 14px;
+}
+
+#header .nav-wrap {
+    padding: 0 70px 0 23px;
+}
+
+
+#header p {
+    color:#ffffff;
+    font-size: 18px;
+    margin-left: 23px;
+    margin-top: 15px;
+}
+
+
+#header p {
+    float: left;
+}
+
+#header a {
+    color: white;
+    text-decoration: none;
+}
+
+#logo img {
+    margin: 20px 0 12px;
+}
+
+#navlinks a {
+    color: #D0D2D3;
+    transition: all 0.2s ease 0s;
+    text-decoration: none;
+    padding-bottom: 15px;
+}
+
+#navlinks a:hover, #navlinks a:focus {
+    color: #EFEFF1;
+    border-bottom: 5px solid #00B2EF;
+    padding-bottom: 9.5px; /* going to exactly 10 px w/ a transition causes it to be off by 1px occasionally.. */
+}
+
+#navlinks, #navlinks li {
+    float: right;
+}
+
+#navlinks {
+    margin: 23px 0 0 0;
+    padding: 0;
+}
+
+#navlinks li {
+    font-size: 14px;
+    margin: 0px 2px 0px 32px;
+    padding-bottom: 15px;
+}
+
+#navlinks li:last-child {
+    margin-left: 5px;
+}
+
+@media screen and (max-width: 1200px) {
+    #header p {
+        font-size: 14px;
+    }
+    #navlinks {
+        margin-right: 15px;
+        margin-top: 19px;
+    }
+    #navlinks li {
+        margin-left: 15px
+    }
+}
+
+@media screen and (max-width: 1000px) {
+    /* hide the content marketplace and app gallery links on small screens
+    #navlinks li:nth-child(1), #navlinks li:nth-child(2) {
+        display: none;
+    }
+    */
+    #header p {
+        margin-top: 8px;
+    }
+    #navlinks {
+        margin-top: 10px;
+    }
+
+    #navlinks li {
+        display: none;
+    }
+
+    #navlinks:before {
+        content: "Menu";
+        color: #D0D2D3;
+    }
+    #navlinks:hover:before, #navlinks:focus:before {
+        display: none;
+    }
+    #navlinks:hover li,  #navlinks:focus li{
+        display: block;
+        float: none;
+        text-align: right;
+    }
+    #navlinks a:hover, #navlinks a:focus {
+        color: #EFEFF1;
+        border-bottom: 5px solid #00B2EF;
+        padding-bottom: 5px;
+        margin-bottom: 5px;
+    }
+}
+
+@media screen and (max-width: 900px) {
+    #header {
+        position: static;
+    }
+}
+
+@media screen and (max-width: 900px) {
+    body {
+        padding-top: 0;
+    }
+    #header {
+        position: static;
+    }
+    #header p {
+        font-size: 14px;
+        float: none;
+    }
+    #navlinks {
+        margin-right: 15px;
+        margin-top: 19px;
+    }
+    #navlinks li {
+        margin-left: 15px
+    }
+}
+
+
+#content_message {
+    margin: 10px 15px;
+    font-style: italic;
+    color: #999999;
+}
+#message-bar {
+    min-height: 30px;
+    text-align: center;
+    padding-top: 10px;
+}
+
+.clearfix:before, .clearfix:after {
+    content: " ";
+    display: table;
+}
+
+/* hide he try-iy-out button for now */
+.swagger-section .swagger-ui-wrap ul#resources li.resource ul.endpoints li.endpoint ul.operations li.operation div.content div.sandbox_header input.submit  {
+    display: none;
+}
+
+#swagger-ui-container, .swagger-section .swagger-ui-wrap  {
+    width: auto;
+    max-width: 100%;
+    margin: 0px 25px;
+}
+
+.swagger-section #header a#logo {
+    background: none;
+    padding: 0;
+    font-size: inherit;
+}
