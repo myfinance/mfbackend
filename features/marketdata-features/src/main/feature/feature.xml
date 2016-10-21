@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<features name="marketdata-persistence-feature" xmlns="http://karaf.apache.org/xmlns/features/v1.3.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://karaf.apache.org/xmlns/features/v1.3.0 http://karaf.apache.org/xmlns/features/v1.3.0">
+
+    <repository>mvn:org.apache.karaf.features/enterprise/${karaf.version}/xml/features</repository>
+    <repository>mvn:org.hibernate/hibernate-osgi/${hibernate.version}/xml/karaf</repository>
+    <repository>mvn:de.hf.dac.features/dac-base-features/${project.version}/xml/features</repository>
+
+    <feature name="marketdata-domain-feature" version="${pom.version}">
+        <feature prerequisite="true" dependency="false">wrap</feature>
+        <feature version="${hibernate.version}" prerequisite="false" dependency="false">hibernate-envers</feature>
+        <bundle>mvn:org.hibernate.javax.persistence/hibernate-jpa-2.1-api/1.0.0.Final</bundle>
+        <!--<capability>osgi.service;effective:=active;objectClass=javax.persistence.spi.PersistenceProvider</capability>--><!--von aris -Jpacontainer benötigt-->
+        <bundle>mvn:de.hf.dac.marketdataprovider.api/de.hf.dac.marketdataprovider.api.domain/${project.version}</bundle>
+    </feature>
+
+    <feature name="marketdata-persistence-feature" version="${pom.version}">
+        <feature>dac-springdata-feature</feature>
+        <feature>dac-io-feature</feature>
+        <feature>marketdata-domain-feature</feature>
+        <bundle>mvn:de.hf.dac.marketdataprovider.api/de.hf.dac.marketdataprovider.api.persistence/${project.version}</bundle>
+        <bundle>mvn:de.hf.dac.marketdataprovider/de.hf.dac.marketdataprovider.persistence/${project.version}</bundle>
+    </feature>
+
+    <feature name="marketdata-service-feature" version="${pom.version}">
+        <feature>dac-io-feature</feature>
+        <feature>marketdata-persistence-feature</feature>
+        <bundle>mvn:de.hf.dac.marketdataprovider.api/de.hf.dac.marketdataprovider.api.service/${project.version}</bundle>
+        <bundle>mvn:de.hf.dac.marketdataprovider/de.hf.dac.marketdataprovider.service/${project.version}</bundle>
+    </feature>
+
+    <feature name="marketdata-restservice-feature" version="${pom.version}">
+        <feature>rest-base-feature</feature>
+        <feature>marketdata-service-feature</feature>
+        <bundle>mvn:de.hf.dac.marketdataprovider.api/de.hf.dac.marketdataprovider.api.application/${project.version}</bundle>
+        <bundle>mvn:de.hf.dac.marketdataprovider/de.hf.dac.marketdataprovider.restservice/${project.version}</bundle>
+        <bundle>mvn:de.hf.dac.marketdataprovider/de.hf.dac.marketdataprovider.application/${project.version}</bundle>
+
+    </feature>
+
+    <feature name="marketdata-features" version="${pom.version}">
+        <feature>marketdata-restservice-feature</feature>
+    </feature>
+
+</features>

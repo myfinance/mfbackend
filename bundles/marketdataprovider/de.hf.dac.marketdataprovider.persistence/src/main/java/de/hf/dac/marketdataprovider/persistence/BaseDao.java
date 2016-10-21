@@ -28,10 +28,6 @@ public abstract class BaseDao {
 
     //to create additional EntityManagers with separate connections for big transactions
     protected EntityManagerFactory marketDataEmf;
-    @Inject
-    public void setMarketDataEmf(EntityManagerFactory marketDataEmf){
-        this.marketDataEmf = marketDataEmf;
-    }
 
     protected final RepositoryService repositoryService = new RepositoryService();
 

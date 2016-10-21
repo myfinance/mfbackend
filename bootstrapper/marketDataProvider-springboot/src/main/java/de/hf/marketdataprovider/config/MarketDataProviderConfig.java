@@ -30,12 +30,15 @@ public class MarketDataProviderConfig {
    @Bean
    public ProductService productService(){
 
-      return new ProductServiceImpl();
-   }
+      DaoBuilder daoBuilder = new SpringDaoBuilderImpl();
+      ProductService productService = null;
+      try {
+         productService = new ProductServiceImpl(daoBuilder.buildProductDao(""));
+      } catch(Exception e) {
+         throw new RuntimeException(e);
+      }
 
-   @Bean
-   public DaoBuilder daoBuilder(){
-      return new SpringDaoBuilderImpl();
+      return productService;
    }
 
    /*@Bean

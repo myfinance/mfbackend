@@ -1,7 +1,2 @@
--dsannotations : *
 Export-Package: de.hf.dac.marketdataprovider.service
 Bundle-SymbolicName: ${project.artifactId}
-Import-Package \
-    org.apache.karaf.shell.commands, \
-    org.apache.karaf.shell.console, \
-    *

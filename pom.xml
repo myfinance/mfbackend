@@ -79,6 +79,11 @@
             </dependency>
             <dependency>
                 <groupId>de.hf.dac.marketdataprovider.api</groupId>
+                <artifactId>de.hf.dac.marketdataprovider.api.application</artifactId>
+                <version>0.4.1-SNAPSHOT</version>
+            </dependency>
+            <dependency>
+                <groupId>de.hf.dac.marketdataprovider.api</groupId>
                 <artifactId>de.hf.dac.marketdataprovider.api.persistence</artifactId>
                 <version>0.4.1-SNAPSHOT</version>
             </dependency>

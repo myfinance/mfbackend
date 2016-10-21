@@ -18,7 +18,7 @@ import java.util.List;
  */
 public class ProductServiceAlternativeImpl implements ProductService {
     @Override
-    public List<Product> listProducts(String env) throws SQLException {
+    public List<Product> listProducts() throws SQLException {
         ArrayList<Product> products = new ArrayList<>(2);
         products.add(new Product("1", "Product alternative  1 desc"));
         products.add(new Product("2", "Product alternative 2 desc"));
@@ -26,12 +26,12 @@ public class ProductServiceAlternativeImpl implements ProductService {
     }
 
     @Override
-    public void saveProduct(Product product, String env) throws SQLException {
+    public void saveProduct(Product product) throws SQLException {
 
     }
 
     @Override
-    public List<Product> doSomeWork(String env) throws SQLException {
+    public List<Product> doSomeWork() throws SQLException {
         return null;
     }
 }

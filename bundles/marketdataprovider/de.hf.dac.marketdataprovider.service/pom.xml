@@ -32,14 +32,6 @@
             <artifactId>javax.transaction-api</artifactId>
             <version>1.2</version>
         </dependency>
-        <dependency>
-            <groupId>com.google.inject</groupId>
-            <artifactId>guice</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.karaf.shell</groupId>
-            <artifactId>org.apache.karaf.shell.console</artifactId>
-        </dependency>
 
     </dependencies>
 

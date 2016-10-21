@@ -17,11 +17,7 @@
 
 package de.hf.dac.marketdataprovider.service;
 
-import javax.annotation.PostConstruct;
-import javax.inject.Inject;
-import javax.inject.Singleton;
 
-import de.hf.dac.marketdataprovider.api.persistence.DaoBuilder;
 import de.hf.dac.marketdataprovider.api.persistence.dao.ProductDao;
 import de.hf.dac.marketdataprovider.api.service.ProductService;
 import de.hf.dac.marketdataprovider.api.domain.Product;
@@ -31,40 +27,36 @@ import java.util.ArrayList;
 import java.util.List;
 
 import lombok.extern.slf4j.Slf4j;
-import org.ops4j.pax.cdi.api.OsgiService;
-import org.ops4j.pax.cdi.api.OsgiServiceProvider;
 
 /**
  *
  * @author hf
  */
 @Slf4j
-@OsgiServiceProvider(classes = {ProductService.class})
-@Singleton
 public class ProductServiceImpl implements ProductService {
 
-    @OsgiService
-    @Inject
-    protected DaoBuilder daoBuilder;
+
+    private ProductDao productDao;
+
+    public ProductServiceImpl(ProductDao productDao){
+        this.productDao = productDao;
+    }
 
     @Override
-    public List<Product> listProducts(String env) throws SQLException {
+    public List<Product> listProducts() throws SQLException {
 
-        ProductDao productDao = daoBuilder.buildProductDao(env);
         List products = productDao.listProducts();
 
         return products;
     }
 
     @Override
-    public void saveProduct(Product product, String env) throws SQLException {
-        ProductDao productDao = daoBuilder.buildProductDao(env);
+    public void saveProduct(Product product) throws SQLException {
         productDao.saveProduct(product);
     }
 
     @Override
-    public List<Product> doSomeWork(String env) throws SQLException {
-        ProductDao productDao = daoBuilder.buildProductDao(env);
+    public List<Product> doSomeWork() throws SQLException {
         productDao.deleteAll();
         Product p = new Product("isin1", "singleProductAdded");
         productDao.saveProduct(p);

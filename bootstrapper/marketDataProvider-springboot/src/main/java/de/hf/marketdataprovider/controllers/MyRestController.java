@@ -85,7 +85,7 @@ public class MyRestController {
     @RequestMapping("/get/products")
     public List<Product> getProducts() {
         try {
-            return productService.listProducts("dev");
+            return productService.listProducts();
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -96,7 +96,7 @@ public class MyRestController {
     public void getProducts(@PathVariable String isin) {
         Product product = new Product(isin, "test");
         try {
-            productService.saveProduct(product,"dev");
+            productService.saveProduct(product);
         } catch (SQLException e) {
             e.printStackTrace();
         }

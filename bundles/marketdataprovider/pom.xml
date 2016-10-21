@@ -16,6 +16,7 @@
         <module>de.hf.dac.marketdataprovider.persistence</module>
         <module>de.hf.dac.marketdataprovider.restservice</module>
         <module>de.hf.dac.marketdataprovider.service</module>
+        <module>de.hf.dac.marketdataprovider.application</module>
     </modules>
 
 

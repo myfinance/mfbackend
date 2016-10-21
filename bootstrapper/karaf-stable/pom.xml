@@ -28,7 +28,7 @@
         </dependency>
         <dependency>
             <groupId>de.hf.dac.features</groupId>
-            <artifactId>marketdata-restservice-features</artifactId>
+            <artifactId>marketdata-features</artifactId>
             <version>${project.version}</version>
             <type>xml</type>
             <scope>runtime</scope>
@@ -74,10 +74,8 @@
                         <!--for web-pages like swagger ui-->
                         <feature>war</feature>
 
-                        <!--<feature>marketdata-restservice-features</feature>-->
-                        <!--<feature>marketdata-h2-feature</feature>-->
                         <!-- the application -->
-                        <feature>marketdata-restservice-features</feature>
+                        <feature>marketdata-features</feature>
 
 
 

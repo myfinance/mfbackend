@@ -1,0 +1,1 @@
+Marketdataprovider is an example for an application with multiple submodules designed for running on the karaf-osgi-container

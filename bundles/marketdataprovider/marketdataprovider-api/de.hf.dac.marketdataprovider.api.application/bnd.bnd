@@ -1,0 +1,4 @@
+-metatype: *
+Export-Package: \
+ de.hf.dac.marketdataprovider.api.application
+Bundle-SymbolicName: ${project.artifactId}

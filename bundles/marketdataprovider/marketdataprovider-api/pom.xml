@@ -13,6 +13,7 @@
         <module>de.hf.dac.marketdataprovider.api.service</module>
         <module>de.hf.dac.marketdataprovider.api.domain</module>
         <module>de.hf.dac.marketdataprovider.api.persistence</module>
+        <module>de.hf.dac.marketdataprovider.api.application</module>
     </modules>
 
 </project>

@@ -19,6 +19,7 @@ package de.hf.dac.marketdataprovider.persistence;
 
 import com.google.inject.Module;
 import de.hf.dac.api.io.efmb.EntityManagerFactorySetup;
+import de.hf.dac.api.io.env.EnvironmentInfo;
 import de.hf.dac.api.io.env.EnvironmentService;
 import de.hf.dac.api.io.env.context.ApplicationContext;
 import de.hf.dac.api.io.env.context.ContextBuilder;
@@ -30,6 +31,9 @@ import javax.inject.Inject;
 import javax.inject.Singleton;
 import javax.transaction.TransactionManager;
 import java.sql.SQLException;
+import java.util.Collection;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @OsgiServiceProvider(classes = { DaoContextBuilder.class })
 @Singleton
@@ -58,5 +62,11 @@ public class DaoContextBuilderImpl implements DaoContextBuilder {
             jtaManager, //
             env);
         return contextBuilder.build("daobuilder/" + env, new Module[] { daoBuilderModule });
+    }
+
+    @Override
+    public List<String> getInfo() {
+        final Collection<EnvironmentInfo> environmentInfos = envService.availableEnvironments();
+        return environmentInfos.stream().map(EnvironmentInfo::getName).collect(Collectors.toList());
     }
 }

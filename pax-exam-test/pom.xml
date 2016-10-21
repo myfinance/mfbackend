@@ -162,7 +162,7 @@
 
         <dependency>
             <groupId>de.hf.dac.features</groupId>
-            <artifactId>dac-io-features</artifactId>
+            <artifactId>dac-base-features</artifactId>
             <version>${project.version}</version>
             <type>xml</type>
             <scope>runtime</scope>
@@ -171,7 +171,7 @@
 
         <dependency>
             <groupId>de.hf.dac.features</groupId>
-            <artifactId>marketdata-restservice-features</artifactId>
+            <artifactId>marketdata-features</artifactId>
             <version>${project.version}</version>
             <type>xml</type>
             <scope>runtime</scope>

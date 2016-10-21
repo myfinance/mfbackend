@@ -9,12 +9,8 @@
     <modelVersion>4.0.0</modelVersion>
     <packaging>pom</packaging>
     <modules>
-        <module>marketdata-domain-features</module>
-        <module>dac-io-features</module>
-        <module>dac-spring-features</module>
-        <module>marketdata-persistence-features</module>
-        <module>marketdata-service-features</module>
-        <module>marketdata-restservice-features</module>
+        <module>marketdata-features</module>
+        <module>dac-base-features</module>
     </modules>
     <artifactId>features</artifactId>
     <build>

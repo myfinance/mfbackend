@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<features name="dac-io-features" xmlns="http://karaf.apache.org/xmlns/features/v1.3.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://karaf.apache.org/xmlns/features/v1.3.0 http://karaf.apache.org/xmlns/features/v1.3.0">
+
+    <repository>mvn:org.hibernate/hibernate-osgi/${hibernate.version}/xml/karaf</repository>
+    <repository>mvn:org.ops4j.pax.jdbc/pax-jdbc-features/${pax-jdbc.version}/xml/features</repository>
+    <repository>mvn:org.apache.karaf.features/enterprise/${karaf.version}/xml/features</repository>
+    <repository>mvn:org.apache.cxf.karaf/apache-cxf/${apache-cxf.version}/xml/features</repository> <!--rest-->
+
+    <feature name="dac-spring-feature" version="${spring.version}">
+        <feature version="${hibernate.version}">hibernate-envers</feature>
+        <feature>jpa</feature>
+        <bundle>mvn:org.apache.servicemix.bundles/org.apache.servicemix.bundles.spring-core/${spring.version}</bundle>
+        <bundle>mvn:org.apache.servicemix.bundles/org.apache.servicemix.bundles.spring-beans/${spring.version}</bundle>
+        <bundle>mvn:org.apache.servicemix.bundles/org.apache.servicemix.bundles.spring-expression/${spring.version}</bundle>
+        <bundle>mvn:org.apache.servicemix.bundles/org.apache.servicemix.bundles.aopalliance/${aopalliance.version}</bundle>
+        <bundle>mvn:org.apache.servicemix.bundles/org.apache.servicemix.bundles.spring-aop/${spring.version}</bundle>
+        <bundle>mvn:org.apache.servicemix.bundles/org.apache.servicemix.bundles.spring-context/${spring.version}</bundle>
+        <bundle>mvn:org.apache.servicemix.bundles/org.apache.servicemix.bundles.spring-orm/${spring.version}</bundle>
+        <bundle>mvn:org.apache.servicemix.bundles/org.apache.servicemix.bundles.spring-jdbc/${spring.version}</bundle>
+        <bundle>mvn:org.apache.servicemix.bundles/org.apache.servicemix.bundles.spring-tx/${spring.version}</bundle>
+    </feature>
+
+    <feature name="dac-springdata-feature" version="1.9.4.RELEASE">
+        <feature>dac-spring-feature</feature>
+        <bundle>mvn:org.springframework.data/spring-data-commons/${spring-data-commons.version}</bundle>
+        <bundle>mvn:org.springframework.data/spring-data-jpa/${spring-data.version}</bundle>
+    </feature>
+
+
+    <feature name="postgres" version="${pom.version}">
+        <feature>transaction</feature> <!-- enterprise-4.0.6                | OSGi Transaction Manager-->
+        <bundle>mvn:org.osgi/org.osgi.service.jdbc/1.0.0</bundle>
+        <bundle>mvn:org.postgresql/postgresql/9.4-1203-jdbc42</bundle>
+
+    </feature>
+
+    <feature name="dac-h2-feature" version="${pom.version}">
+        <feature prerequisite="true">wrap</feature>
+        <bundle>mvn:com.h2database/h2/1.4.186</bundle>
+    </feature>
+
+    <feature name="dac-cdi-feature"  version="${pom.version}">
+        <bundle>mvn:org.ops4j.pax.cdi/pax-cdi-api/0.12.0</bundle>
+        <!--<bundle>mvn:javax.enterprise/cdi-api/1.2</bundle>
+        <bundle>mvn:javax.el/javax.el-api/2.2.5</bundle>
+        <bundle>mvn:javax.interceptor/javax.interceptor-api/1.2</bundle>
+        <bundle>mvn:org.apache.servicemix.bundles/org.apache.servicemix.bundles.javax-inject/1_2</bundle>-->
+    </feature>
+
+    <feature name="dac-base-karaf" version="${pom.version}"><!-- Helps analyze package dependencies in WebConsole -->
+        <bundle>mvn:org.apache.servicemix.bundles/org.apache.servicemix.bundles.commons-io/1.4_3</bundle>
+        <bundle>mvn:org.apache.felix/org.apache.felix.webconsole.plugins.packageadmin/1.0.2</bundle>
+    </feature>
+
+    <feature name="dac-base-commands" version="${pom.version}">
+        <bundle>mvn:org.apache.felix.gogo/org.apache.felix.gogo.commands/0.4.0</bundle>
+        <bundle>mvn:org.apache.felix.gogo/org.apache.felix.gogo.runtime/0.4.0</bundle>
+    </feature>
+
+    <feature name="dac-guice" version="${guice.version}">
+        <bundle>mvn:org.apache.servicemix.bundles/org.apache.servicemix.bundles.javax-inject/1_2</bundle>
+        <bundle>mvn:org.apache.servicemix.bundles/org.apache.servicemix.bundles.aopalliance/${aopalliance.version}</bundle>
+        <bundle>mvn:com.google.guava/guava/${guava.version}</bundle>
+        <bundle>mvn:com.google.inject/guice/${guice.version}</bundle>
+    </feature>
+
+
+    <feature name="dac-io-jpa-feature" version="${pom.version}">
+        <feature prerequisite="true">wrap</feature>
+        <feature prerequisite="true">dac-cdi-feature</feature>
+        <feature prerequisite="true">postgres</feature>
+        <feature prerequisite="true">dac-h2-feature</feature>
+        <feature prerequisite="true">dac-guice</feature>
+        <feature>pax-jdbc-pool-dbcp2</feature>
+        <feature>hibernate-orm</feature>
+        <bundle>mvn:org.osgi/org.osgi.service.jdbc/1.0.0</bundle>
+        <bundle>mvn:org.apache.commons/commons-lang3/${apache-commons-lang3.version}</bundle><!--necessary for api.io-->
+        <bundle>mvn:de.hf.dac.api/de.hf.dac.api.io/${project.version}</bundle>
+        <bundle>mvn:de.hf.dac.io/de.hf.dac.io.efmb/${project.version}</bundle>
+        <bundle>mvn:de.hf.dac.io/de.hf.dac.io.env/${project.version}</bundle>
+        <bundle>mvn:de.hf.dac.io/de.hf.dac.io.configuration/${project.version}</bundle>
+        <bundle>mvn:org.eclipse.persistence/javax.persistence/2.1.1</bundle>
+        <bundle>mvn:org.jboss.narayana.osgi/narayana-osgi-jta/5.3.4.Final</bundle>
+        <bundle>mvn:org.apache.geronimo.specs/geronimo-jta_1.1_spec/1.1.1</bundle>
+    </feature>
+
+    <feature name="dac-io-feature" version="${pom.version}">
+        <feature prerequisite="true">wrap</feature>
+        <feature>dac-base-karaf</feature>
+        <feature>dac-base-commands</feature>
+        <feature>dac-io-jpa-feature</feature>
+    </feature>
+
+    <feature name="dac-jackson-feature" version="${pom.version}">
+        <!-- Not 2.8.* because of ElasticSearch embedded incompat -->
+        <bundle>mvn:com.fasterxml.jackson.core/jackson-core/2.7.2</bundle>
+        <bundle>mvn:com.fasterxml.jackson.core/jackson-annotations/2.7.2</bundle>
+        <bundle>mvn:com.fasterxml.jackson.core/jackson-databind/2.7.2</bundle>
+        <bundle>mvn:com.fasterxml.jackson.jaxrs/jackson-jaxrs-base/2.7.2</bundle>
+        <bundle>mvn:com.fasterxml.jackson.jaxrs/jackson-jaxrs-json-provider/2.7.2</bundle>
+    </feature>
+
+    <feature name="rest-base-feature" version="${pom.version}">
+        <feature>cxf-specs</feature>
+        <feature>cxf-core</feature>
+        <feature>cxf-jaxrs</feature>
+        <feature>pax-cdi-1.2</feature>
+        <feature>cxf-jaxrs-cdi</feature>
+        <feature>cxf-rs-description-swagger2</feature>
+        <feature>cxf-commands</feature>
+        <feature>cxf-features-logging</feature>
+        <feature>dac-jackson-feature</feature>
+        <bundle>mvn:io.swagger/swagger-annotations/${swagger.version}</bundle>
+        <bundle>mvn:de.hf.dac.web/de.hf.dac.web.swaggerui/${project.version}</bundle>
+    </feature>
+
+    <feature name="dac-base-features" version="${pom.version}">
+        <feature>dac-io-feature</feature>
+        <feature>dac-springdata-feature</feature>
+    </feature>
+
+</features>

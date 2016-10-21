@@ -18,7 +18,9 @@
 package de.hf.dac.api.io.env;
 
 import java.sql.SQLException;
+import java.util.List;
 
 public interface EnvironmentBasedBuilder<T> {
     T build(String environment) throws SQLException;
+    List<String> getInfo();
 }

@@ -59,6 +59,7 @@
     <jaxrs:server id="sampleServer" address="/rest">
         <jaxrs:serviceBeans>
             <ref component-id="myHello" />
+            <ref component-id="marketData" />
         </jaxrs:serviceBeans>
         <jaxrs:providers>
             <ref component-id="jsonProvider" />

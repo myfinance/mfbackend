@@ -48,7 +48,7 @@ abstract public class PAXExamTestSetup {
 
 
     public Option embeddedH2Option() {
-        return features(maven().groupId("de.hf.dac.features").artifactId("dac-io-features").type("xml").classifier("features").versionAsInProject(),
+        return features(maven().groupId("de.hf.dac.features").artifactId("dac-base-features").type("xml").classifier("features").versionAsInProject(),
             "dac-h2-feature");
     }
 
@@ -91,15 +91,15 @@ abstract public class PAXExamTestSetup {
 
     public Option ioFeatures() {
         return composite(
-            features(maven().groupId("de.hf.dac.features").artifactId("dac-io-features").type("xml").classifier("features").versionAsInProject(),
-                "dac-io-features")
+            features(maven().groupId("de.hf.dac.features").artifactId("dac-base-features").type("xml").classifier("features").versionAsInProject(),
+                "dac-io-feature")
         );
     }
 
     public Option restFeatures() {
         return composite(
-            features(maven().groupId("de.hf.dac.features").artifactId("marketdata-restservice-features").type("xml").classifier("features").versionAsInProject(),
-                "marketdata-restservice-features")
+            features(maven().groupId("de.hf.dac.features").artifactId("marketdata-features").type("xml").classifier("features").versionAsInProject(),
+                "marketdata-features")
         );
     }
 
