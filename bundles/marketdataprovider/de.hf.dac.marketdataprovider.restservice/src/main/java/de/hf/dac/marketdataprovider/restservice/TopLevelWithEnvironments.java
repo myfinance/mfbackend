@@ -15,7 +15,7 @@
  * ----------------------------------------------------------------------------
  */
 
-package de.hf.dac.marketdataprovider.restservice.rootresources;
+package de.hf.dac.marketdataprovider.restservice;
 
 import de.hf.dac.api.io.env.EnvironmentService;
 import de.hf.dac.marketdataprovider.api.application.MarketDataEnvironment;
