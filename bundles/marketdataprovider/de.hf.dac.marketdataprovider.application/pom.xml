@@ -24,6 +24,15 @@
             <groupId>de.hf.dac.marketdataprovider.api</groupId>
             <artifactId>de.hf.dac.marketdataprovider.api.persistence</artifactId>
         </dependency>
+        <!-- the application module is the only module were we add other implementations to setup the app-context dependent on runtime variables link the environment -->
+        <dependency>
+            <groupId>de.hf.dac.marketdataprovider</groupId>
+            <artifactId>de.hf.dac.marketdataprovider.persistence</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>de.hf.dac.marketdataprovider</groupId>
+            <artifactId>de.hf.dac.marketdataprovider.service</artifactId>
+        </dependency>
         <dependency>
             <groupId>org.apache.karaf.shell</groupId>
             <artifactId>org.apache.karaf.shell.console</artifactId>

@@ -1,2 +1,2 @@
-Export-Package: de.hf.dac.persistence,de.hf.dac.marketdataprovider.persistence.repositories
+Export-Package: de.hf.dac.marketdataprovider.persistence
 Bundle-SymbolicName: ${project.artifactId}

@@ -28,13 +28,17 @@
         <bundle>mvn:de.hf.dac.marketdataprovider/de.hf.dac.marketdataprovider.service/${project.version}</bundle>
     </feature>
 
+    <feature name="marketdata-app-feature" version="${pom.version}">
+        <feature>marketdata-service-feature</feature>
+        <feature prerequisite="true" dependency="true">marketdata-persistence-feature</feature>
+        <bundle>mvn:de.hf.dac.marketdataprovider/de.hf.dac.marketdataprovider.application/${project.version}</bundle>
+        <bundle>mvn:de.hf.dac.marketdataprovider.api/de.hf.dac.marketdataprovider.api.application/${project.version}</bundle>
+    </feature>
+
     <feature name="marketdata-restservice-feature" version="${pom.version}">
         <feature>rest-base-feature</feature>
-        <feature>marketdata-service-feature</feature>
-        <bundle>mvn:de.hf.dac.marketdataprovider.api/de.hf.dac.marketdataprovider.api.application/${project.version}</bundle>
+        <feature>marketdata-app-feature</feature>
         <bundle>mvn:de.hf.dac.marketdataprovider/de.hf.dac.marketdataprovider.restservice/${project.version}</bundle>
-        <bundle>mvn:de.hf.dac.marketdataprovider/de.hf.dac.marketdataprovider.application/${project.version}</bundle>
-
     </feature>
 
     <feature name="marketdata-features" version="${pom.version}">

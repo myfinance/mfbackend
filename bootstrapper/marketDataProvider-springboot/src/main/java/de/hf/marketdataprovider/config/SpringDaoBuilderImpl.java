@@ -17,15 +17,6 @@
 
 package de.hf.marketdataprovider.config;
 
-import de.hf.dac.api.io.efmb.DatabaseInfo;
-import de.hf.dac.api.io.efmb.EntityManagerFactorySetup;
-import de.hf.dac.api.io.efmb.tx.WrappedEntityManagerFactory;
-import de.hf.dac.api.io.env.EnvironmentConfiguration;
-import de.hf.dac.api.io.env.EnvironmentTargetInfo;
-import de.hf.dac.io.config.resfile.ResfileConfigurationImpl;
-import de.hf.dac.io.efmb.EntityManagerFactorySetupImpl;
-import de.hf.dac.marketdataprovider.api.domain.Product;
-import de.hf.dac.marketdataprovider.api.persistence.DaoBuilder;
 import de.hf.dac.marketdataprovider.api.persistence.dao.ProductDao;
 import de.hf.dac.marketdataprovider.persistence.ProductDaoImpl;
 

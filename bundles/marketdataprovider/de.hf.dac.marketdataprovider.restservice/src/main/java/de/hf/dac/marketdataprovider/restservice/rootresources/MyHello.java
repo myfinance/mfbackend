@@ -17,7 +17,6 @@
 
 package de.hf.dac.marketdataprovider.restservice.rootresources;
 
-import javax.inject.Inject;
 import javax.inject.Singleton;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;

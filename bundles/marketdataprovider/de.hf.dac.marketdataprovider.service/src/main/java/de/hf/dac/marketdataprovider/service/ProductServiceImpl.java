@@ -28,6 +28,8 @@ import java.util.List;
 
 import lombok.extern.slf4j.Slf4j;
 
+import javax.inject.Inject;
+
 /**
  *
  * @author hf
@@ -38,6 +40,7 @@ public class ProductServiceImpl implements ProductService {
 
     private ProductDao productDao;
 
+    @Inject
     public ProductServiceImpl(ProductDao productDao){
         this.productDao = productDao;
     }
