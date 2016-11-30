@@ -104,7 +104,7 @@ public class EntityManagerSetupTest extends PAXExamTestSetup {
         throws SQLException, SystemException, NotSupportedException, HeuristicRollbackException, HeuristicMixedException, RollbackException {
         assertNotNull(productService);
 
-        String value = productService.listProducts().toString();
+        String value = productService.listInstruments().toString();
 
     }*/
 

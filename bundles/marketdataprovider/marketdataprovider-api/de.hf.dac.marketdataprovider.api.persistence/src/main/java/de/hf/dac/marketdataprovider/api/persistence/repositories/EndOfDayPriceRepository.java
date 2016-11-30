@@ -18,7 +18,7 @@
 package de.hf.dac.marketdataprovider.api.persistence.repositories;
 
 import de.hf.dac.marketdataprovider.api.domain.EndOfDayPrice;
-import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.List;
 
 /**
@@ -30,6 +30,6 @@ import java.util.List;
  * They are used for the domain class the repository is supporting, and the type of the id declared of the domain class.
  * @author xn01598
  */
-public interface EndOfDayPriceRepository extends CrudRepository<EndOfDayPrice, Integer>  {
+public interface EndOfDayPriceRepository extends JpaRepository<EndOfDayPrice, Integer> {
     List<EndOfDayPrice> findByInstrumentIsin (String isin);
 }

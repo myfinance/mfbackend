@@ -18,6 +18,7 @@
 package de.hf.dac.marketdataprovider.restservice.marketdataresources;
 
 import de.hf.dac.marketdataprovider.api.application.MarketDataEnvironment;
+import de.hf.dac.marketdataprovider.api.domain.Instrument;
 import de.hf.dac.marketdataprovider.api.domain.Product;
 import io.swagger.annotations.ApiOperation;
 
@@ -37,17 +38,12 @@ public class EnvironmentResource {
     }
 
     @GET
-    @Path("/productobjects")
+    @Path("/instruments")
     @Produces(MediaType.APPLICATION_JSON)
-    @ApiOperation(value = "get ProductObjects",
+    @ApiOperation(value = "get Instruments",
         response = List.class)
-    public List<Product> getProductObjects() {
-        List<Product> returnvalue = null;
-        try {
-            returnvalue = marketDataEnvironment.getProductService().listProducts();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+    public List<Instrument> getInstruments() {
+        List<Instrument> returnvalue = marketDataEnvironment.getInstrumentService().listInstruments();
         return returnvalue;
     }
 }

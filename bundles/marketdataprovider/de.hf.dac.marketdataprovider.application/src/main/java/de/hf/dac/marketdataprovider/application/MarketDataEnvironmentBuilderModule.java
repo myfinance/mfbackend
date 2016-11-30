@@ -26,9 +26,13 @@ import de.hf.dac.api.io.env.EnvironmentService;
 import de.hf.dac.api.io.env.EnvironmentTargetInfo;
 import de.hf.dac.marketdataprovider.api.application.MarketDataEnvironment;
 import de.hf.dac.marketdataprovider.api.domain.Product;
+import de.hf.dac.marketdataprovider.api.persistence.dao.InstrumentDao;
 import de.hf.dac.marketdataprovider.api.persistence.dao.ProductDao;
+import de.hf.dac.marketdataprovider.persistence.InstrumentDaoImpl;
 import de.hf.dac.marketdataprovider.persistence.ProductDaoImpl;
 import de.hf.dac.marketdataprovider.api.service.ProductService;
+import de.hf.dac.marketdataprovider.api.service.InstrumentService;
+import de.hf.dac.marketdataprovider.service.InstrumentServiceImpl;
 import de.hf.dac.marketdataprovider.service.ProductServiceImpl;
 
 import javax.persistence.EntityManagerFactory;
@@ -58,7 +62,9 @@ public class MarketDataEnvironmentBuilderModule  extends AbstractModule {
 
         EntityManagerFactory entityManagerFactory = provideEntityManagerFactory();
         bind(ProductDao.class).toInstance(new ProductDaoImpl(entityManagerFactory));
+        bind(InstrumentDao.class).toInstance(new InstrumentDaoImpl(entityManagerFactory));
         bind(ProductService.class).to(ProductServiceImpl.class);
+        bind(InstrumentService.class).to(InstrumentServiceImpl.class);
         bind(MarketDataEnvironment.class).to(MarketDataEnvironmentImpl.class);
     }
 

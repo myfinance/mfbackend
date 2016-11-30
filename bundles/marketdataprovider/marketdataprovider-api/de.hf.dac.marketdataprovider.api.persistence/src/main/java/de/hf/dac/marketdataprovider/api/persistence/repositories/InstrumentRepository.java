@@ -18,7 +18,7 @@
 package de.hf.dac.marketdataprovider.api.persistence.repositories;
 
 import de.hf.dac.marketdataprovider.api.domain.Instrument;
-import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;
 
@@ -31,6 +31,6 @@ import java.util.Optional;
  * They are used for the domain class the repository is supporting, and the type of the id declared of the domain class.
  * @author xn01598
  */
-public interface InstrumentRepository  extends CrudRepository<Instrument, Integer> {
+public interface InstrumentRepository  extends JpaRepository<Instrument, Integer> {
     Optional<Instrument> findByIsin(String isin);
 }

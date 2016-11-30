@@ -145,7 +145,9 @@ public class BootstrapConfiguration implements Serializable {
         if (dbUrl == null) {
             throw new RuntimeException("dbdriver not found not for DB " + loginInfoAlias + " in res files");
         }
-        return new DatabaseInfo(dbUrl, dbUser, dbPasswd, dbdriver, null, null);
+        DatabaseInfo dbinfo = new DatabaseInfo(dbUrl, dbUser, dbPasswd, dbdriver, null, null);
+        //dbinfo.getExtraHibernateProperties().put("hibernate.hbm2ddl.auto", "create");
+        return dbinfo;
     }
 }
 

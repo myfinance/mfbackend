@@ -8,8 +8,7 @@ package de.hf.marketdataprovider.controllers;
 
 import de.hf.dac.marketdataprovider.api.domain.Product;
 import de.hf.dac.marketdataprovider.api.service.ProductService;
-import de.hf.dac.marketdataprovider.service.InstrumentService;
-import de.hf.dac.marketdataprovider.service.ProductServiceImpl;
+import de.hf.dac.marketdataprovider.api.service.InstrumentService;
 import de.hf.marketdataprovider.config.CommonConfig;
 import java.security.Principal;
 import java.sql.SQLException;

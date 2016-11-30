@@ -15,7 +15,7 @@
  * ----------------------------------------------------------------------------
  */
 
-package de.hf.dac.marketdataprovider.service;
+package de.hf.dac.marketdataprovider.api.service;
 
 import de.hf.dac.marketdataprovider.api.domain.EndOfDayPrice;
 import de.hf.dac.marketdataprovider.api.domain.Instrument;

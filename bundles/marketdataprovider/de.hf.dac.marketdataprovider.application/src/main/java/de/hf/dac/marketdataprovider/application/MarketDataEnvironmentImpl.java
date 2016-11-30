@@ -19,6 +19,7 @@ package de.hf.dac.marketdataprovider.application;
 
 import de.hf.dac.marketdataprovider.api.application.MarketDataEnvironment;
 import de.hf.dac.marketdataprovider.api.service.ProductService;
+import de.hf.dac.marketdataprovider.api.service.InstrumentService;
 
 import javax.inject.Inject;
 
@@ -26,9 +27,16 @@ public class MarketDataEnvironmentImpl implements MarketDataEnvironment {
 
     @Inject
     ProductService productService;
+    @Inject
+    InstrumentService instrumentService;
 
     @Override
     public ProductService getProductService() {
         return productService;
+    }
+
+    @Override
+    public InstrumentService getInstrumentService() {
+        return instrumentService;
     }
 }

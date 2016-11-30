@@ -36,7 +36,7 @@ public class ProductDaoImpl extends BaseDao implements ProductDao {
     @Inject
     public ProductDaoImpl(EntityManagerFactory marketDataEmf) {
         super(marketDataEmf);
-        productRepository = repositoryService.buildProductRepository(marketDataEm);
+        productRepository = repositoryService.buildRepository(ProductRepository.class, marketDataEm);
     }
 
     /**
@@ -119,7 +119,7 @@ public class ProductDaoImpl extends BaseDao implements ProductDao {
         //try-catch-rollback is necessary for bigger transactions
         try {
             em = marketDataEmf.createEntityManager();
-            ProductRepository productRepository = repositoryService.buildProductRepository(em);
+            ProductRepository productRepository = repositoryService.buildRepository(ProductRepository.class, em);
             em.getTransaction().begin();
             productRepository.save(products);
             em.getTransaction().commit();
@@ -141,7 +141,7 @@ public class ProductDaoImpl extends BaseDao implements ProductDao {
         //try-catch-rollback is necessary for bigger transactions
         try {
             em = marketDataEmf.createEntityManager();
-            ProductRepository productRepository = repositoryService.buildProductRepository(em);
+            ProductRepository productRepository = repositoryService.buildRepository(ProductRepository.class, em);
             em.getTransaction().begin();
             productRepository.deleteAllInBatch();
             em.getTransaction().commit();

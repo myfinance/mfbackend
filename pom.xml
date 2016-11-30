@@ -70,62 +70,62 @@
             <dependency>
                 <groupId>de.hf.dac</groupId>
                 <artifactId>de.hf.dac.security</artifactId>
-                <version>0.4.1-SNAPSHOT</version>
+                <version>${project.version}</version>
             </dependency>
             <dependency>
                 <groupId>de.hf.dac.marketdataprovider.api</groupId>
                 <artifactId>de.hf.dac.marketdataprovider.api.domain</artifactId>
-                <version>0.4.1-SNAPSHOT</version>
+                <version>${project.version}</version>
             </dependency>
             <dependency>
                 <groupId>de.hf.dac.marketdataprovider.api</groupId>
                 <artifactId>de.hf.dac.marketdataprovider.api.application</artifactId>
-                <version>0.4.1-SNAPSHOT</version>
+                <version>${project.version}</version>
             </dependency>
             <dependency>
                 <groupId>de.hf.dac.marketdataprovider.api</groupId>
                 <artifactId>de.hf.dac.marketdataprovider.api.persistence</artifactId>
-                <version>0.4.1-SNAPSHOT</version>
+                <version>${project.version}</version>
             </dependency>
             <dependency>
                 <groupId>de.hf.dac.marketdataprovider</groupId>
                 <artifactId>de.hf.dac.marketdataprovider.service</artifactId>
-                <version>0.4.1-SNAPSHOT</version>
+                <version>${project.version}</version>
             </dependency>
             <dependency>
                 <groupId>de.hf.dac.marketdataprovider</groupId>
                 <artifactId>de.hf.dac.marketdataprovider.restservice</artifactId>
-                <version>0.4.1-SNAPSHOT</version>
+                <version>${project.version}</version>
             </dependency>
             <dependency>
                 <groupId>de.hf.dac.marketdataprovider</groupId>
                 <artifactId>de.hf.dac.marketdataprovider.persistence</artifactId>
-                <version>0.4.1-SNAPSHOT</version>
+                <version>${project.version}</version>
             </dependency>
             <dependency>
                 <groupId>de.hf.dac.api</groupId>
                 <artifactId>de.hf.dac.api.io</artifactId>
-                <version>0.4.1-SNAPSHOT</version>
+                <version>${project.version}</version>
             </dependency>
             <dependency>
                 <groupId>de.hf.dac.marketdataprovider.api</groupId>
                 <artifactId>de.hf.dac.marketdataprovider.api.service</artifactId>
-                <version>0.4.1-SNAPSHOT</version>
+                <version>${project.version}</version>
             </dependency>
             <dependency>
                 <groupId>de.hf.dac.io</groupId>
                 <artifactId>de.hf.dac.io.env</artifactId>
-                <version>0.4.1-SNAPSHOT</version>
+                <version>${project.version}</version>
             </dependency>
             <dependency>
                 <groupId>de.hf.dac.io</groupId>
                 <artifactId>de.hf.dac.io.configuration</artifactId>
-                <version>0.4.1-SNAPSHOT</version>
+                <version>${project.version}</version>
             </dependency>
             <dependency>
                 <groupId>de.hf.dac.io</groupId>
                 <artifactId>de.hf.dac.io.efmb</artifactId>
-                <version>0.4.1-SNAPSHOT</version>
+                <version>${project.version}</version>
             </dependency>
 
             <dependency>

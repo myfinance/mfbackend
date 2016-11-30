@@ -17,6 +17,7 @@
 
 package de.hf.dac.marketdataprovider.persistence;
 
+import de.hf.dac.marketdataprovider.api.persistence.repositories.InstrumentRepository;
 import de.hf.dac.marketdataprovider.api.persistence.repositories.ProductRepository;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.FrameworkUtil;
@@ -27,14 +28,14 @@ import javax.persistence.EntityManager;
 
 public class RepositoryService {
 
-    public ProductRepository buildProductRepository(EntityManager entityManager) {
+    public <T> T buildRepository(Class<T> t, EntityManager entityManager) {
         JpaRepositoryFactory factory = new JpaRepositoryFactory(entityManager);
-        final Bundle bundle = FrameworkUtil.getBundle(ProductRepository.class);
+        final Bundle bundle = FrameworkUtil.getBundle(t);
         //OSGI-Context?
         if(bundle!=null) {
             final ClassLoader classLoader = bundle.adapt(BundleWiring.class).getClassLoader();
             factory.setBeanClassLoader(classLoader);
         }
-        return factory.getRepository(ProductRepository.class);
+        return factory.getRepository(t);
     }
 }

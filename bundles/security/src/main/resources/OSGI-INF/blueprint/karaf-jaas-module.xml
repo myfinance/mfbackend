@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<blueprint xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0"
+           xmlns:jaas="http://karaf.apache.org/xmlns/jaas/v1.1.0">
+
+    <jaas:config name="karaf" rank="2">
+        <jaas:module className="de.dzbank.poet.dac.security.auth.modules.LdapLoginModule" flags="required">
+            java.naming.provider.url = ldap://dzag.vrnet
+            bindDN = ${auth.ldap.user}
+            bindCredential = ${auth.ldap.credentials}
+            baseCtxDN = ou=Accounts,dc=dzag,dc=vrnet
+            searchTimeLimit = 30000
+            baseFilter = (sAMAccountName={0})
+            password-stacking = useFirstPass
+            storePass = true
+            useFirstPass = false
+            rolesCtxDN = ou=Accounts,dc=dzag,dc=vrnet
+            roleFilter = (sAMAccountName={0})
+            roleAttributeID = memberOf
+            roleAttributeIsDN = true
+            roleNameAttributeID = cn
+            roleRecursion = -1
+            searchScope = ONELEVEL_SCOPE
+            allowEmptyPasswords = false
+            principalClass = org.apache.karaf.jaas.boot.principal.UserPrincipal
+            debug = false
+        </jaas:module>
+        <jaas:module className="de.dzbank.poet.dac.security.auth.modules.LdapLoginModule" flags="required">
+            java.naming.provider.url = ldap://dfvvpldps1.dzbank.vrnet:389
+            bindDN = ${role.ldap.user}
+            bindCredential = ${role.ldap.credentials}
+            baseCtxDN = ou=People,dc=dzbank,dc=vrnet
+            baseFilter = (dzuid={0})
+            rolesCtxDN = ou=Rollen,ou=Test,ou=PoET,ou=Eigenentwicklungen,ou=Anwendungen,dc=dzbank,dc=vrnet
+            roleFilter = (uniqueMember={1})
+            roleAttributeID = cn
+            permissionAttributeID = dzpermissions
+            searchScope = ONELEVEL_SCOPE
+            allowEmptyPasswords = false
+            useFirstPass = true
+            permissionRoleMapping = ${role.mappings}
+            debug = false
+        </jaas:module>
+    </jaas:config>
+</blueprint>

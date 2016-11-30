@@ -18,8 +18,9 @@
 package de.hf.dac.marketdataprovider.api.application;
 
 import de.hf.dac.marketdataprovider.api.service.ProductService;
+import de.hf.dac.marketdataprovider.api.service.InstrumentService;
 
 public interface MarketDataEnvironment {
     ProductService getProductService();
-
+    InstrumentService getInstrumentService();
 }

@@ -21,25 +21,27 @@ import de.hf.dac.marketdataprovider.api.domain.EndOfDayPrice;
 import de.hf.dac.marketdataprovider.api.domain.Instrument;
 //import de.hf.marketdataprovider.persistence.repositories.EndOfDayPriceRepository;
 //import de.hf.marketdataprovider.persistence.repositories.InstrumentRepository;
+import de.hf.dac.marketdataprovider.api.persistence.dao.InstrumentDao;
+import de.hf.dac.marketdataprovider.api.service.InstrumentService;
 import lombok.Data;
 
-import java.util.ArrayList;
+import javax.inject.Inject;
 import java.util.List;
 
 @Data
 public class InstrumentServiceImpl implements InstrumentService {
 
-    public InstrumentServiceImpl(){
+    private InstrumentDao instrumentDao;
 
+    @Inject
+    public InstrumentServiceImpl(InstrumentDao instrumentDao){
+        this.instrumentDao = instrumentDao;
     }
 
-    /*private InstrumentRepository instrumentRepository;
-    private EndOfDayPriceRepository endOfDayPriceRepository;
-*/
     @Override
     public List<Instrument> listInstruments() {
-        List<Instrument> instruments = new ArrayList<>();
-        //instrumentRepository.findAll().forEach(i->instruments.add(i));
+
+        List<Instrument> instruments = instrumentDao.listInstruments();
         return instruments;
     }
 
