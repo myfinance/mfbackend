@@ -10,3 +10,10 @@ H2DEV=jdbc:h2:file:./h2dev;AUTO_SERVER=TRUE,sa,sa,org.h2.Driver
 
 [EMFB]
 POOL_SIZE=20
+
+[LDAP]
+auth.ldap.user = cn=XNMEE01,ou=FR,ou=Accounts,dc=dzag,dc=vrnet
+auth.ldap.credentials = Ready2Work11#
+role.ldap.user = uid=eigenentwicklungen_lesend,ou=Eigenentwicklungen,ou=Special Users,dc=dzbank,dc=vrnet
+role.ldap.credentials = eigen310511
+role.mappings = poetStatus=admin,poetView=viewer

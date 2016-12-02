@@ -94,6 +94,12 @@
         <bundle>mvn:com.fasterxml.jackson.jaxrs/jackson-jaxrs-json-provider/2.7.2</bundle>
     </feature>
 
+    <feature name="security-feature" version="${pom.version}">
+        <bundle>mvn:de.hf.dac.api/de.hf.dac.api.io/${project.version}</bundle>
+        <bundle>mvn:de.hf.dac.api/de.hf.dac.api.security/${project.version}</bundle>
+        <bundle>mvn:de.hf.dac/de.hf.dac.security/${project.version}</bundle>
+    </feature>
+
     <feature name="rest-base-feature" version="${pom.version}">
         <feature>cxf-specs</feature>
         <feature>cxf-core</feature>
@@ -104,9 +110,11 @@
         <feature>cxf-commands</feature>
         <feature>cxf-features-logging</feature>
         <feature>dac-jackson-feature</feature>
+        <feature>security-feature</feature>
         <bundle>mvn:io.swagger/swagger-annotations/${swagger.version}</bundle>
         <bundle>mvn:de.hf.dac.web/de.hf.dac.web.swaggerui/${project.version}</bundle>
     </feature>
+
 
     <feature name="dac-base-features" version="${pom.version}">
         <feature>dac-io-feature</feature>

@@ -108,6 +108,11 @@
                 <version>${project.version}</version>
             </dependency>
             <dependency>
+                <groupId>de.hf.dac.api</groupId>
+                <artifactId>de.hf.dac.api.security</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
                 <groupId>de.hf.dac.marketdataprovider.api</groupId>
                 <artifactId>de.hf.dac.marketdataprovider.api.service</artifactId>
                 <version>${project.version}</version>
@@ -230,6 +235,14 @@
                 <version>${swagger.version}</version>
                 <scope>provided</scope>
             </dependency>
+
+            <!--security and ldap-->
+            <dependency>
+                <groupId>org.apache.karaf.jaas</groupId>
+                <artifactId>org.apache.karaf.jaas.boot</artifactId>
+                <version>${karaf.version}</version>
+            </dependency>
+
 
             <!--Apache Options für Optionparser in Common -->
             <dependency>

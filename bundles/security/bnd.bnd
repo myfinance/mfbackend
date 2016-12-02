@@ -1,0 +1,16 @@
+-metatype: *
+
+Export-Package: \
+  de.hf.dac.security.auth, \
+  de.hf.dac.security.auth.modules
+
+
+Import-Package: \
+    de.hf.dac.api.io.lookup, \
+    de.hf.dac.io.config, \
+    org.apache.karaf.jaas.config, \
+    javassist.util.proxy, \
+    org.hibernate.proxy, \
+    javax.persistence, \
+    *
+AnnotatedDomainClasses: ${classes;CONCRETE;ANNOTATION;javax.persistence.Entity}

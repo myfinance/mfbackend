@@ -71,6 +71,20 @@
         </jaxrs:features>
     </jaxrs:server>
 
+    <cxf:bus>
+        <cxf:inInterceptors>
+            <bean class="org.apache.cxf.transport.http.HttpAuthenticationFaultHandler">
+                <property name="realm" value="karaf"/>
+            </bean>
+        </cxf:inInterceptors>
+        <cxf:features>
+            <cxf:logging />
+            <bean class="org.apache.cxf.interceptor.security.JAASAuthenticationFeature">
+                <property name="contextName" value="karaf" />
+                <property name="reportFault" value="true" />
+            </bean>
+        </cxf:features>
+    </cxf:bus>
 
 </blueprint>
         <!-- END SNIPPET: blueprint -->

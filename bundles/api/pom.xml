@@ -13,6 +13,7 @@
     <packaging>pom</packaging>
     <modules>
         <module>de.hf.dac.api.io</module>
+        <module>de.hf.dac.api.security</module>
     </modules>
 
 

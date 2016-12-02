@@ -9,4 +9,8 @@ Import-Package: \
     com.fasterxml.jackson.jaxrs.json,\
     org.apache.cxf.jaxrs.provider,\
     org.apache.cxf.jaxrs.swagger,\
+    org.apache.cxf.interceptor.security, \
+    org.apache.cxf.transport.http, \
+    javax.security.auth, \
+    de.hf.dac.security.auth, \
     *

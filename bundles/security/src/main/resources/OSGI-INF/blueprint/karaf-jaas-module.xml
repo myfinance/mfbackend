@@ -3,7 +3,7 @@
            xmlns:jaas="http://karaf.apache.org/xmlns/jaas/v1.1.0">
 
     <jaas:config name="karaf" rank="2">
-        <jaas:module className="de.dzbank.poet.dac.security.auth.modules.LdapLoginModule" flags="required">
+        <jaas:module className="de.hf.dac.security.auth.modules.LdapLoginModule" flags="required">
             java.naming.provider.url = ldap://dzag.vrnet
             bindDN = ${auth.ldap.user}
             bindCredential = ${auth.ldap.credentials}
@@ -24,7 +24,7 @@
             principalClass = org.apache.karaf.jaas.boot.principal.UserPrincipal
             debug = false
         </jaas:module>
-        <jaas:module className="de.dzbank.poet.dac.security.auth.modules.LdapLoginModule" flags="required">
+        <jaas:module className="de.hf.dac.security.auth.modules.LdapLoginModule" flags="required">
             java.naming.provider.url = ldap://dfvvpldps1.dzbank.vrnet:389
             bindDN = ${role.ldap.user}
             bindCredential = ${role.ldap.credentials}
