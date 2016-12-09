@@ -17,7 +17,7 @@
 
 package de.hf.marketdataprovider.config.security;
 
-import de.hf.dac.security.LdapProperties;
+import de.hf.marketdataprovider.security.LdapProperties;
 import de.hf.marketdataprovider.security.LdapLoginModule;
 import de.hf.marketdataprovider.security.SimplePrincipal;
 import org.slf4j.Logger;

@@ -16,6 +16,7 @@
  */
 
 package de.hf.dac.security.auth.modules;
+
 import de.hf.dac.api.io.env.EnvironmentConfiguration;
 import de.hf.dac.api.io.lookup.OSGIServiceLookup;
 import de.hf.dac.security.auth.CompanyPrincipal;
@@ -77,11 +78,15 @@ public abstract class BaseLoginModule implements LoginModule {
     protected static final String CONTEXT_LOGIN_NAME = "javax.security.auth.login.name";
     protected static final String CONTEXT_LOGIN_PASSWORD = "javax.security.auth.login.password";
 
+    //the default user if the authorisation is deactivated
+    protected static final String NO_AUTHENTIFICATION_USER = "admin";
+
     protected Subject subject;
     protected CallbackHandler callbackHandler;
     protected Map<String, ?> sharedState;
     protected Map<String, ?> options;
     protected boolean loginSuccess;
+    protected boolean isAuthActive = true;
 
     private String principalClassName;
     private boolean useFirstPass;
@@ -89,14 +94,17 @@ public abstract class BaseLoginModule implements LoginModule {
     EnvironmentConfiguration serviceByInterface = null;
     private HashMap<String, String> roleMappings;
 
+
     @Override
     public void initialize(Subject theSubject, CallbackHandler theCB, Map<String, ?> theSharedState, Map<String, ?> theOptions) {
         serviceByInterface = OSGIServiceLookup.getServiceByInterface(EnvironmentConfiguration.class);
         assert (serviceByInterface != null);
+        isAuthActive=serviceByInterface.getString("LDAP", "auth.ldap.active").toLowerCase().equals("true");
         this.subject = theSubject;
         this.callbackHandler = theCB;
         this.sharedState = theSharedState;
         this.options = theOptions;
+
 
         useFirstPass = parseBooleanOption("useFirstPass");
         storePass = parseBooleanOption("storePass");
@@ -130,7 +138,6 @@ public abstract class BaseLoginModule implements LoginModule {
     @Override
     public boolean login() throws LoginException {
         loginSuccess = false;
-
         if (useFirstPass) {
             Object identity = sharedState.get(CONTEXT_LOGIN_NAME);
             Object credential = sharedState.get(CONTEXT_LOGIN_PASSWORD);
@@ -171,16 +178,21 @@ public abstract class BaseLoginModule implements LoginModule {
                 while (members.hasMoreElements()) {
                     Principal role = members.nextElement();
                     subjectGroup.addMember(role);
-                    if (i == 1) { // Roles are Groups
-                        plainRoleRightPrincipals.add(new GroupPrincipal(role.getName()));
-                        if (this.roleMappings.containsKey(role.getName())) {
-                            plainRoleRightPrincipals.add(new RolePrincipal(this.roleMappings.get(role.getName())));
+                    if(this.roleMappings!=null) {
+                        if (i == 1) { // Roles are Groups
+                            plainRoleRightPrincipals.add(new GroupPrincipal(role.getName()));
+                            if (this.roleMappings.containsKey(role.getName())) {
+                                plainRoleRightPrincipals.add(new RolePrincipal(this.roleMappings.get(role.getName())));
+                            }
+                        } else { // Permissions are Roles
+                            plainRoleRightPrincipals.add(new RolePrincipal(role.getName()));
+                            if (this.roleMappings.containsKey(role.getName())) {
+                                plainRoleRightPrincipals.add(new RolePrincipal(this.roleMappings.get(role.getName())));
+                            }
                         }
-                    } else { // Permissions are Roles
+                    }
+                    else {
                         plainRoleRightPrincipals.add(new RolePrincipal(role.getName()));
-                        if (this.roleMappings.containsKey(role.getName())) {
-                            plainRoleRightPrincipals.add(new RolePrincipal(this.roleMappings.get(role.getName())));
-                        }
                     }
                 }
             }
@@ -201,7 +213,6 @@ public abstract class BaseLoginModule implements LoginModule {
         subject.getPrincipals().remove(identity);
         // TODO: remove any added groups...
 
-        String demo = new String ("Hello World");
         return true;
     }
 

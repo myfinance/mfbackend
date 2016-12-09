@@ -5,7 +5,6 @@
  */
 package de.hf.marketdataprovider.security;
 
-import de.hf.dac.security.BasePrincipal;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;

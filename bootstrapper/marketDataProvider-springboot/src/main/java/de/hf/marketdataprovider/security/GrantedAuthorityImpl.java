@@ -17,7 +17,6 @@
 
 package de.hf.marketdataprovider.security;
 
-import de.hf.dac.security.BasePrincipal;
 import org.springframework.security.core.GrantedAuthority;
 
 public class GrantedAuthorityImpl extends BasePrincipal implements GrantedAuthority {

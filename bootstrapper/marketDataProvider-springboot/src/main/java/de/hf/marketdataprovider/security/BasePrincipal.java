@@ -15,7 +15,7 @@
  * ----------------------------------------------------------------------------
  */
 
-package de.hf.dac.security;
+package de.hf.marketdataprovider.security;
 
 import java.io.Serializable;
 import java.security.Principal;

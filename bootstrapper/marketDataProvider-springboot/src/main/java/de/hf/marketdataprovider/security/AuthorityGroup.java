@@ -6,7 +6,6 @@
 package de.hf.marketdataprovider.security;
 
 
-import de.hf.dac.security.BasePrincipal;
 import org.springframework.security.core.GrantedAuthority;
 
 import java.io.Serializable;

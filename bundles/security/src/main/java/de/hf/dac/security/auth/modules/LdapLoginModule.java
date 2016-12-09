@@ -18,14 +18,11 @@
 package de.hf.dac.security.auth.modules;
 
 import de.hf.dac.security.auth.CompanyPrincipal;
-import de.hf.dac.security.auth.EnvironmentCredential;
 import de.hf.dac.security.auth.SimplePrincipal;
 
 import java.security.Principal;
 import java.security.acl.Group;
-import java.util.Arrays;
 import java.util.Iterator;
-import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Properties;
@@ -140,14 +137,16 @@ public class LdapLoginModule extends BaseLoginModule {
 
         super.initialize(theSubject, theCB, theSharedState, theOptions);
 
-        String roleGroup = (String) theOptions.get(OPT_ROLE_GROUP);
-        if (roleGroup != null) {
-            roleGroupName = roleGroup;
-        }
+        if(isAuthActive) {
+            String roleGroup = (String) theOptions.get(OPT_ROLE_GROUP);
+            if (roleGroup != null) {
+                roleGroupName = roleGroup;
+            }
 
-        String permissionGroup = (String) theOptions.get(OPT_PERMISSION_GROUP);
-        if (permissionGroup != null) {
-            permissionsGroupName = permissionGroup;
+            String permissionGroup = (String) theOptions.get(OPT_PERMISSION_GROUP);
+            if (permissionGroup != null) {
+                permissionsGroupName = permissionGroup;
+            }
         }
 
         debug = parseBooleanOption(OPT_DEBUG);
@@ -157,7 +156,6 @@ public class LdapLoginModule extends BaseLoginModule {
     }
 
     @Override
-    @SuppressWarnings({ "rawtypes", "unchecked" })
     public boolean login() throws LoginException {
         LOG.debug("login()");
         ///
@@ -194,6 +192,10 @@ public class LdapLoginModule extends BaseLoginModule {
             // get roles from LDAP
             roles = createGroup(roleGroupName, subject.getPrincipals());
             permissions = createGroup(permissionsGroupName, subject.getPrincipals());
+            if(!isAuthActive) {
+                addRole("admin");
+                return true;
+            }
             try {
                 createLdapInitContext(identity.getName(), credential);
 
@@ -215,9 +217,16 @@ public class LdapLoginModule extends BaseLoginModule {
         }
 
         super.loginSuccess = false;
-        String[] info = getUsernameAndPassword();
-        String username = info[0];
-        String password = info[1];
+
+        String username = NO_AUTHENTIFICATION_USER;
+        String password = "nopassword";
+
+        if(isAuthActive) {
+            String[] info = getUsernameAndPassword();
+            username = info[0];
+            password = info[1];
+        }
+
 
         if (identity == null) {
             try {
@@ -229,7 +238,7 @@ public class LdapLoginModule extends BaseLoginModule {
                 throw new LoginException("Failed to create principal: " + e.getMessage());
             }
 
-            if (!validatePassword(password)) {
+            if (isAuthActive && !validatePassword(password)) {
                 throw new FailedLoginException("Password incorrect/Password required");
             }
 
@@ -242,20 +251,6 @@ public class LdapLoginModule extends BaseLoginModule {
         }
         LOG.info("LDAP login successfully finished.");
         return true;
-    }
-
-    @Override
-    public boolean commit() throws LoginException {
-        LOG.debug("commit()");
-        ///
-        if (super.commit()) {
-            subject.getPrivateCredentials().add(new EnvironmentCredential(getEnvironment()));
-            LOG.info("Module commit successfully!");
-            return true;
-        } else {
-            LOG.info("Module commit failed!");
-            return false;
-        }
     }
 
     /**
@@ -664,23 +659,6 @@ public class LdapLoginModule extends BaseLoginModule {
             }
         }
 
-    }
-
-    private String getEnvironment() {
-        List<String> envs = Arrays.asList("Produktion", "Integration", "Integration1", "Integration2", "Test", "Konfiguration", "UAT", "SIMULATION",
-            "Test1", "Konfiguration1", "UAT1", "SIMULATION1", "Test2", "Konfiguration2", "UAT2", "SIMULATION2", "Test3", "Konfiguration3", "UAT3",
-            "SIMULATION3", "Test4", "Konfiguration4", "UAT4", "SIMULATION4");
-        String environment = "Test";
-        ///
-        if (roleCtxDN != null) {
-            for (String env : envs) {
-                if (roleCtxDN.contains(env)) {
-                    environment = env;
-                    break;
-                }
-            }
-        }
-        return environment;
     }
 
     private void parseUser(SearchResult result, String userDN, CompanyPrincipal principal) throws NamingException {

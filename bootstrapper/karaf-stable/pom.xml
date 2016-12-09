@@ -34,7 +34,6 @@
             <scope>runtime</scope>
             <classifier>features</classifier>
         </dependency>
-
     </dependencies>
 
     <build>
