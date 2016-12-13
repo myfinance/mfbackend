@@ -18,16 +18,20 @@
 package de.hf.dac.marketdataprovider.restservice;
 
 import de.hf.dac.api.io.env.EnvironmentService;
+import de.hf.dac.api.security.AuthorizationSubject;
+import de.hf.dac.api.security.SecurityService;
 import de.hf.dac.marketdataprovider.api.application.MarketDataEnvironment;
 import de.hf.dac.marketdataprovider.api.application.MarketDataEnvironmentBuilder;
 import io.swagger.annotations.ApiOperation;
 import org.ops4j.pax.cdi.api.OsgiService;
 
 import javax.inject.Inject;
+import javax.security.auth.Subject;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
+import java.security.AccessController;
 import java.sql.SQLException;
 import java.util.List;
 
@@ -45,6 +49,10 @@ public abstract class TopLevelWithEnvironments {
     @OsgiService
     EnvironmentService environmentService;
 
+    @Inject
+    @OsgiService
+    SecurityService securityService;
+
     @GET
     @Path("/getEnvironments")
     @Produces(MediaType.APPLICATION_JSON)
@@ -53,5 +61,9 @@ public abstract class TopLevelWithEnvironments {
     public List<String> getEnvironments() {
 
         return marketDataEnvironmentBuilder.getInfo();
+    }
+
+    protected AuthorizationSubject getAuthorization() {
+        return securityService.getAuthorizationSubject(Subject.getSubject(AccessController.getContext()));
     }
 }

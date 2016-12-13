@@ -17,11 +17,13 @@
 
 package de.hf.dac.marketdataprovider.persistence;
 
+import de.hf.dac.marketdataprovider.api.application.EnvTarget;
 import de.hf.dac.marketdataprovider.api.domain.Product;
 import de.hf.dac.marketdataprovider.api.persistence.dao.ProductDao;
 import de.hf.dac.marketdataprovider.api.persistence.repositories.ProductRepository;
 
 import javax.inject.Inject;
+import javax.inject.Named;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Query;
@@ -34,7 +36,7 @@ public class ProductDaoImpl extends BaseDao implements ProductDao {
     private ProductRepository productRepository;
 
     @Inject
-    public ProductDaoImpl(EntityManagerFactory marketDataEmf) {
+    public ProductDaoImpl(@Named(EnvTarget.MDB) EntityManagerFactory marketDataEmf) {
         super(marketDataEmf);
         productRepository = repositoryService.buildRepository(ProductRepository.class, marketDataEm);
     }

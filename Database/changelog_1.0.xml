@@ -32,4 +32,36 @@
                        constraintName="pk_envconv"
                        tableName="dacenvironmentconfiguration"/>
     </changeSet>
+    <changeSet id="1.0.2" author="hf">
+        <createTable tableName="restauthorization">
+            <column name="system" type="VARCHAR(25)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="resource" type="VARCHAR(25)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="opType" type="VARCHAR(10)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="idPattern" type="VARCHAR(50)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="permissions" type="VARCHAR(200)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="description" type="VARCHAR(100)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="operations" type="VARCHAR(200)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="users" type="VARCHAR(200)">
+                <constraints nullable="false"/>
+            </column>
+
+        </createTable>
+        <addPrimaryKey columnNames="system, resource, idPattern, opType, operations"
+                       constraintName="pk_restauth"
+                       tableName="restauthorization"/>
+    </changeSet>
 </databaseChangeLog>

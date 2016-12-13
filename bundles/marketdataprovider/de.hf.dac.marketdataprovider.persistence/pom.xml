@@ -24,6 +24,10 @@
             <artifactId>de.hf.dac.marketdataprovider.api.persistence</artifactId>
         </dependency>
         <dependency>
+            <groupId>de.hf.dac.marketdataprovider.api</groupId>
+            <artifactId>de.hf.dac.marketdataprovider.api.application</artifactId>
+        </dependency>
+        <dependency>
             <groupId>org.springframework.data</groupId>
             <artifactId>spring-data-jpa</artifactId>
         </dependency>

@@ -4,16 +4,16 @@
 
     <jaas:config name="karaf" rank="2">
         <jaas:module className="de.hf.dac.security.auth.modules.LdapLoginModule" flags="required">
-            java.naming.provider.url = ldap://dzag.vrnet
+            java.naming.provider.url = ${auth.ldap.url}
             bindDN = ${auth.ldap.user}
             bindCredential = ${auth.ldap.credentials}
-            baseCtxDN = ou=Accounts,dc=dzag,dc=vrnet
+            baseCtxDN = ${auth.ldap.baseCtxDN}
             searchTimeLimit = 30000
             baseFilter = (sAMAccountName={0})
             password-stacking = useFirstPass
             storePass = true
             useFirstPass = false
-            rolesCtxDN = ou=Accounts,dc=dzag,dc=vrnet
+            rolesCtxDN = ${auth.ldap.rolesCtxDN}
             roleFilter = (sAMAccountName={0})
             roleAttributeID = memberOf
             roleAttributeIsDN = true
@@ -25,12 +25,12 @@
             debug = false
         </jaas:module>
         <jaas:module className="de.hf.dac.security.auth.modules.LdapLoginModule" flags="required">
-            java.naming.provider.url = ldap://dfvvpldps1.dzbank.vrnet:389
+            java.naming.provider.url = ${role.ldap.url}
             bindDN = ${role.ldap.user}
             bindCredential = ${role.ldap.credentials}
-            baseCtxDN = ou=People,dc=dzbank,dc=vrnet
+            baseCtxDN = ${role.ldap.baseCtxDN}
             baseFilter = (dzuid={0})
-            rolesCtxDN = ou=Rollen,ou=Test,ou=PoET,ou=Eigenentwicklungen,ou=Anwendungen,dc=dzbank,dc=vrnet
+            rolesCtxDN = ${role.ldap.rolesCtxDN}
             roleFilter = (uniqueMember={1})
             roleAttributeID = cn
             permissionAttributeID = dzpermissions
@@ -38,6 +38,7 @@
             allowEmptyPasswords = false
             useFirstPass = true
             permissionRoleMapping = ${role.mappings}
+            userAttributes = ${role.userAttributes}
             debug = false
         </jaas:module>
     </jaas:config>

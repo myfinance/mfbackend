@@ -68,8 +68,6 @@ import org.slf4j.LoggerFactory;
  * also try to use it. LoginModules do not prompt for a new password if authentication fails (authentication simply fails).</li>
  * </ul>
  *
- * @author Jens Granseuer
- * @author Taudo Wenzel (JBoss EAP 6 changes)
  */
 public abstract class BaseLoginModule implements LoginModule {
     public static final String WHAT = "$Id$";
@@ -97,6 +95,7 @@ public abstract class BaseLoginModule implements LoginModule {
 
     @Override
     public void initialize(Subject theSubject, CallbackHandler theCB, Map<String, ?> theSharedState, Map<String, ?> theOptions) {
+        //EnvironmentConfiguration is not injected via blueprint because it is not working. A timing issue?! it runs with declarative services maybe?
         serviceByInterface = OSGIServiceLookup.getServiceByInterface(EnvironmentConfiguration.class);
         assert (serviceByInterface != null);
         isAuthActive=serviceByInterface.getString("LDAP", "auth.ldap.active").toLowerCase().equals("true");

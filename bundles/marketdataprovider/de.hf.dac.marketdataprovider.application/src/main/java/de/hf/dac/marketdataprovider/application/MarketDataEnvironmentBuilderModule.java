@@ -19,11 +19,13 @@ package de.hf.dac.marketdataprovider.application;
 
 import com.google.inject.AbstractModule;
 import com.google.inject.Provides;
+import com.google.inject.name.Names;
 import de.hf.dac.api.io.efmb.DatabaseInfo;
 import de.hf.dac.api.io.efmb.EntityManagerFactorySetup;
 import de.hf.dac.api.io.efmb.tx.WrappedEntityManagerFactory;
 import de.hf.dac.api.io.env.EnvironmentService;
 import de.hf.dac.api.io.env.EnvironmentTargetInfo;
+import de.hf.dac.marketdataprovider.api.application.EnvTarget;
 import de.hf.dac.marketdataprovider.api.application.MarketDataEnvironment;
 import de.hf.dac.marketdataprovider.api.domain.Product;
 import de.hf.dac.marketdataprovider.api.persistence.dao.InstrumentDao;
@@ -34,6 +36,7 @@ import de.hf.dac.marketdataprovider.api.service.ProductService;
 import de.hf.dac.marketdataprovider.api.service.InstrumentService;
 import de.hf.dac.marketdataprovider.service.InstrumentServiceImpl;
 import de.hf.dac.marketdataprovider.service.ProductServiceImpl;
+import de.hf.dac.security.restauthorization.domain.RestAuthorization;
 
 import javax.persistence.EntityManagerFactory;
 import javax.transaction.TransactionManager;
@@ -60,22 +63,34 @@ public class MarketDataEnvironmentBuilderModule  extends AbstractModule {
     protected void configure() {
         bind(EnvironmentService.class).toInstance(envService);
 
-        EntityManagerFactory entityManagerFactory = provideEntityManagerFactory();
-        bind(ProductDao.class).toInstance(new ProductDaoImpl(entityManagerFactory));
-        bind(InstrumentDao.class).toInstance(new InstrumentDaoImpl(entityManagerFactory));
+        bind(EntityManagerFactory.class).annotatedWith(Names.named(EnvTarget.MDB)).toInstance(provideMdbEntityManagerFactory());
+        bind(EntityManagerFactory.class).annotatedWith(Names.named(EnvTarget.SDB)).toInstance(provideSdbEntityManagerFactory());
+        bind(ProductDao.class).to(ProductDaoImpl.class);
+        bind(InstrumentDao.class).to(InstrumentDaoImpl.class);
         bind(ProductService.class).to(ProductServiceImpl.class);
         bind(InstrumentService.class).to(InstrumentServiceImpl.class);
         bind(MarketDataEnvironment.class).to(MarketDataEnvironmentImpl.class);
     }
 
-
-    @Provides
-    EntityManagerFactory provideEntityManagerFactory() {
-        EnvironmentTargetInfo marketDataTargetInfo = envService.getTarget(env, "marketdata");
+    EntityManagerFactory provideMdbEntityManagerFactory() {
+        EnvironmentTargetInfo marketDataTargetInfo = envService.getTarget(env, EnvTarget.MDB);
         DatabaseInfo dbi = (DatabaseInfo) marketDataTargetInfo.getTargetDetails();
         WrappedEntityManagerFactory emf = null;
         try {
-            emf = new WrappedEntityManagerFactory(jtaManager, emfb.buildEntityManagerFactory("marketdata", new ClassLoader[] {Product.class.getClassLoader()}, dbi));
+            emf = new WrappedEntityManagerFactory(jtaManager, emfb.buildEntityManagerFactory(EnvTarget.MDB, new ClassLoader[] {Product.class.getClassLoader()}, dbi));
+        }
+        catch (Exception ex) {
+            throw new RuntimeException(ex);
+        }
+        return emf;
+    }
+
+    EntityManagerFactory provideSdbEntityManagerFactory() {
+        EnvironmentTargetInfo marketDataTargetInfo = envService.getTarget(env, EnvTarget.SDB);
+        DatabaseInfo dbi = (DatabaseInfo) marketDataTargetInfo.getTargetDetails();
+        WrappedEntityManagerFactory emf = null;
+        try {
+            emf = new WrappedEntityManagerFactory(jtaManager, emfb.buildEntityManagerFactory(EnvTarget.SDB, new ClassLoader[] {RestAuthorization.class.getClassLoader()}, dbi));
         }
         catch (Exception ex) {
             throw new RuntimeException(ex);

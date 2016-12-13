@@ -36,7 +36,16 @@
 
         <dependency>
             <groupId>de.hf.dac.marketdataprovider.api</groupId>
+            <artifactId>de.hf.dac.marketdataprovider.api.restservice</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>de.hf.dac.marketdataprovider.api</groupId>
             <artifactId>de.hf.dac.marketdataprovider.api.application</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>de.hf.dac.api</groupId>
+            <artifactId>de.hf.dac.api.security</artifactId>
         </dependency>
 
     </dependencies>

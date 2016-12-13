@@ -17,12 +17,11 @@
 
 package de.hf.dac.marketdataprovider.restservice;
 
+import de.hf.dac.marketdataprovider.api.service.OpType;
 import de.hf.dac.marketdataprovider.restservice.marketdataresources.EnvironmentResource;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
-import io.swagger.annotations.ApiResponse;
-import io.swagger.annotations.ApiResponses;
 
 import javax.inject.Singleton;
 import javax.ws.rs.Path;
@@ -41,7 +40,7 @@ public class MarketData extends TopLevelWithEnvironments{
     @ApiOperation(value = "get Environment",
         response = EnvironmentResource.class)
     public EnvironmentResource getEnvironment(@PathParam("envID") @ApiParam(value="The Service Environment") String envID) throws SQLException {
-        return new EnvironmentResource(getMarketDataEnvironment(envID));
+        return new EnvironmentResource(getAuthorization(), getMarketDataEnvironment(envID));
     }
 
 }

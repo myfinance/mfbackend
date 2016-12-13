@@ -82,8 +82,6 @@ import org.slf4j.LoggerFactory;
  * <code>java.naming.factory.initial</code>.
  * </p>
  *
- * @author Jens Granseuer
- * @author Taudo Wenzel (JBoss EAP 6 changes)
  */
 public class LdapLoginModule extends BaseLoginModule {
     public static final String WHAT = "$Id$";
@@ -522,9 +520,7 @@ public class LdapLoginModule extends BaseLoginModule {
             String definedUserAttributes = (String) getOption(OPT_USER_ATTRIBUTES);
             if (definedUserAttributes == null) {
                 // use default attributes
-                attrs = new String[] { "sn", "givenName", "mail", "dzdepartment", "dzkst", "cn", "dzuid", "dzanrede", "dzarbeitsplatz", "dzani",
-                    "dzbereich", "dzfaxNumber", "dztelNumber", "dzlokkurz", "dzraum", "dzetage", "dzgebaeude", "dzpnrleit", "l", "dzkstdn",
-                    "dzksthierarchy", "dzdepartmentlong", "dzgeschlecht", "initials", "employeeNumber", "uid" };
+                attrs = new String[] { "sn", "givenName", "mail", "cn", "initials", "employeeNumber", "uid" };
             } else {
                 attrs = definedUserAttributes.split(",");
             }
@@ -668,63 +664,10 @@ public class LdapLoginModule extends BaseLoginModule {
         while (ar.hasMoreElements()) {
             Attribute att = ar.next();
             String id = att.getID();
+            principal.addProperty(id,(String) att.get());
 
             if (debug) {
                 LOG.info("Got attribute: {} ({})", new Object[] { id, att.get() });
-            }
-
-            if ("sn".equals(id)) {
-                principal.setLastName((String) att.get());
-            } else if ("givenName".equals(id)) {
-                principal.setFirstName((String) att.get());
-            } else if ("mail".equals(id)) {
-                principal.setEmail((String) att.get());
-            } else if ("dzdepartment".equals(id)) {
-                principal.setDepartment((String) att.get());
-            } else if ("dzkst".equals(id)) {
-                principal.setCostCenter((String) att.get());
-            } else if ("cn".equals(id)) {
-                principal.setCn((String) att.get());
-            } else if ("dzuid".equals(id)) {
-                principal.setDzuid((String) att.get());
-            } else if ("dzanrede".equals(id)) {
-                principal.setDzanrede((String) att.get());
-            } else if ("dzarbeitsplatz".equals(id)) {
-                principal.setDzarbeitsplatz((String) att.get());
-            } else if ("dzani".equals(id)) {
-                principal.setDzani((String) att.get());
-            } else if ("dzbereich".equals(id)) {
-                principal.setDzbereich((String) att.get());
-            } else if ("dzfaxNumber".equals(id)) {
-                principal.setDzfaxNumber((String) att.get());
-            } else if ("dztelNumber".equals(id)) {
-                principal.setDztelNumber((String) att.get());
-            } else if ("dzlokkurz".equals(id)) {
-                principal.setDzlokkurz((String) att.get());
-            } else if ("dzraum".equals(id)) {
-                principal.setDzraum((String) att.get());
-            } else if ("dzetage".equals(id)) {
-                principal.setDzetage((String) att.get());
-            } else if ("dzgebaeude".equals(id)) {
-                principal.setDzgebaeude((String) att.get());
-            } else if ("dzpnrleit".equals(id)) {
-                principal.setDzpnrleit((String) att.get());
-            } else if ("l".equals(id)) {
-                principal.setLocation((String) att.get());
-            } else if ("dzkstdn".equals(id)) {
-                principal.setDzkstdn((String) att.get());
-            } else if ("dzksthierarchy".equals(id)) {
-                principal.setDzksthierarchy((String) att.get());
-            } else if ("dzdepartmentlong".equals(id)) {
-                principal.setDzdepartmentlong((String) att.get());
-            } else if ("dzgeschlecht".equals(id)) {
-                principal.setDzgeschlecht((String) att.get());
-            } else if ("initials".equals(id)) {
-                principal.setInitials((String) att.get());
-            } else if ("employeeNumber".equals(id)) {
-                principal.setEmployeeNumber((String) att.get());
-            } else if ("uid".equals(id)) {
-                principal.setUid((String) att.get());
             }
         }
     }
