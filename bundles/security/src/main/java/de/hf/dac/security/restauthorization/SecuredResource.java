@@ -15,7 +15,7 @@
  * ----------------------------------------------------------------------------
  */
 
-package de.hf.dac.marketdataprovider.restservice;
+package de.hf.dac.security.restauthorization;
 
 import de.hf.dac.api.security.AccessNotAllowedException;
 import de.hf.dac.api.security.AuthorizationSubject;
@@ -53,7 +53,7 @@ public abstract class SecuredResource<ACCESS_TYPE extends Enum<ACCESS_TYPE>,RESO
         this.rootSecurityProvider2 = resource.getRootSecurityProvider();
     }
 
-    public <T1 extends IdentifiableResource<RESOURCE_LEVEL> & Secured, T2 extends IdentifiableResource<RESOURCE_LEVEL> & Secured>
+    /*public <T1 extends IdentifiableResource<RESOURCE_LEVEL> & Secured, T2 extends IdentifiableResource<RESOURCE_LEVEL> & Secured>
     SecuredResource(AuthorizationSubject userPermissions, T1 resource1, T2 resource2) {
         this.userPermissions = userPermissions;
         this.resourceId1 = resource1.getId();
@@ -62,7 +62,7 @@ public abstract class SecuredResource<ACCESS_TYPE extends Enum<ACCESS_TYPE>,RESO
         this.resourceId2 = resource2.getId();
         this.opLevel2 = resource2.getOpLevel();
         this.rootSecurityProvider2 = resource2.getRootSecurityProvider();
-    }
+    }*/
 
     public void checkOperationAllowed(ACCESS_TYPE accessType) throws AccessNotAllowedException {
         StackTraceElement stack = Thread.currentThread().getStackTrace()[2];

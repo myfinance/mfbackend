@@ -17,11 +17,13 @@
 
 package de.hf.dac.marketdataprovider.api.application;
 
+import de.hf.dac.api.security.IdentifiableResource;
 import de.hf.dac.api.security.RootSecurityProvider;
+import de.hf.dac.api.security.Secured;
 import de.hf.dac.marketdataprovider.api.service.ProductService;
 import de.hf.dac.marketdataprovider.api.service.InstrumentService;
 
-public interface MarketDataEnvironment {
+public interface MarketDataEnvironment extends IdentifiableResource<OpLevel>, Secured {
     ProductService getProductService();
     InstrumentService getInstrumentService();
     RootSecurityProvider getRootSecurityProvider();

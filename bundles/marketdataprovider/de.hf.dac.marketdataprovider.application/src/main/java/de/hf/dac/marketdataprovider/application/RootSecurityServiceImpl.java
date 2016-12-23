@@ -15,13 +15,13 @@
  * ----------------------------------------------------------------------------
  */
 
-package de.hf.dac.marketdataprovider.restservice.security;
+package de.hf.dac.marketdataprovider.application;
 
 import de.hf.dac.api.security.RootSecurityProvider;
 import de.hf.dac.marketdataprovider.api.application.EnvTarget;
-import de.hf.dac.marketdataprovider.api.restservice.MarketDataSystemDescriptor;
-import de.hf.dac.marketdataprovider.api.restservice.OpLevel;
-import de.hf.dac.marketdataprovider.api.restservice.OpType;
+import de.hf.dac.marketdataprovider.api.application.MarketDataSystemDescriptor;
+import de.hf.dac.marketdataprovider.api.application.OpLevel;
+import de.hf.dac.marketdataprovider.api.application.OpType;
 import de.hf.dac.security.restauthorization.BaseSecurityProviderImpl;
 
 import javax.inject.Inject;

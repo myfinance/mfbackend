@@ -18,13 +18,13 @@
 package de.hf.dac.marketdataprovider.application;
 
 import com.google.inject.AbstractModule;
-import com.google.inject.Provides;
 import com.google.inject.name.Names;
 import de.hf.dac.api.io.efmb.DatabaseInfo;
 import de.hf.dac.api.io.efmb.EntityManagerFactorySetup;
 import de.hf.dac.api.io.efmb.tx.WrappedEntityManagerFactory;
 import de.hf.dac.api.io.env.EnvironmentService;
 import de.hf.dac.api.io.env.EnvironmentTargetInfo;
+import de.hf.dac.api.security.RootSecurityProvider;
 import de.hf.dac.marketdataprovider.api.application.EnvTarget;
 import de.hf.dac.marketdataprovider.api.application.MarketDataEnvironment;
 import de.hf.dac.marketdataprovider.api.domain.Product;
@@ -65,10 +65,14 @@ public class MarketDataEnvironmentBuilderModule  extends AbstractModule {
 
         bind(EntityManagerFactory.class).annotatedWith(Names.named(EnvTarget.MDB)).toInstance(provideMdbEntityManagerFactory());
         bind(EntityManagerFactory.class).annotatedWith(Names.named(EnvTarget.SDB)).toInstance(provideSdbEntityManagerFactory());
+        bind(String.class).annotatedWith(Names.named("envID")).toInstance(new String(env));
         bind(ProductDao.class).to(ProductDaoImpl.class);
         bind(InstrumentDao.class).to(InstrumentDaoImpl.class);
         bind(ProductService.class).to(ProductServiceImpl.class);
         bind(InstrumentService.class).to(InstrumentServiceImpl.class);
+
+        bind(RootSecurityProvider.class).to(RootSecurityServiceImpl.class);
+
         bind(MarketDataEnvironment.class).to(MarketDataEnvironmentImpl.class);
     }
 

@@ -17,8 +17,6 @@
 
 package de.hf.dac.marketdataprovider.persistence;
 
-import de.hf.dac.marketdataprovider.api.persistence.repositories.InstrumentRepository;
-import de.hf.dac.marketdataprovider.api.persistence.repositories.ProductRepository;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.FrameworkUtil;
 import org.osgi.framework.wiring.BundleWiring;

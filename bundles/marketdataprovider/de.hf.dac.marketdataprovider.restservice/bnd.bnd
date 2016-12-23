@@ -1,5 +1,6 @@
 -dsannotations : *
-Export-Package: de.hf.dac.marketdataprovider.restservice
+Export-Package: de.hf.dac.marketdataprovider.restservice, \
+    de.hf.dac.marketdataprovider.restservice.security
 Bundle-SymbolicName: ${project.artifactId}
 Import-Package: \
     javax.ws.rs,\
@@ -13,4 +14,5 @@ Import-Package: \
     org.apache.cxf.transport.http, \
     javax.security.auth, \
     de.hf.dac.security.auth, \
+    de.hf.dac.api.security, \
     *

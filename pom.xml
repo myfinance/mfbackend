@@ -118,8 +118,8 @@
                 <version>${project.version}</version>
             </dependency>
             <dependency>
-                <groupId>de.hf.dac.marketdataprovider.api</groupId>
-                <artifactId>de.hf.dac.marketdataprovider.api.restservice</artifactId>
+                <groupId>de.hf.dac.marketdataprovider</groupId>
+                <artifactId>de.hf.dac.marketdataprovider.restsecurity</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>

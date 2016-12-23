@@ -1,4 +1,4 @@
-package de.hf.dac.marketdataprovider.api.restservice;
+package de.hf.dac.marketdataprovider.api.application;
 
 /** ----------------------------------------------------------------------------
  *

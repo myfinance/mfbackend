@@ -17,8 +17,6 @@
 
 package de.hf.dac.marketdataprovider.application;
 
-import de.hf.dac.api.io.env.EnvironmentInfo;
-import de.hf.dac.api.io.env.EnvironmentService;
 import de.hf.dac.api.io.env.context.ApplicationContext;
 import de.hf.dac.marketdataprovider.api.application.MarketDataEnvironment;
 import de.hf.dac.marketdataprovider.api.application.MarketDataEnvironmentBuilder;

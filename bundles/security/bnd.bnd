@@ -2,7 +2,9 @@
 
 Export-Package: \
   de.hf.dac.security.auth, \
-  de.hf.dac.security.auth.modules
+  de.hf.dac.security.auth.modules, \
+  de.hf.dac.security.restauthorization, \
+  de.hf.dac.security.restauthorization.domain
 
 
 Import-Package: \

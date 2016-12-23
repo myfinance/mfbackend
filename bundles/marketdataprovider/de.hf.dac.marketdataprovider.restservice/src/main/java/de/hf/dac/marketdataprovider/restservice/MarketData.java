@@ -17,7 +17,6 @@
 
 package de.hf.dac.marketdataprovider.restservice;
 
-import de.hf.dac.marketdataprovider.api.service.OpType;
 import de.hf.dac.marketdataprovider.restservice.marketdataresources.EnvironmentResource;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;

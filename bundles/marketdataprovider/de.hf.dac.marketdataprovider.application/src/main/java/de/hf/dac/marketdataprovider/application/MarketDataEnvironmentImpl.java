@@ -17,28 +17,32 @@
 
 package de.hf.dac.marketdataprovider.application;
 
-import de.hf.dac.api.security.IdentifiableResource;
 import de.hf.dac.api.security.RootSecurityProvider;
 import de.hf.dac.marketdataprovider.api.application.MarketDataEnvironment;
+import de.hf.dac.marketdataprovider.api.application.OpLevel;
 import de.hf.dac.marketdataprovider.api.service.ProductService;
 import de.hf.dac.marketdataprovider.api.service.InstrumentService;
 
 import javax.inject.Inject;
+import javax.inject.Named;
+import java.util.ArrayList;
 import java.util.List;
 
 
 //todo besser hier eine extra property erstellen die von IdentifiableResource erbt da dies restapi spezifisch ist
-public class MarketDataEnvironmentImpl implements MarketDataEnvironment, IdentifiableResource {
+public class MarketDataEnvironmentImpl implements MarketDataEnvironment{
 
     final private ProductService productService;
     final private InstrumentService instrumentService;
     final private RootSecurityProvider rootSecurityProvider;
+    final private String environment;
 
     @Inject
-    public MarketDataEnvironmentImpl(RootSecurityProvider rootSecurityProvider, ProductService productService, InstrumentService instrumentService){
+    public MarketDataEnvironmentImpl(RootSecurityProvider rootSecurityProvider, ProductService productService, InstrumentService instrumentService, @Named("envID") String environment){
         this.productService=productService;
         this.instrumentService=instrumentService;
         this.rootSecurityProvider=rootSecurityProvider;
+        this.environment=environment;
     }
 
     @Override
@@ -58,16 +62,18 @@ public class MarketDataEnvironmentImpl implements MarketDataEnvironment, Identif
 
     @Override
     public String getId() {
-        return null;
+        return environment;
     }
 
     @Override
     public List<String> getParentIdTrail() {
-        return null;
+        List<String> ret = new ArrayList<>();
+        ret.add(environment);
+        return ret;
     }
 
     @Override
-    public Object getOpLevel() {
-        return null;
+    public OpLevel getOpLevel() {
+        return OpLevel.environment;
     }
 }
