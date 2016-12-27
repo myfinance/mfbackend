@@ -25,6 +25,8 @@ import org.ops4j.pax.cdi.api.OsgiService;
 import org.ops4j.pax.cdi.api.OsgiServiceProvider;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleReference;
+import org.osgi.service.component.annotations.Component;
+import org.osgi.service.component.annotations.Reference;
 import org.osgi.service.jdbc.DataSourceFactory;
 import org.osgi.service.jpa.EntityManagerFactoryBuilder;
 
@@ -40,11 +42,13 @@ import java.util.*;
 
 import static javax.persistence.spi.PersistenceUnitTransactionType.JTA;
 
-@OsgiServiceProvider(classes = {EntityManagerFactorySetup.class})
-@Singleton
+//@OsgiServiceProvider(classes = {EntityManagerFactorySetup.class})
+//@Singleton
+@Component(service = {EntityManagerFactorySetup.class})
 public class EntityManagerFactorySetupImpl implements EntityManagerFactorySetup {
 
-    @Inject
+    //@Inject
+    @Reference
     EntityManagerFactoryBuilder efb;
 
     //@Inject @OsgiService(filter = "(&(osgi.jdbc.driver.class=com.sybase.jdbc4.jdbc.SybDriver))" )
@@ -53,13 +57,16 @@ public class EntityManagerFactorySetupImpl implements EntityManagerFactorySetup 
     //@Inject @OsgiService(filter = "(&(osgi.jdbc.driver.class=oracle.jdbc.OracleDriver))" )
     DataSourceFactory oracleDataSourceFactory;
 
-    @Inject @OsgiService(filter = "(&(osgi.jdbc.driver.class=org.h2.Driver-pool-xa))" )
+    //@Inject @OsgiService(filter = "(&(osgi.jdbc.driver.class=org.h2.Driver-pool-xa))" )
+    @Reference(target = "(&(osgi.jdbc.driver.class=org.h2.Driver-pool-xa))" )
     DataSourceFactory h2Embedded;
 
-    @Inject @OsgiService(filter = "(&(osgi.jdbc.driver.class=org.postgresql.Driver-pool-xa))" )
+    //@Inject @OsgiService(filter = "(&(osgi.jdbc.driver.class=org.postgresql.Driver-pool-xa))" )
+    @Reference(target = "(&(osgi.jdbc.driver.class=org.postgresql.Driver-pool-xa))" )
     DataSourceFactory postgresDataSourceFactory;
 
-    @Inject @OsgiService
+    //@Inject @OsgiService
+    @Reference
     EnvironmentConfiguration configuration;
 
     private Map<String,Object> buildDBProperties(String persistenceUnit, Class<?>[] entities, ClassLoader[] classLoaders, String jdbcUrl, String user,

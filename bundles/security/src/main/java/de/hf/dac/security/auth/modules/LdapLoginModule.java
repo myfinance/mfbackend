@@ -130,6 +130,8 @@ public class LdapLoginModule extends BaseLoginModule {
     private Group roles = null;
     private Group permissions = null;
 
+    private Group[] roleSets;
+
     @Override
     public void initialize(Subject theSubject, CallbackHandler theCB, Map<String, ?> theSharedState, Map<String, ?> theOptions) {
 
@@ -270,6 +272,11 @@ public class LdapLoginModule extends BaseLoginModule {
     @Override
     protected Group[] getRoleSets() throws LoginException {
         return new Group[] { roles, permissions };
+    }
+
+    public void setRoleSets(Group[] roleSets) {
+        this.roles = roleSets[0];
+        this.permissions = roleSets[1];
     }
 
     private void addRole(String theRoleName) {
@@ -420,17 +427,31 @@ public class LdapLoginModule extends BaseLoginModule {
                 LOG.info("Authenticating user");
             }
 
-            String userDN = bindDNAuthentication(ctx, username, credential, baseDN, baseFilter, searchTimeLimit);
-
-            // Query for roles matching the role filter
-            SearchControls constraints = new SearchControls();
-            constraints.setSearchScope(searchScope);
-            constraints.setReturningAttributes(new String[0]);
-            constraints.setTimeLimit(searchTimeLimit);
-            if (debug) {
-                LOG.info("Querying roles");
+            // avoid userDN lookup by using cache
+            String userDN = LDAPCache.getCache(this.providerURL).getUserDn(username);
+            if (userDN == null) {
+                userDN = bindDNAuthentication(ctx, username, credential, baseDN, baseFilter, searchTimeLimit);
+                LDAPCache.getCache(this.providerURL).setUserDn(username, userDN);
             }
-            rolesSearch(ctx, constraints, username, userDN, recursion, 0);
+
+            // avoid role search ldap query
+            if (LDAPCache.getCache(this.providerURL).getUserRolesPermission(username) != null) {
+                setRoleSets(LDAPCache.getCache(this.providerURL).getUserRolesPermission(username));
+            } else {
+                // Query for roles matching the role filter
+                SearchControls constraints = new SearchControls();
+                constraints.setSearchScope(searchScope);
+                constraints.setReturningAttributes(new String[0]);
+                constraints.setTimeLimit(searchTimeLimit);
+                if (debug) {
+                    LOG.info("Querying roles");
+                }
+                rolesSearch(ctx, constraints, username, userDN, recursion, 0);
+                // cache results
+                if (getRoleSets()[0] != null && getRoleSets()[1] != null) {
+                    LDAPCache.getCache(this.providerURL).setUserRolesPermission(username, getRoleSets());
+                }
+            }
         } finally {
             if (ctx != null) {
                 ctx.close();

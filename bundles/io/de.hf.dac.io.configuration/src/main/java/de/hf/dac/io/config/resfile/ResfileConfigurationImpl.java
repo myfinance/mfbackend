@@ -19,6 +19,7 @@ package de.hf.dac.io.config.resfile;
 
 import de.hf.dac.api.io.env.EnvironmentConfiguration;
 import org.ops4j.pax.cdi.api.OsgiServiceProvider;
+import org.osgi.service.component.annotations.Component;
 
 import javax.inject.Singleton;
 import java.io.File;
@@ -32,8 +33,9 @@ import java.util.logging.Logger;
  * Environment Configuration based on Res Files located on
  * local file system.
  */
-@OsgiServiceProvider( classes = {EnvironmentConfiguration.class})
-@Singleton
+//@OsgiServiceProvider( classes = {EnvironmentConfiguration.class})
+//@Singleton
+@Component
 public class ResfileConfigurationImpl implements EnvironmentConfiguration {
 
     private static final Logger LOG = Logger.getLogger(ResfileConfigurationImpl.class.getName());

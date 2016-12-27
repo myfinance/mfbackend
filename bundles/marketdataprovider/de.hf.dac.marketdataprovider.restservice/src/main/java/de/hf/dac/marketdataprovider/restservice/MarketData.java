@@ -21,7 +21,9 @@ import de.hf.dac.marketdataprovider.restservice.marketdataresources.EnvironmentR
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
+import org.osgi.service.component.annotations.Component;
 
+import javax.inject.Named;
 import javax.inject.Singleton;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
@@ -31,7 +33,9 @@ import java.sql.SQLException;
 
 @Path("/marketdata")
 @Api(value = "marketdata")
-@Singleton
+//@Singleton
+@Component(service = MarketData.class, immediate = true)
+@Named
 public class MarketData extends TopLevelWithEnvironments{
 
     @Path("/environments/{envID}")

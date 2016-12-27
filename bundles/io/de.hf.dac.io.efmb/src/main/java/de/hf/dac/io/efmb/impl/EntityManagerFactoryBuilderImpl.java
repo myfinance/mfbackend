@@ -20,7 +20,13 @@ package de.hf.dac.io.efmb.impl;
 
 import org.ops4j.pax.cdi.api.OsgiService;
 import org.osgi.framework.Bundle;
+import org.osgi.framework.BundleContext;
 import org.osgi.framework.BundleReference;
+import org.osgi.framework.ServiceReference;
+import org.osgi.service.component.ComponentContext;
+import org.osgi.service.component.annotations.Activate;
+import org.osgi.service.component.annotations.Component;
+import org.osgi.service.component.annotations.Reference;
 import org.osgi.service.jpa.EntityManagerFactoryBuilder;
 
 import javax.inject.Inject;
@@ -35,7 +41,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 
-@Singleton
+//@Singleton
+@Component
 public class EntityManagerFactoryBuilderImpl implements EntityManagerFactoryBuilder {
     private static final String JAVAX_PERSISTENCE_JDBC_DRIVER = "javax.persistence.jdbc.driver";
     private static final String JAVAX_PERSISTENCE_JTA_DATASOURCE = "javax.persistence.jtaDataSource";
@@ -46,8 +53,17 @@ public class EntityManagerFactoryBuilderImpl implements EntityManagerFactoryBuil
     public static final String managedClassNames = "managedClassNames";
     public static final String persistenceUnitProperties = "persistenceUnitProperties";
 
-    @OsgiService
-    @Inject
+    @Activate
+    protected void activate(ComponentContext componentContext,
+        BundleContext bundleContext,
+        Map<String, ?> properties) {
+        final ServiceReference<PersistenceProvider> serviceReference = bundleContext.getServiceReference(PersistenceProvider.class);
+        provider = (PersistenceProvider) bundleContext.getService(serviceReference);
+    }
+
+    //@OsgiService
+    //@Inject
+    //@Reference
     private PersistenceProvider provider;
 
     public EntityManagerFactory createEntityManagerFactory(Map<String, Object> props) {

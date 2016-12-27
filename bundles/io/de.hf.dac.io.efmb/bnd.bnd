@@ -1,4 +1,5 @@
 -metatype: *
+-dsannotations : *
 Export-Package: \
   de.hf.dac.io.emfb
 

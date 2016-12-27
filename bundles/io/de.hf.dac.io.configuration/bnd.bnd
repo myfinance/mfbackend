@@ -1,4 +1,5 @@
 -metatype: *
+-dsannotations : *
 Bundle-SymbolicName: ${project.artifactId}
 Export-Package: \
   de.hf.dac.io.config, \

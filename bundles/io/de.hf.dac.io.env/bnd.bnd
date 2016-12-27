@@ -1,5 +1,8 @@
 -metatype: *
+-dsannotations : *
 Bundle-SymbolicName: ${project.artifactId}
+Bundle-ClassPath= .
+AnnotatedDomainClasses: ${classes;CONCRETE;ANNOTATION;javax.persistence.Entity}
 Export-Package: \
   de.hf.dac.io.env, \
   de.hf.dac.io.env.resfile

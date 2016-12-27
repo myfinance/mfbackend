@@ -20,13 +20,15 @@ package de.hf.dac.security.auth;
 import de.hf.dac.api.security.AuthorizationSubject;
 import de.hf.dac.api.security.SecurityService;
 import org.ops4j.pax.cdi.api.OsgiServiceProvider;
+import org.osgi.service.component.annotations.Component;
 
 import javax.inject.Singleton;
 import javax.security.auth.Subject;
 import java.security.AccessController;
 
-@OsgiServiceProvider(classes = { SecurityService.class })
-@Singleton
+//@OsgiServiceProvider(classes = { SecurityService.class })
+//@Singleton
+@Component
 public class SecurityServiceImpl implements SecurityService{
 
     @Override

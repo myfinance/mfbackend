@@ -26,6 +26,8 @@ import de.hf.dac.api.io.env.EnvironmentTargetInfo;
 import de.hf.dac.api.io.env.domain.DacEnvironmentConfiguration;
 import org.ops4j.pax.cdi.api.OsgiService;
 import org.ops4j.pax.cdi.api.OsgiServiceProvider;
+import org.osgi.service.component.annotations.Component;
+import org.osgi.service.component.annotations.Reference;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -39,18 +41,21 @@ import java.util.Properties;
 import java.util.Set;
 import java.util.logging.Logger;
 
-@OsgiServiceProvider(classes = { EnvironmentService.class })
-@Singleton
+//@OsgiServiceProvider(classes = { EnvironmentService.class })
+//@Singleton
+@Component
 public class EnvironmentServiceImpl implements EnvironmentService {
 
     private static final Logger LOG = Logger.getLogger(EnvironmentServiceImpl.class.getName());
 
-    @Inject
-    @OsgiService
+    //@Inject
+    //@OsgiService
+    @Reference
     EnvironmentConfiguration configuration;
 
-    @Inject
-    @OsgiService
+    //@Inject
+    //@OsgiService
+    @Reference
     EntityManagerFactorySetup emfb;
 
     private EnvironmentDAO environmentDAO;

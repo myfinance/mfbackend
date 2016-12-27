@@ -27,9 +27,9 @@
         <pax-cdi-api.version>0.12.0</pax-cdi-api.version>
         <jpa-api2.1.version>1.0.0.Final</jpa-api2.1.version><!-- jpa-api, the implementation is provided by the app-server like JBoss or SpringBoot-->
         <hibernate.version>5.2.2.Final</hibernate.version>
-        <karaf.version>4.0.6</karaf.version>
+        <karaf.version>4.0.8</karaf.version>
         <pax-jdbc.version>0.9.0</pax-jdbc.version><!--feature to create Datasources -->
-        <apache-cxf.version>3.1.7</apache-cxf.version><!-- rest für osgi -->
+        <apache-cxf.version>3.1.9</apache-cxf.version><!-- rest für osgi -->
         <junit.version>4.12</junit.version>
 
         <spring.version>4.2.6.RELEASE_1</spring.version>
@@ -45,6 +45,7 @@
         <osgi-cmpn.version>6.0.0</osgi-cmpn.version>
         <rs-api.version>2.0.1</rs-api.version>
         <swagger.version>1.5.10</swagger.version>
+        <cxf-dosgi.version>2.0.0</cxf-dosgi.version>
 
 
 
@@ -218,7 +219,6 @@
                 <groupId>org.osgi</groupId>
                 <artifactId>osgi.cmpn</artifactId>
                 <version>${osgi-cmpn.version}</version>
-                <scope>provided</scope>
             </dependency>
 
             <dependency>

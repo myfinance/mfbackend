@@ -17,6 +17,7 @@
 
 package de.hf.dac.marketdataprovider.restservice;
 
+import javax.inject.Named;
 import javax.inject.Singleton;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
@@ -29,13 +30,16 @@ import de.hf.dac.marketdataprovider.api.domain.Product;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
+import org.osgi.service.component.annotations.Component;
 
 import java.sql.SQLException;
 import java.util.List;
 
 @Path("/hello")
 @Api(value = "hello")
-@Singleton
+//@Singleton
+@Component(service = MyHello.class, immediate = true)
+@Named
 public class MyHello extends TopLevelWithEnvironments{
 
     @GET

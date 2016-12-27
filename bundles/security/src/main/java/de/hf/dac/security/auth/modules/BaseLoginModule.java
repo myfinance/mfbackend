@@ -75,6 +75,7 @@ public abstract class BaseLoginModule implements LoginModule {
 
     protected static final String CONTEXT_LOGIN_NAME = "javax.security.auth.login.name";
     protected static final String CONTEXT_LOGIN_PASSWORD = "javax.security.auth.login.password";
+    private static final String PROVIDER_URL = "java.naming.provider.url";
 
     //the default user if the authorisation is deactivated
     protected static final String NO_AUTHENTIFICATION_USER = "admin";
@@ -85,6 +86,7 @@ public abstract class BaseLoginModule implements LoginModule {
     protected Map<String, ?> options;
     protected boolean loginSuccess;
     protected boolean isAuthActive = true;
+    protected String providerURL;
 
     private String principalClassName;
     private boolean useFirstPass;
@@ -97,6 +99,7 @@ public abstract class BaseLoginModule implements LoginModule {
     public void initialize(Subject theSubject, CallbackHandler theCB, Map<String, ?> theSharedState, Map<String, ?> theOptions) {
         //EnvironmentConfiguration is not injected via blueprint because it is not working. A timing issue?! it runs with declarative services maybe?
         serviceByInterface = OSGIServiceLookup.getServiceByInterface(EnvironmentConfiguration.class);
+        this.providerURL = (String) theOptions.get(PROVIDER_URL);
         assert (serviceByInterface != null);
         isAuthActive=serviceByInterface.getString("LDAP", "auth.ldap.active").toLowerCase().equals("true");
         this.subject = theSubject;
@@ -210,8 +213,6 @@ public abstract class BaseLoginModule implements LoginModule {
         // remove the user identity
         Principal identity = getIdentity();
         subject.getPrincipals().remove(identity);
-        // TODO: remove any added groups...
-
         return true;
     }
 
