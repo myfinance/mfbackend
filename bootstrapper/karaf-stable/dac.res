@@ -12,7 +12,7 @@ H2DEV=jdbc:h2:file:./h2dev;AUTO_SERVER=TRUE,sa,sa,org.h2.Driver
 POOL_SIZE=20
 
 [LDAP]
-auth.ldap.active = false
+auth.ldap.active = true
 auth.ldap.url = ldap://dzag.vrnet
 auth.ldap.baseCtxDN = ou=Accounts,dc=dzag,dc=vrnet
 auth.ldap.rolesCtxDN = ou=Accounts,dc=dzag,dc=vrnet

@@ -6,7 +6,7 @@
  *
  *  Project     : dac
  *
- *  File        : EnvironmentResource.java
+ *  File        : EnvironmentResourceImpl.java
  *
  *  Author(s)   : xn01598
  *
@@ -22,6 +22,7 @@ import de.hf.dac.marketdataprovider.api.application.MarketDataEnvironment;
 import de.hf.dac.marketdataprovider.api.application.OpLevel;
 import de.hf.dac.marketdataprovider.api.application.OpType;
 import de.hf.dac.marketdataprovider.api.domain.Instrument;
+import de.hf.dac.marketdataprovider.api.restservice.EnvironmentResource;
 import de.hf.dac.security.restauthorization.SecuredResource;
 import io.swagger.annotations.ApiOperation;
 
@@ -31,11 +32,11 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import java.util.List;
 
-public class EnvironmentResource extends SecuredResource<OpType,OpLevel> {
+public class EnvironmentResourceImpl extends SecuredResource<OpType,OpLevel> implements EnvironmentResource {
 
     MarketDataEnvironment marketDataEnvironment;
 
-    public EnvironmentResource(AuthorizationSubject authorization, MarketDataEnvironment marketDataEnvironment) {
+    public EnvironmentResourceImpl(AuthorizationSubject authorization, MarketDataEnvironment marketDataEnvironment) {
         super(authorization, marketDataEnvironment);
         this.marketDataEnvironment = marketDataEnvironment;
     }

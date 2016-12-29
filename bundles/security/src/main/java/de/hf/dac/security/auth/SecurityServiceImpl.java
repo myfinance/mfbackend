@@ -26,9 +26,7 @@ import javax.inject.Singleton;
 import javax.security.auth.Subject;
 import java.security.AccessController;
 
-//@OsgiServiceProvider(classes = { SecurityService.class })
-//@Singleton
-@Component
+@Component(service = SecurityService.class)
 public class SecurityServiceImpl implements SecurityService{
 
     @Override

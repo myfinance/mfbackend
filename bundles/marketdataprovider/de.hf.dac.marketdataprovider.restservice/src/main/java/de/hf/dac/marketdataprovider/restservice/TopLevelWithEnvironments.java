@@ -17,16 +17,12 @@
 
 package de.hf.dac.marketdataprovider.restservice;
 
-import de.hf.dac.api.io.env.EnvironmentService;
 import de.hf.dac.api.security.AuthorizationSubject;
 import de.hf.dac.api.security.SecurityService;
 import de.hf.dac.marketdataprovider.api.application.MarketDataEnvironment;
 import de.hf.dac.marketdataprovider.api.application.MarketDataEnvironmentBuilder;
 import io.swagger.annotations.ApiOperation;
-import org.ops4j.pax.cdi.api.OsgiService;
-import org.osgi.service.component.annotations.Reference;
 
-import javax.inject.Inject;
 import javax.security.auth.Subject;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
@@ -38,18 +34,21 @@ import java.util.List;
 
 public abstract class TopLevelWithEnvironments {
 
-    //@Inject
-    //@OsgiService
-    @Reference
-    private MarketDataEnvironmentBuilder marketDataEnvironmentBuilder;
+    protected MarketDataEnvironmentBuilder marketDataEnvironmentBuilder;
+    //we need this abstract method to override this with Reference Annotation in the Component because we can not Reference in abstract classes
+    public abstract void setMarketDataEnvironmentBuilder(MarketDataEnvironmentBuilder marketDataEnvironmentBuilder);
 
     protected MarketDataEnvironment getMarketDataEnvironment(String env) throws SQLException {
         return marketDataEnvironmentBuilder.build(env);
     }
 
-    @Inject
-    @OsgiService
-    SecurityService securityService;
+    protected SecurityService securityService;
+
+    public abstract void setSecurityService(SecurityService securityService);
+
+    protected AuthorizationSubject getAuthorization() {
+        return securityService.getAuthorizationSubject(Subject.getSubject(AccessController.getContext()));
+    }
 
     @GET
     @Path("/getEnvironments")
@@ -61,7 +60,4 @@ public abstract class TopLevelWithEnvironments {
         return marketDataEnvironmentBuilder.getInfo();
     }
 
-    protected AuthorizationSubject getAuthorization() {
-        return securityService.getAuthorizationSubject(Subject.getSubject(AccessController.getContext()));
-    }
 }

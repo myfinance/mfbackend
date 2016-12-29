@@ -21,21 +21,16 @@ import de.hf.dac.api.io.env.context.ApplicationContext;
 import de.hf.dac.marketdataprovider.api.application.MarketDataEnvironment;
 import de.hf.dac.marketdataprovider.api.application.MarketDataEnvironmentBuilder;
 import de.hf.dac.marketdataprovider.api.application.MarketDataEnvironmentContextBuilder;
-import org.ops4j.pax.cdi.api.OsgiServiceProvider;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
 
-import javax.inject.Inject;
-import javax.inject.Singleton;
+
 import java.sql.SQLException;
 import java.util.List;
 
-//@OsgiServiceProvider(classes = { MarketDataEnvironmentBuilder.class })
-//@Singleton
 @Component(service = {MarketDataEnvironmentBuilder.class})
 public class MarketDataEnvironmentBuilderImpl implements MarketDataEnvironmentBuilder {
 
-    //@Inject
     @Reference
     MarketDataEnvironmentContextBuilder contextBuilder;
 

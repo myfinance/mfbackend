@@ -46,6 +46,7 @@ import javax.security.auth.spi.LoginModule;
 
 import org.apache.karaf.jaas.boot.principal.GroupPrincipal;
 import org.apache.karaf.jaas.boot.principal.RolePrincipal;
+import org.apache.karaf.jaas.modules.AbstractKarafLoginModule;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -69,7 +70,7 @@ import org.slf4j.LoggerFactory;
  * </ul>
  *
  */
-public abstract class BaseLoginModule implements LoginModule {
+public abstract class BaseLoginModule extends AbstractKarafLoginModule implements LoginModule {
     public static final String WHAT = "$Id$";
     private static final Logger LOG = LoggerFactory.getLogger(BaseLoginModule.class);
 
