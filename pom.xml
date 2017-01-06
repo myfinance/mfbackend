@@ -43,10 +43,13 @@
         <guice.version>4.1.0</guice.version>
         <guava.version>19.0</guava.version> <!--von guice benötigt-->
         <osgi-cmpn.version>6.0.0</osgi-cmpn.version>
+
+        <!--rest-->
         <rs-api.version>2.0.1</rs-api.version>
         <swagger.version>1.5.10</swagger.version>
-        <cxf-dosgi.version>2.0.0</cxf-dosgi.version>
-
+        <jackson.version>2.8.5</jackson.version>
+        <snakeyaml.version>1.17</snakeyaml.version>
+        <aries.rsa.version>1.9.0</aries.rsa.version>
 
 
     </properties>
@@ -262,6 +265,46 @@
                 <artifactId>org.apache.karaf.jaas.modules</artifactId>
                 <version>${karaf.version}</version>
             </dependency>
+
+            <!-- rest -->
+
+            <dependency>
+                <groupId>javax.servlet</groupId>
+                <artifactId>javax.servlet-api</artifactId>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.cxf</groupId>
+                <artifactId>cxf-core</artifactId>
+                <version>${apache-cxf.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.cxf</groupId>
+                <artifactId>cxf-rt-frontend-jaxrs</artifactId>
+                <version>${apache-cxf.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.cxf</groupId>
+                <artifactId>cxf-rt-rs-service-description-swagger</artifactId>
+                <version>${apache-cxf.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.cxf</groupId>
+                <artifactId>cxf-rt-rs-security-cors</artifactId>
+                <version>${apache-cxf.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.fasterxml.jackson.core</groupId>
+                <artifactId>jackson-annotations</artifactId>
+                <version>${jackson.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.fasterxml.jackson.jaxrs</groupId>
+                <artifactId>jackson-jaxrs-json-provider</artifactId>
+                <version>${jackson.version}</version>
+            </dependency>
+
+            <!-- rest ende -->
 
 
             <!--Apache Options für Optionparser in Common -->

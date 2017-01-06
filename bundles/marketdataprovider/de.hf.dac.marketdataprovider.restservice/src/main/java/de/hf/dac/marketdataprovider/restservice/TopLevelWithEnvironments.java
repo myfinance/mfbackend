@@ -22,6 +22,9 @@ import de.hf.dac.api.security.SecurityService;
 import de.hf.dac.marketdataprovider.api.application.MarketDataEnvironment;
 import de.hf.dac.marketdataprovider.api.application.MarketDataEnvironmentBuilder;
 import io.swagger.annotations.ApiOperation;
+import org.osgi.framework.BundleContext;
+import org.osgi.framework.FrameworkUtil;
+import org.osgi.framework.ServiceReference;
 
 import javax.security.auth.Subject;
 import javax.ws.rs.GET;
@@ -34,19 +37,31 @@ import java.util.List;
 
 public abstract class TopLevelWithEnvironments {
 
-    protected MarketDataEnvironmentBuilder marketDataEnvironmentBuilder;
-    //we need this abstract method to override this with Reference Annotation in the Component because we can not Reference in abstract classes
-    public abstract void setMarketDataEnvironmentBuilder(MarketDataEnvironmentBuilder marketDataEnvironmentBuilder);
+    protected MarketDataEnvironmentBuilder getMarketDataEnvironmentBuilder() throws SQLException {
+        final BundleContext bundleContext = FrameworkUtil.getBundle(this.getClass()).getBundleContext();
 
-    protected MarketDataEnvironment getMarketDataEnvironment(String env) throws SQLException {
-        return marketDataEnvironmentBuilder.build(env);
+        ServiceReference<MarketDataEnvironmentBuilder> sr = bundleContext.getServiceReference(MarketDataEnvironmentBuilder.class);
+
+        return bundleContext.getService(sr);
     }
 
-    protected SecurityService securityService;
+    protected MarketDataEnvironment getMarketDataEnvironment(String env) throws SQLException {
+        final BundleContext bundleContext = FrameworkUtil.getBundle(this.getClass()).getBundleContext();
 
-    public abstract void setSecurityService(SecurityService securityService);
+        ServiceReference<MarketDataEnvironmentBuilder> sr = bundleContext.getServiceReference(MarketDataEnvironmentBuilder.class);
+
+        MarketDataEnvironmentBuilder marketDataEnvironmentBuilder = bundleContext.getService(sr);
+
+        return getMarketDataEnvironmentBuilder().build(env);
+    }
+
 
     protected AuthorizationSubject getAuthorization() {
+        final BundleContext bundleContext = FrameworkUtil.getBundle(this.getClass()).getBundleContext();
+        ServiceReference<SecurityService> sr = bundleContext.getServiceReference(SecurityService.class);
+
+        SecurityService securityService = bundleContext.getService(sr);
+
         return securityService.getAuthorizationSubject(Subject.getSubject(AccessController.getContext()));
     }
 
@@ -55,9 +70,9 @@ public abstract class TopLevelWithEnvironments {
     @Produces(MediaType.APPLICATION_JSON)
     @ApiOperation(value = "List Environments",
         response = List.class)
-    public List<String> getEnvironments() {
+    public List<String> getEnvironments() throws SQLException{
 
-        return marketDataEnvironmentBuilder.getInfo();
+        return getMarketDataEnvironmentBuilder().getInfo();
     }
 
 }

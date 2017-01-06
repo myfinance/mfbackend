@@ -12,6 +12,39 @@
     <dependencies>
 
         <dependency>
+            <groupId>javax.servlet</groupId>
+            <artifactId>javax.servlet-api</artifactId>
+            <version>3.1.0</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.cxf</groupId>
+            <artifactId>cxf-core</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.cxf</groupId>
+            <artifactId>cxf-rt-frontend-jaxrs</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.cxf</groupId>
+            <artifactId>cxf-rt-rs-service-description-swagger</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.cxf</groupId>
+            <artifactId>cxf-rt-rs-security-cors</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>com.fasterxml.jackson.jaxrs</groupId>
+            <artifactId>jackson-jaxrs-json-provider</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.httpcomponents</groupId>
+            <artifactId>httpcore-osgi</artifactId>
+            <scope>provided</scope>
+            <version>4.4.5</version>
+        </dependency>
+
+        <dependency>
             <groupId>javax.ws.rs</groupId>
             <artifactId>javax.ws.rs-api</artifactId>
             <scope>provided</scope>
@@ -53,35 +86,7 @@
         </dependency>
 
     </dependencies>
-  <!--  <build>
-<plugins>
-    <plugin>
-        <groupId>org.apache.aries.blueprint</groupId>
-        <artifactId>blueprint-maven-plugin</artifactId>
-        <version>1.4.0</version>
-        <executions>
-            <execution>
-                <goals>
-                    <goal>blueprint-generate</goal>
-                </goals>
 
-            </execution>
-        </executions>
-        <configuration>
-            <scanPaths>
-                <scanPath>${scanPath}</scanPath>
-            </scanPaths>
-        </configuration>
-        <dependencies>
-            <dependency>
-                <groupId>org.apache.xbean</groupId>
-                <artifactId>xbean-finder-shaded</artifactId>
-                <version>4.5</version>
-            </dependency>
-        </dependencies>
-    </plugin>
-</plugins>
-    </build>-->
 
 
 </project>

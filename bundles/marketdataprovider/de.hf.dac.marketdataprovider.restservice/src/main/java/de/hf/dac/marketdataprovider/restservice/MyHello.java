@@ -39,11 +39,6 @@ import org.osgi.service.component.annotations.Reference;
 import java.sql.SQLException;
 import java.util.List;
 
-@Component(service = Hello.class, immediate = true, property={"service.exported.interfaces=*",
-    "service.exported.configs=org.apache.cxf.rs",
-    "org.apache.cxf.rs.address=/rest/hello"})
-//@Component(service = Hello.class, immediate = true)
-@Named
 public class MyHello  extends TopLevelWithEnvironments implements Hello{
 
     public String getHello() {
@@ -89,17 +84,5 @@ public class MyHello  extends TopLevelWithEnvironments implements Hello{
             e.printStackTrace();
             return "error";
         }
-    }
-
-    @Override
-    @Reference
-    public void setMarketDataEnvironmentBuilder(MarketDataEnvironmentBuilder marketDataEnvironmentBuilder) {
-        this.marketDataEnvironmentBuilder = marketDataEnvironmentBuilder;
-    }
-
-    @Override
-    @Reference
-    public void setSecurityService(SecurityService securityService) {
-        this.securityService=securityService;
     }
 }

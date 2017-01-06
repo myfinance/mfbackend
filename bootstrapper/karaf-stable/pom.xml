@@ -34,6 +34,13 @@
             <scope>runtime</scope>
             <classifier>features</classifier>
         </dependency>
+        <!--<dependency>
+            <groupId>org.apache.aries.rsa</groupId>
+            <artifactId>rsa-features</artifactId>
+            <version>${aries.rsa.version}</version>
+            <type>xml</type>
+            <classifier>features</classifier>
+        </dependency>-->
     </dependencies>
 
     <build>
