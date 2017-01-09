@@ -109,8 +109,8 @@ public abstract class BaseSecurityProviderImpl<
 
         EntityManager em = getEMFactory().createEntityManager();
         ////em.getTransaction().begin();
-        Query query = em.createQuery("SELECT DISTINCT(c.resource) FROM " + getTableName() + " c WHERE c.system = :system ");
-        query.setParameter("system", system);
+        Query query = em.createQuery("SELECT DISTINCT(c.resource) FROM " + getTableName() + " c WHERE c.restApp = :restApp ");
+        query.setParameter("restApp", system);
 
         List<String> ol = query.getResultList();
         for(String o : ol) {
@@ -182,16 +182,16 @@ public abstract class BaseSecurityProviderImpl<
         EntityManager em = getEMFactory().createEntityManager();
         Query query = em.createQuery("SELECT c FROM " + getTableName() + " c WHERE " +
             "c.resource = :resource and " +
-            "c.system = :system and " +
-            "c.opType = :opType ");
-        query.setParameter("opType", opType.toString());
+            "c.restApp = :restApp and " +
+            "c.restOpType = :restOpType ");
+        query.setParameter("restOpType", opType.toString());
         query.setParameter("resource", opLevel.toString());
-        query.setParameter("system", system);
+        query.setParameter("restApp", system);
         //EntityTransaction et =  //em.getTransaction();
         //et.begin();;
         List<AuthorizationEntry> ol = query.getResultList();
         for(AuthorizationEntry o : ol) {
-            ret.add(new AuthMatcherImpl(o.getIdPattern(),
+            ret.add(new AuthMatcherImpl(o.getRestIdPattern(),
                 o.listOperations(),
                 o.listPermissions(),
                 o.listUsers() ,

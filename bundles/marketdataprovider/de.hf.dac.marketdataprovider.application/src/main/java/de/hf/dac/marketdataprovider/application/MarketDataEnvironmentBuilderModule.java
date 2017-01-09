@@ -40,6 +40,7 @@ import de.hf.dac.security.restauthorization.domain.RestAuthorization;
 
 import javax.persistence.EntityManagerFactory;
 import javax.transaction.TransactionManager;
+import java.util.Properties;
 
 /**
  * Provides the application context of marketdataprovider
@@ -79,6 +80,10 @@ public class MarketDataEnvironmentBuilderModule  extends AbstractModule {
     EntityManagerFactory provideMdbEntityManagerFactory() {
         EnvironmentTargetInfo marketDataTargetInfo = envService.getTarget(env, EnvTarget.MDB);
         DatabaseInfo dbi = (DatabaseInfo) marketDataTargetInfo.getTargetDetails();
+        //// TODO: 09.01.2017 die extra hibernate properties sollten aus dertabelle dacenvironmentconfiguration gelesen werden
+        /*Properties extraHibernateProperties = new Properties();
+        extraHibernateProperties.put("hibernate.hbm2ddl.auto", "create-drop");
+        dbi.setExtraHibernateProperties(extraHibernateProperties);*/
         WrappedEntityManagerFactory emf = null;
         try {
             emf = new WrappedEntityManagerFactory(jtaManager, emfb.buildEntityManagerFactory(EnvTarget.MDB, new ClassLoader[] {Product.class.getClassLoader()}, dbi));

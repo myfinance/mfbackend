@@ -34,20 +34,20 @@ import java.util.Objects;
 public class RestAuthorization  implements java.io.Serializable, AuthorizationEntry {
 
     @Id
-    @Column(name = "system", nullable = false,length = 25)
-    private String system;
+    @Column(name = "restApp", nullable = false,length = 25)
+    private String restApp;
 
     @Id
     @Column(name = "resource", nullable = false,length = 25)
     private String resource;
 
     @Id
-    @Column(name = "idPattern", nullable = false,length = 50)
-    private String idPattern;
+    @Column(name = "restIdPattern", nullable = false,length = 50)
+    private String restIdPattern;
 
     @Id
-    @Column(name = "opType", nullable = false,length = 10)
-    private String opType;
+    @Column(name = "restOpType", nullable = false,length = 10)
+    private String restOpType;
 
     @Column(name = "permissions", nullable = false,length = 200)
     private String permissions;
@@ -72,12 +72,12 @@ public class RestAuthorization  implements java.io.Serializable, AuthorizationEn
     }
 
     @Override
-    public String getIdPattern() {
-        return idPattern;
+    public String getRestIdPattern() {
+        return restIdPattern;
     }
 
-    public String getOpType() {
-        return opType;
+    public String getRestOpType() {
+        return restOpType;
     }
 
     public String getPermissions() {
@@ -102,8 +102,8 @@ public class RestAuthorization  implements java.io.Serializable, AuthorizationEn
         if (!(o instanceof RestAuthorization)) return false;
         RestAuthorization that = (RestAuthorization) o;
         return Objects.equals(getResource(), that.getResource()) &&
-            Objects.equals(getIdPattern(), that.getIdPattern()) &&
-            Objects.equals(getOpType(), that.getOpType()) &&
+            Objects.equals(getRestIdPattern(), that.getRestIdPattern()) &&
+            Objects.equals(getRestOpType(), that.getRestOpType()) &&
             Objects.equals(getPermissions(), that.getPermissions()) &&
             Objects.equals(getUsers(), that.getUsers()) &&
             Objects.equals(getDescription(), that.getDescription()) &&
@@ -112,7 +112,7 @@ public class RestAuthorization  implements java.io.Serializable, AuthorizationEn
 
     @Override
     public int hashCode() {
-        return Objects.hash(getResource(), getIdPattern(), getOpType(), getPermissions(), getDescription(), getOperations());
+        return Objects.hash(getResource(), getRestIdPattern(), getRestOpType(), getPermissions(), getDescription(), getOperations());
     }
 
     @Override

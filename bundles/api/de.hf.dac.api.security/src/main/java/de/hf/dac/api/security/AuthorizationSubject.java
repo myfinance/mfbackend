@@ -28,6 +28,8 @@ public interface AuthorizationSubject {
 
     List<String> getRoles();
 
+    List<String> getInternalRoles();
+
     DacPrincipal getPrincipal();
 
 }

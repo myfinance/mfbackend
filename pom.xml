@@ -41,7 +41,8 @@
         <felix-commands.version>0.4.0</felix-commands.version>
         <karaf-shell.version>4.0.6</karaf-shell.version>
         <guice.version>4.1.0</guice.version>
-        <guava.version>19.0</guava.version> <!--von guice benötigt-->
+        <guava.version>19.0</guava.version> <!--von guice benötigt in version > 19-->
+        <guava-swagger.version>18.0</guava-swagger.version> <!--von swagger in version 18 benötigt-->
         <osgi-cmpn.version>6.0.0</osgi-cmpn.version>
 
         <!--rest-->
@@ -50,6 +51,7 @@
         <jackson.version>2.8.5</jackson.version>
         <snakeyaml.version>1.17</snakeyaml.version>
         <aries.rsa.version>1.9.0</aries.rsa.version>
+        <gson.version>2.7</gson.version>
 
 
     </properties>

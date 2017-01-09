@@ -23,5 +23,6 @@ role.ldap.credentials = eigen310511
 role.ldap.url = ldap://dfvvpldps1.dzbank.vrnet:389
 role.ldap.baseCtxDN = ou=People,dc=dzbank,dc=vrnet
 role.ldap.rolesCtxDN = ou=Rollen,ou=Test,ou=PoET,ou=Eigenentwicklungen,ou=Anwendungen,dc=dzbank,dc=vrnet
+#to map the persions from the ldap to internal roles. for karaf admin and view are necessary
 role.mappings = poetStatus=admin,poetView=viewer
 role.userAttributes = sn,givenName,mail,dzdepartment,dzkst,cn,dzuid,dzanrede,dzarbeitsplatz,dzani,dzbereich,dzfaxNumber,dztelNumber,dzlokkurz,dzraum,dzetage,dzgebaeude,dzpnrleit,l,dzkstdn,dzksthierarchy,dzdepartmentlong,dzgeschlecht,initials,employeeNumber,uid

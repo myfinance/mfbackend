@@ -21,7 +21,7 @@ import javax.persistence.Transient;
 import java.util.List;
 
 public interface AuthorizationEntry {
-    String getIdPattern();
+    String getRestIdPattern();
 
     String getDescription();
 

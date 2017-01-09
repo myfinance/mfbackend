@@ -35,6 +35,7 @@ import java.util.List;
 public class EnvironmentResourceImpl extends SecuredResource<OpType,OpLevel> implements EnvironmentResource {
 
     MarketDataEnvironment marketDataEnvironment;
+    final String OPERATIONID="environment";
 
     public EnvironmentResourceImpl(AuthorizationSubject authorization, MarketDataEnvironment marketDataEnvironment) {
         super(authorization, marketDataEnvironment);
@@ -47,7 +48,7 @@ public class EnvironmentResourceImpl extends SecuredResource<OpType,OpLevel> imp
     @ApiOperation(value = "get Instruments",
         response = List.class)
     public List<Instrument> getInstruments() {
-        checkOperationAllowed(OpType.READ, marketDataEnvironment.getId());
+        checkOperationAllowed(OpType.READ, OPERATIONID);
         checkPassthroughAllowed();
         List<Instrument> returnvalue = marketDataEnvironment.getInstrumentService().listInstruments();
         return returnvalue;

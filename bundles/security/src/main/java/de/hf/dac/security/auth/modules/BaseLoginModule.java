@@ -183,12 +183,12 @@ public abstract class BaseLoginModule extends AbstractKarafLoginModule implement
                     subjectGroup.addMember(role);
                     if(this.roleMappings!=null) {
                         if (i == 1) { // Roles are Groups
-                            plainRoleRightPrincipals.add(new GroupPrincipal(role.getName()));
+                            //plainRoleRightPrincipals.add(new GroupPrincipal(role.getName()));
                             if (this.roleMappings.containsKey(role.getName())) {
                                 plainRoleRightPrincipals.add(new RolePrincipal(this.roleMappings.get(role.getName())));
                             }
                         } else { // Permissions are Roles
-                            plainRoleRightPrincipals.add(new RolePrincipal(role.getName()));
+                            //plainRoleRightPrincipals.add(new RolePrincipal(role.getName()));
                             if (this.roleMappings.containsKey(role.getName())) {
                                 plainRoleRightPrincipals.add(new RolePrincipal(this.roleMappings.get(role.getName())));
                             }

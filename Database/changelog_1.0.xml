@@ -34,16 +34,16 @@
     </changeSet>
     <changeSet id="1.0.2" author="hf">
         <createTable tableName="restauthorization">
-            <column name="system" type="VARCHAR(25)">
+            <column name="restApp" type="VARCHAR(25)">
                 <constraints nullable="false"/>
             </column>
             <column name="resource" type="VARCHAR(25)">
                 <constraints nullable="false"/>
             </column>
-            <column name="opType" type="VARCHAR(10)">
+            <column name="operationType" type="VARCHAR(10)">
                 <constraints nullable="false"/>
             </column>
-            <column name="idPattern" type="VARCHAR(50)">
+            <column name="restIdPattern" type="VARCHAR(50)">
                 <constraints nullable="false"/>
             </column>
             <column name="permissions" type="VARCHAR(200)">
@@ -60,7 +60,7 @@
             </column>
 
         </createTable>
-        <addPrimaryKey columnNames="system, resource, idPattern, opType, operations"
+        <addPrimaryKey columnNames="restApp, resource, restIdPattern, restOpType, operations"
                        constraintName="pk_restauth"
                        tableName="restauthorization"/>
     </changeSet>
