@@ -1,7 +1,5 @@
 -dsannotations : *
 -metatype: *
-Export-Package: de.hf.dac.marketdataprovider.restservice, \
-    de.hf.dac.marketdataprovider.restservice.security
 Bundle-SymbolicName: ${project.artifactId}
 Import-Package: \
     javax.ws.rs,\

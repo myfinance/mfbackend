@@ -51,7 +51,7 @@ public class RESTApplication {
         JAXRSServerFactoryBean sf = new JAXRSServerFactoryBean();
         sf.setResourceClasses(
             MyHello.class,
-            MarketDataImpl.class);
+            MarketData.class);
         sf.setResourceProvider(this.getClass(), new SingletonResourceProvider(this));
         sf.setAddress(RESTApplicationConfiguration.serverAddress());
         sf.setProvider(new JacksonJsonProvider());
@@ -76,6 +76,7 @@ public class RESTApplication {
             swagger2Feature.setTitle(RESTApplicationConfiguration.swaggerTitle());
             swagger2Feature.setContact(RESTApplicationConfiguration.swaggerContact());
             swagger2Feature.setVersion(RESTApplicationConfiguration.swaggerVersion());
+            swagger2Feature.setScan(false);
             sf.getFeatures().add(swagger2Feature);
         }
         {

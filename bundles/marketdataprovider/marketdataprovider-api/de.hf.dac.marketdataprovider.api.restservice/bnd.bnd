@@ -1,6 +1,0 @@
--metatype: *
--dsannotations : *
-Export-Package: \
-	de.hf.dac.marketdataprovider.api.restservice
-
-Bundle-SymbolicName: ${project.artifactId}
