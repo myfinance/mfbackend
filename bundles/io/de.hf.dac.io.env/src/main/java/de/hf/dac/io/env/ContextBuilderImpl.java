@@ -28,8 +28,6 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
-//@OsgiServiceProvider(classes = { ContextBuilder.class })
-//@Singleton
 @Component
 public class ContextBuilderImpl implements ContextBuilder {
 

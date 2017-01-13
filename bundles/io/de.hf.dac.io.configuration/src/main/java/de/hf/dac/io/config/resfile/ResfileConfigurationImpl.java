@@ -19,11 +19,19 @@ package de.hf.dac.io.config.resfile;
 
 import de.hf.dac.api.io.env.EnvironmentConfiguration;
 import org.ops4j.pax.cdi.api.OsgiServiceProvider;
+import org.osgi.framework.BundleContext;
+import org.osgi.framework.FrameworkUtil;
+import org.osgi.framework.ServiceReference;
+import org.osgi.service.cm.Configuration;
+import org.osgi.service.cm.ConfigurationAdmin;
 import org.osgi.service.component.annotations.Component;
 
 import javax.inject.Singleton;
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Dictionary;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
@@ -33,12 +41,14 @@ import java.util.logging.Logger;
  * Environment Configuration based on Res Files located on
  * local file system.
  */
-//@OsgiServiceProvider( classes = {EnvironmentConfiguration.class})
-//@Singleton
 @Component
 public class ResfileConfigurationImpl implements EnvironmentConfiguration {
 
     private static final Logger LOG = Logger.getLogger(ResfileConfigurationImpl.class.getName());
+
+    private static final String OSGICMPIDS_CONFIGROOTSECTION = "CM_CONFIG";
+    private static final String OSGICMPIDS_SECTIONPREFIX = "CMPID_";
+    private static final String OSGICMPIDS_PIDSKEY = "pids";
 
     private ResFileParser resFileParser = new ResFileParser();
 
@@ -62,15 +72,63 @@ public class ResfileConfigurationImpl implements EnvironmentConfiguration {
     public ResfileConfigurationImpl(ResFileParser parser) {
         this.resFileParser = parser;
         searchResFiles();
+
+        Map<String,Properties> props = buildOSGiCMProperties();
+        updateConfigurationAdmin(props);
     }
 
     public ResfileConfigurationImpl() {
         searchResFiles();
+
+        Map<String,Properties> props = buildOSGiCMProperties();
+        updateConfigurationAdmin(props);
     }
 
     protected void searchResFiles() {
         for (ResFileLocation resFileLocation : resFileSearchOrder) {
             parseResFile(resFileLocation);
+        }
+    }
+
+    private Map<String, Properties> buildOSGiCMProperties() {
+        Map<String, Properties> propertyMap = new HashMap<>();
+        if(this.getProperties(OSGICMPIDS_CONFIGROOTSECTION) == null || this.getProperties(OSGICMPIDS_CONFIGROOTSECTION).getProperty("pids") == null ) {
+            return propertyMap;
+        }
+
+        final String[] pids = this.getProperties(OSGICMPIDS_CONFIGROOTSECTION).getProperty(OSGICMPIDS_PIDSKEY).split(",");
+
+        for(String pid : pids) {
+            final String section = OSGICMPIDS_SECTIONPREFIX + pid;
+            propertyMap.put(pid,getProperties(section));
+        }
+
+        return propertyMap;
+    }
+
+    private void updateConfigurationAdmin(Map<String,Properties> bundleConfigs) {
+        try {
+            if(bundleConfigs.isEmpty()) {
+                return;
+            }
+
+            final BundleContext bundleContext = FrameworkUtil.getBundle(this.getClass()).getBundleContext();
+
+            ServiceReference configurationAdminReference = bundleContext.getServiceReference(ConfigurationAdmin.class.getName());
+
+            ConfigurationAdmin configAdmin = (ConfigurationAdmin) bundleContext.getService(configurationAdminReference);
+
+            for(Map.Entry<String,Properties> pidSettings : bundleConfigs.entrySet()) {
+                final Configuration configuration = configAdmin.getConfiguration(pidSettings.getKey(), null);
+                final Dictionary pidProperties = configuration.getProperties();
+                for(Map.Entry<Object,Object> e : pidSettings.getValue().entrySet()) {
+                    pidProperties.put(e.getKey(),e.getValue());
+                }
+                configuration.update(pidProperties);
+            }
+
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
     }
 

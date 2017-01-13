@@ -41,20 +41,14 @@ import java.util.Properties;
 import java.util.Set;
 import java.util.logging.Logger;
 
-//@OsgiServiceProvider(classes = { EnvironmentService.class })
-//@Singleton
 @Component
 public class EnvironmentServiceImpl implements EnvironmentService {
 
     private static final Logger LOG = Logger.getLogger(EnvironmentServiceImpl.class.getName());
 
-    //@Inject
-    //@OsgiService
     @Reference
     EnvironmentConfiguration configuration;
 
-    //@Inject
-    //@OsgiService
     @Reference
     EntityManagerFactorySetup emfb;
 

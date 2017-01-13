@@ -31,8 +31,8 @@ role.userAttributes = sn,givenName,mail,dzdepartment,dzkst,cn,dzuid,dzanrede,dza
 pids=org.ops4j.pax.web
 
 [CMPID_org.ops4j.pax.web]
-org.ops4j.pax.web.ssl.keystore=/home/xne0133/servers/monitoring/keystore.jks
-org.ops4j.pax.web.ssl.password = poettest
-org.ops4j.pax.web.ssl.keypassword = poettest
+org.ops4j.pax.web.ssl.keystore=D:/devenv/bitbucket/dac/bootstrapper/karaf-stable/devkeystore.jks
+org.ops4j.pax.web.ssl.password = password
+org.ops4j.pax.web.ssl.keypassword = password
 org.osgi.service.http.port.secure = 8443
 org.osgi.service.http.secure.enabled = true
