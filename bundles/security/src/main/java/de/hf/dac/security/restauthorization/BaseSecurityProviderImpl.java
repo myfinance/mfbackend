@@ -18,12 +18,15 @@
 package de.hf.dac.security.restauthorization;
 
 import de.hf.dac.api.security.AuthorizationEntry;
+import de.hf.dac.api.security.AuthorizationSubject;
 import de.hf.dac.api.security.RootSecurityProvider;
+import de.hf.dac.security.auth.AuthorizationSubjectImpl;
 import de.hf.dac.security.restauthorization.domain.RestAuthorization;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Query;
+import javax.security.auth.Subject;
 import java.util.AbstractMap;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -38,7 +41,6 @@ public abstract class BaseSecurityProviderImpl<
     ACCESS_TYPE extends Enum<ACCESS_TYPE>,
     RESOURCE_LEVEL extends Enum<RESOURCE_LEVEL>>
     implements RootSecurityProvider<ACCESS_TYPE,RESOURCE_LEVEL> {
-
 
     // Pair replacement
     private class EntryPair extends AbstractMap.SimpleEntry<ACCESS_TYPE,RESOURCE_LEVEL> {

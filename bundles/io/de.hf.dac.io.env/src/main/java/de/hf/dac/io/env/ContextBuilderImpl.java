@@ -20,10 +20,8 @@ package de.hf.dac.io.env;
 import com.google.inject.Module;
 import de.hf.dac.api.io.env.context.ApplicationContext;
 import de.hf.dac.api.io.env.context.ContextBuilder;
-import org.ops4j.pax.cdi.api.OsgiServiceProvider;
 import org.osgi.service.component.annotations.Component;
 
-import javax.inject.Singleton;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;

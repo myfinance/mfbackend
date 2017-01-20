@@ -17,7 +17,6 @@
 
 package de.hf.dac.marketdataprovider.restservice.marketdataresources;
 
-import de.hf.dac.api.security.AuthorizationSubject;
 import de.hf.dac.marketdataprovider.api.application.MarketDataEnvironment;
 import de.hf.dac.marketdataprovider.api.application.OpLevel;
 import de.hf.dac.marketdataprovider.api.application.OpType;
@@ -36,8 +35,8 @@ public class EnvironmentResource extends SecuredResource<OpType,OpLevel>  {
     MarketDataEnvironment marketDataEnvironment;
     final String OPERATIONID="environment";
 
-    public EnvironmentResource(AuthorizationSubject authorization, MarketDataEnvironment marketDataEnvironment) {
-        super(authorization, marketDataEnvironment);
+    public EnvironmentResource(MarketDataEnvironment marketDataEnvironment) {
+        super(marketDataEnvironment);
         this.marketDataEnvironment = marketDataEnvironment;
     }
 
@@ -48,7 +47,6 @@ public class EnvironmentResource extends SecuredResource<OpType,OpLevel>  {
         response = List.class)
     public List<Instrument> getInstruments() {
         checkOperationAllowed(OpType.READ, OPERATIONID);
-        checkPassthroughAllowed();
         List<Instrument> returnvalue = marketDataEnvironment.getInstrumentService().listInstruments();
         return returnvalue;
     }

@@ -23,11 +23,13 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 
 import javax.inject.Named;
+import javax.security.auth.Subject;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
+import java.security.AccessController;
 import java.sql.SQLException;
 
 @Path("/marketdata")
@@ -38,7 +40,7 @@ public class MarketData extends TopLevelWithEnvironments{
     @Produces(MediaType.APPLICATION_JSON)
     @ApiOperation(value = "get Environment", response = EnvironmentResource.class)
     public EnvironmentResource getEnvironment(@PathParam("envID") @ApiParam(value="The Service Environment") String envID) throws SQLException {
-        return new EnvironmentResource(getAuthorization(), getMarketDataEnvironment(envID));
+        return new EnvironmentResource(getMarketDataEnvironment(envID));
     }
 
 }

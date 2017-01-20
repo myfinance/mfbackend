@@ -20,9 +20,6 @@ package de.hf.dac.api.security;
 import java.util.List;
 
 public interface AuthorizationSubject {
-    boolean isAuthorized();
-
-    boolean inValidate();
 
     List<String> getPermissions();
 

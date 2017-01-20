@@ -25,38 +25,26 @@ import de.hf.dac.api.io.env.context.ApplicationContext;
 import de.hf.dac.api.io.env.context.ContextBuilder;
 import de.hf.dac.marketdataprovider.api.application.MarketDataEnvironmentContextBuilder;
 import de.hf.dac.marketdataprovider.api.application.MarketDataSystemDescriptor;
-import org.ops4j.pax.cdi.api.OsgiService;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
 
-import javax.inject.Inject;
-import javax.inject.Singleton;
 import javax.transaction.TransactionManager;
 import java.sql.SQLException;
 import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 
-//@Singleton
 @Component
 public class MarketDataEnvironmentContextBuilderImpl implements MarketDataEnvironmentContextBuilder {
-    //@Inject
-    //@OsgiService
     @Reference
     ContextBuilder contextBuilder;
 
-    //@Inject
-    //@OsgiService
     @Reference
     EnvironmentService envService;
 
-    //@Inject
-    //@OsgiService
     @Reference
     EntityManagerFactorySetup emfb;
 
-    //@Inject
-    //@OsgiService
     @Reference
     TransactionManager jtaManager;
 

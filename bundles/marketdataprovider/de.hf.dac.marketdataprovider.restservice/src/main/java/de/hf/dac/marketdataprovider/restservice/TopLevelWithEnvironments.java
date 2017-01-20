@@ -18,7 +18,6 @@
 package de.hf.dac.marketdataprovider.restservice;
 
 import de.hf.dac.api.security.AuthorizationSubject;
-import de.hf.dac.api.security.SecurityService;
 import de.hf.dac.marketdataprovider.api.application.MarketDataEnvironment;
 import de.hf.dac.marketdataprovider.api.application.MarketDataEnvironmentBuilder;
 import io.swagger.annotations.ApiOperation;
@@ -46,23 +45,8 @@ public abstract class TopLevelWithEnvironments {
     }
 
     protected MarketDataEnvironment getMarketDataEnvironment(String env) throws SQLException {
-        final BundleContext bundleContext = FrameworkUtil.getBundle(this.getClass()).getBundleContext();
-
-        ServiceReference<MarketDataEnvironmentBuilder> sr = bundleContext.getServiceReference(MarketDataEnvironmentBuilder.class);
-
-        MarketDataEnvironmentBuilder marketDataEnvironmentBuilder = bundleContext.getService(sr);
 
         return getMarketDataEnvironmentBuilder().build(env);
-    }
-
-
-    protected AuthorizationSubject getAuthorization() {
-        final BundleContext bundleContext = FrameworkUtil.getBundle(this.getClass()).getBundleContext();
-        ServiceReference<SecurityService> sr = bundleContext.getServiceReference(SecurityService.class);
-
-        SecurityService securityService = bundleContext.getService(sr);
-
-        return securityService.getAuthorizationSubject(Subject.getSubject(AccessController.getContext()));
     }
 
     @GET

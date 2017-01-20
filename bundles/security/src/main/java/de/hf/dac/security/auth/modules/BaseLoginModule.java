@@ -45,6 +45,7 @@ import javax.security.auth.login.LoginException;
 import javax.security.auth.spi.LoginModule;
 
 import org.apache.karaf.jaas.boot.principal.RolePrincipal;
+import org.apache.karaf.jaas.modules.AbstractKarafLoginModule;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -68,9 +69,8 @@ import org.slf4j.LoggerFactory;
  * </ul>
  *
  */
-//todo can we use AbstractKarafLoginModule?
-//public abstract class BaseLoginModule extends AbstractKarafLoginModule implements LoginModule {
-public abstract class BaseLoginModule implements LoginModule {
+public abstract class BaseLoginModule extends AbstractKarafLoginModule implements LoginModule {
+//public abstract class BaseLoginModule implements LoginModule {
     public static final String WHAT = "$Id$";
     private static final Logger LOG = LoggerFactory.getLogger(BaseLoginModule.class);
 
@@ -199,6 +199,9 @@ public abstract class BaseLoginModule implements LoginModule {
                     }
                 }
             }
+        }
+        if(!isAuthActive) {
+            plainRoleRightPrincipals.add(new RolePrincipal("admin"));
         }
         subject.getPrincipals().addAll(plainRoleRightPrincipals);
         return true;
