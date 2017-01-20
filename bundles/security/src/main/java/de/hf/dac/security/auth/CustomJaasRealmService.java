@@ -17,6 +17,8 @@
 
 package de.hf.dac.security.auth;
 
+import de.hf.dac.api.io.env.EnvironmentConfiguration;
+import de.hf.dac.api.io.lookup.OSGIServiceLookup;
 import de.hf.dac.security.auth.modules.LdapLoginModule;
 import org.apache.karaf.jaas.boot.ProxyLoginModule;
 import org.apache.karaf.jaas.config.JaasRealm;
@@ -35,11 +37,13 @@ public class CustomJaasRealmService implements JaasRealm
 
     private AppConfigurationEntry[] configEntries;
 
+    EnvironmentConfiguration serviceByInterface = null;
+
     @Activate
     public void activate(BundleContext bc)
     {
         // create the configuration entry field using ProxyLoginModule class
-
+        serviceByInterface = OSGIServiceLookup.getServiceByInterface(EnvironmentConfiguration.class);
 
         configEntries = new AppConfigurationEntry[2];
 
@@ -67,16 +71,16 @@ public class CustomJaasRealmService implements JaasRealm
         // add extra options if needed; for example, karaf encryption
         // ....
 
-        options.put("java.naming.provider.url", "${auth.ldap.url}");
-        options.put("bindDN", "${auth.ldap.user}");
-        options.put("bindCredential", "${auth.ldap.credentials}");
-        options.put("baseCtxDN", "${auth.ldap.baseCtxDN}");
+        options.put("java.naming.provider.url", serviceByInterface.getString("LDAP", "auth.ldap.url"));
+        options.put("bindDN", serviceByInterface.getString("LDAP", "auth.ldap.user"));
+        options.put("bindCredential",serviceByInterface.getString("LDAP", "auth.ldap.credentials") );
+        options.put("baseCtxDN", serviceByInterface.getString("LDAP", "auth.ldap.baseCtxDN"));
         options.put("searchTimeLimit", "30000");
         options.put("baseFilter", "(sAMAccountName={0})");
         options.put("password-stacking", "useFirstPass");
         options.put("storePass", "true");
         options.put("useFirstPass", "false");
-        options.put("rolesCtxDN", "${auth.ldap.rolesCtxDN}");
+        options.put("rolesCtxDN", serviceByInterface.getString("LDAP", "auth.ldap.rolesCtxDN"));
         options.put("roleFilter", "(sAMAccountName={0})");
         options.put("roleAttributeID", "memberOf");
         options.put("roleAttributeIsDN", "true");
@@ -108,20 +112,20 @@ public class CustomJaasRealmService implements JaasRealm
         // add extra options if needed; for example, karaf encryption
         // ....
 
-        options.put("java.naming.provider.url", "${role.ldap.url}");
-        options.put("bindDN", "${role.ldap.user}");
-        options.put("bindCredential", "${role.ldap.credentials}");
-        options.put("baseCtxDN", "${role.ldap.baseCtxDN}");
+        options.put("java.naming.provider.url", serviceByInterface.getString("LDAP", "role.ldap.url"));
+        options.put("bindDN", serviceByInterface.getString("LDAP", "role.ldap.user"));
+        options.put("bindCredential", serviceByInterface.getString("LDAP", "role.ldap.credentials"));
+        options.put("baseCtxDN",serviceByInterface.getString("LDAP", "role.ldap.baseCtxDN") );
         options.put("baseFilter", "(dzuid={0})");
-        options.put("rolesCtxDN", "${role.ldap.rolesCtxDN}");
+        options.put("rolesCtxDN", serviceByInterface.getString("LDAP", "role.ldap.rolesCtxDN"));
         options.put("roleFilter", "(uniqueMember={1})");
         options.put("roleAttributeID", "cn");
         options.put("permissionAttributeID", "dzpermissions");
         options.put("searchScope", "ONELEVEL_SCOPE");
         options.put("allowEmptyPasswords", "false");
         options.put("useFirstPass", "true");
-        options.put("permissionRoleMapping", "${role.mappings}");
-        options.put("userAttributes", "${role.userAttributes}");
+        options.put("permissionRoleMapping", serviceByInterface.getString("LDAP", "role.mappings"));
+        options.put("userAttributes", serviceByInterface.getString("LDAP", "role.userAttributes"));
         options.put("debug", "false");
     }
 
