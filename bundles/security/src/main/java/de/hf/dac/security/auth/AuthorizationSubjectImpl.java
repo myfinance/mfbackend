@@ -42,22 +42,31 @@ public class AuthorizationSubjectImpl implements AuthorizationSubject {
         this.subject = subject;
 
         this.internalRoles = subject.getPrincipals(RolePrincipal.class).stream().map(x -> x.getName()).collect(Collectors.toList());
-        this.permissions = Collections.list(subject.getPrincipals(SimpleGroup.class).stream()
-            .filter(x -> x.getName().equals("Permissions"))
-            .findFirst()
-            .get().members())
-            .stream()
-            .map(x -> x.getName()).collect(Collectors.toList());
 
-        this.roles = Collections.list(subject.getPrincipals(SimpleGroup.class).stream()
-            .filter(x -> x.getName().equals("Roles"))
-            .findFirst()
-            .get().members())
-            .stream()
-            .map(x -> x.getName()).collect(Collectors.toList());
+        if(subject.getPrincipals(SimpleGroup.class).contains(SimpleGroup.class)){
+            this.permissions = Collections.list(subject.getPrincipals(SimpleGroup.class).stream()
+                .filter(x -> x.getName().equals("Permissions"))
+                .findFirst()
+                .get().members())
+                .stream()
+                .map(x -> x.getName()).collect(Collectors.toList());
+
+            this.roles = Collections.list(subject.getPrincipals(SimpleGroup.class).stream()
+                .filter(x -> x.getName().equals("Roles"))
+                .findFirst()
+                .get().members())
+                .stream()
+                .map(x -> x.getName()).collect(Collectors.toList());
 
 
-        this.principal = subject.getPrincipals(CompanyPrincipal.class).iterator().next();
+            this.principal = subject.getPrincipals(CompanyPrincipal.class).iterator().next();
+        } else {
+            permissions=null;
+            roles=null;
+            principal=new CompanyPrincipal("noUser");
+        }
+
+
 
     }
 

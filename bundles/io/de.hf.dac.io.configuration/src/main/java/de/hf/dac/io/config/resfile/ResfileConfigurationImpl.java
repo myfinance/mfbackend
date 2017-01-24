@@ -41,7 +41,7 @@ import java.util.logging.Logger;
  * Environment Configuration based on Res Files located on
  * local file system.
  */
-@Component
+@Component(immediate = true)
 public class ResfileConfigurationImpl implements EnvironmentConfiguration {
 
     private static final Logger LOG = Logger.getLogger(ResfileConfigurationImpl.class.getName());
