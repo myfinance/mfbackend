@@ -32,6 +32,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Dictionary;
 import java.util.HashMap;
+import java.util.Hashtable;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
@@ -120,7 +121,7 @@ public class ResfileConfigurationImpl implements EnvironmentConfiguration {
 
             for(Map.Entry<String,Properties> pidSettings : bundleConfigs.entrySet()) {
                 final Configuration configuration = configAdmin.getConfiguration(pidSettings.getKey(), null);
-                final Dictionary pidProperties = configuration.getProperties();
+                final Dictionary pidProperties = configuration.getProperties()!=null ? configuration.getProperties() : new Hashtable();
                 for(Map.Entry<Object,Object> e : pidSettings.getValue().entrySet()) {
                     pidProperties.put(e.getKey(),e.getValue());
                 }

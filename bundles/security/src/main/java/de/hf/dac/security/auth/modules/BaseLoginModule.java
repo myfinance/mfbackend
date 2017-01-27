@@ -78,31 +78,25 @@ public abstract class BaseLoginModule extends AbstractKarafLoginModule implement
     protected static final String CONTEXT_LOGIN_PASSWORD = "javax.security.auth.login.password";
     private static final String PROVIDER_URL = "java.naming.provider.url";
 
-    //the default user if the authorisation is deactivated
-    protected static final String NO_AUTHENTIFICATION_USER = "admin";
-
     protected Subject subject;
     protected CallbackHandler callbackHandler;
     protected Map<String, ?> sharedState;
     protected Map<String, ?> options;
     protected boolean loginSuccess;
-    protected boolean isAuthActive = true;
-    protected String providerURL;
 
     private String principalClassName;
     private boolean useFirstPass;
     private boolean storePass;
     EnvironmentConfiguration serviceByInterface = null;
     private HashMap<String, String> roleMappings;
+    protected String providerURL;
 
 
     @Override
     public void initialize(Subject theSubject, CallbackHandler theCB, Map<String, ?> theSharedState, Map<String, ?> theOptions) {
-        //EnvironmentConfiguration is not injected via blueprint because it is not working. A timing issue?! it runs with declarative services maybe?
         serviceByInterface = OSGIServiceLookup.getServiceByInterface(EnvironmentConfiguration.class);
         this.providerURL = (String) theOptions.get(PROVIDER_URL);
         assert (serviceByInterface != null);
-        isAuthActive=serviceByInterface.getString("LDAP", "auth.ldap.active").toLowerCase().equals("true");
         this.subject = theSubject;
         this.callbackHandler = theCB;
         this.sharedState = theSharedState;
@@ -183,12 +177,10 @@ public abstract class BaseLoginModule extends AbstractKarafLoginModule implement
                     subjectGroup.addMember(role);
                     if(this.roleMappings!=null) {
                         if (i == 1) { // Roles are Groups
-                            //plainRoleRightPrincipals.add(new GroupPrincipal(role.getName()));
                             if (this.roleMappings.containsKey(role.getName())) {
                                 plainRoleRightPrincipals.add(new RolePrincipal(this.roleMappings.get(role.getName())));
                             }
                         } else { // Permissions are Roles
-                            //plainRoleRightPrincipals.add(new RolePrincipal(role.getName()));
                             if (this.roleMappings.containsKey(role.getName())) {
                                 plainRoleRightPrincipals.add(new RolePrincipal(this.roleMappings.get(role.getName())));
                             }
@@ -199,9 +191,6 @@ public abstract class BaseLoginModule extends AbstractKarafLoginModule implement
                     }
                 }
             }
-        }
-        if(!isAuthActive) {
-            plainRoleRightPrincipals.add(new RolePrincipal("admin"));
         }
         subject.getPrincipals().addAll(plainRoleRightPrincipals);
         return true;

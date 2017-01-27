@@ -137,17 +137,17 @@ public class LdapLoginModule extends BaseLoginModule {
 
         super.initialize(theSubject, theCB, theSharedState, theOptions);
 
-        if(isAuthActive) {
-            String roleGroup = (String) theOptions.get(OPT_ROLE_GROUP);
-            if (roleGroup != null) {
-                roleGroupName = roleGroup;
-            }
 
-            String permissionGroup = (String) theOptions.get(OPT_PERMISSION_GROUP);
-            if (permissionGroup != null) {
-                permissionsGroupName = permissionGroup;
-            }
+        String roleGroup = (String) theOptions.get(OPT_ROLE_GROUP);
+        if (roleGroup != null) {
+            roleGroupName = roleGroup;
         }
+
+        String permissionGroup = (String) theOptions.get(OPT_PERMISSION_GROUP);
+        if (permissionGroup != null) {
+            permissionsGroupName = permissionGroup;
+        }
+
 
         debug = parseBooleanOption(OPT_DEBUG);
         if (debug) {
@@ -192,10 +192,6 @@ public class LdapLoginModule extends BaseLoginModule {
             // get roles from LDAP
             roles = createGroup(roleGroupName, subject.getPrincipals());
             permissions = createGroup(permissionsGroupName, subject.getPrincipals());
-            if(!isAuthActive) {
-                addRole("admin");
-                return true;
-            }
             try {
                 createLdapInitContext(identity.getName(), credential);
 
@@ -218,15 +214,9 @@ public class LdapLoginModule extends BaseLoginModule {
 
         super.loginSuccess = false;
 
-        String username = NO_AUTHENTIFICATION_USER;
-        String password = "nopassword";
-
-        if(isAuthActive) {
-            String[] info = getUsernameAndPassword();
-            username = info[0];
-            password = info[1];
-        }
-
+        String[] info = getUsernameAndPassword();
+        String username = info[0];
+        String password = info[1];
 
         if (identity == null) {
             try {
@@ -238,7 +228,7 @@ public class LdapLoginModule extends BaseLoginModule {
                 throw new LoginException("Failed to create principal: " + e.getMessage());
             }
 
-            if (isAuthActive && !validatePassword(password)) {
+            if (!validatePassword(password)) {
                 throw new FailedLoginException("Password incorrect/Password required");
             }
 
