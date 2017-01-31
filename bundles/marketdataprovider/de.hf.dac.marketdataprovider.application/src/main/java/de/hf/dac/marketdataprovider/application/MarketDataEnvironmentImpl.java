@@ -28,8 +28,6 @@ import javax.inject.Named;
 import java.util.ArrayList;
 import java.util.List;
 
-
-//todo besser hier eine extra property erstellen die von IdentifiableResource erbt da dies restapi spezifisch ist
 public class MarketDataEnvironmentImpl implements MarketDataEnvironment{
 
     final private ProductService productService;

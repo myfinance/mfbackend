@@ -59,7 +59,6 @@ function handleLogin() {
       '</div>'].join(''));
   $(document.body).append(popupDialog);
 
-  //TODO: only display applicable scopes (will need to pass them into handleLogin)
   popup = popupDialog.find('ul.api-popup-scopes').empty();
   for (i = 0; i < scopes.length; i ++) {
     scope = scopes[i];
@@ -118,8 +117,7 @@ function handleLogin() {
       if (OAuthSchemeKeys.indexOf(OAuthSchemeKey) === -1)
           OAuthSchemeKeys.push(OAuthSchemeKey);
     }
-    
-    //TODO: merge not replace if scheme is different from any existing 
+
     //(needs to be aware of schemes to do so correctly)
     window.enabledScopes=scopes;    
     

@@ -25,8 +25,6 @@ import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
-//todo ist es nicht besser immer das Subject weiterzugeben und im BaseSecurityProviderImpl welche sich im selben bundle wie das loginmodule befindet
-// aufzulösen wie die internen Rollen aus dem Subject zu laden sind
 /**
  * Defines how to get the internal Roles from the generic subject
  */

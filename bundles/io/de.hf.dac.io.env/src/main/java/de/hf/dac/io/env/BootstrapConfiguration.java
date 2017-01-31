@@ -48,15 +48,8 @@ public class BootstrapConfiguration implements Serializable {
         BOOTSTRAP_URL, /**
          * Bootstrap DB Driver if using explicit url
          */
-        BOOTSTRAP_DRIVER, BOOTSTRAP_PWD, BOOTSTRAP_USER, /**
-         * Comma separated list of known DBs.
-         * Only known are extracted from res files
-         */
-        EXPORTED_DBS,
-        /**
-         * FIXME: DE UNKLAR
-         */
-        SUBSET_ENVIRONMENTS,
+        BOOTSTRAP_DRIVER, BOOTSTRAP_PWD, BOOTSTRAP_USER,
+
         SQL_INI_FILE
     }
 
@@ -146,6 +139,7 @@ public class BootstrapConfiguration implements Serializable {
             throw new RuntimeException("dbdriver not found not for DB " + loginInfoAlias + " in res files");
         }
         DatabaseInfo dbinfo = new DatabaseInfo(dbUrl, dbUser, dbPasswd, dbdriver, null, null);
+        //todo benötigt? wie sieht db update process aus
         //dbinfo.getExtraHibernateProperties().put("hibernate.hbm2ddl.auto", "create");
         return dbinfo;
     }
