@@ -49,38 +49,6 @@ import org.slf4j.LoggerFactory;
  * The <code>LdapLoginModule</code> is an implementation of the <code>LoginModule</code> interface to authenticate users against and extract roles
  * from an LDAP server via the JAAS framework.
  * </p>
- * This module supports the following options:
- * <ul>
- * <li><code>allowEmptyPasswords</code> - if <code>false</code>, authenticating with an empty password is not allowed and authentication will fail.
- * For some LDAP servers, empty passwords are treated as anonymous login. The default is <code>false</code>.</li>
- * <li><code>bindDN</code> - user DN to use to connect to LDAP initially. This user needs to be able to access the users and roles subtrees.</li>
- * <li><code>bindCredential</code> - password for the bind user.</li>
- * <li><code>rolesCtxDN</code> - base context DN for looking up the roles.</li>
- * <li><code>roleFilter</code> - filter expression to identify the roles object belonging to the user. The placeholders <code>{0}</code> and
- * <code>{1}</code> will be replaced by the input username and the authenticated user DN, respectively. A typical expression matching the input
- * username would be <code>(uid={0})</code>.</li>
- * <li><code>roleRecursion</code> - how deep to recurse looking for roles. The default is <code>0</code> which disables recursion entirely.</li>
- * <li><code>roleAttributeID</code> - name of the attribute containing the role name.</li>
- * <li><code>roleGroup</code> - name of the group to add the roles to. This defaults to <code>Roles</code> which is the name used by JBoss.</li>
- * <li><code>principalClass</code> - class to use for instantiating the principal, defaults to <code>de.dzbank.lisa.auth.SimplePrincipal</code>.</li>
- * <li><code>baseCtxDN</code> - base context for looking up users.</li>
- * <li><code>baseFilter</code> - filter expression to identify the user object.</li>
- * <li><code>userAttributes</code> - when using the <code>principalClass</code> <code>de.dzbank.lisa.auth.CompanyPrincipal</code>, the module can
- * extract additional user information from the directory. This options specifies which extended attributes to extract and defaults to the maximum set
- * of attributes known to the module.</li>
- * <li><code>searchScope</code> - scope of the LDAP user search, either of <code>OBJECT_SCOPE</code>, <code>ONELEVEL_SCOPE</code>, and
- * <code>SUBTREE_SCOPE</code>.</li>
- * <li><code>searchTimeLimit</code> - time limit for the LDAP search in milliseconds. Defaults to <code>10000</code>.</li>
- * <li><code>storePass</code> - if <code>true</code>, the LoginModule stores the user name and password obtained from the <code>CallbackHandler</code>
- * in the shared state, using <code>javax.security.auth.login.name</code> and <code>javax.security.auth.login.password</code> as the respective keys.
- * This is not performed if values already exist for username and password in the shared state, or if authentication fails.</li>
- * <li><code>useFirstPass</code> - if <code>true</code>, the first LoginModule in the stack saves the password entered, and subsequent LoginModules
- * also try to use it. LoginModules do not prompt for a new password if authentication fails (authentication simply fails).</li>
- * </ul>
- * <p>
- * Additionally, the module supports all the options supported by the JNDI provider, such as <code>java.naming.provider.url</code> or
- * <code>java.naming.factory.initial</code>.
- * </p>
  *
  */
 public class LdapLoginModule extends BaseLoginModule {
@@ -380,7 +348,7 @@ public class LdapLoginModule extends BaseLoginModule {
         }
         permissionAttributeID = (String) getOption(OPT_PERMISSION_ATTRIBUTE_ID);
         if (permissionAttributeID == null) {
-            permissionAttributeID = "dzpermissions";
+            permissionAttributeID = "permissions";
         }
         // Is user's role attribute a DN or the role name?
         roleAttributeIsDN = parseBooleanOption(OPT_ROLE_ATTRIBUTE_IS_DN);
