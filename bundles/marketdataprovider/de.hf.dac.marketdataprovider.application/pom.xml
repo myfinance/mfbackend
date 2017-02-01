@@ -36,6 +36,10 @@
             <artifactId>de.hf.dac.marketdataprovider.restservice</artifactId>
         </dependency>
         <dependency>
+            <groupId>de.hf.dac</groupId>
+            <artifactId>de.hf.dac.security</artifactId>
+        </dependency>
+        <dependency>
             <groupId>org.apache.karaf.shell</groupId>
             <artifactId>org.apache.karaf.shell.console</artifactId>
         </dependency>

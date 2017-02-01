@@ -17,7 +17,6 @@
 
 package de.hf.dac.marketdataprovider.restservice;
 
-import de.hf.dac.api.security.AuthorizationSubject;
 import de.hf.dac.marketdataprovider.api.application.MarketDataEnvironment;
 import de.hf.dac.marketdataprovider.api.application.MarketDataEnvironmentBuilder;
 import io.swagger.annotations.ApiOperation;
@@ -25,12 +24,10 @@ import org.osgi.framework.BundleContext;
 import org.osgi.framework.FrameworkUtil;
 import org.osgi.framework.ServiceReference;
 
-import javax.security.auth.Subject;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
-import java.security.AccessController;
 import java.sql.SQLException;
 import java.util.List;
 

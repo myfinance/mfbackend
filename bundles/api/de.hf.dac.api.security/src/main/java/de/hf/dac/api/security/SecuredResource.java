@@ -15,25 +15,13 @@
  * ----------------------------------------------------------------------------
  */
 
-package de.hf.dac.security.restauthorization;
-
-import de.hf.dac.api.security.AccessNotAllowedException;
-import de.hf.dac.api.security.AuthorizationSubject;
-import de.hf.dac.api.security.IdentifiableResource;
-import de.hf.dac.api.security.RootSecurityProvider;
-import de.hf.dac.api.security.Secured;
-import de.hf.dac.security.auth.AuthorizationSubjectImpl;
+package de.hf.dac.api.security;
 
 import javax.security.auth.Subject;
 import java.security.AccessController;
 
 public abstract class SecuredResource<ACCESS_TYPE extends Enum<ACCESS_TYPE>,RESOURCE_LEVEL extends Enum<RESOURCE_LEVEL>> {
 
-    public AuthorizationSubject getUserPermissions() {
-        return userPermissions;
-    }
-
-    final private AuthorizationSubject userPermissions;
     final private String resourceId1;
 
     final private RESOURCE_LEVEL opLevel1;
@@ -48,7 +36,6 @@ public abstract class SecuredResource<ACCESS_TYPE extends Enum<ACCESS_TYPE>,RESO
 
 
     public <T extends IdentifiableResource<RESOURCE_LEVEL> & Secured> SecuredResource(T resource) {
-        this.userPermissions = new AuthorizationSubjectImpl(Subject.getSubject(AccessController.getContext()));
         this.resourceId1 = resource.getId();
         this.opLevel1 = resource.getOpLevel();
         this.rootSecurityProvider1 = resource.getRootSecurityProvider();
@@ -66,7 +53,6 @@ public abstract class SecuredResource<ACCESS_TYPE extends Enum<ACCESS_TYPE>,RESO
      */
     public <T1 extends IdentifiableResource<RESOURCE_LEVEL> & Secured, T2 extends IdentifiableResource<RESOURCE_LEVEL> & Secured>
     SecuredResource(T1 resource1, T2 resource2) {
-        this.userPermissions = new AuthorizationSubjectImpl(Subject.getSubject(AccessController.getContext()));
         this.resourceId1 = resource1.getId();
         this.opLevel1 = resource1.getOpLevel();
         this.rootSecurityProvider1 = resource1.getRootSecurityProvider();
@@ -82,23 +68,23 @@ public abstract class SecuredResource<ACCESS_TYPE extends Enum<ACCESS_TYPE>,RESO
     }
 
     public void checkOperationAllowed(ACCESS_TYPE accessType, String operationId) throws AccessNotAllowedException {
-        boolean allowed = rootSecurityProvider1.isOperationAllowed(accessType, opLevel1, resourceId1, userPermissions.getInternalRoles(), userPermissions.getPrincipal().getName(), operationId);
+        boolean allowed = rootSecurityProvider1.isOperationAllowed(accessType, opLevel1, resourceId1, Subject.getSubject(AccessController.getContext()), operationId);
         if(allowed)
             return;
         throw new SecurityException("Not allowed");
     }
 
     public void checkBinaryOperationAllowed(ACCESS_TYPE accessType, String operationId1, String operationId2) throws AccessNotAllowedException {
-        boolean allowed1 = rootSecurityProvider1.isOperationAllowed(accessType, opLevel1, resourceId1, userPermissions.getInternalRoles(), userPermissions.getPrincipal().getName(), operationId1);
-        boolean allowed2 = rootSecurityProvider2.isOperationAllowed(accessType, opLevel2, resourceId2, userPermissions.getInternalRoles(), userPermissions.getPrincipal().getName(), operationId2);
+        boolean allowed1 = rootSecurityProvider1.isOperationAllowed(accessType, opLevel1, resourceId1, Subject.getSubject(AccessController.getContext()), operationId1);
+        boolean allowed2 = rootSecurityProvider2.isOperationAllowed(accessType, opLevel2, resourceId2, Subject.getSubject(AccessController.getContext()), operationId2);
         if(allowed1 && allowed2)
             return;
         throw new SecurityException("Not allowed");
     }
 
     public void checkPassthroughAllowed() {
-        boolean allowed = rootSecurityProvider1.isPassthroughAllowed(opLevel1, resourceId1, userPermissions.getInternalRoles(), userPermissions.getPrincipal().getName());
-        boolean allowed2 = rootSecurityProvider2.isPassthroughAllowed(opLevel2, resourceId2, userPermissions.getInternalRoles(), userPermissions.getPrincipal().getName());
+        boolean allowed = rootSecurityProvider1.isPassthroughAllowed(opLevel1, resourceId1, Subject.getSubject(AccessController.getContext()));
+        boolean allowed2 = rootSecurityProvider2.isPassthroughAllowed(opLevel2, resourceId2, Subject.getSubject(AccessController.getContext()));
         if(allowed && allowed2)
             return;
         throw new SecurityException("Not allowed");

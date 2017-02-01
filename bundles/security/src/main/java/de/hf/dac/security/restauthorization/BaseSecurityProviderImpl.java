@@ -57,8 +57,10 @@ public abstract class BaseSecurityProviderImpl<
 
     private Map<RESOURCE_LEVEL,List<AuthMatcherImpl>> passThroughAuthMatchers = new HashMap<>();
     private Map<EntryPair,List<AuthMatcherImpl>> rootAuthMatchers = new HashMap<>();
+    protected AuthorizationSubject authSubject;
 
     public abstract EntityManagerFactory getEMFactory();
+
 
     @Override
     public void updateAuth() {
@@ -110,7 +112,7 @@ public abstract class BaseSecurityProviderImpl<
         List<T> ret = new ArrayList<>();
 
         EntityManager em = getEMFactory().createEntityManager();
-        ////em.getTransaction().begin();
+
         Query query = em.createQuery("SELECT DISTINCT(c.resource) FROM " + getTableName() + " c WHERE c.restApp = :restApp ");
         query.setParameter("restApp", system);
 
@@ -118,7 +120,6 @@ public abstract class BaseSecurityProviderImpl<
         for(String o : ol) {
             ret.add(Enum.valueOf(clazz,o));
         }
-        ////em.getTransaction().commit();
         return ret;
     }
 
@@ -126,9 +127,22 @@ public abstract class BaseSecurityProviderImpl<
         return RestAuthorization.class.getSimpleName();
     }
 
+    private void setUserPermissions(Subject subject){
+        authSubject = new AuthorizationSubjectImpl(subject);
+    }
+
+    protected List<String> getPermissions(){
+        return authSubject.getInternalRoles();
+    }
+
+    protected String getUser(){
+        return authSubject.getPrincipal().getName();
+    }
+
     @Override
-    public boolean isOperationAllowed(ACCESS_TYPE opType, RESOURCE_LEVEL opLevel, String resourceId, List<String> permissions, String user, String operationId) {
+    public boolean isOperationAllowed(ACCESS_TYPE opType, RESOURCE_LEVEL opLevel, String resourceId, Subject subject, String operationId) {
         try {
+            setUserPermissions(subject);
             List<AuthMatcherImpl> impls = rootAuthMatchers.get(new EntryPair(opType,opLevel));
 
             Set<String> allowedPermissions = new HashSet<>();
@@ -139,11 +153,11 @@ public abstract class BaseSecurityProviderImpl<
                 allowedUsers.addAll(impl.getPossibleUsers(resourceId,operationId));
             }
 
-            Set<String> availablePermissions = new HashSet<>(permissions);
+            Set<String> availablePermissions = new HashSet<>(getPermissions());
 
             availablePermissions.retainAll(allowedPermissions);
 
-            return !(availablePermissions.isEmpty() && DoesNotContain(allowedUsers, user));
+            return !(availablePermissions.isEmpty() && DoesNotContain(allowedUsers,  getUser()));
         } catch(Exception ex) {
             throw new SecurityException("Can't check authorization",ex);
 
@@ -155,7 +169,7 @@ public abstract class BaseSecurityProviderImpl<
     }
 
     @Override
-    public boolean isPassthroughAllowed(RESOURCE_LEVEL opLevel, String resourceId, List<String> permissions, String user) {
+    public boolean isPassthroughAllowed(RESOURCE_LEVEL opLevel, String resourceId, Subject subject) {
         try {
             List<AuthMatcherImpl> impls = passThroughAuthMatchers.get(opLevel);
 
@@ -167,11 +181,11 @@ public abstract class BaseSecurityProviderImpl<
                 allowedUsers.addAll(impl.getAllUsers(resourceId));
             }
 
-            Set<String> availablePermissions = new HashSet<>(permissions);
+            Set<String> availablePermissions = new HashSet<>(getPermissions());
 
             availablePermissions.retainAll(allowedPermissions);
 
-            return !(availablePermissions.isEmpty() && DoesNotContain(allowedUsers, user));
+            return !(availablePermissions.isEmpty() && DoesNotContain(allowedUsers,  getUser()));
         } catch(Exception ex) {
             throw new SecurityException("Can't check authorization",ex);
         }
@@ -189,8 +203,6 @@ public abstract class BaseSecurityProviderImpl<
         query.setParameter("restOpType", opType.toString());
         query.setParameter("resource", opLevel.toString());
         query.setParameter("restApp", system);
-        //EntityTransaction et =  //em.getTransaction();
-        //et.begin();;
         List<AuthorizationEntry> ol = query.getResultList();
         for(AuthorizationEntry o : ol) {
             ret.add(new AuthMatcherImpl(o.getRestIdPattern(),
@@ -199,7 +211,6 @@ public abstract class BaseSecurityProviderImpl<
                 o.listUsers() ,
                 o.getDescription()));
         }
-        //et.commit();
         em.close();
         return ret;
     }

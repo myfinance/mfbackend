@@ -17,11 +17,11 @@
 
 package de.hf.dac.marketdataprovider.restservice.marketdataresources;
 
+import de.hf.dac.api.security.SecuredResource;
 import de.hf.dac.marketdataprovider.api.application.MarketDataEnvironment;
 import de.hf.dac.marketdataprovider.api.application.OpLevel;
 import de.hf.dac.marketdataprovider.api.application.OpType;
 import de.hf.dac.marketdataprovider.api.domain.Instrument;
-import de.hf.dac.security.restauthorization.SecuredResource;
 import io.swagger.annotations.ApiOperation;
 
 import javax.ws.rs.GET;
@@ -30,7 +30,7 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import java.util.List;
 
-public class EnvironmentResource extends SecuredResource<OpType,OpLevel>  {
+public class EnvironmentResource extends SecuredResource<OpType,OpLevel> {
 
     MarketDataEnvironment marketDataEnvironment;
     final String OPERATIONID="environment";

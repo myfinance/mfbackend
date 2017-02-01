@@ -17,13 +17,13 @@
 
 package de.hf.dac.api.security;
 
-import java.util.List;
+import javax.security.auth.Subject;
 
 public interface RootSecurityProvider<ACCESS_TYPE extends Enum<ACCESS_TYPE>, RESOURCE_LEVEL extends Enum<RESOURCE_LEVEL>> {
     void updateAuth();
 
-    boolean isOperationAllowed(ACCESS_TYPE opType, RESOURCE_LEVEL opLevel, String resourceId, List<String> permissions, String user,
+    boolean isOperationAllowed(ACCESS_TYPE opType, RESOURCE_LEVEL opLevel, String resourceId, Subject subject,
         String operationId);
 
-    boolean isPassthroughAllowed(RESOURCE_LEVEL opLevel, String resourceId, List<String> permissions, String user);
+    boolean isPassthroughAllowed(RESOURCE_LEVEL opLevel, String resourceId, Subject subject);
 }

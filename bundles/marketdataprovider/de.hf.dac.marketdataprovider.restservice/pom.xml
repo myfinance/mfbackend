@@ -75,10 +75,7 @@
             <artifactId>de.hf.dac.api.security</artifactId>
         </dependency>
 
-        <dependency>
-            <groupId>de.hf.dac</groupId>
-            <artifactId>de.hf.dac.security</artifactId>
-        </dependency>
+
 
     </dependencies>
 
