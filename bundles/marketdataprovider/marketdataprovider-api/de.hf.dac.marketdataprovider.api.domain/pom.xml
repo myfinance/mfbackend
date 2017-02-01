@@ -6,7 +6,7 @@
     <parent>
         <groupId>de.hf.dac.marketdataprovider.api</groupId>
         <artifactId>marketdataprovider-api</artifactId>
-        <version>0.6.0-SNAPSHOT</version>
+        <version>0.6.0</version>
         <relativePath>../</relativePath>
     </parent>
     <dependencies> 
