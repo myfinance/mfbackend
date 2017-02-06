@@ -36,6 +36,7 @@ import de.hf.marketDataProvider.paxexam.support.PAXExamTestSetup;
 import de.hf.dac.api.io.efmb.DatabaseInfo;
 import de.hf.dac.api.io.efmb.EntityManagerFactorySetup;
 import de.hf.dac.marketdataprovider.api.domain.Product;
+import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.ops4j.pax.cdi.api.OsgiService;
@@ -96,7 +97,7 @@ public class EntityManagerSetupTest extends PAXExamTestSetup {
         TypedQuery<Product> query = entityManager.createNamedQuery(Product.findAll, Product.class);
         List newproducts=query.getResultList();
 
-        //Assert.assertEquals(2, newproducts.size());
+        Assert.assertEquals(2, newproducts.size());
     }
 
     /*@Test

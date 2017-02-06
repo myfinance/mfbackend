@@ -46,28 +46,12 @@ abstract public class PAXExamTestSetup {
         return when(System.getProperty("PAXDEBUG") != null).useOptions(composite(vmOption("-Xrunjdwp:transport=dt_socket,server=y,suspend=y,address=5005")));
     }
 
-
-    public Option embeddedH2Option() {
-        return features(maven().groupId("de.hf.dac.features").artifactId("dac-base-features").type("xml").classifier("features").versionAsInProject(),
-            "dac-h2-feature");
-    }
-
-
     protected DatabaseInfo inMemoryH2DatabaseInfo() {
 
         DatabaseInfo dbi = new DatabaseInfo("jdbc:h2:mem:test;DATABASE_TO_UPPER=FALSE;MVCC=TRUE;INIT=CREATE SCHEMA IF NOT EXISTS dbo;","sa", "sa", "org.h2.Driver");
         dbi.setDialect("org.hibernate.dialect.H2Dialect");
         // force schema / table creation
         dbi.getExtraHibernateProperties().put("hibernate.hbm2ddl.auto","create");
-        return dbi;
-    }
-
-    protected DatabaseInfo postgresDatabaseInfo() {
-
-        DatabaseInfo dbi = new DatabaseInfo("jdbc:postgresql://localhost:5432/marketdata","postgres", "vulkan", "org.postgresql.Driver");
-        dbi.setDialect("org.hibernate.dialect.PostgreSQL82Dialect");
-        // force schema / table creation
-        dbi.getExtraHibernateProperties().put("hibernate.hbm2ddl.auto","create-drop");
         return dbi;
     }
 

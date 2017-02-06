@@ -40,7 +40,6 @@ import de.hf.dac.security.restauthorization.domain.RestAuthorization;
 
 import javax.persistence.EntityManagerFactory;
 import javax.transaction.TransactionManager;
-import java.util.Properties;
 
 /**
  * Provides the application context of marketdataprovider
