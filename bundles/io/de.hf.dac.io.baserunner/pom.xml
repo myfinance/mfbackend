@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <parent>
+        <artifactId>io</artifactId>
+        <groupId>de.hf.dac.io</groupId>
+        <version>0.7.0-SNAPSHOT</version>
+    </parent>
+    <modelVersion>4.0.0</modelVersion>
+
+    <artifactId>de.hf.dac.io.baserunner</artifactId>
+    <dependencies>
+
+        <dependency>
+            <groupId>de.hf.dac</groupId>
+            <artifactId>de.hf.dac.common</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>commons-cli</groupId>
+            <artifactId>commons-cli</artifactId>
+            <version>${commons-cli.version}</version>
+        </dependency>
+
+        <!--Logger-->
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-log4j12</artifactId>
+            <version>${slf4j.version}</version>
+        </dependency>
+        <!-- redirect all jul logging to slf4j -->
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>jul-to-slf4j</artifactId>
+            <version>${slf4j.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>de.hf.dac.api</groupId>
+            <artifactId>de.hf.dac.api.io</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>de.hf.dac.io</groupId>
+            <artifactId>de.hf.dac.io.configuration</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.servicemix.bundles</groupId>
+            <artifactId>org.apache.servicemix.bundles.spring-beans</artifactId>
+            <version>${spring.version}</version>
+        </dependency>
+
+    </dependencies>
+
+</project>

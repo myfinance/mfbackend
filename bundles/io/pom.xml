@@ -15,6 +15,7 @@
         <module>de.hf.dac.io.efmb</module>
         <module>de.hf.dac.io.env</module>
         <module>de.hf.dac.io.configuration</module>
+        <module>de.hf.dac.io.baserunner</module>
     </modules>
 
 

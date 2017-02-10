@@ -21,6 +21,7 @@
         <module>io</module>
         <module>marketdataprovider</module>
         <module>web</module>
+        <module>de.hf.dac.common</module>
     </modules>
 
 

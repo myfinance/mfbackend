@@ -48,6 +48,7 @@
         <!--rest-->
         <rs-api.version>2.0.1</rs-api.version>
         <swagger.version>1.5.10</swagger.version>
+        <swagger-codegen.version>2.2.1</swagger-codegen.version>
         <jackson.version>2.8.5</jackson.version>
         <snakeyaml.version>1.17</snakeyaml.version>
         <aries.rsa.version>1.9.0</aries.rsa.version>
@@ -68,11 +69,22 @@
         <!--<module>client</module>-->
         <module>features</module>
         <module>pax-exam-test</module>
+        <module>tools</module>
     </modules>
 
 
     <dependencyManagement>
         <dependencies>
+            <dependency>
+                <groupId>de.hf.dac</groupId>
+                <artifactId>de.hf.dac.common</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>de.hf.dac.io</groupId>
+                <artifactId>de.hf.dac.io.baserunner</artifactId>
+                <version>${project.version}</version>
+            </dependency>
             <dependency>
                 <groupId>de.hf.dac</groupId>
                 <artifactId>de.hf.dac.security</artifactId>
