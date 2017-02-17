@@ -24,3 +24,8 @@ org.osgi.service.http.secure.enabled = true
 [CMPID_de.hf.dac.security.auth.DacJaasRealmService]
 #ldap,off or some thing else for karaf default
 auth.mode=karaf
+
+[MARKETDATA]
+MARKETDATA_LAUNCH_USER=karaf
+MARKETDATA_LAUNCH_PASSWORD=karaf
+MARKETDATA_LAUNCH_URL=http://http://localhost:8181/dac/rest

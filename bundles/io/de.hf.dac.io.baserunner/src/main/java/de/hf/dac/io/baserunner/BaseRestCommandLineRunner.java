@@ -21,6 +21,8 @@ import de.hf.dac.common.BuildMetadataUtil;
 import org.apache.commons.cli.ParseException;
 import org.slf4j.MDC;
 
+import java.util.Base64;
+
 /**
  * Base class for all runners which starts jobs in an container via rest interface
  */
@@ -92,25 +94,7 @@ public abstract class BaseRestCommandLineRunner extends BaseRunner {
         MDC.put("CCRVersion", buildMetadata.getCCRVersion());
     }
 
-    private CCRRunnerApi createRestClient() {
-
-        if (this.runnerClient == null) {
-            if (password.startsWith("Basic ")) {
-                this.credentialsHeader = password;
-            } else {
-                this.credentialsHeader = String.format("Basic %s", new String(Base64.encodeBase64((apiUser + ":" + password).getBytes())));
-            }
-
-            ApiClient client = new ApiClient();
-            if (basePath != null) {client.setBasePath(this.basePath);}
-
-            client.addDefaultHeader("Authorization", this.credentialsHeader);
-
-            this.runnerClient = new CCRRunnerApi(client);
-        }
-        return this.runnerClient;
-
-    }
+    protected abstract void passParamsToExternal(String var1, RunnerParameter var2);
 
 }
 

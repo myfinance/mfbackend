@@ -35,7 +35,7 @@ import java.sql.SQLException;
 import java.util.List;
 
 @Path("/hello")
-@Api(value = "hello")
+@Api(value = "Hello")
 public class MyHello  extends TopLevelWithEnvironments{
 
     @GET
@@ -89,7 +89,7 @@ public class MyHello  extends TopLevelWithEnvironments{
         return "saved";
     }
 
-    @GET
+    /*@GET
     @Path("/dosomework")
     @Produces(MediaType.APPLICATION_JSON)
     @ApiOperation(value = "doSomeWork",
@@ -101,5 +101,5 @@ public class MyHello  extends TopLevelWithEnvironments{
             e.printStackTrace();
             return "error";
         }
-    }
+    }*/
 }

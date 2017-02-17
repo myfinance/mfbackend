@@ -21,6 +21,9 @@ import de.hf.dac.marketdataprovider.restservice.marketdataresources.EnvironmentR
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
+import org.apache.http.HttpStatus;
 
 import javax.inject.Named;
 import javax.security.auth.Subject;
@@ -33,13 +36,14 @@ import java.security.AccessController;
 import java.sql.SQLException;
 
 @Path("/marketdata")
-@Api(value = "marketdata")
+@Api(value = "Marketdata") //must start with capital letter for client generation
 public class MarketData extends TopLevelWithEnvironments{
 
     @Path("/environments/{envID}")
     @Produces(MediaType.APPLICATION_JSON)
     @ApiOperation(value = "get Environment", response = EnvironmentResource.class)
     public EnvironmentResource getEnvironment(@PathParam("envID") @ApiParam(value="The Service Environment") String envID) throws SQLException {
+        audit();
         return new EnvironmentResource(getMarketDataEnvironment(envID));
     }
 

@@ -13,6 +13,8 @@
     <packaging>pom</packaging>
     <modules>
         <module>marketdata-client-generator</module>
+        <module>marketdata-client-generation</module>
+        <module>generated-projects/marketdata-client-generated-java</module>
     </modules>
 
 </project>

@@ -17,6 +17,9 @@
 
 package de.hf.dac.api.security;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import javax.security.auth.Subject;
 import java.security.AccessController;
 

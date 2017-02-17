@@ -1,0 +1,263 @@
+{
+  "swagger" : "2.0",
+  "info" : {
+    "description" : "Dac Service REST API",
+    "version" : "1.1",
+    "title" : "Dac Services",
+    "contact" : {
+      "name" : "HF"
+    },
+    "license" : {
+      "name" : "Apache 2.0 License",
+      "url" : "http://www.apache.org/licenses/LICENSE-2.0.html"
+    }
+  },
+  "basePath" : "/dac/rest",
+  "tags" : [ {
+    "name" : "Marketdata"
+  }, {
+    "name" : "Jobs"
+  }, {
+    "name" : "Hello"
+  } ],
+  "paths" : {
+    "/hello" : {
+      "get" : {
+        "tags" : [ "Hello" ],
+        "operationId" : "getHello",
+        "parameters" : [ ],
+        "responses" : {
+          "200" : {
+            "description" : "successful operation",
+            "schema" : {
+              "type" : "string"
+            },
+            "headers" : { }
+          }
+        }
+      }
+    },
+    "/hello/addproduct" : {
+      "get" : {
+        "tags" : [ "Hello" ],
+        "summary" : "save Product",
+        "description" : "",
+        "operationId" : "addProduct",
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "name" : "productId",
+          "in" : "query",
+          "description" : "the isin",
+          "required" : false,
+          "type" : "string"
+        }, {
+          "name" : "description",
+          "in" : "query",
+          "description" : "description",
+          "required" : false,
+          "type" : "string"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "successful operation",
+            "schema" : {
+              "type" : "string"
+            }
+          }
+        }
+      }
+    },
+    "/hello/getEnvironments" : {
+      "get" : {
+        "tags" : [ "Hello" ],
+        "summary" : "List Environments",
+        "description" : "",
+        "operationId" : "getEnvironments",
+        "produces" : [ "application/json" ],
+        "parameters" : [ ],
+        "responses" : {
+          "200" : {
+            "description" : "successful operation",
+            "schema" : {
+              "type" : "array",
+              "items" : {
+                "type" : "object"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/hello/productobjects" : {
+      "get" : {
+        "tags" : [ "Hello" ],
+        "summary" : "get ProductObjects",
+        "description" : "",
+        "operationId" : "getProductObjects",
+        "produces" : [ "application/json" ],
+        "parameters" : [ ],
+        "responses" : {
+          "200" : {
+            "description" : "successful operation",
+            "schema" : {
+              "type" : "array",
+              "items" : {
+                "type" : "object"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/hello/products" : {
+      "get" : {
+        "tags" : [ "Hello" ],
+        "summary" : "get Products",
+        "description" : "",
+        "operationId" : "getProducts",
+        "produces" : [ "application/json" ],
+        "parameters" : [ ],
+        "responses" : {
+          "200" : {
+            "description" : "successful operation",
+            "schema" : {
+              "type" : "string"
+            }
+          }
+        }
+      }
+    },
+    "/marketdata/environments/{envID}/instruments" : {
+      "get" : {
+        "tags" : [ "Marketdata" ],
+        "summary" : "get Instruments",
+        "description" : "",
+        "operationId" : "getInstruments",
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "name" : "envID",
+          "in" : "path",
+          "description" : "The Service Environment",
+          "required" : true,
+          "type" : "string"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "successful operation",
+            "schema" : {
+              "type" : "array",
+              "items" : {
+                "type" : "object"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/marketdata/environments/{envID}/{jobtype}/instruments" : {
+      "post" : {
+        "tags" : [ "Jobs", "Marketdata" ],
+        "summary" : "get Instruments",
+        "description" : "",
+        "operationId" : "importData",
+        "consumes" : [ "application/json" ],
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "name" : "jobtype",
+          "in" : "path",
+          "description" : "launching cops jobs",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "name" : "envID",
+          "in" : "path",
+          "description" : "The Service Environment",
+          "required" : true,
+          "type" : "string"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "successful operation",
+            "schema" : {
+              "type" : "array",
+              "items" : {
+                "type" : "object"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/marketdata/getEnvironments" : {
+      "get" : {
+        "tags" : [ "Marketdata" ],
+        "summary" : "List Environments",
+        "description" : "",
+        "operationId" : "getEnvironments",
+        "produces" : [ "application/json" ],
+        "parameters" : [ ],
+        "responses" : {
+          "200" : {
+            "description" : "successful operation",
+            "schema" : {
+              "type" : "array",
+              "items" : {
+                "type" : "object"
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "definitions" : {
+    "Instrument" : {
+      "type" : "object",
+      "properties" : {
+        "instrumentTypeId" : {
+          "type" : "integer",
+          "format" : "int32"
+        },
+        "sourceId" : {
+          "type" : "integer",
+          "format" : "int32"
+        },
+        "isin" : {
+          "type" : "string"
+        },
+        "id" : {
+          "type" : "integer",
+          "format" : "int32"
+        },
+        "wkn" : {
+          "type" : "string"
+        },
+        "ticker" : {
+          "type" : "string"
+        },
+        "description" : {
+          "type" : "string"
+        },
+        "treeLastChanged" : {
+          "type" : "integer",
+          "format" : "int64"
+        },
+        "homeTradingCurrencyId" : {
+          "type" : "integer",
+          "format" : "int32"
+        }
+      }
+    },
+    "EnvironmentResource" : {
+      "type" : "object",
+      "properties" : {
+        "instruments" : {
+          "type" : "array",
+          "items" : {
+            "$ref" : "#/definitions/Instrument"
+          }
+        }
+      }
+    }
+  }
+}

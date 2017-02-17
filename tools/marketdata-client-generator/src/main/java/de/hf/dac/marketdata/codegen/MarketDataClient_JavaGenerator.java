@@ -52,7 +52,7 @@ public class MarketDataClient_JavaGenerator  extends JavaClientCodegen implement
      * @return the friendly name for the generator
      */
     public String getName() {
-        return "templates/CCRClient_Java";
+        return "templates/MarketDataClient_Java";
     }
 
     /**
