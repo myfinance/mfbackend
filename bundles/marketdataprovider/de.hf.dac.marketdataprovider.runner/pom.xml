@@ -10,12 +10,23 @@
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>de.hf.dac.marketdataprovider.runner</artifactId>
+
+    <properties>
+        <timestamp>${maven.build.timestamp}</timestamp>
+        <maven.build.timestamp.format>yyyy-MM-dd HH:mm</maven.build.timestamp.format>
+    </properties>
+
     <dependencies>
 
         <dependency>
             <groupId>de.hf.dac.io</groupId>
             <artifactId>de.hf.dac.io.baserunner</artifactId>
             <version>${project.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>de.hf.dac.marketdataprovider.api</groupId>
+            <artifactId>de.hf.dac.marketdataprovider.api.application</artifactId>
         </dependency>
 
         <dependency>
@@ -29,5 +40,14 @@
             <artifactId>commons-codec</artifactId>
         </dependency>
     </dependencies>
+
+    <build>
+        <resources>
+            <resource>
+                <directory>src/main/resources</directory>
+                <filtering>true</filtering>
+            </resource>
+        </resources>
+    </build>
 
 </project>

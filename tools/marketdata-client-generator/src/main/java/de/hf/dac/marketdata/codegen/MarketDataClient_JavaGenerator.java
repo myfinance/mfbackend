@@ -110,8 +110,8 @@ public class MarketDataClient_JavaGenerator  extends JavaClientCodegen implement
          */
         languageSpecificPrimitives.addAll(new HashSet<String>());
 
-        groupId = "de.dzbank.poet.ccr";
-        artifactId = "ccr-client-generated";
+        groupId = "de.hf.dac.marketdata";
+        artifactId = "marketdata-client-generated";
         //artifactVersion = getClass().getPackage().getImplementationVersion();
 
 

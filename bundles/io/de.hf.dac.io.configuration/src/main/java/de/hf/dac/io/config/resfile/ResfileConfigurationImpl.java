@@ -54,7 +54,7 @@ public class ResfileConfigurationImpl implements EnvironmentConfiguration {
     public static final String DEVPROPS_FILENAME = "dev.res";
     public static final String DAC_RES_FILENAME = "dac.res";
     public static final String DAC_LOGIN_INFO = "DAC_LOGIN_INFO";
-    public static final String DAC_RES_PATH_ENV = "CAD_RES_PATH";
+    public static final String DAC_RES_PATH_ENV = "DAC_RES_PATH";
 
     private List<String> knownResFiles = new ArrayList<>();
 

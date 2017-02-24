@@ -89,17 +89,5 @@ public class MyHello  extends TopLevelWithEnvironments{
         return "saved";
     }
 
-    /*@GET
-    @Path("/dosomework")
-    @Produces(MediaType.APPLICATION_JSON)
-    @ApiOperation(value = "doSomeWork",
-        response = String.class)
-    public String cal(@PathParam("env") @ApiParam(value="The Service Environment") String env) {
-        try {
-            return getMarketDataEnvironment(env).getProductService().doSomeWork().toString();
-        } catch (SQLException e) {
-            e.printStackTrace();
-            return "error";
-        }
-    }*/
+
 }

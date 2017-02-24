@@ -19,9 +19,11 @@ package de.hf.dac.marketdataprovider.runner;
 
 import de.hf.dac.io.baserunner.BaseRestCommandLineRunner;
 import de.hf.dac.io.baserunner.OptionsParser;
-import de.hf.dac.io.baserunner.RunnerParameter;
+import de.hf.dac.api.io.routes.job.RunnerParameter;
 import de.hf.dac.io.config.resfile.Configuration;
 import de.hf.dac.marketdata.client.api.MarketdataApi;
+import de.hf.dac.marketdataprovider.api.runner.BaseMDRunnerParameter;
+import de.hf.dac.marketdataprovider.api.runner.ImportRunnerParameter;
 import io.swagger.client.ApiClient;
 import io.swagger.client.ApiException;
 import org.apache.commons.codec.binary.Base64;
@@ -35,6 +37,8 @@ public abstract class BaseMDRunner extends BaseRestCommandLineRunner {
     private String password = Configuration.getString("MARKETDATA", "MARKETDATA_LAUNCH_PASSWORD");
     private String basePath = Configuration.getString("MARKETDATA", "MARKETDATA_LAUNCH_URL", "http://http://localhost:8181/dac/rest");
 
+    public static final String ENV_OPTION = "env";
+
     public BaseMDRunner(){
         super(new OptionsParser());
     }
@@ -46,19 +50,24 @@ public abstract class BaseMDRunner extends BaseRestCommandLineRunner {
     }
 
     @Override
-    protected void passParamsToExternal(String env, RunnerParameter runnerParameter) {
-        MarketdataApi client = createRestClient();
-        try {
-            client.importData_envID_jobtype("myimportjob", "dev");
-        } catch (ApiException e) {
-            e.printStackTrace();
+    protected RunnerParameter extractParameters() {
+        String env = "dev";
+        if (optionsParser.hasOption(ENV_OPTION)) {
+            env = optionsParser.getOptionArg(ENV_OPTION);
         }
+        return new BaseMDRunnerParameter(env);
+    }
 
-        /*if (runnerParameter instanceof CCRBaseRunnerParameter) {
+    @Override
+    protected void passParamsToExternal(RunnerParameter runnerParameter) {
 
+
+        if (runnerParameter instanceof ImportRunnerParameter) {
+            ImportRunnerParameter p = (ImportRunnerParameter)runnerParameter;
+            MarketdataApi client = createRestClient();
             try {
-
-                JobInformation start = client.start(env, this.getClass().getSimpleName(), convertParam((CCRBaseRunnerParameter) runnerParameter));
+                client.importData_envID_jobtype("myimportjob", p.getEnvironment());
+                /*JobInformation start = client.importData_envID_jobtype(p));
                 int maxTimeWait = Configuration.getInt("CCR", "CCR_LAUNCH_TIMEOUT", 60*60*1000);
 
                 String uid = start.getUuid();
@@ -81,13 +90,13 @@ public abstract class BaseMDRunner extends BaseRestCommandLineRunner {
 
                 if (start.getStatus().compareTo(JobInformation.StatusEnum.FINISHED) != 0) {
                     throw new RuntimeException("Job Execution Failed " + start );
-                }
+                }*/
 
             } catch (ApiException e) {
                 e.printStackTrace();
                 throw new RuntimeException("Unable to call Externa Rest Resource");
             }
-        }*/
+        }
     }
 
     private MarketdataApi createRestClient() {

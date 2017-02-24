@@ -18,28 +18,56 @@
 package de.hf.dac.marketdataprovider.restservice.marketdataresources;
 
 
-import de.hf.dac.marketdataprovider.api.domain.Instrument;
+import com.google.gson.Gson;
+import de.hf.dac.api.io.routes.job.JobDispatcher;
+import de.hf.dac.api.io.routes.job.JobInformation;
+import de.hf.dac.api.security.SecuredResource;
+import de.hf.dac.marketdataprovider.api.application.MarketDataEnvironment;
+import de.hf.dac.marketdataprovider.api.application.OpLevel;
+import de.hf.dac.marketdataprovider.api.application.OpType;
+import de.hf.dac.marketdataprovider.api.runner.ImportRunnerParameter;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
+import org.apache.http.HttpStatus;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.ws.rs.Consumes;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 import java.util.List;
 
 @Api(tags = "Jobs")
-public class MDRunnerResource {
+public class MDRunnerResource extends SecuredResource<OpType,OpLevel> {
     private static final Logger LOG = LoggerFactory.getLogger("MDRunnerResource");
+    final protected static Gson gson = new Gson();
+    final protected MarketDataEnvironment marketDataEnvironment;
+
+
+    public MDRunnerResource(MarketDataEnvironment marketDataEnvironment, String jobType) {
+        super(marketDataEnvironment);
+        this.marketDataEnvironment = marketDataEnvironment;
+    }
 
     @POST
-    @Path("/instruments")
+    @Path("/{env}/start")
+    @ApiOperation(response = JobInformation.class, value = "execute marketdata launcher", notes = "Execute marketdata Core Launcher", nickname = "VERBATIMstart")
+    @ApiResponses(value = { @ApiResponse(code = HttpStatus.SC_OK, message = "Job Submitted", response = JobInformation.class) })
     @Produces(MediaType.APPLICATION_JSON)
-    @ApiOperation(value = "get Instruments",
-        response = List.class)
-    public void importData() {
-        LOG.info("import data");
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response start(@PathParam("env") @ApiParam(name = "env", value = "Environment to use") String env,
+        @ApiParam(name = "params", value = "Parameter") ImportRunnerParameter params) {
+
+        JobInformation jobInformation = marketDataEnvironment.getDispatcher()
+            .sendJob(new WrappedJobParameter(params, env, null, RunnerLaunchParameter.RUNNER_REQUEST, RunnerLaunchParameter.RUNNER_RESULT));
+
+        return Response.ok(gson.toJson(jobInformation)).build();
     }
 }

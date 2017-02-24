@@ -17,7 +17,6 @@
 
 package de.hf.dac.marketdataprovider.runner;
 
-
 public class ImportRunner extends BaseMDRunner {
 
     /**
@@ -32,4 +31,6 @@ public class ImportRunner extends BaseMDRunner {
             e.printStackTrace();
         }
     }
+
+
 }

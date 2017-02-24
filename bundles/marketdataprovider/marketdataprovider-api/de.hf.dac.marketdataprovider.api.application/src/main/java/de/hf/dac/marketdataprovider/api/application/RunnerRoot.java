@@ -6,20 +6,21 @@
  *
  *  Project     : dac
  *
- *  File        : RunnerParameter.java
+ *  File        : RunnerRoot.java
  *
  *  Author(s)   : hf
  *
- *  Created     : 17.02.2017
+ *  Created     : 21.02.2017
  *
  * ----------------------------------------------------------------------------
  */
 
-package de.hf.dac.io.baserunner;
+package de.hf.dac.marketdataprovider.api.application;
 
-import java.io.Serializable;
+import de.hf.dac.api.io.routes.job.JobDispatcher;
+import de.hf.dac.api.io.routes.job.JobParameter;
 
-public interface RunnerParameter extends Serializable {
-    String getBeanClass();
+public interface RunnerRoot {
+    JobDispatcher<JobParameter> getDispatcher();
+    MDRunnerJobType getJobType(String type);
 }
-

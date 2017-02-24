@@ -24,6 +24,8 @@ import de.hf.dac.api.io.efmb.EntityManagerFactorySetup;
 import de.hf.dac.api.io.efmb.tx.WrappedEntityManagerFactory;
 import de.hf.dac.api.io.env.EnvironmentService;
 import de.hf.dac.api.io.env.EnvironmentTargetInfo;
+import de.hf.dac.api.io.routes.job.JobDispatcher;
+import de.hf.dac.api.io.routes.job.JobParameter;
 import de.hf.dac.api.security.RootSecurityProvider;
 import de.hf.dac.marketdataprovider.api.application.EnvTarget;
 import de.hf.dac.marketdataprovider.api.application.MarketDataEnvironment;
@@ -50,13 +52,15 @@ public class MarketDataEnvironmentBuilderModule  extends AbstractModule {
     private EntityManagerFactorySetup emfb;
     TransactionManager jtaManager;
     private String env;
+    private JobDispatcher<JobParameter> dispatcher;
 
     public MarketDataEnvironmentBuilderModule(EnvironmentService envService, EntityManagerFactorySetup emfb,
-        TransactionManager jtaManager, String env){
+        TransactionManager jtaManager, String env, JobDispatcher<JobParameter> dispatcher){
         this.envService=envService;
         this.emfb=emfb;
         this.jtaManager=jtaManager;
         this.env = env;
+        this.dispatcher = dispatcher;
     }
 
     @Override
@@ -72,6 +76,8 @@ public class MarketDataEnvironmentBuilderModule  extends AbstractModule {
         bind(InstrumentService.class).to(InstrumentServiceImpl.class);
 
         bind(RootSecurityProvider.class).to(RootSecurityServiceImpl.class);
+
+        bind(JobDispatcher.class).toInstance(dispatcher);
 
         bind(MarketDataEnvironment.class).to(MarketDataEnvironmentImpl.class);
     }

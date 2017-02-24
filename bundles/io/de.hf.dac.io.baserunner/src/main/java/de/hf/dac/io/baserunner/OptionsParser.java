@@ -20,6 +20,7 @@ package de.hf.dac.io.baserunner;
 import de.hf.dac.api.io.efmb.DatabaseInfo;
 import de.hf.dac.io.config.resfile.Configuration;
 import de.hf.dac.io.config.resfile.ResFileParser;
+import de.hf.dac.io.config.resfile.ResfileConfigurationImpl;
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.GnuParser;
 import org.apache.commons.cli.HelpFormatter;
@@ -40,10 +41,10 @@ import java.util.List;
  */
 public class OptionsParser {
     public static final String DEBUG_OPTION = "debug";
-    private static final String CAD_LOGIN_INFO = "CAD_LOGIN_INFO";
+    private static final String CAD_LOGIN_INFO = ResfileConfigurationImpl.DAC_LOGIN_INFO;
 
-    private static final String DEVPROPS_FILENAME = "../dev.res";
-    private static final String CAD_RES_PATH_ENV = "CAD_RES_PATH";
+    private static final String DEVPROPS_FILENAME = ResfileConfigurationImpl.DEVPROPS_FILENAME;
+    private static final String DAC_RES_PATH_ENV = ResfileConfigurationImpl.DAC_RES_PATH_ENV;
 
     private static final String VERBOSE_SQL_LONG = "vs";
     private static final String EXTRA_VERBOSE_SQL_LONG = "vvs";
@@ -225,21 +226,21 @@ public class OptionsParser {
             } else {
                 LOG.info("Environment variable {} not set.", CAD_LOGIN_INFO);
             }
-            if (System.getenv(CAD_RES_PATH_ENV) != null) {
+            if (System.getenv(DAC_RES_PATH_ENV) != null) {
                 // take it from environment
-                String poetResFileName = System.getenv(CAD_RES_PATH_ENV) + "/poet.res";
+                String poetResFileName = System.getenv(DAC_RES_PATH_ENV) + "/" + ResfileConfigurationImpl.DAC_RES_FILENAME;
 
                 if (new File(poetResFileName).exists() && !resFileList.contains(poetResFileName)) {
                     resFileList.add(poetResFileName);
                 } else {
-                    LOG.info("Res File {}  from environment variable {} does not exist", poetResFileName, CAD_RES_PATH_ENV);
+                    LOG.info("Res File {}  from environment variable {} does not exist", poetResFileName, DAC_RES_PATH_ENV);
                 }
             } else {
-                LOG.info("Environment variable {} not set.", CAD_RES_PATH_ENV);
+                LOG.info("Environment variable {} not set.", DAC_RES_PATH_ENV);
             }
             if (resFileList.isEmpty()) {
                 LOG.error("Using development defaults", CAD_LOGIN_INFO);
-                resFiles = new String[] { "../poet.res" };
+                resFiles = new String[] { "../" + ResfileConfigurationImpl.DAC_RES_FILENAME };
             } else {
                 resFiles = (String[]) resFileList.toArray(new String[resFileList.size()]);
             }

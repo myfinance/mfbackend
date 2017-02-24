@@ -66,17 +66,9 @@ public abstract class TopLevelWithEnvironments{
         return service;
     }
 
-    protected MarketDataEnvironmentBuilder getMarketDataEnvironmentBuilder() throws SQLException {
-        final BundleContext bundleContext = FrameworkUtil.getBundle(this.getClass()).getBundleContext();
-
-        ServiceReference<MarketDataEnvironmentBuilder> sr = bundleContext.getServiceReference(MarketDataEnvironmentBuilder.class);
-
-        return bundleContext.getService(sr);
-    }
-
     protected MarketDataEnvironment getMarketDataEnvironment(String env) throws SQLException {
 
-        return getMarketDataEnvironmentBuilder().build(env);
+        return getService(MarketDataEnvironmentBuilder.class).build(env);
     }
 
     protected void audit() {
@@ -92,7 +84,7 @@ public abstract class TopLevelWithEnvironments{
         response = List.class)
     public List<String> getEnvironments() throws SQLException{
 
-        return getMarketDataEnvironmentBuilder().getInfo();
+        return getService(MarketDataEnvironmentBuilder.class).getInfo();
     }
 
 }

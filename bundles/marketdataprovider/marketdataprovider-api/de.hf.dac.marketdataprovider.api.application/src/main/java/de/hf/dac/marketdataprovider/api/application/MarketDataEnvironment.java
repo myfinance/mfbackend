@@ -17,6 +17,8 @@
 
 package de.hf.dac.marketdataprovider.api.application;
 
+import de.hf.dac.api.io.routes.job.JobDispatcher;
+import de.hf.dac.api.io.routes.job.JobParameter;
 import de.hf.dac.api.security.IdentifiableResource;
 import de.hf.dac.api.security.RootSecurityProvider;
 import de.hf.dac.api.security.Secured;
@@ -27,4 +29,5 @@ public interface MarketDataEnvironment extends IdentifiableResource<OpLevel>, Se
     ProductService getProductService();
     InstrumentService getInstrumentService();
     RootSecurityProvider getRootSecurityProvider();
+    JobDispatcher<JobParameter> getDispatcher();
 }

@@ -55,6 +55,8 @@
         <gson.version>2.7</gson.version>
         <commons-codec.version>1.10</commons-codec.version>
 
+        <camel.version>2.18.1</camel.version>
+
 
     </properties>
 
@@ -319,6 +321,12 @@
                 <version>${jackson.version}</version>
             </dependency>
 
+            <dependency>
+                <groupId>com.google.code.gson</groupId>
+                <artifactId>gson</artifactId>
+                <version>${gson.version}</version>
+            </dependency>
+
             <!--deserialisation in rest client -->
             <dependency>
                 <groupId>commons-codec</groupId>
@@ -327,6 +335,18 @@
             </dependency>
 
             <!-- rest ende -->
+
+            <!--camel-->
+            <dependency>
+                <groupId>org.apache.camel</groupId>
+                <artifactId>camel-core</artifactId>
+                <version>${camel.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.camel</groupId>
+                <artifactId>camel-scr</artifactId>
+                <version>${camel.version}</version>
+            </dependency>
 
 
             <!--Apache Options für Optionparser in Common -->

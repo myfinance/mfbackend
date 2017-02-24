@@ -17,19 +17,16 @@
 
 package de.hf.dac.io.baserunner;
 
-import de.hf.dac.common.BuildMetadataUtil;
-import org.apache.commons.cli.ParseException;
-import org.slf4j.MDC;
-
-import java.util.Base64;
+import de.hf.dac.api.io.routes.job.RunnerParameter;
 
 /**
  * Base class for all runners which starts jobs in an container via rest interface
  */
 public abstract class BaseRestCommandLineRunner extends BaseRunner {
 
-    private boolean exitOnShutdown = true;
-    private OptionsParser optionsParser;
+
+
+
 
     public BaseRestCommandLineRunner(OptionsParser optionsParser) {
         this.optionsParser = optionsParser;
@@ -42,59 +39,26 @@ public abstract class BaseRestCommandLineRunner extends BaseRunner {
      * @throws Exception the exception
      */
     public void run(String[] args) throws Exception {
-        // log pid if available
-        logPid();
+        int rc = 0;
 
-        // log build info if available
-        logBuidInfo();
+        try {
+            super.run(args);
 
-        if (args != null) {
-            prepareCommandLineParser(args);
-        } else {
-            log.info("No Programm Arguments provided. ");
-            System.exit(0);
+            this.passParamsToExternal(this.extractParameters());
+
+        } catch (Exception var7) {
+            rc = -1;
+            var7.printStackTrace();
+        } finally {
+            this.shutdown(rc);
         }
     }
 
-    /**
-     * Subclass can add extra CLI Options here
-     */
-    protected abstract void addCustomCommandLineOptions();
 
-    protected void prepareCommandLineParser(String[] args) throws ParseException {
-        addBaseCommandLineOptions();
-        addCustomCommandLineOptions();
 
-        optionsParser.parse(args);
+    protected abstract RunnerParameter extractParameters();
 
-        // handle defaults like db connect
-        handleDefaultOptions(optionsParser);
-
-    }
-
-    private void addBaseCommandLineOptions() {
-        // enable DEBUGGING by using Command Line Parameter
-        optionsParser.addOption(OptionsParser.DEBUG_OPTION, "Debug Options enabled", "Use Debug Options like data filtering .", false);
-    }
-
-    public boolean isExitOnShutdown() {
-        return exitOnShutdown;
-    }
-
-    public void setExitOnShutdown(boolean exitOnShutdown) {
-        this.exitOnShutdown = exitOnShutdown;
-    }
-
-    protected void logBuidInfo() {
-        BuildMetadataUtil buildMetadata = BuildMetadataUtil.get(this.getClass());
-        log.info("CCR Build version     : {} ", buildMetadata.getCCRVersion());
-        log.info("CCR Build timestamp   : {} ", buildMetadata.getBuildTimestamp());
-        log.info("CCR Build User: {} ", buildMetadata.getUserName());
-
-        MDC.put("CCRVersion", buildMetadata.getCCRVersion());
-    }
-
-    protected abstract void passParamsToExternal(String var1, RunnerParameter var2);
+    protected abstract void passParamsToExternal( RunnerParameter var);
 
 }
 

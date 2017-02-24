@@ -23,6 +23,8 @@ import de.hf.dac.api.io.env.EnvironmentInfo;
 import de.hf.dac.api.io.env.EnvironmentService;
 import de.hf.dac.api.io.env.context.ApplicationContext;
 import de.hf.dac.api.io.env.context.ContextBuilder;
+import de.hf.dac.api.io.routes.job.JobDispatcher;
+import de.hf.dac.api.io.routes.job.JobParameter;
 import de.hf.dac.marketdataprovider.api.application.MarketDataEnvironmentContextBuilder;
 import de.hf.dac.marketdataprovider.api.application.MarketDataSystemDescriptor;
 import org.osgi.service.component.annotations.Component;
@@ -48,6 +50,9 @@ public class MarketDataEnvironmentContextBuilderImpl implements MarketDataEnviro
     @Reference
     TransactionManager jtaManager;
 
+    @Reference
+    private JobDispatcher<JobParameter> dispatcher;
+
 
     @Override
     public ApplicationContext build(String environment) throws SQLException {
@@ -55,7 +60,7 @@ public class MarketDataEnvironmentContextBuilderImpl implements MarketDataEnviro
             = new MarketDataEnvironmentBuilderModule(envService, //
             emfb, //
             jtaManager, //
-            environment);
+            environment, dispatcher);
         return contextBuilder.build(MarketDataSystemDescriptor.CONTEXT+"/" + environment, new Module[] { marketDataEnvironmentBuilderModule });
     }
 
