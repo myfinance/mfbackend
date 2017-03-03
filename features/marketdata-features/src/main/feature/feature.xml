@@ -29,6 +29,7 @@
     </feature>
 
     <feature name="marketdata-restservice-feature" version="${pom.version}">
+        <feature>dac-io-routes-feature</feature>
         <feature>rest-base-feature</feature>
         <feature>marketdata-service-feature</feature>
         <feature prerequisite="true" dependency="true">marketdata-persistence-feature</feature>

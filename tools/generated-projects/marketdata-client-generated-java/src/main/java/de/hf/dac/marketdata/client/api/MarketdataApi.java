@@ -39,7 +39,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-@javax.annotation.Generated(value = "class de.hf.dac.marketdata.codegen.MarketDataClient_JavaGenerator", date = "2017-02-17T14:45:39.233+01:00")
+@javax.annotation.Generated(value = "class de.hf.dac.marketdata.codegen.MarketDataClient_JavaGenerator", date = "2017-03-03T12:58:46.482+01:00")
 public class MarketdataApi {
   private ApiClient apiClient;
 
@@ -135,54 +135,5 @@ public class MarketdataApi {
 
     GenericType<List<Object>> localVarReturnType = new GenericType<List<Object>>() {};
     return apiClient.invokeAPI(localVarPath, "GET", localVarQueryParams, localVarPostBody, localVarHeaderParams, localVarFormParams, localVarAccept, localVarContentType, localVarAuthNames, localVarReturnType);
-      }
-  /**
-   * get Instruments
-   * 
-   * @param jobtype launching cops jobs (required)
-   * @param envID The Service Environment (required)
-   * @return List<Object>
-   * @throws ApiException if fails to make API call
-   */
-  public List<Object> importData_envID_jobtype(String jobtype, String envID) throws ApiException {
-    Object localVarPostBody = null;
-    
-    // verify the required parameter 'jobtype' is set
-    if (jobtype == null) {
-      throw new ApiException(400, "Missing the required parameter 'jobtype' when calling importData_envID_jobtype");
-    }
-    
-    // verify the required parameter 'envID' is set
-    if (envID == null) {
-      throw new ApiException(400, "Missing the required parameter 'envID' when calling importData_envID_jobtype");
-    }
-    
-    // create path and map variables
-    String localVarPath = "/marketdata/environments/{envID}/{jobtype}/instruments".replaceAll("\\{format\\}","json")
-      .replaceAll("\\{" + "jobtype" + "\\}", apiClient.escapeString(jobtype.toString()))
-      .replaceAll("\\{" + "envID" + "\\}", apiClient.escapeString(envID.toString()));
-
-    // query params
-    List<Pair> localVarQueryParams = new ArrayList<Pair>();
-    Map<String, String> localVarHeaderParams = new HashMap<String, String>();
-    Map<String, Object> localVarFormParams = new HashMap<String, Object>();
-
-
-    
-    
-    final String[] localVarAccepts = {
-      "application/json"
-    };
-    final String localVarAccept = apiClient.selectHeaderAccept(localVarAccepts);
-
-    final String[] localVarContentTypes = {
-      "application/json"
-    };
-    final String localVarContentType = apiClient.selectHeaderContentType(localVarContentTypes);
-
-    String[] localVarAuthNames = new String[] {  };
-
-    GenericType<List<Object>> localVarReturnType = new GenericType<List<Object>>() {};
-    return apiClient.invokeAPI(localVarPath, "POST", localVarQueryParams, localVarPostBody, localVarHeaderParams, localVarFormParams, localVarAccept, localVarContentType, localVarAuthNames, localVarReturnType);
       }
 }

@@ -19,12 +19,13 @@ package de.hf.dac.marketdataprovider.restservice.marketdataresources;
 
 
 import com.google.gson.Gson;
-import de.hf.dac.api.io.routes.job.JobDispatcher;
 import de.hf.dac.api.io.routes.job.JobInformation;
+import de.hf.dac.api.io.routes.job.WrappedJobParameter;
 import de.hf.dac.api.security.SecuredResource;
 import de.hf.dac.marketdataprovider.api.application.MarketDataEnvironment;
 import de.hf.dac.marketdataprovider.api.application.OpLevel;
 import de.hf.dac.marketdataprovider.api.application.OpType;
+import de.hf.dac.marketdataprovider.api.runner.BaseMDRunnerParameter;
 import de.hf.dac.marketdataprovider.api.runner.ImportRunnerParameter;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -42,7 +43,6 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import java.util.List;
 
 @Api(tags = "Jobs")
 public class MDRunnerResource extends SecuredResource<OpType,OpLevel> {
@@ -51,22 +51,23 @@ public class MDRunnerResource extends SecuredResource<OpType,OpLevel> {
     final protected MarketDataEnvironment marketDataEnvironment;
 
 
-    public MDRunnerResource(MarketDataEnvironment marketDataEnvironment, String jobType) {
+    public MDRunnerResource(MarketDataEnvironment marketDataEnvironment) {
         super(marketDataEnvironment);
         this.marketDataEnvironment = marketDataEnvironment;
     }
 
     @POST
-    @Path("/{env}/start")
+    @Path("/{jobtype}/start")
     @ApiOperation(response = JobInformation.class, value = "execute marketdata launcher", notes = "Execute marketdata Core Launcher", nickname = "VERBATIMstart")
     @ApiResponses(value = { @ApiResponse(code = HttpStatus.SC_OK, message = "Job Submitted", response = JobInformation.class) })
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response start(@PathParam("env") @ApiParam(name = "env", value = "Environment to use") String env,
-        @ApiParam(name = "params", value = "Parameter") ImportRunnerParameter params) {
-
+    public Response start(@PathParam("jobtype") @ApiParam(value="The JobType") String jobType,
+            @ApiParam(name = "params", value = "Parameter") BaseMDRunnerParameter params) {
+        //checkOperationAllowed(OpType.WRITE, jobtype);
+        //todo wird hier env benötigt?, sollte nicht besser der Jobtype mitgegeben werden
         JobInformation jobInformation = marketDataEnvironment.getDispatcher()
-            .sendJob(new WrappedJobParameter(params, env, null, RunnerLaunchParameter.RUNNER_REQUEST, RunnerLaunchParameter.RUNNER_RESULT));
+            .sendJob(new WrappedJobParameter(params, "dev", null, WrappedJobParameter.RUNNER_REQUEST, WrappedJobParameter.RUNNER_RESULT));
 
         return Response.ok(gson.toJson(jobInformation)).build();
     }

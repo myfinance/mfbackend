@@ -21,21 +21,26 @@ import de.hf.dac.io.baserunner.BaseRestCommandLineRunner;
 import de.hf.dac.io.baserunner.OptionsParser;
 import de.hf.dac.api.io.routes.job.RunnerParameter;
 import de.hf.dac.io.config.resfile.Configuration;
-import de.hf.dac.marketdata.client.api.MarketdataApi;
+import de.hf.dac.marketdata.client.api.MDRunnerApi;
 import de.hf.dac.marketdataprovider.api.runner.BaseMDRunnerParameter;
 import de.hf.dac.marketdataprovider.api.runner.ImportRunnerParameter;
 import io.swagger.client.ApiClient;
 import io.swagger.client.ApiException;
 import org.apache.commons.codec.binary.Base64;
+import de.hf.dac.marketdata.client.model.JobInformation;
+import org.joda.time.DateTime;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.util.Arrays;
+import java.util.HashMap;
 
 public abstract class BaseMDRunner extends BaseRestCommandLineRunner {
 
+    public static final Logger LOG = LoggerFactory.getLogger(BaseMDRunner.class);
 
-    private MarketdataApi runnerClient;
+    private MDRunnerApi runnerClient;
     private String credentialsHeader;
-    private String apiUser = Configuration.getString("MARKETDATA", "MARKETDATA_LAUNCH_USER");
-    private String password = Configuration.getString("MARKETDATA", "MARKETDATA_LAUNCH_PASSWORD");
-    private String basePath = Configuration.getString("MARKETDATA", "MARKETDATA_LAUNCH_URL", "http://http://localhost:8181/dac/rest");
 
     public static final String ENV_OPTION = "env";
 
@@ -64,10 +69,10 @@ public abstract class BaseMDRunner extends BaseRestCommandLineRunner {
 
         if (runnerParameter instanceof ImportRunnerParameter) {
             ImportRunnerParameter p = (ImportRunnerParameter)runnerParameter;
-            MarketdataApi client = createRestClient();
+            MDRunnerApi client = createRestClient();
             try {
-                client.importData_envID_jobtype("myimportjob", p.getEnvironment());
-                /*JobInformation start = client.importData_envID_jobtype(p));
+                client.start("myimportjob", p.getEnvironment(), convertParam((BaseMDRunnerParameter)runnerParameter));
+                JobInformation start = client.start("myimportjob", p.getEnvironment(), convertParam((BaseMDRunnerParameter)runnerParameter));
                 int maxTimeWait = Configuration.getInt("CCR", "CCR_LAUNCH_TIMEOUT", 60*60*1000);
 
                 String uid = start.getUuid();
@@ -90,7 +95,7 @@ public abstract class BaseMDRunner extends BaseRestCommandLineRunner {
 
                 if (start.getStatus().compareTo(JobInformation.StatusEnum.FINISHED) != 0) {
                     throw new RuntimeException("Job Execution Failed " + start );
-                }*/
+                }
 
             } catch (ApiException e) {
                 e.printStackTrace();
@@ -99,8 +104,10 @@ public abstract class BaseMDRunner extends BaseRestCommandLineRunner {
         }
     }
 
-    private MarketdataApi createRestClient() {
-
+    private MDRunnerApi createRestClient() {
+        String apiUser = Configuration.getString("MARKETDATA", "MARKETDATA_LAUNCH_USER");
+        String password = Configuration.getString("MARKETDATA", "MARKETDATA_LAUNCH_PASSWORD");
+        String basePath = Configuration.getString("MARKETDATA", "MARKETDATA_LAUNCH_URL", "http://localhost:8181/dac/rest");
         if (this.runnerClient == null) {
             if (password.startsWith("Basic ")) {
                 this.credentialsHeader = password;
@@ -109,13 +116,25 @@ public abstract class BaseMDRunner extends BaseRestCommandLineRunner {
             }
 
             ApiClient client = new ApiClient();
-            if (basePath != null) {client.setBasePath(this.basePath);}
+            if (basePath != null) {client.setBasePath(basePath);}
 
             client.addDefaultHeader("Authorization", this.credentialsHeader);
 
-            this.runnerClient = new MarketdataApi(client);
+            this.runnerClient = new MDRunnerApi(client);
         }
         return this.runnerClient;
+    }
 
+    protected long getNextTimeOut(int maxTimeWait, int count) {
+        // some fancier logic possible
+        return maxTimeWait > 1000 ? 1000*(count%10) : maxTimeWait;
+    }
+
+    private de.hf.dac.marketdata.client.model.BaseMDRunnerParameter convertParam(BaseMDRunnerParameter rp) {
+        de.hf.dac.marketdata.client.model.BaseMDRunnerParameter p = new de.hf.dac.marketdata.client.model.BaseMDRunnerParameter();
+        p.setEnvironment(rp.getEnvironment());
+        p.setParams(new HashMap());
+        p.getParams().putAll(rp.getParams());
+        return p;
     }
 }

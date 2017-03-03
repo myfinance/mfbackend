@@ -68,7 +68,7 @@
 
     <modules>
         <module>bundles</module>
-        <module>bootstrapper</module>
+        <module>distributions</module>
         <!--<module>client</module>-->
         <module>features</module>
         <module>pax-exam-test</module>
@@ -369,6 +369,11 @@
     <build>
         <pluginManagement>
             <plugins>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-jar-plugin</artifactId>
+                    <version>2.6</version>
+                </plugin>
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-release-plugin</artifactId>

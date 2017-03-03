@@ -20,7 +20,7 @@ package de.hf.dac.marketdataprovider.restservice;
 
 import org.osgi.service.metatype.annotations.ObjectClassDefinition;
 
-@ObjectClassDefinition(name = "MarketData Service Configuration")
+@ObjectClassDefinition(name = "MDDataService Service Configuration")
 public @interface RESTApplicationConfiguration {
     String serverAddress() default "/rest";
 

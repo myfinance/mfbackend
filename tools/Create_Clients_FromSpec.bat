@@ -7,7 +7,7 @@ set specfile=%2
 
 set generatedroot=%~dp0/generated-projects
 
-set MAVEN_OPTS=-DsupportingFiles -Dapis=Hello,Marketdata -Dmodels
+set MAVEN_OPTS=-DsupportingFiles -Dapis=Hello,Marketdata,MDRunner -Dmodels
 
 echo %MAVEN_OPTS%
 

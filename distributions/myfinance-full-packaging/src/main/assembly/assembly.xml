@@ -1,0 +1,58 @@
+<assembly
+        xmlns="http://maven.apache.org/plugins/maven-assembly-plugin/assembly/1.1.2"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://maven.apache.org/plugins/maven-assembly-plugin/assembly/1.1.2 http://maven.apache.org/xsd/assembly-1.1.2.xsd">
+    <id>bin</id>
+    <formats>
+        <format>zip</format>
+    </formats>
+
+    <includeBaseDirectory>false</includeBaseDirectory>
+
+    <fileSets>
+
+        <fileSet>
+            <outputDirectory>lib</outputDirectory>
+            <directory>${project.build.directory}/lib</directory>
+            <includes>
+                <include>*</include>
+            </includes>
+        </fileSet>
+
+        <fileSet>
+            <outputDirectory></outputDirectory>
+            <directory>${project.build.directory}</directory>
+
+            <includes>
+                <include>**/run*</include>
+            </includes>
+        </fileSet>
+        <fileSet>
+            <outputDirectory></outputDirectory>
+            <directory>${project.build.scriptSourceDirectory}</directory>
+
+            <includes>
+                <include>*</include>
+            </includes>
+            <fileMode>0755</fileMode>
+        </fileSet>
+        <fileSet>
+            <outputDirectory>database</outputDirectory>
+            <directory>${project.build.scriptSourceDirectory}/../../../../../database/</directory>
+            <includes>
+                <include>**/*</include>
+            </includes>
+            <fileMode>0755</fileMode>
+            <lineEnding>unix</lineEnding>
+        </fileSet>
+        <!--<fileSet>
+            <outputDirectory></outputDirectory>
+            <directory>${project.build.scriptSourceDirectory}/../../../../../distributions/myfinance-full-packaging/scripts/</directory>
+            <includes>
+                <include>dbcmd.sh</include>
+            </includes>
+            <fileMode>0755</fileMode>
+        </fileSet>-->
+    </fileSets>
+
+</assembly>

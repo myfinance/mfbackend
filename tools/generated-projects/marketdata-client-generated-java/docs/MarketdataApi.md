@@ -6,7 +6,6 @@ Method | HTTP request | Description
 ------------- | ------------- | -------------
 [**getEnvironments**](MarketdataApi.md#getEnvironments) | **GET** /marketdata/getEnvironments | List Environments
 [**getInstruments_envID**](MarketdataApi.md#getInstruments_envID) | **GET** /marketdata/environments/{envID}/instruments | get Instruments
-[**importData_envID_jobtype**](MarketdataApi.md#importData_envID_jobtype) | **POST** /marketdata/environments/{envID}/{jobtype}/instruments | get Instruments
 
 
 <a name="getEnvironments"></a>
@@ -93,52 +92,5 @@ No authorization required
 ### HTTP request headers
 
  - **Content-Type**: Not defined
- - **Accept**: application/json
-
-<a name="importData_envID_jobtype"></a>
-# **importData_envID_jobtype**
-> List&lt;Object&gt; importData_envID_jobtype(jobtype, envID)
-
-get Instruments
-
-
-
-### Example
-```java
-// Import classes:
-//import io.swagger.client.ApiException;
-//import de.hf.dac.marketdata.client.api.MarketdataApi;
-
-
-MarketdataApi apiInstance = new MarketdataApi();
-String jobtype = "jobtype_example"; // String | launching cops jobs
-String envID = "envID_example"; // String | The Service Environment
-try {
-    List<Object> result = apiInstance.importData_envID_jobtype(jobtype, envID);
-    System.out.println(result);
-} catch (ApiException e) {
-    System.err.println("Exception when calling MarketdataApi#importData_envID_jobtype");
-    e.printStackTrace();
-}
-```
-
-### Parameters
-
-Name | Type | Description  | Notes
-------------- | ------------- | ------------- | -------------
- **jobtype** | **String**| launching cops jobs |
- **envID** | **String**| The Service Environment |
-
-### Return type
-
-**List&lt;Object&gt;**
-
-### Authorization
-
-No authorization required
-
-### HTTP request headers
-
- - **Content-Type**: application/json
  - **Accept**: application/json
 

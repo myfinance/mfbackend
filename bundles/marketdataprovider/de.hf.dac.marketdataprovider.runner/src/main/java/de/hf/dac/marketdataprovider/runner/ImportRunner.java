@@ -17,6 +17,9 @@
 
 package de.hf.dac.marketdataprovider.runner;
 
+import de.hf.dac.api.io.routes.job.RunnerParameter;
+import de.hf.dac.marketdataprovider.api.runner.ImportRunnerParameter;
+
 public class ImportRunner extends BaseMDRunner {
 
     /**
@@ -30,6 +33,15 @@ public class ImportRunner extends BaseMDRunner {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    @Override
+    protected RunnerParameter extractParameters() {
+        String env = "dev";
+        if (optionsParser.hasOption(ENV_OPTION)) {
+            env = optionsParser.getOptionArg(ENV_OPTION);
+        }
+        return new ImportRunnerParameter(env, ImportRunnerParameter.IMPORTTYPES.YAHOO);
     }
 
 

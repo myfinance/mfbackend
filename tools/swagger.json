@@ -14,11 +14,13 @@
   },
   "basePath" : "/dac/rest",
   "tags" : [ {
-    "name" : "Marketdata"
+    "name" : "MDRunner"
   }, {
     "name" : "Jobs"
   }, {
     "name" : "Hello"
+  }, {
+    "name" : "Marketdata"
   } ],
   "paths" : {
     "/hello" : {
@@ -154,40 +156,6 @@
         }
       }
     },
-    "/marketdata/environments/{envID}/{jobtype}/instruments" : {
-      "post" : {
-        "tags" : [ "Jobs", "Marketdata" ],
-        "summary" : "get Instruments",
-        "description" : "",
-        "operationId" : "importData",
-        "consumes" : [ "application/json" ],
-        "produces" : [ "application/json" ],
-        "parameters" : [ {
-          "name" : "jobtype",
-          "in" : "path",
-          "description" : "launching cops jobs",
-          "required" : true,
-          "type" : "string"
-        }, {
-          "name" : "envID",
-          "in" : "path",
-          "description" : "The Service Environment",
-          "required" : true,
-          "type" : "string"
-        } ],
-        "responses" : {
-          "200" : {
-            "description" : "successful operation",
-            "schema" : {
-              "type" : "array",
-              "items" : {
-                "type" : "object"
-              }
-            }
-          }
-        }
-      }
-    },
     "/marketdata/getEnvironments" : {
       "get" : {
         "tags" : [ "Marketdata" ],
@@ -208,9 +176,196 @@
           }
         }
       }
+    },
+    "/runner/getEnvironments" : {
+      "get" : {
+        "tags" : [ "MDRunner" ],
+        "summary" : "List Environments",
+        "description" : "",
+        "operationId" : "getEnvironments",
+        "produces" : [ "application/json" ],
+        "parameters" : [ ],
+        "responses" : {
+          "200" : {
+            "description" : "successful operation",
+            "schema" : {
+              "type" : "array",
+              "items" : {
+                "type" : "object"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/runner/list" : {
+      "get" : {
+        "tags" : [ "MDRunner" ],
+        "summary" : "list known cops jobs",
+        "description" : "List all JobInformation",
+        "operationId" : "VERBATIMlist",
+        "consumes" : [ "application/json" ],
+        "produces" : [ "application/json" ],
+        "parameters" : [ ],
+        "responses" : {
+          "200" : {
+            "description" : "List of known jobs",
+            "schema" : {
+              "type" : "array",
+              "items" : {
+                "type" : "object"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/runner/status/{uuid}" : {
+      "get" : {
+        "tags" : [ "MDRunner" ],
+        "summary" : "get status of cops jobs",
+        "description" : "JobInformation of actual Job",
+        "operationId" : "VERBATIMstatus",
+        "consumes" : [ "application/json" ],
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "name" : "uuid",
+          "in" : "path",
+          "description" : "uuid of job",
+          "required" : true,
+          "type" : "string"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Status of one Job",
+            "schema" : {
+              "$ref" : "#/definitions/JobInformation"
+            }
+          }
+        }
+      }
+    },
+    "/runner/{env}/{jobtype}/start" : {
+      "post" : {
+        "tags" : [ "MDRunner", "Jobs" ],
+        "summary" : "execute marketdata launcher",
+        "description" : "Execute marketdata Core Launcher",
+        "operationId" : "VERBATIMstart",
+        "consumes" : [ "application/json" ],
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "name" : "jobtype",
+          "in" : "path",
+          "description" : "The JobType",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "in" : "body",
+          "name" : "params",
+          "description" : "Parameter",
+          "required" : false,
+          "schema" : {
+            "$ref" : "#/definitions/BaseMDRunnerParameter"
+          }
+        }, {
+          "name" : "env",
+          "in" : "path",
+          "description" : "The Service Environment",
+          "required" : true,
+          "type" : "string"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Job Submitted",
+            "schema" : {
+              "$ref" : "#/definitions/JobInformation"
+            }
+          }
+        }
+      }
     }
   },
   "definitions" : {
+    "JobInformation" : {
+      "type" : "object",
+      "properties" : {
+        "uuid" : {
+          "type" : "string"
+        },
+        "startTime" : {
+          "type" : "string"
+        },
+        "endTime" : {
+          "type" : "string"
+        },
+        "status" : {
+          "type" : "string",
+          "enum" : [ "UNKNOWN", "QUEUED", "PROCESSING", "FINISHED", "FAILED" ]
+        },
+        "statusChangeHistory" : {
+          "type" : "array",
+          "items" : {
+            "$ref" : "#/definitions/StatusChange"
+          }
+        },
+        "payload" : {
+          "type" : "object"
+        },
+        "result" : {
+          "type" : "object"
+        },
+        "statusMessageCollector" : {
+          "type" : "array",
+          "items" : {
+            "$ref" : "#/definitions/StatusChange"
+          }
+        }
+      }
+    },
+    "StatusChange" : {
+      "type" : "object",
+      "properties" : {
+        "changeTime" : {
+          "type" : "string"
+        },
+        "oldStatus" : {
+          "type" : "string",
+          "enum" : [ "UNKNOWN", "QUEUED", "PROCESSING", "FINISHED", "FAILED" ]
+        },
+        "newStatus" : {
+          "type" : "string",
+          "enum" : [ "UNKNOWN", "QUEUED", "PROCESSING", "FINISHED", "FAILED" ]
+        },
+        "changeInformation" : {
+          "type" : "string"
+        }
+      }
+    },
+    "EnvironmentDataResource" : {
+      "type" : "object",
+      "properties" : {
+        "instruments" : {
+          "type" : "array",
+          "items" : {
+            "$ref" : "#/definitions/Instrument"
+          }
+        }
+      }
+    },
+    "BaseMDRunnerParameter" : {
+      "type" : "object",
+      "properties" : {
+        "params" : {
+          "type" : "object",
+          "additionalProperties" : {
+            "type" : "object"
+          }
+        },
+        "environment" : {
+          "type" : "string"
+        }
+      }
+    },
     "Instrument" : {
       "type" : "object",
       "properties" : {
@@ -245,17 +400,6 @@
         "homeTradingCurrencyId" : {
           "type" : "integer",
           "format" : "int32"
-        }
-      }
-    },
-    "EnvironmentResource" : {
-      "type" : "object",
-      "properties" : {
-        "instruments" : {
-          "type" : "array",
-          "items" : {
-            "$ref" : "#/definitions/Instrument"
-          }
         }
       }
     }

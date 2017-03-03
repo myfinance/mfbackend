@@ -18,9 +18,14 @@
 package de.hf.dac.marketdataprovider.api.runner;
 
 public class ImportRunnerParameter extends BaseMDRunnerParameter{
-    public static final String IMPORTTYPE = "yahoo";
+    public static final String IMPORTTYPE = "importtype";
 
-    public ImportRunnerParameter(String env, String importtype) {
+    public enum IMPORTTYPES {
+        YAHOO,
+        HTML
+    }
+
+    public ImportRunnerParameter(String env, IMPORTTYPES importtype) {
         super(env);
         setImportType(importtype);
     }
@@ -29,7 +34,7 @@ public class ImportRunnerParameter extends BaseMDRunnerParameter{
         return (String) get(IMPORTTYPE);
     }
 
-    public void setImportType(String importtype) {
+    public void setImportType(IMPORTTYPES importtype) {
         put(IMPORTTYPE, importtype);
     }
 }

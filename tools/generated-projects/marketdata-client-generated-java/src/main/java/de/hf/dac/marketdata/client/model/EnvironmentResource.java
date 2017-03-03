@@ -38,7 +38,7 @@ import java.io.Serializable;
 /**
  * EnvironmentResource
  */
-@javax.annotation.Generated(value = "class de.hf.dac.marketdata.codegen.MarketDataClient_JavaGenerator", date = "2017-02-17T14:45:39.233+01:00")
+@javax.annotation.Generated(value = "class de.hf.dac.marketdata.codegen.MarketDataClient_JavaGenerator", date = "2017-03-03T10:10:19.544+01:00")
 public class EnvironmentResource  implements Serializable {
   @JsonProperty("instruments")
   private List<Instrument> instruments = new ArrayList<Instrument>();

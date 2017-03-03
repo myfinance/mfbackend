@@ -51,7 +51,8 @@ public class RESTApplication {
         JAXRSServerFactoryBean sf = new JAXRSServerFactoryBean();
         sf.setResourceClasses(
             MyHello.class,
-            MarketData.class);
+            MDDataService.class,
+            MDRunnerService.class);
         sf.setResourceProvider(this.getClass(), new SingletonResourceProvider(this));
         sf.setAddress(RESTApplicationConfiguration.serverAddress());
         sf.setProvider(new JacksonJsonProvider());
