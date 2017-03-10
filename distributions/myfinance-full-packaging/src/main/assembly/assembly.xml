@@ -10,32 +10,36 @@
     <includeBaseDirectory>false</includeBaseDirectory>
 
     <fileSets>
-
+        <!--libs for the runner -->
         <fileSet>
             <outputDirectory>lib</outputDirectory>
-            <directory>${project.build.directory}/lib</directory>
+            <directory>${project.build.directory}/../../run-job/target/lib</directory>
             <includes>
                 <include>*</include>
             </includes>
         </fileSet>
 
+        <!--runner -->
         <fileSet>
             <outputDirectory></outputDirectory>
-            <directory>${project.build.directory}</directory>
+            <directory>${project.build.directory}/../../run-job/target</directory>
 
             <includes>
-                <include>**/run*</include>
+                <include>run*</include>
             </includes>
         </fileSet>
+
+        <!--karaf -->
         <fileSet>
-            <outputDirectory></outputDirectory>
-            <directory>${project.build.scriptSourceDirectory}</directory>
+            <outputDirectory>karaf</outputDirectory>
+            <directory>${project.build.directory}/../../karaf-full/target/assembly</directory>
 
             <includes>
-                <include>*</include>
+                <include>**/*</include>
             </includes>
-            <fileMode>0755</fileMode>
         </fileSet>
+
+        <!--Database-Scripts-->
         <fileSet>
             <outputDirectory>database</outputDirectory>
             <directory>${project.build.scriptSourceDirectory}/../../../../../database/</directory>
@@ -45,14 +49,8 @@
             <fileMode>0755</fileMode>
             <lineEnding>unix</lineEnding>
         </fileSet>
-        <!--<fileSet>
-            <outputDirectory></outputDirectory>
-            <directory>${project.build.scriptSourceDirectory}/../../../../../distributions/myfinance-full-packaging/scripts/</directory>
-            <includes>
-                <include>dbcmd.sh</include>
-            </includes>
-            <fileMode>0755</fileMode>
-        </fileSet>-->
+
     </fileSets>
+
 
 </assembly>

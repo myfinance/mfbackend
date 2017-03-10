@@ -13,5 +13,6 @@
     <modules>
         <module>karaf-full</module>
         <module>myfinance-full-packaging</module>
+        <module>run-job</module>
     </modules>
 </project>

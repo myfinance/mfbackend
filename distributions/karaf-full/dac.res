@@ -15,7 +15,7 @@ POOL_SIZE=20
 pids=org.ops4j.pax.web,de.hf.dac.security.auth.DacJaasRealmService
 
 [CMPID_org.ops4j.pax.web]
-org.ops4j.pax.web.ssl.keystore=D:/devenv/bitbucket/dac/bootstrapper/karaf-stable/devkeystore.jks
+org.ops4j.pax.web.ssl.keystore=D:/devenv/bitbucket/dac/distributions/karaf-full/devkeystore.jks
 org.ops4j.pax.web.ssl.password = password
 org.ops4j.pax.web.ssl.keypassword = password
 org.osgi.service.http.port.secure = 8443

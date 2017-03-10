@@ -60,7 +60,8 @@ public class MarketDataEnvironmentContextBuilderImpl implements MarketDataEnviro
             = new MarketDataEnvironmentBuilderModule(envService, //
             emfb, //
             jtaManager, //
-            environment, dispatcher);
+            environment, //
+            dispatcher);
         return contextBuilder.build(MarketDataSystemDescriptor.CONTEXT+"/" + environment, new Module[] { marketDataEnvironmentBuilderModule });
     }
 

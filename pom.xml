@@ -12,6 +12,8 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <targetRepository>file:m2repo/</targetRepository>
 
+        <jar-plugin.version>3.0.2</jar-plugin.version>
+
         <postgresql.version>9.1-901.jdbc4</postgresql.version><!-- DB-->
         <commons-cli.version>1.2</commons-cli.version><!-- parsing commandline options in Module common-->
 
@@ -47,7 +49,7 @@
 
         <!--rest-->
         <rs-api.version>2.0.1</rs-api.version>
-        <swagger.version>1.5.10</swagger.version>
+        <swagger.version>1.5.12</swagger.version>
         <swagger-codegen.version>2.2.1</swagger-codegen.version>
         <jackson.version>2.8.5</jackson.version>
         <snakeyaml.version>1.17</snakeyaml.version>
@@ -372,7 +374,14 @@
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-jar-plugin</artifactId>
-                    <version>2.6</version>
+                    <version>${jar-plugin.version}</version>
+                    <configuration>
+                        <archive>
+                            <manifest>
+                                <addClasspath>true</addClasspath>
+                            </manifest>
+                        </archive>
+                    </configuration>
                 </plugin>
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
@@ -415,24 +424,6 @@
                         </configuration>
                     </execution>
                 </executions>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-javadoc-plugin</artifactId>
-                <version>2.9.1</version>
-                <executions>
-                    <execution>
-                        <id>aggregate</id>
-                        <goals>
-                            <goal>aggregate</goal>
-                        </goals>
-                        <phase>site</phase>
-                    </execution>
-                </executions>
-                <configuration>
-                    <outputDirectory>target/api-docs</outputDirectory>
-                    <aggregate>true</aggregate>
-                </configuration>
             </plugin>
         </plugins>
     </build>

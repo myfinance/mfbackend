@@ -39,7 +39,7 @@ public class MarketDataEnvironmentImpl implements MarketDataEnvironment{
     final private JobDispatcher<JobParameter> dispatcher;
 
     @Inject
-    public MarketDataEnvironmentImpl(RootSecurityProvider rootSecurityProvider, ProductService productService, InstrumentService instrumentService, @Named("envID") String environment, JobDispatcher<JobParameter> dispatcher){
+    public MarketDataEnvironmentImpl(RootSecurityProvider rootSecurityProvider, ProductService productService, InstrumentService instrumentService, @Named("envID") String environment, JobDispatcher dispatcher){
         this.productService=productService;
         this.instrumentService=instrumentService;
         this.rootSecurityProvider=rootSecurityProvider;

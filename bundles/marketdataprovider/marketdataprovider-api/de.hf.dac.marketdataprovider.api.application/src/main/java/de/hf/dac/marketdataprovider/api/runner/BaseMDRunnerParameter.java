@@ -23,6 +23,10 @@ public class BaseMDRunnerParameter  extends RunnerParameter {
 
     public static final String ENV = "env";
 
+    public BaseMDRunnerParameter() {
+
+    }
+
     public BaseMDRunnerParameter(String env) {
         setEnvironment(env);
     }

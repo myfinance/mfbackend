@@ -22,5 +22,5 @@ import de.hf.dac.api.io.routes.job.JobParameter;
 
 public interface RunnerRoot {
     JobDispatcher<JobParameter> getDispatcher();
-    MDRunnerJobType getJobType(String type);
+    //MDRunnerJobType getJobType(String type);
 }
