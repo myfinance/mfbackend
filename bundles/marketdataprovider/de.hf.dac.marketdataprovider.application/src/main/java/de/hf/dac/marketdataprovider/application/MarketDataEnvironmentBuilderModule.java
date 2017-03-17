@@ -68,16 +68,12 @@ public class MarketDataEnvironmentBuilderModule  extends AbstractModule {
         bind(EnvironmentService.class).toInstance(envService);
 
         bind(EntityManagerFactory.class).annotatedWith(Names.named(EnvTarget.MDB)).toInstance(provideMdbEntityManagerFactory());
-        bind(EntityManagerFactory.class).annotatedWith(Names.named(EnvTarget.SDB)).toInstance(provideSdbEntityManagerFactory());
+
         bind(String.class).annotatedWith(Names.named("envID")).toInstance(new String(env));
         bind(ProductDao.class).to(ProductDaoImpl.class);
         bind(InstrumentDao.class).to(InstrumentDaoImpl.class);
         bind(ProductService.class).to(ProductServiceImpl.class);
         bind(InstrumentService.class).to(InstrumentServiceImpl.class);
-
-        bind(RootSecurityProvider.class).to(RootSecurityServiceImpl.class);
-
-        bind(JobDispatcher.class).toInstance(dispatcher);
 
         bind(MarketDataEnvironment.class).to(MarketDataEnvironmentImpl.class);
     }
@@ -98,18 +94,4 @@ public class MarketDataEnvironmentBuilderModule  extends AbstractModule {
         }
         return emf;
     }
-
-    EntityManagerFactory provideSdbEntityManagerFactory() {
-        EnvironmentTargetInfo marketDataTargetInfo = envService.getTarget(env, EnvTarget.SDB);
-        DatabaseInfo dbi = (DatabaseInfo) marketDataTargetInfo.getTargetDetails();
-        WrappedEntityManagerFactory emf = null;
-        try {
-            emf = new WrappedEntityManagerFactory(jtaManager, emfb.buildEntityManagerFactory(EnvTarget.SDB, new ClassLoader[] {RestAuthorization.class.getClassLoader()}, dbi));
-        }
-        catch (Exception ex) {
-            throw new RuntimeException(ex);
-        }
-        return emf;
-    }
-
 }

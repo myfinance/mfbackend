@@ -44,16 +44,16 @@ public class MDRunnerService extends TopLevelWithEnvironments{
 
     final protected static Gson gson = new Gson();
 
-    @Path("/{env}")
+    @Path("/{jobtype}")
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
     @ApiOperation(value = "launch Job", notes = "Anything Else?")
     @ApiResponses(value = { @ApiResponse(code = HttpStatus.SC_INTERNAL_SERVER_ERROR, message = "Something wrong in Server") })
-    public MDRunnerResource getJobTypeRunner(@PathParam("env") @ApiParam(value="The Service Environment") String env)
+    public MDRunnerResource getJobTypeRunner(@PathParam("jobtype") @ApiParam(name = "jobtype", value = "launching md jobs") String jobtype)
         throws SQLException {
         audit();
         // create RunnerResource
-        return new MDRunnerResource(getMarketDataEnvironment(env));
+        return new MDRunnerResource(getService(RunnerRoot.class).getDispatcher(), getService(RunnerRoot.class).getAuthType(jobtype));
     }
 
     @GET

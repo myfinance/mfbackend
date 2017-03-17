@@ -17,5 +17,8 @@
 
 package de.hf.dac.marketdataprovider.api.application;
 
-public interface MDRunnerJobType {
+import de.hf.dac.api.security.Secured;
+
+public interface MDRunnerJobType extends ServiceResourceType, Secured {
+    String getBeanClass();
 }

@@ -32,10 +32,6 @@
             <artifactId>de.hf.dac.marketdataprovider.service</artifactId>
         </dependency>
         <dependency>
-            <groupId>de.hf.dac.marketdataprovider</groupId>
-            <artifactId>de.hf.dac.marketdataprovider.restservice</artifactId>
-        </dependency>
-        <dependency>
             <groupId>de.hf.dac</groupId>
             <artifactId>de.hf.dac.security</artifactId>
         </dependency>

@@ -29,5 +29,4 @@ public interface MarketDataEnvironment extends IdentifiableResource<OpLevel>, Se
     ProductService getProductService();
     InstrumentService getInstrumentService();
     RootSecurityProvider getRootSecurityProvider();
-    JobDispatcher<JobParameter> getDispatcher();
 }

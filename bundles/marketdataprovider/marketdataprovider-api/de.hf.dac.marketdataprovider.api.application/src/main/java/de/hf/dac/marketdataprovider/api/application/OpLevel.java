@@ -22,5 +22,6 @@ public enum OpLevel {
     instrument,
     position,
     portfolio, //a type of trades like loads or real estate
-    account
+    account,
+    runner
 }

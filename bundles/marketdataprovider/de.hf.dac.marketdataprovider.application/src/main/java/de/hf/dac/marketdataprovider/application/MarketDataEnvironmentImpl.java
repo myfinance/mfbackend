@@ -36,15 +36,13 @@ public class MarketDataEnvironmentImpl implements MarketDataEnvironment{
     final private InstrumentService instrumentService;
     final private RootSecurityProvider rootSecurityProvider;
     final private String environment;
-    final private JobDispatcher<JobParameter> dispatcher;
 
     @Inject
-    public MarketDataEnvironmentImpl(RootSecurityProvider rootSecurityProvider, ProductService productService, InstrumentService instrumentService, @Named("envID") String environment, JobDispatcher dispatcher){
+    public MarketDataEnvironmentImpl(RootSecurityProvider rootSecurityProvider, ProductService productService, InstrumentService instrumentService, @Named("envID") String environment){
         this.productService=productService;
         this.instrumentService=instrumentService;
         this.rootSecurityProvider=rootSecurityProvider;
         this.environment=environment;
-        this.dispatcher=dispatcher;
     }
 
     @Override
@@ -60,11 +58,6 @@ public class MarketDataEnvironmentImpl implements MarketDataEnvironment{
     @Override
     public RootSecurityProvider getRootSecurityProvider() {
         return rootSecurityProvider;
-    }
-
-    @Override
-    public JobDispatcher<JobParameter> getDispatcher() {
-        return dispatcher;
     }
 
     @Override
