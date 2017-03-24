@@ -30,8 +30,14 @@
         </dependency>
 
         <dependency>
-            <groupId>de.dzbank.poet.ccr</groupId>
-            <artifactId>ccr-client-generated</artifactId>
+            <groupId>de.hf.dac.marketdataprovider</groupId>
+            <artifactId>de.hf.dac.marketdataprovider.importer</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>de.hf.dac</groupId>
+            <artifactId>md-client-generated</artifactId>
             <version>${project.version}</version>
         </dependency>
 

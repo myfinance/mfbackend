@@ -18,7 +18,7 @@
 package de.hf.dac.marketdataprovider.runner;
 
 import de.hf.dac.api.io.routes.job.RunnerParameter;
-import de.hf.dac.marketdataprovider.api.runner.ImportRunnerParameter;
+import de.hf.dac.marketdataprovider.importer.ImportRunnerParameter;
 
 public class ImportRunner extends BaseMDRunner {
 

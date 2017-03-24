@@ -15,9 +15,11 @@
  * ----------------------------------------------------------------------------
  */
 
-package de.hf.dac.marketdataprovider.api.runner;
+package de.hf.dac.marketdataprovider.importer;
 
-public class ImportRunnerParameter extends BaseMDRunnerParameter{
+import de.hf.dac.marketdataprovider.api.runner.BaseMDRunnerParameter;
+
+public class ImportRunnerParameter extends BaseMDRunnerParameter {
     public static final String IMPORTTYPE = "importtype";
 
     public enum IMPORTTYPES {
@@ -29,6 +31,11 @@ public class ImportRunnerParameter extends BaseMDRunnerParameter{
     public ImportRunnerParameter(String env, IMPORTTYPES importtype) {
         super(env);
         setImportType(importtype);
+        setBeanClass(Import.class.getName());
+    }
+
+    public ImportRunnerParameter(BaseMDRunnerParameter toBeCopied) {
+        super(toBeCopied);
     }
 
     public String getImportType() {
@@ -36,6 +43,6 @@ public class ImportRunnerParameter extends BaseMDRunnerParameter{
     }
 
     public void setImportType(IMPORTTYPES importtype) {
-        put(IMPORTTYPE, importtype);
+        put(IMPORTTYPE, importtype.name());
     }
 }

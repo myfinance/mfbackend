@@ -39,7 +39,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-@javax.annotation.Generated(value = "class de.hf.dac.marketdata.codegen.MarketDataClient_JavaGenerator", date = "2017-03-03T12:58:46.482+01:00")
+@javax.annotation.Generated(value = "class de.hf.dac.marketdata.codegen.MarketDataClient_JavaGenerator", date = "2017-03-24T15:45:39.967+01:00")
 public class HelloApi {
   private ApiClient apiClient;
 
@@ -104,7 +104,7 @@ public class HelloApi {
    * @return List<Object>
    * @throws ApiException if fails to make API call
    */
-  public List<Object> getEnvironments() throws ApiException {
+  public List<Object> getEnvironments2() throws ApiException {
     Object localVarPostBody = null;
     
     // create path and map variables

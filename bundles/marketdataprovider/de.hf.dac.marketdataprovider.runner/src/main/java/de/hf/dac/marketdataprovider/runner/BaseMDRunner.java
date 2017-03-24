@@ -23,16 +23,14 @@ import de.hf.dac.api.io.routes.job.RunnerParameter;
 import de.hf.dac.io.config.resfile.Configuration;
 import de.hf.dac.marketdata.client.api.MDRunnerApi;
 import de.hf.dac.marketdataprovider.api.runner.BaseMDRunnerParameter;
-import de.hf.dac.marketdataprovider.api.runner.ImportRunnerParameter;
+import de.hf.dac.marketdataprovider.importer.ImportRunnerParameter;
 import io.swagger.client.ApiClient;
 import io.swagger.client.ApiException;
 import org.apache.commons.codec.binary.Base64;
 import de.hf.dac.marketdata.client.model.JobInformation;
-import org.joda.time.DateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.Arrays;
 import java.util.HashMap;
 
 public abstract class BaseMDRunner extends BaseRestCommandLineRunner {
@@ -60,7 +58,7 @@ public abstract class BaseMDRunner extends BaseRestCommandLineRunner {
         if (optionsParser.hasOption(ENV_OPTION)) {
             env = optionsParser.getOptionArg(ENV_OPTION);
         }
-        return new BaseMDRunnerParameter(env);
+        return new ImportRunnerParameter(env, ImportRunnerParameter.IMPORTTYPES.YAHOO);
     }
 
     @Override
@@ -71,9 +69,8 @@ public abstract class BaseMDRunner extends BaseRestCommandLineRunner {
             ImportRunnerParameter p = (ImportRunnerParameter)runnerParameter;
             MDRunnerApi client = createRestClient();
             try {
-                client.start("myimportjob", p.getEnvironment(), convertParam((BaseMDRunnerParameter)runnerParameter));
-                JobInformation start = client.start("myimportjob", p.getEnvironment(), convertParam((BaseMDRunnerParameter)runnerParameter));
-                int maxTimeWait = Configuration.getInt("CCR", "CCR_LAUNCH_TIMEOUT", 60*60*1000);
+                JobInformation start = client.start(p.getEnvironment(), ((ImportRunnerParameter) runnerParameter).getImportType(), convertParam((ImportRunnerParameter)runnerParameter));
+                int maxTimeWait = Configuration.getInt("MARKETDATA", "MD_LAUNCH_TIMEOUT", 60*60*1000);
 
                 String uid = start.getUuid();
                 int count = 1;
@@ -135,6 +132,7 @@ public abstract class BaseMDRunner extends BaseRestCommandLineRunner {
         p.setEnvironment(rp.getEnvironment());
         p.setParams(new HashMap());
         p.getParams().putAll(rp.getParams());
+        p.setBeanClass(rp.getBeanClass());
         return p;
     }
 }

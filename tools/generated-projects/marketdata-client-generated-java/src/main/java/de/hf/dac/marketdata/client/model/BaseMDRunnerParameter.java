@@ -38,13 +38,34 @@ import java.io.Serializable;
 /**
  * BaseMDRunnerParameter
  */
-@javax.annotation.Generated(value = "class de.hf.dac.marketdata.codegen.MarketDataClient_JavaGenerator", date = "2017-03-03T12:58:46.482+01:00")
+@javax.annotation.Generated(value = "class de.hf.dac.marketdata.codegen.MarketDataClient_JavaGenerator", date = "2017-03-24T15:45:39.967+01:00")
 public class BaseMDRunnerParameter  implements Serializable {
+  @JsonProperty("beanClass")
+  private String beanClass = null;
+
   @JsonProperty("params")
   private Map<String, Object> params = new HashMap<String, Object>();
 
   @JsonProperty("environment")
   private String environment = null;
+
+  public BaseMDRunnerParameter beanClass(String beanClass) {
+    this.beanClass = beanClass;
+    return this;
+  }
+
+   /**
+   * Get beanClass
+   * @return beanClass
+  **/
+  @ApiModelProperty(example = "null", value = "")
+  public String getBeanClass() {
+    return beanClass;
+  }
+
+  public void setBeanClass(String beanClass) {
+    this.beanClass = beanClass;
+  }
 
   public BaseMDRunnerParameter params(Map<String, Object> params) {
     this.params = params;
@@ -97,13 +118,14 @@ public class BaseMDRunnerParameter  implements Serializable {
       return false;
     }
     BaseMDRunnerParameter baseMDRunnerParameter = (BaseMDRunnerParameter) o;
-    return Objects.equals(this.params, baseMDRunnerParameter.params) &&
+    return Objects.equals(this.beanClass, baseMDRunnerParameter.beanClass) &&
+        Objects.equals(this.params, baseMDRunnerParameter.params) &&
         Objects.equals(this.environment, baseMDRunnerParameter.environment);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(params, environment);
+    return Objects.hash(beanClass, params, environment);
   }
 
   @Override
@@ -111,6 +133,7 @@ public class BaseMDRunnerParameter  implements Serializable {
     StringBuilder sb = new StringBuilder();
     sb.append("class BaseMDRunnerParameter {\n");
     
+    sb.append("    beanClass: ").append(toIndentedString(beanClass)).append("\n");
     sb.append("    params: ").append(toIndentedString(params)).append("\n");
     sb.append("    environment: ").append(toIndentedString(environment)).append("\n");
     sb.append("}");

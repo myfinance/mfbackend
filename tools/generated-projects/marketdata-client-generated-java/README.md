@@ -26,8 +26,8 @@ Add this dependency to your project's POM:
 
 ```xml
 <dependency>
-    <groupId>de.dzbank.poet.ccr</groupId>
-    <artifactId>ccr-client-generated</artifactId>
+    <groupId>de.hf.dac</groupId>
+    <artifactId>md-client-generated</artifactId>
     <version>0.7.0-SNAPSHOT</version>
     <scope>compile</scope>
 </dependency>
@@ -38,7 +38,7 @@ Add this dependency to your project's POM:
 Add this dependency to your project's build file:
 
 ```groovy
-compile "de.dzbank.poet.ccr:ccr-client-generated:0.7.0-SNAPSHOT"
+compile "de.hf.dac:md-client-generated:0.7.0-SNAPSHOT"
 ```
 
 ### Others

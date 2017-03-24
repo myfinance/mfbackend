@@ -41,7 +41,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-@javax.annotation.Generated(value = "class de.hf.dac.marketdata.codegen.MarketDataClient_JavaGenerator", date = "2017-03-03T12:58:46.482+01:00")
+@javax.annotation.Generated(value = "class de.hf.dac.marketdata.codegen.MarketDataClient_JavaGenerator", date = "2017-03-24T15:45:39.967+01:00")
 public class MDRunnerApi {
   private ApiClient apiClient;
 
@@ -67,7 +67,7 @@ public class MDRunnerApi {
    * @return List<Object>
    * @throws ApiException if fails to make API call
    */
-  public List<Object> getEnvironments() throws ApiException {
+  public List<Object> getEnvironments1() throws ApiException {
     Object localVarPostBody = null;
     
     // create path and map variables
@@ -134,29 +134,29 @@ public class MDRunnerApi {
   /**
    * execute marketdata launcher
    * Execute marketdata Core Launcher
-   * @param jobtype The JobType (required)
-   * @param env The Service Environment (required)
+   * @param env The env (required)
+   * @param jobtype launching md jobs (required)
    * @param params Parameter (optional)
    * @return JobInformation
    * @throws ApiException if fails to make API call
    */
-  public JobInformation start(String jobtype, String env, BaseMDRunnerParameter params) throws ApiException {
+  public JobInformation start(String env, String jobtype, BaseMDRunnerParameter params) throws ApiException {
     Object localVarPostBody = params;
-    
-    // verify the required parameter 'jobtype' is set
-    if (jobtype == null) {
-      throw new ApiException(400, "Missing the required parameter 'jobtype' when calling start");
-    }
     
     // verify the required parameter 'env' is set
     if (env == null) {
       throw new ApiException(400, "Missing the required parameter 'env' when calling start");
     }
     
+    // verify the required parameter 'jobtype' is set
+    if (jobtype == null) {
+      throw new ApiException(400, "Missing the required parameter 'jobtype' when calling start");
+    }
+    
     // create path and map variables
-    String localVarPath = "/runner/{env}/{jobtype}/start".replaceAll("\\{format\\}","json")
-      .replaceAll("\\{" + "jobtype" + "\\}", apiClient.escapeString(jobtype.toString()))
-      .replaceAll("\\{" + "env" + "\\}", apiClient.escapeString(env.toString()));
+    String localVarPath = "/runner/{jobtype}/{env}/start".replaceAll("\\{format\\}","json")
+      .replaceAll("\\{" + "env" + "\\}", apiClient.escapeString(env.toString()))
+      .replaceAll("\\{" + "jobtype" + "\\}", apiClient.escapeString(jobtype.toString()));
 
     // query params
     List<Pair> localVarQueryParams = new ArrayList<Pair>();

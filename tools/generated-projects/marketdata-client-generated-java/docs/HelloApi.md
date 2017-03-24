@@ -5,7 +5,7 @@ All URIs are relative to *https://localhost/dac/rest*
 Method | HTTP request | Description
 ------------- | ------------- | -------------
 [**addProduct_productId_description**](HelloApi.md#addProduct_productId_description) | **GET** /hello/addproduct | save Product
-[**getEnvironments**](HelloApi.md#getEnvironments) | **GET** /hello/getEnvironments | List Environments
+[**getEnvironments2**](HelloApi.md#getEnvironments2) | **GET** /hello/getEnvironments | List Environments
 [**getHello**](HelloApi.md#getHello) | **GET** /hello | 
 [**getProductObjects**](HelloApi.md#getProductObjects) | **GET** /hello/productobjects | get ProductObjects
 [**getProducts**](HelloApi.md#getProducts) | **GET** /hello/products | get Products
@@ -58,9 +58,9 @@ No authorization required
  - **Content-Type**: Not defined
  - **Accept**: application/json
 
-<a name="getEnvironments"></a>
-# **getEnvironments**
-> List&lt;Object&gt; getEnvironments()
+<a name="getEnvironments2"></a>
+# **getEnvironments2**
+> List&lt;Object&gt; getEnvironments2()
 
 List Environments
 
@@ -75,10 +75,10 @@ List Environments
 
 HelloApi apiInstance = new HelloApi();
 try {
-    List<Object> result = apiInstance.getEnvironments();
+    List<Object> result = apiInstance.getEnvironments2();
     System.out.println(result);
 } catch (ApiException e) {
-    System.err.println("Exception when calling HelloApi#getEnvironments");
+    System.err.println("Exception when calling HelloApi#getEnvironments2");
     e.printStackTrace();
 }
 ```

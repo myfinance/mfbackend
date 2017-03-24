@@ -14,121 +14,15 @@
   },
   "basePath" : "/dac/rest",
   "tags" : [ {
+    "name" : "Marketdata"
+  }, {
     "name" : "MDRunner"
   }, {
     "name" : "Jobs"
   }, {
     "name" : "Hello"
-  }, {
-    "name" : "Marketdata"
   } ],
   "paths" : {
-    "/hello" : {
-      "get" : {
-        "tags" : [ "Hello" ],
-        "operationId" : "getHello",
-        "parameters" : [ ],
-        "responses" : {
-          "200" : {
-            "description" : "successful operation",
-            "schema" : {
-              "type" : "string"
-            },
-            "headers" : { }
-          }
-        }
-      }
-    },
-    "/hello/addproduct" : {
-      "get" : {
-        "tags" : [ "Hello" ],
-        "summary" : "save Product",
-        "description" : "",
-        "operationId" : "addProduct",
-        "produces" : [ "application/json" ],
-        "parameters" : [ {
-          "name" : "productId",
-          "in" : "query",
-          "description" : "the isin",
-          "required" : false,
-          "type" : "string"
-        }, {
-          "name" : "description",
-          "in" : "query",
-          "description" : "description",
-          "required" : false,
-          "type" : "string"
-        } ],
-        "responses" : {
-          "200" : {
-            "description" : "successful operation",
-            "schema" : {
-              "type" : "string"
-            }
-          }
-        }
-      }
-    },
-    "/hello/getEnvironments" : {
-      "get" : {
-        "tags" : [ "Hello" ],
-        "summary" : "List Environments",
-        "description" : "",
-        "operationId" : "getEnvironments",
-        "produces" : [ "application/json" ],
-        "parameters" : [ ],
-        "responses" : {
-          "200" : {
-            "description" : "successful operation",
-            "schema" : {
-              "type" : "array",
-              "items" : {
-                "type" : "object"
-              }
-            }
-          }
-        }
-      }
-    },
-    "/hello/productobjects" : {
-      "get" : {
-        "tags" : [ "Hello" ],
-        "summary" : "get ProductObjects",
-        "description" : "",
-        "operationId" : "getProductObjects",
-        "produces" : [ "application/json" ],
-        "parameters" : [ ],
-        "responses" : {
-          "200" : {
-            "description" : "successful operation",
-            "schema" : {
-              "type" : "array",
-              "items" : {
-                "type" : "object"
-              }
-            }
-          }
-        }
-      }
-    },
-    "/hello/products" : {
-      "get" : {
-        "tags" : [ "Hello" ],
-        "summary" : "get Products",
-        "description" : "",
-        "operationId" : "getProducts",
-        "produces" : [ "application/json" ],
-        "parameters" : [ ],
-        "responses" : {
-          "200" : {
-            "description" : "successful operation",
-            "schema" : {
-              "type" : "string"
-            }
-          }
-        }
-      }
-    },
     "/marketdata/environments/{envID}/instruments" : {
       "get" : {
         "tags" : [ "Marketdata" ],
@@ -159,27 +53,6 @@
     "/marketdata/getEnvironments" : {
       "get" : {
         "tags" : [ "Marketdata" ],
-        "summary" : "List Environments",
-        "description" : "",
-        "operationId" : "getEnvironments",
-        "produces" : [ "application/json" ],
-        "parameters" : [ ],
-        "responses" : {
-          "200" : {
-            "description" : "successful operation",
-            "schema" : {
-              "type" : "array",
-              "items" : {
-                "type" : "object"
-              }
-            }
-          }
-        }
-      }
-    },
-    "/runner/getEnvironments" : {
-      "get" : {
-        "tags" : [ "MDRunner" ],
         "summary" : "List Environments",
         "description" : "",
         "operationId" : "getEnvironments",
@@ -245,18 +118,18 @@
         }
       }
     },
-    "/runner/{env}/{jobtype}/start" : {
+    "/runner/{jobtype}/{env}/start" : {
       "post" : {
-        "tags" : [ "MDRunner", "Jobs" ],
+        "tags" : [ "Jobs", "MDRunner" ],
         "summary" : "execute marketdata launcher",
         "description" : "Execute marketdata Core Launcher",
         "operationId" : "VERBATIMstart",
         "consumes" : [ "application/json" ],
         "produces" : [ "application/json" ],
         "parameters" : [ {
-          "name" : "jobtype",
+          "name" : "env",
           "in" : "path",
-          "description" : "The JobType",
+          "description" : "The env",
           "required" : true,
           "type" : "string"
         }, {
@@ -268,9 +141,9 @@
             "$ref" : "#/definitions/BaseMDRunnerParameter"
           }
         }, {
-          "name" : "env",
+          "name" : "jobtype",
           "in" : "path",
-          "description" : "The Service Environment",
+          "description" : "launching md jobs",
           "required" : true,
           "type" : "string"
         } ],
@@ -283,9 +156,184 @@
           }
         }
       }
+    },
+    "/runner/getEnvironments" : {
+      "get" : {
+        "tags" : [ "MDRunner" ],
+        "summary" : "List Environments",
+        "description" : "",
+        "operationId" : "getEnvironments_1",
+        "produces" : [ "application/json" ],
+        "parameters" : [ ],
+        "responses" : {
+          "200" : {
+            "description" : "successful operation",
+            "schema" : {
+              "type" : "array",
+              "items" : {
+                "type" : "object"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/hello" : {
+      "get" : {
+        "tags" : [ "Hello" ],
+        "operationId" : "getHello",
+        "parameters" : [ ],
+        "responses" : {
+          "200" : {
+            "description" : "successful operation",
+            "schema" : {
+              "type" : "string"
+            },
+            "headers" : { }
+          }
+        }
+      }
+    },
+    "/hello/products" : {
+      "get" : {
+        "tags" : [ "Hello" ],
+        "summary" : "get Products",
+        "description" : "",
+        "operationId" : "getProducts",
+        "produces" : [ "application/json" ],
+        "parameters" : [ ],
+        "responses" : {
+          "200" : {
+            "description" : "successful operation",
+            "schema" : {
+              "type" : "string"
+            }
+          }
+        }
+      }
+    },
+    "/hello/addproduct" : {
+      "get" : {
+        "tags" : [ "Hello" ],
+        "summary" : "save Product",
+        "description" : "",
+        "operationId" : "addProduct",
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "name" : "productId",
+          "in" : "query",
+          "description" : "the isin",
+          "required" : false,
+          "type" : "string"
+        }, {
+          "name" : "description",
+          "in" : "query",
+          "description" : "description",
+          "required" : false,
+          "type" : "string"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "successful operation",
+            "schema" : {
+              "type" : "string"
+            }
+          }
+        }
+      }
+    },
+    "/hello/productobjects" : {
+      "get" : {
+        "tags" : [ "Hello" ],
+        "summary" : "get ProductObjects",
+        "description" : "",
+        "operationId" : "getProductObjects",
+        "produces" : [ "application/json" ],
+        "parameters" : [ ],
+        "responses" : {
+          "200" : {
+            "description" : "successful operation",
+            "schema" : {
+              "type" : "array",
+              "items" : {
+                "type" : "object"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/hello/getEnvironments" : {
+      "get" : {
+        "tags" : [ "Hello" ],
+        "summary" : "List Environments",
+        "description" : "",
+        "operationId" : "getEnvironments_2",
+        "produces" : [ "application/json" ],
+        "parameters" : [ ],
+        "responses" : {
+          "200" : {
+            "description" : "successful operation",
+            "schema" : {
+              "type" : "array",
+              "items" : {
+                "type" : "object"
+              }
+            }
+          }
+        }
+      }
     }
   },
   "definitions" : {
+    "EnvironmentDataResource" : {
+      "type" : "object",
+      "properties" : {
+        "instruments" : {
+          "type" : "array",
+          "items" : {
+            "$ref" : "#/definitions/Instrument"
+          }
+        }
+      }
+    },
+    "Instrument" : {
+      "type" : "object",
+      "properties" : {
+        "instrumentTypeId" : {
+          "type" : "integer",
+          "format" : "int32"
+        },
+        "sourceId" : {
+          "type" : "integer",
+          "format" : "int32"
+        },
+        "isin" : {
+          "type" : "string"
+        },
+        "id" : {
+          "type" : "integer",
+          "format" : "int32"
+        },
+        "wkn" : {
+          "type" : "string"
+        },
+        "ticker" : {
+          "type" : "string"
+        },
+        "description" : {
+          "type" : "string"
+        },
+        "treeLastChanged" : {
+          "type" : "integer",
+          "format" : "int64"
+        },
+        "homeTradingCurrencyId" : {
+          "type" : "integer",
+          "format" : "int32"
+        }
+      }
+    },
     "JobInformation" : {
       "type" : "object",
       "properties" : {
@@ -341,20 +389,12 @@
         }
       }
     },
-    "EnvironmentDataResource" : {
-      "type" : "object",
-      "properties" : {
-        "instruments" : {
-          "type" : "array",
-          "items" : {
-            "$ref" : "#/definitions/Instrument"
-          }
-        }
-      }
-    },
     "BaseMDRunnerParameter" : {
       "type" : "object",
       "properties" : {
+        "beanClass" : {
+          "type" : "string"
+        },
         "params" : {
           "type" : "object",
           "additionalProperties" : {
@@ -363,43 +403,6 @@
         },
         "environment" : {
           "type" : "string"
-        }
-      }
-    },
-    "Instrument" : {
-      "type" : "object",
-      "properties" : {
-        "instrumentTypeId" : {
-          "type" : "integer",
-          "format" : "int32"
-        },
-        "sourceId" : {
-          "type" : "integer",
-          "format" : "int32"
-        },
-        "isin" : {
-          "type" : "string"
-        },
-        "id" : {
-          "type" : "integer",
-          "format" : "int32"
-        },
-        "wkn" : {
-          "type" : "string"
-        },
-        "ticker" : {
-          "type" : "string"
-        },
-        "description" : {
-          "type" : "string"
-        },
-        "treeLastChanged" : {
-          "type" : "integer",
-          "format" : "int64"
-        },
-        "homeTradingCurrencyId" : {
-          "type" : "integer",
-          "format" : "int32"
         }
       }
     }

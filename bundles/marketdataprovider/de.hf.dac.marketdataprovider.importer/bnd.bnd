@@ -1,0 +1,2 @@
+Export-Package: de.hf.dac.marketdataprovider.importer
+Bundle-SymbolicName: ${project.artifactId}

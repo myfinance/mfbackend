@@ -18,10 +18,13 @@
 package de.hf.dac.marketdataprovider.api.runner;
 
 import de.hf.dac.api.io.routes.job.RunnerParameter;
+import io.swagger.annotations.ApiModel;
 
+@ApiModel()
 public class BaseMDRunnerParameter  extends RunnerParameter {
 
     public static final String ENV = "env";
+
 
     public BaseMDRunnerParameter() {
 
@@ -31,6 +34,12 @@ public class BaseMDRunnerParameter  extends RunnerParameter {
         setEnvironment(env);
     }
 
+    public BaseMDRunnerParameter(BaseMDRunnerParameter toBeCopied) {
+        this(toBeCopied.getEnvironment());
+        setParams(toBeCopied.getParams());
+        setBeanClass(toBeCopied.getBeanClass());
+    }
+
     public String getEnvironment() {
         return (String) get(ENV);
     }
@@ -38,4 +47,5 @@ public class BaseMDRunnerParameter  extends RunnerParameter {
     public void setEnvironment(String env) {
         put(ENV, env);
     }
+
 }
