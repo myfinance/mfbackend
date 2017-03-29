@@ -16,14 +16,6 @@
     <artifactId>myfinance-full-packaging</artifactId>
     <name>Distributions - Release Packaging</name>
 
-    <dependencies>
-        <dependency>
-            <groupId>de.hf.dac</groupId>
-            <artifactId>run-job</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-    </dependencies>
-
     <build>
         <!-- to be sure that the jar has always the same name without a version-->
         <finalName>run-job</finalName>
