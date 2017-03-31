@@ -26,6 +26,8 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
+
+import de.hf.dac.marketdataprovider.api.application.rootcontext.DataServiceRoot;
 import de.hf.dac.marketdataprovider.api.domain.Product;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -50,7 +52,7 @@ public class MyHello  extends TopLevelWithEnvironments{
     public String getProducts() {
         String returnvalue = "No Products";
         try {
-            returnvalue = getMarketDataEnvironment("dev").getProductService().listProducts().toString();
+            returnvalue = getService(DataServiceRoot.class).getMarketDataEnvironment("dev").getProductService().listProducts().toString();
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -65,7 +67,7 @@ public class MyHello  extends TopLevelWithEnvironments{
     public List<Product> getProductObjects() {
         List<Product> returnvalue = null;
         try {
-            returnvalue = getMarketDataEnvironment("dev").getProductService().listProducts();
+            returnvalue = getService(DataServiceRoot.class).getMarketDataEnvironment("dev").getProductService().listProducts();
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -81,7 +83,7 @@ public class MyHello  extends TopLevelWithEnvironments{
             @QueryParam("description") @ApiParam(value="description") String description) {
         Product p = new Product(productId, description);
         try {
-            getMarketDataEnvironment("dev").getProductService().saveProduct(p);
+            getService(DataServiceRoot.class).getMarketDataEnvironment("dev").getProductService().saveProduct(p);
         } catch (SQLException e) {
             e.printStackTrace();
             return "not Saved";

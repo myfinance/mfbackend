@@ -17,8 +17,6 @@
 
 package de.hf.dac.marketdataprovider.application;
 
-import de.hf.dac.api.io.routes.job.JobDispatcher;
-import de.hf.dac.api.io.routes.job.JobParameter;
 import de.hf.dac.api.security.RootSecurityProvider;
 import de.hf.dac.api.security.SecurityServiceBuilder;
 import de.hf.dac.marketdataprovider.api.application.MarketDataEnvironment;
@@ -26,6 +24,7 @@ import de.hf.dac.marketdataprovider.api.application.OpLevel;
 import de.hf.dac.marketdataprovider.api.application.OpType;
 import de.hf.dac.marketdataprovider.api.service.ProductService;
 import de.hf.dac.marketdataprovider.api.service.InstrumentService;
+import de.hf.dac.marketdataprovider.application.rootcontext.RunnerRootImpl;
 import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Reference;
 import org.osgi.service.metatype.annotations.ObjectClassDefinition;

@@ -1,0 +1,6 @@
+-dsannotations : *
+-metatype: *
+Export-Package: \
+	de.hf.dac.api.rest.model, \
+    de.hf.dac.api.rest.model.data
+Bundle-SymbolicName: ${project.artifactId}

@@ -22,6 +22,7 @@
         <module>marketdataprovider</module>
         <module>web</module>
         <module>de.hf.dac.common</module>
+        <module>services</module>
     </modules>
 
 

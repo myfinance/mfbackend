@@ -15,12 +15,14 @@
  * ----------------------------------------------------------------------------
  */
 
-package de.hf.dac.marketdataprovider.api.application;
+package de.hf.dac.marketdataprovider.api.application.rootcontext;
 
 import de.hf.dac.api.io.routes.job.JobDispatcher;
 import de.hf.dac.api.io.routes.job.JobParameter;
 import de.hf.dac.api.security.IdentifiableResource;
 import de.hf.dac.api.security.Secured;
+import de.hf.dac.marketdataprovider.api.application.MDRunnerJobType;
+import de.hf.dac.marketdataprovider.api.application.OpLevel;
 
 public interface RunnerRoot extends IdentifiableResource<OpLevel>, Secured {
     JobDispatcher<JobParameter> getDispatcher();

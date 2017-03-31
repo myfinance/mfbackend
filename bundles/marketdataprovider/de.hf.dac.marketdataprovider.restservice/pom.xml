@@ -76,6 +76,12 @@
         </dependency>
 
         <dependency>
+            <groupId>de.hf.dac.services</groupId>
+            <artifactId>de.hf.dac.services.rest-resources</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
+        <dependency>
             <groupId>com.google.code.gson</groupId>
             <artifactId>gson</artifactId>
             <scope>provided</scope>

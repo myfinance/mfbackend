@@ -1,0 +1,6 @@
+-dsannotations : *
+-metatype: *
+Export-Package: \
+	de.hf.dac.api.base.identity
+
+Bundle-SymbolicName: ${project.artifactId}

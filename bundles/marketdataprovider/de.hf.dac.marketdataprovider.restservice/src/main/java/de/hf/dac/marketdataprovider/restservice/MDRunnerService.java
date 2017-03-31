@@ -19,7 +19,7 @@ package de.hf.dac.marketdataprovider.restservice;
 
 import com.google.gson.Gson;
 import de.hf.dac.api.io.routes.job.JobInformation;
-import de.hf.dac.marketdataprovider.api.application.RunnerRoot;
+import de.hf.dac.marketdataprovider.api.application.rootcontext.RunnerRoot;
 import de.hf.dac.marketdataprovider.restservice.marketdataresources.MDRunnerResource;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;

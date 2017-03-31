@@ -14,6 +14,8 @@
     <modules>
         <module>de.hf.dac.api.io</module>
         <module>de.hf.dac.api.security</module>
+        <module>de.hf.dac.api.rest</module>
+        <module>de.hf.dac.api.base</module>
     </modules>
 
 

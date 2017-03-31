@@ -15,7 +15,7 @@
  * ----------------------------------------------------------------------------
  */
 
-package de.hf.dac.marketdataprovider.application;
+package de.hf.dac.marketdataprovider.application.rootcontext;
 
 import de.hf.dac.api.io.routes.job.JobDispatcher;
 import de.hf.dac.api.io.routes.job.JobParameter;
@@ -24,8 +24,9 @@ import de.hf.dac.api.security.SecurityServiceBuilder;
 import de.hf.dac.marketdataprovider.api.application.MDRunnerJobType;
 import de.hf.dac.marketdataprovider.api.application.OpLevel;
 import de.hf.dac.marketdataprovider.api.application.OpType;
-import de.hf.dac.marketdataprovider.api.application.RunnerRoot;
+import de.hf.dac.marketdataprovider.api.application.rootcontext.RunnerRoot;
 import de.hf.dac.marketdataprovider.api.application.ServiceResourceType;
+import de.hf.dac.marketdataprovider.application.MDRunnerJobTypeImpl;
 import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
@@ -39,21 +40,7 @@ import java.util.List;
 
 @Designate(ocd = RunnerRootImpl.RunnerRootSecurity.class)
 @Component(service = RunnerRoot.class, immediate = true, scope = ServiceScope.SINGLETON)
-public class RunnerRootImpl implements RunnerRoot, ServiceResourceType {
-
-    /**
-     * Not all Requests have an Environment e.G. listRunner (there are jobs for multiple environments listed).
-     * so I have to configure a environment to secure these operations as well
-     */
-    @ObjectClassDefinition(name = "Runner Security Source Configuration")
-    public @interface RunnerRootSecurity {
-        String sourceEnvironmentForSecurityDB() default "dev";
-    }
-
-    @Reference
-    SecurityServiceBuilder<OpType, OpLevel> securityServiceBuilder;
-
-    private RootSecurityProvider<OpType, OpLevel> rootSecurityProvider;
+public class RunnerRootImpl extends BaseRootContext implements RunnerRoot {
 
     @Reference
     private JobDispatcher<JobParameter> dispatcher;
@@ -90,11 +77,6 @@ public class RunnerRootImpl implements RunnerRoot, ServiceResourceType {
     @Override
     public OpLevel getOpLevel() {
         return OpLevel.runner;
-    }
-
-    @Override
-    public RootSecurityProvider getRootSecurityProvider() {
-        return rootSecurityProvider;
     }
 
     public JobDispatcher<JobParameter> getDispatcher() {
