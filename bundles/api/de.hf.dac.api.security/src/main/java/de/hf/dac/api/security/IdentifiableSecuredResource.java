@@ -6,19 +6,17 @@
  *
  *  Project     : dac
  *
- *  File        : MDRunnerJobType.java
+ *  File        : IdentifiableSecuredResource.java
  *
  *  Author(s)   : hf
  *
- *  Created     : 21.02.2017
+ *  Created     : 13.04.2017
  *
  * ----------------------------------------------------------------------------
  */
 
-package de.hf.dac.marketdataprovider.api.application;
+package de.hf.dac.api.security;
 
-import de.hf.dac.api.security.Secured;
-
-public interface MDRunnerJobType extends ServiceResourceType, Secured {
-    String getBeanClass();
+public interface IdentifiableSecuredResource<RESOURCE_LEVEL>  extends IdentifiableResource<RESOURCE_LEVEL>, Secured{
+    IdentifiableSecuredResource<RESOURCE_LEVEL> getParent();
 }

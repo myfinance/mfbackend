@@ -32,7 +32,7 @@ public abstract class BaseRootContext  implements ServiceResourceType {
      * so I have to configure a environment to secure these operations as well
      */
     @ObjectClassDefinition(name = "Runner Security Source Configuration")
-    public @interface RunnerRootSecurity {
+    public @interface RootSecurity {
         String sourceEnvironmentForSecurityDB() default "dev";
     }
 
@@ -45,4 +45,6 @@ public abstract class BaseRootContext  implements ServiceResourceType {
     public RootSecurityProvider getRootSecurityProvider() {
         return rootSecurityProvider;
     }
+
+    public abstract ServiceResourceType getAuthType(String id);
 }

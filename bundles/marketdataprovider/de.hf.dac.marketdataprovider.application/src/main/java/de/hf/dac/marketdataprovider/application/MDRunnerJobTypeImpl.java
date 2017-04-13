@@ -18,16 +18,14 @@
 package de.hf.dac.marketdataprovider.application;
 
 import de.hf.dac.api.security.RootSecurityProvider;
-import de.hf.dac.marketdataprovider.api.application.MDRunnerJobType;
 import de.hf.dac.marketdataprovider.api.application.OpLevel;
 import de.hf.dac.marketdataprovider.api.application.ServiceResourceType;
 import org.apache.commons.lang3.NotImplementedException;
 
 import java.util.List;
 
-public class MDRunnerJobTypeImpl implements MDRunnerJobType {
+public class MDRunnerJobTypeImpl implements ServiceResourceType {
     private final ServiceResourceType parent;
-    private final String beanClass;
 
     @Override
     public ServiceResourceType getParent() {
@@ -38,7 +36,6 @@ public class MDRunnerJobTypeImpl implements MDRunnerJobType {
 
     public MDRunnerJobTypeImpl(String beanClass, ServiceResourceType parent) {
         this.id = beanClass;
-        this.beanClass = beanClass;
         this.parent = parent;
     }
 
@@ -63,10 +60,5 @@ public class MDRunnerJobTypeImpl implements MDRunnerJobType {
         throw new NotImplementedException("getParentIdTrail");
     }
 
-
-    @Override
-    public String getBeanClass() {
-        return beanClass;
-    }
 }
 

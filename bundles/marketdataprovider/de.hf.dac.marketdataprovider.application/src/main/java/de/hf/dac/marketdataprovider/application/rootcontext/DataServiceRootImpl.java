@@ -33,7 +33,8 @@ public class DataServiceRootImpl extends BaseRootContext implements DataServiceR
     @Reference
     private MarketDataEnvironmentBuilder marketDataEnvironmentBuilder;
 
-    private void activate(RunnerRootSecurity cacheRootSecurity) {
+    //todo kann das in die base class?
+    private void activate(RootSecurity cacheRootSecurity) {
         try {
             rootSecurityProvider = securityServiceBuilder.build(cacheRootSecurity.sourceEnvironmentForSecurityDB());
         } catch (SQLException e) {
@@ -54,6 +55,7 @@ public class DataServiceRootImpl extends BaseRootContext implements DataServiceR
         return id;
     }
 
+    //todo kann das in die base class?
     @Override
     public List<String> getParentIdTrail() {
         List<String> ret = new ArrayList<>();
@@ -74,5 +76,10 @@ public class DataServiceRootImpl extends BaseRootContext implements DataServiceR
     @Override
     public List<String> getEnvironmentInfo() {
         return marketDataEnvironmentBuilder.getInfo();
+    }
+
+    @Override
+    public ServiceResourceType getAuthType(String jobType) {
+        return new MDRunnerJobTypeImpl(jobType, this);
     }
 }

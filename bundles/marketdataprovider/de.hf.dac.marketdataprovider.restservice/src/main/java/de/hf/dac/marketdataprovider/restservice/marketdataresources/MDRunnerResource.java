@@ -23,9 +23,9 @@ import de.hf.dac.api.io.routes.job.JobDispatcher;
 import de.hf.dac.api.io.routes.job.JobInformation;
 import de.hf.dac.api.io.routes.job.WrappedJobParameter;
 import de.hf.dac.api.security.SecuredResource;
-import de.hf.dac.marketdataprovider.api.application.MDRunnerJobType;
 import de.hf.dac.marketdataprovider.api.application.OpLevel;
 import de.hf.dac.marketdataprovider.api.application.OpType;
+import de.hf.dac.marketdataprovider.api.application.ServiceResourceType;
 import de.hf.dac.marketdataprovider.api.runner.BaseMDRunnerParameter;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -51,7 +51,7 @@ public class MDRunnerResource extends SecuredResource<OpType,OpLevel> {
     private final JobDispatcher dispatcher;
 
 
-    public MDRunnerResource(JobDispatcher dispatcher, MDRunnerJobType jobTyp) {
+    public MDRunnerResource(JobDispatcher dispatcher, ServiceResourceType jobTyp) {
         super(jobTyp);
         this.dispatcher = dispatcher;
     }

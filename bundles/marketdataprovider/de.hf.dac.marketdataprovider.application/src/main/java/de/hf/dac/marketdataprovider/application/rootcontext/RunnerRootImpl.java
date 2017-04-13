@@ -19,11 +19,7 @@ package de.hf.dac.marketdataprovider.application.rootcontext;
 
 import de.hf.dac.api.io.routes.job.JobDispatcher;
 import de.hf.dac.api.io.routes.job.JobParameter;
-import de.hf.dac.api.security.RootSecurityProvider;
-import de.hf.dac.api.security.SecurityServiceBuilder;
-import de.hf.dac.marketdataprovider.api.application.MDRunnerJobType;
 import de.hf.dac.marketdataprovider.api.application.OpLevel;
-import de.hf.dac.marketdataprovider.api.application.OpType;
 import de.hf.dac.marketdataprovider.api.application.rootcontext.RunnerRoot;
 import de.hf.dac.marketdataprovider.api.application.ServiceResourceType;
 import de.hf.dac.marketdataprovider.application.MDRunnerJobTypeImpl;
@@ -32,13 +28,12 @@ import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
 import org.osgi.service.component.annotations.ServiceScope;
 import org.osgi.service.metatype.annotations.Designate;
-import org.osgi.service.metatype.annotations.ObjectClassDefinition;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-@Designate(ocd = RunnerRootImpl.RunnerRootSecurity.class)
+@Designate(ocd = BaseRootContext.RootSecurity.class)
 @Component(service = RunnerRoot.class, immediate = true, scope = ServiceScope.SINGLETON)
 public class RunnerRootImpl extends BaseRootContext implements RunnerRoot {
 
@@ -46,7 +41,7 @@ public class RunnerRootImpl extends BaseRootContext implements RunnerRoot {
     private JobDispatcher<JobParameter> dispatcher;
 
     @Activate
-    private void activate(RunnerRootSecurity cacheRootSecurity) {
+    private void activate(RootSecurity cacheRootSecurity) {
         try {
             rootSecurityProvider = securityServiceBuilder.build(cacheRootSecurity.sourceEnvironmentForSecurityDB());
         } catch (SQLException e) {
@@ -79,11 +74,13 @@ public class RunnerRootImpl extends BaseRootContext implements RunnerRoot {
         return OpLevel.runner;
     }
 
+    @Override
     public JobDispatcher<JobParameter> getDispatcher() {
         return dispatcher;
     }
 
-    public MDRunnerJobType getAuthType(String jobType) {
+    @Override
+    public ServiceResourceType getAuthType(String jobType) {
         return new MDRunnerJobTypeImpl(jobType, this);
     }
 }

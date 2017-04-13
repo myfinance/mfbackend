@@ -21,10 +21,10 @@ import de.hf.dac.api.io.routes.job.JobDispatcher;
 import de.hf.dac.api.io.routes.job.JobParameter;
 import de.hf.dac.api.security.IdentifiableResource;
 import de.hf.dac.api.security.Secured;
-import de.hf.dac.marketdataprovider.api.application.MDRunnerJobType;
 import de.hf.dac.marketdataprovider.api.application.OpLevel;
+import de.hf.dac.marketdataprovider.api.application.ServiceResourceType;
 
 public interface RunnerRoot extends IdentifiableResource<OpLevel>, Secured {
     JobDispatcher<JobParameter> getDispatcher();
-    MDRunnerJobType getAuthType(String jobType);
+    ServiceResourceType getAuthType(String jobType);
 }

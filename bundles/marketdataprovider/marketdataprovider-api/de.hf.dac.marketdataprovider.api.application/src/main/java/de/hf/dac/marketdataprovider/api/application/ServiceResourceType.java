@@ -17,9 +17,7 @@
 
 package de.hf.dac.marketdataprovider.api.application;
 
-import de.hf.dac.api.security.IdentifiableResource;
-import de.hf.dac.api.security.Secured;
+import de.hf.dac.api.security.IdentifiableSecuredResource;
 
-public interface ServiceResourceType extends IdentifiableResource<OpLevel>, Secured {
-    ServiceResourceType getParent();
+public interface ServiceResourceType extends IdentifiableSecuredResource<OpLevel> {
 }

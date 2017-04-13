@@ -18,6 +18,11 @@
 package de.hf.dac.marketdataprovider.restservice;
 
 
+import de.hf.dac.api.security.IdentifiableResource;
+import de.hf.dac.api.security.Secured;
+import de.hf.dac.api.security.SecuredResource;
+import de.hf.dac.marketdataprovider.api.application.OpLevel;
+import de.hf.dac.marketdataprovider.api.application.OpType;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.FrameworkUtil;
 import org.osgi.framework.ServiceReference;
@@ -32,7 +37,7 @@ import javax.ws.rs.core.UriInfo;
 
 import java.security.AccessController;
 
-public abstract class TopLevelWithEnvironments{
+public abstract class TopLevelWithEnvironments {
 
     private static final Logger AUDIT_LOG = LoggerFactory.getLogger("audit");
 
