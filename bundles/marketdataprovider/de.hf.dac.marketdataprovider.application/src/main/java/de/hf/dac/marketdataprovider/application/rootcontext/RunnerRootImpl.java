@@ -22,51 +22,21 @@ import de.hf.dac.api.io.routes.job.JobParameter;
 import de.hf.dac.marketdataprovider.api.application.OpLevel;
 import de.hf.dac.marketdataprovider.api.application.rootcontext.RunnerRoot;
 import de.hf.dac.marketdataprovider.api.application.ServiceResourceType;
-import de.hf.dac.marketdataprovider.application.MDRunnerJobTypeImpl;
-import org.osgi.service.component.annotations.Activate;
+import de.hf.dac.marketdataprovider.application.servicecontext.MDRunnerJobTypeContext;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
 import org.osgi.service.component.annotations.ServiceScope;
 import org.osgi.service.metatype.annotations.Designate;
 
-import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.List;
-
-@Designate(ocd = BaseRootContext.RootSecurity.class)
+@Designate(ocd = BaseRootSecurityContext.RootSecurity.class)
 @Component(service = RunnerRoot.class, immediate = true, scope = ServiceScope.SINGLETON)
-public class RunnerRootImpl extends BaseRootContext implements RunnerRoot {
+public class RunnerRootImpl extends BaseRootSecurityContext implements RunnerRoot {
 
     @Reference
     private JobDispatcher<JobParameter> dispatcher;
 
-    @Activate
-    private void activate(RootSecurity cacheRootSecurity) {
-        try {
-            rootSecurityProvider = securityServiceBuilder.build(cacheRootSecurity.sourceEnvironmentForSecurityDB());
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    final private String id = "RunnerRoot";
-
-
-    @Override
-    public ServiceResourceType getParent() {
-        return this;
-    }
-
-    @Override
-    public String getId() {
-        return id;
-    }
-
-    @Override
-    public List<String> getParentIdTrail() {
-        List<String> ret = new ArrayList<>();
-        ret.add(id);
-        return ret;
+    public RunnerRootImpl(){
+        super("RunnerRoot" );
     }
 
     @Override
@@ -80,7 +50,7 @@ public class RunnerRootImpl extends BaseRootContext implements RunnerRoot {
     }
 
     @Override
-    public ServiceResourceType getAuthType(String jobType) {
-        return new MDRunnerJobTypeImpl(jobType, this);
+    public ServiceResourceType getChildServiceContext(String jobType) {
+        return new MDRunnerJobTypeContext(jobType, this);
     }
 }

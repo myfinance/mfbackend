@@ -17,61 +17,37 @@
 
 package de.hf.dac.marketdataprovider.application.rootcontext;
 
-import de.hf.dac.marketdataprovider.api.application.MarketDataEnvironment;
 import de.hf.dac.marketdataprovider.api.application.MarketDataEnvironmentBuilder;
 import de.hf.dac.marketdataprovider.api.application.OpLevel;
 import de.hf.dac.marketdataprovider.api.application.ServiceResourceType;
 import de.hf.dac.marketdataprovider.api.application.rootcontext.DataServiceRoot;
+import de.hf.dac.marketdataprovider.api.application.servicecontext.MDEnvironmentContext;
+import de.hf.dac.marketdataprovider.application.servicecontext.MDEnvironmentContextImpl;
+import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
+import org.osgi.service.component.annotations.ServiceScope;
+import org.osgi.service.metatype.annotations.Designate;
 
-import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.List;
 
-public class DataServiceRootImpl extends BaseRootContext implements DataServiceRoot{
+@Designate(ocd = BaseRootSecurityContext.RootSecurity.class)
+@Component(service = DataServiceRoot.class, immediate = true, scope = ServiceScope.SINGLETON)
+public class DataServiceRootImpl extends BaseRootSecurityContext implements DataServiceRoot{
 
     @Reference
     private MarketDataEnvironmentBuilder marketDataEnvironmentBuilder;
 
-    //todo kann das in die base class?
-    private void activate(RootSecurity cacheRootSecurity) {
-        try {
-            rootSecurityProvider = securityServiceBuilder.build(cacheRootSecurity.sourceEnvironmentForSecurityDB());
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
+    public DataServiceRootImpl() {
+        super("DataServiceRoot");
     }
 
-    final private String id = "DataServiceRoot";
-
-
-    @Override
-    public ServiceResourceType getParent() {
-        return this;
-    }
-
-    @Override
-    public String getId() {
-        return id;
-    }
-
-    //todo kann das in die base class?
-    @Override
-    public List<String> getParentIdTrail() {
-        List<String> ret = new ArrayList<>();
-        ret.add(id);
-        return ret;
-    }
 
     @Override
     public OpLevel getOpLevel() {
         return OpLevel.environment;
     }
 
-    @Override
-    public MarketDataEnvironment getMarketDataEnvironment(String env) throws SQLException {
-        return marketDataEnvironmentBuilder.build(env);
-    }
+
 
     @Override
     public List<String> getEnvironmentInfo() {
@@ -79,7 +55,12 @@ public class DataServiceRootImpl extends BaseRootContext implements DataServiceR
     }
 
     @Override
-    public ServiceResourceType getAuthType(String jobType) {
-        return new MDRunnerJobTypeImpl(jobType, this);
+    public ServiceResourceType getChildServiceContext(String env) {
+        return getMDEnvironmentContext(env);
+    }
+
+    @Override
+    public MDEnvironmentContext getMDEnvironmentContext(String env){
+        return new MDEnvironmentContextImpl(marketDataEnvironmentBuilder, env, this);
     }
 }

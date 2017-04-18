@@ -52,7 +52,7 @@ public class MyHello  extends TopLevelWithEnvironments{
     public String getProducts() {
         String returnvalue = "No Products";
         try {
-            returnvalue = getService(DataServiceRoot.class).getMarketDataEnvironment("dev").getProductService().listProducts().toString();
+            returnvalue = getService(DataServiceRoot.class).getMDEnvironmentContext("dev").getMarketDataEnvironment().getProductService().listProducts().toString();
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -67,7 +67,7 @@ public class MyHello  extends TopLevelWithEnvironments{
     public List<Product> getProductObjects() {
         List<Product> returnvalue = null;
         try {
-            returnvalue = getService(DataServiceRoot.class).getMarketDataEnvironment("dev").getProductService().listProducts();
+            returnvalue = getService(DataServiceRoot.class).getMDEnvironmentContext("dev").getMarketDataEnvironment().getProductService().listProducts();
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -83,7 +83,7 @@ public class MyHello  extends TopLevelWithEnvironments{
             @QueryParam("description") @ApiParam(value="description") String description) {
         Product p = new Product(productId, description);
         try {
-            getService(DataServiceRoot.class).getMarketDataEnvironment("dev").getProductService().saveProduct(p);
+            getService(DataServiceRoot.class).getMDEnvironmentContext("dev").getMarketDataEnvironment().getProductService().saveProduct(p);
         } catch (SQLException e) {
             e.printStackTrace();
             return "not Saved";

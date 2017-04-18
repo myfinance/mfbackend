@@ -59,7 +59,7 @@ public class MDRunnerService extends TopLevelWithEnvironments{
         throws SQLException {
         audit();
         // create RunnerResource
-        return new MDRunnerResource(getService(RunnerRoot.class).getDispatcher(), getService(RunnerRoot.class).getAuthType(jobtype));
+        return new MDRunnerResource(getService(RunnerRoot.class).getDispatcher(), getService(RunnerRoot.class).getChildServiceContext(jobtype));
     }
 
     @GET

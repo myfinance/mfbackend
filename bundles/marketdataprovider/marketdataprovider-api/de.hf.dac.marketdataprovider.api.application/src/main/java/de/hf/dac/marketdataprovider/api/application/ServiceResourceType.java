@@ -20,4 +20,5 @@ package de.hf.dac.marketdataprovider.api.application;
 import de.hf.dac.api.security.IdentifiableSecuredResource;
 
 public interface ServiceResourceType extends IdentifiableSecuredResource<OpLevel> {
+    ServiceResourceType getChildServiceContext(String id);
 }

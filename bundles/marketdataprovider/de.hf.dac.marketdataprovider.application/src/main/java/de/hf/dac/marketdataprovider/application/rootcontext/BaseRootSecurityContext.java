@@ -6,7 +6,7 @@
  *
  *  Project     : dac
  *
- *  File        : BaseRootContext.java
+ *  File        : BaseRootSecurityContext.java
  *
  *  Author(s)   : hf
  *
@@ -25,7 +25,11 @@ import de.hf.dac.marketdataprovider.api.application.ServiceResourceType;
 import org.osgi.service.component.annotations.Reference;
 import org.osgi.service.metatype.annotations.ObjectClassDefinition;
 
-public abstract class BaseRootContext  implements ServiceResourceType {
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
+
+public abstract class BaseRootSecurityContext extends BaseSecurityContext {
 
     /**
      * Not all Requests have an Environment e.G. listRunner (there are jobs for multiple environments listed).
@@ -36,15 +40,37 @@ public abstract class BaseRootContext  implements ServiceResourceType {
         String sourceEnvironmentForSecurityDB() default "dev";
     }
 
-    @Reference
-    SecurityServiceBuilder<OpType, OpLevel> securityServiceBuilder;
+    private void activate(RootSecurity cacheRootSecurity) {
+        try {
+            rootSecurityProvider = securityServiceBuilder.build(cacheRootSecurity.sourceEnvironmentForSecurityDB());
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
 
     protected RootSecurityProvider<OpType, OpLevel> rootSecurityProvider;
+    protected SecurityServiceBuilder<OpType, OpLevel> securityServiceBuilder;
+
+    public BaseRootSecurityContext(String id){
+        super(id);
+        securityServiceBuilder = getService(SecurityServiceBuilder.class);
+    }
+
+    @Override
+    public ServiceResourceType getParent() {
+        return this;
+    }
 
     @Override
     public RootSecurityProvider getRootSecurityProvider() {
         return rootSecurityProvider;
     }
 
-    public abstract ServiceResourceType getAuthType(String id);
+    @Override
+    public List<String> getParentIdTrail() {
+        List<String> ret = new ArrayList<>();
+        ret.add(id);
+        return ret;
+    }
+
 }

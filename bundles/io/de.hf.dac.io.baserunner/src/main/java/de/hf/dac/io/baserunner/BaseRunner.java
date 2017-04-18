@@ -94,11 +94,11 @@ public abstract class BaseRunner {
 
     protected void logBuidInfo() {
         BuildMetadataUtil buildMetadata = BuildMetadataUtil.get(this.getClass());
-        log.info("Dac Build version     : {} ", buildMetadata.getCCRVersion());
+        log.info("Dac Build version     : {} ", buildMetadata.getVersion());
         log.info("Dac Build timestamp   : {} ", buildMetadata.getBuildTimestamp());
         log.info("Dac Build User: {} ", buildMetadata.getUserName());
 
-        MDC.put("DacVersion", buildMetadata.getCCRVersion());
+        MDC.put("DacVersion", buildMetadata.getVersion());
     }
 
     /**

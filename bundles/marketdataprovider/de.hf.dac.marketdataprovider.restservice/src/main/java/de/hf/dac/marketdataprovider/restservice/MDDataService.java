@@ -41,7 +41,7 @@ public class MDDataService extends TopLevelWithEnvironments{
     @ApiOperation(value = "get Environment", response = EnvironmentDataResource.class)
     public EnvironmentDataResource getEnvironment(@PathParam("envID") @ApiParam(value="The Service Environment") String envID) throws SQLException {
         audit();
-        return new EnvironmentDataResource(getService(DataServiceRoot.class).getMarketDataEnvironment(envID));
+        return new EnvironmentDataResource(getService(DataServiceRoot.class).getMDEnvironmentContext(envID));
     }
 
     @Path("/environments/list")

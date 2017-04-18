@@ -1,0 +1,1 @@
+bundle contains simple helper classes

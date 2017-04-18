@@ -78,7 +78,7 @@ public class BuildMetadataUtil {
         }
     }
 
-    public String getCCRVersion() {
+    public String getVersion() {
         return version;
     }
 

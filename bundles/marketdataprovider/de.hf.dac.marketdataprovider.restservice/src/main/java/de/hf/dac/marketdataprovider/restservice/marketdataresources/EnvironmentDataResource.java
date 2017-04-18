@@ -22,17 +22,11 @@ import de.hf.dac.api.security.SecuredResource;
 import de.hf.dac.marketdataprovider.api.application.MarketDataEnvironment;
 import de.hf.dac.marketdataprovider.api.application.OpLevel;
 import de.hf.dac.marketdataprovider.api.application.OpType;
+import de.hf.dac.marketdataprovider.api.application.servicecontext.MDEnvironmentContext;
 import de.hf.dac.marketdataprovider.api.domain.Instrument;
 import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiParam;
-import io.swagger.annotations.ApiResponse;
-import io.swagger.annotations.ApiResponses;
-import org.apache.http.HttpStatus;
-
-import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import java.util.List;
@@ -43,9 +37,9 @@ public class EnvironmentDataResource extends SecuredResource<OpType,OpLevel> {
     final String OPERATIONID="environment";
     final protected static Gson gson = new Gson();
 
-    public EnvironmentDataResource(MarketDataEnvironment marketDataEnvironment) {
-        super(marketDataEnvironment);
-        this.marketDataEnvironment = marketDataEnvironment;
+    public EnvironmentDataResource(MDEnvironmentContext envContext) {
+        super(envContext);
+        this.marketDataEnvironment = envContext.getMarketDataEnvironment();
     }
 
     @GET

@@ -24,7 +24,7 @@ import de.hf.dac.marketdataprovider.api.application.OpLevel;
 import de.hf.dac.marketdataprovider.api.application.OpType;
 import de.hf.dac.marketdataprovider.api.service.ProductService;
 import de.hf.dac.marketdataprovider.api.service.InstrumentService;
-import de.hf.dac.marketdataprovider.application.rootcontext.BaseRootContext;
+import de.hf.dac.marketdataprovider.application.rootcontext.BaseRootSecurityContext;
 import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Reference;
 import org.osgi.service.metatype.annotations.ObjectClassDefinition;
@@ -64,7 +64,7 @@ public class MarketDataEnvironmentImpl implements MarketDataEnvironment{
     }
 
     @Activate
-    private void activate(BaseRootContext.RootSecurity cacheRootSecurity) {
+    private void activate(BaseRootSecurityContext.RootSecurity cacheRootSecurity) {
         try {
             rootSecurityProvider = securityServiceBuilder.build(cacheRootSecurity.sourceEnvironmentForSecurityDB());
         } catch (SQLException e) {

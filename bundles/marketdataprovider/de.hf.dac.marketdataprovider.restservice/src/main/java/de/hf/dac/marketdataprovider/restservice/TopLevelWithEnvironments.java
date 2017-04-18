@@ -17,15 +17,7 @@
 
 package de.hf.dac.marketdataprovider.restservice;
 
-
-import de.hf.dac.api.security.IdentifiableResource;
-import de.hf.dac.api.security.Secured;
-import de.hf.dac.api.security.SecuredResource;
-import de.hf.dac.marketdataprovider.api.application.OpLevel;
-import de.hf.dac.marketdataprovider.api.application.OpType;
-import org.osgi.framework.BundleContext;
-import org.osgi.framework.FrameworkUtil;
-import org.osgi.framework.ServiceReference;
+import de.hf.dac.common.BaseDS;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -37,7 +29,7 @@ import javax.ws.rs.core.UriInfo;
 
 import java.security.AccessController;
 
-public abstract class TopLevelWithEnvironments {
+public abstract class TopLevelWithEnvironments extends BaseDS {
 
     private static final Logger AUDIT_LOG = LoggerFactory.getLogger("audit");
 
@@ -49,16 +41,6 @@ public abstract class TopLevelWithEnvironments {
 
     @Context
     protected UriInfo uriInfo;
-
-    protected <T> T getService(Class<T> clazz) {
-        final BundleContext bundleContext = FrameworkUtil.getBundle(this.getClass()).getBundleContext();
-
-        ServiceReference<T> sr = bundleContext.getServiceReference(clazz);
-
-        T service = bundleContext.getService(sr);
-
-        return service;
-    }
 
     protected void audit() {
         AUDIT_LOG.info("User {} Method {} Resource {} ", Subject.getSubject(AccessController.getContext()).getPrincipals().iterator().next(),

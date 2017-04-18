@@ -82,6 +82,12 @@
         </dependency>
 
         <dependency>
+            <groupId>de.hf.dac</groupId>
+            <artifactId>de.hf.dac.common</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
+        <dependency>
             <groupId>com.google.code.gson</groupId>
             <artifactId>gson</artifactId>
             <scope>provided</scope>

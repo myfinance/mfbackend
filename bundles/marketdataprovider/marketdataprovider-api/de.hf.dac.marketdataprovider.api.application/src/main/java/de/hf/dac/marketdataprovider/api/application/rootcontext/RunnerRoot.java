@@ -24,7 +24,6 @@ import de.hf.dac.api.security.Secured;
 import de.hf.dac.marketdataprovider.api.application.OpLevel;
 import de.hf.dac.marketdataprovider.api.application.ServiceResourceType;
 
-public interface RunnerRoot extends IdentifiableResource<OpLevel>, Secured {
+public interface RunnerRoot extends ServiceResourceType {
     JobDispatcher<JobParameter> getDispatcher();
-    ServiceResourceType getAuthType(String jobType);
 }
