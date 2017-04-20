@@ -22,6 +22,8 @@ import de.hf.dac.api.security.SecurityServiceBuilder;
 import de.hf.dac.marketdataprovider.api.application.OpLevel;
 import de.hf.dac.marketdataprovider.api.application.OpType;
 import de.hf.dac.marketdataprovider.api.application.ServiceResourceType;
+import de.hf.dac.marketdataprovider.api.application.securitycontext.SecurityEnvProviderService;
+import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Reference;
 import org.osgi.service.metatype.annotations.ObjectClassDefinition;
 
@@ -31,30 +33,26 @@ import java.util.List;
 
 public abstract class BaseRootSecurityContext extends BaseSecurityContext {
 
-    /**
-     * Not all Requests have an Environment e.G. listRunner (there are jobs for multiple environments listed).
-     * so I have to configure a environment to secure these operations as well
-     */
-    @ObjectClassDefinition(name = "Runner Security Source Configuration")
-    public @interface RootSecurity {
-        String sourceEnvironmentForSecurityDB() default "dev";
-    }
+    protected RootSecurityProvider<OpType, OpLevel> rootSecurityProvider;
 
-    private void activate(RootSecurity cacheRootSecurity) {
+    /**
+     *  this will execute only once, so runtime changes on the securityEnvironmentConfig will have no effect.
+     *  But to change the SecurityEnvironment at runtime is not recommanded anyway
+     *  if it should needed at at some point the sub-classes has to Designate(ocd = RootSecurityEnvironmentConfiguration.class)
+     *  in stead of SecurityEnvProviderService. It can not be done in this class because DS is not processing annotaions in super-classes
+     *  an so we can not write an activate methode here
+     * @param id
+     */
+    public BaseRootSecurityContext(String id){
+        super(id);
+        SecurityServiceBuilder<OpType, OpLevel> securityServiceBuilder = getService(SecurityServiceBuilder.class);
         try {
-            rootSecurityProvider = securityServiceBuilder.build(cacheRootSecurity.sourceEnvironmentForSecurityDB());
+            rootSecurityProvider = securityServiceBuilder.build(getService(SecurityEnvProviderService.class).getSecurityEnvironment());
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
     }
 
-    protected RootSecurityProvider<OpType, OpLevel> rootSecurityProvider;
-    protected SecurityServiceBuilder<OpType, OpLevel> securityServiceBuilder;
-
-    public BaseRootSecurityContext(String id){
-        super(id);
-        securityServiceBuilder = getService(SecurityServiceBuilder.class);
-    }
 
     @Override
     public ServiceResourceType getParent() {

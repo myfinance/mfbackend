@@ -27,7 +27,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public abstract class BaseSecurityContext extends BaseDS implements ServiceResourceType {
-    protected RootSecurityProvider<OpType, OpLevel> rootSecurityProvider;
+
     final protected String id;
     private final ServiceResourceType parent;
 

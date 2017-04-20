@@ -27,6 +27,10 @@
             <artifactId>swagger-annotations</artifactId>
             <scope>provided</scope>
         </dependency>
+        <dependency>
+            <groupId>org.osgi</groupId>
+            <artifactId>osgi.cmpn</artifactId>
+        </dependency>
     </dependencies>
 
 

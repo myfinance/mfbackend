@@ -15,7 +15,7 @@
  * ----------------------------------------------------------------------------
  */
 
-package de.hf.dac.marketdataprovider.application;
+package de.hf.dac.marketdataprovider.application.securitycontext;
 
 import de.hf.dac.api.security.RootSecurityProvider;
 import de.hf.dac.marketdataprovider.api.application.EnvTarget;

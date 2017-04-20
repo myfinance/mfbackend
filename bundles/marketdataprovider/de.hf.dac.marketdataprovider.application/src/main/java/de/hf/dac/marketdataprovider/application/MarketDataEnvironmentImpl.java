@@ -41,21 +41,6 @@ public class MarketDataEnvironmentImpl implements MarketDataEnvironment{
     final private InstrumentService instrumentService;
     final private String environment;
 
-    private RootSecurityProvider rootSecurityProvider;
-
-    //todo gemeinsamkeiten mit runnerRoot in abstracte klasse auslagern
-    /**
-     * Not all Requests have an Environment e.G. listRunner (there are jobs for multiple environments listed).
-     * so I have to configure a environment to secure these operations as well
-     */
-    @ObjectClassDefinition(name = "Runner Security Source Configuration")
-    public @interface RunnerRootSecurity {
-        String sourceEnvironmentForSecurityDB() default "dev";
-    }
-
-    @Reference
-    SecurityServiceBuilder<OpType, OpLevel> securityServiceBuilder;
-
     @Inject
     public MarketDataEnvironmentImpl(ProductService productService, InstrumentService instrumentService, @Named("envID") String environment){
         this.productService=productService;
@@ -63,14 +48,6 @@ public class MarketDataEnvironmentImpl implements MarketDataEnvironment{
         this.environment=environment;
     }
 
-    @Activate
-    private void activate(BaseRootSecurityContext.RootSecurity cacheRootSecurity) {
-        try {
-            rootSecurityProvider = securityServiceBuilder.build(cacheRootSecurity.sourceEnvironmentForSecurityDB());
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
-    }
 
     @Override
     public ProductService getProductService() {
@@ -82,25 +59,5 @@ public class MarketDataEnvironmentImpl implements MarketDataEnvironment{
         return instrumentService;
     }
 
-    @Override
-    public RootSecurityProvider getRootSecurityProvider() {
-        return rootSecurityProvider;
-    }
 
-    @Override
-    public String getId() {
-        return environment;
-    }
-
-    @Override
-    public List<String> getParentIdTrail() {
-        List<String> ret = new ArrayList<>();
-        ret.add(environment);
-        return ret;
-    }
-
-    @Override
-    public OpLevel getOpLevel() {
-        return OpLevel.environment;
-    }
 }

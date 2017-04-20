@@ -15,7 +15,7 @@
  * ----------------------------------------------------------------------------
  */
 
-package de.hf.dac.marketdataprovider.application;
+package de.hf.dac.marketdataprovider.application.securitycontext;
 
 import com.google.inject.Module;
 import de.hf.dac.api.io.efmb.EntityManagerFactorySetup;
@@ -26,6 +26,7 @@ import de.hf.dac.api.security.RootSecurityProvider;
 import de.hf.dac.api.security.SecurityServiceBuilder;
 import de.hf.dac.marketdataprovider.api.application.OpLevel;
 import de.hf.dac.marketdataprovider.api.application.OpType;
+import de.hf.dac.marketdataprovider.application.MDSecurityApplicationContextModule;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
 

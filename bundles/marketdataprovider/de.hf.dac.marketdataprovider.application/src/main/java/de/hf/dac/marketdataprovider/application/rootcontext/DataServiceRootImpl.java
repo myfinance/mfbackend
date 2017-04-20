@@ -26,12 +26,9 @@ import de.hf.dac.marketdataprovider.application.servicecontext.MDEnvironmentCont
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
 import org.osgi.service.component.annotations.ServiceScope;
-import org.osgi.service.metatype.annotations.Designate;
-
 import java.util.List;
 
-@Designate(ocd = BaseRootSecurityContext.RootSecurity.class)
-@Component(service = DataServiceRoot.class, immediate = true, scope = ServiceScope.SINGLETON)
+@Component(service = DataServiceRoot.class, scope = ServiceScope.SINGLETON)
 public class DataServiceRootImpl extends BaseRootSecurityContext implements DataServiceRoot{
 
     @Reference

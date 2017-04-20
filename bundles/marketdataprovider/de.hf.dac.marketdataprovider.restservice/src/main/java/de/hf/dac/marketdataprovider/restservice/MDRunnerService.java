@@ -19,9 +19,6 @@ package de.hf.dac.marketdataprovider.restservice;
 
 import com.google.gson.Gson;
 import de.hf.dac.api.io.routes.job.JobInformation;
-import de.hf.dac.api.security.IdentifiableResource;
-import de.hf.dac.api.security.Secured;
-import de.hf.dac.marketdataprovider.api.application.OpLevel;
 import de.hf.dac.marketdataprovider.api.application.rootcontext.RunnerRoot;
 import de.hf.dac.marketdataprovider.restservice.marketdataresources.MDRunnerResource;
 import io.swagger.annotations.Api;
@@ -30,9 +27,6 @@ import io.swagger.annotations.ApiParam;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import org.apache.http.HttpStatus;
-import org.osgi.framework.BundleContext;
-import org.osgi.framework.FrameworkUtil;
-import org.osgi.framework.ServiceReference;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;

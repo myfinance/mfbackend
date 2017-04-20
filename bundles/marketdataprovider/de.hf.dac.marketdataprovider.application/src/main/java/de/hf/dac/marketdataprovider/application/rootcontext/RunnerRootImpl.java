@@ -26,10 +26,8 @@ import de.hf.dac.marketdataprovider.application.servicecontext.MDRunnerJobTypeCo
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
 import org.osgi.service.component.annotations.ServiceScope;
-import org.osgi.service.metatype.annotations.Designate;
 
-@Designate(ocd = BaseRootSecurityContext.RootSecurity.class)
-@Component(service = RunnerRoot.class, immediate = true, scope = ServiceScope.SINGLETON)
+@Component(service = RunnerRoot.class, scope = ServiceScope.SINGLETON)
 public class RunnerRootImpl extends BaseRootSecurityContext implements RunnerRoot {
 
     @Reference
