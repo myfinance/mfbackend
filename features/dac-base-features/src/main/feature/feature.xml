@@ -80,6 +80,7 @@
     <feature name="dac-io-api-feature" version="${pom.version}">
         <feature prerequisite="true">camel-core</feature>
         <bundle>mvn:io.swagger/swagger-annotations/${swagger.version}</bundle><!--for dto's like JobInformation to start routes via rest-client-->
+        <bundle>mvn:com.fasterxml.jackson.core/jackson-annotations/${jackson.version}</bundle>
         <bundle>mvn:de.hf.dac.api/de.hf.dac.api.io/${project.version}</bundle>
     </feature>
 

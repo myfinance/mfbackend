@@ -18,6 +18,11 @@
             <groupId>de.hf.dac.api</groupId>
             <artifactId>de.hf.dac.api.io</artifactId>
         </dependency>
+        <dependency>
+            <groupId>de.hf.dac</groupId>
+            <artifactId>de.hf.dac.common</artifactId>
+            <version>${project.version}</version>
+        </dependency>
     </dependencies>
 
 </project>

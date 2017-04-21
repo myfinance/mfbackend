@@ -17,6 +17,8 @@
 
 package de.hf.dac.api.io.routes.job;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.annotations.ApiModel;
 
 import java.text.SimpleDateFormat;
@@ -74,7 +76,7 @@ public class JobInformation {
     private final String uuid;
 
     private String startTime;
-    private String endTime;
+
     private JobStatus status = JobStatus.UNKNOWN;
 
     private List<StatusChange> statusChangeHistory = new ArrayList<>();
@@ -90,6 +92,7 @@ public class JobInformation {
         startTime = fd.format(new Date());
     }
 
+    private String endTime;
     public String getStartTime() {
         return startTime;
     }
@@ -102,9 +105,17 @@ public class JobInformation {
         return endTime;
     }
 
+    @JsonProperty("endTime")
     public void setEndTime(Date endTime) {
         this.endTime = fd.format(endTime);
     }
+
+    @JsonIgnore
+    public void setEndTime(String endTime) {
+        this.endTime = endTime;
+    }
+
+
 
     public JobStatus getStatus() {
         return status;
@@ -145,10 +156,6 @@ public class JobInformation {
 
     public String getUuid() {
         return uuid;
-    }
-
-    public void setEndTime(String endTime) {
-        this.endTime = endTime;
     }
 
     public List<StatusChange> getStatusChangeHistory() {

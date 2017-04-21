@@ -22,11 +22,14 @@ import com.google.gson.Gson;
 import de.hf.dac.api.io.routes.job.JobDispatcher;
 import de.hf.dac.api.io.routes.job.JobInformation;
 import de.hf.dac.api.io.routes.job.WrappedJobParameter;
+import de.hf.dac.api.security.IdentifiableResource;
+import de.hf.dac.api.security.Secured;
 import de.hf.dac.api.security.SecuredResource;
 import de.hf.dac.marketdataprovider.api.application.OpLevel;
 import de.hf.dac.marketdataprovider.api.application.OpType;
 import de.hf.dac.marketdataprovider.api.application.ServiceResourceType;
 import de.hf.dac.marketdataprovider.api.runner.BaseMDRunnerParameter;
+import de.hf.dac.services.resources.BaseSecuredResource;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
@@ -45,7 +48,7 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 @Api(tags = "Jobs")
-public class MDRunnerResource extends SecuredResource<OpType,OpLevel> {
+public class MDRunnerResource extends BaseSecuredResource<OpType,OpLevel> {
     private static final Logger LOG = LoggerFactory.getLogger("MDRunnerResource");
     final protected static Gson gson = new Gson();
     private final JobDispatcher dispatcher;

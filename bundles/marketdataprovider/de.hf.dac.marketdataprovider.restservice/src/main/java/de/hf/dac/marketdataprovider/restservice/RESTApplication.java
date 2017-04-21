@@ -24,6 +24,7 @@ import org.apache.cxf.feature.FastInfosetFeature;
 import org.apache.cxf.feature.LoggingFeature;
 import org.apache.cxf.interceptor.security.JAASAuthenticationFeature;
 import org.apache.cxf.jaxrs.JAXRSServerFactoryBean;
+import org.apache.cxf.jaxrs.impl.WebApplicationExceptionMapper;
 import org.apache.cxf.jaxrs.lifecycle.SingletonResourceProvider;
 import org.apache.cxf.jaxrs.provider.MultipartProvider;
 import org.apache.cxf.jaxrs.swagger.Swagger2Feature;
@@ -81,21 +82,26 @@ public class RESTApplication {
             sf.getFeatures().add(swagger2Feature);
         }
         {
-            final LoggingFeature loggingFeature = new LoggingFeature();
-            sf.getFeatures().add(loggingFeature);
-        }
-        {
             sf.getFeatures().add(new FastInfosetFeature());
             sf.getFeatures().add(new GZIPFeature());
         }
         {
+            WebApplicationExceptionMapper x =  new WebApplicationExceptionMapper();
+            x.setAddMessageToResponse(true);
+            x.setPrintStackTrace(true);
             sf.setProvider(new ServiceExceptionMapper());
+            sf.setProvider(x);
         }
         {
             final CrossOriginResourceSharingFilter crossOriginResourceSharingFilter = new CrossOriginResourceSharingFilter();
             crossOriginResourceSharingFilter.setAllowCredentials(true);
-            crossOriginResourceSharingFilter.setAllowHeaders(Arrays.asList(RESTApplicationConfiguration.corsAllowedHeaders().split(",")));
-            crossOriginResourceSharingFilter.setAllowOrigins(Arrays.asList(RESTApplicationConfiguration.corsAllowedOrigins().split(",")));
+            if(!RESTApplicationConfiguration.corsAllowedHeaders().isEmpty()) {
+                crossOriginResourceSharingFilter.setAllowHeaders(Arrays.asList(RESTApplicationConfiguration.corsAllowedHeaders().split(",")));
+            }
+
+            if(!RESTApplicationConfiguration.corsAllowedOrigins().isEmpty()) {
+                crossOriginResourceSharingFilter.setAllowOrigins(Arrays.asList(RESTApplicationConfiguration.corsAllowedOrigins().split(",")));
+            }
 
             sf.setProvider(crossOriginResourceSharingFilter);
         }

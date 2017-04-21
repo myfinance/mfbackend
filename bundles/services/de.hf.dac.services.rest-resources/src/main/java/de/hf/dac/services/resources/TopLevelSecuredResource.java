@@ -6,7 +6,7 @@
  *
  *  Project     : dac
  *
- *  File        : TopLevelWithEnvironments.java
+ *  File        : TopLevelSecuredResource.java
  *
  *  Author(s)   : hf
  *
@@ -15,9 +15,11 @@
  * ----------------------------------------------------------------------------
  */
 
-package de.hf.dac.marketdataprovider.restservice;
+package de.hf.dac.services.resources;
 
-import de.hf.dac.common.BaseDS;
+import de.hf.dac.api.security.IdentifiableResource;
+import de.hf.dac.api.security.Secured;
+import de.hf.dac.api.security.SecuredResource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -29,7 +31,21 @@ import javax.ws.rs.core.UriInfo;
 
 import java.security.AccessController;
 
-public abstract class TopLevelWithEnvironments extends BaseDS {
+/**
+ * base functionality for rest-root-resources for logging and security
+ * @param <ACCESS_TYPE> enum with accesstypes for permission check , e.G. Read, Write, Execute
+ * @param <RESOURCE_LEVEL> enum with the Resourcelevels of the application for permission check
+ */
+public abstract class TopLevelSecuredResource<ACCESS_TYPE extends Enum<ACCESS_TYPE>,RESOURCE_LEVEL extends Enum<RESOURCE_LEVEL>> extends
+    SecuredResource<ACCESS_TYPE, RESOURCE_LEVEL> {
+
+    public TopLevelSecuredResource(){
+        super();
+    }
+
+    public <T extends IdentifiableResource<RESOURCE_LEVEL> & Secured> TopLevelSecuredResource(T resource){
+        super(resource);
+    }
 
     private static final Logger AUDIT_LOG = LoggerFactory.getLogger("audit");
 

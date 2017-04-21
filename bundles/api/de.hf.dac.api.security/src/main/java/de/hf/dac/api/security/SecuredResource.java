@@ -17,51 +17,64 @@
 
 package de.hf.dac.api.security;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import de.hf.dac.common.BaseDS;
 
 import javax.security.auth.Subject;
 import java.security.AccessController;
 
-public abstract class SecuredResource<ACCESS_TYPE extends Enum<ACCESS_TYPE>,RESOURCE_LEVEL extends Enum<RESOURCE_LEVEL>> {
+public abstract class SecuredResource<ACCESS_TYPE extends Enum<ACCESS_TYPE>,RESOURCE_LEVEL extends Enum<RESOURCE_LEVEL>> extends BaseDS {
 
-    final private String resourceId1;
+    private String resourceId1;
 
-    final private RESOURCE_LEVEL opLevel1;
+    private RESOURCE_LEVEL opLevel1;
 
-    final private RootSecurityProvider rootSecurityProvider1;
+    private RootSecurityProvider rootSecurityProvider1;
 
-    final private String resourceId2;
+    private String resourceId2;
 
-    final private RESOURCE_LEVEL opLevel2;
+    private RESOURCE_LEVEL opLevel2;
 
-    final private RootSecurityProvider rootSecurityProvider2;
+    private RootSecurityProvider rootSecurityProvider2;
 
+    private boolean isInit = false;
+
+    public SecuredResource() {
+        init(getSecurityContext());
+    }
 
     public <T extends IdentifiableResource<RESOURCE_LEVEL> & Secured> SecuredResource(T resource) {
-        this.resourceId1 = resource.getId();
-        this.opLevel1 = resource.getOpLevel();
-        this.rootSecurityProvider1 = resource.getRootSecurityProvider();
-        this.resourceId2 = resource.getId();
-        this.opLevel2 = resource.getOpLevel();
-        this.rootSecurityProvider2 = resource.getRootSecurityProvider();
+        init(resource);
+    }
+
+    protected abstract <T extends IdentifiableResource<RESOURCE_LEVEL> & Secured>  T getSecurityContext();
+
+    protected <T extends IdentifiableResource<RESOURCE_LEVEL> & Secured> void init(T securityContext){
+        if(!isInit){
+            this.resourceId1 = securityContext.getId();
+            this.opLevel1 = securityContext.getOpLevel();
+            this.rootSecurityProvider1 = securityContext.getRootSecurityProvider();
+            this.resourceId2 = securityContext.getId();
+            this.opLevel2 = securityContext.getOpLevel();
+            this.rootSecurityProvider2 = securityContext.getRootSecurityProvider();
+            isInit=true;
+        }
     }
 
     /**
      * for multiEnvironment operations e.G. if you want to compare two sets of Information from different environments
-     * @param resource1
-     * @param resource2
+     * @param securityContext1
+     * @param securityContext2
      * @param <T1>
      * @param <T2>
      */
     public <T1 extends IdentifiableResource<RESOURCE_LEVEL> & Secured, T2 extends IdentifiableResource<RESOURCE_LEVEL> & Secured>
-    SecuredResource(T1 resource1, T2 resource2) {
-        this.resourceId1 = resource1.getId();
-        this.opLevel1 = resource1.getOpLevel();
-        this.rootSecurityProvider1 = resource1.getRootSecurityProvider();
-        this.resourceId2 = resource2.getId();
-        this.opLevel2 = resource2.getOpLevel();
-        this.rootSecurityProvider2 = resource2.getRootSecurityProvider();
+    SecuredResource(T1 securityContext1, T2 securityContext2) {
+        this.resourceId1 = securityContext1.getId();
+        this.opLevel1 = securityContext1.getOpLevel();
+        this.rootSecurityProvider1 = securityContext1.getRootSecurityProvider();
+        this.resourceId2 = securityContext2.getId();
+        this.opLevel2 = securityContext2.getOpLevel();
+        this.rootSecurityProvider2 = securityContext2.getRootSecurityProvider();
     }
 
     public void checkOperationAllowed(ACCESS_TYPE accessType) throws AccessNotAllowedException {

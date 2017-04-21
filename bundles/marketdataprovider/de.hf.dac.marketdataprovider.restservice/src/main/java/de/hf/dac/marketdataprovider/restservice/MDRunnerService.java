@@ -19,8 +19,13 @@ package de.hf.dac.marketdataprovider.restservice;
 
 import com.google.gson.Gson;
 import de.hf.dac.api.io.routes.job.JobInformation;
+import de.hf.dac.api.security.IdentifiableResource;
+import de.hf.dac.api.security.Secured;
+import de.hf.dac.marketdataprovider.api.application.OpLevel;
+import de.hf.dac.marketdataprovider.api.application.OpType;
 import de.hf.dac.marketdataprovider.api.application.rootcontext.RunnerRoot;
 import de.hf.dac.marketdataprovider.restservice.marketdataresources.MDRunnerResource;
+import de.hf.dac.services.resources.TopLevelSecuredResource;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
@@ -40,9 +45,10 @@ import java.util.List;
 
 @Path("/runner")
 @Api(value = "MDRunner") //must start with capital letter for client generation
-public class MDRunnerService extends TopLevelWithEnvironments{
+public class MDRunnerService extends TopLevelSecuredResource<OpType,OpLevel> {
 
     final protected static Gson gson = new Gson();
+    private RunnerRoot root;
 
     @Path("/{jobtype}")
     @Produces(MediaType.APPLICATION_JSON)
@@ -80,5 +86,11 @@ public class MDRunnerService extends TopLevelWithEnvironments{
         JobInformation jobInformation = getService(RunnerRoot.class).getDispatcher().getStatus(uuid);
 
         return Response.ok(gson.toJson(jobInformation)).build();
+    }
+
+    @Override
+    protected <T extends IdentifiableResource<OpLevel> & Secured> T getSecurityContext() {
+        root = getService(RunnerRoot.class);
+        return (T)root;
     }
 }

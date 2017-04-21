@@ -1,6 +1,7 @@
 -dsannotations : *
 -metatype: *
 Export-Package: \
+	de.hf.dac.services.resources, \
 	de.hf.dac.services.resources.leaf.list
 
 Bundle-SymbolicName: ${project.artifactId}
