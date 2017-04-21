@@ -31,7 +31,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 @Designate(ocd = DacJaasRealmConfiguration.class)
-@Component(immediate = true)
+@Component(immediate = true, name="DAC.DacJaasRealmService")
 public class DacJaasRealmService implements JaasRealm
 {
     public static final String REALM_NAME = "karaf";

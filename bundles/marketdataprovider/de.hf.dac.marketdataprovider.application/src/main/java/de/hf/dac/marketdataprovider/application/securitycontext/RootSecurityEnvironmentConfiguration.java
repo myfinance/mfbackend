@@ -25,5 +25,5 @@ import org.osgi.service.metatype.annotations.ObjectClassDefinition;
  */
 @ObjectClassDefinition(name = "Runner Security Source Configuration")
 public @interface RootSecurityEnvironmentConfiguration {
-    String sourceEnvironmentForSecurityDB() default "dev";
+    String sourceEnvironmentForSecurityDB() default "md";
 }
