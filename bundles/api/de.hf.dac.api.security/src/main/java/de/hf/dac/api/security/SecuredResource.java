@@ -22,6 +22,13 @@ import de.hf.dac.common.BaseDS;
 import javax.security.auth.Subject;
 import java.security.AccessController;
 
+/**
+ * each secured class (sub class of SecuredResource) can check access right for methods. For this it needs a security-context.
+ * The securityContext derives an OpLevel and a Id from IdentifiableResource and a SecurityProvider from Secured.
+ * The SecurityProvider is responsable to get all rights and rolls for an authenticated user and to check a Table which rights are necessary for the OpLevel and Id
+ * @param <ACCESS_TYPE> enum of allowed access_types e.G. Read and write
+ * @param <RESOURCE_LEVEL> enum of allowed Resource_Levels
+ */
 public abstract class SecuredResource<ACCESS_TYPE extends Enum<ACCESS_TYPE>,RESOURCE_LEVEL extends Enum<RESOURCE_LEVEL>> extends BaseDS {
 
     private String resourceId1;
@@ -48,7 +55,7 @@ public abstract class SecuredResource<ACCESS_TYPE extends Enum<ACCESS_TYPE>,RESO
 
     protected abstract <T extends IdentifiableResource<RESOURCE_LEVEL> & Secured>  T getSecurityContext();
 
-    protected <T extends IdentifiableResource<RESOURCE_LEVEL> & Secured> void init(T securityContext){
+    private <T extends IdentifiableResource<RESOURCE_LEVEL> & Secured> void init(T securityContext){
         if(!isInit){
             this.resourceId1 = securityContext.getId();
             this.opLevel1 = securityContext.getOpLevel();

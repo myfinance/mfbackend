@@ -22,7 +22,8 @@ import de.hf.dac.api.io.routes.job.JobParameter;
 import de.hf.dac.marketdataprovider.api.application.OpLevel;
 import de.hf.dac.marketdataprovider.api.application.rootcontext.RunnerRoot;
 import de.hf.dac.marketdataprovider.api.application.ServiceResourceType;
-import de.hf.dac.marketdataprovider.application.servicecontext.MDRunnerJobTypeContext;
+import de.hf.dac.marketdataprovider.api.application.servicecontext.MDRunnerJobTypeContext;
+import de.hf.dac.marketdataprovider.application.servicecontext.MDRunnerJobTypeContextImpl;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
 import org.osgi.service.component.annotations.ServiceScope;
@@ -48,7 +49,14 @@ public class RunnerRootImpl extends BaseRootSecurityContext implements RunnerRoo
     }
 
     @Override
-    public ServiceResourceType getChildServiceContext(String jobType) {
-        return new MDRunnerJobTypeContext(jobType, this);
+    public MDRunnerJobTypeContext getMDRunnerJobTypeContext(String jobType) {
+        return new MDRunnerJobTypeContextImpl(jobType, this, getDispatcher());
     }
+
+    @Override
+    public ServiceResourceType getChildServiceContext(String jobType) {
+        return getMDRunnerJobTypeContext(jobType);
+    }
+
+
 }

@@ -28,6 +28,7 @@ import de.hf.dac.api.security.SecuredResource;
 import de.hf.dac.marketdataprovider.api.application.OpLevel;
 import de.hf.dac.marketdataprovider.api.application.OpType;
 import de.hf.dac.marketdataprovider.api.application.ServiceResourceType;
+import de.hf.dac.marketdataprovider.api.application.servicecontext.MDRunnerJobTypeContext;
 import de.hf.dac.marketdataprovider.api.runner.BaseMDRunnerParameter;
 import de.hf.dac.services.resources.BaseSecuredResource;
 import io.swagger.annotations.Api;
@@ -51,12 +52,12 @@ import javax.ws.rs.core.Response;
 public class MDRunnerResource extends BaseSecuredResource<OpType,OpLevel> {
     private static final Logger LOG = LoggerFactory.getLogger("MDRunnerResource");
     final protected static Gson gson = new Gson();
-    private final JobDispatcher dispatcher;
+    private final MDRunnerJobTypeContext ctx;
 
 
-    public MDRunnerResource(JobDispatcher dispatcher, ServiceResourceType jobTyp) {
-        super(jobTyp);
-        this.dispatcher = dispatcher;
+    public MDRunnerResource(MDRunnerJobTypeContext runnerContext) {
+        super(runnerContext);
+        ctx = runnerContext;
     }
 
     @POST
@@ -69,7 +70,7 @@ public class MDRunnerResource extends BaseSecuredResource<OpType,OpLevel> {
             @ApiParam(name = "params", value = "Parameter") BaseMDRunnerParameter params) {
         //checkOperationAllowed(OpType.WRITE, jobtype);
         //todo wird hier env benötigt?, sollte nicht besser der Jobtype mitgegeben werden
-        JobInformation jobInformation = dispatcher
+        JobInformation jobInformation = ctx.getDispatcher()
             .sendJob(new WrappedJobParameter(params, env, null, WrappedJobParameter.RUNNER_REQUEST, WrappedJobParameter.RUNNER_RESULT));
 
         return Response.ok(gson.toJson(jobInformation)).build();

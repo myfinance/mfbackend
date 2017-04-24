@@ -50,6 +50,12 @@ public class MDRunnerService extends TopLevelSecuredResource<OpType,OpLevel> {
     final protected static Gson gson = new Gson();
     private RunnerRoot root;
 
+    @Override
+    protected <T extends IdentifiableResource<OpLevel> & Secured> T getSecurityContext() {
+        root = getService(RunnerRoot.class);
+        return (T)root;
+    }
+
     @Path("/{jobtype}")
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
@@ -59,7 +65,7 @@ public class MDRunnerService extends TopLevelSecuredResource<OpType,OpLevel> {
         throws SQLException {
         audit();
         // create RunnerResource
-        return new MDRunnerResource(getService(RunnerRoot.class).getDispatcher(), getService(RunnerRoot.class).getChildServiceContext(jobtype));
+        return new MDRunnerResource(root.getMDRunnerJobTypeContext(jobtype));
     }
 
     @GET
@@ -70,7 +76,7 @@ public class MDRunnerService extends TopLevelSecuredResource<OpType,OpLevel> {
     @Consumes(MediaType.APPLICATION_JSON)
     public Response list() {
 
-        List jobInformation = getService(RunnerRoot.class).getDispatcher().list();
+        List jobInformation = root.getDispatcher().list();
 
         return Response.ok(gson.toJson(jobInformation)).build();
     }
@@ -83,14 +89,8 @@ public class MDRunnerService extends TopLevelSecuredResource<OpType,OpLevel> {
     @Consumes(MediaType.APPLICATION_JSON)
     public Response status(@PathParam("uuid") @ApiParam(name = "uuid", value = "uuid of job") String uuid) {
 
-        JobInformation jobInformation = getService(RunnerRoot.class).getDispatcher().getStatus(uuid);
+        JobInformation jobInformation = root.getDispatcher().getStatus(uuid);
 
         return Response.ok(gson.toJson(jobInformation)).build();
-    }
-
-    @Override
-    protected <T extends IdentifiableResource<OpLevel> & Secured> T getSecurityContext() {
-        root = getService(RunnerRoot.class);
-        return (T)root;
     }
 }

@@ -6,7 +6,7 @@
  *
  *  Project     : dac
  *
- *  File        : MDRunnerJobTypeContext.java
+ *  File        : MDRunnerJobTypeContextImpl.java
  *
  *  Author(s)   : hf
  *
@@ -17,15 +17,20 @@
 
 package de.hf.dac.marketdataprovider.application.servicecontext;
 
+import de.hf.dac.api.io.routes.job.JobDispatcher;
+import de.hf.dac.api.io.routes.job.JobParameter;
 import de.hf.dac.marketdataprovider.api.application.OpLevel;
 import de.hf.dac.marketdataprovider.api.application.ServiceResourceType;
+import de.hf.dac.marketdataprovider.api.application.servicecontext.MDRunnerJobTypeContext;
 import de.hf.dac.marketdataprovider.application.rootcontext.BaseSecurityContext;
 
-public class MDRunnerJobTypeContext extends BaseSecurityContext {
+public class MDRunnerJobTypeContextImpl extends BaseSecurityContext implements MDRunnerJobTypeContext {
 
+    private JobDispatcher<JobParameter> dispatcher;
 
-    public MDRunnerJobTypeContext(String beanClass, ServiceResourceType parent) {
+    public MDRunnerJobTypeContextImpl(String beanClass, ServiceResourceType parent, JobDispatcher<JobParameter> dispatcher) {
         super(beanClass,parent);
+        this.dispatcher = dispatcher;
     }
 
     @Override
@@ -38,5 +43,9 @@ public class MDRunnerJobTypeContext extends BaseSecurityContext {
         return OpLevel.runner;
     }
 
+    @Override
+    public JobDispatcher<JobParameter> getDispatcher() {
+        return dispatcher;
+    }
 }
 

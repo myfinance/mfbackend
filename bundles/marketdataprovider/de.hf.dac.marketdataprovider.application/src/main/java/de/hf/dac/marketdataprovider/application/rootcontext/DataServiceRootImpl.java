@@ -38,13 +38,10 @@ public class DataServiceRootImpl extends BaseRootSecurityContext implements Data
         super("DataServiceRoot");
     }
 
-
     @Override
     public OpLevel getOpLevel() {
         return OpLevel.environment;
     }
-
-
 
     @Override
     public List<String> getEnvironmentInfo() {
@@ -52,8 +49,8 @@ public class DataServiceRootImpl extends BaseRootSecurityContext implements Data
     }
 
     @Override
-    public ServiceResourceType getChildServiceContext(String env) {
-        return getMDEnvironmentContext(env);
+    public ServiceResourceType getChildServiceContext(String id) {
+        return getMDEnvironmentContext(id);
     }
 
     @Override
