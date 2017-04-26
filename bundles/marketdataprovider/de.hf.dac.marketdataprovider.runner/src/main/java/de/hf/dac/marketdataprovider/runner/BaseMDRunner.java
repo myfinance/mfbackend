@@ -53,15 +53,6 @@ public abstract class BaseMDRunner extends BaseRestCommandLineRunner {
     }
 
     @Override
-    protected RunnerParameter extractParameters() {
-        String env = "dev";
-        if (optionsParser.hasOption(ENV_OPTION)) {
-            env = optionsParser.getOptionArg(ENV_OPTION);
-        }
-        return new ImportRunnerParameter(env, ImportRunnerParameter.IMPORTTYPES.YAHOO);
-    }
-
-    @Override
     protected void passParamsToExternal(RunnerParameter runnerParameter) {
 
 
