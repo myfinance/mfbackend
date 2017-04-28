@@ -24,6 +24,9 @@ import org.apache.camel.ProducerTemplate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+/**
+ * handles the camel communication. Builds with the camel context a camel producerTemplate and sends asyn msg
+ */
 public class BaseApplicationRouteContext implements ApplicationRouteContext {
 
     public static final Logger LOG = LoggerFactory.getLogger(BaseApplicationRouteContext.class);

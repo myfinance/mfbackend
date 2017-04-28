@@ -39,7 +39,6 @@ import java.util.List;
 public class EnvironmentDataResource extends BaseSecuredResource<OpType,OpLevel> {
 
     MarketDataEnvironment marketDataEnvironment;
-    final String OPERATIONID="environment";
     final protected static Gson gson = new Gson();
 
     public EnvironmentDataResource(MDEnvironmentContext envContext) {
@@ -53,7 +52,7 @@ public class EnvironmentDataResource extends BaseSecuredResource<OpType,OpLevel>
     @ApiOperation(value = "get Instruments",
         response = List.class)
     public List<Instrument> getInstruments() {
-        checkOperationAllowed(OpType.READ, OPERATIONID);
+        checkOperationAllowed(OpType.READ);
         List<Instrument> returnvalue = marketDataEnvironment.getInstrumentService().listInstruments();
         return returnvalue;
     }

@@ -33,7 +33,7 @@ public class MDCoreRoutesImpl implements JobHandler<JobParameter> {
 
         public static final Logger LOG = LoggerFactory.getLogger(MDCoreRoutesImpl.class);
 
-        public static final String CCR_CORE_SERVICE = "CCR-CORE-SERVICE";
+        public static final String MD_CORE_SERVICE = "MD-CORE-SERVICE";
 
         @Reference
         RouteContextBuilder contextBuilder;
@@ -51,7 +51,10 @@ public class MDCoreRoutesImpl implements JobHandler<JobParameter> {
          */
         @Activate
         public void init() throws Exception {
-            contextBuilder.build(CCR_CORE_SERVICE, this.getClass().getClassLoader(), new MDCoreRoutesProvider(this));
+            if(contextBuilder==null) {
+                LOG.error("no RouteContextBuilder available ");
+            }
+            contextBuilder.build(MD_CORE_SERVICE, this.getClass().getClassLoader(), new MDCoreRoutesProvider(this));
         }
 
         public RouteContextBuilder getContextBuilder() {

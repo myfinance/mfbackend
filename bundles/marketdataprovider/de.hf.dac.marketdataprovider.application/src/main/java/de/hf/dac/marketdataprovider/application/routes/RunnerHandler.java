@@ -59,7 +59,7 @@ public class RunnerHandler implements RouteExchangeHandler {
         WrappedJobParameter wrappedParams = object;
         RunnerParameter p = (RunnerParameter) wrappedParams.getWrappedSerializable();
         // pass on to actual spring launch logic
-        return launcher.launch(new RunnerLaunchParameter(wrappedParams.getEnv(),wrappedParams.getUid(), wrappedParams.getStart(), p));
+        return launcher.launch(new RunnerLaunchParameter(wrappedParams.getEnv(),wrappedParams.getJobType(), wrappedParams.getUid(), wrappedParams.getStart(), p));
     }
 
 }

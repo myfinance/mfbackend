@@ -68,10 +68,10 @@ public class MDRunnerResource extends BaseSecuredResource<OpType,OpLevel> {
     @Consumes(MediaType.APPLICATION_JSON)
     public Response start(@PathParam("env") @ApiParam(value="The env") String env,
             @ApiParam(name = "params", value = "Parameter") BaseMDRunnerParameter params) {
-        //checkOperationAllowed(OpType.WRITE, jobtype);
-        //todo wird hier env benötigt?, sollte nicht besser der Jobtype mitgegeben werden
+        //todo berechtigungen glatt ziehen. Execute gibts noch nicht in der Tabelle
+        //checkOperationAllowed(OpType.EXECUTE);
         JobInformation jobInformation = ctx.getDispatcher()
-            .sendJob(new WrappedJobParameter(params, env, null, WrappedJobParameter.RUNNER_REQUEST, WrappedJobParameter.RUNNER_RESULT));
+            .sendJob(new WrappedJobParameter(params, env, ctx.getId(),null, WrappedJobParameter.RUNNER_REQUEST, WrappedJobParameter.RUNNER_RESULT));
 
         return Response.ok(gson.toJson(jobInformation)).build();
     }

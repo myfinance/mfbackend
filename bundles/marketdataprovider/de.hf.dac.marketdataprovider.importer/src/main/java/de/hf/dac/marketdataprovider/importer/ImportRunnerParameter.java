@@ -21,6 +21,7 @@ import de.hf.dac.marketdataprovider.api.runner.BaseMDRunnerParameter;
 
 public class ImportRunnerParameter extends BaseMDRunnerParameter {
     public static final String IMPORTTYPE = "importtype";
+    public static final String JOBTYPE = Import.class.getName();
 
     public enum IMPORTTYPES {
         YAHOO,
@@ -31,7 +32,6 @@ public class ImportRunnerParameter extends BaseMDRunnerParameter {
     public ImportRunnerParameter(String env, IMPORTTYPES importtype) {
         super(env);
         setImportType(importtype);
-        setBeanClass(Import.class.getName());
     }
 
     public ImportRunnerParameter(BaseMDRunnerParameter toBeCopied) {

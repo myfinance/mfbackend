@@ -19,5 +19,6 @@ package de.hf.dac.marketdataprovider.api.application;
 
 public enum OpType {
     READ,
-    WRITE
+    WRITE,
+    EXECUTE
 }

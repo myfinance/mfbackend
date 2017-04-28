@@ -37,7 +37,7 @@ public class BaseJobDispatcherRouteProvider extends RouteBuilder {
          * Default Inbox receiving all new Jobs . Jobs will be routed according their RoutingID using
          * JobHandler Services registered from other Bundles
          */
-        from(BaseJobDispatcher.DIRECT_VM_PDAC_JOB_IN) //
+        from(BaseJobDispatcher.DIRECT_VM_DAC_JOB_IN) //
             .errorHandler(getDeadLetterConfig()) //
             .id("DAC-JOBS-IN").threads(2).keepAliveTime(KEEP_ALIVE_TIME). //
             bean(baseJobDispatcher.getHandler(), "handleJob").id("BASE-JOB-DISPATCHER");
@@ -46,7 +46,7 @@ public class BaseJobDispatcherRouteProvider extends RouteBuilder {
          * Default Inbox receiving all new JopbResults as well as Results. Jobs will be routed according their RoutingID using
          * JobHandler Services registered from other Bundles
          */
-        from(BaseJobDispatcher.DIRECT_VM_PDAC_JOB_RESULT_IN) //
+        from(BaseJobDispatcher.DIRECT_VM_DAC_JOB_RESULT_IN) //
             .errorHandler(getDeadLetterConfig()) //
             .id(DAC_JOB_RESULTS_IN).threads(2).keepAliveTime(KEEP_ALIVE_TIME). //
             bean(baseJobDispatcher.getHandler(), "handleResult").id(BASE_JOBRESULT_DISPATCHER);

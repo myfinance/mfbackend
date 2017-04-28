@@ -37,7 +37,6 @@ public class BaseMDRunnerParameter  extends RunnerParameter {
     public BaseMDRunnerParameter(BaseMDRunnerParameter toBeCopied) {
         this(toBeCopied.getEnvironment());
         setParams(toBeCopied.getParams());
-        setBeanClass(toBeCopied.getBeanClass());
     }
 
     public String getEnvironment() {

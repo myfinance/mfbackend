@@ -28,19 +28,25 @@ public class RunnerLaunchParameter implements JobParameter {
     public static final String RUNNER_RESULT = "RUNNER_RESULT";
 
     private final String env;
+    private final String bean;
     private String uid;
     private final RunnerParameter beanParameter;
     private final Date started;
 
-    public RunnerLaunchParameter(String env, String jobUid, Date started, RunnerParameter beanParameter) {
+    public RunnerLaunchParameter(String env, String bean, String jobUid, Date started, RunnerParameter beanParameter) {
         this.env = env;
         this.beanParameter = beanParameter;
         this.started = started;
         this.uid = jobUid;
+        this.bean = bean;
     }
 
     public String getEnv() {
         return env;
+    }
+
+    public String getBean() {
+        return bean;
     }
 
     public RunnerParameter getBeanParameter() {

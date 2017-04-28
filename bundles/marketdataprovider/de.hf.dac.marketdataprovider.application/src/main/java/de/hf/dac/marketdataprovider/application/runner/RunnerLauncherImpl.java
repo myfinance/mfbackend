@@ -44,7 +44,7 @@ public class RunnerLauncherImpl implements RunnerLauncher {
         LOG.debug("Reveived params {} started at {}" + runnerParameter.getClass().getName(), params.getStart());
 
         // find actual class to be used
-        String beanName = runnerParameter.getBeanClass();
+        String beanName = params.getBean();
 
         if (beanName == null) {
             LOG.error("Unable to GUICE correct Bean. No name given in Request");

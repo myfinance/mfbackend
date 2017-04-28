@@ -60,7 +60,7 @@ public abstract class BaseMDRunner extends BaseRestCommandLineRunner {
             ImportRunnerParameter p = (ImportRunnerParameter)runnerParameter;
             MDRunnerApi client = createRestClient();
             try {
-                JobInformation start = client.start(p.getEnvironment(), ((ImportRunnerParameter) runnerParameter).getImportType(), convertParam((ImportRunnerParameter)runnerParameter));
+                JobInformation start = client.start(p.getEnvironment(), ImportRunnerParameter.JOBTYPE, convertParam(p));
                 int maxTimeWait = Configuration.getInt("MARKETDATA", "MD_LAUNCH_TIMEOUT", 60*60*1000);
 
                 String uid = start.getUuid();
@@ -123,7 +123,6 @@ public abstract class BaseMDRunner extends BaseRestCommandLineRunner {
         p.setEnvironment(rp.getEnvironment());
         p.setParams(new HashMap());
         p.getParams().putAll(rp.getParams());
-        p.setBeanClass(rp.getBeanClass());
         return p;
     }
 }

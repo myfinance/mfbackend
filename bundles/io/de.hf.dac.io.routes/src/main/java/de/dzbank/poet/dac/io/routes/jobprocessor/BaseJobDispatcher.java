@@ -76,7 +76,7 @@ public class BaseJobDispatcher implements JobDispatcher<JobParameter> {
             LOG.info("Dispatching JobParameter {} ", (job != null ? job.getClass().getName() : "null"));
             // Wrap and remmeber job information. Assign unique id as well
             JobInformation jobInfo = registerJob(job);
-            routingContext.sendMessage(DIRECT_VM_PDAC_JOB_IN, jobInfo.getPayload());
+            routingContext.sendMessage(DIRECT_VM_DAC_JOB_IN, jobInfo.getPayload());
             return jobInfo;
         }
         return new JobInformation(UUID.randomUUID().toString());

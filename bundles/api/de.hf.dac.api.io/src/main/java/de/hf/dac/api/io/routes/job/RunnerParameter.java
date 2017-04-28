@@ -23,8 +23,6 @@ import java.util.Map;
 
 public abstract class RunnerParameter implements Serializable {
 
-    private String beanClass;
-
     private Map<String, Object> params = new HashMap<>();
 
     public Map<String, Object> getParams() {
@@ -41,14 +39,6 @@ public abstract class RunnerParameter implements Serializable {
 
     public Object get(String name) {
         return this.params.get(name);
-    }
-
-    public void setBeanClass(String beanClass) {
-        this.beanClass = beanClass;
-    }
-
-    public String getBeanClass() {
-        return beanClass;
     }
 }
 

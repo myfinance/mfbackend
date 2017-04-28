@@ -45,7 +45,7 @@ public class MDCoreRoutesProvider extends RouteBuilder {
             .threads(2).keepAliveTime(KEEP_ALIVE_TIME) //
             // return back any results into Dispatching queue.
             // make sure base infrastructure knows about it
-            .to(JobDispatcher.DIRECT_VM_PDAC_JOB_RESULT_IN);
+            .to(JobDispatcher.DIRECT_VM_DAC_JOB_RESULT_IN);
 
         /**
          * Route to handle incoming JobResults

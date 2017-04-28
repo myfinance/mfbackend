@@ -25,11 +25,12 @@ public class WrappedJobParameter extends BaseWrapper implements JobParameter {
     public static final String RUNNER_RESULT = "RUNNER_RESULT";
 
     private String env;
+    private String jobType;
 
-    public WrappedJobParameter(Serializable wrappedSerializable, String env, String uid, String routingID, String resultRoutingID) {
+    public WrappedJobParameter(Serializable wrappedSerializable, String env, String jobType, String uid, String routingID, String resultRoutingID) {
         super(wrappedSerializable, uid, routingID, resultRoutingID);
         this.env = env;
-
+        this.jobType = jobType;
     }
 
     public String getEnv() {
@@ -38,6 +39,10 @@ public class WrappedJobParameter extends BaseWrapper implements JobParameter {
 
     public void setEnv(String env) {
         this.env = env;
+    }
+
+    public String getJobType() {
+        return jobType;
     }
 
 }

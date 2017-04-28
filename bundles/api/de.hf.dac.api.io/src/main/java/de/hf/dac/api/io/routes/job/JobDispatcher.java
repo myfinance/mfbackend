@@ -26,8 +26,8 @@ import java.util.List;
 public interface JobDispatcher<JOB_TYPE extends JobParameter> {
 
     public static final String DAC_JOB_DISPATCHER = "DAC_JOB_DISPATCHER";
-    public static final String DIRECT_VM_PDAC_JOB_IN = "direct-vm:dac-core-job-in";
-    public static final String DIRECT_VM_PDAC_JOB_RESULT_IN = "direct-vm:dac-core-job-results-in";
+    public static final String DIRECT_VM_DAC_JOB_IN = "direct-vm:dac-core-job-in";
+    public static final String DIRECT_VM_DAC_JOB_RESULT_IN = "direct-vm:dac-core-job-results-in";
     public static final String DIRECT_DEAD_LETTER = "direct-vm:dac-core-job-dead-letter";
 
 
