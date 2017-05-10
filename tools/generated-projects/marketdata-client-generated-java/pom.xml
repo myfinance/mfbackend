@@ -4,11 +4,11 @@
     <artifactId>md-client-generated</artifactId>
     <packaging>jar</packaging>
     <name>md-client-generated</name>
-    <version>0.7.0</version>
+    <version>0.8.0-SNAPSHOT</version>
     <parent>
         <artifactId>tools</artifactId>
         <groupId>de.hf.dac</groupId>
-        <version>0.7.0</version>
+        <version>0.8.0-SNAPSHOT</version>
         <relativePath>../../pom.xml</relativePath>
     </parent>
 
