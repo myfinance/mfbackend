@@ -235,7 +235,7 @@
     </dependencies>
     <properties>
         <jodatime-version>2.9.4</jodatime-version>
-        <jersey-version>1.19.1</jersey-version>
+        <jersey.version>1.19.1</jersey.version>
         <maven-plugin-version>1.0.0</maven-plugin-version>
     </properties>
 </project>
