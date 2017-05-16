@@ -38,9 +38,13 @@ public @interface RESTApplicationConfiguration {
 
     String swaggerVersion() default "1.1";
 
-    String corsAllowedHeaders() default "Origin,Accept,Authorization,X-Requested-With,Content-Type,Access-Control-Request-Method,Access-Control-Request-Headers";
+    // If empty allow any header - if filled with comma separated origins allow only those
+    //String corsAllowedHeaders() default "Origin,Accept,Authorization,X-Requested-With,Content-Type,Access-Control-Request-Method,Access-Control-Request-Headers";
+    String corsAllowedHeaders() default "";
 
-    String corsAllowedOrigins() default "*";
+    // If empty allow any origin - if filled with comma separated origins allow only those
+    String corsAllowedOrigins() default "http://localhost:4200,*";
 
+    // If empty allow any methods - if filled with comma separated methods allow only those
     String corsAllowedMethods() default "GET,POST,DELETE,PUT,OPTIONS";
 }

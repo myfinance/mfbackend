@@ -21,7 +21,7 @@ org.ops4j.pax.web.ssl.keypassword = password
 org.osgi.service.http.port.secure = 8443
 org.osgi.service.http.secure.enabled = true
 
-[CMPID_de.hf.dac.security.auth.DacJaasRealmService]
+[CMPID_DAC.DacJaasRealmService]
 #ldap,off or some thing else for karaf default
 auth.mode=karaf
 

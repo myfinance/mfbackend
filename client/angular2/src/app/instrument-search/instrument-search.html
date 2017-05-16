@@ -1,0 +1,13 @@
+<input [(ngModel)]="isin">
+<button (click)="search()">
+  Search
+</button>
+
+<table>
+  <tr *ngFor="let instrument of instruments">
+    <td>{{instrument.id}}</td>
+    <td>{{instrument.isin}}</td>
+    <td>{{instrument.desc}}</td>
+    <td>{{instrument.lastUpdate}}</td>
+  </tr>
+</table>

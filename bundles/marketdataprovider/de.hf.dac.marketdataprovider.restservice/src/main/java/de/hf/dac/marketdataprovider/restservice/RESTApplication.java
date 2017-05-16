@@ -41,6 +41,7 @@ import java.util.Arrays;
 @Designate(ocd = RESTApplicationConfiguration.class)
 @Component(
     service = RESTApplication.class,
+    name = "MD.RestAplicationService",
     immediate = true
 )
 public class RESTApplication {
