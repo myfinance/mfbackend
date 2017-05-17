@@ -12,18 +12,17 @@ import {BASE_URL} from "../app.tokens";
 @Injectable()
 export class InstrumentDummyService{
   constructor(
-    private http: Http,
-    @Inject(BASE_URL) private baseUrl: string
   ) {
     console.debug('Viele Grüße aus dem dummy Ctor!');
   }
 
-  find(): Observable<Instrument[]> {
+  find(isin: string): Observable<Instrument[]> {
 
     var instrument = { id: 1, isin: "isin00000001", desc:"testinstrument1", lastUpdate: "2017-12-24T17:00:00.000+01:00" };
     var instrument2 = { id: 2, isin: "isin00000002", desc:"testinstrument2", lastUpdate: "2017-12-24T17:00:00.000+01:00" };
     let instruments: Instrument[]=[instrument, instrument2]
-    return Observable.of(instruments);
+    let filteredinstruments: Instrument[]=instruments.filter(i=>i.isin.indexOf(isin)>=0);
+    return Observable.of(filteredinstruments);
   }
 
 }

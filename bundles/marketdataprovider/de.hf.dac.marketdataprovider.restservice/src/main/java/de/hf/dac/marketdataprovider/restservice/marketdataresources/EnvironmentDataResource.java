@@ -35,6 +35,7 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import java.sql.SQLException;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class EnvironmentDataResource extends BaseSecuredResource<OpType,OpLevel> {
 
@@ -54,6 +55,18 @@ public class EnvironmentDataResource extends BaseSecuredResource<OpType,OpLevel>
     public List<Instrument> getInstruments() {
         checkOperationAllowed(OpType.READ);
         List<Instrument> returnvalue = marketDataEnvironment.getInstrumentService().listInstruments();
+        return returnvalue;
+    }
+
+    @GET
+    @Path("/filteredinstruments")
+    @Produces(MediaType.APPLICATION_JSON)
+    @ApiOperation(value = "get Instruments",
+        response = List.class)
+    public List<Instrument> getFilteredInstruments(@QueryParam("isin") @ApiParam(value="the isin") String isin) {
+        checkOperationAllowed(OpType.READ);
+        List<Instrument> returnvalue =
+            marketDataEnvironment.getInstrumentService().listInstruments().stream().filter(i->i.getIsin().contains(isin)).collect(Collectors.toList());
         return returnvalue;
     }
 

@@ -1,5 +1,5 @@
 <input [(ngModel)]="isin">
-<button (click)="search()">
+<button [disabled]="!isin" (click)="search()">
   Search
 </button>
 

@@ -9,7 +9,7 @@ import {InstrumentService} from "./instrument-search/instrument.service";
 import {BASE_URL} from "./app.tokens";
 import {InstrumentDummyService} from "./instrument-search/dummy.instrument.service";
 
-const DEBUG=false;
+const DEBUG=true;
 const BASEURL='http://localhost:8181/dac/rest/marketdata/environments/dev';
 
 
@@ -21,7 +21,7 @@ let injector = ReflectiveInjector.resolveAndCreate([baseURLProvider]);
 
 let instrumentServiceFactory = (http:Http) => {
   if(DEBUG) {
-    return new InstrumentDummyService(http, injector.get(BASE_URL));
+    return new InstrumentDummyService();
   }
   else {
     return new InstrumentService(http, injector.get(BASE_URL));

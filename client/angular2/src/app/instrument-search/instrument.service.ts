@@ -17,18 +17,18 @@ export class InstrumentService{
     console.debug('Viele Grüße aus dem Ctor!');
   }
 
-  find(): Observable<Instrument[]> {
-    let url = this.baseUrl + '/instruments';
+  find(isin: string): Observable<Instrument[]> {
+    let url = this.baseUrl + '/filteredinstruments';
 
     let headers = new Headers()
     headers.set('Accept', 'application/json');
 
     let search = new URLSearchParams();
-    //search.set('from', from);
+    search.set('isin', isin);
     //search.set('to', to);
     console.debug(url);
 
-    let options = new RequestOptions({ headers: headers, withCredentials: true });
+    let options = new RequestOptions({ headers: headers, search, withCredentials: true });
     return this
       .http
       .get(url, options)

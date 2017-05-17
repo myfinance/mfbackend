@@ -18,7 +18,7 @@ export class InstrumentSearchComponent {
   search(): void{
     this
       .instrumentService
-      .find()
+      .find(this.isin)
       .subscribe(
         (instruments: Instrument[]) => {
           this.instruments = instruments;
