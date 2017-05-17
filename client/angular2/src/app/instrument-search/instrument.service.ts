@@ -18,8 +18,7 @@ export class InstrumentService{
   }
 
   find(): Observable<Instrument[]> {
-    let url= 'http://karaf:karaf@localhost:8181/dac/rest/marketdata/environments/dev/instruments';
-    //let url = this.baseUrl + '/instruments';
+    let url = this.baseUrl + '/instruments';
 
     let headers = new Headers()
     headers.set('Accept', 'application/json');
@@ -28,21 +27,12 @@ export class InstrumentService{
     //search.set('from', from);
     //search.set('to', to);
     console.debug(url);
-    /*var jwt = localStorage.getItem('id_token');
 
-    if(jwt) {
-      headers.append('Authorization', 'Bearer ' + jwt);
-    }*/
-    var creds = "karaf=karaf&password=karaf";
     let options = new RequestOptions({ headers: headers, withCredentials: true });
     return this
       .http
       .get(url, options)
       .map(r => r.json());
-    /*return this
-      .http
-      .get(url, { headers })
-      .map(r => r.json());*/
 
   }
 

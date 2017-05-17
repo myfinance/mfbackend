@@ -4,7 +4,7 @@
 import { Component } from '@angular/core';
 import {Http} from "@angular/http";
 import {Instrument} from "../entities/instrument";
-import {InstrumentService} from "./InstrumentService";
+import {InstrumentService} from "./instrument.service";
 
 @Component({
   selector: 'instrument-search',
