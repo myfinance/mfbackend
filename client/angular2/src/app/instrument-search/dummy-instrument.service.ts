@@ -3,8 +3,6 @@ import {Inject, Injectable} from "@angular/core";
 import {Observable} from "rxjs";
 import {Instrument} from "../entities/instrument";
 import 'rxjs/add/operator/map';
-import {Http} from "@angular/http";
-import {BASE_URL} from "../app.tokens";
 /**
  * Created by xn01598 on 11.05.2017.
  */

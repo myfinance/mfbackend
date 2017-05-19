@@ -7,9 +7,12 @@ import { AppComponent } from './app.component';
 import {InstrumentSearchComponent} from "./instrument-search/instrument-search.component";
 import {InstrumentService} from "./instrument-search/instrument.service";
 import {BASE_URL} from "./app.tokens";
-import {InstrumentDummyService} from "./instrument-search/dummy.instrument.service";
+import {InstrumentDummyService} from "./instrument-search/dummy-instrument.service";
+import {InstrumentCardComponent} from "./instrument-search/instrument-card.component";
+import {AppRoutesModule} from "./app.routes";
+import {HomeComponent} from "./home/home.component";
 
-const DEBUG=true;
+const DEBUG=false;
 const BASEURL='http://localhost:8181/dac/rest/marketdata/environments/dev';
 
 
@@ -19,14 +22,14 @@ export let baseURLProvider =
 
 let injector = ReflectiveInjector.resolveAndCreate([baseURLProvider]);
 
-let instrumentServiceFactory = (http:Http) => {
+export function instrumentServiceFactory(http:Http){
   if(DEBUG) {
     return new InstrumentDummyService();
   }
   else {
     return new InstrumentService(http, injector.get(BASE_URL));
   }
-};
+}
 
 export let instrumentServiceProvider =
   { provide: InstrumentService,
@@ -37,12 +40,13 @@ export let instrumentServiceProvider =
 @NgModule({
 
   declarations: [
-    AppComponent, InstrumentSearchComponent
+    AppComponent, InstrumentSearchComponent, InstrumentCardComponent, HomeComponent
   ],
   imports: [
     BrowserModule,
     FormsModule,
-    HttpModule
+    HttpModule,
+    AppRoutesModule
   ],
   providers: [
     baseURLProvider,

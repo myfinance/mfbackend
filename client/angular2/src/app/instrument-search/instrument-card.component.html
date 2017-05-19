@@ -1,0 +1,12 @@
+<div class="card" [ngStyle]="{'background-color': 'orange' }">
+
+  <h2>{{item.isin}}</h2>
+  <p>InstrumentId. #{{item.id}}</p>
+  <p>Description. #{{item.desc}}</p>
+  <p>Last change: {{item.lastUpdate | date:'dd.MM.yyyy HH:mm'}}</p>
+
+
+  <p>
+    <button class="btn btn-default" (click)="select()">Edit</button>
+  </p>
+</div>
