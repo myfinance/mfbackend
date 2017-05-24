@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 
-import HelloMessage from './HelloMessage';
+import InstrumentSearch from './instrument-search';
 
 const mountNode = document.getElementById('mount');
-ReactDOM.render(<HelloMessage greeting="Hello"/>, mountNode);
+ReactDOM.render(<InstrumentSearch greeting="Hello"/>, mountNode);
