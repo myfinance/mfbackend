@@ -11,6 +11,12 @@ import {InstrumentDummyService} from "./instrument-search/dummy-instrument.servi
 import {InstrumentCardComponent} from "./instrument-search/instrument-card.component";
 import {AppRoutesModule} from "./app.routes";
 import {HomeComponent} from "./home/home.component";
+import {ChartComponent} from "./charts/chart.component";
+import {RichGridComponent} from "./charts/rich-grid.component";
+import {HeaderGroupComponent} from "./charts/header-group.component";
+import {HeaderComponent} from "./charts/header.component";
+import {DateComponent} from "./charts/date.component";
+import {AgGridModule} from "ag-grid-angular/main";
 
 const DEBUG=false;
 const BASEURL='http://localhost:8181/dac/rest/marketdata/environments/dev';
@@ -40,13 +46,28 @@ export let instrumentServiceProvider =
 @NgModule({
 
   declarations: [
-    AppComponent, InstrumentSearchComponent, InstrumentCardComponent, HomeComponent
+    AppComponent,
+    InstrumentSearchComponent,
+    InstrumentCardComponent,
+    HomeComponent,
+    ChartComponent,
+    RichGridComponent,
+    DateComponent,
+    HeaderComponent,
+    HeaderGroupComponent
   ],
   imports: [
     BrowserModule,
     FormsModule,
     HttpModule,
-    AppRoutesModule
+    AppRoutesModule,
+    AgGridModule.withComponents(
+      [
+        DateComponent,
+        HeaderComponent,
+        HeaderGroupComponent
+      ]
+    )
   ],
   providers: [
     baseURLProvider,
