@@ -1,0 +1,1 @@
+An separate bundle to de.hf.dac.api.io due to additional dependencies to swagger and camel

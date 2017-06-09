@@ -77,25 +77,25 @@
         <capability>osgi.service;effective:=active;objectClass=org.osgi.service.jdbc.DataSourceFactory</capability>
     </feature>
 
-    <feature name="dac-io-api-feature" version="${pom.version}">
+    <feature name="dac-routes-api-feature" version="${pom.version}">
         <feature prerequisite="true">camel-core</feature>
         <bundle>mvn:io.swagger/swagger-annotations/${swagger.version}</bundle><!--for dto's like JobInformation to start routes via rest-client-->
         <bundle>mvn:com.fasterxml.jackson.core/jackson-annotations/${jackson.version}</bundle>
-        <bundle>mvn:de.hf.dac.api/de.hf.dac.api.io/${project.version}</bundle>
+        <bundle>mvn:de.hf.dac.api/de.hf.dac.api.io.routes/${project.version}</bundle>
     </feature>
 
     <feature name="dac-io-jpa-feature" version="${pom.version}">
         <feature prerequisite="true">dac-cdi-feature</feature>
         <feature prerequisite="true">dac-db-base-feature</feature>
         <feature prerequisite="true">dac-guice</feature>
-        <feature prerequisite="true">dac-io-api-feature</feature>
+        <bundle>mvn:de.hf.dac.api/de.hf.dac.api.io/${project.version}</bundle>
         <bundle>mvn:de.hf.dac.io/de.hf.dac.io.efmb/${project.version}</bundle>
         <bundle>mvn:de.hf.dac.io/de.hf.dac.io.env/${project.version}</bundle>
         <bundle>mvn:de.hf.dac.io/de.hf.dac.io.configuration/${project.version}</bundle>
     </feature>
 
     <feature name="dac-io-routes-feature" version="${pom.version}">
-        <feature prerequisite="true">dac-io-api-feature</feature>
+        <feature prerequisite="true">dac-routes-api-feature</feature>
         <bundle>mvn:de.hf.dac.io/de.hf.dac.io.routes/${project.version}</bundle>
     </feature>
 

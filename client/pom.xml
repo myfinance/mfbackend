@@ -4,13 +4,15 @@
     <parent>
         <groupId>de.hf.dac</groupId>
         <artifactId>root</artifactId>
-        <version>0.3.1-SNAPSHOT</version>
+        <version>0.8.0-SNAPSHOT</version>
         <relativePath>../</relativePath>
     </parent>
     <groupId>de.hf.dac</groupId>
     <artifactId>client</artifactId>
     <packaging>pom</packaging>
     <modules>
-        <module>angular</module>
+        <!--<module>angular2</module>-->
+        <module>baserunner</module>
+        <module>mdclients</module>
     </modules>
 </project>

@@ -16,8 +16,8 @@
 
     <dependencies>
         <dependency>
-            <groupId>de.hf.dac.marketdataprovider</groupId>
-            <artifactId>de.hf.dac.marketdataprovider.runner</artifactId>
+            <groupId>de.hf.dac.marketdataprovider.client</groupId>
+            <artifactId>mdrunner</artifactId>
             <version>${project.version}</version>
         </dependency>
     </dependencies>
@@ -67,7 +67,7 @@
                                     <mainClass>de.hf.dac.marketdataprovider.runner.ImportRunner</mainClass>
                                 </manifest>
                                 <manifestEntries>
-                                    <Class-Path>lib/de.hf.dac.marketdataprovider.runner-${project.version}.jar</Class-Path>
+                                    <Class-Path>lib/mdrunner-${project.version}.jar</Class-Path>
                                 </manifestEntries>
                             </archive>
                         </configuration>

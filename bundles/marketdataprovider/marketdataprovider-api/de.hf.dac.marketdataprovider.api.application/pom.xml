@@ -15,6 +15,10 @@
             <artifactId>de.hf.dac.api.io</artifactId>
         </dependency>
         <dependency>
+            <groupId>de.hf.dac.api</groupId>
+            <artifactId>de.hf.dac.api.io.routes</artifactId>
+        </dependency>
+        <dependency>
             <groupId>de.hf.dac.marketdataprovider.api</groupId>
             <artifactId>de.hf.dac.marketdataprovider.api.service</artifactId>
         </dependency>

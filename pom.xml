@@ -17,9 +17,6 @@
         <postgresql.version>9.1-901.jdbc4</postgresql.version><!-- DB-->
         <commons-cli.version>1.2</commons-cli.version><!-- parsing commandline options in Module common-->
 
-        <spring.boot.version>1.3.3.RELEASE</spring.boot.version><!-- springboot bootstrapper-->
-        <springfox-swagger.version>2.0.2</springfox-swagger.version><!-- generate docs and clients for Rest via spring boot-->
-
         <apacheds-server-jndi.version>1.5.5</apacheds-server-jndi.version><!-- connect to ldap -->
         <slf4j.version>1.7.21</slf4j.version><!-- logging slf impl-->
         <lombok.version>1.16.8</lombok.version><!-- generate constructor, getter, setter via annotation-->
@@ -75,11 +72,11 @@
 
     <modules>
         <module>bundles</module>
+        <module>tools</module>
+        <module>client</module>
         <module>distributions</module>
-        <!--<module>client</module>-->
         <module>features</module>
         <module>pax-exam-test</module>
-        <module>tools</module>
     </modules>
 
 
@@ -170,6 +167,16 @@
                 <artifactId>de.hf.dac.io.efmb</artifactId>
                 <version>${project.version}</version>
             </dependency>
+            <dependency>
+                <groupId>de.hf.dac.api</groupId>
+                <artifactId>de.hf.dac.api.io.routes</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>de.hf.dac</groupId>
+                <artifactId>baserunner</artifactId>
+                <version>${project.version}</version>
+            </dependency>
 
             <dependency>
                 <groupId>org.apache.commons</groupId>
@@ -194,16 +201,6 @@
                 <groupId>postgresql</groupId>
                 <artifactId>postgresql</artifactId>
                 <version>${postgresql.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>io.springfox</groupId>
-                <artifactId>springfox-swagger-ui</artifactId>
-                <version>${springfox-swagger.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>io.springfox</groupId>
-                <artifactId>springfox-swagger2</artifactId>
-                <version>${springfox-swagger.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.apache.directory.server</groupId>

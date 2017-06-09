@@ -1,0 +1,7 @@
+-metatype: *
+Export-Package: \
+    de.hf.dac.api.io.routes, \
+    de.hf.dac.api.io.routes.job
+Import-Package: *
+
+Bundle-SymbolicName: ${project.artifactId}

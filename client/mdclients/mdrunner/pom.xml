@@ -1,13 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
-        <artifactId>marketdataprovider</artifactId>
-        <groupId>de.hf.dac.marketdataprovider</groupId>
+        <groupId>de.hf.dac.marketdataprovider.client</groupId>
+        <artifactId>mdclient</artifactId>
         <version>0.8.0-SNAPSHOT</version>
+        <relativePath>../</relativePath>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>de.hf.dac.marketdataprovider.runner</artifactId>
+    <artifactId>mdrunner</artifactId>
 
     <properties>
         <timestamp>${maven.build.timestamp}</timestamp>
@@ -17,9 +18,8 @@
     <dependencies>
 
         <dependency>
-            <groupId>de.hf.dac.io</groupId>
-            <artifactId>de.hf.dac.io.baserunner</artifactId>
-            <version>${project.version}</version>
+            <groupId>de.hf.dac</groupId>
+            <artifactId>baserunner</artifactId>
         </dependency>
 
         <dependency>
