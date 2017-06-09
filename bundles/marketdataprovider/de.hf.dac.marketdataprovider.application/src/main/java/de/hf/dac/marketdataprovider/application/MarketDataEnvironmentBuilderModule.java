@@ -52,15 +52,13 @@ public class MarketDataEnvironmentBuilderModule  extends AbstractModule {
     private EntityManagerFactorySetup emfb;
     TransactionManager jtaManager;
     private String env;
-    private JobDispatcher<JobParameter> dispatcher;
 
     public MarketDataEnvironmentBuilderModule(EnvironmentService envService, EntityManagerFactorySetup emfb,
-        TransactionManager jtaManager, String env, JobDispatcher<JobParameter> dispatcher){
+        TransactionManager jtaManager, String env){
         this.envService=envService;
         this.emfb=emfb;
         this.jtaManager=jtaManager;
         this.env = env;
-        this.dispatcher = dispatcher;
     }
 
     @Override

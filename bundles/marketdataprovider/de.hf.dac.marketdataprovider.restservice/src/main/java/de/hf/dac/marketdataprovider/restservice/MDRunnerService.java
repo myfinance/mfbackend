@@ -61,8 +61,7 @@ public class MDRunnerService extends TopLevelSecuredResource<OpType,OpLevel> {
     @Consumes(MediaType.APPLICATION_JSON)
     @ApiOperation(value = "launch Job", notes = "Anything Else?")
     @ApiResponses(value = { @ApiResponse(code = HttpStatus.SC_INTERNAL_SERVER_ERROR, message = "Something wrong in Server") })
-    public MDRunnerResource getJobTypeRunner(@PathParam("jobtype") @ApiParam(name = "jobtype", value = "launching md jobs") String jobtype)
-        throws SQLException {
+    public MDRunnerResource getJobTypeRunner(@PathParam("jobtype") @ApiParam(name = "jobtype", value = "launching md jobs") String jobtype) {
         audit();
         // create RunnerResource
         return new MDRunnerResource(root.getMDRunnerJobTypeContext(jobtype));

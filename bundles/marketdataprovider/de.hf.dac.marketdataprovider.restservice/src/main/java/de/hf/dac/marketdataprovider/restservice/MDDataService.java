@@ -51,7 +51,7 @@ public class MDDataService extends TopLevelSecuredResource<OpType,OpLevel> {
     @Path("/environments/{envID}")
     @Produces(MediaType.APPLICATION_JSON)
     @ApiOperation(value = "get Environment", response = EnvironmentDataResource.class)
-    public EnvironmentDataResource getEnvironment(@PathParam("envID") @ApiParam(value="The Service Environment") String envID) throws SQLException {
+    public EnvironmentDataResource getEnvironment(@PathParam("envID") @ApiParam(value="The Service Environment") String envID){
         audit();
         return new EnvironmentDataResource(root.getMDEnvironmentContext(envID));
     }
@@ -59,7 +59,7 @@ public class MDDataService extends TopLevelSecuredResource<OpType,OpLevel> {
     @Path("/environments/list")
     @Produces(MediaType.APPLICATION_JSON)
     @ApiOperation(value = "List Environments", response = StringListResource.class)
-    public StringListResource getEnvironmentList() throws SQLException {
+    public StringListResource getEnvironmentList() {
         checkOperationAllowed(OpType.READ, "getEnvironmentList");
         audit();
         List<String> envs = root.getEnvironmentInfo();

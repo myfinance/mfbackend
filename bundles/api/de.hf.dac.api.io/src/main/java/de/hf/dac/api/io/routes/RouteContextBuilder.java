@@ -24,7 +24,7 @@ import org.apache.camel.builder.RouteBuilder;
  */
 public interface RouteContextBuilder {
 
-    ApplicationRouteContext build(String contextID, ClassLoader messageJaxbClassLoaders,RouteBuilder... providers) throws Exception;
+    ApplicationRouteContext build(String contextID, ClassLoader messageJaxbClassLoaders,RouteBuilder... providers);
 
     void remove(String contextID);
 

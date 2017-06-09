@@ -50,8 +50,6 @@ public class MarketDataEnvironmentContextBuilderImpl implements MarketDataEnviro
     @Reference
     TransactionManager jtaManager;
 
-    @Reference
-    private JobDispatcher<JobParameter> dispatcher;
 
 
     @Override
@@ -60,8 +58,7 @@ public class MarketDataEnvironmentContextBuilderImpl implements MarketDataEnviro
             = new MarketDataEnvironmentBuilderModule(envService, //
             emfb, //
             jtaManager, //
-            environment, //
-            dispatcher);
+            environment);
         return contextBuilder.build(MarketDataSystemDescriptor.CONTEXT+"/" + environment, new Module[] { marketDataEnvironmentBuilderModule });
     }
 
