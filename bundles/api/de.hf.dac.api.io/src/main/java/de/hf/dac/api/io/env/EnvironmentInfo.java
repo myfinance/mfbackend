@@ -18,34 +18,25 @@
 package de.hf.dac.api.io.env;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
 
 import java.io.Serializable;
+import java.util.HashMap;
+import java.util.Map;
 
 public class EnvironmentInfo implements Serializable {
     private String name;
-    private String target;
-    private String type;
+    private Map<String, EnvironmentTargetInfo<?>> targets = new HashMap<>();
 
-    public EnvironmentInfo(String name, String target) {
+
+
+    public EnvironmentInfo(String name, Map<String, EnvironmentTargetInfo<?>> targets) {
         this.name = name;
-        this.target = target;
-    }
-
-    public EnvironmentInfo(String name, String target, String type) {
-        this(name, target);
-        this.type = type;
+        this.targets = targets;
     }
 
     public EnvironmentInfo(String name) {
         this.name = name;
-    }
-
-    public String getTarget() {
-        return target;
-    }
-
-    public void setTarget(String target) {
-        this.target = target;
     }
 
     public String getName() {
@@ -54,11 +45,6 @@ public class EnvironmentInfo implements Serializable {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    @Override
-    public String toString() {
-        return "EnvironmentInfo{" + "name='" + name + '\'' + ", target='" + target + '\'' + ", type='" + type + '\'' + '}';
     }
 
     @Override
@@ -71,21 +57,28 @@ public class EnvironmentInfo implements Serializable {
 
         EnvironmentInfo that = (EnvironmentInfo) o;
 
-        return new EqualsBuilder().append(name, that.name).append(target, that.target).isEquals();
+        return new EqualsBuilder().append(name, that.name).isEquals();
     }
 
     @Override
     public int hashCode() {
-        return (name + "#" + target).hashCode();
+        return new HashCodeBuilder(17, 37).append(name).toHashCode();
     }
 
-    public String getType() {
-
-        return type;
+    @Override
+    public String toString() {
+        return "EnvironmentInfo{" + "name='" + name + '\'' + ", targets=" + targets + '}';
     }
 
-    public void setType(String type) {
-        this.type = type;
+    public void addTarget(EnvironmentTargetInfo<?> targetInfo) {
+        getTargets().put(targetInfo.getTargetName(), targetInfo);
     }
 
+    public Map<String, EnvironmentTargetInfo<?>> getTargets() {
+        return targets;
+    }
+
+    public void setTargets(Map<String, EnvironmentTargetInfo<?>> targets) {
+        this.targets = targets;
+    }
 }

@@ -17,7 +17,9 @@
 
 package de.hf.dac.api.io.env;
 
-import java.util.Set;
+import java.util.Collection;
+import java.util.Map;
+import java.util.Optional;
 
 /**
  * Lookup Service to translate Environment names to actual Environment Settings.
@@ -29,7 +31,26 @@ public interface EnvironmentService {
      * List all available EnvironmentInfo.
      * @return List of EnvironmentInfo instances
      */
-    Set<EnvironmentInfo> availableEnvironments();
+    Collection<EnvironmentInfo> availableEnvironments();
+
+    /**
+     * Retrieve Environemnt by ClientID.
+     * @param clientID The client ID
+     * @return EnvironmentInfo inculding all Target Infos
+     */
+    EnvironmentInfo getEnvironmentByClientid(String clientID);
+
+    Map<String,String> getEnvironmentContextMap(String env);
+
+    /**
+     * Get All EnvironmentInfos.
+     * @param env Name of Environment
+     * @return EnvironmentInfo including all Targets
+     */
+    EnvironmentInfo getEnvironment(String env);
+
+    void refresh();
+
 
     /**
      * Retrieve information of actual target.
@@ -38,7 +59,7 @@ public interface EnvironmentService {
      * @return Concrete Instance containing typed information for the target type. This will differ as targets of type DB may have other needs than
      * targets of type Eisdiele
      */
-    EnvironmentTargetInfo getTarget(String environmentName, String target);
+    Optional<EnvironmentTargetInfo> getTarget(String environmentName, String target);
 
     /**
      * Retrieve poet configuration, initially read from ResFiles

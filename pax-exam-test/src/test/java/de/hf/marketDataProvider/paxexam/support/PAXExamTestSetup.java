@@ -21,6 +21,7 @@ import de.hf.dac.api.io.efmb.DatabaseInfo;
 import org.ops4j.pax.exam.Configuration;
 import org.ops4j.pax.exam.Option;
 import org.ops4j.pax.exam.karaf.options.KarafDistributionOption;
+import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
 
 import javax.inject.Inject;
@@ -42,8 +43,25 @@ abstract public class PAXExamTestSetup {
     @Configuration
     abstract public Option[] config();
 
+    /*public <T> T createServiceMock(Class<T> clazz) {
+        T mock = Mockito.mock(clazz);
+        bundleContext.registerService(clazz.getName(), mock, null);
+        return mock;
+    }*/
+
+    public <T> T getService(Class<T> clazz) {
+        return (T) bundleContext.getService(bundleContext.getServiceReference(clazz.getName()));
+    }
+
     protected Option getDebugOption() {
         return when(System.getProperty("PAXDEBUG") != null).useOptions(composite(vmOption("-Xrunjdwp:transport=dt_socket,server=y,suspend=y,address=5005")));
+    }
+
+    protected DatabaseInfo postgresDatabaseInfo() {
+
+        DatabaseInfo dbi = new DatabaseInfo("jdbc:postgresql://localhost:5432/marketdata","postgres", "vulkan", "org.postgresql.Driver");
+        dbi.setDialect("org.hibernate.dialect.PostgreSQL82Dialect");
+        return dbi;
     }
 
     protected DatabaseInfo inMemoryH2DatabaseInfo() {
@@ -67,24 +85,20 @@ abstract public class PAXExamTestSetup {
             keepRuntimeFolder());
     }
 
+    protected Option installFeatures(String groupId, String artefactId, String... names) {
+        return composite(features(maven().groupId(groupId).artifactId(artefactId).type("xml").classifier("features").versionAsInProject(), names));
+    }
+
     public Option karafStandardFeatures() {
-        return composite(
-            features(maven().groupId("org.apache.karaf.features").artifactId("standard").type("xml").classifier("features").versionAsInProject(),
-                "standard", "http", "scr", "webconsole", "wrap"));
+        return installFeatures("org.apache.karaf.features", "standard", "standard", "eventadmin", "http", "scr", "webconsole", "wrap", "war");
     }
 
     public Option ioFeatures() {
-        return composite(
-            features(maven().groupId("de.hf.dac.features").artifactId("dac-base-features").type("xml").classifier("features").versionAsInProject(),
-                "dac-io-feature")
-        );
+        return installFeatures("de.hf.dac.features", "dac-base-features", "dac-io-feature");
     }
 
     public Option restFeatures() {
-        return composite(
-            features(maven().groupId("de.hf.dac.features").artifactId("marketdata-features").type("xml").classifier("features").versionAsInProject(),
-                "marketdata-features")
-        );
+        return installFeatures("de.hf.dac.features", "marketdata-features", "marketdata-features", "dac-db-base-feature");
     }
 
     public Option configDefaults() {

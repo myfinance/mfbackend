@@ -1,6 +1,21 @@
 @echo off
-
-
+rem
+rem
+rem    Licensed to the Apache Software Foundation (ASF) under one or more
+rem    contributor license agreements.  See the NOTICE file distributed with
+rem    this work for additional information regarding copyright ownership.
+rem    The ASF licenses this file to You under the Apache License, Version 2.0
+rem    (the "License"); you may not use this file except in compliance with
+rem    the License.  You may obtain a copy of the License at
+rem
+rem       http://www.apache.org/licenses/LICENSE-2.0
+rem
+rem    Unless required by applicable law or agreed to in writing, software
+rem    distributed under the License is distributed on an "AS IS" BASIS,
+rem    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+rem    See the License for the specific language governing permissions and
+rem    limitations under the License.
+rem
 
 if not "%ECHO%" == "" echo %ECHO%
 
@@ -9,6 +24,7 @@ set DIRNAME=%~dp0%
 set PROGNAME=%~nx0%
 set ARGS=%*
 
+
 if "%CAD_LOGIN_INFO%" == "" (
     set CAD_LOGIN_INFO=%~dp0\..\..\..\..\..\config\poet.res
 )
@@ -16,6 +32,7 @@ if "%CAD_LOGIN_INFO%" == "" (
 if "%DEV_RES_FILE%" == "" (
     set DEV_RES_FILE=%~dp0\..\..\..\..\..\config\dev.res
 )
+
 
 rem Sourcing environment settings for karaf similar to tomcats setenv
 SET KARAF_SCRIPT="karaf.bat"
@@ -32,10 +49,10 @@ if not "%KARAF_TITLE%" == "" (
 
 rem Check/Set up some easily accessible MIN/MAX params for JVM mem usage
 if "%JAVA_MIN_MEM%" == "" (
-    set JAVA_MIN_MEM=512M
+    set JAVA_MIN_MEM=1G
 )
 if "%JAVA_MAX_MEM%" == "" (
-    set JAVA_MAX_MEM=2G
+    set JAVA_MAX_MEM=4G
 )
 
 goto BEGIN
@@ -93,6 +110,7 @@ set JAVA_MODE=-server
 
 set CLASSPATH=%LOCAL_CLASSPATH%;%KARAF_BASE%\conf
 set DEFAULT_JAVA_DEBUG_OPTS=-agentlib:jdwp=transport=dt_socket,server=y,suspend=y,address=5005
+set DEFAULT_JAVA_PROFILE_OPTS=-agentpath:C:\develop\YourKit\bin\win64\yjpagent.dll
 
 if "%LOCAL_CLASSPATH%" == "" goto :KARAF_CLASSPATH_EMPTY
     set CLASSPATH=%LOCAL_CLASSPATH%;%KARAF_BASE%\conf
@@ -231,7 +249,7 @@ if not exist "%JAVA_HOME%\bin\server\jvm.dll" (
         set JAVA_MODE=-client
     )
 )
-set DEFAULT_JAVA_OPTS=%JAVA_MODE% -Xms%JAVA_MIN_MEM% -Xmx%JAVA_MAX_MEM% -Dcom.sun.management.jmxremote  -XX:+UnlockDiagnosticVMOptions -XX:+UnsyncloadClass
+set DEFAULT_JAVA_OPTS=%JAVA_MODE% -Xms%JAVA_MIN_MEM% -Xmx%JAVA_MAX_MEM% -XX:+UnlockCommercialFeatures -Dcom.sun.management.jmxremote  -XX:+UnlockDiagnosticVMOptions -XX:+UnsyncloadClass
 
 rem Check some easily accessible MIN/MAX params for JVM mem usage
 if not "%JAVA_PERM_MEM%" == "" (
@@ -298,10 +316,12 @@ if "%KARAF_PROFILER%" == "" goto :RUN
     if "%1" == "status" goto :EXECUTE_STATUS
     if "%1" == "console" goto :EXECUTE_CONSOLE
     if "%1" == "server" goto :EXECUTE_SERVER
+    if "%1" == "run" goto :EXECUTE_RUN
     if "%1" == "daemon" goto :EXECUTE_DAEMON
     if "%1" == "client" goto :EXECUTE_CLIENT
     if "%1" == "clean" goto :EXECUTE_CLEAN
     if "%1" == "debug" goto :EXECUTE_DEBUG
+    if "%1" == "profile" goto :EXECUTE_PROFILE
     goto :EXECUTE
 
 :EXECUTE_STOP
@@ -326,6 +346,11 @@ if "%KARAF_PROFILER%" == "" goto :RUN
     shift
     goto :RUN_LOOP
 
+:EXECUTE_RUN
+    SET OPTS=-Dkaraf.startLocalConsole=false -Dkaraf.startRemoteShell=true -Dkaraf.log.console=ALL
+    shift
+    goto :RUN_LOOP
+
 :EXECUTE_DAEMON
     SET OPTS=-Dkaraf.startLocalConsole=false -Dkaraf.startRemoteShell=true
     SET KARAF_DAEMON=true
@@ -346,6 +371,14 @@ if "%KARAF_PROFILER%" == "" goto :RUN
 :EXECUTE_DEBUG
     if "%JAVA_DEBUG_OPTS%" == "" set JAVA_DEBUG_OPTS=%DEFAULT_JAVA_DEBUG_OPTS%
     set JAVA_OPTS=%JAVA_DEBUG_OPTS% %JAVA_OPTS%
+    shift
+    goto :RUN_LOOP
+
+:EXECUTE_PROFILE
+    if "%JAVA_DEBUG_OPTS%" == "" set JAVA_DEBUG_OPTS=%DEFAULT_JAVA_PROFILE_OPTS%
+    set JAVA_OPTS=%JAVA_DEBUG_OPTS% %JAVA_OPTS%
+    echo "Calling Process using these OPTS: "
+    echo %JAVA_OPTS%
     shift
     goto :RUN_LOOP
 
@@ -412,4 +445,4 @@ endlocal
 if not "%PAUSE%" == "" pause
 
 :END_NO_PAUSE
-
+    EXIT /B %ERRORLEVEL%

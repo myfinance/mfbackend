@@ -14,8 +14,14 @@
 
         <jar-plugin.version>3.0.2</jar-plugin.version>
 
-        <postgresql.version>9.1-901.jdbc4</postgresql.version><!-- DB-->
+        <!-- DB-->
+        <postgresql.version>9.4-1203-jdbc42</postgresql.version>
+        <h2.version>1.4.186</h2.version>
+
         <commons-cli.version>1.2</commons-cli.version><!-- parsing commandline options in Module common-->
+
+        <commons-io.version>2.5</commons-io.version>
+        <packageadmin-plugin.version>1.0.4</packageadmin-plugin.version>
 
         <apacheds-server-jndi.version>1.5.5</apacheds-server-jndi.version><!-- connect to ldap -->
         <slf4j.version>1.7.21</slf4j.version><!-- logging slf impl-->
@@ -24,12 +30,14 @@
         <transaction-api.version>1.2</transaction-api.version><!-- javax.transaction-->
         <pax-cdi-api.version>0.12.0</pax-cdi-api.version>
         <jpa-api2.1.version>1.0.0.Final</jpa-api2.1.version><!-- jpa-api, the implementation is provided by the app-server like JBoss or SpringBoot-->
-        <hibernate.version>5.2.2.Final</hibernate.version>
-        <karaf.version>4.0.8</karaf.version>
-        <pax-jdbc.version>0.9.0</pax-jdbc.version><!--feature to create Datasources -->
-        <apache-cxf.version>3.1.10</apache-cxf.version><!-- rest für osgi -->
+        <hibernate.version>5.2.10.Final</hibernate.version>
+        <karaf.version>4.1.1</karaf.version>
+        <pax-jdbc.version>1.1.0</pax-jdbc.version><!--feature to create Datasources -->
+        <apache-cxf.version>3.1.11</apache-cxf.version><!-- rest für osgi -->
+        <servicemix-reflections.version>0.9.10_3</servicemix-reflections.version>
         <junit.version>4.12</junit.version>
         <httpcore-osgi.version>4.4.5</httpcore-osgi.version>
+        <narayana.version>5.6.2.Final</narayana.version>
 
         <spring.version>4.2.6.RELEASE_1</spring.version>
         <aopalliance.version>1.0_6</aopalliance.version><!--von spring und guice benötigt-->
@@ -41,7 +49,9 @@
         <hawtio.version>1.5.0</hawtio.version>
         <guice.version>4.1.0</guice.version>
         <guava.version>19.0</guava.version> <!--von guice benötigt in version > 19-->
+        <guava-swagger.version>18.0</guava-swagger.version>
         <osgi-cmpn.version>6.0.0</osgi-cmpn.version>
+        <javax-persistence.version>2.1.1</javax-persistence.version>
 
         <xerces.version>2.11.0_1</xerces.version>
         <servicemix.specs.version>2.7.0</servicemix.specs.version>

@@ -32,7 +32,9 @@ import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
+import javax.ws.rs.core.Link;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -45,6 +47,19 @@ public class EnvironmentDataResource extends BaseSecuredResource<OpType,OpLevel>
     public EnvironmentDataResource(MDEnvironmentContext envContext) {
         super(envContext);
         this.marketDataEnvironment = envContext.getMarketDataEnvironment();
+    }
+
+    @GET
+    @Path("/instrumentshateos")
+    @Produces(MediaType.APPLICATION_JSON)
+    @ApiOperation(value = "get Instruments",
+        response = List.class)
+    public Response getInstrumentshateos() {
+        checkOperationAllowed(OpType.READ);
+        List<Instrument> returnvalue = marketDataEnvironment.getInstrumentService().listInstruments();
+        Link link = Link.fromUri("http://foo.bar/employee/john").rel("manager").rel("friend")
+            .title("employee").type("application/xml").build();
+        return Response.ok(returnvalue).links(link).build();
     }
 
     @GET

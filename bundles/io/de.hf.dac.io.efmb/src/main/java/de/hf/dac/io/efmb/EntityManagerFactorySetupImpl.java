@@ -21,253 +21,276 @@ import de.hf.dac.api.io.efmb.DatabaseInfo;
 import de.hf.dac.api.io.efmb.EntityManagerFactorySetup;
 import de.hf.dac.api.io.env.EnvironmentConfiguration;
 import de.hf.dac.io.efmb.impl.EntityManagerFactoryBuilderImpl;
-import org.ops4j.pax.cdi.api.OsgiService;
-import org.ops4j.pax.cdi.api.OsgiServiceProvider;
+import org.ops4j.pax.jdbc.pool.common.PooledDataSourceFactory;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleReference;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
+import org.osgi.service.component.annotations.ServiceScope;
 import org.osgi.service.jdbc.DataSourceFactory;
 import org.osgi.service.jpa.EntityManagerFactoryBuilder;
 
-import javax.inject.Inject;
-import javax.inject.Singleton;
-import javax.naming.Context;
-import javax.naming.InitialContext;
-import javax.naming.NamingException;
 import javax.persistence.EntityManagerFactory;
-import java.lang.reflect.Field;
+import javax.sql.DataSource;
+import java.lang.ref.WeakReference;
 import java.sql.SQLException;
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 
 import static javax.persistence.spi.PersistenceUnitTransactionType.JTA;
 
-//@OsgiServiceProvider(classes = {EntityManagerFactorySetup.class})
-//@Singleton
-@Component(service = {EntityManagerFactorySetup.class})
+@Component(service = {EntityManagerFactorySetup.class}, name = "DAC.EntityManagerFactorySetup", scope = ServiceScope.SINGLETON )
 public class EntityManagerFactorySetupImpl implements EntityManagerFactorySetup {
 
-    //@Inject
+    public static final String JAVAX_PERSISTENCE_JDBC_DRIVER = "javax.persistence.jdbc.driver";
+    public static final String JAVAX_PERSISTENCE_JTA_DATASOURCE = "javax.persistence.jtaDataSource";
+    public static final String JAVAX_PERSISTENCE_NON_JTA_DATASOURCE = "javax.persistence.nonJtaDataSource";
+    public static final String JAVAX_PERSISTENCE_TX_TYPE = "javax.persistence.transactionType";
+
     @Reference
     EntityManagerFactoryBuilder efb;
 
-    //@Inject @OsgiService(filter = "(&(osgi.jdbc.driver.class=com.sybase.jdbc4.jdbc.SybDriver))" )
-    DataSourceFactory sybaseDataSourceFactory;
-
-    //@Inject @OsgiService(filter = "(&(osgi.jdbc.driver.class=oracle.jdbc.OracleDriver))" )
-    DataSourceFactory oracleDataSourceFactory;
-
-    //@Inject @OsgiService(filter = "(&(osgi.jdbc.driver.class=org.h2.Driver-pool-xa))" )
-    @Reference(target = "(&(osgi.jdbc.driver.class=org.h2.Driver-pool-xa))" )
+    @Reference(target = "(&(osgi.jdbc.driver.class=org.h2.Driver))" )
     DataSourceFactory h2Embedded;
 
-    //@Inject @OsgiService(filter = "(&(osgi.jdbc.driver.class=org.postgresql.Driver-pool-xa))" )
-    @Reference(target = "(&(osgi.jdbc.driver.class=org.postgresql.Driver-pool-xa))" )
+    @Reference(target = "(&(osgi.jdbc.driver.class=org.postgresql.Driver))" )
     DataSourceFactory postgresDataSourceFactory;
 
-    //@Inject @OsgiService
+    @Reference(target = "(&(xa=false))")
+    PooledDataSourceFactory pooledDataSourceFactory;
+
     @Reference
     EnvironmentConfiguration configuration;
 
-    private Map<String,Object> buildDBProperties(String persistenceUnit, Class<?>[] entities, ClassLoader[] classLoaders, String jdbcUrl, String user,
-        String password, String jtaPlatform, String driverClass, String databaseDialectClass, Properties extraHibernateProperties)
-            throws SQLException {
-        Map<String, Object> props = new HashMap<String, Object>();
-        props.put(EntityManagerFactoryBuilderImpl.persistenceUnitName,persistenceUnit);
-        List<String> managedClasses = new ArrayList<>();
-        if(entities!=null) {
-            for(Class<?> c : entities) {
-                managedClasses.add(c.getCanonicalName());
-            }
+    private Map<String,WeakReference<EntityManagerFactory>> entityManagerFactories = new ConcurrentHashMap<>();
+
+    private static Properties getPooledProps(String dataSourceName, String url, String user, String password, PoolSize poolSize) {
+        Properties props = new Properties();
+        props.setProperty(DataSourceFactory.JDBC_URL, url);
+        props.setProperty(DataSourceFactory.JDBC_USER,user);
+        props.setProperty(DataSourceFactory.JDBC_PASSWORD,password);
+        //props.setProperty(DataSourceFactory.JDBC_DATASOURCE_NAME, dataSourceName);
+        setC3P0Props(props, poolSize, dataSourceName);
+        return props;
+    }
+
+
+    private static void setC3P0Props(Properties ret, PoolSize poolSize, String dataSourceName) {
+        // http://www.mchange.com/projects/c3p0/#configuration_properties
+
+        if (dataSourceName != null && !dataSourceName.isEmpty()) {
+            ret.setProperty("c3p0.dataSourceName", dataSourceName);
         }
-        props.put(EntityManagerFactoryBuilderImpl.managedClassNames,managedClasses);
-        Properties persistenceUnitProperties = new Properties();
-        persistenceUnitProperties.put("hibernate.dialect", databaseDialectClass);
-        persistenceUnitProperties.put("hibernate.transaction.jta.platform",jtaPlatform);
 
-        List<ClassLoader> all = new ArrayList<>();
-        all.addAll(Arrays.asList(classLoaders));
-        all.add(this.getClass().getClassLoader());
 
-        if(classLoaders != null) {
-            persistenceUnitProperties.put("hibernate.classloaders", new HashSet<>(all));
-            props.put("joinedClassloader", classLoaders[0]);
+        Integer initialPoolSize;
+        Integer maxPoolSize;
+        Integer minPoolSize;
+        Integer acquireIncrement;
+
+        // Pool Size
+        switch (poolSize) {
+            case SMALL:
+                initialPoolSize = 3;
+                maxPoolSize = 8;
+                minPoolSize = 3;
+                acquireIncrement = 1;
+                break;
+            case MEDIUM:
+                initialPoolSize = 6;
+                maxPoolSize = 20;
+                minPoolSize = 6;
+                acquireIncrement = 2;
+                break;
+            case LARGE:
+                initialPoolSize = 20;
+                maxPoolSize = 100;
+                minPoolSize = 20;
+                acquireIncrement = 3;
+                break;
+            default:
+                throw new IllegalArgumentException("Unknown PoolSize " + poolSize);
+        }
+
+        ret.setProperty("c3p0.initialPoolSize", initialPoolSize.toString());
+        ret.setProperty("c3p0.maxPoolSize", maxPoolSize.toString());
+        ret.setProperty("c3p0.minPoolSize", minPoolSize.toString());
+        ret.setProperty("c3p0.acquireIncrement", acquireIncrement.toString());
+
+        // Basic Pool Configuration
+
+        ret.setProperty("c3p0.checkoutTimeout", "30000"); // milliseconds
+
+        // Managing Pool Size and Connection Age
+        ret.setProperty("c3p0.maxIdleTime", "7200"); // seconds
+        ret.setProperty("c3p0.maxConnectionAge", "7200"); // seconds
+        ret.setProperty("c3p0.maxIdleTimeExcessConnections", "1800"); // seconds
+
+        // Recovery
+        ret.setProperty("c3p0.acquireRetryAttempts", "10");
+        ret.setProperty("c3p0.acquireRetryDelay", "4000"); // milliseconds
+        ret.setProperty("c3p0.breakAfterAcquireFailure", "false");
+
+        // Configuring Connection Testing
+
+        ret.setProperty("c3p0.idleConnectionTestPeriod", "30"); // seconds
+        ret.setProperty("c3p0.testConnectionOnCheckin", "true");
+        ret.setProperty("c3p0.testConnectionOnCheckout", "false");
+        // testConnectionOnCheckout is costly
+        // better use combination
+        // of (async!) idleConnectionTestPeriod testConnectionOnCheckin
+
+        // Internal Configuration
+
+        ret.setProperty("c3p0.numHelperThreads", "6"); // async cleanup
+
+        // Experimental
+
+        // Statement Caching?
+        //ret.setProperty("c3p0.maxStatementsPerConnection ","20");
+
+        ret.setProperty("c3p0.unreturnedConnectionTimeout  ", "14400"); // seconds
+
+
+    }
+
+    private Map<String, Object> buildDBProperties(String persistenceUnitId, Class<?>[] entities, ClassLoader[] classLoaders, String user,
+        String password, String jtaPlatform, String driverClass, String databaseDialectClass, Properties extraHibernateProperties)
+        throws SQLException {
+
+
+
+        List<ClassLoader> allClassLoaders = new ArrayList<>();
+        allClassLoaders.addAll(Arrays.asList(classLoaders));
+        allClassLoaders.add(this.getClass().getClassLoader());
+
+        for (Class<?> entity : entities) {
+            allClassLoaders.add(entity.getClassLoader());
+        }
+
+        List<String> managedClasses = getManagedClasses(entities, classLoaders);
+
+        // https://docs.jboss.org/hibernate/orm/5.2/userguide/html_single/Hibernate_User_Guide.html
+        Properties persitenceUnitProperties = new Properties();
+        persitenceUnitProperties.put("hibernate.dialect", databaseDialectClass);
+        persitenceUnitProperties.put("hibernate.transaction.jta.platform", jtaPlatform);
+        persitenceUnitProperties.put("hibernate.connection.username", user);
+        persitenceUnitProperties.put("hibernate.connection.password", password);
+        persitenceUnitProperties.put("hibernate.connection.handling_mode", "DELAYED_ACQUISITION_AND_RELEASE_AFTER_TRANSACTION");
+        persitenceUnitProperties.put("hibernate.transaction.auto_close_session", false);
+        persitenceUnitProperties.put("hibernate.jdbc.batch_size", Integer.parseInt(configuration.getString("CCR", "HIBERNATE_BATCH_SIZE", "50")));
+        persitenceUnitProperties.put("hibernate.classloaders", new HashSet<>(allClassLoaders));
+        if (extraHibernateProperties != null) {
+            persitenceUnitProperties.putAll(extraHibernateProperties);
+        }
+
+        Map<String, Object> emfbProperties = new HashMap<>();
+        emfbProperties.put(EntityManagerFactoryBuilderImpl.CCR_persistenceUnitName, persistenceUnitId);
+
+
+        emfbProperties.put(EntityManagerFactoryBuilderImpl.JOINED_CLASSLOADER, allClassLoaders.get(0));
+        emfbProperties.put(EntityManagerFactoryBuilderImpl.CCR_managedClassNames, managedClasses);
+        emfbProperties.put(EntityManagerFactoryBuilderImpl.CCR_persistenceUnitProperties, persitenceUnitProperties);
+        emfbProperties.put(JAVAX_PERSISTENCE_JDBC_DRIVER, driverClass);
+        emfbProperties.put(JAVAX_PERSISTENCE_TX_TYPE, JTA.name());
+
+        return emfbProperties;
+    }
+
+    private static List<String> getManagedClasses(Class<?>[] entities, ClassLoader[] classLoaders) {
+        List<String> managedClasses = new ArrayList<>();
+
+        for (Class<?> c : entities) {
+            managedClasses.add(c.getCanonicalName());
+        }
+        for (ClassLoader classLoader : classLoaders) {
 
             // look for compile time generated list of javax.persistence.Entity annotatedClasses
-            Bundle bundle = ((BundleReference) classLoaders[0]).getBundle();
-            String[] annotatedDomainClasses = new String[] {bundle.getHeaders().get("AnnotatedDomainClasses"), bundle.getHeaders().get("AnnotatedDomainSuperClasses")};
+            Bundle bundle = ((BundleReference) classLoader).getBundle();
+            String[] annotatedDomainClasses = new String[]{bundle.getHeaders().get("AnnotatedDomainClasses"), bundle.getHeaders().get("AnnotatedDomainSuperClasses")};
 
             for (String annotatedDomainClass : annotatedDomainClasses) {
-                if (annotatedDomainClass != null && annotatedDomainClass.length() != 0 ) {
+                if (annotatedDomainClass != null && !annotatedDomainClass.isEmpty()) {
                     String[] classNames = annotatedDomainClass.split(",");
                     for (String className : classNames) {
-                        managedClasses.add(className);
+                        if (!managedClasses.contains(className)) {
+                            managedClasses.add(className);
+                        }
                     }
                 }
             }
         }
+        return managedClasses;
+    }
 
-        persistenceUnitProperties.put("hibernate.connection.url",jdbcUrl);
-        persistenceUnitProperties.put("hibernate.connection.user",user);
-        persistenceUnitProperties.put("hibernate.connection.password",password);
-        persistenceUnitProperties.put("hibernate.connection.driver_class", driverClass);
-        persistenceUnitProperties.put("hibernate.connection.pool_size", getPoolSizeConfigValue());
-        persistenceUnitProperties.put("connection.release_mode", "after_statement");
-        persistenceUnitProperties.put("transaction.auto_close_session", true);
 
-        if (extraHibernateProperties != null) {
-            persistenceUnitProperties.putAll(extraHibernateProperties);
+    @Override
+    public EntityManagerFactory getOrCreateEntityManagerFactory(String persistenceUnitId,
+        PoolSize poolSize,
+        Class<?>[] entities,
+        ClassLoader[] classLoaders,
+        DatabaseInfo db) {
+        if(entityManagerFactories.containsKey(persistenceUnitId)) {
+            EntityManagerFactory emf = entityManagerFactories.get(persistenceUnitId).get();
+            if(emf != null ) {
+                return emf;
+            }
+            entityManagerFactories.remove(persistenceUnitId);
         }
 
-        props.put(EntityManagerFactoryBuilderImpl.persistenceUnitProperties, persistenceUnitProperties);
-        props.put("javax.persistence.jdbc.driver", driverClass);
-        props.put("javax.persistence.transactionType", JTA.name());
+        String user = null;
+        String pwd = null;
+        String url = null;
+        String jtaPlatform = "org.hibernate.osgi.OsgiJtaPlatform";
+        String driver = null;
+        String dialect = null;
+
+        url = db.getUrl();
+        user = db.getUser();
+        pwd = db.getPassword();
+
+        driver = db.getDriver();
+
+        try {
+            DataSourceFactory dsf = null;
+
+            if (db.getDriver().matches("org.h2.Driver")) {
+                dialect = db.getDialect();
+                dsf = h2Embedded;
+            } else if (db.getDriver().matches("org.postgresql.Driver")) {
+                dialect = "org.hibernate.dialect.PostgreSQL82Dialect";
+                dsf = postgresDataSourceFactory;
+            } else {
+                throw new IllegalArgumentException("Unhandled Driver " + driver);
+            }
+
+            DataSource dataSource = poolSize == PoolSize.NO_POOL
+                ? dsf.createDataSource(getUnpooledProps(persistenceUnitId, url, user,pwd ))
+                : pooledDataSourceFactory.create(dsf, getPooledProps(persistenceUnitId, url,user , pwd, poolSize));
+
+            Map<String, Object> emfbProps = buildDBProperties(persistenceUnitId, entities, classLoaders, user, pwd, jtaPlatform, driver, dialect, db.getExtraHibernateProperties());
+
+            emfbProps.put(JAVAX_PERSISTENCE_JTA_DATASOURCE, dataSource);
+            final EntityManagerFactory entityManagerFactory = efb.createEntityManagerFactory(emfbProps);
+            entityManagerFactories.put(persistenceUnitId, new WeakReference<>(entityManagerFactory));
+            return entityManagerFactory;
+        } catch (SQLException ex) {
+            throw new RuntimeException(ex);
+        }
+
+    }
+
+    private Properties getUnpooledProps(String dataSourceName, String url, String user, String password) {
+        Properties props = new Properties();
+        props.setProperty(DataSourceFactory.JDBC_URL,url);
+        props.setProperty(DataSourceFactory.JDBC_USER,user);
+        props.setProperty(DataSourceFactory.JDBC_PASSWORD,password);
+        props.setProperty(DataSourceFactory.JDBC_DATASOURCE_NAME, dataSourceName);
 
         return props;
     }
 
-    private int getPoolSizeConfigValue() {
-        return Integer.parseInt(configuration.getString("EMFB", "POOL_SIZE", "50"));
-    }
 
-    private static Properties getJdbcProps() {
-        Properties ret = new Properties();
-        return ret;
-    }
-
-    private Object getDataSourceFromJndi(String url) {
-        Object ds = null;
-        Context context = null;
-        try {
-            context = new InitialContext();
-            ds = context.lookup(url);
-        } catch (NamingException e) {
-            throw new RuntimeException(e);
-        }
-        return ds;
-    }
-
-    @Override
-    public EntityManagerFactory buildEntityManagerFactory(String persistenceUnit,
-        ClassLoader[] classLoaders,
-        DatabaseInfo dbi) throws SQLException {
-        return buildEntityManagerFactory(persistenceUnit, null, classLoaders, dbi);
-    }
-
-    @Override
-    public EntityManagerFactory buildEntityManagerFactory(String persistenceUnit,
-        Class<?>[] entities,
-        ClassLoader[] classLoaders,
-        DatabaseInfo dbi) throws SQLException {
-        Object dataSource = null;
-        String user = null;
-        String password = null;
-        String url = null;
-        String jtaPlatform = null;
-        String driver = null;
-        String dialect = null;
-        DatabaseInfo db = null;
-        if(dbi.getJndiUrl() == null) {
-            db = dbi;
-        } else {
-            Object wrapperDataSource = getDataSourceFromJndi(dbi.getJndiUrl());
-            db = getDBInfo(wrapperDataSource);
-        }
-
-        url = db.getUrl();
-        user = db.getUser();
-        password = db.getPassword();
-
-        if(org.osgi.framework.FrameworkUtil.getBundle(EntityManagerFactorySetupImpl.class) == null ) {
-            jtaPlatform = "org.hibernate.service.jta.platform.internal.JBossAppServerJtaPlatform";
-        } else {
-            jtaPlatform = "org.hibernate.osgi.OsgiJtaPlatform";
-        }
-
-        driver = db.getDriver();
-
-        if(driver.matches("com.sybase.jdbc4.jdbc.SybDriver")) {
-            dataSource = sybaseDataSourceFactory.createDataSource(getJdbcProps());
-            dialect = "org.hibernate.dialect.SybaseASE157Dialect";
-        } else if(db.getDriver().matches("oracle.jdbc.OracleDriver")) {
-            dialect = "org.hibernate.dialect.Oracle10gDialect";
-            dataSource = oracleDataSourceFactory.createDataSource(getJdbcProps());
-        } else if (db.getDriver().matches("org.h2.Driver")) {
-            dialect = "org.hibernate.dialect.H2Dialect";
-            dataSource = h2Embedded.createDataSource(getJdbcProps());
-        } else if (db.getDriver().matches("org.postgresql.Driver")) {
-            dialect = "org.hibernate.dialect.PostgreSQL82Dialect";
-            dataSource = postgresDataSourceFactory.createDataSource(getJdbcProps());
-        } else {
-            throw new IllegalArgumentException("Unhandled Driver " + driver);
-        }
-
-        if(db.getDialect()!=null){
-            dialect = db.getDialect();
-        }
-
-        Map<String,Object> props = buildDBProperties(persistenceUnit,entities,classLoaders,url,user,password, jtaPlatform, driver, dialect, dbi.getExtraHibernateProperties());
-
-        props.put("javax.persistence.JtaDataSource",dataSource);
-        return efb.createEntityManagerFactory(props);
-
-    }
-
-    private static Iterable<Field> getFieldsUpTo(Class<?> startClass,
-        Class<?> exclusiveParent) {
-
-        List<Field> currentClassFields = new ArrayList<>(Arrays.asList(startClass.getDeclaredFields()));
-        Class<?> parentClass = startClass.getSuperclass();
-
-        if (parentClass != null &&
-            (exclusiveParent == null || !(parentClass.equals(exclusiveParent)))) {
-            List<Field> parentClassFields =
-                (List<Field>) getFieldsUpTo(parentClass, exclusiveParent);
-            currentClassFields.addAll(parentClassFields);
-        }
-
-        return currentClassFields;
-    }
-
-    private DatabaseInfo getDBInfo(Object wrapperDataSource) {
-        Field connectionFactoryField = null;
-        Object connectionFactory = null;
-        String url = null;
-        String user = null;
-        String password = null;
-        String driver = null;
-        try {
-            Class<?> clazz = wrapperDataSource.getClass();
-            connectionFactoryField = clazz.getDeclaredField("mcf");
-            connectionFactoryField.setAccessible(true);
-            connectionFactory = connectionFactoryField.get(wrapperDataSource);
-            Iterable<Field> fields = getFieldsUpTo(connectionFactory.getClass(),Object.class);
-            for(Field field : fields) {
-                field.setAccessible(true);
-                if(field.getName().equals("connectionURL")) {
-                    url = (String)field.get(connectionFactory);
-                }
-                if(field.getName().equals("password")) {
-                    password = (String)field.get(connectionFactory);
-                }
-                if(field.getName().equals("userName")) {
-                    user = (String)field.get(connectionFactory);
-                }
-                if(field.getName().equals("driverClass")) {
-                    driver = (String)field.get(connectionFactory);
-                }
-            }
-        } catch (NoSuchFieldException e) {
-            throw new RuntimeException(e);
-        } catch (IllegalAccessException e) {
-            throw new RuntimeException(e);
-        }
-
-        DatabaseInfo ret = null;
-
-        new DatabaseInfo(url,user,password,driver,"","");
-        return ret;
-    }
 
 
 }

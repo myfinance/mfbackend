@@ -24,7 +24,7 @@ import javax.persistence.Table;
 import java.util.Objects;
 
 @Entity
-@Table(name="dacenvironmentconfiguration" )
+@Table(name="\"dacenvironmentconfiguration\"" )
 public class DacEnvironmentConfiguration implements java.io.Serializable {
 
     @Id

@@ -6,8 +6,13 @@
     <repository>mvn:org.apache.karaf.features/standard/${karaf.version}/xml/features</repository>
     <repository>mvn:org.apache.karaf.features/enterprise/${karaf.version}/xml/features</repository>
     <repository>mvn:org.apache.cxf.karaf/apache-cxf/${apache-cxf.version}/xml/features</repository> <!--rest-->
-    <repository>mvn:org.apache.aries.rsa/rsa-features/${aries.rsa.version}/xml/features</repository> <!--The Aries Remote Service Admin (RSA) project allows to transparently use OSGi services for remote communication. -->
     <repository>mvn:org.apache.camel.karaf/apache-camel/${camel.version}/xml/features</repository>
+
+    <feature name="dac-base-karaf-webconsoletools" version="${pom.version}"><!-- Helps analyze package dependencies in WebConsole -->
+        <feature>webconsole</feature>
+        <bundle>mvn:commons-io/commons-io/${commons-io.version}</bundle>
+        <bundle>mvn:org.apache.felix/org.apache.felix.webconsole.plugins.packageadmin/${packageadmin-plugin.version}</bundle>
+    </feature>
 
     <feature name="dac-spring-feature" version="${spring.version}">
         <feature version="${hibernate.version}">hibernate-envers</feature>
@@ -29,30 +34,11 @@
         <bundle>mvn:org.springframework.data/spring-data-jpa/${spring-data.version}</bundle>
     </feature>
 
-
     <feature name="postgres" version="${pom.version}">
-        <feature>transaction</feature> <!-- enterprise-4.0.6                | OSGi Transaction Manager-->
+        <feature>transaction</feature>
         <bundle>mvn:org.osgi/org.osgi.service.jdbc/1.0.0</bundle>
-        <bundle>mvn:org.postgresql/postgresql/9.4-1203-jdbc42</bundle>
+        <bundle>mvn:org.postgresql/postgresql/${postgresql.version}</bundle>
 
-    </feature>
-
-    <feature name="dac-h2-feature" version="${pom.version}">
-        <feature prerequisite="true">wrap</feature>
-        <bundle>mvn:com.h2database/h2/1.4.186</bundle>
-    </feature>
-
-    <feature name="dac-cdi-feature"  version="${pom.version}">
-        <bundle>mvn:org.ops4j.pax.cdi/pax-cdi-api/0.12.0</bundle>
-        <!--<bundle>mvn:javax.enterprise/cdi-api/1.2</bundle>
-        <bundle>mvn:javax.el/javax.el-api/2.2.5</bundle>
-        <bundle>mvn:javax.interceptor/javax.interceptor-api/1.2</bundle>
-        <bundle>mvn:org.apache.servicemix.bundles/org.apache.servicemix.bundles.javax-inject/1_2</bundle>-->
-    </feature>
-
-    <feature name="dac-base-commands" version="${pom.version}">
-        <bundle>mvn:org.apache.felix.gogo/org.apache.felix.gogo.commands/0.4.0</bundle>
-        <bundle>mvn:org.apache.felix.gogo/org.apache.felix.gogo.runtime/0.4.0</bundle>
     </feature>
 
     <feature name="dac-guice" version="${guice.version}">
@@ -63,31 +49,27 @@
     </feature>
 
     <feature name="dac-db-base-feature" version="${pom.version}">
-        <feature prerequisite="true">wrap</feature>
-        <feature prerequisite="true">postgres</feature>
-        <feature prerequisite="true">dac-h2-feature</feature>
-        <feature prerequisite="true">scr</feature><!--for DS -->
-        <feature prerequisite="true">pax-jdbc-pool-dbcp2</feature>
-        <feature prerequisite="true">hibernate-orm</feature>
-        <bundle>mvn:org.osgi/org.osgi.service.jdbc/1.0.0</bundle>
-        <bundle>mvn:org.apache.commons/commons-lang3/${apache-commons-lang3.version}</bundle><!--necessary for api.io-->
-        <bundle>mvn:org.eclipse.persistence/javax.persistence/2.1.1</bundle>
-        <bundle>mvn:org.jboss.narayana.osgi/narayana-osgi-jta/5.3.4.Final</bundle>
-        <bundle>mvn:org.apache.geronimo.specs/geronimo-jta_1.1_spec/1.1.1</bundle>
+        <feature>wrap</feature>
+        <feature>postgres</feature>
+        <feature>scr</feature><!--for DS -->
+        <feature>pax-jdbc-pool-c3p0</feature>
+        <capability>
+            osgi.service;objectClass=org.ops4j.pax.jdbc.pool.common.PooledDataSourceFactory
+        </capability>
+        <!--<feature prerequisite="true">pax-jdbc-pool-dbcp2</feature>-->
+        <bundle>mvn:org.hibernate.javax.persistence/hibernate-jpa-2.1-api/1.0.0.Final</bundle>
+        <feature version="${hibernate.version}">hibernate-envers</feature>
+        <bundle>mvn:com.h2database/h2/${h2.version}</bundle>
+        <bundle>mvn:org.jboss.narayana.osgi/narayana-osgi-jta/${narayana.version}</bundle>
+
         <capability>osgi.service;effective:=active;objectClass=org.osgi.service.jdbc.DataSourceFactory</capability>
     </feature>
 
-    <feature name="dac-routes-api-feature" version="${pom.version}">
-        <feature prerequisite="true">camel-core</feature>
-        <bundle>mvn:io.swagger/swagger-annotations/${swagger.version}</bundle><!--for dto's like JobInformation to start routes via rest-client-->
-        <bundle>mvn:com.fasterxml.jackson.core/jackson-annotations/${jackson.version}</bundle>
-        <bundle>mvn:de.hf.dac.api/de.hf.dac.api.io.routes/${project.version}</bundle>
-    </feature>
-
     <feature name="dac-io-jpa-feature" version="${pom.version}">
-        <feature prerequisite="true">dac-cdi-feature</feature>
-        <feature prerequisite="true">dac-db-base-feature</feature>
-        <feature prerequisite="true">dac-guice</feature>
+        <feature>dac-db-base-feature</feature>
+        <feature>dac-guice</feature>
+        <bundle>mvn:org.eclipse.persistence/javax.persistence/${javax-persistence.version}</bundle>
+        <bundle>mvn:org.apache.commons/commons-lang3/${apache-commons-lang3.version}</bundle>
         <bundle>mvn:de.hf.dac.api/de.hf.dac.api.io/${project.version}</bundle>
         <bundle>mvn:de.hf.dac.io/de.hf.dac.io.efmb/${project.version}</bundle>
         <bundle>mvn:de.hf.dac.io/de.hf.dac.io.env/${project.version}</bundle>
@@ -95,68 +77,75 @@
     </feature>
 
     <feature name="dac-io-routes-feature" version="${pom.version}">
-        <feature prerequisite="true">dac-routes-api-feature</feature>
+        <feature>camel-core</feature>
+        <bundle>mvn:io.swagger/swagger-annotations/${swagger.version}</bundle>
+        <bundle>mvn:com.fasterxml.jackson.core/jackson-annotations/${jackson.version}</bundle>
+        <bundle>mvn:de.hf.dac.api/de.hf.dac.api.io.routes/${project.version}</bundle>
         <bundle>mvn:de.hf.dac.io/de.hf.dac.io.routes/${project.version}</bundle>
     </feature>
 
+    <feature name="dac-base-commands" version="${pom.version}">
+        <bundle>mvn:org.apache.felix.gogo/org.apache.felix.gogo.commands/0.4.0</bundle>
+        <bundle>mvn:org.apache.felix.gogo/org.apache.felix.gogo.runtime/0.4.0</bundle>
+    </feature>
+
     <feature name="dac-io-feature" version="${pom.version}">
-        <feature prerequisite="true">wrap</feature>
         <feature>dac-base-commands</feature>
         <feature>dac-io-jpa-feature</feature>
+        <feature>dac-io-routes-feature</feature>
     </feature>
 
-    <feature name="dac-jackson-feature" version="${pom.version}">
-        <bundle>mvn:com.fasterxml.jackson.core/jackson-core/${jackson.version}</bundle>
-        <bundle>mvn:com.fasterxml.jackson.core/jackson-annotations/${jackson.version}</bundle>
-        <bundle>mvn:com.fasterxml.jackson.core/jackson-databind/${jackson.version}</bundle>
-        <bundle>mvn:com.fasterxml.jackson.dataformat/jackson-dataformat-yaml/${jackson.version}</bundle>
-        <bundle>mvn:com.fasterxml.jackson.jaxrs/jackson-jaxrs-base/${jackson.version}</bundle>
-        <bundle>mvn:com.fasterxml.jackson.jaxrs/jackson-jaxrs-json-provider/${jackson.version}</bundle>
-        <bundle>mvn:org.yaml/snakeyaml/${snakeyaml.version}</bundle>
-    </feature>
-
-    <feature name="security-feature" version="${pom.version}">
+    <feature name="dac-security-feature" version="${pom.version}">
+        <feature>dac-io-jpa-feature</feature>
         <bundle>mvn:de.hf.dac.api/de.hf.dac.api.io/${project.version}</bundle>
         <bundle>mvn:de.hf.dac.api/de.hf.dac.api.security/${project.version}</bundle>
+        <bundle>mvn:de.hf.dac/de.hf.dac.common/${project.version}</bundle>
         <bundle>mvn:de.hf.dac/de.hf.dac.security/${project.version}</bundle>
     </feature>
 
-    <feature name="dac-base-stax-replacement" version="${pom.version}">
-        <!-- http://veithen.github.io/2014/10/12/stax-osgi.html -->
-        <bundle>mvn:org.apache.servicemix.specs/org.apache.servicemix.specs.stax-api-1.2/2.7.0</bundle>
-    </feature>
-
-    <feature name="google" version="${pom.version}">
+    <feature name="dac-cxf-swagger" version="${pom.version}">
+        <feature version="${apache-cxf.version}">cxf-jaxrs</feature>
+        <feature version="${apache-cxf.version}">cxf-jackson</feature>
         <bundle>mvn:com.google.guava/guava/${guava-swagger.version}</bundle>
+        <bundle>mvn:org.apache.commons/commons-lang3/${apache-commons-lang3.version}</bundle>
+        <bundle>mvn:javax.validation/validation-api/1.1.0.Final</bundle>
+        <bundle>mvn:org.apache.servicemix.bundles/org.apache.servicemix.bundles.reflections/${servicemix-reflections.version}</bundle>
+        <bundle>mvn:org.apache.cxf/cxf-rt-rs-service-description-swagger/${apache-cxf.version}</bundle>
+        <bundle>mvn:io.swagger/swagger-annotations/${swagger.version}</bundle>
+        <bundle>mvn:io.swagger/swagger-models/${swagger.version}</bundle>
+        <bundle>mvn:io.swagger/swagger-core/${swagger.version}</bundle>
+        <bundle>mvn:io.swagger/swagger-jaxrs/${swagger.version}</bundle>
     </feature>
 
-    <feature name="rest-base-feature" version="${pom.version}">
+    <feature name="dac-cxf-base" version="${pom.version}">
+        <feature>dac-cxf-swagger</feature>
+        <feature version="${apache-cxf.version}">cxf-specs</feature>
+        <feature version="${apache-cxf.version}">cxf-http</feature>
+        <feature>pax-http</feature>
+        <feature version="${apache-cxf.version}">cxf-http-jetty</feature>
+        <feature version="${apache-cxf.version}">cxf-jaxrs</feature>
+        <feature version="${apache-cxf.version}">cxf-rs-security-cors</feature>
+        <feature version="${apache-cxf.version}">cxf-features-logging</feature>
+        <feature version="${apache-cxf.version}">cxf-features-metrics</feature>
+        <feature version="${apache-cxf.version}">cxf-commands</feature>
+    </feature>
 
-        <feature>aries-rsa-core</feature>
-        <feature>cxf-specs</feature>
-        <feature>cxf-http</feature>
-        <feature>http</feature>
-        <feature>cxf-http-jetty</feature>
-        <feature>cxf-jaxrs</feature>
-        <feature>cxf-rs-security-cors</feature>
 
-        <feature>cxf-rs-description-swagger2</feature>
+    <feature name="dac-rest-base-feature" version="${pom.version}">
+        <feature>dac-cxf-base</feature>
         <bundle>mvn:de.hf.dac.web/de.hf.dac.web.swaggerui/${project.version}</bundle>
-
-        <feature>cxf-features-logging</feature>
-        <feature>cxf-features-metrics</feature>
-        <feature>cxf-commands</feature>
-        <feature>dac-base-stax-replacement</feature>
-        <feature>dac-jackson-feature</feature>
-        <feature>security-feature</feature>
+        <feature>dac-security-feature</feature>
         <bundle>mvn:com.google.code.gson/gson/${gson.version}</bundle>
-
+        <bundle>mvn:de.hf.dac.api/de.hf.dac.api.base/${project.version}</bundle>
+        <bundle>mvn:de.hf.dac.api/de.hf.dac.api.rest/${project.version}</bundle>
+        <bundle>mvn:de.hf.dac.services/de.hf.dac.services.rest-resources/${project.version}</bundle>
     </feature>
 
 
     <feature name="dac-base-features" version="${pom.version}">
         <feature>dac-io-feature</feature>
         <feature>dac-springdata-feature</feature>
+        <feature>dac-rest-base-feature</feature>
     </feature>
 
 </features>

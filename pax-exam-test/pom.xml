@@ -9,8 +9,8 @@
 
     <artifactId>pax-exam-test</artifactId>
     <properties>
-        <exam.version>4.8.0</exam.version>
-        <url.version>2.4.7</url.version>
+        <pax-exam.version>4.9.1</pax-exam.version>
+        <pax-url.version>2.5.1</pax-url.version>
     </properties>
 
 
@@ -28,7 +28,7 @@
                 <dependency>
                     <groupId>org.ops4j.pax.exam</groupId>
                     <artifactId>pax-exam-container-karaf</artifactId>
-                    <version>4.9.1</version>
+                    <version>${pax-exam.version}</version>
                     <scope>test</scope>
                 </dependency>
                 <dependency>
@@ -49,7 +49,10 @@
             <groupId>de.hf.dac.api</groupId>
             <artifactId>de.hf.dac.api.io</artifactId>
         </dependency>
-
+        <dependency>
+            <groupId>de.hf.dac.io</groupId>
+            <artifactId>de.hf.dac.io.env</artifactId>
+        </dependency>
         <dependency>
             <groupId>de.hf.dac.marketdataprovider.api</groupId>
             <artifactId>de.hf.dac.marketdataprovider.api.service</artifactId>
@@ -65,49 +68,53 @@
             <groupId>de.hf.dac.marketdataprovider</groupId>
             <artifactId>de.hf.dac.marketdataprovider.restservice</artifactId>
         </dependency>
+        <dependency>
+            <groupId>de.hf.dac.marketdataprovider</groupId>
+            <artifactId>de.hf.dac.marketdataprovider.persistence</artifactId>
+        </dependency>
 
         <!-- Pax Exam -->
         <dependency>
             <groupId>org.ops4j.pax.exam</groupId>
             <artifactId>pax-exam</artifactId>
-            <version>${exam.version}</version>
+            <version>${pax-exam.version}</version>
         </dependency>
 
         <dependency>
             <groupId>org.ops4j.pax.exam</groupId>
             <artifactId>pax-exam-link-mvn</artifactId>
-            <version>${exam.version}</version>
+            <version>${pax-exam.version}</version>
             <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>org.ops4j.pax.url</groupId>
             <artifactId>pax-url-aether</artifactId>
-            <version>${url.version}</version>
+            <version>${pax-url.version}</version>
             <scope>test</scope>
         </dependency>
 
         <dependency>
             <groupId>org.ops4j.pax.exam</groupId>
             <artifactId>pax-exam-junit4</artifactId>
-            <version>${exam.version}</version>
+            <version>${pax-exam.version}</version>
         </dependency>
 
         <dependency>
             <groupId>org.ops4j.pax.url</groupId>
             <artifactId>pax-url-commons</artifactId>
-            <version>2.4.7</version>
+            <version>${pax-url.version}</version>
         </dependency>
 
         <dependency>
             <groupId>org.ops4j.pax.url</groupId>
             <artifactId>pax-url-wrap</artifactId>
-            <version>2.4.7</version>
+            <version>${pax-url.version}</version>
         </dependency>
 
         <dependency>
             <groupId>org.ops4j.pax.url</groupId>
             <artifactId>pax-url-assembly</artifactId>
-            <version>2.4.7</version>
+            <version>${pax-url.version}</version>
         </dependency>
 
         <dependency>

@@ -12,5 +12,5 @@ Import-Package: \
     org.hibernate.proxy, \
     javassist.util.proxy, \
     *
-
+AnnotatedDomainClasses: ${classes;CONCRETE;ANNOTATION;javax.persistence.Entity}
 Bundle-SymbolicName: ${project.artifactId}

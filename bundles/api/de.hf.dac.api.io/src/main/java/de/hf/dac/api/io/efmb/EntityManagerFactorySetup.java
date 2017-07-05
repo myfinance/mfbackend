@@ -24,11 +24,10 @@ import java.sql.SQLException;
  * Created by xne0133 on 05.09.2016.
  */
 public interface EntityManagerFactorySetup {
-    EntityManagerFactory buildEntityManagerFactory(String persistenceUnit,
+    EntityManagerFactory getOrCreateEntityManagerFactory(String persistenceUnit,
+        PoolSize poolSize,
         Class<?>[] entities,
         ClassLoader[] classLoaders,
-        DatabaseInfo dbi) throws SQLException;
-    EntityManagerFactory buildEntityManagerFactory(String persistenceUnit,
-        ClassLoader[] classLoaders,
-        DatabaseInfo dbi) throws SQLException;
+        DatabaseInfo dbi);
+    enum PoolSize { NO_POOL, SMALL, MEDIUM, LARGE }
 }

@@ -116,4 +116,10 @@ public class DatabaseInfo {
     public void setExtraHibernateProperties(Properties extraHibernateProperties) {
         this.extraHibernateProperties = extraHibernateProperties;
     }
+
+    @Override
+    public String toString() {
+        return "url = " + url + "\nuser = " + user + "\ndriver = " + driver + "\nserver = " + server +
+            "\ndatabase = " + database +"\ndialect = " + dialect + "\njndiUrl = " + jndiUrl + "\n";
+    }
 }

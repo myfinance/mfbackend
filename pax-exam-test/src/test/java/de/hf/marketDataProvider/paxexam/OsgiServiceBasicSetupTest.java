@@ -31,12 +31,11 @@ public class OsgiServiceBasicSetupTest extends PAXExamTestSetup {
 
     @Configuration
     public Option[] config() {
-        return new Option[] { getDebugOption(), super.configDefaults(), ioFeatures() };
+        return new Option[] { super.configDefaults(), ioFeatures() };
     }
 
     @Test
     public void testInjectAndBasicOsgiContainerSetupIsWorking() {
         assertNotNull(bundleContext);
-        System.out.println(this.bundleContext.getBundle().getSymbolicName());
     }
 }

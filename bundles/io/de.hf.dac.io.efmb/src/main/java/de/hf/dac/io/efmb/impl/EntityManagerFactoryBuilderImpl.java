@@ -18,7 +18,6 @@
 package de.hf.dac.io.efmb.impl;
 
 
-import org.ops4j.pax.cdi.api.OsgiService;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.BundleReference;
@@ -26,11 +25,8 @@ import org.osgi.framework.ServiceReference;
 import org.osgi.service.component.ComponentContext;
 import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
-import org.osgi.service.component.annotations.Reference;
 import org.osgi.service.jpa.EntityManagerFactoryBuilder;
 
-import javax.inject.Inject;
-import javax.inject.Singleton;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.spi.PersistenceProvider;
 import javax.persistence.spi.PersistenceUnitTransactionType;
@@ -41,73 +37,64 @@ import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 
-//@Singleton
-@Component
-public class EntityManagerFactoryBuilderImpl implements EntityManagerFactoryBuilder {
-    private static final String JAVAX_PERSISTENCE_JDBC_DRIVER = "javax.persistence.jdbc.driver";
-    private static final String JAVAX_PERSISTENCE_JTA_DATASOURCE = "javax.persistence.jtaDataSource";
-    private static final String JAVAX_PERSISTENCE_NON_JTA_DATASOURCE = "javax.persistence.nonJtaDataSource";
-    private static final String JAVAX_PERSISTENCE_TX_TYPE = "javax.persistence.transactionType";
+import static de.hf.dac.io.efmb.EntityManagerFactorySetupImpl.JAVAX_PERSISTENCE_JDBC_DRIVER;
+import static de.hf.dac.io.efmb.EntityManagerFactorySetupImpl.JAVAX_PERSISTENCE_JTA_DATASOURCE;
+import static de.hf.dac.io.efmb.EntityManagerFactorySetupImpl.JAVAX_PERSISTENCE_NON_JTA_DATASOURCE;
+import static de.hf.dac.io.efmb.EntityManagerFactorySetupImpl.JAVAX_PERSISTENCE_TX_TYPE;
 
-    public static final String persistenceUnitName = "persistenceUnitName";
-    public static final String managedClassNames = "managedClassNames";
-    public static final String persistenceUnitProperties = "persistenceUnitProperties";
+@Component(name = "DAC.EntityManagerFactoryBuilderImpl", service = EntityManagerFactoryBuilder.class)
+public class EntityManagerFactoryBuilderImpl implements EntityManagerFactoryBuilder {
+    public static final String CCR_persistenceUnitName = "persistenceUnitName";
+    public static final String CCR_managedClassNames = "managedClassNames";
+    public static final String CCR_persistenceUnitProperties = "persistenceUnitProperties";
+    public static final String JOINED_CLASSLOADER = "joinedClassloader";
 
     @Activate
     protected void activate(ComponentContext componentContext,
         BundleContext bundleContext,
         Map<String, ?> properties) {
         final ServiceReference<PersistenceProvider> serviceReference = bundleContext.getServiceReference(PersistenceProvider.class);
-        provider = (PersistenceProvider) bundleContext.getService(serviceReference);
+        provider = bundleContext.getService(serviceReference);
     }
 
-    //@OsgiService
-    //@Inject
-    //@Reference
     private PersistenceProvider provider;
 
     public EntityManagerFactory createEntityManagerFactory(Map<String, Object> props) {
-        props = new HashMap<String, Object>(props);
+        props = new HashMap<>(props);
 
         String persistenceUnitName;
         List<String> managedClassNames;
         Properties persistenceUnitProperties;
 
-        Object o = props.get(EntityManagerFactoryBuilderImpl.persistenceUnitName);
+        Object o = props.get(CCR_persistenceUnitName);
         if(o instanceof String) {
             persistenceUnitName = (String) o;
-            props.remove(EntityManagerFactoryBuilderImpl.persistenceUnitName);
+            props.remove(CCR_persistenceUnitName);
         } else {
-            throw new IllegalArgumentException("No " + EntityManagerFactoryBuilderImpl.persistenceUnitName + " found");
+            throw new IllegalArgumentException("No " + CCR_persistenceUnitName + " found");
         }
 
-        o = props.get(EntityManagerFactoryBuilderImpl.managedClassNames);
+        o = props.get(CCR_managedClassNames);
         if(o instanceof List<?>) {
             managedClassNames = (List<String>) o;
-            props.remove(EntityManagerFactoryBuilderImpl.managedClassNames);
+            props.remove(CCR_managedClassNames);
         } else {
-            managedClassNames = new ArrayList<String>();
+            managedClassNames = new ArrayList<>();
         }
 
-        o = props.get(EntityManagerFactoryBuilderImpl.persistenceUnitProperties);
+        o = props.get(CCR_persistenceUnitProperties);
         if(o instanceof Properties) {
             persistenceUnitProperties = (Properties) o;
-            props.remove(EntityManagerFactoryBuilderImpl.persistenceUnitProperties);
+            props.remove(CCR_persistenceUnitProperties);
         } else {
             persistenceUnitProperties = new Properties();
         }
+        // we are in OSGi conmtainer
+        Bundle bundle =
+            BundleReference.class.cast(EntityManagerFactoryBuilderImpl.class.getClassLoader())
+                .getBundle();
 
-        PersistenceUnitInfoImpl persistenceUnitInfoImpl = null;
-        if(org.osgi.framework.FrameworkUtil.getBundle(EntityManagerFactoryBuilderImpl.class) == null) {
-            persistenceUnitInfoImpl = new PersistenceUnitInfoImpl(Thread.currentThread().getContextClassLoader(),persistenceUnitName,PersistenceUnitTransactionType.JTA);
-        } else {
-            // we are in OSGi conmtainer
-            Bundle bundle =
-                BundleReference.class.cast(EntityManagerFactoryBuilderImpl.class.getClassLoader())
-                    .getBundle();
-
-            persistenceUnitInfoImpl = new OSGiPersistenceUnit(bundle,persistenceUnitName,PersistenceUnitTransactionType.JTA);
-        }
+        PersistenceUnitInfoImpl persistenceUnitInfoImpl = new OSGiPersistenceUnit(bundle,persistenceUnitName,PersistenceUnitTransactionType.JTA);
 
         persistenceUnitInfoImpl.setExcludeUnlisted(true);
         for(String m : managedClassNames) {
@@ -138,11 +125,12 @@ public class EntityManagerFactoryBuilderImpl implements EntityManagerFactoryBuil
             props.remove(JAVAX_PERSISTENCE_NON_JTA_DATASOURCE);
         }
 
-        o = props.get("joinedClassloader");
+        o = props.get(JOINED_CLASSLOADER);
         if(o instanceof ClassLoader) {
             persistenceUnitInfoImpl.classLoader = (ClassLoader)o;
-            props.remove("joinedClassloader");
+            props.remove(JOINED_CLASSLOADER);
         }
+
 
         o = props.get(JAVAX_PERSISTENCE_TX_TYPE);
         if(o instanceof PersistenceUnitTransactionType) {
@@ -156,3 +144,4 @@ public class EntityManagerFactoryBuilderImpl implements EntityManagerFactoryBuil
     }
 
 }
+

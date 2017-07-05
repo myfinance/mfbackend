@@ -24,27 +24,23 @@ import de.hf.dac.api.io.env.EnvironmentInfo;
 import de.hf.dac.api.io.env.EnvironmentService;
 import de.hf.dac.api.io.env.EnvironmentTargetInfo;
 import de.hf.dac.api.io.env.domain.DacEnvironmentConfiguration;
-import org.ops4j.pax.cdi.api.OsgiService;
-import org.ops4j.pax.cdi.api.OsgiServiceProvider;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
+import org.slf4j.LoggerFactory;
 
-import javax.inject.Inject;
-import javax.inject.Singleton;
 import javax.persistence.EntityManagerFactory;
-import java.sql.SQLException;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Properties;
-import java.util.Set;
-import java.util.logging.Logger;
 
-@Component
+@Component(service = { EnvironmentService.class }, name = "DAC.EnvironmentServiceImpl")
 public class EnvironmentServiceImpl implements EnvironmentService {
 
-    private static final Logger LOG = Logger.getLogger(EnvironmentServiceImpl.class.getName());
+    private static final org.slf4j.Logger LOG = LoggerFactory.getLogger(EnvironmentServiceImpl.class.getName());
 
     @Reference
     EnvironmentConfiguration configuration;
@@ -57,7 +53,9 @@ public class EnvironmentServiceImpl implements EnvironmentService {
     private BootstrapConfiguration bootstrapConfiguration = null;
     private EntityManagerFactory entityManagerFactory;
 
-    private final Map<EnvironmentInfo, EnvironmentTargetInfo> allEnvironments = new HashMap<>();
+    private final Map<String, EnvironmentInfo> allEnvironments = new HashMap<>();
+    private final Map<String, EnvironmentInfo> mappedByClientID = new HashMap<>();
+    private final Map<String, Map<String,String>> contextMap = new HashMap<>();
 
     public boolean initEnvironments() {
 
@@ -77,54 +75,53 @@ public class EnvironmentServiceImpl implements EnvironmentService {
             DatabaseInfo dbInfo = bootstrapConfiguration.getDatabaseInfo();
 
             // create JPA EntityManagerFactory for configuration classes
-            this.entityManagerFactory = emfb.buildEntityManagerFactory("ENV_CONFIGURATION", new Class[] { DacEnvironmentConfiguration.class },
+            this.entityManagerFactory = emfb.getOrCreateEntityManagerFactory("ENV_CONFIGURATION",
+                EntityManagerFactorySetup.PoolSize.SMALL,
+                new Class[] { },
                 new ClassLoader[] { DacEnvironmentConfiguration.class.getClassLoader() }, dbInfo);
 
             environmentDAO = new EnvironmentDAO(entityManagerFactory);
 
             // createEnvironmentInfos
-            createEnvironmentInformation();
+            createEnvironmentInformation(dbInfo);
 
-        } catch (SQLException e) {
-            LOG.severe("Unable to Retrieve Environments from Bootstrap DB");
-            e.printStackTrace();
+        } catch (Exception e) {
+            LOG.error("Unable to Retrieve Environments from Bootstrap DB",e);
             return false;
         }
         return true;
     }
 
-    private void createEnvironmentInformation() {
+    private void createEnvironmentInformation(DatabaseInfo dbInfo) {
         Properties properties = configuration.getProperties(BootstrapConfiguration.LOGIN_INFO_SECTION);
         List<DacEnvironmentConfiguration> envs = environmentDAO.getAllEnvironments();
         for (DacEnvironmentConfiguration env : envs) {
-            EnvironmentTargetInfo savedEnv = null;
-            if ("db".equals(env.getEnvtype())) {
-                savedEnv = createDBEnvironentInfo(properties, env);
-            } else if ("cache".equals(env.getEnvtype())) {
-                //savedEnv = createCacheEnvironentInfo(env);
-            }
-            if (savedEnv != null) {
-                allEnvironments.put(new EnvironmentInfo(savedEnv.getEnvName(), savedEnv.getTargetName(), savedEnv.getTargetType()), savedEnv);
+
+            try {
+
+                // see, if it's already created
+                EnvironmentInfo info = allEnvironments.get(env.getEnvironment());
+                if (info == null) {
+                    info = new EnvironmentInfo(env.getEnvironment());
+                    // default target sdb pointing to Bootstrap ConfigDB, because it should exist always only one security db for all environments
+                    info.addTarget(new EnvironmentTargetInfo<>(env.getEnvironment(), "sdb", "db", dbInfo));
+                    allEnvironments.put(env.getEnvironment(), info);
+                }
+
+                EnvironmentTargetInfo savedEnv = null;
+                if ("db".equals(env.getEnvtype())) {
+                    savedEnv = createDBEnvironentInfo(properties, env);
+                }
+                if (savedEnv != null) {
+                    info.addTarget(savedEnv);
+                }
+            } catch (Exception ex) {
+                // ignore and make sure this target becomes prominent Entry in Log File
+                LOG.error("Skipping Target:" + env.getTarget(), ex.getLocalizedMessage());
             }
         }
     }
 
-    /*private EnvironmentTargetInfo createCacheEnvironentInfo(DacEnvironmentConfiguration env) {
-        Properties properties = configuration.getProperties("CACHE#" + env.getIdentifier());
-        EnvironmentTargetInfo<CouchBaseInfo> savedEnv = new EnvironmentTargetInfo<>(env.getEnvironment(), env.getTarget(), env.getType());
-        if (properties.size() != 0) {
-            // look up cache info from ResFile
-            String bucket = properties.getProperty("BUCKET");
-            String password = properties.getProperty("PASSWORD");
-            String servers = properties.getProperty("SERVERS");
-            CouchBaseInfo cbi = new CouchBaseInfo(servers, bucket, password);
-            savedEnv.setTargetDetails(cbi);
-            return savedEnv;
-        } else {
-            LOG.warning("Unable to retrieve Couchbase Details from Configuration for "+savedEnv.toString());
-        }
-        return null;
-    }*/
 
     private EnvironmentTargetInfo createDBEnvironentInfo(Properties properties, DacEnvironmentConfiguration env) {
         EnvironmentTargetInfo<DatabaseInfo> savedEnv = new EnvironmentTargetInfo<>(env.getEnvironment(), env.getTarget(), env.getEnvtype());
@@ -134,28 +131,63 @@ public class EnvironmentServiceImpl implements EnvironmentService {
             savedEnv.setTargetDetails(dbi);
             return savedEnv;
         } else {
-            LOG.warning("Unable to retrieve DB Details from Configuration for "+savedEnv.toString());
+            LOG.warn("Unable to retrieve DB Details from Configuration for " + savedEnv.toString() + ", Identifier not found in Config: " + env.getIdentifier());
         }
         return null;
     }
 
     @Override
-    public Set<EnvironmentInfo> availableEnvironments() {
+    public Collection<EnvironmentInfo> availableEnvironments() {
         if (initEnvironments()) {
-            return allEnvironments.keySet();
+            return allEnvironments.values();
         }
         return Collections.emptySet();
     }
 
     @Override
-    public EnvironmentTargetInfo getTarget(String environmentName, String target) {
+    public EnvironmentInfo getEnvironmentByClientid(String clientID) {
+        return mappedByClientID.get(clientID);
+    }
+
+    @Override
+    public Map<String,String> getEnvironmentContextMap(String env) {
+
+        return contextMap.containsKey(env) ? contextMap.get(env) : new HashMap<>();
+    }
+
+    @Override
+    public EnvironmentInfo getEnvironment(String env) {
+        if (allEnvironments.containsKey(env)) {
+            return allEnvironments.get(env);
+        } else {
+            throw new RuntimeException("Unknown Environment " + env);
+        }
+    }
+
+    @Override
+    public void refresh() {
+        bootstrapConfiguration = null;
+        allEnvironments.clear();
+        mappedByClientID.clear();
+        initEnvironments();
+    }
+
+    @Override
+    public Optional<EnvironmentTargetInfo> getTarget(String environmentName, String target) {
         if (initEnvironments()) {
-            EnvironmentTargetInfo envTarget = allEnvironments.get(new EnvironmentInfo(environmentName, target));
-            if (envTarget != null) {
-                return envTarget;
+            EnvironmentInfo env = allEnvironments.get(environmentName);
+            EnvironmentTargetInfo envTarget = null;
+            if (env != null) {
+                envTarget = env.getTargets().get(target);
+                if (envTarget != null) {
+                    return Optional.of(envTarget);
+                } else {
+                    return Optional.empty();
+                }
             } else {
                 throw new RuntimeException("Unknown Environment");
             }
+
         }
         throw new RuntimeException("Not initialised");
     }
@@ -178,4 +210,3 @@ public class EnvironmentServiceImpl implements EnvironmentService {
     }
 
 }
-

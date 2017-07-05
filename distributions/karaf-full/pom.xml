@@ -60,31 +60,33 @@
                 <artifactId>karaf-maven-plugin</artifactId>
 
                 <configuration>
+                    <installedFeatures>
+                        <feature>wrapper</feature>
+                    </installedFeatures>
                     <startupFeatures>
                         <feature>eventadmin</feature>
                         <!--for publish subscribe between bundles. needed for transactionhandling? resposible for Unknown protocol: mvn error. Why? -> can not be an bootfeature -->
 
                         <!--<feature>hibernate-orm</feature>-->
                     </startupFeatures>
-
                     <bootFeatures>
 
                         <feature>standard</feature>
+                        <feature>pax-http</feature>
 
                         <!-- non-standard -->
-                        <feature>http</feature>
                         <feature>scr</feature>
-                        <feature>webconsole</feature>
-                        <feature>hawtio-offline</feature>
-                        <feature>wrap</feature>
-
-                        <!--for web-pages like swagger ui-->
+                        <feature>http</feature><!--for web-pages like swagger ui-->
                         <feature>war</feature>
+
+                        <!-- 3rdparty management -->
+                        <feature>hawtio-offline</feature>
+
+                        <!-- DAC Features management  -->
+                        <feature>dac-base-karaf-webconsoletools</feature>
 
                         <!-- the application -->
                         <feature>marketdata-features</feature>
-
-
 
                     </bootFeatures>
 
@@ -141,6 +143,39 @@
                                 <resource>
                                     <directory>cfg/bin</directory>
                                     <filtering>true</filtering>
+                                </resource>
+                            </resources>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>copy-cfg-etc-filtered</id>
+                        <phase>prepare-package</phase>
+                        <goals>
+                            <goal>copy-resources</goal>
+                        </goals>
+                        <configuration>
+                            <outputDirectory>${basedir}/target/assembly/etc</outputDirectory>
+                            <resources>
+                                <resource>
+                                    <directory>cfg/etc-filtered</directory>
+                                    <filtering>true</filtering>
+                                </resource>
+                            </resources>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>copy-patch-pax-web-features-4.3.0</id>
+                        <phase>prepare-package</phase>
+                        <goals>
+                            <goal>copy-resources</goal>
+                        </goals>
+                        <!--patch jetty.xml location in feature config pax-http-jetty -->
+                        <configuration>
+                            <outputDirectory>${basedir}/target/assembly/system/org/ops4j/pax/web/pax-web-features/4.3.0</outputDirectory>
+                            <resources>
+                                <resource>
+                                    <directory>patches/pax-web-features-4.3.0</directory>
+                                    <filtering>false</filtering>
                                 </resource>
                             </resources>
                         </configuration>

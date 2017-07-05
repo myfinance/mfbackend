@@ -32,6 +32,11 @@ import javax.transaction.RollbackException;
 import javax.transaction.SystemException;
 import javax.transaction.UserTransaction;
 
+import de.hf.dac.api.io.env.EnvironmentService;
+import de.hf.dac.api.io.env.domain.DacEnvironmentConfiguration;
+import de.hf.dac.io.env.EnvironmentDAO;
+import de.hf.dac.marketdataprovider.api.persistence.dao.ProductDao;
+import de.hf.dac.marketdataprovider.persistence.ProductDaoImpl;
 import de.hf.marketDataProvider.paxexam.support.PAXExamTestSetup;
 import de.hf.dac.api.io.efmb.DatabaseInfo;
 import de.hf.dac.api.io.efmb.EntityManagerFactorySetup;
@@ -54,33 +59,34 @@ public class EntityManagerSetupTest extends PAXExamTestSetup {
     @OsgiService
     EntityManagerFactorySetup emfb;
 
+    @Inject
+    EnvironmentService envService;
+
 
     @Configuration
     public Option[] config() {
         return new Option[] { //
             super.configDefaults(),
-            // enable this to be able to debug
-            // first start this unit test, and then connect using remote debugging.
-            //     getDebugOption(),
-            // enable this to be able to debug
-            // first start this unit test, and then connect using remote debugging.
             restFeatures()}; //, composite(vmOption("-Xrunjdwp:transport=dt_socket,server=y,suspend=y,address=5005")) };
     }
 
 
 
-    @Test
+    //@Test
     public void testIoFeature()
         throws SQLException, SystemException, NotSupportedException, HeuristicRollbackException, HeuristicMixedException, RollbackException {
         assertNotNull(emfb);
+        assertNotNull(envService);
 
         DatabaseInfo dbi = inMemoryH2DatabaseInfo();
 
-        EntityManagerFactory testunit = emfb.buildEntityManagerFactory("testunit", new ClassLoader[] {Product.class.getClassLoader()}, dbi);
-        EntityManager entityManager = testunit.createEntityManager();
 
-        UserTransaction utx = (UserTransaction) bundleContext.getService(bundleContext.getServiceReference(UserTransaction.class.getName()));
-        utx.begin();
+        //entityManager.getTransaction().begin();
+
+        //BundleContext context2 = ((BundleReference) Product.class.getClassLoader()).getBundle().getBundleContext();
+        //UserTransaction utx = getService(UserTransaction.class);
+        //UserTransaction utx = (UserTransaction) bundleContext.getService(bundleContext.getServiceReference(UserTransaction.class.getName()));
+        /*utx.begin();
 
         Product p1 = new Product("1234", "Product 1 desc");
         Product p2 = new Product("1235", "Product 2 desc");
@@ -93,11 +99,56 @@ public class EntityManagerSetupTest extends PAXExamTestSetup {
         entityManager.persist(p2);
 
         utx.commit();
+        //entityManager.getTransaction().commit();
 
         TypedQuery<Product> query = entityManager.createNamedQuery(Product.findAll, Product.class);
         List newproducts=query.getResultList();
 
-        Assert.assertEquals(2, newproducts.size());
+        Assert.assertEquals(2, newproducts.size());*/
+    }
+
+    //@Test
+    public void testIoFeatureRead()
+        throws SQLException, SystemException, NotSupportedException, HeuristicRollbackException, HeuristicMixedException, RollbackException {
+        assertNotNull(emfb);
+        assertNotNull(envService);
+
+        DatabaseInfo dbi = postgresDatabaseInfo();
+
+        EntityManagerFactory testunit =
+            emfb.getOrCreateEntityManagerFactory("testunit",
+                EntityManagerFactorySetup.PoolSize.SMALL,
+                new Class[] {},
+                new ClassLoader[] { Product.class.getClassLoader() },
+                dbi);
+
+        ProductDao productDao = new ProductDaoImpl(testunit);
+
+        List<Product> products = productDao.listProducts();
+        Assert.assertEquals(2, products.size());
+
+    }
+
+    @Test
+    public void testIoFeatureReadEnv()
+        throws SQLException, SystemException, NotSupportedException, HeuristicRollbackException, HeuristicMixedException, RollbackException {
+        assertNotNull(emfb);
+        assertNotNull(envService);
+
+        DatabaseInfo dbi = postgresDatabaseInfo();
+
+        EntityManagerFactory testunit =
+            emfb.getOrCreateEntityManagerFactory("testunit",
+                EntityManagerFactorySetup.PoolSize.SMALL,
+                new Class[] {},
+                new ClassLoader[] { DacEnvironmentConfiguration.class.getClassLoader() },
+                dbi);
+
+        EnvironmentDAO envDao = new EnvironmentDAO(testunit);
+
+        List<DacEnvironmentConfiguration> envs = envDao.getAllEnvironments();
+        Assert.assertEquals(4, envs.size());
+
     }
 
     /*@Test

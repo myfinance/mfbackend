@@ -54,12 +54,12 @@ public class MDSecurityApplicationContextModule extends AbstractModule {
     }
 
     EntityManagerFactory provideSdbEntityManagerFactory() {
-        EnvironmentTargetInfo sdbTargetInfo = envService.getTarget(env, EnvTarget.SDB);
+        EnvironmentTargetInfo sdbTargetInfo = envService.getTarget(env, EnvTarget.SDB).get();
         DatabaseInfo dbi = (DatabaseInfo) sdbTargetInfo.getTargetDetails();
         EntityManagerFactory emf = null;
         try {
             emf = emfb
-                .buildEntityManagerFactory(buildPersistenceUnitName("SECURITY"), new Class[] {}, new ClassLoader[] { RestAuthorization.class.getClassLoader() }, dbi);
+                .getOrCreateEntityManagerFactory(this.buildPersistenceUnitName("SECURITY"), EntityManagerFactorySetup.PoolSize.SMALL, new Class[] {}, new ClassLoader[] { RestAuthorization.class.getClassLoader() }, dbi);
         }
         catch (Exception ex) {
             throw new RuntimeException(ex);

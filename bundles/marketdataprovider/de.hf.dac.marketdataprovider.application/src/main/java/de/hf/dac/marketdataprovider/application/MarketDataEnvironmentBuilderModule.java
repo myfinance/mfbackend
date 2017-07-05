@@ -77,7 +77,7 @@ public class MarketDataEnvironmentBuilderModule  extends AbstractModule {
     }
 
     EntityManagerFactory provideMdbEntityManagerFactory() {
-        EnvironmentTargetInfo marketDataTargetInfo = envService.getTarget(env, EnvTarget.MDB);
+        EnvironmentTargetInfo marketDataTargetInfo = envService.getTarget(env, EnvTarget.MDB).get();
         DatabaseInfo dbi = (DatabaseInfo) marketDataTargetInfo.getTargetDetails();
         //// TODO: 09.01.2017 die extra hibernate properties sollten aus dertabelle dacenvironmentconfiguration gelesen werden
         /*Properties extraHibernateProperties = new Properties();
@@ -85,7 +85,7 @@ public class MarketDataEnvironmentBuilderModule  extends AbstractModule {
         dbi.setExtraHibernateProperties(extraHibernateProperties);*/
         WrappedEntityManagerFactory emf = null;
         try {
-            emf = new WrappedEntityManagerFactory(jtaManager, emfb.buildEntityManagerFactory(EnvTarget.MDB, new ClassLoader[] {Product.class.getClassLoader()}, dbi));
+            emf = new WrappedEntityManagerFactory(jtaManager, emfb.getOrCreateEntityManagerFactory(EnvTarget.MDB, EntityManagerFactorySetup.PoolSize.SMALL, new Class[] {}, new ClassLoader[] { Product.class.getClassLoader() }, dbi));
         }
         catch (Exception ex) {
             throw new RuntimeException(ex);

@@ -6,38 +6,28 @@
     <repository>mvn:de.hf.dac.features/dac-base-features/${project.version}/xml/features</repository>
 
     <feature name="marketdata-domain-feature" version="${pom.version}">
-        <feature prerequisite="true" dependency="false">wrap</feature>
-        <feature version="${hibernate.version}" prerequisite="false" dependency="false">hibernate-envers</feature>
-        <bundle>mvn:org.hibernate.javax.persistence/hibernate-jpa-2.1-api/1.0.0.Final</bundle>
-        <!--<capability>osgi.service;effective:=active;objectClass=javax.persistence.spi.PersistenceProvider</capability>--><!--von aris -Jpacontainer benötigt-->
+        <feature version="${hibernate.version}">hibernate-envers</feature>
         <bundle>mvn:de.hf.dac.marketdataprovider.api/de.hf.dac.marketdataprovider.api.domain/${project.version}</bundle>
     </feature>
 
     <feature name="marketdata-persistence-feature" version="${pom.version}">
-        <feature>dac-springdata-feature</feature>
         <feature>dac-io-feature</feature>
+        <feature>dac-springdata-feature</feature>
         <feature>marketdata-domain-feature</feature>
         <bundle>mvn:de.hf.dac.marketdataprovider.api/de.hf.dac.marketdataprovider.api.persistence/${project.version}</bundle>
         <bundle>mvn:de.hf.dac.marketdataprovider/de.hf.dac.marketdataprovider.persistence/${project.version}</bundle>
     </feature>
 
     <feature name="marketdata-service-feature" version="${pom.version}">
-        <feature>dac-io-feature</feature>
         <feature>marketdata-persistence-feature</feature>
         <bundle>mvn:de.hf.dac.marketdataprovider.api/de.hf.dac.marketdataprovider.api.service/${project.version}</bundle>
         <bundle>mvn:de.hf.dac.marketdataprovider/de.hf.dac.marketdataprovider.service/${project.version}</bundle>
     </feature>
 
     <feature name="marketdata-restservice-feature" version="${pom.version}">
-        <feature>dac-io-routes-feature</feature>
-        <feature>rest-base-feature</feature>
+        <feature>dac-rest-base-feature</feature>
         <feature>marketdata-service-feature</feature>
-        <feature prerequisite="true" dependency="true">marketdata-persistence-feature</feature>
         <bundle  dependency="true">mvn:de.hf.dac.marketdataprovider/de.hf.dac.marketdataprovider.importer/${project.version}</bundle>
-        <bundle>mvn:de.hf.dac.api/de.hf.dac.api.base/${project.version}</bundle>
-        <bundle>mvn:de.hf.dac.api/de.hf.dac.api.rest/${project.version}</bundle>
-        <bundle>mvn:de.hf.dac.services/de.hf.dac.services.rest-resources/${project.version}</bundle>
-        <bundle>mvn:de.hf.dac/de.hf.dac.common/${project.version}</bundle>
         <bundle>mvn:de.hf.dac.marketdataprovider.api/de.hf.dac.marketdataprovider.api.application/${project.version}</bundle>
         <bundle>mvn:de.hf.dac.marketdataprovider/de.hf.dac.marketdataprovider.restservice/${project.version}</bundle>
         <bundle>mvn:de.hf.dac.marketdataprovider/de.hf.dac.marketdataprovider.application/${project.version}</bundle>
