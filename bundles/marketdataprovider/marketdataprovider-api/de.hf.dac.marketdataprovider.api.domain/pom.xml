@@ -17,6 +17,12 @@
         </dependency>
 
         <dependency>
+            <groupId>de.hf.dac.api</groupId>
+            <artifactId>de.hf.dac.api.base</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
+        <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
         </dependency>

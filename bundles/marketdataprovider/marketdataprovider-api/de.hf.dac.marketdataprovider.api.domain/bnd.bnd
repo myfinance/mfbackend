@@ -1,6 +1,7 @@
 -metatype: *
 Export-Package: \
- de.hf.dac.marketdataprovider.api.domain
+ de.hf.dac.marketdataprovider.api.domain, \
+ de.hf.dac.marketdataprovider.api.exceptions
 Import-Package: \
     javax.persistence, \
     org.hibernate.proxy, \

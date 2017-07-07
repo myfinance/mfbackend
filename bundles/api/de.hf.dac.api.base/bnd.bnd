@@ -1,6 +1,6 @@
 -dsannotations : *
 -metatype: *
 Export-Package: \
-	de.hf.dac.api.base.identity
-
+	de.hf.dac.api.base.identity, \
+    de.hf.dac.api.base.exceptions
 Bundle-SymbolicName: ${project.artifactId}

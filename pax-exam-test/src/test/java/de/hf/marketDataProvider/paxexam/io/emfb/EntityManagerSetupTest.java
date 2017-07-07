@@ -32,9 +32,11 @@ import javax.transaction.RollbackException;
 import javax.transaction.SystemException;
 import javax.transaction.UserTransaction;
 
+import de.hf.dac.api.io.efmb.tx.WrappedEntityManagerFactory;
 import de.hf.dac.api.io.env.EnvironmentService;
 import de.hf.dac.api.io.env.domain.DacEnvironmentConfiguration;
 import de.hf.dac.io.env.EnvironmentDAO;
+import de.hf.dac.marketdataprovider.api.application.EnvTarget;
 import de.hf.dac.marketdataprovider.api.persistence.dao.ProductDao;
 import de.hf.dac.marketdataprovider.persistence.ProductDaoImpl;
 import de.hf.marketDataProvider.paxexam.support.PAXExamTestSetup;
@@ -79,7 +81,12 @@ public class EntityManagerSetupTest extends PAXExamTestSetup {
         assertNotNull(envService);
 
         DatabaseInfo dbi = inMemoryH2DatabaseInfo();
-
+        /*emf = new WrappedEntityManagerFactory(jtaManager,
+            emfb.getOrCreateEntityManagerFactory(EnvTarget.MDB,
+                EntityManagerFactorySetup.PoolSize.SMALL,
+                new Class[] {},
+                new ClassLoader[] { Product.class.getClassLoader() },
+                dbi));*/
 
         //entityManager.getTransaction().begin();
 
@@ -147,7 +154,7 @@ public class EntityManagerSetupTest extends PAXExamTestSetup {
         EnvironmentDAO envDao = new EnvironmentDAO(testunit);
 
         List<DacEnvironmentConfiguration> envs = envDao.getAllEnvironments();
-        Assert.assertEquals(4, envs.size());
+        Assert.assertEquals(2, envs.size());
 
     }
 

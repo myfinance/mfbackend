@@ -7,6 +7,7 @@
 
     <feature name="marketdata-domain-feature" version="${pom.version}">
         <feature version="${hibernate.version}">hibernate-envers</feature>
+        <bundle>mvn:de.hf.dac.api/de.hf.dac.api.base/${project.version}</bundle>
         <bundle>mvn:de.hf.dac.marketdataprovider.api/de.hf.dac.marketdataprovider.api.domain/${project.version}</bundle>
     </feature>
 

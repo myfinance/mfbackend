@@ -24,12 +24,11 @@ import de.hf.dac.api.io.efmb.EntityManagerFactorySetup;
 import de.hf.dac.api.io.efmb.tx.WrappedEntityManagerFactory;
 import de.hf.dac.api.io.env.EnvironmentService;
 import de.hf.dac.api.io.env.EnvironmentTargetInfo;
-import de.hf.dac.api.io.routes.job.JobDispatcher;
-import de.hf.dac.api.io.routes.job.JobParameter;
-import de.hf.dac.api.security.RootSecurityProvider;
 import de.hf.dac.marketdataprovider.api.application.EnvTarget;
 import de.hf.dac.marketdataprovider.api.application.MarketDataEnvironment;
 import de.hf.dac.marketdataprovider.api.domain.Product;
+import de.hf.dac.marketdataprovider.api.exceptions.MDException;
+import de.hf.dac.marketdataprovider.api.exceptions.MDMsgKey;
 import de.hf.dac.marketdataprovider.api.persistence.dao.InstrumentDao;
 import de.hf.dac.marketdataprovider.api.persistence.dao.ProductDao;
 import de.hf.dac.marketdataprovider.persistence.InstrumentDaoImpl;
@@ -38,10 +37,10 @@ import de.hf.dac.marketdataprovider.api.service.ProductService;
 import de.hf.dac.marketdataprovider.api.service.InstrumentService;
 import de.hf.dac.marketdataprovider.service.InstrumentServiceImpl;
 import de.hf.dac.marketdataprovider.service.ProductServiceImpl;
-import de.hf.dac.security.restauthorization.domain.RestAuthorization;
 
 import javax.persistence.EntityManagerFactory;
 import javax.transaction.TransactionManager;
+import java.util.Optional;
 
 /**
  * Provides the application context of marketdataprovider
@@ -67,7 +66,7 @@ public class MarketDataEnvironmentBuilderModule  extends AbstractModule {
 
         bind(EntityManagerFactory.class).annotatedWith(Names.named(EnvTarget.MDB)).toInstance(provideMdbEntityManagerFactory());
 
-        bind(String.class).annotatedWith(Names.named("envID")).toInstance(new String(env));
+        bind(String.class).annotatedWith(Names.named("envID")).toInstance(env);
         bind(ProductDao.class).to(ProductDaoImpl.class);
         bind(InstrumentDao.class).to(InstrumentDaoImpl.class);
         bind(ProductService.class).to(ProductServiceImpl.class);
@@ -77,19 +76,24 @@ public class MarketDataEnvironmentBuilderModule  extends AbstractModule {
     }
 
     EntityManagerFactory provideMdbEntityManagerFactory() {
-        EnvironmentTargetInfo marketDataTargetInfo = envService.getTarget(env, EnvTarget.MDB).get();
-        DatabaseInfo dbi = (DatabaseInfo) marketDataTargetInfo.getTargetDetails();
-        //// TODO: 09.01.2017 die extra hibernate properties sollten aus dertabelle dacenvironmentconfiguration gelesen werden
-        /*Properties extraHibernateProperties = new Properties();
-        extraHibernateProperties.put("hibernate.hbm2ddl.auto", "create-drop");
-        dbi.setExtraHibernateProperties(extraHibernateProperties);*/
-        WrappedEntityManagerFactory emf = null;
-        try {
-            emf = new WrappedEntityManagerFactory(jtaManager, emfb.getOrCreateEntityManagerFactory(EnvTarget.MDB, EntityManagerFactorySetup.PoolSize.SMALL, new Class[] {}, new ClassLoader[] { Product.class.getClassLoader() }, dbi));
+        Optional<EnvironmentTargetInfo> targetInfo = envService.getTarget(env, EnvTarget.MDB);
+        if(targetInfo.isPresent()) {
+            EnvironmentTargetInfo marketDataTargetInfo = targetInfo.get();
+            DatabaseInfo dbi = (DatabaseInfo) marketDataTargetInfo.getTargetDetails();
+            // TODO: 09.01.2017 die extra hibernate properties sollten aus dertabelle dacenvironmentconfiguration gelesen werden
+            /* Properties extraHibernateProperties = new Properties();
+            extraHibernateProperties.put("hibernate.hbm2ddl.auto", "create-drop");
+            dbi.setExtraHibernateProperties(extraHibernateProperties);*/
+
+            return new WrappedEntityManagerFactory(jtaManager,
+                emfb.getOrCreateEntityManagerFactory(EnvTarget.MDB,
+                    EntityManagerFactorySetup.PoolSize.SMALL,
+                    new Class[] {},
+                    new ClassLoader[] { Product.class.getClassLoader() },
+                    dbi));
+        } else {
+            throw new MDException(MDMsgKey.NO_TARGET_CONFIG_EXCEPTION,
+                "No Config for Target " + EnvTarget.MDB + " and Environment " + env + " found.");
         }
-        catch (Exception ex) {
-            throw new RuntimeException(ex);
-        }
-        return emf;
     }
 }
