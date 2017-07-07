@@ -31,7 +31,7 @@ public class OsgiServiceBasicSetupTest extends PAXExamTestSetup {
 
     @Configuration
     public Option[] config() {
-        return new Option[] { super.configDefaults(), ioFeatures() };
+        return new Option[] { super.configDefaults(), restFeatures() };
     }
 
     @Test

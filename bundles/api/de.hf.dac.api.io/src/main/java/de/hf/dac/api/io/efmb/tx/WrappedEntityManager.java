@@ -17,6 +17,9 @@
 
 package de.hf.dac.api.io.efmb.tx;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import javax.persistence.EntityGraph;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -31,19 +34,25 @@ import javax.persistence.criteria.CriteriaDelete;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.CriteriaUpdate;
 import javax.persistence.metamodel.Metamodel;
+import javax.transaction.SystemException;
+import javax.transaction.Transaction;
 import java.util.List;
 import java.util.Map;
 
 public class WrappedEntityManager implements EntityManager {
 
+    private static final Logger LOG = LoggerFactory.getLogger(WrappedEntityManager.class);
+
     private final EntityManager entityManager;
     private final OsgiTxProvider txProvider;
     private final WrappedEntityManagerTransaction transaction;
+    private final WrappedEntityManagerFactory wrappedEntityManagerFactory;
 
-    public WrappedEntityManager(OsgiTxProvider txProvider, EntityManager entityManager) {
+    public WrappedEntityManager(OsgiTxProvider txProvider, EntityManager entityManager, WrappedEntityManagerFactory wrappedEntityManagerFactory) {
         this.txProvider = txProvider;
         this.entityManager = entityManager;
         transaction = new WrappedEntityManagerTransaction(this, txProvider);
+        this.wrappedEntityManagerFactory = wrappedEntityManagerFactory;
     }
 
     @Override
@@ -177,6 +186,11 @@ public class WrappedEntityManager implements EntityManager {
     }
 
     @Override
+    public <T> TypedQuery<T> createQuery(String s, Class<T> aClass) {
+        return entityManager.createQuery(s, aClass);
+    }
+
+    @Override
     public Query createQuery(CriteriaUpdate criteriaUpdate) {
         return entityManager.createQuery(criteriaUpdate);
     }
@@ -184,11 +198,6 @@ public class WrappedEntityManager implements EntityManager {
     @Override
     public Query createQuery(CriteriaDelete criteriaDelete) {
         return entityManager.createQuery(criteriaDelete);
-    }
-
-    @Override
-    public <T> TypedQuery<T> createQuery(String s, Class<T> aClass) {
-        return entityManager.createQuery(s, aClass);
     }
 
     @Override
@@ -217,8 +226,51 @@ public class WrappedEntityManager implements EntityManager {
     }
 
     @Override
-    public StoredProcedureQuery createNamedStoredProcedureQuery(String s) {
-        return entityManager.createNamedStoredProcedureQuery(s);
+    public void joinTransaction() {
+        entityManager.joinTransaction();
+    }
+
+    @Override
+    public <T> T unwrap(Class<T> aClass) {
+        return entityManager.unwrap(aClass);
+    }
+
+    @Override
+    public Object getDelegate() {
+        return entityManager.getDelegate();
+    }
+
+    @Override
+    public void close() {
+        try {
+            Transaction tx = txProvider.removeTxForEntityManager(this);
+            entityManager.close();
+            if (tx != null) {
+                txProvider.resumeAndJoin(this, tx);
+            }
+        } catch (SystemException e) {
+            LOG.error("Unspecified error",e);
+        }
+    }
+
+    @Override
+    public boolean isOpen() {
+        return entityManager.isOpen();
+    }
+
+    @Override
+    public EntityManagerFactory getEntityManagerFactory() {
+        return wrappedEntityManagerFactory;
+    }
+
+    @Override
+    public CriteriaBuilder getCriteriaBuilder() {
+        return entityManager.getCriteriaBuilder();
+    }
+
+    @Override
+    public Metamodel getMetamodel() {
+        return entityManager.getMetamodel();
     }
 
     @Override
@@ -237,68 +289,32 @@ public class WrappedEntityManager implements EntityManager {
     }
 
     @Override
-    public void joinTransaction() {
-        entityManager.joinTransaction();
-    }
-
-    @Override
-    public boolean isJoinedToTransaction() {
-        return false;
-    }
-
-    @Override
-    public <T> T unwrap(Class<T> aClass) {
-        return entityManager.unwrap(aClass);
-    }
-
-    @Override
-    public Object getDelegate() {
-        return entityManager.getDelegate();
-    }
-
-    @Override
-    public void close() {
-        txProvider.removeTxForEntityManager(this);
-        entityManager.close();
-    }
-
-    @Override
-    public boolean isOpen() {
-        return entityManager.isOpen();
-    }
-
-    @Override
-    public EntityManagerFactory getEntityManagerFactory() {
-        return entityManager.getEntityManagerFactory();
-    }
-
-    @Override
-    public CriteriaBuilder getCriteriaBuilder() {
-        return entityManager.getCriteriaBuilder();
-    }
-
-    @Override
-    public Metamodel getMetamodel() {
-        return entityManager.getMetamodel();
-    }
-
-    @Override
-    public <T> EntityGraph<T> createEntityGraph(Class<T> aClass) {
-            return entityManager.createEntityGraph(aClass);
-    }
-
-    @Override
-    public EntityGraph<?> createEntityGraph(String s) {
-            return entityManager.createEntityGraph(s);
-    }
-
-    @Override
     public EntityGraph<?> getEntityGraph(String s) {
-            return entityManager.getEntityGraph(s);
+        return entityManager.getEntityGraph(s);
     }
 
     @Override
     public <T> List<EntityGraph<? super T>> getEntityGraphs(Class<T> aClass) {
         return entityManager.getEntityGraphs(aClass);
+    }
+
+    @Override
+    public <T> EntityGraph<T> createEntityGraph(Class<T> aClass) {
+        return entityManager.createEntityGraph(aClass);
+    }
+
+    @Override
+    public EntityGraph<?> createEntityGraph(String s) {
+        return entityManager.createEntityGraph(s);
+    }
+
+    @Override
+    public StoredProcedureQuery createNamedStoredProcedureQuery(String s) {
+        return entityManager.createNamedStoredProcedureQuery(s);
+    }
+
+    @Override
+    public boolean isJoinedToTransaction() {
+        return entityManager.isJoinedToTransaction();
     }
 }

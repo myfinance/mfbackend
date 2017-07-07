@@ -20,6 +20,8 @@ package de.hf.dac.api.io.efmb.tx;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.BundleReference;
 import org.osgi.framework.ServiceReference;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.persistence.Cache;
 import javax.persistence.EntityGraph;
@@ -38,36 +40,33 @@ import java.util.Map;
 public class WrappedEntityManagerFactory implements EntityManagerFactory
 {
 
-    private final TransactionManager jtaManager;
-    private final ThreadLocal<OsgiTxProvider> txProvider;
+    private static final Logger LOG = LoggerFactory.getLogger(WrappedEntityManagerFactory.class);
+
+    private static ThreadLocal<OsgiTxProvider> txProvider;
     private EntityManagerFactory emfDelegate;
 
     public WrappedEntityManagerFactory(TransactionManager jtaManager, EntityManagerFactory emfDelegate) {
-        this.jtaManager = jtaManager;
         this.emfDelegate = emfDelegate;
 
-        txProvider = new ThreadLocal<OsgiTxProvider>() {
-            @Override
-            protected OsgiTxProvider initialValue() {
-                BundleContext context = ((BundleReference) WrappedEntityManagerFactory.class.getClassLoader()).getBundle().getBundleContext();
-                ServiceReference txRef = context.getServiceReference(UserTransaction.class.getName());
-                UserTransaction utx = (UserTransaction) context.getService(txRef);
-                // never timeout
-                try {
-                    utx.setTransactionTimeout(6000);
-                } catch (SystemException e) {
-                    e.printStackTrace();
-                }
-                return new OsgiTxProvider(jtaManager, utx);
+        txProvider = ThreadLocal.withInitial(() -> {
+            BundleContext context = ((BundleReference) WrappedEntityManagerFactory.class.getClassLoader()).getBundle().getBundleContext();
+            ServiceReference txRef = context.getServiceReference(UserTransaction.class.getName());
+            UserTransaction utx = (UserTransaction) context.getService(txRef);
+            // never timeout
+            try {
+                utx.setTransactionTimeout(6000);
+            } catch (SystemException e) {
+                LOG.error("Unspecified error",e);
             }
-        };
+            return new OsgiTxProvider(jtaManager, utx);
+        });
 
     }
 
     @Override
     public EntityManager createEntityManager() {
         // need to intercept this and wrap our own Entitymanager
-        return new WrappedEntityManager(txProvider.get(), emfDelegate.createEntityManager());
+        return new WrappedEntityManager(txProvider.get(), emfDelegate.createEntityManager(), this);
     }
 
     @Override
@@ -79,6 +78,7 @@ public class WrappedEntityManagerFactory implements EntityManagerFactory
     public EntityManager createEntityManager(SynchronizationType synchronizationType) {
         return emfDelegate.createEntityManager(synchronizationType);
     }
+
 
     @Override
     public EntityManager createEntityManager(SynchronizationType synchronizationType, Map map) {
@@ -121,8 +121,8 @@ public class WrappedEntityManagerFactory implements EntityManagerFactory
     }
 
     @Override
-    public void addNamedQuery(String s, Query query) {
-        emfDelegate.addNamedQuery(s, query);
+    public <T> void addNamedEntityGraph(String s, EntityGraph<T> entityGraph) {
+        emfDelegate.addNamedEntityGraph(s, entityGraph);
     }
 
     @Override
@@ -131,8 +131,7 @@ public class WrappedEntityManagerFactory implements EntityManagerFactory
     }
 
     @Override
-    public <T> void addNamedEntityGraph(String s, EntityGraph<T> entityGraph) {
-        emfDelegate.addNamedEntityGraph(s, entityGraph);
+    public void addNamedQuery(String s, Query query) {
+        emfDelegate.addNamedQuery(s, query);
     }
 }
-

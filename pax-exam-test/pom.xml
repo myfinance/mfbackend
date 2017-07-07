@@ -167,6 +167,16 @@
             <type>xml</type>
         </dependency>
 
+
+        <dependency>
+            <groupId>org.ops4j.pax.jdbc</groupId>
+            <artifactId>pax-jdbc-features</artifactId>
+            <version>${pax-jdbc.version}</version>
+            <classifier>features</classifier>
+            <type>xml</type>
+        </dependency>
+
+
         <dependency>
             <groupId>de.hf.dac.features</groupId>
             <artifactId>dac-base-features</artifactId>

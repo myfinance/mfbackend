@@ -17,6 +17,7 @@
                 <artifactId>karaf-maven-plugin</artifactId>
             </plugin>
         </plugins>
+
     </build>
 
 </project>

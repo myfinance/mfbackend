@@ -6,7 +6,7 @@
  *
  *  Project     : dac
  *
- *  File        : DacMsgKey.java
+ *  File        : DACMsgKey.java
  *
  *  Author(s)   : hf
  *
@@ -17,7 +17,7 @@
 
 package de.hf.dac.api.base.exceptions;
 
-public enum DacMsgKey implements MsgKey {
+public enum DACMsgKey implements MsgKey {
     // 10000 - 14999: system errors
     SYSTEM(10001),
     NULL_POINTER(10003),
@@ -31,6 +31,7 @@ public enum DacMsgKey implements MsgKey {
     EXECUTION_EXCEPTION(10102),
 
     // 15000 - 19999: hibernate, database, sybase
+    ENTITYMANAGER_NULL(15000),
     // 20000 - 20999: memory, caching, couchbase
     UNSPECIFIED(21000);
 
@@ -38,7 +39,7 @@ public enum DacMsgKey implements MsgKey {
 
     private final int id;
 
-    DacMsgKey(int id) {
+    DACMsgKey(int id) {
         this.id = id;
     }
 

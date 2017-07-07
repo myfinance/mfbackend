@@ -62,7 +62,7 @@ public class MsgKeyException extends RuntimeException {
         if (e instanceof MsgKeyException) {
             return (MsgKeyException) e;
         } else {
-            return new MsgKeyException(DacMsgKey.UNSPECIFIED, e);
+            return new MsgKeyException(DACMsgKey.UNSPECIFIED, e);
         }
 
     }

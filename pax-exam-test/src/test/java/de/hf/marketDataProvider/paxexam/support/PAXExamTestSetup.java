@@ -94,12 +94,17 @@ abstract public class PAXExamTestSetup {
     }
 
     public Option ioFeatures() {
-        return installFeatures("de.hf.dac.features", "dac-base-features", "dac-io-feature");
+        return installFeatures("de.hf.dac.features", "dac-base-features", "dac-base-features");
     }
 
     public Option restFeatures() {
-        return installFeatures("de.hf.dac.features", "marketdata-features", "marketdata-features", "dac-db-base-feature");
+        return installFeatures("de.hf.dac.features", "marketdata-features", "marketdata-features");
     }
+
+    public Option jdbcFeatures() {
+        return installFeatures("org.ops4j.pax.jdbc", "pax-jdbc-features", "pax-jdbc-pool-c3p0");
+    }
+
 
     public Option configDefaults() {
         return composite(
