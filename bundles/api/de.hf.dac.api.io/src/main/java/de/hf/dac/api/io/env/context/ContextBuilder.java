@@ -21,5 +21,7 @@ import com.google.inject.Module;
 
 public interface ContextBuilder {
     ApplicationContext build(String contextID, Module[] provider);
+    void clearCache();
+    void remove(String id);
 }
 

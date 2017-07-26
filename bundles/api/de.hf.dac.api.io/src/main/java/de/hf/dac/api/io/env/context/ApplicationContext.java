@@ -40,5 +40,7 @@ public interface ApplicationContext {
     <T> T getLocalInstance(Class<T> instanceClass);
 
     ApplicationContext addInstance(Class instanceInterface, Object instance);
+
+    String getId();
 }
 

@@ -20,25 +20,51 @@ package de.hf.dac.io.env;
 import com.google.inject.Module;
 import de.hf.dac.api.io.env.context.ApplicationContext;
 import de.hf.dac.api.io.env.context.ContextBuilder;
+import org.osgi.framework.BundleContext;
+import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
+import org.osgi.service.metatype.annotations.Designate;
 
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
-@Component
+@Designate(ocd = ContextBuilderConfiguration.class)
+@Component(service = { ContextBuilder.class }, name = "DAC.ContextBuilderImpl")
 public class ContextBuilderImpl implements ContextBuilder {
 
     private Map<String, ApplicationContext> contextCache = Collections.synchronizedMap(new HashMap<>());
+    private ContextBuilderConfiguration builderConfiguration;
+
+    @Activate
+    public void activate(BundleContext bc, ContextBuilderConfiguration builderConfiguration) {
+        this.builderConfiguration = builderConfiguration;
+    }
 
     @Override
-    public ApplicationContext build(String contextID, Module[] provider) {
-        if (contextCache.containsKey(contextID)) {
+    public synchronized ApplicationContext build(String contextID, Module[] provider) {
+        return buildInternal(contextID, provider, builderConfiguration.enableCaching());
+    }
+
+    private ApplicationContext buildInternal(String contextID, Module[] provider, boolean cacheEnabled) {
+        if (cacheEnabled && contextCache.containsKey(contextID)) {
             return contextCache.get(contextID);
         } else {
-            EnvironmentApplicationContext ctxt = new EnvironmentApplicationContext(provider);
-            contextCache.put(contextID, ctxt);
+            EnvironmentApplicationContext ctxt = new EnvironmentApplicationContext(contextID, provider, this);
+            if (cacheEnabled) {
+                contextCache.put(contextID, ctxt);
+            }
             return ctxt;
         }
+    }
+
+    @Override
+    public synchronized void clearCache() {
+        contextCache.clear();
+    }
+
+    @Override
+    public synchronized void remove(String id) {
+        this.contextCache.remove(id);
     }
 }

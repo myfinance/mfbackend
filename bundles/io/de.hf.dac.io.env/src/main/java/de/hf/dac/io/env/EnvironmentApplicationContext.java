@@ -19,11 +19,12 @@ package de.hf.dac.io.env;
 
 import com.google.inject.Module;
 import de.hf.dac.api.io.env.context.ApplicationContext;
+import de.hf.dac.api.io.env.context.ContextBuilder;
 
 public class EnvironmentApplicationContext extends BaseGuiceApplicationContext implements ApplicationContext {
 
-    public EnvironmentApplicationContext(Module[] providers) {
-        super(providers);
+    public EnvironmentApplicationContext(String contextID, Module[] providers, ContextBuilder contextBuilder) {
+        super(contextID, providers, contextBuilder);
     }
 
 }
