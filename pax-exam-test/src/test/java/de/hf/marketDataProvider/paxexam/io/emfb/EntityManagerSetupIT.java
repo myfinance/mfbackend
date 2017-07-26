@@ -6,7 +6,7 @@
  *
  *  Project     : marketDataProvider
  *
- *  File        : EntityManagerSetupTest.java
+ *  File        : EntityManagerSetupIT.java
  *
  *  Author(s)   : hf
  *
@@ -58,7 +58,7 @@ import static org.ops4j.pax.exam.CoreOptions.mavenBundle;
 
 
 @RunWith(PaxExam.class)
-public class EntityManagerSetupTest extends PAXExamTestSetup {
+public class EntityManagerSetupIT extends PAXExamTestSetup {
 
 
     @Inject

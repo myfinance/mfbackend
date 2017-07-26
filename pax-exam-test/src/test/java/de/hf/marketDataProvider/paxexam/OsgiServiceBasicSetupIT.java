@@ -6,7 +6,7 @@
  *
  *  Project     : marketDataProvider
  *
- *  File        : OsgiServiceBasicSetupTest.java
+ *  File        : OsgiServiceBasicSetupIT.java
  *
  *  Author(s)   : hf
  *
@@ -27,8 +27,9 @@ import org.ops4j.pax.exam.junit.PaxExam;
 import static org.junit.Assert.assertNotNull;
 
 @RunWith(PaxExam.class)
-public class OsgiServiceBasicSetupTest extends PAXExamTestSetup {
+public class OsgiServiceBasicSetupIT extends PAXExamTestSetup {
 
+    @Override
     @Configuration
     public Option[] config() {
         return new Option[] { super.configDefaults(), restFeatures() };
