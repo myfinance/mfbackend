@@ -33,7 +33,12 @@ public enum DACMsgKey implements MsgKey {
     // 15000 - 19999: hibernate, database, sybase
     ENTITYMANAGER_NULL(15000),
     // 20000 - 20999: memory, caching, couchbase
-    UNSPECIFIED(21000);
+    // 21000 - 21999: camel
+    CAMEL_START(21001),
+    CAMEL_STOP(21002),
+
+    UNSPECIFIED(30000);
+
 
     private final String globalPrefix = "DAC";
 

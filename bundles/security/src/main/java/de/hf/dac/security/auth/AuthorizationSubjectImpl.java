@@ -21,15 +21,16 @@ import de.hf.dac.api.security.AuthorizationSubject;
 import org.apache.karaf.jaas.boot.principal.RolePrincipal;
 
 import javax.security.auth.Subject;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 /**
  * Defines how to get the internal Roles from the generic subject
  */
 public class AuthorizationSubjectImpl implements AuthorizationSubject {
-    private final Subject subject;
 
     private final List<String> permissions;
     private final List<String> internalRoles;
@@ -37,25 +38,33 @@ public class AuthorizationSubjectImpl implements AuthorizationSubject {
     private final CompanyPrincipal principal;
 
     public AuthorizationSubjectImpl(Subject subject) {
-        this.subject = subject;
 
         this.internalRoles = subject.getPrincipals(RolePrincipal.class).stream().map(x -> x.getName()).collect(Collectors.toList());
 
         if(subject.getPrincipals(SimpleGroup.class).contains(SimpleGroup.class)){
-            this.permissions = Collections.list(subject.getPrincipals(SimpleGroup.class).stream()
+            Optional<SimpleGroup> simplePermissionGroup = subject.getPrincipals(SimpleGroup.class).stream()
                 .filter(x -> x.getName().equals("Permissions"))
-                .findFirst()
-                .get().members())
-                .stream()
-                .map(x -> x.getName()).collect(Collectors.toList());
+                .findFirst();
+            if(simplePermissionGroup.isPresent()){
+                this.permissions = Collections.list(simplePermissionGroup.get().members())
+                        .stream()
+                        .map(x -> x.getName())
+                        .collect(Collectors.toList());
+            } else {
+                permissions = null;
+            }
 
-            this.roles = Collections.list(subject.getPrincipals(SimpleGroup.class).stream()
+            Optional<SimpleGroup> simpleRoleGroup = subject.getPrincipals(SimpleGroup.class).stream()
                 .filter(x -> x.getName().equals("Roles"))
-                .findFirst()
-                .get().members())
-                .stream()
-                .map(x -> x.getName()).collect(Collectors.toList());
-
+                .findFirst();
+            if(simpleRoleGroup.isPresent()){
+                this.roles = Collections.list(simpleRoleGroup.get().members())
+                    .stream()
+                    .map(x -> x.getName())
+                    .collect(Collectors.toList());
+            } else {
+                roles = null;
+            }
 
             this.principal = subject.getPrincipals(CompanyPrincipal.class).iterator().next();
         } else {

@@ -17,6 +17,8 @@
 
 package de.dzbank.poet.dac.io.routes;
 
+import de.hf.dac.api.base.exceptions.DACException;
+import de.hf.dac.api.base.exceptions.DACMsgKey;
 import de.hf.dac.api.io.routes.ApplicationRouteContext;
 import org.apache.camel.CamelContext;
 import org.apache.camel.Endpoint;
@@ -49,11 +51,8 @@ public class BaseApplicationRouteContext implements ApplicationRouteContext {
 
     @Override
     public void sendMessage(String uri, Object object) {
-        if (object == null || uri == null || uri.length() == 0) {
+        if (object == null || uri == null || uri.isEmpty()) {
             LOG.info("Unable to send message. uri = {}, message = {}", uri, object);
-        }
-        if (uri == null) {
-            LOG.error("No EndpointURI provided. Unable to forward Messages {}", object);
         } else {
             Endpoint endpoint = ctxt.getEndpoint(uri);
             LOG.info("{}: Sending Job of type {} into {} ", this.contextID, object.getClass().getName(), uri);
@@ -62,17 +61,24 @@ public class BaseApplicationRouteContext implements ApplicationRouteContext {
     }
 
     @Override
-    public void stop() throws Exception {
+    public void stop() {
         producerTemplate.cleanUp();
-        producerTemplate.stop();
-        ctxt.stop();
+        try {
+            producerTemplate.stop();
+            ctxt.stop();
+        } catch(Exception ex) {
+            throw new DACException(DACMsgKey.CAMEL_STOP,"Can't stop",ex);
+        }
     }
 
     @Override
-    public void start() throws Exception {
-        ctxt.start();
+    public void start() {
+        try {
+            ctxt.start();
+        } catch(Exception ex) {
+            throw new DACException(DACMsgKey.CAMEL_START,"Can't stop",ex);
+        }
     }
 
 
 }
-

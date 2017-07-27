@@ -32,8 +32,6 @@ import java.util.Iterator;
  * @author Jens Granseuer
  */
 public class SimpleGroup extends SimplePrincipal implements Group, Cloneable, Serializable {
-    public static final String WHAT = "$Id$";
-
     private static final long serialVersionUID = 8399135191756840977L;
 
     private HashMap<Principal, Principal> members;

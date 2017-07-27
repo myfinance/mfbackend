@@ -27,7 +27,7 @@ public interface ApplicationRouteContext {
 
     void sendMessage(String uri, Object jaxbMessage);
 
-    void stop() throws Exception;
+    void stop();
 
-    void start() throws Exception;
+    void start();
 }

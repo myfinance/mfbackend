@@ -30,6 +30,7 @@ import io.swagger.client.Pair;
 import java.util.Map;
 import java.util.List;
 
+@FunctionalInterface
 public interface Authentication {
     /**
      * Apply authentication settings to header and query params.

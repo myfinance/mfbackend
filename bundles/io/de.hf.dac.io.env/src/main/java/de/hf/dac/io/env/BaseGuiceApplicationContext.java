@@ -33,9 +33,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-abstract public class BaseGuiceApplicationContext implements ApplicationContext {
+public abstract class BaseGuiceApplicationContext implements ApplicationContext {
     private final String contextID;
-    private final Module[] provider;
     private final ContextBuilder contextBuilder;
     private final Injector injector;
 
@@ -43,7 +42,6 @@ abstract public class BaseGuiceApplicationContext implements ApplicationContext 
 
     public BaseGuiceApplicationContext(String contextID, Module[] provider, ContextBuilder contextBuilder) {
         this.contextID = contextID;
-        this.provider = provider;
         this.contextBuilder = contextBuilder;
 
         List<Module> all = new ArrayList<>();
