@@ -25,11 +25,9 @@
 package de.hf.dac.marketdata.client.api;
 
 import com.sun.jersey.api.client.GenericType;
-
 import io.swagger.client.ApiException;
 import io.swagger.client.ApiClient;
 import io.swagger.client.Configuration;
-import de.hf.dac.marketdata.client.model.*;
 import io.swagger.client.Pair;
 
 

@@ -51,20 +51,4 @@ public class EnvironmentDAO {
 
         return ret;
     }
-
-    private String getConfigurationId(EntityManager em, final String environment, final String target, final String type) {
-        List<String> ret = null;
-
-        Query query = em.createQuery("SELECT DISTINCT(c.identifier) FROM DacEnvironmentConfiguration c WHERE " +
-            "c.target = :target and c.environment = :environment and c.type = :type");
-
-        query.setParameter("environment",environment);
-        query.setParameter("target",target);
-        query.setParameter("type",type);
-
-        ret = query.getResultList();
-
-        return ret.get(0);
-    }
-
 }

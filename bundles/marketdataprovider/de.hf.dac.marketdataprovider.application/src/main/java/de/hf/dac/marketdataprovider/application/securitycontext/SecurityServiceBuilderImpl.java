@@ -31,6 +31,7 @@ import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 @Component(service =  {SecurityServiceBuilder.class})
@@ -60,7 +61,7 @@ public class SecurityServiceBuilderImpl implements SecurityServiceBuilder {
 
     @Override
     public List<String> getInfo() {
-        return null;
+        return new ArrayList<>();
     }
 
 }

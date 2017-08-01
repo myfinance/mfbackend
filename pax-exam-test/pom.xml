@@ -44,29 +44,90 @@
     </profiles>
 
     <dependencies>
-
-        <dependency>
-            <groupId>de.hf.dac.api</groupId>
-            <artifactId>de.hf.dac.api.io</artifactId>
-        </dependency>
         <dependency>
             <groupId>de.hf.dac.io</groupId>
             <artifactId>de.hf.dac.io.env</artifactId>
         </dependency>
         <dependency>
+            <groupId>de.hf.dac.io</groupId>
+            <artifactId>de.hf.dac.io.configuration</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>de.hf.dac.io</groupId>
+            <artifactId>de.hf.dac.io.efmb</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>de.hf.dac.io</groupId>
+            <artifactId>de.hf.dac.io.routes</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>de.hf.dac.api</groupId>
+            <artifactId>de.hf.dac.api.io</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>de.hf.dac.api</groupId>
+            <artifactId>de.hf.dac.api.security</artifactId>
+            <version>0.8.0-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>de.hf.dac.api</groupId>
+            <artifactId>de.hf.dac.api.base</artifactId>
+            <version>0.8.0-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>de.hf.dac.api</groupId>
+            <artifactId>de.hf.dac.api.rest</artifactId>
+            <version>0.8.0-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>de.hf.dac</groupId>
+            <artifactId>de.hf.dac.common</artifactId>
+            <version>0.8.0-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>de.hf.dac</groupId>
+            <artifactId>de.hf.dac.security</artifactId>
+            <version>0.8.0-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>de.hf.dac.services</groupId>
+            <artifactId>de.hf.dac.services.rest-resources</artifactId>
+            <version>0.8.0-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>de.hf.dac.web</groupId>
+            <artifactId>de.hf.dac.web.swaggerui</artifactId>
+            <version>0.8.0-SNAPSHOT</version>
+        </dependency>
+        <dependency>
             <groupId>de.hf.dac.marketdataprovider.api</groupId>
             <artifactId>de.hf.dac.marketdataprovider.api.service</artifactId>
         </dependency>
-
+        <dependency>
+            <groupId>de.hf.dac.marketdataprovider.api</groupId>
+            <artifactId>de.hf.dac.marketdataprovider.api.application</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>de.hf.dac.marketdataprovider</groupId>
+            <artifactId>de.hf.dac.marketdataprovider.service</artifactId>
+        </dependency>
         <dependency>
             <groupId>de.hf.dac.marketdataprovider.api</groupId>
             <artifactId>de.hf.dac.marketdataprovider.api.domain</artifactId>
         </dependency>
-
-
         <dependency>
             <groupId>de.hf.dac.marketdataprovider</groupId>
             <artifactId>de.hf.dac.marketdataprovider.restservice</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>de.hf.dac.marketdataprovider</groupId>
+            <artifactId>de.hf.dac.marketdataprovider.importer</artifactId>
+            <version>0.8.0-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>de.hf.dac.marketdataprovider</groupId>
+            <artifactId>de.hf.dac.marketdataprovider.application</artifactId>
+            <version>0.8.0-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>de.hf.dac.marketdataprovider</groupId>
@@ -264,10 +325,15 @@
             <version>1.4.186</version>
         </dependency>
 
+        <!-- runtimedependencies -->
+
     </dependencies>
 
     <build>
         <plugins>
+            <!-- damit pax exam immer funktioniert auch wenn spezielle settings für maven benötigt werden (z.b.offline mit nexus
+            werden alle benötigten dependencies in einen Ordner kopiert aus dem Pax dann liest -> auch runtime-dependencies ,üssen vorhanden sein
+            wenn pax mal timeouts beim landen eines features meldet was aber in karaf läuft kann dies ein Grund sein-->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-dependency-plugin</artifactId>

@@ -30,8 +30,6 @@ public abstract class BaseDS {
 
         ServiceReference<T> sr = bundleContext.getServiceReference(clazz);
 
-        T service = bundleContext.getService(sr);
-
-        return service;
+        return bundleContext.getService(sr);
     }
 }

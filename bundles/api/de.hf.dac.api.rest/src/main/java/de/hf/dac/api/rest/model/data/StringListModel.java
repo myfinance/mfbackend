@@ -31,6 +31,7 @@ public class StringListModel extends ListModel<String> implements Serializable {
     }
 
     @ApiModelProperty(required = true)
+    @Override
     public List<String> getValues() {
         return values;
     }

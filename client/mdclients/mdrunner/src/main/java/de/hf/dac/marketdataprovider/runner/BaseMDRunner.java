@@ -35,8 +35,6 @@ import java.util.HashMap;
 
 public abstract class BaseMDRunner extends BaseRestCommandLineRunner {
 
-    public static final Logger LOG = LoggerFactory.getLogger(BaseMDRunner.class);
-
     private MDRunnerApi runnerClient;
     private String credentialsHeader;
 
@@ -72,7 +70,7 @@ public abstract class BaseMDRunner extends BaseRestCommandLineRunner {
                         Thread.sleep(timeout);
                         maxTimeWait -= timeout;
                         if (count % 30 == 0) {
-                            LOG.info("Still waiting for Job {}", start.getStatus().toString());
+                            log.info("Still waiting for Job {}", start.getStatus().toString());
                         }
                         start = client.status(uid);
                     } catch (InterruptedException e) {

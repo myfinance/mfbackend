@@ -23,10 +23,11 @@ import org.osgi.framework.ServiceReference;
 
 public class OSGIServiceLookup {
 
+    private OSGIServiceLookup(){}
+
     public static <T> T getServiceByInterface(Class<?> clazz) {
         BundleContext context = ((BundleReference) OSGIServiceLookup.class.getClassLoader()).getBundle().getBundleContext();
         ServiceReference txRef = context.getServiceReference(clazz.getName());
-        T service = (T) context.getService(txRef);
-        return service;
+        return (T) context.getService(txRef);
     }
 }

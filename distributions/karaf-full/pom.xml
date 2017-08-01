@@ -66,8 +66,6 @@
                     <startupFeatures>
                         <feature>eventadmin</feature>
                         <!--for publish subscribe between bundles. needed for transactionhandling? resposible for Unknown protocol: mvn error. Why? -> can not be an bootfeature -->
-
-                        <!--<feature>hibernate-orm</feature>-->
                     </startupFeatures>
                     <bootFeatures>
 

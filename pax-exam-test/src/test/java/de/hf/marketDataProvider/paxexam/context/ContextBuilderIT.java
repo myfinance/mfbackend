@@ -44,7 +44,7 @@ public class ContextBuilderIT extends PAXExamTestSetup {
     @Configuration
     public Option[] config() {
         return new Option[] { //
-            super.configDefaults(), ioFeatures() };
+            super.configDefaults(), baseFeatures() };
     }
 
     @Test

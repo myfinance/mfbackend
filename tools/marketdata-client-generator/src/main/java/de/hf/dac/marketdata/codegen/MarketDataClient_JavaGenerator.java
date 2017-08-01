@@ -31,8 +31,6 @@ import java.util.TreeMap;
 
 public class MarketDataClient_JavaGenerator  extends JavaClientCodegen implements CodegenConfig {
 
-    // source folder where to write the files
-    protected String sourceFolder = "src/main/java";
     protected String apiVersion = "1.0.0";
 
     /**
@@ -67,7 +65,8 @@ public class MarketDataClient_JavaGenerator  extends JavaClientCodegen implement
 
     public MarketDataClient_JavaGenerator() {
         super();
-
+        // source folder where to write the files
+        sourceFolder = "src/main/java";
         // set the output folder here
         outputFolder = "generated-code/MarketDataClient_Java";
 

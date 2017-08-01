@@ -50,7 +50,6 @@ import javax.ws.rs.core.Response;
 
 @Api(tags = "Jobs")
 public class MDRunnerResource extends BaseSecuredResource<OpType,OpLevel> {
-    private static final Logger LOG = LoggerFactory.getLogger("MDRunnerResource");
     final protected static Gson gson = new Gson();
     private final MDRunnerJobTypeContext ctx;
 

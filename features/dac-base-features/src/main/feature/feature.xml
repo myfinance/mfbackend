@@ -16,7 +16,6 @@
 
     <feature name="dac-spring-feature" version="${spring.version}">
         <feature version="${hibernate.version}">hibernate-envers</feature>
-        <feature>jpa</feature>
         <bundle>mvn:org.apache.servicemix.bundles/org.apache.servicemix.bundles.spring-core/${spring.version}</bundle>
         <bundle>mvn:org.apache.servicemix.bundles/org.apache.servicemix.bundles.spring-beans/${spring.version}</bundle>
         <bundle>mvn:org.apache.servicemix.bundles/org.apache.servicemix.bundles.spring-expression/${spring.version}</bundle>
@@ -34,13 +33,6 @@
         <bundle>mvn:org.springframework.data/spring-data-jpa/${spring-data.version}</bundle>
     </feature>
 
-    <feature name="postgres" version="${pom.version}">
-        <feature>transaction</feature>
-        <bundle>mvn:org.osgi/org.osgi.service.jdbc/1.0.0</bundle>
-        <bundle>mvn:org.postgresql/postgresql/${postgresql.version}</bundle>
-
-    </feature>
-
     <feature name="dac-guice" version="${guice.version}">
         <bundle>mvn:org.apache.servicemix.bundles/org.apache.servicemix.bundles.javax-inject/1_2</bundle>
         <bundle>mvn:org.apache.servicemix.bundles/org.apache.servicemix.bundles.aopalliance/${aopalliance.version}</bundle>
@@ -50,27 +42,30 @@
 
     <feature name="dac-db-base-feature" version="${pom.version}">
         <feature>wrap</feature>
-        <feature>postgres</feature>
         <feature>scr</feature><!--for DS -->
         <feature>pax-jdbc-pool-c3p0</feature>
         <capability>
             osgi.service;objectClass=org.ops4j.pax.jdbc.pool.common.PooledDataSourceFactory
         </capability>
-        <!--<feature prerequisite="true">pax-jdbc-pool-dbcp2</feature>-->
-        <bundle>mvn:org.hibernate.javax.persistence/hibernate-jpa-2.1-api/1.0.0.Final</bundle>
-        <feature version="${hibernate.version}">hibernate-envers</feature>
+        <feature>hibernate-orm</feature>
         <bundle>mvn:com.h2database/h2/${h2.version}</bundle>
+        <bundle>mvn:org.postgresql/postgresql/${postgresql.version}</bundle>
         <bundle>mvn:org.jboss.narayana.osgi/narayana-osgi-jta/${narayana.version}</bundle>
-
         <capability>osgi.service;effective:=active;objectClass=org.osgi.service.jdbc.DataSourceFactory</capability>
     </feature>
 
-    <feature name="dac-io-jpa-feature" version="${pom.version}">
-        <feature>dac-db-base-feature</feature>
+    <feature name="dac-io-api-feature" version="${pom.version}">
         <feature>dac-guice</feature>
-        <bundle>mvn:org.eclipse.persistence/javax.persistence/${javax-persistence.version}</bundle>
+        <feature>dac-db-base-feature</feature>
         <bundle>mvn:org.apache.commons/commons-lang3/${apache-commons-lang3.version}</bundle>
+        <bundle>mvn:de.hf.dac.api/de.hf.dac.api.base/${project.version}</bundle>
+        <bundle>mvn:org.eclipse.persistence/javax.persistence/${javax-persistence.version}</bundle>
         <bundle>mvn:de.hf.dac.api/de.hf.dac.api.io/${project.version}</bundle>
+    </feature>
+
+
+    <feature name="dac-io-jpa-feature" version="${pom.version}">
+        <feature>dac-io-api-feature</feature>
         <bundle>mvn:de.hf.dac.io/de.hf.dac.io.efmb/${project.version}</bundle>
         <bundle>mvn:de.hf.dac.io/de.hf.dac.io.env/${project.version}</bundle>
         <bundle>mvn:de.hf.dac.io/de.hf.dac.io.configuration/${project.version}</bundle>

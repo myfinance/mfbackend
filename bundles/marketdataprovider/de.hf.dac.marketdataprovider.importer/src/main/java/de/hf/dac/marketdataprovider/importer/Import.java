@@ -24,6 +24,10 @@ public class Import {
     public static final Logger LOG = LoggerFactory.getLogger(Import.class);
 
     public void run(ImportRunnerParameter params) {
-        LOG.info("import...");
+        if(params!=null) {
+            LOG.info("import... with params:"+params.toString());
+        } else {
+            LOG.info("import... ");
+        }
     }
 }

@@ -70,18 +70,13 @@ import org.slf4j.LoggerFactory;
  *
  */
 public abstract class BaseLoginModule extends AbstractKarafLoginModule implements LoginModule {
-//public abstract class BaseLoginModule implements LoginModule {
-    public static final String WHAT = "$Id$";
     private static final Logger LOG = LoggerFactory.getLogger(BaseLoginModule.class);
 
     protected static final String CONTEXT_LOGIN_NAME = "javax.security.auth.login.name";
-    protected static final String CONTEXT_LOGIN_PASSWORD = "javax.security.auth.login.password";
+    protected static final String CONTEXT_LOGIN_PW = "javax.security.auth.login.password";
     private static final String PROVIDER_URL = "java.naming.provider.url";
 
-    protected Subject subject;
-    protected CallbackHandler callbackHandler;
     protected Map<String, ?> sharedState;
-    protected Map<String, ?> options;
     protected boolean loginSuccess;
 
     private String principalClassName;
@@ -137,7 +132,7 @@ public abstract class BaseLoginModule extends AbstractKarafLoginModule implement
         loginSuccess = false;
         if (useFirstPass) {
             Object identity = sharedState.get(CONTEXT_LOGIN_NAME);
-            Object credential = sharedState.get(CONTEXT_LOGIN_PASSWORD);
+            Object credential = sharedState.get(CONTEXT_LOGIN_PW);
             if (identity != null & credential != null) {
                 loginSuccess = true;
             } else {

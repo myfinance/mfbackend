@@ -22,6 +22,9 @@ import io.swagger.annotations.ApiModelProperty;
 
 public abstract class ModelBase implements Storable {
 
+    protected String url = "";
+    protected String id;
+
     @ApiModelProperty(required = true)
     public String getUrl() {
         return url;
@@ -31,13 +34,9 @@ public abstract class ModelBase implements Storable {
         this.url = url;
     }
 
-    protected String url = "";
-
     public void setId(String id) {
         this.id = id;
     }
-
-    protected String id;
 
     @ApiModelProperty(required = true)
     public String getId() {

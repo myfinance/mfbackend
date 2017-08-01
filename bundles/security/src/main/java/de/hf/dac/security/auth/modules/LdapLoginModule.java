@@ -52,12 +52,10 @@ import org.slf4j.LoggerFactory;
  *
  */
 public class LdapLoginModule extends BaseLoginModule {
-    public static final String WHAT = "$Id$";
-
     private static final Logger LOG = LoggerFactory.getLogger(LdapLoginModule.class);
 
     /* module options */
-    private final static String OPT_ALLOW_EMPTY_PASSWORDS = "allowEmptyPasswords";
+    private final static String OPT_ALLOW_EMPTY_PWS = "allowEmptyPasswords";
     private final static String OPT_ROLE_GROUP = "roleGroup";
     private final static String OPT_PERMISSION_GROUP = "permissionGroup";
 
@@ -91,8 +89,6 @@ public class LdapLoginModule extends BaseLoginModule {
     private String roleNameAttributeID = null;
     private boolean roleAttributeIsDN = false;
     private boolean checkRolesAssigned = true;
-
-    private boolean debug;
 
     private Principal identity = null;
     private Group roles = null;
@@ -145,7 +141,7 @@ public class LdapLoginModule extends BaseLoginModule {
                 throw new FailedLoginException("Failed to create principal: " + e.getMessage());
             }
 
-            Object password = sharedState.get(CONTEXT_LOGIN_PASSWORD);
+            Object password = sharedState.get(CONTEXT_LOGIN_PW);
             char[] credential = null;
             if (password instanceof char[]) {
                 credential = (char[]) password;
@@ -203,7 +199,7 @@ public class LdapLoginModule extends BaseLoginModule {
             if (getStorePass()) {
                 // add username and password to the shared state map
                 ((Map) sharedState).put(CONTEXT_LOGIN_NAME, username);
-                ((Map) sharedState).put(CONTEXT_LOGIN_PASSWORD, password.toCharArray());
+                ((Map) sharedState).put(CONTEXT_LOGIN_PW, password.toCharArray());
             }
             super.loginSuccess = true;
         }
@@ -300,7 +296,7 @@ public class LdapLoginModule extends BaseLoginModule {
             // See if this is an empty password that should be disallowed
             if (password.length() == 0) {
                 // Check for an allowEmptyPasswords option
-                boolean allowEmptyPasswords = parseBooleanOption(OPT_ALLOW_EMPTY_PASSWORDS);
+                boolean allowEmptyPasswords = parseBooleanOption(OPT_ALLOW_EMPTY_PWS);
 
                 if (allowEmptyPasswords == false) {
                     if (debug) {

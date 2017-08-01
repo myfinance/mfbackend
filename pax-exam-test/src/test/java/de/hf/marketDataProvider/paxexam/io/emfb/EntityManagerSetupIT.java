@@ -17,108 +17,70 @@
 
 package de.hf.marketDataProvider.paxexam.io.emfb;
 
-import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.List;
-
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.TypedQuery;
-import javax.transaction.HeuristicMixedException;
-import javax.transaction.HeuristicRollbackException;
-import javax.transaction.NotSupportedException;
-import javax.transaction.RollbackException;
-import javax.transaction.SystemException;
 import javax.transaction.TransactionManager;
 
+import de.hf.dac.api.io.efmb.DatabaseInfo;
+import de.hf.dac.api.io.efmb.EntityManagerFactorySetup;
 import de.hf.dac.api.io.efmb.tx.WrappedEntityManagerFactory;
 import de.hf.dac.api.io.env.EnvironmentService;
 import de.hf.dac.marketdataprovider.api.application.EnvTarget;
+import de.hf.dac.marketdataprovider.api.domain.Product;
 import de.hf.dac.marketdataprovider.api.persistence.dao.ProductDao;
 import de.hf.dac.marketdataprovider.persistence.ProductDaoImpl;
 import de.hf.marketDataProvider.paxexam.support.PAXExamTestSetup;
-import de.hf.dac.api.io.efmb.DatabaseInfo;
-import de.hf.dac.api.io.efmb.EntityManagerFactorySetup;
-import de.hf.dac.marketdataprovider.api.domain.Product;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.ops4j.pax.exam.Configuration;
 import org.ops4j.pax.exam.Option;
 import org.ops4j.pax.exam.junit.PaxExam;
-import org.ops4j.pax.exam.util.Filter;
 import org.osgi.framework.Bundle;
-import org.osgi.framework.BundleContext;
-import org.osgi.framework.FrameworkUtil;
-import org.osgi.framework.ServiceReference;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import static org.junit.Assert.assertNotNull;
-import static org.ops4j.pax.exam.CoreOptions.mavenBundle;
-
 
 @RunWith(PaxExam.class)
 public class EntityManagerSetupIT extends PAXExamTestSetup {
 
+    @Inject
+    EnvironmentService envService;
 
     @Inject
     EntityManagerFactorySetup emfb;
 
     @Inject
-    EnvironmentService envService;
-
-    //@Inject
-    //@Filter(timeout = 60000)
     TransactionManager jtaManager;
 
 
     @Configuration
     public Option[] config() {
-        return new Option[] { //
-            super.configDefaults(),
-            ioFeatures(), restFeatures(), jdbcFeatures()
-        , mavenBundle("org.jboss.narayana.osgi", "narayana-osgi-jta", "5.6.2.Final")
-
+        return new Option[] {
+            super.configDefaults(), persistenceFeatures()
         };
     }
 
 
     @Test
-    public void testWriteDatabase()
-        throws SQLException, SystemException, NotSupportedException, HeuristicRollbackException, HeuristicMixedException, RollbackException {
-        assertNotNull(emfb);
-        assertNotNull(envService);
-        ServiceReference<TransactionManager> transactionRef=null;
+    public void testWriteDatabase() throws Exception{
+
+        assertNotNull(bundleContext);
+
         for(Bundle b : bundleContext.getBundles()){
             System.out.println("bundle:"+b.toString());
-            if(b.toString().startsWith("narayana-osgi-jta")){
-                for(ServiceReference s : b.getRegisteredServices()){
-                    //System.out.println("service:"+s.toString());
-                    if(s.toString().contains("javax.transaction.TransactionManager")){
-                        transactionRef=s;
-                    }
-                }
-            }
         }
-//todo warum wird der Transactionmanager nicht gefunden? Es sieht so aus als ob c3po etc gar nicht geladen werden
 
-        BundleContext thisBundleContext = FrameworkUtil.getBundle(this.getClass()).getBundleContext();
+        Assert.assertNotNull(envService);
+        Assert.assertNotNull(emfb);
+        Assert.assertNotNull(jtaManager);
 
-        ServiceReference<TransactionManager> transactionRef2;
-        System.out.println("name:"+TransactionManager.class.getName());
-        transactionRef2=bundleContext.getServiceReference(TransactionManager.class);
-        transactionRef2=thisBundleContext.getServiceReference(TransactionManager.class);
-        Object jtaManagerRaw= bundleContext.getService(transactionRef);
-        //OsgiTransactionManager jtaManagerRaw=(OsgiTransactionManager) bundleContext.getService(transactionRef);
-        //assertNotNull(transactionRef2);
+        DatabaseInfo dbi = inMemoryH2DatabaseInfo();
 
-        //jtaManager = (OsgiTransactionManager)jtaManagerRaw;
-         //   .getServiceReference(clazz.getName())
-
-        /*jtaManager=getService(javax.transaction.TransactionManager.class);
-        assertNotNull(jtaManager);
-*/
-        /*DatabaseInfo dbi = inMemoryH2DatabaseInfo();
         EntityManagerFactory emf = new WrappedEntityManagerFactory(jtaManager,
             emfb.getOrCreateEntityManagerFactory(EnvTarget.MDB,
                 EntityManagerFactorySetup.PoolSize.SMALL,
@@ -144,16 +106,14 @@ public class EntityManagerSetupIT extends PAXExamTestSetup {
         TypedQuery<Product> query = entityManager.createNamedQuery(Product.findAll, Product.class);
         List newproducts=query.getResultList();
 
-        Assert.assertEquals(2, newproducts.size());*/
+        Assert.assertEquals(2, newproducts.size());
 
     }
 
-    //@Test
-    public void testDaoTest()
-        throws SQLException, SystemException, NotSupportedException, HeuristicRollbackException, HeuristicMixedException, RollbackException {
+    @Test
+    public void testDaoTest() throws Exception {
         assertNotNull(emfb);
         assertNotNull(envService);
-        //jtaManager=getService(TransactionManager.class);
         assertNotNull(jtaManager);
 
         DatabaseInfo dbi = inMemoryH2DatabaseInfo();
@@ -179,15 +139,12 @@ public class EntityManagerSetupIT extends PAXExamTestSetup {
 
         List<Product> productsResult = productDao.listProducts();
         Assert.assertEquals(2, productsResult.size());
-
     }
 
-    //@Test
-    public void testDaoRepositoryTest()
-        throws SQLException, SystemException, NotSupportedException, HeuristicRollbackException, HeuristicMixedException, RollbackException {
+    @Test
+    public void testDaoRepositoryTest() throws Exception {
         assertNotNull(emfb);
         assertNotNull(envService);
-        //jtaManager=getService(TransactionManager.class);
         assertNotNull(jtaManager);
 
         DatabaseInfo dbi = inMemoryH2DatabaseInfo();
@@ -214,5 +171,6 @@ public class EntityManagerSetupIT extends PAXExamTestSetup {
         Assert.assertEquals(2, productsResult.size());
 
     }
+
 }
 

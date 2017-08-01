@@ -68,9 +68,10 @@ public class JobDispatchHandler {
         String routingID = job.getRoutingID();
         if (baseJobDispatcher.getRoutingidToHandlerMap().containsKey(routingID)) {
             JobHandler handler = baseJobDispatcher.getRoutingidToHandlerMap().get(routingID);
-            String name = handler.getClass().getName();
-            LOG.info("Found {} to handle {} of {}", name, routingID, job.getClass().getName());
+
             if (handler != null) {
+                String name = handler.getClass().getName();
+                LOG.info("Found {} to handle {} of {}", name, routingID, job.getClass().getName());
                 String inboxUrl = handler.getInbox(routingID);
                 if (baseJobDispatcher.getRoutingContext() != null) {
                     // simply putting into next Camel Route

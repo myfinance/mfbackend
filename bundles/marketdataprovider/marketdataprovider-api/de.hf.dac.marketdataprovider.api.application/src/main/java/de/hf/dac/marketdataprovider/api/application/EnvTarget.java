@@ -22,4 +22,6 @@ public final class EnvTarget {
     public static final String MDB = "mdb";
     //security-config
     public static final String SDB = "sdb";
+
+    private EnvTarget(){}
 }

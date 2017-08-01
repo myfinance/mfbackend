@@ -18,17 +18,23 @@
 package de.hf.marketDataProvider.paxexam.support;
 
 import de.hf.dac.api.io.efmb.DatabaseInfo;
+import org.mockito.Mockito;
 import org.ops4j.pax.exam.Configuration;
 import org.ops4j.pax.exam.Option;
 import org.ops4j.pax.exam.karaf.options.KarafDistributionOption;
+import org.ops4j.pax.exam.util.PathUtils;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.inject.Inject;
 import java.io.File;
+import java.io.IOException;
 
 import static org.ops4j.pax.exam.CoreOptions.composite;
 import static org.ops4j.pax.exam.CoreOptions.maven;
+import static org.ops4j.pax.exam.CoreOptions.mavenBundle;
 import static org.ops4j.pax.exam.CoreOptions.vmOption;
 import static org.ops4j.pax.exam.CoreOptions.when;
 import static org.ops4j.pax.exam.karaf.options.KarafDistributionOption.features;
@@ -36,6 +42,9 @@ import static org.ops4j.pax.exam.karaf.options.KarafDistributionOption.karafDist
 import static org.ops4j.pax.exam.karaf.options.KarafDistributionOption.keepRuntimeFolder;
 
 abstract public class PAXExamTestSetup {
+    protected static final Logger LOG = LoggerFactory.getLogger(PAXExamTestSetup.class);
+
+    public static final String TARGET_PAXEXAM_UNPACK = "target/paxexam/unpack/";
 
     @Inject
     protected BundleContext bundleContext;
@@ -57,13 +66,16 @@ abstract public class PAXExamTestSetup {
         return when(System.getProperty("PAXDEBUG") != null).useOptions(composite(vmOption("-Xrunjdwp:transport=dt_socket,server=y,suspend=y,address=5005")));
     }
 
+    /**
+     * even if not used in the subclass the bundle with DatabaseInfo has to be loaded, otherwise we get an class not found exception.
+     * @return DatabaseInfo
+     */
     protected DatabaseInfo postgresDatabaseInfo() {
 
         DatabaseInfo dbi = new DatabaseInfo("jdbc:postgresql://localhost:5432/marketdata","postgres", "vulkan", "org.postgresql.Driver");
         dbi.setDialect("org.hibernate.dialect.PostgreSQL82Dialect");
         return dbi;
     }
-
     protected DatabaseInfo inMemoryH2DatabaseInfo() {
 
         DatabaseInfo dbi = new DatabaseInfo("jdbc:h2:mem:test;DATABASE_TO_UPPER=FALSE;MVCC=TRUE;INIT=CREATE SCHEMA IF NOT EXISTS dbo;","sa", "sa", "org.h2.Driver");
@@ -73,16 +85,26 @@ abstract public class PAXExamTestSetup {
         return dbi;
     }
 
+
     public Option karafContainerSetup() {
-        return composite(karafDistributionConfiguration().frameworkUrl(maven().groupId("org.apache.karaf").artifactId("apache-karaf").versionAsInProject().type("zip"))
-                .useDeployFolder(false).unpackDirectory(new File("target/paxexam/unpack/")),
+        String localRepo = "file:"+new File(PathUtils.getBaseDir() + "/target/dependency").getAbsolutePath()+"@id=localAtTarget";
+        System.setProperty("org.ops4j.pax.url.mvn.localRepository", localRepo);
+        System.setProperty("org.ops4j.pax.url.mvn.defaultRepositories", localRepo);
+
+        return composite(
+            karafDistributionConfiguration()
+                .frameworkUrl(maven().groupId("org.apache.karaf").artifactId("apache-karaf").type("zip").versionAsInProject()).useDeployFolder(false)
+                .unpackDirectory(new File(TARGET_PAXEXAM_UNPACK)),
+            KarafDistributionOption.editConfigurationFilePut("etc/system.properties", "org.ops4j.pax.url.mvn.localRepository", localRepo),
+            KarafDistributionOption.editConfigurationFilePut("etc/system.properties", "org.ops4j.pax.url.mvn.defaultRepositories ", localRepo),
 
             KarafDistributionOption.editConfigurationFilePut("etc/org.ops4j.pax.url.mvn.cfg", "org.ops4j.pax.url.mvn.proxySupport", "true"),
             KarafDistributionOption.editConfigurationFilePut("etc/org.ops4j.pax.web.cfg", "org.osgi.service.http.port", "8765"),
             KarafDistributionOption.editConfigurationFilePut("etc/org.apache.karaf.management.cfg", "rmiRegistryPort", "8768"),
             KarafDistributionOption.editConfigurationFilePut("etc/org.apache.karaf.management.cfg", "rmiServerPort", "8769"),
             KarafDistributionOption.editConfigurationFilePut("etc/org.apache.karaf.shell.cfg", "sshPort", "8770"),
-            keepRuntimeFolder());
+            keepRuntimeFolder()
+        );
     }
 
     protected Option installFeatures(String groupId, String artefactId, String... names) {
@@ -93,26 +115,32 @@ abstract public class PAXExamTestSetup {
         return installFeatures("org.apache.karaf.features", "standard", "standard", "eventadmin", "http", "scr", "webconsole", "wrap", "war");
     }
 
-    public Option ioFeatures() {
+    public Option ioJpaFeatures() {
+        return installFeatures("de.hf.dac.features", "dac-base-features", "dac-io-jpa-feature");
+    }
+
+    public Option baseFeatures() {
         return installFeatures("de.hf.dac.features", "dac-base-features", "dac-base-features");
     }
 
-    public Option restFeatures() {
+    public Option persistenceFeatures() {
+        return installFeatures("de.hf.dac.features", "marketdata-features", "marketdata-persistence-feature");
+    }
+
+    public Option marketdataFeatures() {
         return installFeatures("de.hf.dac.features", "marketdata-features", "marketdata-features");
     }
-
-    public Option jdbcFeatures() {
-        return installFeatures("org.ops4j.pax.jdbc", "pax-jdbc-features", "pax-jdbc-pool-c3p0");
-    }
-
 
     public Option configDefaults() {
         return composite(
             getDebugOption(),
+            //mavenBundle("org.mockito", "mockito-all").versionAsInProject(),
             // extract container into target directory
             karafContainerSetup(), //
             // deploy standard karaf Fetures
-            karafStandardFeatures()); //
+            karafStandardFeatures()
+            , ioJpaFeatures()
+        ); //
     }
 }
 

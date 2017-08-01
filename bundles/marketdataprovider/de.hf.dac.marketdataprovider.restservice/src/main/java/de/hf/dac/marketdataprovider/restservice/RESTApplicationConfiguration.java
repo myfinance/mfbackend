@@ -39,7 +39,6 @@ public @interface RESTApplicationConfiguration {
     String swaggerVersion() default "1.1";
 
     // If empty allow any header - if filled with comma separated origins allow only those
-    //String corsAllowedHeaders() default "Origin,Accept,Authorization,X-Requested-With,Content-Type,Access-Control-Request-Method,Access-Control-Request-Headers";
     String corsAllowedHeaders() default "";
 
     // If empty allow any origin - if filled with comma separated origins allow only those

@@ -40,14 +40,13 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import java.sql.SQLException;
 import java.util.List;
 
 @Path("/runner")
 @Api(value = "MDRunner") //must start with capital letter for client generation
 public class MDRunnerService extends TopLevelSecuredResource<OpType,OpLevel> {
 
-    final protected static Gson gson = new Gson();
+    protected static final Gson gson = new Gson();
     private RunnerRoot root;
 
     @Override

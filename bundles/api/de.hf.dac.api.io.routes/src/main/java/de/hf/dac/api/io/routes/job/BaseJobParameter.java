@@ -19,7 +19,7 @@ package de.hf.dac.api.io.routes.job;
 
 import java.util.Date;
 
-abstract public class BaseJobParameter implements JobParameter {
+public abstract class BaseJobParameter implements JobParameter {
 
     protected String routingID;
     protected String resultRoutingID;

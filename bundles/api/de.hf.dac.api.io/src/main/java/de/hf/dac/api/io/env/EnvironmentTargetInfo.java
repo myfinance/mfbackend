@@ -28,6 +28,19 @@ public class EnvironmentTargetInfo<T> {
 
     private T targetDetails;
 
+    public EnvironmentTargetInfo(String envName, String targetName, String targetType) {
+        this.envName = envName;
+        this.targetName = targetName;
+        this.targetType = targetType;
+    }
+
+    public EnvironmentTargetInfo(String envName, String targetName, String targetType, T targetDetails) {
+        this.envName = envName;
+        this.targetName = targetName;
+        this.targetType = targetType;
+        this.targetDetails = targetDetails;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o)
@@ -44,19 +57,6 @@ public class EnvironmentTargetInfo<T> {
     @Override
     public int hashCode() {
         return new HashCodeBuilder(17, 37).append(envName).append(targetName).toHashCode();
-    }
-
-    public EnvironmentTargetInfo(String envName, String targetName, String targetType) {
-        this.envName = envName;
-        this.targetName = targetName;
-        this.targetType = targetType;
-    }
-
-    public EnvironmentTargetInfo(String envName, String targetName, String targetType, T targetDetails) {
-        this.envName = envName;
-        this.targetName = targetName;
-        this.targetType = targetType;
-        this.targetDetails = targetDetails;
     }
 
     public String getEnvName() {
