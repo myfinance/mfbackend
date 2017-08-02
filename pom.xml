@@ -46,7 +46,7 @@
 
         <apache-commons-lang3.version>3.4</apache-commons-lang3.version><!--Equalsbuilder wirklich benötigt? Was kann das Paket noch-->
         <felix-commands.version>0.4.0</felix-commands.version>
-        <hawtio.version>1.5.0</hawtio.version>
+        <hawtio.version>1.5.3</hawtio.version>
         <guice.version>4.1.0</guice.version>
         <guava.version>19.0</guava.version> <!--von guice benötigt in version > 19-->
         <guava-swagger.version>18.0</guava-swagger.version>
