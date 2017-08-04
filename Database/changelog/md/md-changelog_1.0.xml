@@ -1,0 +1,70 @@
+<?xml version="1.1" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.5.xsd">
+    <preConditions>
+        <or>
+            <dbms type="postgresql" />
+            <dbms type="h2" />
+        </or>
+    </preConditions>
+    <changeSet author="hf" id="md.1.0.1">
+        <createTable tableName="md_endofdayprice">
+            <column name="id" type="INT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="currencyid" type="INT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="dayofprice" type="date"/>
+            <column name="endofdayprice" type="FLOAT8">
+                <constraints nullable="false"/>
+            </column>
+            <column name="lastchanged" type="TIMESTAMP(6) WITHOUT TIME ZONE"/>
+            <column name="instrument_id" type="INT"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="hf" id="md.1.0.2">
+        <createTable tableName="md_instrument">
+            <column name="id" type="INT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="description" type="VARCHAR(255)"/>
+            <column name="hometradingcurrencyid" type="INT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="instrumenttypeid" type="INT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="isin" type="VARCHAR(255)"/>
+            <column name="sourceid" type="INT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="ticker" type="VARCHAR(255)"/>
+            <column name="treelastchanged" type="TIMESTAMP(6) WITHOUT TIME ZONE"/>
+            <column name="wkn" type="VARCHAR(255)"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="hf" id="md.1.0.3">
+        <createTable tableName="md_product">
+            <column name="id" type="INT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="description" type="VARCHAR(255)"/>
+            <column name="image_url" type="VARCHAR(255)"/>
+            <column name="price" type="numeric(19, 2)"/>
+            <column name="product_id" type="VARCHAR(255)"/>
+            <column name="version" type="INT"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="hf" id="md.1.0.4">
+        <addPrimaryKey columnNames="id" constraintName="endofdayprice_pkey" tableName="md_endofdayprice"/>
+    </changeSet>
+    <changeSet author="hf" id="md.1.0.5">
+        <addPrimaryKey columnNames="id" constraintName="instrument_pkey" tableName="md_instrument"/>
+    </changeSet>
+    <changeSet author="hf" id="md.1.0.6">
+        <addPrimaryKey columnNames="id" constraintName="product_pkey" tableName="md_product"/>
+    </changeSet>
+    <changeSet author="hf" id="md.1.0.7">
+        <addForeignKeyConstraint baseColumnNames="instrument_id" baseTableName="md_endofdayprice" constraintName="fkn0bxwo6ph4wmalhd8f6s6tqjm" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="md_instrument"/>
+    </changeSet>
+</databaseChangeLog>

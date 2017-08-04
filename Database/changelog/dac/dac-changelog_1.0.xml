@@ -10,9 +10,9 @@
             <dbms type="postgresql" />
             <dbms type="h2" />
         </or>
-    </preConditions>    
-    <changeSet id="1.0.1" author="hf">
-        <createTable tableName="dacenvironmentconfiguration">
+    </preConditions>
+    <changeSet author="hf" id="dac.1.0.1">
+        <createTable tableName="dac_environmentconfiguration">
             <column name="environment" type="VARCHAR(20)">
                 <constraints nullable="false"/>
             </column>
@@ -28,22 +28,19 @@
             <column name="jdbcurl" type="VARCHAR(100)"/>
             <column name="jndiurl" type="VARCHAR(50)"/>
         </createTable>
-        <addPrimaryKey columnNames="environment, target"
-                       constraintName="pk_envconv"
-                       tableName="dacenvironmentconfiguration"/>
     </changeSet>
-    <changeSet id="1.0.2" author="hf">
-        <createTable tableName="restauthorization">
-            <column name="restApp" type="VARCHAR(25)">
+    <changeSet author="hf" id="dac.1.0.2">
+        <createTable tableName="dac_restauthorization">
+            <column name="restapp" type="VARCHAR(25)">
                 <constraints nullable="false"/>
             </column>
             <column name="resource" type="VARCHAR(25)">
                 <constraints nullable="false"/>
             </column>
-            <column name="operationType" type="VARCHAR(10)">
+            <column name="restoptype" type="VARCHAR(10)">
                 <constraints nullable="false"/>
             </column>
-            <column name="restIdPattern" type="VARCHAR(50)">
+            <column name="restidpattern" type="VARCHAR(50)">
                 <constraints nullable="false"/>
             </column>
             <column name="permissions" type="VARCHAR(200)">
@@ -58,10 +55,12 @@
             <column name="users" type="VARCHAR(200)">
                 <constraints nullable="false"/>
             </column>
-
         </createTable>
-        <addPrimaryKey columnNames="restApp, resource, restIdPattern, restOpType, operations"
-                       constraintName="pk_restauth"
-                       tableName="restauthorization"/>
+    </changeSet>
+    <changeSet author="hf" id="dac.1.0.3">
+        <addPrimaryKey columnNames="environment, target" constraintName="pk_envconv" tableName="dac_environmentconfiguration"/>
+    </changeSet>
+    <changeSet author="hf" id="dac.1.0.4">
+        <addPrimaryKey columnNames="restapp, resource, restidpattern, restoptype, operations" constraintName="pk_restauth" tableName="dac_restauthorization"/>
     </changeSet>
 </databaseChangeLog>

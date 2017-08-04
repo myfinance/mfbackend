@@ -17,9 +17,10 @@
 
 package de.hf.dac.api.io.routes.job;
 
+import java.io.Serializable;
 import java.util.Date;
 
-public class BaseJobResult<T> extends BaseRoutable implements JobResult {
+public class BaseJobResult<T extends Serializable> extends BaseRoutable implements JobResult {
 
     private final T resultData;
     private Date start;
@@ -32,12 +33,12 @@ public class BaseJobResult<T> extends BaseRoutable implements JobResult {
         setMessage(this.resultData != null ? resultData.toString() : null);
     }
 
-    private void setMessage(String s) {
-        this.message = s;
-    }
-
     public BaseJobResult(String uid, String routingID) {
         this(uid, routingID, null);
+    }
+
+    private void setMessage(String s) {
+        this.message = s;
     }
 
     @Override

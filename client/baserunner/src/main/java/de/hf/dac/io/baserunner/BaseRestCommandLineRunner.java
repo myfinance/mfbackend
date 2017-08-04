@@ -24,10 +24,6 @@ import de.hf.dac.api.io.routes.job.RunnerParameter;
  */
 public abstract class BaseRestCommandLineRunner extends BaseRunner {
 
-
-
-
-
     public BaseRestCommandLineRunner(OptionsParser optionsParser) {
         this.optionsParser = optionsParser;
     }
@@ -38,6 +34,7 @@ public abstract class BaseRestCommandLineRunner extends BaseRunner {
      * @param args the args
      * @throws Exception the exception
      */
+    @Override
     public void run(String[] args) throws Exception {
         int rc = 0;
 
@@ -46,9 +43,9 @@ public abstract class BaseRestCommandLineRunner extends BaseRunner {
 
             this.passParamsToExternal(this.extractParameters());
 
-        } catch (Exception var7) {
+        } catch (Exception e) {
             rc = -1;
-            var7.printStackTrace();
+            log.error(e.getLocalizedMessage(), e);
         } finally {
             this.shutdown(rc);
         }
