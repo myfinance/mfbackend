@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-reverse-engineering PUBLIC "-//Hibernate/Hibernate Reverse Engineering DTD 3.0 Local//EN" "http://hibernate.sourceforge.net/hibernate-reverse-engineering-3.0.dtd" >
+
+<hibernate-reverse-engineering>
+	<schema-selection match-schema="public" />
+	<type-mapping>
+		<!-- order is very important specific cases first everything without decimal 
+			digits should be mapped to long -->
+
+		<sql-type jdbc-type="NUMERIC" hibernate-type="int" not-null="true"
+			scale="0" precision="3">
+		</sql-type>
+		<sql-type jdbc-type="NUMERIC" hibernate-type="int" not-null="true"
+			scale="0" precision="4">
+		</sql-type>
+		<sql-type jdbc-type="NUMERIC" hibernate-type="Integer"
+			not-null="false" scale="0" precision="4">
+		</sql-type>
+		<sql-type jdbc-type="NUMERIC" hibernate-type="Integer"
+			not-null="false" scale="0" precision="3">
+		</sql-type>
+		<sql-type jdbc-type="NUMERIC" hibernate-type="int" not-null="true"
+			scale="0" precision="8">
+		</sql-type>
+		<sql-type jdbc-type="NUMERIC" hibernate-type="Integer"
+			not-null="false" scale="0" precision="8">
+		</sql-type>
+		<sql-type jdbc-type="NUMERIC" hibernate-type="long" not-null="true"
+			scale="0">
+		</sql-type>
+		<sql-type jdbc-type="NUMERIC" hibernate-type="Long" scale="0"
+			not-null="false">
+		</sql-type>
+		<sql-type jdbc-type="NUMERIC" hibernate-type="double"
+			not-null="true">
+		</sql-type>
+		<sql-type jdbc-type="NUMERIC" hibernate-type="Double"
+			not-null="false">
+		</sql-type>
+	</type-mapping>
+	<table-filter match-name="dac.*" match-schema="public" package="de.hf.dac.api.io.domain"/>
+
+
+	<!--<table schema="public" name="dac_restauthorization" class="de.hf.dac.api.io.domain.RestAuthorization"/>-->
+
+
+</hibernate-reverse-engineering>

@@ -16,7 +16,8 @@
  */
 
 package de.hf.dac.io.env;
-import de.hf.dac.api.io.env.domain.DacEnvironmentConfiguration;
+
+import de.hf.dac.api.io.domain.DacServiceconfiguration;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -31,24 +32,11 @@ public class EnvironmentDAO {
         this.emf = emf;
     }
 
-    public List<DacEnvironmentConfiguration> getAllEnvironments() {
+    public List<DacServiceconfiguration> getAllEnvironments() {
         EntityManager em = emf.createEntityManager();
 
-        Query query = em.createQuery("SELECT c FROM DacEnvironmentConfiguration c");
+        Query query = em.createQuery("SELECT c FROM DacServiceconfiguration c");
 
         return query.getResultList();
-    }
-
-    public String getEnvironmentByClientId(String clientId) {
-        EntityManager em = emf.createEntityManager();
-        String ret = null;
-
-        Query query = em.createQuery("SELECT c.environment FROM DacEnvironmentConfiguration c where identifier=:clientId" +
-            " and target='ClientId'");
-
-        query.setParameter("clientId",clientId);
-        ret = (String) query.getResultList().get(0);
-
-        return ret;
     }
 }

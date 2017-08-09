@@ -4,7 +4,7 @@ Export-Package: \
 	de.hf.dac.api.io.efmb, \
 	de.hf.dac.api.io.efmb.tx, \
 	de.hf.dac.api.io.env, \
-	de.hf.dac.api.io.env.domain, \
+	de.hf.dac.api.io.domain, \
 	de.hf.dac.api.io.env.context, \
 	de.hf.dac.api.io.lookup
 Import-Package: \

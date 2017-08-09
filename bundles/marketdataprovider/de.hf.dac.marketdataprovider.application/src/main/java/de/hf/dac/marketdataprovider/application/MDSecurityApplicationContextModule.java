@@ -19,13 +19,12 @@ package de.hf.dac.marketdataprovider.application;
 
 import com.google.inject.AbstractModule;
 import com.google.inject.name.Names;
+import de.hf.dac.api.io.domain.DacRestauthorization;
 import de.hf.dac.api.io.efmb.DatabaseInfo;
 import de.hf.dac.api.io.efmb.EntityManagerFactorySetup;
-import de.hf.dac.api.io.efmb.tx.WrappedEntityManagerFactory;
 import de.hf.dac.api.io.env.EnvironmentService;
 import de.hf.dac.api.io.env.EnvironmentTargetInfo;
 import de.hf.dac.marketdataprovider.api.application.EnvTarget;
-import de.hf.dac.security.restauthorization.domain.RestAuthorization;
 
 import javax.persistence.EntityManagerFactory;
 
@@ -59,7 +58,13 @@ public class MDSecurityApplicationContextModule extends AbstractModule {
         EntityManagerFactory emf = null;
         try {
             emf = emfb
-                .getOrCreateEntityManagerFactory(this.buildPersistenceUnitName("SECURITY"), EntityManagerFactorySetup.PoolSize.SMALL, new Class[] {}, new ClassLoader[] { RestAuthorization.class.getClassLoader() }, dbi);
+                .getOrCreateEntityManagerFactory(
+                    this.buildPersistenceUnitName("SECURITY"),
+                    EntityManagerFactorySetup.PoolSize.SMALL,
+                    new Class[] {},
+                    new ClassLoader[] { DacRestauthorization.class.getClassLoader() },
+                    dbi
+                );
         }
         catch (Exception ex) {
             throw new RuntimeException(ex);

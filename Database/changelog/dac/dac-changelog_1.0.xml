@@ -11,26 +11,12 @@
             <dbms type="h2" />
         </or>
     </preConditions>
+
     <changeSet author="hf" id="dac.1.0.1">
-        <createTable tableName="dac_environmentconfiguration">
-            <column name="environment" type="VARCHAR(20)">
-                <constraints nullable="false"/>
-            </column>
-            <column name="target" type="VARCHAR(20)">
-                <constraints nullable="false"/>
-            </column>
-            <column name="envtype" type="VARCHAR(25)">
-                <constraints nullable="false"/>
-            </column>
-            <column name="identifier" type="VARCHAR(40)">
-                <constraints nullable="false"/>
-            </column>
-            <column name="jdbcurl" type="VARCHAR(100)"/>
-            <column name="jndiurl" type="VARCHAR(50)"/>
-        </createTable>
-    </changeSet>
-    <changeSet author="hf" id="dac.1.0.2">
         <createTable tableName="dac_restauthorization">
+            <column name="restauthorizationid" type="INT">
+                <constraints nullable="false"/>
+            </column>
             <column name="restapp" type="VARCHAR(25)">
                 <constraints nullable="false"/>
             </column>
@@ -57,10 +43,37 @@
             </column>
         </createTable>
     </changeSet>
+    <changeSet author="hf" id="dac.1.0.2">
+        <createTable tableName="dac_serviceconfiguration">
+            <column name="serviceconfigurationid" type="INT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="environment" type="VARCHAR(20)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="target" type="VARCHAR(20)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="envtype" type="VARCHAR(25)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="identifier" type="VARCHAR(40)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="jdbcurl" type="VARCHAR(100)"/>
+            <column name="jndiurl" type="VARCHAR(50)"/>
+        </createTable>
+    </changeSet>
     <changeSet author="hf" id="dac.1.0.3">
-        <addPrimaryKey columnNames="environment, target" constraintName="pk_envconv" tableName="dac_environmentconfiguration"/>
+        <addPrimaryKey columnNames="serviceconfigurationid" constraintName="pk_envconv" tableName="dac_serviceconfiguration"/>
     </changeSet>
     <changeSet author="hf" id="dac.1.0.4">
-        <addPrimaryKey columnNames="restapp, resource, restidpattern, restoptype, operations" constraintName="pk_restauth" tableName="dac_restauthorization"/>
+        <addPrimaryKey columnNames="restauthorizationid" constraintName="pk_restauth" tableName="dac_restauthorization"/>
+    </changeSet>
+    <changeSet author="hf" id="dac.1.0.5">
+        <addUniqueConstraint columnNames="target, environment" constraintName="ak_envconfunique_dac_serv" tableName="dac_serviceconfiguration"/>
+    </changeSet>
+    <changeSet author="hf" id="dac.1.0.6">
+        <addUniqueConstraint columnNames="restidpattern, restapp, resource, restoptype, operations" constraintName="ak_restauthunique_dac_rest" tableName="dac_restauthorization"/>
     </changeSet>
 </databaseChangeLog>

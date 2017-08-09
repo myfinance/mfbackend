@@ -17,13 +17,13 @@
 
 package de.hf.dac.io.env;
 
+import de.hf.dac.api.io.domain.DacServiceconfiguration;
 import de.hf.dac.api.io.efmb.DatabaseInfo;
 import de.hf.dac.api.io.efmb.EntityManagerFactorySetup;
 import de.hf.dac.api.io.env.EnvironmentConfiguration;
 import de.hf.dac.api.io.env.EnvironmentInfo;
 import de.hf.dac.api.io.env.EnvironmentService;
 import de.hf.dac.api.io.env.EnvironmentTargetInfo;
-import de.hf.dac.api.io.env.domain.DacEnvironmentConfiguration;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
 import org.slf4j.LoggerFactory;
@@ -78,7 +78,7 @@ public class EnvironmentServiceImpl implements EnvironmentService {
             this.entityManagerFactory = emfb.getOrCreateEntityManagerFactory("ENV_CONFIGURATION",
                 EntityManagerFactorySetup.PoolSize.SMALL,
                 new Class[] { },
-                new ClassLoader[] { DacEnvironmentConfiguration.class.getClassLoader() }, dbInfo);
+                new ClassLoader[] { DacServiceconfiguration.class.getClassLoader() }, dbInfo);
 
             environmentDAO = new EnvironmentDAO(entityManagerFactory);
 
@@ -94,8 +94,8 @@ public class EnvironmentServiceImpl implements EnvironmentService {
 
     private void createEnvironmentInformation(DatabaseInfo dbInfo) {
         Properties properties = configuration.getProperties(BootstrapConfiguration.LOGIN_INFO_SECTION);
-        List<DacEnvironmentConfiguration> envs = environmentDAO.getAllEnvironments();
-        for (DacEnvironmentConfiguration env : envs) {
+        List<DacServiceconfiguration> envs = environmentDAO.getAllEnvironments();
+        for (DacServiceconfiguration env : envs) {
 
             try {
 
@@ -123,7 +123,7 @@ public class EnvironmentServiceImpl implements EnvironmentService {
     }
 
 
-    private EnvironmentTargetInfo createDBEnvironentInfo(Properties properties, DacEnvironmentConfiguration env) {
+    private EnvironmentTargetInfo createDBEnvironentInfo(Properties properties, DacServiceconfiguration env) {
         EnvironmentTargetInfo<DatabaseInfo> savedEnv = new EnvironmentTargetInfo<>(env.getEnvironment(), env.getTarget(), env.getEnvtype());
         // look up database info from ResFile
         if (properties.containsKey(env.getIdentifier())) {

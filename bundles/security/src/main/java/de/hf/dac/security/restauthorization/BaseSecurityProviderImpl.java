@@ -17,11 +17,11 @@
 
 package de.hf.dac.security.restauthorization;
 
+import de.hf.dac.api.io.domain.DacRestauthorization;
 import de.hf.dac.api.security.AuthorizationEntry;
 import de.hf.dac.api.security.AuthorizationSubject;
 import de.hf.dac.api.security.RootSecurityProvider;
 import de.hf.dac.security.auth.AuthorizationSubjectImpl;
-import de.hf.dac.security.restauthorization.domain.RestAuthorization;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -124,7 +124,7 @@ public abstract class BaseSecurityProviderImpl<
     }
 
     protected String getTableName() {
-        return RestAuthorization.class.getSimpleName();
+        return DacRestauthorization.class.getSimpleName();
     }
 
     private void setUserPermissions(Subject subject){

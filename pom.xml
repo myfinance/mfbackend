@@ -81,6 +81,7 @@
     </scm>
 
     <modules>
+        <module>Database</module>
         <module>bundles</module>
         <module>tools</module>
         <module>client</module>

@@ -41,13 +41,22 @@
 
         <!--Database-Scripts-->
         <fileSet>
-            <outputDirectory>database</outputDirectory>
-            <directory>${project.build.scriptSourceDirectory}/../../../../../database/</directory>
+            <outputDirectory>database/changelog</outputDirectory>
+            <directory>${project.build.scriptSourceDirectory}/../../../../../database/changelog</directory>
             <includes>
                 <include>**/*</include>
             </includes>
             <fileMode>0755</fileMode>
             <lineEnding>unix</lineEnding>
+        </fileSet>
+
+        <!--Database-Scripts-->
+        <fileSet>
+            <outputDirectory>database</outputDirectory>
+            <directory>${project.build.scriptSourceDirectory}/../../../../../database</directory>
+            <includes>
+                <include>postgres*.jar</include>
+            </includes>
         </fileSet>
 
     </fileSets>
