@@ -78,7 +78,6 @@ public class ProductServiceImpl implements ProductService {
         String desc = productDao.getProductDescriptionWithoutRepo("isin6");
         List<Product> productResult1 = productDao.getProductsWithoutRepo();
         List<Product> productResult2 = productDao.listProducts();
-        List<Product> productResult3 = productDao.listProductsNamedQuery();
         return productResult2;
     }
 }

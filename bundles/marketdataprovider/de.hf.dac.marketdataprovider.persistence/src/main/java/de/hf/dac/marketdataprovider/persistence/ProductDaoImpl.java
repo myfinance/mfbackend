@@ -27,7 +27,6 @@ import javax.inject.Named;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Query;
-import javax.persistence.TypedQuery;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -39,17 +38,6 @@ public class ProductDaoImpl extends BaseDao implements ProductDao {
     public ProductDaoImpl(@Named(EnvTarget.MDB) EntityManagerFactory marketDataEmf) {
         super(marketDataEmf);
         productRepository = repositoryService.buildRepository(ProductRepository.class, marketDataEm);
-    }
-
-    /**
-     * show case: simple read with named Query
-     * just a show case this shouldn't be used
-     * Use repositories or for special optimized queries create the query here
-     * @return
-     */
-    public List<Product> listProductsNamedQuery() {
-        TypedQuery<Product> query = marketDataEm.createNamedQuery(Product.findAll, Product.class);
-        return query.getResultList();
     }
 
     /**

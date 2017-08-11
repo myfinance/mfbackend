@@ -20,7 +20,7 @@ package de.hf.marketDataProvider.paxexam.io.emfb;
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
-import javax.persistence.TypedQuery;
+import javax.persistence.Query;
 import javax.transaction.TransactionManager;
 
 import de.hf.dac.api.io.efmb.DatabaseInfo;
@@ -103,10 +103,14 @@ public class EntityManagerSetupIT extends PAXExamTestSetup {
 
         entityManager.getTransaction().commit();
 
-        TypedQuery<Product> query = entityManager.createNamedQuery(Product.findAll, Product.class);
-        List newproducts=query.getResultList();
+        List<Product> result = new ArrayList<>();
+        Query query = entityManager.createQuery("select a FROM Product a");
+        List<Object> queryResult = (List<Object>) query.getResultList();
+        for (Object object : queryResult) {
+            result.add((Product)object);
+        }
 
-        Assert.assertEquals(2, newproducts.size());
+        Assert.assertEquals(2, result.size());
 
     }
 

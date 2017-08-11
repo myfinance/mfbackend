@@ -57,6 +57,7 @@
     <feature name="dac-io-api-feature" version="${pom.version}">
         <feature>dac-guice</feature>
         <feature>dac-db-base-feature</feature>
+        <bundle>mvn:io.swagger/swagger-annotations/${swagger.version}</bundle>
         <bundle>mvn:org.apache.commons/commons-lang3/${apache-commons-lang3.version}</bundle>
         <bundle>mvn:de.hf.dac.api/de.hf.dac.api.base/${project.version}</bundle>
         <bundle>mvn:org.eclipse.persistence/javax.persistence/${javax-persistence.version}</bundle>

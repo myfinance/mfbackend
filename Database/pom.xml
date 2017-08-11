@@ -84,10 +84,9 @@
                                     <jdbcconfiguration
                                             revengfile="src/main/reveng/hibernate.revengmd.xml"
                                             packagename="package.name"
-                                            detectmanytomany="true"
                                             propertyfile="src/main/reveng/hibernate.reveng.properties"
                                             reversestrategy="de.hf.dac.support.CustomReverseEngineeringStrategy"
-                                    />
+                                    /><!--detectmanytomany="true"-->
                                     <hbm2java  jdk5="true" ejb3="true"/>
                                 </hibernatetool>
                                 <echo message="End generating entities"/>

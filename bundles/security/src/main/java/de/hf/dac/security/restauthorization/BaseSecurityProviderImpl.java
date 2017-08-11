@@ -113,7 +113,7 @@ public abstract class BaseSecurityProviderImpl<
 
         EntityManager em = getEMFactory().createEntityManager();
 
-        Query query = em.createQuery("SELECT DISTINCT(c.resource) FROM " + getTableName() + " c WHERE c.restApp = :restApp ");
+        Query query = em.createQuery("SELECT DISTINCT(c.resource) FROM " + getTableName() + " c WHERE c.restapp = :restApp ");
         query.setParameter("restApp", system);
 
         List<String> ol = query.getResultList();
@@ -198,18 +198,19 @@ public abstract class BaseSecurityProviderImpl<
         EntityManager em = getEMFactory().createEntityManager();
         Query query = em.createQuery("SELECT c FROM " + getTableName() + " c WHERE " +
             "c.resource = :resource and " +
-            "c.restApp = :restApp and " +
-            "c.restOpType = :restOpType ");
+            "c.restapp = :restApp and " +
+            "c.restoptype = :restOpType ");
         query.setParameter("restOpType", opType.toString());
         query.setParameter("resource", opLevel.toString());
         query.setParameter("restApp", system);
-        List<AuthorizationEntry> ol = query.getResultList();
-        for(AuthorizationEntry o : ol) {
-            ret.add(new AuthMatcherImpl(o.getRestIdPattern(),
-                o.listOperations(),
-                o.listPermissions(),
-                o.listUsers() ,
-                o.getDescription()));
+        List<DacRestauthorization> ol = query.getResultList();
+        for(DacRestauthorization o : ol) {
+            AuthorizationEntry entry = new AuthorizationEntryImpl(o);
+            ret.add(new AuthMatcherImpl(entry.getRestIdPattern(),
+                entry.listOperations(),
+                entry.listPermissions(),
+                entry.listUsers() ,
+                entry.getDescription()));
         }
         em.close();
         return ret;

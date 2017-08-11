@@ -22,7 +22,6 @@ import de.hf.dac.marketdataprovider.api.domain.Product;
 import java.util.List;
 
 public interface ProductDao {
-    List<Product> listProductsNamedQuery();
     String getProductDescriptionWithoutRepo(String productId);
     List<Product> getProductsWithoutRepo();
     List<Product> listProducts();
