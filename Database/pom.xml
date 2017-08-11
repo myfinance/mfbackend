@@ -106,17 +106,17 @@
                     <dependency>
                         <groupId>org.hibernate</groupId>
                         <artifactId>hibernate-core</artifactId>
-                        <version>4.3.5.Final</version>
+                        <version>${hibernate.version}</version>
                     </dependency>
                     <dependency>
                         <groupId>org.hibernate</groupId>
                         <artifactId>hibernate-entitymanager</artifactId>
-                        <version>4.3.5.Final</version>
+                        <version>${hibernate.version}</version>
                     </dependency>
                     <dependency>
                         <groupId>org.hibernate.common</groupId>
                         <artifactId>hibernate-commons-annotations</artifactId>
-                        <version>4.0.5.Final</version>
+                        <version>${hibernate-annotations.version}</version>
                     </dependency>
                     <dependency>
                         <groupId>org.hibernate.javax.persistence</groupId>
@@ -128,6 +128,11 @@
                         <artifactId>jta</artifactId>
                         <version>1.1</version>
                     </dependency>
+                    <!--<dependency>
+                        <groupId>org.freemarker</groupId>
+                        <artifactId>freemarker</artifactId>
+                        <version>2.3.23</version>
+                    </dependency>-->
                     <dependency>
                         <groupId>freemarker</groupId>
                         <artifactId>freemarker</artifactId>
@@ -141,18 +146,18 @@
                     <dependency>
                         <groupId>commons-logging</groupId>
                         <artifactId>commons-logging</artifactId>
-                        <version>1.1</version>
+                        <version>1.2</version>
                     </dependency>
                     <dependency>
                         <groupId>commons-collections</groupId>
                         <artifactId>commons-collections</artifactId>
-                        <version>3.2.1</version>
+                        <version>3.2.2</version>
                     </dependency>
                     <!-- I get timeouts while reading revengfile with hibernate 5.x.x -->
                     <dependency>
                         <groupId>org.hibernate</groupId>
                         <artifactId>hibernate-tools</artifactId>
-                        <version>4.3.5.Final</version>
+                        <version>${hibernate-tools.version}</version>
                         <exclusions>
                             <exclusion>
                                 <groupId>*</groupId>
