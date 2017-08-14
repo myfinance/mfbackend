@@ -38,7 +38,6 @@
 
     <build>
         <plugins>
-
             <plugin>
                 <artifactId>maven-antrun-plugin</artifactId>
                 <version>1.8</version>
@@ -85,8 +84,9 @@
                                             revengfile="src/main/reveng/hibernate.revengmd.xml"
                                             packagename="package.name"
                                             propertyfile="src/main/reveng/hibernate.reveng.properties"
-                                            reversestrategy="de.hf.dac.support.CustomReverseEngineeringStrategy"
-                                    /><!--detectmanytomany="true"-->
+
+                                    /><!--detectmanytomany="true"
+                                    reversestrategy="de.hf.dac.support.CustomReverseEngineeringStrategy"-->
                                     <hbm2java  jdk5="true" ejb3="true"/>
                                 </hibernatetool>
                                 <echo message="End generating entities"/>
@@ -128,15 +128,10 @@
                         <artifactId>jta</artifactId>
                         <version>1.1</version>
                     </dependency>
-                    <!--<dependency>
+                    <dependency>
                         <groupId>org.freemarker</groupId>
                         <artifactId>freemarker</artifactId>
                         <version>2.3.23</version>
-                    </dependency>-->
-                    <dependency>
-                        <groupId>freemarker</groupId>
-                        <artifactId>freemarker</artifactId>
-                        <version>2.3.8</version>
                     </dependency>
                     <dependency>
                         <groupId>org.postgresql</groupId>
@@ -153,7 +148,6 @@
                         <artifactId>commons-collections</artifactId>
                         <version>3.2.2</version>
                     </dependency>
-                    <!-- I get timeouts while reading revengfile with hibernate 5.x.x -->
                     <dependency>
                         <groupId>org.hibernate</groupId>
                         <artifactId>hibernate-tools</artifactId>

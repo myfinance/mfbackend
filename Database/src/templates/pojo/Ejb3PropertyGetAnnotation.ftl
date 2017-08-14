@@ -1,15 +1,12 @@
 <#if ejb3>
-<#if pojo.hasIdentifierProperty()><#if property.equals(clazz.identifierProperty)>${pojo.generateAnnIdGenerator()}</#if></#if><#if c2h.isOneToOne(property)>
-${pojo.generateOneToOneAnnotation(property, cfg)}
+<#if pojo.hasIdentifierProperty()>
+<#if property.equals(clazz.identifierProperty)>${pojo.generateAnnIdGenerator()}</#if></#if><#if c2h.isOneToOne(property)>${pojo.generateOneToOneAnnotation(property, md)}
 <#elseif c2h.isManyToOne(property)>
-
     ${pojo.generateManyToOneAnnotation(property)}
-${pojo.generateJoinColumnsAnnotation(property, cfg)}
+${pojo.generateJoinColumnsAnnotation(property, md)}
 <#elseif c2h.isCollection(property)>
-
-    ${pojo.generateCollectionAnnotation(property, cfg)}
-<#else>
-${pojo.generateBasicAnnotation(property)}
+    ${pojo.generateCollectionAnnotation(property, md)}
+<#else>${pojo.generateBasicAnnotation(property)}
 ${pojo.generateAnnColumnAnnotation(property)}
 </#if>
 </#if>

@@ -42,11 +42,11 @@
         <sql-type jdbc-type="TIMESTAMP" hibernate-type="java.time.Instant">
         </sql-type>
     </type-mapping>
-    <!--<table-filter match-name="md.*" match-schema="public" package="de.hf.dac.marketdataprovider.api.domain"/>-->
-    <table-filter match-name="md_product" match-schema="public" package="de.hf.dac.marketdataprovider.api.domain"/>
+    <table-filter match-name="md.*" match-schema="public" package="de.hf.dac.marketdataprovider.api.domain"/>
+    <!--<table-filter match-name="md_product" match-schema="public" package="de.hf.dac.marketdataprovider.api.domain"/>-->
 
 
-    <!--<table schema="public" name="md_endofdayprice" class="de.hf.dac.marketdataprovider.api.domain.EndOfDayPrice">
+    <table schema="public" name="md_endofdayprice" class="de.hf.dac.marketdataprovider.api.domain.EndOfDayPrice">
         <primary-key>
             <generator class="identity"></generator>
         </primary-key>
@@ -54,13 +54,17 @@
 
     <table schema="public" name="md_instrument" class="de.hf.dac.marketdataprovider.api.domain.Instrument">
         <primary-key>
-            <generator class="identity"></generator>
+            <generator class="sequence">
+                <param name="sequence_name">md_instrument_id_seq</param>
+            </generator>
         </primary-key>
-    </table>-->
+    </table>
 
     <table schema="public" name="md_product" class="de.hf.dac.marketdataprovider.api.domain.Product">
         <primary-key>
-            <generator class="auto"></generator>
+            <generator class="sequence">
+                <param name="sequence_name">md_product_id_seq</param>
+            </generator>
         </primary-key>
     </table>
 

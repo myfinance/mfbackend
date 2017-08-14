@@ -21,21 +21,25 @@
 <#include "PojoTypeDeclaration.ftl"/> {
     private static final long serialVersionUID = 1L;
 
-<#include "PojoFields.ftl"/>
+ <#if !pojo.isInterface()>
+  <#include "PojoFields.ftl"/>
 
-<#include "PojoConstructors.ftl"/>
-   
-<#include "PojoPropertyAccessors.ftl"/>
+  <#include "PojoConstructors.ftl"/>
 
-<#include "PojoToString.ftl"/>
+  <#include "PojoPropertyAccessors.ftl"/>
 
-<#include "PojoEqualsHashcode.ftl"/>
+  <#include "PojoToString.ftl"/>
 
-<#include "PojoExtraClassCode.ftl"/>
+  <#include "PojoEqualsHashcode.ftl"/>
+
+ <#else>
+  <#include "PojoInterfacePropertyAccessors.ftl"/>
+
+ </#if>
+ <#include "PojoExtraClassCode.ftl"/>
 
 }
 </#assign>
 
 ${pojo.generateImports()}
 ${classbody}
-

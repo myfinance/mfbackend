@@ -49,13 +49,7 @@ public class CustomReverseEngineeringStrategy extends DelegatingReverseEngineeri
     @Override
     public String columnToPropertyName(TableIdentifier table, String column) {
         String propertyName = super.columnToPropertyName(table, column);
-        if (column.startsWith("M_F_")) {
-            // special cases for MX_RCR_ tables
-            propertyName = propertyName.substring(2);
-            // make the first two letter lower case, so that the variable satisfies java convention and
-            // hibernate tools correctly make a sensible setter/getter because it checks the second letter!
-            propertyName = propertyName.substring(0, 2).toLowerCase() + propertyName.substring(2);
-        } else if (column.startsWith("M_") || column.startsWith("F_")) {
+        if (column.startsWith("M_") || column.startsWith("F_")) {
             propertyName = propertyName.substring(1);
             // make the first letter lower case, so that the variable satisfies java convention
             propertyName = propertyName.substring(0, 2).toLowerCase() + propertyName.substring(2);

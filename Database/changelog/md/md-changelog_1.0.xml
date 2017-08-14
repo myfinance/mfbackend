@@ -25,7 +25,7 @@
     </changeSet>
     <changeSet author="hf" id="md.1.0.2">
         <createTable tableName="md_instrument">
-            <column name="id" type="INT">
+            <column autoIncrement="true" name="id" type="SERIAL">
                 <constraints nullable="false"/>
             </column>
             <column name="description" type="VARCHAR(255)"/>
@@ -46,7 +46,7 @@
     </changeSet>
     <changeSet author="hf" id="md.1.0.3">
         <createTable tableName="md_product">
-            <column name="id" type="INT">
+            <column autoIncrement="true" name="id" type="SERIAL">
                 <constraints nullable="false"/>
             </column>
             <column name="description" type="VARCHAR(255)">
