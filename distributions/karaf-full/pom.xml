@@ -84,7 +84,7 @@
                         <feature>dac-base-karaf-webconsoletools</feature>
 
                         <!-- the application -->
-                        <!--<feature>marketdata-features</feature>-->
+                        <feature>marketdata-features</feature>
 
                     </bootFeatures>
 

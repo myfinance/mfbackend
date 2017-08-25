@@ -23,9 +23,8 @@ import io.swagger.annotations.ApiModelProperty;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
-import static javax.persistence.GenerationType.SEQUENCE;
+import static javax.persistence.GenerationType.IDENTITY;
 import javax.persistence.Id;
-import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.persistence.Version;
 
@@ -62,7 +61,7 @@ public class Product  implements java.io.Serializable {
        this.productId = productId;
     }
 
-    @SequenceGenerator(name="de.hf.dac.marketdataprovider.api.domain.ProductIdGenerator", sequenceName="md_product_id_seq")@Id @GeneratedValue(strategy=SEQUENCE, generator="de.hf.dac.marketdataprovider.api.domain.ProductIdGenerator")    
+    @Id @GeneratedValue(strategy=IDENTITY)    
     @Column(name="id", unique=true, nullable=false)
     @ApiModelProperty(required = true)
     public Integer getId() {

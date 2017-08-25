@@ -70,6 +70,6 @@
         <addPrimaryKey columnNames="id" constraintName="product_pkey" tableName="md_product"/>
     </changeSet>
     <changeSet author="hf" id="md.1.0.7">
-        <addForeignKeyConstraint baseColumnNames="instrument_id" baseTableName="md_endofdayprice" constraintName="fkn0bxwo6ph4wmalhd8f6s6tqjm" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="md_instrument"/>
+        <addForeignKeyConstraint baseColumnNames="instrument_id" baseTableName="md_endofdayprice" constraintName="fk_Instrument_eodprice" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="md_instrument"/>
     </changeSet>
 </databaseChangeLog>

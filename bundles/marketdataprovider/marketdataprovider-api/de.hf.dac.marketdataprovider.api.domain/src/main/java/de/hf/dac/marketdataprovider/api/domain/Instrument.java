@@ -27,10 +27,9 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
-import static javax.persistence.GenerationType.SEQUENCE;
+import static javax.persistence.GenerationType.IDENTITY;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
-import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
 /**
@@ -76,7 +75,7 @@ public class Instrument  implements java.io.Serializable {
        this.endOfDayPrices = endOfDayPrices;
     }
 
-    @SequenceGenerator(name="de.hf.dac.marketdataprovider.api.domain.InstrumentIdGenerator", sequenceName="md_instrument_id_seq")@Id @GeneratedValue(strategy=SEQUENCE, generator="de.hf.dac.marketdataprovider.api.domain.InstrumentIdGenerator")    
+    @Id @GeneratedValue(strategy=IDENTITY)    
     @Column(name="id", unique=true, nullable=false)
     @ApiModelProperty(required = true)
     public Integer getId() {
