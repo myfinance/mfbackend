@@ -26,6 +26,7 @@ import com.google.inject.spi.TypeEncounter;
 import com.google.inject.spi.TypeListener;
 import de.hf.dac.api.base.exceptions.DACException;
 
+import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 import java.util.Arrays;
 import java.util.stream.Collectors;
@@ -58,7 +59,21 @@ public class GuiceLifecycleListenerModule implements Module, TypeListener {
     }
 
     private static boolean predicate(Method method) {
-        return method.isAnnotationPresent(PostConstruct.class);
+        boolean result = false;
+        Annotation[] annotations = method.getDeclaredAnnotations();
+        if(annotations!=null){
+            for (Annotation annotation : annotations) {
+                if(annotation.toString().equals("@javax.annotation.PostConstruct()")) result=true;
+                /* does not match:
+                if(annotation.annotationType().equals(PostConstruct.class)) result3=true;
+                does not match:
+                if(annotation.getClass()==PostConstruct.class) result4=true;
+                 */
+            }
+        }
+        /*isAnnotationPresent can not match PostConstruct.class I don't know why */
+        //result = method.isAnnotationPresent(PostConstruct.class);
+        return result;
     }
 }
 

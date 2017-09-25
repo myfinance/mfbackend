@@ -23,9 +23,9 @@
     <orderEntry type="library" name="Maven: aopalliance:aopalliance:1.0" level="project" />
     <orderEntry type="library" name="Maven: com.google.guava:guava:19.0" level="project" />
     <orderEntry type="module" module-name="de.hf.dac.api.base" />
-    <orderEntry type="library" name="Maven: org.apache.karaf.jaas:org.apache.karaf.jaas.boot:4.1.1" level="project" />
-    <orderEntry type="library" name="Maven: org.apache.karaf.jaas:org.apache.karaf.jaas.config:4.1.1" level="project" />
-    <orderEntry type="library" name="Maven: org.apache.karaf.jaas:org.apache.karaf.jaas.modules:4.1.1" level="project" />
+    <orderEntry type="library" name="Maven: org.apache.karaf.jaas:org.apache.karaf.jaas.boot:4.1.2" level="project" />
+    <orderEntry type="library" name="Maven: org.apache.karaf.jaas:org.apache.karaf.jaas.config:4.1.2" level="project" />
+    <orderEntry type="library" name="Maven: org.apache.karaf.jaas:org.apache.karaf.jaas.modules:4.1.2" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Maven: org.osgi:osgi.cmpn:6.0.0" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Maven: org.ops4j.pax.cdi:pax-cdi-api:0.12.0" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Maven: org.osgi:org.osgi.core:6.0.0" level="project" />
