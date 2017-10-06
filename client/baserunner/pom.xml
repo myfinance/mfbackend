@@ -46,12 +46,12 @@
         <dependency>
             <groupId>org.apache.servicemix.bundles</groupId>
             <artifactId>org.apache.servicemix.bundles.spring-beans</artifactId>
-            <version>${spring.version}</version>
+            <version>${spring-servicemix.version}</version>
         </dependency>
         <dependency>
             <groupId>org.apache.servicemix.bundles</groupId>
             <artifactId>org.apache.servicemix.bundles.spring-core</artifactId>
-            <version>${spring.version}</version>
+            <version>${spring-servicemix.version}</version>
             <scope>compile</scope>
             <exclusions>
                 <exclusion>

@@ -41,7 +41,7 @@
         <httpcore-osgi.version>4.4.5</httpcore-osgi.version>
         <narayana.version>5.6.2.Final</narayana.version>
 
-        <spring.version>4.2.6.RELEASE_1</spring.version>
+        <spring-servicemix.version>4.2.6.RELEASE_1</spring-servicemix.version>
         <aopalliance.version>1.0_6</aopalliance.version><!--von spring und guice benötigt-->
         <spring-data-commons.version>1.11.4.RELEASE</spring-data-commons.version>
         <spring-data.version>1.9.4.RELEASE</spring-data.version>
@@ -71,6 +71,10 @@
         <gson.version>2.7</gson.version>
         <commons-codec.version>1.10</commons-codec.version>
 
+        <!--testrunner-->
+        <groovy.version>2.4.7</groovy.version>
+        <spring.version>4.3.9.RELEASE</spring.version>
+
         <camel.version>2.18.1</camel.version>
 
 
@@ -90,6 +94,7 @@
         <module>distributions</module>
         <module>features</module>
         <module>pax-exam-test</module>
+        <module>test</module>
     </modules>
 
 

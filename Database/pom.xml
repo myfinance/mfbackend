@@ -16,10 +16,15 @@
             <version>${hibernate.version}</version>
         </dependency>
         <dependency>
-            <groupId>com</groupId>
+            <groupId>org.hibernate</groupId>
             <artifactId>hibernate-tools</artifactId>
-            <version>3.4.0.CR2</version>
-            <scope>provided</scope>
+            <version>${hibernate-tools.version}</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>*</groupId>
+                    <artifactId>*</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
         <dependency>
             <groupId>io.swagger</groupId>
