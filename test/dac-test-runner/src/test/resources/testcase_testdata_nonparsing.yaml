@@ -1,0 +1,13 @@
+name: Nächster Test
+description: |
+   Auch mal eine Beschreibung, die
+   eine Zeile hinaus geht über
+   eine Zeile hinaus geht über
+   eine Zeile hinaus geht über
+   eine Zeile hinaus geht über
+background:
+  parseValuesToTypes: false
+  table: |
+    | Name      | Vorname | Familienstand | Geburtsdatum |
+    | bla       | blub    | verheiratet   | 19721014 |
+    | Napp      | Karl    | ledig         | 19721014|

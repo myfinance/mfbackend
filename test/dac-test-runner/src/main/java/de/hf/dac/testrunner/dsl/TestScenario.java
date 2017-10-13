@@ -17,6 +17,7 @@
 
 package de.hf.dac.testrunner.dsl;
 
+import de.hf.dac.testrunner.datetime.DateTimePropertyConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.yaml.snakeyaml.Yaml;
@@ -29,7 +30,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Serializable;
 import java.nio.charset.Charset;
-import java.time.Instant;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -44,7 +45,7 @@ public class TestScenario extends TestItem implements Serializable {
     private String name;
     private String author;
     private String description;
-    private Instant createAt;
+    private LocalDateTime createAt;
     private Long version;
 
     private List<TestCase> testCases = Collections.emptyList();
@@ -117,7 +118,7 @@ public class TestScenario extends TestItem implements Serializable {
     }
 
     public static TestScenario load(InputStream inputStream) {
-        Yaml yaml = new Yaml(new Constructor(TestScenario.class));
+        Yaml yaml = new Yaml(new DateTimePropertyConstructor(TestScenario.class));
         return (TestScenario) yaml.load(new InputStreamReader(inputStream, Charset.forName("utf-8")));
     }
 
@@ -145,11 +146,11 @@ public class TestScenario extends TestItem implements Serializable {
         this.author = author;
     }
 
-    public Instant getCreateAt() {
+    public LocalDateTime getCreateAt() {
         return createAt;
     }
 
-    public void setCreateAt(Instant createAt) {
+    public void setCreateAt(LocalDateTime createAt) {
         this.createAt = createAt;
     }
 

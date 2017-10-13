@@ -17,6 +17,7 @@
 
 package de.hf.dac.testrunner.dsl;
 
+import de.hf.dac.testrunner.datetime.DateTimePropertyConstructor;
 import org.yaml.snakeyaml.Yaml;
 import org.yaml.snakeyaml.constructor.Constructor;
 
@@ -58,7 +59,7 @@ public class TestCase extends TestItem implements Serializable {
     }
 
     public static TestCase load(InputStream inputStream) {
-        Yaml yaml = new Yaml(new Constructor(TestCase.class));
+        Yaml yaml = new Yaml(new DateTimePropertyConstructor(TestCase.class));
         return (TestCase) yaml.load(new InputStreamReader(inputStream, Charset.forName("utf-8")));
     }
 

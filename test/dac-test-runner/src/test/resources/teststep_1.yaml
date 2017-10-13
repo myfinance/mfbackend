@@ -1,0 +1,11 @@
+action:     BerechneAlter
+reference:  alter
+examples:
+  table: |
+    | Name      | Vorname | Familienstand | Geburtsdatum |
+    | bla       | blub    | verheiratet   | 14.10.1972 |
+    | Napp      | Karl    | ledig         | 24.10.1971 |
+  params:
+    paramName1: Some value
+    paramName2: "Differnet Value"
+    anyUnknownKeyAsParamNameForDouble: 123.0

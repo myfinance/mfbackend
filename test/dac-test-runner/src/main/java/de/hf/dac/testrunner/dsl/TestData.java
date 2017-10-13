@@ -17,6 +17,7 @@
 
 package de.hf.dac.testrunner.dsl;
 
+import de.hf.dac.testrunner.datetime.DateTimePropertyConstructor;
 import de.hf.dac.testrunner.execution.TestExecutionException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -142,7 +143,7 @@ public class TestData implements Serializable {
     }
 
     public static TestData load(InputStream resourceAsStream) {
-        Yaml yaml = new Yaml(new Constructor(TestData.class));
+        Yaml yaml = new Yaml(new DateTimePropertyConstructor(TestData.class));
         return (TestData) yaml.load(resourceAsStream);
     }
 

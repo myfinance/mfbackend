@@ -1,0 +1,9 @@
+table: |
+       | Name      | Vorname | Familienstand | Geburtsdatum |
+       | bla       | blub    | verheiratet   | 14.10.1972 |
+       | Napp      | Karl    | ledig         | 24.10.1971 |
+params:
+  key1: Ein normaler String
+  key2: "Ein gequoteter String"
+  key3: 123.10
+  key4: 12
