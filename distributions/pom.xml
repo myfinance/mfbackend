@@ -14,5 +14,7 @@
         <module>karaf-full</module>
         <module>myfinance-full-packaging</module>
         <module>run-job</module>
+        <module>deploy-myfinance</module>
+        <module>cleanup</module>
     </modules>
 </project>

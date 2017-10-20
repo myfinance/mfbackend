@@ -17,6 +17,14 @@
             <artifactId>dac-test-runner</artifactId>
             <version>${project.version}</version>
         </dependency>
+        <dependency>
+            <groupId>de.hf.dac</groupId>
+            <artifactId>deploy-myfinance</artifactId>
+            <version>${project.version}</version>
+            <scope>test</scope>
+        </dependency>
     </dependencies>
+
+
 
 </project>
