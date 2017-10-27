@@ -75,7 +75,8 @@
         <!--testrunner-->
         <groovy.version>2.4.7</groovy.version>
         <spring.version>4.3.9.RELEASE</spring.version>
-
+        <j2html.version>1.1.0</j2html.version><!-- create testreports -->
+        <restassured.version>3.0.3</restassured.version><!-- rest requests for test -->
         <camel.version>2.18.1</camel.version>
 
 

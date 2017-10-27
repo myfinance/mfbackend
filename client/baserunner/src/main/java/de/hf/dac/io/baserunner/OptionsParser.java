@@ -39,9 +39,10 @@ import java.util.List;
 /**
  * Parses the arguments that were given on the command line.
  */
+// TODO New version of commons-cli has maybe better way to build options
 public class OptionsParser {
     public static final String DEBUG_OPTION = "debug";
-    private static final String CAD_LOGIN_INFO = ResfileConfigurationImpl.DAC_LOGIN_INFO;
+    private static final String DAC_LOGIN_INFO = ResfileConfigurationImpl.DAC_LOGIN_INFO;
 
     private static final String DEVPROPS_FILENAME = ResfileConfigurationImpl.DEVPROPS_FILENAME;
     private static final String DAC_RES_PATH_ENV = ResfileConfigurationImpl.DAC_RES_PATH_ENV;
@@ -216,15 +217,15 @@ public class OptionsParser {
         } else {
             // collect files from environment variables
             List<String> resFileList = new ArrayList<String>();
-            if (System.getenv(CAD_LOGIN_INFO) != null) {
-                String loginResFileName = System.getenv(CAD_LOGIN_INFO);
+            if (System.getenv(DAC_LOGIN_INFO) != null) {
+                String loginResFileName = System.getenv(DAC_LOGIN_INFO);
                 if (new File(loginResFileName).exists()) {
                     resFileList.add(loginResFileName);
                 } else {
-                    LOG.info("Res File {}  from environment variable {} does not exist", loginResFileName, CAD_LOGIN_INFO);
+                    LOG.info("Res File {}  from environment variable {} does not exist", loginResFileName, DAC_LOGIN_INFO);
                 }
             } else {
-                LOG.info("Environment variable {} not set.", CAD_LOGIN_INFO);
+                LOG.info("Environment variable {} not set.", DAC_LOGIN_INFO);
             }
             if (System.getenv(DAC_RES_PATH_ENV) != null) {
                 // take it from environment
@@ -239,7 +240,7 @@ public class OptionsParser {
                 LOG.info("Environment variable {} not set.", DAC_RES_PATH_ENV);
             }
             if (resFileList.isEmpty()) {
-                LOG.error("Using development defaults", CAD_LOGIN_INFO);
+                LOG.error("Using development defaults", DAC_LOGIN_INFO);
                 resFiles = new String[] { "../" + ResfileConfigurationImpl.DAC_RES_FILENAME };
             } else {
                 resFiles = (String[]) resFileList.toArray(new String[resFileList.size()]);
@@ -489,5 +490,6 @@ public class OptionsParser {
     public CommandLine getCommandLine() {
         return commandLine;
     }
+
 }
 

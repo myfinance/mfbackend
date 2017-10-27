@@ -1,0 +1,39 @@
+name: RestApi
+author: hf
+createAt: 2017-08-31 15:00:00
+version: 1
+description: |
+  Testing the Rest Api
+
+testCases:
+    - name: Config Filter TestsList Environments
+      description: |
+          Reading all available Environments.
+          Call should return at 2 valid Environments
+
+      steps:
+
+          - action: GetRestUrl
+            reference: jsonResult
+
+            params:
+               url: "/dac/rest/marketdata/environments/list"
+
+          - action: Assert
+            params:
+              condition: |
+                  jsonResult.getStatusCode()==200
+
+
+          - action: GetRestUrl
+            reference: jsonValues
+
+            params:
+               referenceType: JSON
+               extractPath: "values"
+               url: "/dac/rest/marketdata/environments/list"
+
+          - action: Assert
+            params:
+              condition: |
+                  jsonValues.size==2

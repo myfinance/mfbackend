@@ -65,7 +65,11 @@ public class ResfileConfigurationImpl implements EnvironmentConfiguration {
      * 4. get dev.res from target/.. directory for local overrides from a single developer (never check this in)
      */
     private static ResFileLocation[] resFileSearchOrder =
-        new ResFileLocation[] { ResFileLocation.DAC_LOGIN_INFO_FILE, ResFileLocation.DAC_RES_PATH_ENV_FILE, ResFileLocation.DEVELOPER_DAC_RES, ResFileLocation.DEVELOPER_LOCAL_RES,
+        new ResFileLocation[] {
+            ResFileLocation.DAC_LOGIN_INFO_FILE,
+            ResFileLocation.DAC_RES_PATH_ENV_FILE,
+            ResFileLocation.DEVELOPER_DAC_RES,
+            ResFileLocation.DEVELOPER_LOCAL_RES,
         };
 
     public ResfileConfigurationImpl(ResFileParser parser) {
