@@ -11,19 +11,17 @@
 
     <artifactId>cleanup</artifactId>
 
-    <dependencies>
-        <dependency>
-            <groupId>de.hf.dac.marketdataprovider</groupId>
-            <artifactId>md-int-test</artifactId>
-            <version>${project.version}</version>
-            <scope>test</scope>
-        </dependency>
-    </dependencies>
-
-
     <profiles>
         <profile>
             <id>deploy-win</id>
+            <dependencies>
+                <dependency>
+                    <groupId>de.hf.dac.marketdataprovider</groupId>
+                    <artifactId>md-int-test</artifactId>
+                    <version>${project.version}</version>
+                    <scope>test</scope>
+                </dependency>
+            </dependencies>
             <build>
                 <plugins>
                     <plugin>

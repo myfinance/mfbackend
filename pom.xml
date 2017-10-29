@@ -95,7 +95,7 @@
         <module>client</module>
         <module>distributions</module>
         <module>features</module>
-        <module>pax-exam-test</module>
+        <!--<module>pax-exam-test</module>-->
         <module>test</module>
     </modules>
 

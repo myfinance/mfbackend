@@ -18,9 +18,14 @@
         <module>de.hf.dac.marketdataprovider.service</module>
         <module>de.hf.dac.marketdataprovider.importer</module>
         <module>de.hf.dac.marketdataprovider.application</module>
-        <module>md-int-test</module>
-
     </modules>
 
-
+    <profiles>
+        <profile>
+            <id>deploy-win</id>
+            <modules>
+                <module>md-int-test</module>
+            </modules>
+        </profile>
+    </profiles>
 </project>
