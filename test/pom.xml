@@ -14,5 +14,14 @@
     </modules>
     <artifactId>test</artifactId>
 
+    <profiles>
+        <profile>
+            <id>deploy-win</id>
+            <modules>
+                <module>pax-exam-test</module>
+            </modules>
+        </profile>
+    </profiles>
+
 
 </project>
