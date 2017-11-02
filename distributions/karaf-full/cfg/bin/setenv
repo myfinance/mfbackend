@@ -54,11 +54,11 @@ if [ "$DAC_MAX_MEM" = "" ]; then
 else
     JAVA_MAX_MEM=$DAC_MAX_MEM
 fi
-KARAF_WRITE_DIR=$HOME/karaf_`hostname`
-EXTRA_JAVA_OPTS="-Djava.awt.headless=true -Duser.dir=$KARAF_WRITE_DIR -XX:+UnlockCommercialFeatures -XX:+FlightRecorder "
-DAC_KARAF_INSTANCES=$KARAF_WRITE_DIR/instances
-KARAF_DATA=$KARAF_WRITE_DIR/data
-KARAF_ETC=$KARAF_WRITE_DIR/etc
+#KARAF_WRITE_DIR=$HOME/karaf_`hostname`
+#EXTRA_JAVA_OPTS="-Djava.awt.headless=true -Duser.dir=$KARAF_WRITE_DIR -XX:+UnlockCommercialFeatures -XX:+FlightRecorder "
+#DAC_KARAF_INSTANCES=$KARAF_WRITE_DIR/instances
+#KARAF_DATA=$KARAF_WRITE_DIR/data
+#KARAF_ETC=$KARAF_WRITE_DIR/etc
 
 # KARAF_NOROOT=true <---- this is problematic with solaris sh
 
