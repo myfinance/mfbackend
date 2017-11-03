@@ -43,6 +43,38 @@
 
     <build>
         <plugins>
+            <!-- gets the necessary dependencies to run liquibase locally -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-dependency-plugin</artifactId>
+                <version>${dependency-plugin.version}</version>
+                <executions>
+                    <execution>
+                        <id>copy</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>copy</goal>
+                        </goals>
+                        <configuration>
+                            <artifactItems>
+                                <artifactItem>
+                                    <groupId>org.liquibase</groupId>
+                                    <artifactId>liquibase-core</artifactId>
+                                    <version>${liquibase.version}</version>
+                                    <outputDirectory>${project.basedir}</outputDirectory>
+                                </artifactItem>
+                                <artifactItem>
+                                     <groupId>org.postgresql</groupId>
+                                     <artifactId>postgresql</artifactId>
+                                     <version>${postgresql.version}</version>
+                                    <outputDirectory>${project.basedir}</outputDirectory>
+                                </artifactItem>
+                            </artifactItems>
+                            <!-- other configurations here -->
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
             <plugin>
                 <artifactId>maven-antrun-plugin</artifactId>
                 <version>1.8</version>
@@ -166,6 +198,7 @@
                     </dependency>
                 </dependencies>
             </plugin>
+
         </plugins>
     </build>
 

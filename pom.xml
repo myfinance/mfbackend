@@ -18,6 +18,7 @@
         <!-- DB-->
         <postgresql.version>9.4-1203-jdbc42</postgresql.version>
         <h2.version>1.4.186</h2.version>
+        <liquibase.version>3.5.3</liquibase.version>
 
         <commons-cli.version>1.2</commons-cli.version><!-- parsing commandline options in Module common-->
 
@@ -80,6 +81,7 @@
         <camel.version>2.18.1</camel.version>
 
         <assembly-plugin.version>3.1.0</assembly-plugin.version>
+        <dependency-plugin.version>3.0.2</dependency-plugin.version>
 
 
     </properties>

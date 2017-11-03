@@ -1,0 +1,31 @@
+#!/usr/bin/env bash
+
+if [ ! -n "${LIQUIBASE_HOME+x}" ]; then
+  # echo "LIQUIBASE_HOME is not set."
+
+  ## resolve links - $0 may be a symlink
+  PRG="$0"
+  while [ -h "$PRG" ] ; do
+    ls=`ls -ld "$PRG"`
+    link=`expr "$ls" : '.*-> \(.*\)$'`
+    if expr "$link" : '/.*' > /dev/null; then
+    PRG="$link"
+    else
+    PRG=`dirname "$PRG"`"/$link"
+    fi
+  done
+
+
+  LIQUIBASE_HOME=`dirname "$PRG"`
+
+  # make it fully qualified
+  LIQUIBASE_HOME=`cd "$LIQUIBASE_HOME" && pwd`
+  # echo "Liquibase Home: $LIQUIBASE_HOME"
+fi
+
+
+
+# add any JVM options here
+JAVA_OPTS="${JAVA_OPTS-}"
+
+java -cp "liquibase-core-3.5.3.jar;postgresql-9.4-1203-jdbc42.jar" $JAVA_OPTS liquibase.integration.commandline.Main ${1+"$@"}

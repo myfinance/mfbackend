@@ -15,8 +15,6 @@
     <name>Distributions - Release Packaging</name>
 
     <build>
-        <!-- to be sure that the jar has always the same name without a version-->
-        <finalName>run-job</finalName>
         <plugins>
             <plugin>
                 <artifactId>maven-assembly-plugin</artifactId>
