@@ -20,7 +20,7 @@
         <plugins>
             <plugin>
                 <artifactId>maven-assembly-plugin</artifactId>
-                <version>3.0.0</version>
+                <version>${assembly-plugin.version}</version>
                 <executions>
                     <execution>
                         <id>distro-assembly</id>
@@ -29,7 +29,7 @@
                             <goal>single</goal>
                         </goals>
                         <configuration>
-
+                            <finalName>MyFinance-${pom.version}</finalName>
                             <descriptors>
                                 <descriptor>src/main/assembly/assembly.xml</descriptor>
                             </descriptors>

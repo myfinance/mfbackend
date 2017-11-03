@@ -79,6 +79,8 @@
         <restassured.version>3.0.3</restassured.version><!-- rest requests for test -->
         <camel.version>2.18.1</camel.version>
 
+        <assembly-plugin.version>3.1.0</assembly-plugin.version>
+
 
     </properties>
 
