@@ -14,7 +14,7 @@
     <fileSets>
         <!--libs for the runner -->
         <fileSet>
-            <outputDirectory>lib</outputDirectory>
+            <outputDirectory>MyFinance-${pom.version}/lib</outputDirectory>
             <directory>${project.build.directory}/../../run-job/target/lib</directory>
             <includes>
                 <include>*</include>
@@ -23,7 +23,7 @@
 
         <!--runner -->
         <fileSet>
-            <outputDirectory></outputDirectory>
+            <outputDirectory>MyFinance-${pom.version}</outputDirectory>
             <directory>${project.build.directory}/../../run-job/target</directory>
 
             <includes>
@@ -33,7 +33,7 @@
 
         <!--karaf -->
         <fileSet>
-            <outputDirectory>karaf</outputDirectory>
+            <outputDirectory>MyFinance-${pom.version}/karaf</outputDirectory>
             <directory>${project.build.directory}/../../karaf-full/target/assembly</directory>
 
             <includes>
@@ -43,7 +43,7 @@
 
         <!--Database-Scripts-->
         <fileSet>
-            <outputDirectory>database/changelog</outputDirectory>
+            <outputDirectory>MyFinance-${pom.version}/database/changelog</outputDirectory>
             <directory>${project.build.directory}/../../../Database/changelog</directory>
             <includes>
                 <include>**/*</include>
@@ -54,7 +54,7 @@
 
         <!--Database-Scripts-->
         <fileSet>
-            <outputDirectory>database</outputDirectory>
+            <outputDirectory>MyFinance-${pom.version}/database</outputDirectory>
             <directory>${project.build.directory}/../../../Database</directory>
             <includes>
                 <include>postgres*.jar</include>
