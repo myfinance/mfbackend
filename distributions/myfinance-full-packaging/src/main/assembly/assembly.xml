@@ -44,7 +44,7 @@
         <!--Database-Scripts-->
         <fileSet>
             <outputDirectory>database/changelog</outputDirectory>
-            <directory>${project.build.scriptSourceDirectory}/../../../../../database/changelog</directory>
+            <directory>${project.build.directory}/../../../Database/changelog</directory>
             <includes>
                 <include>**/*</include>
             </includes>
@@ -55,7 +55,7 @@
         <!--Database-Scripts-->
         <fileSet>
             <outputDirectory>database</outputDirectory>
-            <directory>${project.build.scriptSourceDirectory}/../../../../../database</directory>
+            <directory>${project.build.directory}/../../../Database</directory>
             <includes>
                 <include>postgres*.jar</include>
             </includes>
