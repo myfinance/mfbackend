@@ -1,0 +1,18 @@
+// General
+undefined {
+  flex: 1;
+}
+
+html, body {
+  height: 100%;
+}
+
+.dc-chart {
+  height: 100%;
+  width: 100%;
+
+  .dc-select-menu {
+    height: 100%;
+    width: 100%;
+  }
+}

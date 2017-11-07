@@ -1,3 +1,7 @@
+@import '~styles/_variables';
+
+@import '~styles/_general';
+
 body::before {
   background-size: cover;
   background-attachment: fixed;

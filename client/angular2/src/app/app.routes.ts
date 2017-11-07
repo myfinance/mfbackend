@@ -1,11 +1,14 @@
 /**
- * Created by xn01598 on 19.05.2017.
+ * Created by hf on 19.05.2017.
  */
 import { Routes, RouterModule } from '@angular/router';
-import { HomeComponent } from './home/home.component';
 import {InstrumentSearchComponent} from "./instrument-search/instrument-search.component";
 import {ChartComponent} from "./charts/chart.component";
 import {RichGridComponent} from "./charts/rich-grid.component";
+import {NotFoundViewComponent} from "./views/not-found-view/not-found-view.component";
+import {ErrorViewComponent} from "./views/error-view/error-view.component";
+import {HomeComponent} from "./views/home/home.component";
+import {BasicLayoutComponent} from "./shared/components/basic-layout/basic-layout.component";
 
 const APP_ROUTES: Routes = [
   {
@@ -13,25 +16,40 @@ const APP_ROUTES: Routes = [
     redirectTo: 'home',
     pathMatch: 'full'
   },
-  {
-    path: 'home',
-    component: HomeComponent
-  },
-  {
-    path: 'instrument-search',
-    component: InstrumentSearchComponent
-  },
-  {
-    path: 'charts',
-    component: ChartComponent
-  },
-  {
-    path: 'grid',
-    component: RichGridComponent
+  { path: '', component: BasicLayoutComponent,
+    children: [
+      {
+        path: 'not_found',
+        component: NotFoundViewComponent
+      },
+      {
+        path: 'error',
+        component: ErrorViewComponent
+      },
+      {
+        path: 'home',
+        component: HomeComponent
+      },
+      {
+        path: 'instrument-search',
+        component: InstrumentSearchComponent
+      },
+      {
+        path: 'charts',
+        component: ChartComponent
+      },
+      {
+        path: 'dashboards', loadChildren: './modules/dashboard/dashboard.module#DashboardModule'
+      },
+      {
+        path: 'grid',
+        component: RichGridComponent
+      }
+    ]
   },
   {
     path: '**',
-    redirectTo: 'home'
+    redirectTo: 'not_found'
   }
 ];
 

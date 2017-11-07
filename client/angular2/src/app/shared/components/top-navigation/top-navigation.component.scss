@@ -1,0 +1,15 @@
+:host {
+  z-index: 2000;
+}
+
+.top-navigation-wrapper {
+  .title {
+    margin-left: 10px;
+    font-weight: bold;
+  }
+
+  .top {
+    border-radius: 0;
+    margin: 0;
+  }
+}
