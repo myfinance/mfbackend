@@ -2,9 +2,8 @@
  * Created by xn01598 on 11.05.2017.
  */
 import { Component } from '@angular/core';
-import {Http} from "@angular/http";
-import {Instrument} from "../entities/instrument";
-import {InstrumentService} from "./instrument.service";
+import {Instrument} from "../shared/models/instrument";
+import {MyFinanceDataService} from "../shared/services/myfinance-data.service";
 
 @Component({
   selector: 'instrument-search',
@@ -14,7 +13,7 @@ export class InstrumentSearchComponent {
   isin: string;
   instruments: Array<Instrument>;
 
-  constructor(private instrumentService: InstrumentService) { }
+  constructor(private instrumentService: MyFinanceDataService) { }
   search(): void{
     this
       .instrumentService

@@ -1,5 +1,5 @@
 import { Component, Input, EventEmitter, Output, OnChanges, OnInit, SimpleChanges } from '@angular/core';
-import {Instrument} from "../entities/instrument";
+import {Instrument} from "../shared/models/instrument";
 
 
 @Component({

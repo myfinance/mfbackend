@@ -33,6 +33,7 @@
     "ng2-semantic-ui": "^0.9.6",
     "d3": "^4.11.0",
     "dc": "^2.1.8",
+    "crossfilter2": "^1.4.3",
     "ag-grid": "10.0.x",
     "ag-grid-enterprise": "10.0.x",
     "ag-grid-angular": "10.0.x"

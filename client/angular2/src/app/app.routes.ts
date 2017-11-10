@@ -9,6 +9,7 @@ import {NotFoundViewComponent} from "./views/not-found-view/not-found-view.compo
 import {ErrorViewComponent} from "./views/error-view/error-view.component";
 import {HomeComponent} from "./views/home/home.component";
 import {BasicLayoutComponent} from "./shared/components/basic-layout/basic-layout.component";
+import {BarchartexpComponent} from "./views/examples/barchartexp/barchartexp.component";
 
 const APP_ROUTES: Routes = [
   {
@@ -37,6 +38,10 @@ const APP_ROUTES: Routes = [
       {
         path: 'charts',
         component: ChartComponent
+      },
+      {
+        path: 'barchart',
+        component: BarchartexpComponent
       },
       {
         path: 'dashboards', loadChildren: './modules/dashboard/dashboard.module#DashboardModule'

@@ -88,7 +88,7 @@ export const InstrumentOverviewConf = {
           }
         ]
       },
-      layout: { x: 0, y: 6, cols: 4, rows: 2 }
+      layout: { x: 0, y: 0, cols: 2, rows: 2 }
     },
   ]
 }

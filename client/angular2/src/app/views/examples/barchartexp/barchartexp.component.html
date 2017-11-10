@@ -1,0 +1,22 @@
+<div>
+
+    <sui-dimmer [(isDimmed)]="_loading" [isClickable]="false">
+      <div class="ui text loader">Loading</div>
+    </sui-dimmer>
+    <sui-dimmer [(isDimmed)]="_preparing" [isClickable]="false">
+      <div class="ui text loader">Preparing dashboard</div>
+    </sui-dimmer>
+    <app-widget-horizontal-bar-chart class="barchart-wrapper"
+      *ngIf="_dataLoaded; else dataNotLoaded"
+      [config]="_config"
+      [resized]="_resizedSubject">
+    </app-widget-horizontal-bar-chart>
+    <ng-template #dataNotLoaded>
+      <div class="no-data-loaded-wrapper">
+        <div class="no-data-loaded">
+          No data loaded...
+        </div>
+      </div>
+    </ng-template>
+</div>
+

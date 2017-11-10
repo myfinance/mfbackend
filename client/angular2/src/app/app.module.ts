@@ -5,9 +5,7 @@ import {Http, HttpModule} from '@angular/http';
 
 import { AppComponent } from './app.component';
 import {InstrumentSearchComponent} from "./instrument-search/instrument-search.component";
-import {InstrumentService} from "./instrument-search/instrument.service";
 import {BASE_URL} from "./app.tokens";
-import {InstrumentDummyService} from "./instrument-search/dummy-instrument.service";
 import {InstrumentCardComponent} from "./instrument-search/instrument-card.component";
 import {AppRoutesModule} from "./app.routes";
 import {ChartComponent} from "./charts/chart.component";
@@ -22,8 +20,12 @@ import {HomeComponent} from "./views/home/home.component";
 import {TopNavigationComponent} from "./shared/components/top-navigation/top-navigation.component";
 import {BasicLayoutComponent} from "./shared/components/basic-layout/basic-layout.component";
 import { SuiModule } from 'ng2-semantic-ui';
+import { BarchartexpComponent } from './views/examples/barchartexp/barchartexp.component';
+import {WidgetModule} from "./modules/widget/widget.module";
+import {MyFinanceDataService} from "./shared/services/myfinance-data.service";
+import {myfinanceDummyDataService} from "./shared/services/myfinance-data-mock.service";
 
-const DEBUG=false;
+const DEBUG=true;
 const BASEURL='http://localhost:8181/dac/rest/marketdata/environments/dev';
 
 
@@ -33,18 +35,18 @@ export let baseURLProvider =
 
 let injector = ReflectiveInjector.resolveAndCreate([baseURLProvider]);
 
-export function instrumentServiceFactory(http:Http){
+export function myfinanceDataServiceFactory(http:Http){
   if(DEBUG) {
-    return new InstrumentDummyService();
+    return new myfinanceDummyDataService();
   }
   else {
-    return new InstrumentService(http, injector.get(BASE_URL));
+    return new MyFinanceDataService(http, injector.get(BASE_URL));
   }
 }
 
-export let instrumentServiceProvider =
-  { provide: InstrumentService,
-    useFactory: instrumentServiceFactory,
+export let myFinanceDataServiceProvider =
+  { provide: MyFinanceDataService,
+    useFactory: myfinanceDataServiceFactory,
     deps: [Http, BASE_URL]
   };
 
@@ -64,7 +66,8 @@ export let instrumentServiceProvider =
     HeaderComponent,
     HeaderGroupComponent,
     TopNavigationComponent,
-    BasicLayoutComponent
+    BasicLayoutComponent,
+    BarchartexpComponent
   ],
   imports: [
     BrowserModule,
@@ -72,6 +75,7 @@ export let instrumentServiceProvider =
     HttpModule,
     AppRoutesModule,
     SuiModule,
+    WidgetModule,
     AgGridModule.withComponents(
       [
         DateComponent,
@@ -82,7 +86,7 @@ export let instrumentServiceProvider =
   ],
   providers: [
     baseURLProvider,
-    instrumentServiceProvider
+    myFinanceDataServiceProvider
   ],
   bootstrap: [AppComponent]
 
