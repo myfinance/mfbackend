@@ -1,1 +1,29 @@
-<h1>mydashboard!</h1>
+<div class="generic-dashboard-wrapper">
+  <app-dashboard-top-menu
+    [title]="_config.title"
+    [csv]="_config.menu.csv"
+    [service]="_config.menu.service"
+    [filters]="_config.menu.filters"
+    (loading)="handleLoading($event)"
+    (dataLoaded)="handleDataLoaded($event)">
+  </app-dashboard-top-menu>
+  <div class="ui segment">
+    <sui-dimmer [(isDimmed)]="_loading" [isClickable]="false">
+      <div class="ui text loader">Loading</div>
+    </sui-dimmer>
+    <sui-dimmer [(isDimmed)]="_preparing" [isClickable]="false">
+      <div class="ui text loader">Preparing dashboard</div>
+    </sui-dimmer>
+    <app-dashboard-grid
+      *ngIf="_dataLoaded; else dataNotLoaded"
+      [config]="_config">
+    </app-dashboard-grid>
+    <ng-template #dataNotLoaded>
+      <div class="no-data-loaded-wrapper">
+        <div class="no-data-loaded">
+          No data loaded...
+        </div>
+      </div>
+    </ng-template>
+  </div>
+</div>

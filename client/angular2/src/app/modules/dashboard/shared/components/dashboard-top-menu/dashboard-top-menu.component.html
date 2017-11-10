@@ -1,0 +1,16 @@
+<div class="dashboard-top-menu-wrapper">
+  <div class="ui menu">
+    <div class="header item">{{ title }}</div>
+    <div *ngIf="service" class="item">
+      <button class="ui button" (click)="_handleLoadService($event)">Load service data</button>
+    </div>
+    <div *ngIf="csv" class="item">
+      <div class="ui labeled input">
+        <label for="csv-file" class="ui button">
+          Load CSV data
+          <input type="file" id="csv-file" name="csv-file" style="display: none" (change)="_handleLoadCsv($event)" #csvFileInput>
+        </label>
+      </div>
+    </div>
+  </div>
+</div>

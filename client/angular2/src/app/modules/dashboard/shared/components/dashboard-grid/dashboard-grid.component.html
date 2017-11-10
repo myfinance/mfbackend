@@ -1,0 +1,17 @@
+<div class="dashboard-grid-wrapper">
+  <gridster [options]="_options">
+    <gridster-item class="ui card" [item]="item" *ngFor="let item of _dashboard">
+      <div class="drag-handler"><i aria-hidden="true" class="move icon"></i></div>
+      <app-widget-horizontal-bar-chart
+        *ngIf="item.widget.type == 'horizontal-bar-chart'"
+        [config]="item.widget.config"
+        [resized]="_resizedSubject">
+      </app-widget-horizontal-bar-chart>
+      <app-widget-composite-line-chart
+        *ngIf="item.widget.type == 'composite-line-chart'"
+        [config]="item.widget.config"
+        [resized]="_resizedSubject">
+      </app-widget-composite-line-chart>
+    </gridster-item>
+  </gridster>
+</div>

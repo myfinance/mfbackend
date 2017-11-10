@@ -1,5 +1,7 @@
 import { Injectable, OnDestroy } from '@angular/core';
 
+import { CsvService } from './csv.service';
+
 /**
  * Data service to load, cache and provide dashboard data.
  * TODO: Needs a proper caching strategy.
@@ -17,21 +19,39 @@ export class DataService implements OnDestroy {
     return this._data[identifier];
   }
 
-  constructor() { }
+  constructor(private _csvService: CsvService) { }
+
+  /**
+   * Loads a CSV file into the data cache.
+   * @param file The CSV file to load.
+   * @param handler The handler to call upon finish.
+   */
+  loadCsv(file: any, handler: any): void {
+    let identifier = btoa(file.name);
+    if(this._data[identifier]) {
+      handler('csv', identifier);
+    } else {
+      this._clearCache(); //TODO Caching strategy
+      this._csvService.parse(file, result => {
+        this._data[identifier] = result.data;
+        handler('csv', identifier);
+      });
+    }
+  }
 
   /**
    * Loads data from the ccr service into the data cache.
    * @param url
    * @param handler
    */
-  loadData(url: string, handler: any): void {
+  loadService(url: string, handler: any): void {
     let identifier = btoa(url)
     if(this._data[identifier]) {
-      handler('ccr', identifier);
+      handler('service', identifier);
     } else {
       this._clearCache(); //TODO Caching strategy
       this._data[identifier] = identifier;
-      handler('ccr', identifier);
+      handler('service', identifier);
     }
   }
 
