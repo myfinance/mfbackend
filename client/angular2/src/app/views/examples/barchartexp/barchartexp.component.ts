@@ -1,7 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import {ChangeDetectionStrategy, Component, OnInit} from '@angular/core';
 import {Subject} from "rxjs/Subject";
 import {DcService} from "../../../modules/widget/services/dc.service";
 import {MyFinanceDataService} from "../../../shared/services/myfinance-data.service";
+import {UUID} from "angular2-uuid";
 
 
 @Component({
@@ -15,8 +16,7 @@ export class BarchartexpComponent implements OnInit {
   private _preparing: boolean = false;
   private _dataLoaded: boolean = false;
 
-    private _config= {
-    title: 'Positions',
+  private _config= {
     data: {
       columns: [
         { key: 'isin', type: 'string' },
@@ -30,9 +30,19 @@ export class BarchartexpComponent implements OnInit {
       { id: '81e6ea16-6cba-40a0-8204-0e1f8f103ca5', value: [ 'isin' ] },
       { id: '5e9c4eb3-8526-42f3-9ea8-091148b2dd92', value: [ 'valdate' ] },
       { id: '5304029d-3996-4aff-bafc-11098e3f3d2b', value: [ '' ] }
-    ],
+    ]
+  };
+
+
+  private _widgetConfig= {
+    title: 'Positions',
     dimension: '81e6ea16-6cba-40a0-8204-0e1f8f103ca5',
-    group: dimension => dimension.group().reduceSum(d => d.diff)
+    group: dimension => dimension.group().reduceSum(d => d.price),
+    xAxisFormat: 'financial-number',
+    tooltip: [
+      { key: 'typ', value: 'diff', valueType: 'financial-number' }
+    ],
+    uuid: UUID.UUID()
   };
   private _data;
   private _resizedSubject: Subject<any> = new Subject();
@@ -65,5 +75,9 @@ export class BarchartexpComponent implements OnInit {
         }
       );
   }
+
+
+
+
 
 }

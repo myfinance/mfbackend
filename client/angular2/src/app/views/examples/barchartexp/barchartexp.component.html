@@ -8,7 +8,7 @@
     </sui-dimmer>
     <app-widget-horizontal-bar-chart class="barchart-wrapper"
       *ngIf="_dataLoaded; else dataNotLoaded"
-      [config]="_config"
+      [config]="_widgetConfig"
       [resized]="_resizedSubject">
     </app-widget-horizontal-bar-chart>
     <ng-template #dataNotLoaded>

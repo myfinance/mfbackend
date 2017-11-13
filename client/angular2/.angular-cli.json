@@ -21,6 +21,7 @@
       "styles": [
         "styles.scss",
         "../node_modules/bootstrap/dist/css/bootstrap.css",
+        "../node_modules/dc/dc.min.css",
         "../node_modules/semantic-ui-css/semantic.min.css"
       ],
       "scripts": [],
