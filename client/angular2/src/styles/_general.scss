@@ -1,18 +1,22 @@
 // General
-undefined {
-  flex: 1;
-}
-
 html, body {
   height: 100%;
 }
 
+// dc.js
 .dc-chart {
   height: 100%;
   width: 100%;
+  display: flex;
+  flex-flow: column;
 
   .dc-select-menu {
     height: 100%;
     width: 100%;
   }
+}
+
+// Bootstrap
+.btn {
+  border-radius: 0;
 }

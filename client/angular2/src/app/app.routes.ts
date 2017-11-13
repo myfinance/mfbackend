@@ -3,8 +3,6 @@
  */
 import { Routes, RouterModule } from '@angular/router';
 import {InstrumentSearchComponent} from "./instrument-search/instrument-search.component";
-import {ChartComponent} from "./charts/chart.component";
-import {RichGridComponent} from "./charts/rich-grid.component";
 import {NotFoundViewComponent} from "./views/not-found-view/not-found-view.component";
 import {ErrorViewComponent} from "./views/error-view/error-view.component";
 import {HomeComponent} from "./views/home/home.component";
@@ -36,19 +34,11 @@ const APP_ROUTES: Routes = [
         component: InstrumentSearchComponent
       },
       {
-        path: 'charts',
-        component: ChartComponent
-      },
-      {
         path: 'barchart',
         component: BarchartexpComponent
       },
       {
         path: 'dashboards', loadChildren: './modules/dashboard/dashboard.module#DashboardModule'
-      },
-      {
-        path: 'grid',
-        component: RichGridComponent
       }
     ]
   },

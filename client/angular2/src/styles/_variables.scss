@@ -1,5 +1,15 @@
 // Variables
+$bootstrap-path: '../node_modules/bootstrap/scss/bootstrap.scss';
+$fa-font-path : '../node_modules/font-awesome/fonts';
+
+// Bootstrap Variables
+$primary: #f08200;
+
 $border-color: rgba(34,36,38,.15);
+
+$dimmer-color: white;
+$dimmer-background-color: rgba(0, 0, 0, 0.60);
+
 $active-tab-background-color: rgba(0, 0, 0, 0.87);
 $active-tab-color: white;
 

@@ -8,22 +8,20 @@ import {InstrumentSearchComponent} from "./instrument-search/instrument-search.c
 import {BASE_URL} from "./app.tokens";
 import {InstrumentCardComponent} from "./instrument-search/instrument-card.component";
 import {AppRoutesModule} from "./app.routes";
-import {ChartComponent} from "./charts/chart.component";
-import {RichGridComponent} from "./charts/rich-grid.component";
-import {HeaderGroupComponent} from "./charts/header-group.component";
-import {HeaderComponent} from "./charts/header.component";
-import {DateComponent} from "./charts/date.component";
-import {AgGridModule} from "ag-grid-angular/main";
 import {NotFoundViewComponent} from "./views/not-found-view/not-found-view.component";
 import {ErrorViewComponent} from "./views/error-view/error-view.component";
 import {HomeComponent} from "./views/home/home.component";
 import {TopNavigationComponent} from "./shared/components/top-navigation/top-navigation.component";
 import {BasicLayoutComponent} from "./shared/components/basic-layout/basic-layout.component";
-import { SuiModule } from 'ng2-semantic-ui';
 import { BarchartexpComponent } from './views/examples/barchartexp/barchartexp.component';
 import {WidgetModule} from "./modules/widget/widget.module";
 import {MyFinanceDataService} from "./shared/services/myfinance-data.service";
 import {myfinanceDummyDataService} from "./shared/services/myfinance-data-mock.service";
+
+// ngx-bootstrap
+import { CollapseModule } from 'ngx-bootstrap/collapse';
+import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
+import {MyFinanceCommonModule} from "./modules/myfinance-common/myfinance-common.module";
 
 const DEBUG=true;
 const BASEURL='http://localhost:8181/dac/rest/marketdata/environments/dev';
@@ -60,11 +58,6 @@ export let myFinanceDataServiceProvider =
     InstrumentSearchComponent,
     InstrumentCardComponent,
     HomeComponent,
-    ChartComponent,
-    RichGridComponent,
-    DateComponent,
-    HeaderComponent,
-    HeaderGroupComponent,
     TopNavigationComponent,
     BasicLayoutComponent,
     BarchartexpComponent
@@ -74,15 +67,10 @@ export let myFinanceDataServiceProvider =
     FormsModule,
     HttpModule,
     AppRoutesModule,
-    SuiModule,
     WidgetModule,
-    AgGridModule.withComponents(
-      [
-        DateComponent,
-        HeaderComponent,
-        HeaderGroupComponent
-      ]
-    )
+    MyFinanceCommonModule,
+    CollapseModule.forRoot(),
+    BsDropdownModule.forRoot()
   ],
   providers: [
     baseURLProvider,

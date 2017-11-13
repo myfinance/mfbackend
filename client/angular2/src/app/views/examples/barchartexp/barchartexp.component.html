@@ -1,11 +1,15 @@
-<div>
+<div class="grid">
 
-    <sui-dimmer [(isDimmed)]="_loading" [isClickable]="false">
-      <div class="ui text loader">Loading</div>
-    </sui-dimmer>
-    <sui-dimmer [(isDimmed)]="_preparing" [isClickable]="false">
-      <div class="ui text loader">Preparing dashboard</div>
-    </sui-dimmer>
+  <app-dimmer [isDimmed]="_loading">
+    <div class="loader-wrapper">
+      <div class="loader text-primary"><i class="fa fa-spinner fa-spin"></i>Loading</div>
+    </div>
+  </app-dimmer>
+  <app-dimmer [isDimmed]="_preparing">
+    <div class="loader-wrapper">
+      <div class="loader text-primary"><i class="fa fa-spinner fa-spin"></i>Preparing dashboard</div>
+    </div>
+  </app-dimmer>
     <app-widget-horizontal-bar-chart class="barchart-wrapper"
       *ngIf="_dataLoaded; else dataNotLoaded"
       [config]="_widgetConfig"
