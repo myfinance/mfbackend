@@ -1,6 +1,6 @@
 <div class="widget-horizontal-bar-chart-wrapper">
   <app-widget-content [hideHeader]="_hideHeader" [title]="_config.title">
-    <div [id]="'chart-' + _config.uuid" #chart style="height: 500px; width: 500px">
+    <div [id]="'chart-' + _config.uuid" #chart>
       <div class="reset-wrapper">
         <a class="reset" (click)="reset($event)" style="visibility: hidden;">reset</a>
       </div>

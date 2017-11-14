@@ -1,9 +1,7 @@
 import { Injectable, OnDestroy } from '@angular/core';
 import crossfilter from 'crossfilter2';
 import { timeFormat } from 'd3-time-format';
-import { timeParse, utcParse } from 'd3-time-format';
 
-const d3ParseDateDimension = timeParse('%Y-%m-%d');
 const d3FormatDateDim = timeFormat('%Y-%m-%d');
 
 @Injectable()
@@ -52,7 +50,7 @@ export class DcService implements OnDestroy {
       });
       return obj;
     };
-    
+
     this._data = data.map(rowFn);
     this._ndx = crossfilter(this._data);
   }

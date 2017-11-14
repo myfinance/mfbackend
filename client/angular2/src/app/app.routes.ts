@@ -8,6 +8,7 @@ import {ErrorViewComponent} from "./views/error-view/error-view.component";
 import {HomeComponent} from "./views/home/home.component";
 import {BasicLayoutComponent} from "./shared/components/basic-layout/basic-layout.component";
 import {BarchartexpComponent} from "./views/examples/barchartexp/barchartexp.component";
+import {LinechartexpComponent} from "./views/examples/linechartexp/linechartexp.component";
 
 const APP_ROUTES: Routes = [
   {
@@ -36,6 +37,14 @@ const APP_ROUTES: Routes = [
       {
         path: 'barchart',
         component: BarchartexpComponent
+      },
+      {
+        path: 'linechart',
+        component: LinechartexpComponent
+      },
+      {
+        path: 'gridexp',
+        component: LinechartexpComponent
       },
       {
         path: 'dashboards', loadChildren: './modules/dashboard/dashboard.module#DashboardModule'

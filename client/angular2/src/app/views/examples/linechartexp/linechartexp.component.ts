@@ -1,16 +1,19 @@
-import {ChangeDetectionStrategy, Component, OnInit} from '@angular/core';
+import { Component, OnInit, ViewEncapsulation } from '@angular/core';
+import {UUID} from "angular2-uuid";
 import {Subject} from "rxjs/Subject";
 import {DcService} from "../../../modules/widget/services/dc.service";
 import {MyFinanceDataService} from "../../../shared/services/myfinance-data.service";
-import {UUID} from "angular2-uuid";
+import {timeParse} from "d3-time-format";
 
+const d3ParseDateDimension = timeParse('%Y-%m-%d');
 
 @Component({
-  selector: 'app-barchartexp',
-  templateUrl: './barchartexp.component.html',
-  styleUrls: ['./barchartexp.component.scss']
+  selector: 'app-linechartexp',
+  templateUrl: './linechartexp.component.html',
+  styleUrls: ['./linechartexp.component.scss'],
+  encapsulation: ViewEncapsulation.None
 })
-export class BarchartexpComponent implements OnInit {
+export class LinechartexpComponent  implements OnInit {
 
   private _loading: boolean = false;
   private _preparing: boolean = false;
@@ -33,14 +36,36 @@ export class BarchartexpComponent implements OnInit {
     ]
   };
 
-
   private _widgetConfig= {
     title: 'Positions',
-    dimension: '5304029d-3996-4aff-bafc-11098e3f3d2b',
-    group: dimension => dimension.group().reduceSum(d => d.price * d.amount),
-    xAxisFormat: 'financial-number',
-    tooltip: [
-      { key: 'typ', value: 'diff', valueType: 'financial-number' }
+    dimension: '5e9c4eb3-8526-42f3-9ea8-091148b2dd92',
+    xAxisFormat: 'date',
+    yAxisFormat: 'financial-number',
+    lines: [
+      {
+        title: 'Gesamt',
+        group: dimension => dimension.group(d3ParseDateDimension).reduceSum(d => d.price * d.amount),
+        color: 'blue',
+        tooltip: [
+          { key: 'valdate', value: 'value', keyType: 'date', valueType: 'financial-number' }
+        ]
+      },
+      {
+        title: 'testinstrument1',
+        group: dimension => dimension.group(d3ParseDateDimension).reduceSum(d => d.isin === 'isin00000001' ? (d.price * d.amount): 0),
+        color: 'red',
+        tooltip: [
+          { key: 'valdate', value: 'value', keyType: 'date', valueType: 'financial-number' }
+        ]
+      },
+      {
+        title: 'testinstrument2',
+        group: dimension => dimension.group(d3ParseDateDimension).reduceSum(d => (d.isin === 'isin00000002') ? (d.price * d.amount) : 0),
+        color: 'green',
+        tooltip: [
+          { key: 'valdate', value: 'value', keyType: 'date', valueType: 'financial-number' }
+        ]
+      }
     ],
     uuid: UUID.UUID()
   };
