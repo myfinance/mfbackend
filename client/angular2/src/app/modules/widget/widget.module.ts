@@ -7,20 +7,24 @@ import { WidgetHorizontalBarChartComponent } from './components/widget-horizonta
 import { FinancialNumberPipe } from './pipes/financial-number.pipe';
 import { WidgetCompositeLineChartComponent } from './components/widget-composite-line-chart/widget-composite-line-chart.component';
 import {WidgetContentComponent} from "./shared/component/widget-content/widget-content.component";
+import {WidgetDataTableComponent} from "./components/widget-data-table/widget-data-table.component";
+import {AgGridModule} from "ag-grid-angular";
 
 @NgModule({
   imports: [
     CommonModule,
-    SuiModule
+    AgGridModule.withComponents([])
   ],
   declarations: [
     WidgetHorizontalBarChartComponent,
     WidgetCompositeLineChartComponent,
     WidgetContentComponent,
+    WidgetDataTableComponent,
     FinancialNumberPipe
   ],
   exports: [
     WidgetHorizontalBarChartComponent,
+    WidgetDataTableComponent,
     WidgetCompositeLineChartComponent
   ],
   providers: [

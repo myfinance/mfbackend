@@ -90,5 +90,75 @@ export const InstrumentOverviewConf = {
       },
       layout: { x: 0, y: 0, cols: 2, rows: 2 }
     },
+    {
+      type: 'data-table',
+      config: {
+        title: 'Daten',
+        dimension: '5304029d-3996-4aff-bafc-11098e3f3d2b',
+        view: 'fit',
+        columns: [
+          {
+            title: 'Valdate',
+            type: 'date',
+            value: 'valdate',
+            filter: {
+              type: 'text'
+            },
+            sortable: true
+          },
+          {
+            title: 'Abteilung',
+            value: 'abteilung',
+            filter: {
+              type: 'text'
+            },
+            sortable: true
+          },
+          {
+            title: 'Portfolio',
+            value: 'portfolio',
+            filter: {
+              type: 'text'
+            },
+            sortable: true
+          },
+          {
+            title: 'Gruppe',
+            value: 'gruppe',
+            filter: {
+              type: 'text'
+            },
+            sortable: true
+          },
+          {
+            title: 'Typ',
+            value: 'typ',
+            filter: {
+              type: 'text'
+            },
+            sortable: true
+          },
+          {
+            title: 'Value',
+            type: 'financial-number',
+            value: 'value',
+            filter: {
+              type: 'text'
+            },
+            sortable: true
+          },
+          {
+            title: 'Diff',
+            type: 'financial-number',
+            value: 'diff',
+            filter: {
+              type: 'text'
+            },
+            sortable: true
+          }
+        ]
+      },
+      layout: { x: 0, y: 2, cols: 4, rows: 2 }
+    }
   ]
 }

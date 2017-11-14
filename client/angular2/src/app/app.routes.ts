@@ -9,6 +9,7 @@ import {HomeComponent} from "./views/home/home.component";
 import {BasicLayoutComponent} from "./shared/components/basic-layout/basic-layout.component";
 import {BarchartexpComponent} from "./views/examples/barchartexp/barchartexp.component";
 import {LinechartexpComponent} from "./views/examples/linechartexp/linechartexp.component";
+import {GridexpComponent} from "./views/examples/gridexp/gridexp.component";
 
 const APP_ROUTES: Routes = [
   {
@@ -44,7 +45,7 @@ const APP_ROUTES: Routes = [
       },
       {
         path: 'gridexp',
-        component: LinechartexpComponent
+        component: GridexpComponent
       },
       {
         path: 'dashboards', loadChildren: './modules/dashboard/dashboard.module#DashboardModule'

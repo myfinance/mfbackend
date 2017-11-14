@@ -1,17 +1,16 @@
-import {ChangeDetectionStrategy, Component, OnInit} from '@angular/core';
+import { Component, OnInit, ViewEncapsulation } from '@angular/core';
+import {UUID} from "angular2-uuid";
 import {Subject} from "rxjs/Subject";
 import {DcService} from "../../../modules/widget/services/dc.service";
 import {MyFinanceDataService} from "../../../shared/services/myfinance-data.service";
-import {UUID} from "angular2-uuid";
-
 
 @Component({
-  selector: 'app-barchartexp',
-  templateUrl: './barchartexp.component.html',
-  styleUrls: ['./barchartexp.component.scss']
+  selector: 'app-gridexp',
+  templateUrl: './gridexp.component.html',
+  styleUrls: ['./gridexp.component.scss'],
+  encapsulation: ViewEncapsulation.None
 })
-export class BarchartexpComponent implements OnInit {
-
+export class GridexpComponent implements OnInit {
   private _loading: boolean = false;
   private _preparing: boolean = false;
   private _dataLoaded: boolean = false;
@@ -34,17 +33,58 @@ export class BarchartexpComponent implements OnInit {
     ]
   };
 
+
   private _widgetConfig= {
     title: 'Positions',
-    dimension: '5304029d-3996-4aff-bafc-11098e3f3d2b',
-    group: dimension => dimension.group().reduceSum(d => d.price * d.amount),
-    xAxisFormat: 'financial-number',
-    tooltip: [
-      { key: 'typ', value: 'diff', valueType: 'financial-number' }
-    ],
-    uuid: UUID.UUID()
+    dimension: 'd42cafb0-3889-44c5-9420-9020174b05ce',
+    view: 'fit',
+    columns: [
+      {
+        title: 'ISIN',
+        type: 'string',
+        value: 'isin',
+        filter: {
+          type: 'text'
+        },
+        sortable: true
+      },
+      {
+        title: 'Beschreibung',
+        value: 'desc',
+        filter: {
+          type: 'text'
+        },
+        sortable: true
+      },
+      {
+        title: 'Price',
+        value: 'price',
+        type: 'financial-number',
+        filter: {
+          type: 'text'
+        },
+        sortable: true
+      },
+      {
+        title: 'Anzahl',
+        value: 'amount',
+        type: 'financial-number',
+        filter: {
+          type: 'text'
+        },
+        sortable: true
+      },
+      {
+        title: 'Datum',
+        value: 'valdate',
+        type: 'date',
+        filter: {
+          type: 'text'
+        },
+        sortable: true
+      }
+    ]
   };
-
   private _data;
   private _resizedSubject: Subject<any> = new Subject();
 

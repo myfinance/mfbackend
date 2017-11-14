@@ -10,11 +10,11 @@
       <div class="loader text-primary"><i class="fa fa-spinner fa-spin"></i>Preparing dashboard</div>
     </div>
   </app-dimmer>
-  <app-widget-composite-line-chart class="linechart-wrapper"
+  <app-widget-data-table
                                    *ngIf="_dataLoaded; else dataNotLoaded"
                                    [config]="_widgetConfig"
                                    [resized]="_resizedSubject">
-  </app-widget-composite-line-chart>
+  </app-widget-data-table>
   <ng-template #dataNotLoaded>
     <div class="no-data-loaded-wrapper">
       <div class="no-data-loaded">

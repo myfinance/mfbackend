@@ -1,18 +1,25 @@
 import { Injectable, OnDestroy } from '@angular/core';
 import crossfilter from 'crossfilter2';
 import { timeFormat } from 'd3-time-format';
+import {Subject} from "rxjs/Subject";
+import {ActivatedRoute, Router} from "@angular/router";
+import { Location } from '@angular/common';
 
 const d3FormatDateDim = timeFormat('%Y-%m-%d');
 
 @Injectable()
 export class DcService implements OnDestroy {
 
+  filters: any = {};
   private _data;
   private _config;
   private _ndx;
   private _dimensions;
+  private _charts: any[] = [];
 
-  constructor() { }
+  filtered: Subject<any> = new Subject();
+
+  constructor(private _activatedRoute: ActivatedRoute, private _router: Router, private _location: Location) { }
 
   get data() {
     return this._data;
@@ -81,8 +88,60 @@ export class DcService implements OnDestroy {
     }
   }
 
+
+  private _applyURLFilter(chart: any): void {
+    let urlFilters = this._activatedRoute.snapshot.queryParams['filters'];
+    if(urlFilters) {
+      this.filters = JSON.parse(atob(decodeURIComponent(urlFilters)));
+      for(let filter in this.filters) {
+        if(filter == chart.config.dimension) {
+          chart.filter([this.filters[chart.config.dimension]]);
+        }
+      }
+    }
+  }
+
+  registerChart(chart: any): void {
+    this._charts.push(chart);
+    // Apply URL filters after registration.
+    this._applyURLFilter(chart);
+  }
+
+  getChart(uuid: string): any {
+    for(let chart of this._charts) {
+      if(chart.config.uuid == uuid) return chart;
+    }
+  }
+
   getDimension(id: string): any {
     return this._dimensions[id];
+  }
+
+  getDimensionConfig(id: string): any {
+    for(let dimension of this._config.dimensions) {
+      if(dimension.id == id) return dimension;
+    }
+  }
+
+  handleFiltered(chart, filter): void {
+    if(Object.keys(chart.filters()).length === 0) {
+      delete this.filters[chart.config.dimension];
+    } else {
+      this.filters[chart.config.dimension] = chart.filters();
+    }
+
+    this.filtered.next({ chart: chart, filter: filter });
+
+    let url;
+    if(Object.keys(chart.filters()).length === 0) {
+      url = this._router
+        .createUrlTree([], { relativeTo: this._activatedRoute }).toString();
+    } else {
+      url = this._router
+        .createUrlTree([], { queryParams: { filters: encodeURIComponent(btoa(JSON.stringify(this.filters))) }, relativeTo: this._activatedRoute }).toString();
+    }
+
+    this._location.go(url);
   }
 
   ngOnDestroy() {

@@ -33,6 +33,8 @@
     "font-awesome": "^4.7.0",
     "d3": "^4.11.0",
     "dc": "^2.1.8",
+    "ag-grid": "^14.1.1",
+    "ag-grid-angular": "^14.1.0",
     "crossfilter2": "^1.4.3"
   },
   "devDependencies": {

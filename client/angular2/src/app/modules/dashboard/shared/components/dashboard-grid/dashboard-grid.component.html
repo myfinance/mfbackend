@@ -12,6 +12,12 @@
         [config]="item.widget.config"
         [resized]="_resizedSubject">
       </app-widget-composite-line-chart>
+      <app-widget-data-table
+        *ngIf="item.widget.type == 'data-table'"
+        [config]="item.widget.config"
+        [resized]="_resizedSubject"
+        [hideHeader]="item.widget.config.hideHeader">
+      </app-widget-data-table>
     </gridster-item>
   </gridster>
 </div>

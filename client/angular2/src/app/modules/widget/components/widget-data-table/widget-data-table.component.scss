@@ -1,0 +1,21 @@
+:host {
+  height: 100%;
+  display: flex;
+  flex-flow: column;
+}
+
+.widget-data-table-wrapper {
+  height: 100%;
+  display: flex;
+  flex-flow: column;
+
+  .data-table {
+    height: calc(100% - 40px);
+    display: flex;
+    flex-flow: column;
+  }
+
+  .reset-wrapper {
+    height: 20px;
+  }
+}

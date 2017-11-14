@@ -20,7 +20,9 @@
       "prefix": "app",
       "styles": [
         "styles.scss",
-        "../node_modules/dc/dc.min.css"
+        "../node_modules/dc/dc.min.css",
+        "../node_modules/ag-grid/dist/styles/ag-grid.css",
+        "../node_modules/ag-grid/dist/styles/theme-bootstrap.css"
       ],
       "scripts": [],
       "environmentSource": "environments/environment.ts",

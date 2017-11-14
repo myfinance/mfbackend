@@ -23,6 +23,7 @@ import { CollapseModule } from 'ngx-bootstrap/collapse';
 import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
 import {MyFinanceCommonModule} from "./modules/myfinance-common/myfinance-common.module";
 import { LinechartexpComponent } from './views/examples/linechartexp/linechartexp.component';
+import { GridexpComponent } from './views/examples/gridexp/gridexp.component';
 
 const DEBUG=true;
 const BASEURL='http://localhost:8181/dac/rest/marketdata/environments/dev';
@@ -62,7 +63,8 @@ export let myFinanceDataServiceProvider =
     TopNavigationComponent,
     BasicLayoutComponent,
     BarchartexpComponent,
-    LinechartexpComponent
+    LinechartexpComponent,
+    GridexpComponent
   ],
   imports: [
     BrowserModule,

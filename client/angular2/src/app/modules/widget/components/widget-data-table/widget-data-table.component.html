@@ -1,0 +1,8 @@
+<div class="widget-data-table-wrapper">
+  <app-widget-content [hideHeader]="_hideHeader" [title]="_config.title">
+    <ag-grid-angular class="data-table ag-bootstrap" #table
+      [gridOptions]="_gridOptions"
+      (filterChanged)="_handleFilterChanged($event)">
+    </ag-grid-angular>
+  </app-widget-content>
+</div>
