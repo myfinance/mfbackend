@@ -43,38 +43,7 @@
 
     <build>
         <plugins>
-            <!-- gets the necessary dependencies to run liquibase locally -->
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-dependency-plugin</artifactId>
-                <version>${dependency-plugin.version}</version>
-                <executions>
-                    <execution>
-                        <id>copy</id>
-                        <phase>package</phase>
-                        <goals>
-                            <goal>copy</goal>
-                        </goals>
-                        <configuration>
-                            <artifactItems>
-                                <artifactItem>
-                                    <groupId>org.liquibase</groupId>
-                                    <artifactId>liquibase-core</artifactId>
-                                    <version>${liquibase.version}</version>
-                                    <outputDirectory>${project.basedir}</outputDirectory>
-                                </artifactItem>
-                                <artifactItem>
-                                     <groupId>org.postgresql</groupId>
-                                     <artifactId>postgresql</artifactId>
-                                     <version>${postgresql.version}</version>
-                                    <outputDirectory>${project.basedir}</outputDirectory>
-                                </artifactItem>
-                            </artifactItems>
-                            <!-- other configurations here -->
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
+
             <plugin>
                 <artifactId>maven-antrun-plugin</artifactId>
                 <version>1.8</version>
@@ -195,6 +164,102 @@
                                 <artifactId>*</artifactId>
                             </exclusion>
                         </exclusions>
+                    </dependency>
+                </dependencies>
+            </plugin>
+
+
+            <plugin>
+                <groupId>org.liquibase</groupId>
+                <artifactId>liquibase-maven-plugin</artifactId>
+                <version>3.5.3</version>
+                <configuration>
+                    <driver>org.postgresql.Driver</driver>
+                    <username>postgres</username>
+                    <password>vulkan</password>
+                </configuration>
+                <executions>
+                    <execution>
+                        <!--mvn liquibase:update@update_dev-->
+                        <id>update_dev</id>
+                        <configuration>
+                            <changeLogFile>changelog/changelog-master.xml</changeLogFile>
+                            <url>jdbc:postgresql://localhost:5432/marketdata_dev</url>
+                        </configuration>
+                        <phase>none</phase>
+                        <goals>
+                            <goal>update</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                        <!--mvn liquibase:update@update_dac-->
+                        <id>update_dac</id>
+                        <configuration>
+                            <changeLogFile>changelog/dac/dac-changelog-master.xml</changeLogFile>
+                            <url>jdbc:postgresql://localhost:5432/dac_lb_db</url>
+                        </configuration>
+                        <phase>none</phase>
+                        <goals>
+                            <goal>update</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                        <!--mvn liquibase:update@update_md-->
+                        <id>update_md</id>
+                        <configuration>
+                            <changeLogFile>changelog/md/md-changelog-master.xml</changeLogFile>
+                            <url>jdbc:postgresql://localhost:5432/md_lb_db</url>
+                        </configuration>
+                        <phase>none</phase>
+                        <goals>
+                            <goal>update</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                        <!--mvn liquibase:diff@diff_dac-->
+                        <id>diff_dac</id>
+                        <configuration>
+                            <referenceDriver>org.postgresql.Driver</referenceDriver>
+                            <url>jdbc:postgresql://localhost:5432/dac_lb_db</url>
+                            <diffChangeLogFile>db.changelogdiff1.xml</diffChangeLogFile>
+                            <changeLogFile>db.changelogdiff1.xml</changeLogFile>
+                            <referencePassword>vulkan</referencePassword>
+                            <referenceUrl>jdbc:postgresql://localhost:5432/dac_pd_db</referenceUrl>
+                            <referenceUsername>dac</referenceUsername>
+                        </configuration>
+                        <phase>none</phase>
+                        <goals>
+                            <goal>diff</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                        <!--mvn liquibase:diff@diff_md-->
+                        <id>diff_md</id>
+                        <configuration>
+                            <referenceDriver>org.postgresql.Driver</referenceDriver>
+                            <url>jdbc:postgresql://localhost:5432/md_lb_db</url>
+                            <diffChangeLogFile>db.changelogdiff1.xml</diffChangeLogFile>
+                            <changeLogFile>db.changelogdiff1.xml</changeLogFile>
+                            <referencePassword>vulkan</referencePassword>
+                            <referenceUrl>jdbc:postgresql://localhost:5432/md_pd_db</referenceUrl>
+                            <referenceUsername>md</referenceUsername>
+                        </configuration>
+                        <phase>none</phase>
+                        <goals>
+                            <goal>diff</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <dependencies>
+                    <dependency>
+                        <groupId>org.liquibase</groupId>
+                        <artifactId>liquibase-core</artifactId>
+                        <version>${liquibase.version}</version>
+                    </dependency>
+                    <dependency>
+                        <groupId>org.postgresql</groupId>
+                        <artifactId>postgresql</artifactId>
+                        <version>${postgresql.version}</version>
                     </dependency>
                 </dependencies>
             </plugin>

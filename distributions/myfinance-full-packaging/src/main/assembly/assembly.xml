@@ -52,12 +52,32 @@
             <lineEnding>unix</lineEnding>
         </fileSet>
 
-        <!--Database-Scripts-->
+        <!--Database-Jars-->
         <fileSet>
             <outputDirectory>MyFinance-${pom.version}/database</outputDirectory>
-            <directory>${project.build.directory}/../../../Database</directory>
+            <directory>${project.build.outputDirectory}</directory>
             <includes>
                 <include>postgres*.jar</include>
+                <include>liquibase*.jar</include>
+            </includes>
+        </fileSet>
+
+        <!--Liquibase-scripts-->
+        <fileSet>
+            <outputDirectory>MyFinance-${pom.version}/database</outputDirectory>
+            <directory>${project.build.directory}/../../../Database/</directory>
+            <includes>
+                <include>liquibase</include>
+            </includes>
+            <fileMode>0755</fileMode>
+            <lineEnding>unix</lineEnding>
+        </fileSet>
+        <fileSet>
+            <outputDirectory>MyFinance-${pom.version}/database</outputDirectory>
+            <directory>${project.build.directory}/../../../Database/</directory>
+            <includes>
+                <include>dac_liquibase.cmd</include>
+                <include>liquibase.bat</include>
             </includes>
         </fileSet>
 
