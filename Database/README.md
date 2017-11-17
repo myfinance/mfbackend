@@ -1,26 +1,29 @@
-use liquibase-script to work with liquibase commands like 
+For devolopment use maven to create liquibase-scripts and update dev-db:
+mvn liquibase:diff@diff_dac
+mvn liquibase:update@update_dac
+mvn liquibase:update@update_dev
+
+create domain objects for the dev-db with mvn antrun:run@dachbm2java
+
+In Test and Prod use the scripts in ./scripts to update the database. 
+These scripts will be added to the package in the Database folder.
+The liquibase-script is meant to work with the plain 
 liquibase 
  --driver=org.postgresql.Driver 
  --classpath=".\postgresql-9.4-1203-jdbc42.jar" 
- --changeLogFile=db.changelogdiff1.xml 
+ --changeLogFile=changelog/changelog-master.xml 
  --url="jdbc:postgresql://localhost:5432/dac_lb_db" 
  --username=postgres 
  --password=**** 
- diffChangeLog 
- --referenceUrl="jdbc:postgresql://localhost:5432/dac_pd_db" 
- --referenceUsername=dac 
- --referencePassword=**** 
- --referenceDriver=org.postgresql.Driver
+ update
  
-use dac_liquibase-scripts to work with less parameters. Everthing else is set to the dac envirnment(Postgres-db ...)
-liquibase.cmd 
--m "diffChangeLog" 
+
+ 
+The dac_liquibase-script is meant to work with less parameters. Everthing else is set to the dac envirnment(Postgres-db ...)
+dac_liquibase.cmd 
 -url "localhost:5432/dac_lb_db" 
 -u postgres 
 -p xxxxx 
--refurl 
-localhost:5432/dac_pd_db 
--ru dac 
--rp xxxxx
+
 
 

@@ -65,7 +65,7 @@
         <!--Liquibase-scripts-->
         <fileSet>
             <outputDirectory>MyFinance-${pom.version}/database</outputDirectory>
-            <directory>${project.build.directory}/../../../Database/</directory>
+            <directory>${project.build.directory}/../../../Database/scripts</directory>
             <includes>
                 <include>liquibase</include>
             </includes>
@@ -74,7 +74,7 @@
         </fileSet>
         <fileSet>
             <outputDirectory>MyFinance-${pom.version}/database</outputDirectory>
-            <directory>${project.build.directory}/../../../Database/</directory>
+            <directory>${project.build.directory}/../../../Database/scripts</directory>
             <includes>
                 <include>dac_liquibase.cmd</include>
                 <include>liquibase.bat</include>

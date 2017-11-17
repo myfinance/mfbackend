@@ -45,26 +45,6 @@ rem ----------------------------------------------------------------------
 		shift
     	goto next_arg
     )
-	if [%arg%] == [-refurl] (
-		set REFURL="jdbc:postgresql://"%~2
-		shift
-		goto next_arg
-	)
-	if [%arg%] == [-ru] (
-		set REFUSER=%~2
-		shift
-		goto next_arg
-	)
-	if [%arg%] == [-rp] (
-    	set REFPW=%~2
-		shift
-    	goto next_arg
-    )
-	if [%arg%] == [-m] (
-	    set MODE=%~2
-		shift
-    	goto next_arg
-    )
 	goto usage
 :next_arg
 	shift
@@ -77,11 +57,6 @@ rem ----------------------------------------------------------------------
 rem parameter check
 rem ----------------------------------------------------------------------
 
-
-if [%MODE%] == [] (
- 	call:cerr "Mode is a necessary parameter"
- 	goto usage
-)
 
 if [%URL%] == [] (
  	call:cerr "URL is a necessary parameter"
@@ -96,50 +71,13 @@ if [%PW%] == [] (
  	goto usage
 )
 
-rem ----------------------------------------------------------------------
-rem Select Mode
-rem ----------------------------------------------------------------------
-
-IF NOT DEFINED JAVA_OPTS set JAVA_OPTS=
-
-if [%MODE%] == [diffChangeLog] (
- 	call:cout mode:diffChangeLog
- 	goto diff
-)
-
-if [%MODE%] == [migrate] (
- 	call:cout mode:migrate
- 	goto migrate
-)
-
-rem ----------------------------------------------------------------------
-rem call Liquibase diff
-rem ----------------------------------------------------------------------
-
-:diff
-if [%REFURL%] == [] (
- 	call:cerr "REFURL is a necessary parameter for mode diffChangeLog"
- 	goto usage
-)
-if [%REFUSER%] == [] (
-	call:cerr "REFUSER is a necessary parameter for mode diffChangeLog"
- 	goto usage
-)
-if [%REFPW%] == [] (
- 	call:cerr "REFPW is a necessary parameter for mode diffChangeLog"
- 	goto usage
-)
-java -cp "liquibase-core-3.5.3.jar;postgresql-9.4-1203-jdbc42.jar" %JAVA_OPTS% liquibase.integration.commandline.Main --driver=org.postgresql.Driver --classpath=".\postgresql-9.4-1203-jdbc42.jar" --changeLogFile=db.changelogdiff1.xml --url=%URL% --username=%USER% --password=%PW% %MODE% --referenceUrl=%REFURL% --referenceUsername=%REFUSER% --referencePassword=%REFPW% --referenceDriver=org.postgresql.Driver
-
-goto end
 
 rem ----------------------------------------------------------------------
 rem call Liquibase migrate
 rem ----------------------------------------------------------------------
 
-:migrate
 
-java -cp "liquibase-core-3.5.3.jar;postgresql-9.4-1203-jdbc42.jar" %JAVA_OPTS% liquibase.integration.commandline.Main --driver=org.postgresql.Driver --classpath=".\postgresql-9.4-1203-jdbc42.jar" --changeLogFile=changelog/dac/dac-changelog-master.xml --url=%URL% --username=%USER% --password=%PW% migrate
+java -cp "liquibase-core-3.5.3.jar;postgresql-9.4-1203-jdbc42.jar" %JAVA_OPTS% liquibase.integration.commandline.Main --driver=org.postgresql.Driver --classpath=".\postgresql-9.4-1203-jdbc42.jar" --changeLogFile=changelog/dac/dac-changelog-master.xml --url=%URL% --username=%USER% --password=%PW% update
 
 goto end
 
@@ -171,10 +109,6 @@ rem ----------------------------------------------------------------------
 	echo.    -url Database url: "<host>:<port>/<db-name>"
 	echo.    -u Database user
 	echo.    -p Database Password
-	echo.    -refurl Reference Database url: "<host>:<port>/<db-name>"
-	echo.    -ru Reference Database user
-	echo.    -rp Reference Database Password
-	echo.    -m Mode: diffChangeLog-generate diff-script between db and ref-db
 	echo.
 	exit /b 1
 
