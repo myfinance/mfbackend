@@ -28,4 +28,4 @@ fi
 # add any JVM options here
 JAVA_OPTS="${JAVA_OPTS-}"
 
-java -cp "liquibase-core-3.5.3.jar;postgresql-9.4-1203-jdbc42.jar" $JAVA_OPTS liquibase.integration.commandline.Main ${1+"$@"}
+java -cp "liquibase-core-3.5.3.jar:postgresql-9.4-1203-jdbc42.jar" $JAVA_OPTS liquibase.integration.commandline.Main ${1+"$@"}
