@@ -77,7 +77,7 @@ rem call Liquibase migrate
 rem ----------------------------------------------------------------------
 
 
-java -cp "liquibase-core-3.5.3.jar;postgresql-9.4-1203-jdbc42.jar" %JAVA_OPTS% liquibase.integration.commandline.Main --driver=org.postgresql.Driver --classpath=".\postgresql-9.4-1203-jdbc42.jar" --changeLogFile=changelog/dac/dac-changelog-master.xml --url=%URL% --username=%USER% --password=%PW% update
+java -cp "liquibase-core-3.5.3.jar;postgresql-9.4-1203-jdbc42.jar" %JAVA_OPTS% liquibase.integration.commandline.Main --driver=org.postgresql.Driver --classpath=".\postgresql-9.4-1203-jdbc42.jar" --changeLogFile=changelog/changelog-master.xml --url=%URL% --username=%USER% --password=%PW% update
 
 goto end
 
