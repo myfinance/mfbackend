@@ -3,13 +3,10 @@
 
     <repository>mvn:org.hibernate/hibernate-osgi/${hibernate.version}/xml/karaf</repository>
     <repository>mvn:org.ops4j.pax.jdbc/pax-jdbc-features/${pax-jdbc.version}/xml/features</repository>
-    <repository>mvn:org.apache.karaf.features/standard/${karaf.version}/xml/features</repository>
-    <repository>mvn:org.apache.karaf.features/enterprise/${karaf.version}/xml/features</repository>
     <repository>mvn:org.apache.cxf.karaf/apache-cxf/${apache-cxf.version}/xml/features</repository> <!--rest-->
     <repository>mvn:org.apache.camel.karaf/apache-camel/${camel.version}/xml/features</repository>
 
     <feature name="dac-base-karaf-webconsoletools" version="${pom.version}"><!-- Helps analyze package dependencies in WebConsole -->
-        <feature>webconsole</feature>
         <bundle>mvn:commons-io/commons-io/${commons-io.version}</bundle>
         <bundle>mvn:org.apache.felix/org.apache.felix.webconsole.plugins.packageadmin/${packageadmin-plugin.version}</bundle>
     </feature>
@@ -41,8 +38,6 @@
     </feature>
 
     <feature name="dac-db-base-feature" version="${pom.version}">
-        <feature>wrap</feature>
-        <feature>scr</feature><!--for DS -->
         <feature>pax-jdbc-pool-c3p0</feature>
         <capability>
             osgi.service;objectClass=org.ops4j.pax.jdbc.pool.common.PooledDataSourceFactory

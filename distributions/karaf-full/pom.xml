@@ -73,9 +73,11 @@
                         <feature>pax-http</feature>
 
                         <!-- non-standard -->
-                        <feature>scr</feature>
+                        <feature>scr</feature><!--for DS -->
                         <feature>http</feature><!--for web-pages like swagger ui-->
                         <feature>war</feature>
+                        <feature>webconsole</feature>
+                        <feature>wrap</feature>
 
                         <!-- 3rdparty management -->
                         <feature>hawtio-offline</feature>

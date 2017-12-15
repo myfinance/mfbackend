@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <features name="marketdata-persistence-feature" xmlns="http://karaf.apache.org/xmlns/features/v1.3.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://karaf.apache.org/xmlns/features/v1.3.0 http://karaf.apache.org/xmlns/features/v1.3.0">
 
-    <repository>mvn:org.apache.karaf.features/enterprise/${karaf.version}/xml/features</repository>
     <repository>mvn:org.hibernate/hibernate-osgi/${hibernate.version}/xml/karaf</repository>
     <repository>mvn:de.hf.dac.features/dac-base-features/${project.version}/xml/features</repository>
 
