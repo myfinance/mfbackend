@@ -1,0 +1,8 @@
+#!/usr/bin/env bash
+
+echo "wraptest"
+echo $1
+echo $2
+echo $3
+echo "endwrap"
+./dac_liquibase $1 $2 $3 |& tee /database/logs/mfdb.log

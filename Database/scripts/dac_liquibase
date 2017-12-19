@@ -28,12 +28,18 @@ fi
 # add any JVM options here
 JAVA_OPTS="${JAVA_OPTS-}"
 
+export PGPASSWORD=$3
+until psql "postgresql://$1" -U "$2" -c '\q'; do
+	  >&2 echo "Postgres is unavailable - sleeping"
+	    sleep 1
+    done
+    echo "Database available"
+
 #--url=%URL% --username=%USER% --password=%PW%
 if [ ! $# -eq 3 ]
 then
 echo "please add the arguments url, username and password, only these and in the right order."
 echo "E.G: liquibase localhost:5432/marketdata_dev postgres pw "
 else
-java -cp "$LIQUIBASE_HOME/liquibase-core-3.5.3.jar:$LIQUIBASE_HOME/postgresql-9.4-1203-jdbc42.jar" $JAVA_OPTS liquibase.integration.commandline.Main  --driver=org.postgresql.Driver \
- --changeLogFile=$LIQUIBASE_HOME/changelog/changelog-master.xml --url="jdbc:postgresql://$1" --username=$2 --password=$3 update
+java -cp "$LIQUIBASE_HOME/liquibase-core-3.5.3.jar:$LIQUIBASE_HOME/postgresql-9.4-1203-jdbc42.jar" $JAVA_OPTS liquibase.integration.commandline.Main  --driver=org.postgresql.Driver --changeLogFile=$LIQUIBASE_HOME/changelog/changelog-master.xml --url="jdbc:postgresql://$1" --username=$2 --password=$3 update
 fi
