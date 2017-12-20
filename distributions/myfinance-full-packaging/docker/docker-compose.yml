@@ -1,0 +1,73 @@
+version: '3.4'
+services:
+  postgres_mf:
+    image: holgerfischer/myfinance:0.1-mfdb
+    deploy:
+      replicas: 1
+      restart_policy:
+        condition: on-failure
+      placement:
+        constraints: [node.role == manager]
+    environment:
+      POSTGRES_PASSWORD: vulkan
+    ports:
+      - '3432:5432'
+    volumes:
+      - "myfinancedata:/var/lib/postgresql/data"
+    networks:
+      - myfinance-network
+  mf_db_model_upgrade:
+    image: holgerfischer/myfinance:0.7-mfdbupgrade
+    deploy:
+      replicas: 1
+      restart_policy:
+        condition: on-failure
+      placement:
+        constraints: [node.role == manager]
+    environment:
+      DB_PW: vulkan
+      DB_IMAGE: postgres_mf
+      DB_USER: postgres
+    volumes:
+      - mfdblogs:/database/logs
+    networks:
+      - myfinance-network
+    depends_on:
+      - postgres_mf
+  myfinance:
+    image: holgerfischer/myfinance:0.2-myfinance
+    tty: true
+    deploy:
+      replicas: 1
+      restart_policy:
+        condition: on-failure
+      placement:
+        constraints: [node.role == manager]
+    environment:
+      DB_PW: vulkan
+      DB_IMAGE: postgres_mf
+      DB_USER: postgres
+    ports:
+      - '1099:1099'
+      - '8101:8101'
+      - '44444:44444'
+      - '8181:8181'
+      - '8443:8443'
+    volumes:
+      - "myfinancelogs:/MyFinance/data"
+    networks:
+      - myfinance-network
+    depends_on:
+      - mf_db_model_upgrade
+  adminer:
+    image: adminer
+    ports:
+      - 8080:8080
+    networks:
+      - myfinance-network
+networks:
+  myfinance-network:
+volumes:
+  mfdblogs:
+  myfinancedata:
+  myfinancelogs:
