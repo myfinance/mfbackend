@@ -76,17 +76,49 @@
             <build>
                 <plugins>
                     <plugin>
+                        <artifactId>maven-assembly-plugin</artifactId>
+                        <version>${assembly-plugin.version}</version>
+                        <executions>
+                            <execution>
+                                <id>docker-assembly</id>
+                                <phase>package</phase>
+                                <goals>
+                                    <goal>single</goal>
+                                </goals>
+                                <configuration>
+                                    <finalName>docker</finalName>
+                                    <descriptors>
+                                        <descriptor>src/main/assembly/docker-prep-assembly.xml</descriptor>
+                                    </descriptors>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                    <plugin>
                         <groupId>io.fabric8</groupId>
                         <artifactId>docker-maven-plugin</artifactId>
                         <version>0.23.0</version>
-			<configuration>
-				<!--<dockerHost>unix:///var/run/docker.sock</dockerHost>-->
-				<dockerHost>tcp://localhost:2375</dockerHost>	
+                        <configuration>
+                            <dockerHost>tcp://localhost:2375</dockerHost>
                             <images>
                                 <image>
-					<name>holgerfischer/myfinance:${project.version}-mfdb</name>
+                                    <name>holgerfischer/myfinance:${project.version}-mfdb</name>
                                     <build>
-                                        <dockerFileDir>${project.basedir}/docker/mfpostgres</dockerFileDir>
+                                        <dockerFileDir>${project.build.directory}/docker-prep/mfpostgres</dockerFileDir>
+                                        <filter>@</filter>
+                                    </build>
+                                </image>
+                                <image>
+                                    <name>holgerfischer/myfinance:${project.version}-mfdbupgrade</name>
+                                    <build>
+                                        <dockerFileDir>${project.build.directory}/docker-prep/mfdb</dockerFileDir>
+                                        <filter>@</filter>
+                                    </build>
+                                </image>
+                                <image>
+                                    <name>holgerfischer/myfinance:${project.version}-myfinance</name>
+                                    <build>
+                                        <dockerFileDir>${project.build.directory}/docker-prep/myfinance</dockerFileDir>
                                         <filter>@</filter>
                                     </build>
                                 </image>
@@ -94,13 +126,20 @@
                         </configuration>
                         <executions>
                             <execution>
-                                <id>start</id>
+                                <id>build-docker</id>
                                 <phase>pre-integration-test</phase>
                                 <goals>
                                     <!-- "build" should be used to create the images with the
                                          artifact -->
-				    <goal>build</goal>
-				    <goal>push</goal>
+                                    <goal>build</goal>
+                                    <!--<goal>push</goal>-->
+                                </goals>
+                            </execution>
+                            <execution>
+                                <id>push-docekr</id>
+                                <phase>deploy</phase>
+                                <goals>
+                                    <goal>push</goal>
                                 </goals>
                             </execution>
                         </executions>
