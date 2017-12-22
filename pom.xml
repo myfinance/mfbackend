@@ -82,6 +82,7 @@
 
         <assembly-plugin.version>3.1.0</assembly-plugin.version>
         <dependency-plugin.version>3.0.2</dependency-plugin.version>
+        <resource-plugin.version>3.0.2</resource-plugin.version>
 
 
     </properties>
@@ -434,6 +435,11 @@
                         <goals>deploy</goals>
                         <pushChanges>false</pushChanges>
                     </configuration>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-resources-plugin</artifactId>
+                    <version>${resource-plugin.version}</version>
                 </plugin>
             </plugins>
         </pluginManagement>

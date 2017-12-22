@@ -1,7 +1,7 @@
 version: '3.4'
 services:
   postgres_mf:
-    image: holgerfischer/myfinance:0.1-mfdb
+    image: holgerfischer/myfinance:${project.version}-mfdb
     deploy:
       replicas: 1
       restart_policy:
@@ -17,7 +17,7 @@ services:
     networks:
       - myfinance-network
   mf_db_model_upgrade:
-    image: holgerfischer/myfinance:0.7-mfdbupgrade
+    image: holgerfischer/myfinance:${project.version}-mfdbupgrade
     deploy:
       replicas: 1
       restart_policy:
@@ -35,7 +35,7 @@ services:
     depends_on:
       - postgres_mf
   myfinance:
-    image: holgerfischer/myfinance:0.2-myfinance
+    image: holgerfischer/myfinance:${project.version}-myfinance
     tty: true
     deploy:
       replicas: 1
