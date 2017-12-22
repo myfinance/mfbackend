@@ -79,10 +79,12 @@
                         <groupId>io.fabric8</groupId>
                         <artifactId>docker-maven-plugin</artifactId>
                         <version>0.23.0</version>
-                        <configuration>
+			<configuration>
+				<!--<dockerHost>unix:///var/run/docker.sock</dockerHost>-->
+				<dockerHost>tcp://localhost:2375</dockerHost>	
                             <images>
                                 <image>
-                                    <name>postgres_mf</name>
+					<name>holgerfischer/myfinance:${project.version}-mfdb</name>
                                     <build>
                                         <dockerFileDir>${project.basedir}/docker/mfpostgres</dockerFileDir>
                                         <filter>@</filter>
@@ -97,7 +99,8 @@
                                 <goals>
                                     <!-- "build" should be used to create the images with the
                                          artifact -->
-                                    <goal>build</goal>
+				    <goal>build</goal>
+				    <goal>push</goal>
                                 </goals>
                             </execution>
                         </executions>
