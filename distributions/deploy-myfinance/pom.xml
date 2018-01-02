@@ -11,6 +11,14 @@
 
     <artifactId>deploy-myfinance</artifactId>
 
+    <dependencies>
+        <dependency>
+            <groupId>de.hf.dac</groupId>
+            <artifactId>myfinance-full-packaging</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+    </dependencies>
+
     <build>
         <plugins>
             <plugin>
