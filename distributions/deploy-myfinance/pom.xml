@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xmlns="http://maven.apache.org/POM/4.0.0"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
         <artifactId>distributions</artifactId>
@@ -10,6 +10,34 @@
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>deploy-myfinance</artifactId>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-resources-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>copy-docker-compose</id>
+                        <!-- here the phase you need -->
+                        <phase>validate</phase>
+                        <goals>
+                            <goal>copy-resources</goal>
+                        </goals>
+                        <configuration>
+                            <outputDirectory>${basedir}/target/</outputDirectory>
+                            <resources>
+                                <resource>
+                                    <directory>src/main/resources</directory>
+                                    <filtering>true</filtering>
+                                </resource>
+                            </resources>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
 
     <profiles>
         <profile>
@@ -62,21 +90,99 @@
                                     <source>
                                         <![CDATA[
                                         import static com.jayway.restassured.RestAssured.*;
+
                                         println("Wait for karaf to be available")
-                                        for(int i = 0; i < 30; i++) {
-                                            try{
+                                        for (int i = 0; i < 30; i++) {
+                                            try {
                                                 def response = with().get("http://karaf:karaf@localhost:8181/system/console/bundles")
                                                 def status = response.getStatusLine()
                                                 println(status)
-                                                if( !(status ==~ /.*OK.*/) ){
+                                                if (!(status ==~ /.*OK.*/)) {
                                                     Thread.sleep(1000)
                                                     continue
                                                 } else break;
-                                            } catch(Exception e){
-                                                println("got exception:"+e)
+                                            } catch (Exception e) {
+                                                println("got exception:" + e)
                                                 Thread.sleep(1000)
                                                 continue
-                                            }finally{
+                                            } finally {
+                                                print(".")
+                                            }
+                                            println("got status")
+                                        }
+                                        ]]>
+                                    </source>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+        <profile>
+            <id>docker</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-antrun-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <id>deploy</id>
+                                <phase>pre-integration-test</phase>
+                                <configuration>
+                                    <tasks>
+                                        <exec executable="${project.basedir}/deploy.sh" spawn="true">
+                                        </exec>
+                                    </tasks>
+                                </configuration>
+                                <goals>
+                                    <goal>run</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.codehaus.gmaven</groupId>
+                        <artifactId>groovy-maven-plugin</artifactId>
+                        <dependencies>
+                            <dependency>
+                                <groupId>org.codehaus.groovy</groupId>
+                                <artifactId>groovy-all</artifactId>
+                                <version>2.4.12</version>
+                            </dependency>
+                            <dependency>
+                                <groupId>com.jayway.restassured</groupId>
+                                <artifactId>rest-assured</artifactId>
+                                <version>1.8.1</version>
+                            </dependency>
+                        </dependencies>
+                        <executions>
+                            <execution>
+                                <phase>pre-integration-test</phase>
+                                <goals>
+                                    <goal>execute</goal>
+                                </goals>
+                                <configuration>
+                                    <source>
+                                        <![CDATA[
+                                        import static com.jayway.restassured.RestAssured.*;
+
+                                        println("Wait for karaf to be available")
+                                        for (int i = 0; i < 30; i++) {
+                                            try {
+                                                def response = with().get("http://karaf:karaf@localhost:8181/system/console/bundles")
+                                                def status = response.getStatusLine()
+                                                println(status)
+                                                if (!(status ==~ /.*OK.*/)) {
+                                                    Thread.sleep(1000)
+                                                    continue
+                                                } else break;
+                                            } catch (Exception e) {
+                                                println("got exception:" + e)
+                                                Thread.sleep(1000)
+                                                continue
+                                            } finally {
                                                 print(".")
                                             }
                                             println("got status")

@@ -1,0 +1,59 @@
+version: '3.4'
+services:
+  postgres_itestmf:
+    image: holgerfischer/myfinance:${project.version}-mfdb
+    deploy:
+      replicas: 1
+      restart_policy:
+        condition: on-failure
+      placement:
+        constraints: [node.role == manager]
+    environment:
+      POSTGRES_PASSWORD: testpw
+    ports:
+      - '4432:5432'
+    volumes:
+      - "myfinanceitestdata:/var/lib/postgresql/data"
+    networks:
+      - myfinance-itestnetwork
+  itestmf_db_model_upgrade:
+    image: holgerfischer/myfinance:${project.version}-mfdbupgrade
+    deploy:
+      replicas: 1
+      restart_policy:
+        condition: on-failure
+      placement:
+        constraints: [node.role == manager]
+    environment:
+      DB_PW: testpw
+      DB_IMAGE: postgres_itestmf
+      DB_USER: postgres
+    volumes:
+      - mfdblogs:/database/logs
+    networks:
+      - myfinance-itestnetwork
+    depends_on:
+      - postgres_itestmf
+  myfinance:
+    image: holgerfischer/myfinance:${project.version}-myfinance
+    tty: true
+    deploy:
+      replicas: 1
+      restart_policy:
+        condition: on-failure
+      placement:
+        constraints: [node.role == manager]
+    environment:
+      DB_PW: testpw
+      DB_IMAGE: postgres_itestmf
+      DB_USER: postgres
+    ports:
+      - '8281:8181'
+    networks:
+      - myfinance-itestnetwork
+    depends_on:
+      - itestmf_db_model_upgrade
+networks:
+  myfinance-itestnetwork:
+volumes:
+  myfinanceitestdata:

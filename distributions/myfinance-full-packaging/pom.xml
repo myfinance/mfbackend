@@ -126,6 +126,7 @@
                             <images>
                                 <image>
                                     <name>holgerfischer/myfinance:${project.version}-mfdb</name>
+                                    <alias>postgres_testmf</alias>
                                     <build>
                                         <dockerFileDir>${project.build.directory}/docker-prep/mfpostgres</dockerFileDir>
                                         <filter>@</filter>
@@ -146,6 +147,11 @@
                                     </build>
                                 </image>
                             </images>
+                            <volumes>
+                                <volume>
+                                    <name>myfinancetestdata</name>
+                                </volume>
+                            </volumes>
                         </configuration>
                         <executions>
                             <execution>
@@ -155,11 +161,10 @@
                                     <!-- "build" should be used to create the images with the
                                          artifact -->
                                     <goal>build</goal>
-                                    <!--<goal>push</goal>-->
                                 </goals>
                             </execution>
                             <execution>
-                                <id>push-docekr</id>
+                                <id>push-docker</id>
                                 <phase>deploy</phase>
                                 <goals>
                                     <goal>push</goal>

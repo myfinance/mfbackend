@@ -27,5 +27,11 @@
                 <module>md-int-test</module>
             </modules>
         </profile>
+        <profile>
+            <id>docker</id>
+            <modules>
+                <module>md-int-test</module>
+            </modules>
+        </profile>
     </profiles>
 </project>
