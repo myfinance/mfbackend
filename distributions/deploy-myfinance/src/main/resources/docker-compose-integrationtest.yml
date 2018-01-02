@@ -48,7 +48,7 @@ services:
       DB_IMAGE: postgres_itestmf
       DB_USER: postgres
     ports:
-      - '8281:8181'
+      - '8181:8181'
     networks:
       - myfinance-itestnetwork
     depends_on:
