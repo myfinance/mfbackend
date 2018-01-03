@@ -11,14 +11,6 @@
 
     <artifactId>deploy-myfinance</artifactId>
 
-    <dependencies>
-        <dependency>
-            <groupId>de.hf.dac</groupId>
-            <artifactId>myfinance-full-packaging</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-    </dependencies>
-
     <build>
         <plugins>
             <plugin>
@@ -140,7 +132,7 @@
                                 <phase>pre-integration-test</phase>
                                 <configuration>
                                     <tasks>
-                                        <exec executable="${project.basedir}/deploy.sh" spawn="true">
+                                        <exec executable="${project.basedir}/deploy.sh">
                                         </exec>
                                     </tasks>
                                 </configuration>

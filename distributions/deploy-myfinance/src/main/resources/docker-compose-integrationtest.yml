@@ -28,13 +28,11 @@ services:
       DB_PW: testpw
       DB_IMAGE: postgres_itestmf
       DB_USER: postgres
-    volumes:
-      - mfdblogs:/database/logs
     networks:
       - myfinance-itestnetwork
     depends_on:
       - postgres_itestmf
-  myfinance:
+  itestmyfinance:
     image: holgerfischer/myfinance:${project.version}-myfinance
     tty: true
     deploy:
