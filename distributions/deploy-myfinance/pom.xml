@@ -178,11 +178,12 @@
                                     <source>
                                         <![CDATA[
                                         import static com.jayway.restassured.RestAssured.*;
-
+                                        def ip = InetAddress.getLocalHost().getHostAddress()
+					println("local ip ="+ip)
                                         println("Wait for karaf to be available")
                                         for (int i = 0; i < 30; i++) {
                                             try {
-                                                def response = with().get("http://karaf:karaf@localhost:8181/system/console/bundles")
+					    def response = with().get("http://karaf:karaf@"+ip+":8181/dac/rest/hello")
                                                 def status = response.getStatusLine()
                                                 println(status)
                                                 if (!(status ==~ /.*OK.*/)) {

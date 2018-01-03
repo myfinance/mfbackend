@@ -9,14 +9,14 @@ services:
       placement:
         constraints: [node.role == manager]
     environment:
-      POSTGRES_PASSWORD: testpw
+      POSTGRES_PASSWORD: vulkan
     ports:
-      - '4432:5432'
+      - '3432:5432'
     volumes:
-      - "myfinanceitestdata:/var/lib/postgresql/data"
+      - "myfinancedata:/var/lib/postgresql/data"
     networks:
-      - myfinance-itestnetwork
-  itestmf_db_model_upgrade:
+      - myfinance-network
+  mf_db_model_upgrade:
     image: holgerfischer/myfinance:${project.version}-mfdbupgrade
     deploy:
       replicas: 1
@@ -25,14 +25,16 @@ services:
       placement:
         constraints: [node.role == manager]
     environment:
-      DB_PW: testpw
-      DB_IMAGE: postgres_itestmf
+      DB_PW: vulkan
+      DB_IMAGE: postgres_mf
       DB_USER: postgres
+    volumes:
+      - mfdblogs:/database/logs
     networks:
-      - myfinance-itestnetwork
+      - myfinance-network
     depends_on:
-      - postgres_itestmf
-  itestmyfinance:
+      - postgres_mf
+  myfinance:
     image: holgerfischer/myfinance:${project.version}-myfinance
     tty: true
     deploy:
@@ -42,16 +44,41 @@ services:
       placement:
         constraints: [node.role == manager]
     environment:
-      DB_PW: testpw
+      DB_PW: vulkan
       DB_IMAGE: postgres_mf
       DB_USER: postgres
     ports:
+      - '1099:1099'
+      - '8101:8101'
+      - '44444:44444'
       - '8181:8181'
+      - '8443:8443'
+    volumes:
+      - "myfinancelogs:/MyFinance/data"
     networks:
-      - myfinance-itestnetwork
+      - myfinance-network
     depends_on:
-      - itestmf_db_model_upgrade
+      - mf_db_model_upgrade
+  adminer:
+    image: adminer
+    ports:
+      - 8080:8080
+    networks:
+      - myfinance-network
+  visualizer:
+    image: dockersamples/visualizer:stable
+    ports:
+      - "9090:8080"
+    volumes:
+      - "/var/run/docker.sock:/var/run/docker.sock"
+    deploy:
+      placement:
+        constraints: [node.role == manager]
+    networks:
+      - myfinance-network
 networks:
-  myfinance-itestnetwork:
+  myfinance-network:
 volumes:
-  myfinanceitestdata:
+  mfdblogs:
+  myfinancedata:
+  myfinancelogs:
