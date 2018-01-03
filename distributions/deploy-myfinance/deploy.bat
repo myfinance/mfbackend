@@ -9,6 +9,7 @@ set appname=%~n0
 set verbose=0
 set mydir=%~dp0
 set targetdir=c:\temp
+set filename=MyFinance.zip
 
 rem ----------------------------------------------------------------------
 rem Argument Parsen
@@ -31,8 +32,13 @@ rem ----------------------------------------------------------------------
 		set targetdir=%~2
 		goto next_arg
 	)
+	if [%arg%] == [-f] (
+    	set filename=%~2
+    	goto next_arg
+    )
 	goto usage
 :next_arg
+	shift
 	shift
 	goto parse_args
 :done_args
@@ -46,12 +52,13 @@ if exist %targetdir%\karaf (
     rmdir %targetdir%\karaf /s /q
 )
 call:cout %mydir%
+call:cout %filename%
 mkdir %targetdir%\karaf
-copy %mydir%\..\myfinance-full-packaging\target\run-job-bin.zip %targetdir%\karaf
+copy %mydir%\..\myfinance-full-packaging\target\%filename%-bin.zip %targetdir%\karaf
 copy /y %mydir%\..\karaf-full\integrationtest.res %targetdir%\dac.res
 cd %targetdir%\karaf
-unzip %targetdir%\karaf\run-job-bin.zip
-Start "" "%targetdir%\karaf\karaf\bin\karaf_local.bat"
+unzip %targetdir%\karaf\%filename%-bin.zip
+Start "" "%targetdir%\karaf\%filename%\karaf\bin\karaf_local.bat"
 
 :end_with_msg
 	call:cout Done.

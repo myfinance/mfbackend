@@ -11,6 +11,15 @@
 
     <artifactId>deploy-myfinance</artifactId>
 
+    <dependencies>
+        <dependency>
+            <groupId>de.hf.dac</groupId>
+            <artifactId>myfinance-full-packaging</artifactId>
+            <version>${project.version}</version>
+            <type>pom</type>
+        </dependency>
+    </dependencies>
+
     <build>
         <plugins>
             <plugin>
@@ -56,6 +65,8 @@
                                         <exec executable="${project.basedir}/deploy.bat" spawn="true">
                                             <arg value="-t"/>
                                             <arg value="${localdeployfolder}"/>
+                                            <arg value="-f"/>
+                                            <arg value="MyFinance-${project.version}"/>
                                         </exec>
                                     </tasks>
                                 </configuration>

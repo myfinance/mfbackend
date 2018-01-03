@@ -33,7 +33,7 @@
                                 <phase>post-integration-test</phase>
                                 <configuration>
                                     <tasks>
-                                        <exec executable="${localdeployfolder}/karaf/karaf/bin/stop.bat">
+                                        <exec executable="${localdeployfolder}/karaf/MyFinance-${project.version}/karaf/bin/stop.bat">
                                         </exec>
                                     </tasks>
                                 </configuration>
