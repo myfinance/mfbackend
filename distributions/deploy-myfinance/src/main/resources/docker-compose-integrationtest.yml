@@ -1,6 +1,6 @@
 version: '3.4'
 services:
-  postgres_itestmf:
+  postgres_mf:
     image: holgerfischer/myfinance:${project.version}-mfdb
     deploy:
       replicas: 1
@@ -43,7 +43,7 @@ services:
         constraints: [node.role == manager]
     environment:
       DB_PW: testpw
-      DB_IMAGE: postgres_itestmf
+      DB_IMAGE: postgres_mf
       DB_USER: postgres
     ports:
       - '8181:8181'

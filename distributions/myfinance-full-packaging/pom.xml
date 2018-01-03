@@ -167,11 +167,6 @@
                                     </build>
                                 </image>
                             </images>
-                            <volumes>
-                                <volume>
-                                    <name>myfinancetestdata</name>
-                                </volume>
-                            </volumes>
                         </configuration>
                         <executions>
                             <execution>
