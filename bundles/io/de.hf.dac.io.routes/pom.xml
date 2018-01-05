@@ -3,7 +3,7 @@
     <parent>
         <artifactId>io</artifactId>
         <groupId>de.hf.dac.io</groupId>
-        <version>0.9.0-SNAPSHOT</version>
+        <version>0.9.0</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
@@ -16,7 +16,7 @@
         <dependency>
             <groupId>de.hf.dac.api</groupId>
             <artifactId>de.hf.dac.api.base</artifactId>
-            <version>0.9.0-SNAPSHOT</version>
+            <version>0.9.0</version>
         </dependency>
         <dependency>
             <groupId>org.osgi</groupId>

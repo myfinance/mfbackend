@@ -3,7 +3,7 @@
     <parent>
         <groupId>de.hf.dac</groupId>
         <artifactId>root</artifactId>
-        <version>0.9.0-SNAPSHOT</version>
+        <version>0.9.0</version>
         <relativePath>../</relativePath>
     </parent>
     <groupId>de.hf.dac</groupId>
@@ -53,22 +53,13 @@
                         <phase>none</phase>
                         <configuration>
                             <target>
-                                <echo message="Start generating entities .."/>
-                                <taskdef name="hibernatetool"
-                                         classname="org.hibernate.tool.ant.HibernateToolTask"/>
-                                <hibernatetool
-                                        destdir="../bundles/api/de.hf.dac.api.io/src/main/java"
-                                        templatepath="src/templates">
-                                    <jdbcconfiguration
-                                            revengfile="src/main/reveng/hibernate.reveng.xml"
-                                            packagename="de.hf.dac.api.io.domain"
-                                            detectmanytomany="true"
-                                            propertyfile="src/main/reveng/hibernate.reveng.properties"
-                                            reversestrategy="de.hf.dac.support.CustomReverseEngineeringStrategy"
-                                            />
-                                    <hbm2java  jdk5="true" ejb3="true"/>
+                                <echo message="Start generating entities .." />
+                                <taskdef name="hibernatetool" classname="org.hibernate.tool.ant.HibernateToolTask" />
+                                <hibernatetool destdir="../bundles/api/de.hf.dac.api.io/src/main/java" templatepath="src/templates">
+                                    <jdbcconfiguration revengfile="src/main/reveng/hibernate.reveng.xml" packagename="de.hf.dac.api.io.domain" detectmanytomany="true" propertyfile="src/main/reveng/hibernate.reveng.properties" reversestrategy="de.hf.dac.support.CustomReverseEngineeringStrategy" />
+                                    <hbm2java jdk5="true" ejb3="true" />
                                 </hibernatetool>
-                                <echo message="End generating entities"/>
+                                <echo message="End generating entities" />
                             </target>
                         </configuration>
                         <goals>
@@ -80,22 +71,14 @@
                         <phase>none</phase>
                         <configuration>
                             <target>
-                                <echo message="Start generating entities .."/>
-                                <taskdef name="hibernatetool"
-                                         classname="org.hibernate.tool.ant.HibernateToolTask"/>
-                                <hibernatetool
-                                        destdir="../bundles/marketdataprovider/marketdataprovider-api/de.hf.dac.marketdataprovider.api.domain/src/main/java"
-                                        templatepath="src/templates">
-                                    <jdbcconfiguration
-                                            revengfile="src/main/reveng/hibernate.revengmd.xml"
-                                            packagename="package.name"
-                                            propertyfile="src/main/reveng/hibernate.reveng.properties"
-
-                                    /><!--detectmanytomany="true"
+                                <echo message="Start generating entities .." />
+                                <taskdef name="hibernatetool" classname="org.hibernate.tool.ant.HibernateToolTask" />
+                                <hibernatetool destdir="../bundles/marketdataprovider/marketdataprovider-api/de.hf.dac.marketdataprovider.api.domain/src/main/java" templatepath="src/templates">
+                                    <jdbcconfiguration revengfile="src/main/reveng/hibernate.revengmd.xml" packagename="package.name" propertyfile="src/main/reveng/hibernate.reveng.properties" /><!--detectmanytomany="true"
                                     reversestrategy="de.hf.dac.support.CustomReverseEngineeringStrategy"-->
-                                    <hbm2java  jdk5="true" ejb3="true"/>
+                                    <hbm2java jdk5="true" ejb3="true" />
                                 </hibernatetool>
-                                <echo message="End generating entities"/>
+                                <echo message="End generating entities" />
                             </target>
                         </configuration>
                         <goals>
@@ -107,7 +90,7 @@
                     <dependency>
                         <groupId>de.hf.dac</groupId>
                         <artifactId>database</artifactId>
-                        <version>0.9.0-SNAPSHOT</version>
+                        <version>0.9.0</version>
                     </dependency>
                     <dependency>
                         <groupId>org.hibernate</groupId>
