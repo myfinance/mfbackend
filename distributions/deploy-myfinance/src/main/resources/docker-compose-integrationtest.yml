@@ -10,12 +10,10 @@ services:
         constraints: [node.role == manager]
     environment:
       POSTGRES_PASSWORD: vulkan
-    ports:
-      - '3432:5432'
     volumes:
-      - "myfinancedata:/var/lib/postgresql/data"
+      - "imyfinancedata:/var/lib/postgresql/data"
     networks:
-      - myfinance-network
+      - imyfinance-network
   mf_db_model_upgrade:
     image: holgerfischer/myfinance:${project.version}-mfdbupgrade
     deploy:
@@ -28,10 +26,8 @@ services:
       DB_PW: vulkan
       DB_IMAGE: postgres_mf
       DB_USER: postgres
-    volumes:
-      - mfdblogs:/database/logs
     networks:
-      - myfinance-network
+      - imyfinance-network
     depends_on:
       - postgres_mf
   myfinance:
@@ -48,37 +44,12 @@ services:
       DB_IMAGE: postgres_mf
       DB_USER: postgres
     ports:
-      - '1099:1099'
-      - '8101:8101'
-      - '44444:44444'
       - '8181:8181'
-      - '8443:8443'
-    volumes:
-      - "myfinancelogs:/MyFinance/data"
     networks:
-      - myfinance-network
+      - imyfinance-network
     depends_on:
       - mf_db_model_upgrade
-  adminer:
-    image: adminer
-    ports:
-      - 8080:8080
-    networks:
-      - myfinance-network
-  visualizer:
-    image: dockersamples/visualizer:stable
-    ports:
-      - "9090:8080"
-    volumes:
-      - "/var/run/docker.sock:/var/run/docker.sock"
-    deploy:
-      placement:
-        constraints: [node.role == manager]
-    networks:
-      - myfinance-network
 networks:
-  myfinance-network:
+  imyfinance-network:
 volumes:
-  mfdblogs:
-  myfinancedata:
-  myfinancelogs:
+  imyfinancedata:
