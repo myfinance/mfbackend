@@ -62,7 +62,7 @@ public class MarketdataApi {
   /**
    * List Environments
    * 
-   * @return List<Object>
+   * @return List
    * @throws ApiException if fails to make API call
    */
   public List<Object> getEnvironments() throws ApiException {
@@ -98,7 +98,7 @@ public class MarketdataApi {
    * get Instruments
    * 
    * @param envID The Service Environment (required)
-   * @return List<Object>
+   * @return List
    * @throws ApiException if fails to make API call
    */
   public List<Object> getInstruments_envID(String envID) throws ApiException {

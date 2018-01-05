@@ -64,7 +64,7 @@ public class MDRunnerApi {
   /**
    * List Environments
    * 
-   * @return List<Object>
+   * @return List
    * @throws ApiException if fails to make API call
    */
   public List<Object> getEnvironments1() throws ApiException {
@@ -99,7 +99,7 @@ public class MDRunnerApi {
   /**
    * list known cops jobs
    * List all JobInformation
-   * @return List<Object>
+   * @return List
    * @throws ApiException if fails to make API call
    */
   public List<Object> list() throws ApiException {

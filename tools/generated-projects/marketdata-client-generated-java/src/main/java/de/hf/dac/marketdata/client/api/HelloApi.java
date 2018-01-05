@@ -99,7 +99,7 @@ public class HelloApi {
   /**
    * List Environments
    * 
-   * @return List<Object>
+   * @return List
    * @throws ApiException if fails to make API call
    */
   public List<Object> getEnvironments2() throws ApiException {
@@ -169,7 +169,7 @@ public class HelloApi {
   /**
    * get ProductObjects
    * 
-   * @return List<Object>
+   * @return List
    * @throws ApiException if fails to make API call
    */
   public List<Object> getProductObjects() throws ApiException {

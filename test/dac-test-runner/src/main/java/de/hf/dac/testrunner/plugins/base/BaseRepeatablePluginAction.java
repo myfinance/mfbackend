@@ -179,7 +179,7 @@ public abstract class BaseRepeatablePluginAction extends BasePluginAction {
     /**
      * Will be called to signal repeat execution. This will not be called for the first execution
      *
-     * @param repeatCount Current repeat count (>=1)
+     * @param repeatCount Current repeat count (bigger or equal 1)
      * @param ctxt Execution Context from Plugin
      * @param stepInformation TestStep Definition
      * @param backgroundData Any TestCase Background Data
@@ -191,7 +191,7 @@ public abstract class BaseRepeatablePluginAction extends BasePluginAction {
     /**
      * Will be called to signal the timeout event of one iteration
      *
-     * @param repeatCount Current repeat count (>=1)
+     * @param repeatCount Current repeat count (bigger or equal 1)
      * @param ctxt Execution Context from Plugin
      * @param stepInformation TestStep Definition
      * @param backgroundData Any TestCase Background Data
@@ -203,7 +203,7 @@ public abstract class BaseRepeatablePluginAction extends BasePluginAction {
     /**
      * Called if maximum number of iterations tried w/o success
      *
-     * @param repeatCount Current repeat count (>=1)
+     * @param repeatCount Current repeat count (bigger or equal 1)
      * @param ctxt Execution Context from Plugin
      * @param stepInformation TestStep Definition
      * @param backgroundData Any TestCase Background Data

@@ -58,7 +58,6 @@ public class ScenarioRunner extends BaseFileLoadingParentRunner {
      *
      * @param testClass testClass
      * @param scenario  scenario
-     * @throws InitializationError InitializationError
      */
     public ScenarioRunner(Class<?> testClass, TestResult<TestScenario> scenario) {
         super(testClass);
