@@ -14,6 +14,7 @@
         <targetRepository>file:m2repo/</targetRepository>
 
         <jar-plugin.version>3.0.2</jar-plugin.version>
+        <java-doc.version>3.0.0</java-doc.version>
 
         <!-- DB-->
         <postgresql.version>9.4-1203-jdbc42</postgresql.version>
@@ -97,9 +98,9 @@
         <module>Database</module>
         <module>bundles</module>
         <module>tools</module>
-        <module>client</module>
-        <module>distributions</module>
         <module>features</module>
+        <module>distributions</module>
+        <module>client</module>
         <module>test</module>
     </modules>
 
@@ -467,20 +468,6 @@
                     </execution>
                 </executions>
             </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-javadoc-plugin</artifactId>
-                <version>3.0.0</version>
-                <executions>
-                    <execution>
-                        <id>aggregate</id>
-                        <goals>
-                            <goal>aggregate</goal>
-                        </goals>
-                        <phase>prepare-package</phase>
-                    </execution>
-                </executions>
-            </plugin>
             <!--for integration-tests-->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -503,5 +490,31 @@
             <url>${targetRepository}</url>
         </repository>
     </distributionManagement>
+
+
+    <profiles>
+        <profile>
+            <id>javadoc</id>
+
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-javadoc-plugin</artifactId>
+                        <version>${java-doc.version}</version>
+                        <executions>
+                            <execution>
+                                <id>aggregate</id>
+                                <goals>
+                                    <goal>aggregate</goal>
+                                </goals>
+                                <phase>prepare-package</phase>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
 
 </project>

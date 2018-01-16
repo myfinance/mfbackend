@@ -81,31 +81,6 @@
                     </archive>
                 </configuration>
             </plugin>
-            <!--<plugin>
-                <groupId>org.apache.aries.blueprint</groupId>
-                <artifactId>blueprint-maven-plugin</artifactId>
-                <version>1.4.0</version>
-                <executions>
-                    <execution>
-                        <goals>
-                            <goal>blueprint-generate</goal>
-                        </goals>
-
-                    </execution>
-                </executions>
-                <configuration>
-                    <scanPaths>
-                        <scanPath>${scanPath}</scanPath>
-                    </scanPaths>
-                </configuration>
-                <dependencies>
-                    <dependency>
-                        <groupId>org.apache.xbean</groupId>
-                        <artifactId>xbean-finder-shaded</artifactId>
-                        <version>4.5</version>
-                    </dependency>
-                </dependencies>
-            </plugin>-->
             <plugin>
                 <artifactId>maven-resources-plugin</artifactId>
                 <version>3.0.1</version>
