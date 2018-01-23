@@ -12,25 +12,15 @@ import { FinancialNumberPipe } from '../../pipes/financial-number.pipe';
 })
 export class WidgetHorizontalBarChartComponent implements OnInit, OnDestroy, AfterViewInit {
 
-  private _config;
   private _chart;
-  private _hideHeader;
+
 
   @Input()
-  set config(config) {
-    this._config = config;
-  }
-  get config() {
-    return this._config;
-  }
+  hideHeader
 
   @Input()
-  set hideHeader(hideHeader: boolean) {
-    this._hideHeader = hideHeader;
-  }
-  get hideHeader() {
-    return this._hideHeader;
-  }
+  config
+
 
   @Input()
   resized: Subject<any>;
@@ -41,25 +31,25 @@ export class WidgetHorizontalBarChartComponent implements OnInit, OnDestroy, Aft
 
   ngOnInit() {
     this.resized.subscribe(uuid => {
-      if(this._config.uuid == uuid) {
+      if(this.config.uuid == uuid) {
         this.resize();
       }
     })
   }
 
   ngAfterViewInit() {
-    this._chart = dc.rowChart('#chart-' + this._config.uuid)
-      .dimension(this._dcService.getDimension(this._config.dimension))
-      .group(this._config.group(this._dcService.getDimension(this._config.dimension)))
+    this._chart = dc.rowChart('#chart-' + this.config.uuid)
+      .dimension(this._dcService.getDimension(this.config.dimension))
+      .group(this.config.group(this._dcService.getDimension(this.config.dimension)))
       .elasticX(true)
       .controlsUseVisibility(true)
       .width(this.chart.nativeElement.offsetWidth)
       .height(this.chart.nativeElement.offsetHeight - 40);
 
-    if(this._config.tooltip) {
+    if(this.config.tooltip) {
       let tooltip = (d) => {
         let text = "";
-        for(let tooltip of this._config.tooltip) {
+        for(let tooltip of this.config.tooltip) {
           let keySelector;
           if(tooltip.name) {
             keySelector = tooltip.name;
@@ -81,7 +71,7 @@ export class WidgetHorizontalBarChartComponent implements OnInit, OnDestroy, Aft
       this._chart.title(tooltip);
     }
 
-    if(this._config.xAxisFormat == 'financial-number') {
+    if(this.config.xAxisFormat == 'financial-number') {
       let pipe = new FinancialNumberPipe();
       this._chart.xAxis().tickFormat(d => pipe.transform(d));
     }

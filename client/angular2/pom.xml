@@ -4,15 +4,84 @@
     <modelVersion>4.0.0</modelVersion>
     <artifactId>angular</artifactId>
 
-    <packaging>pom</packaging>
 
+  <parent>
+    <groupId>de.hf.dac</groupId>
+    <artifactId>client</artifactId>
+    <version>0.10.0-SNAPSHOT</version>
+    <relativePath>../</relativePath>
+  </parent>
 
-    <!-- um eine Fat-Jar mit mvn package zu bauen. die genaue definition kommt aus dem Spring-Parent.pom -->
     <build>
+       <resources>
+         <resource>
+           <directory>${basedir}/dist</directory>
+         </resource>
+       </resources>
 
         <plugins>
 
           <plugin>
+            <groupId>biz.aQute.bnd</groupId>
+            <artifactId>bnd-maven-plugin</artifactId>
+            <version>3.1.0</version>
+            <executions>
+              <execution>
+                <goals>
+                  <goal>bnd-process</goal>
+                </goals>
+              </execution>
+            </executions>
+          </plugin>
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-jar-plugin</artifactId>
+            <version>3.0.2</version>
+            <configuration>
+              <archive>
+                <manifestFile>${project.build.outputDirectory}/META-INF/MANIFEST.MF</manifestFile>
+              </archive>
+            </configuration>
+          </plugin>
+
+         <plugin>
+          <groupId>org.codehaus.mojo</groupId>
+          <artifactId>exec-maven-plugin</artifactId>
+          <version>1.6.0</version>
+          <executions>
+          <execution>
+            <id>exec-npm-install</id>
+            <phase>generate-sources</phase>
+            <configuration>
+              <workingDirectory>${project.basedir}</workingDirectory>
+              <executable>npm</executable>
+              <arguments>
+                <argument>install</argument>
+              </arguments>
+            </configuration>
+            <goals>
+              <goal>exec</goal>
+            </goals>
+          </execution>
+            <execution>
+              <id>exec-ng</id>
+              <phase>generate-sources</phase>
+              <configuration>
+                <workingDirectory>${project.basedir}</workingDirectory>
+                <executable>ng</executable>
+                <arguments>
+                  <argument>build</argument>
+                  <argument>-prod</argument>
+                </arguments>
+              </configuration>
+              <goals>
+                <goal>exec</goal>
+              </goals>
+            </execution>
+          </executions>
+          </plugin>
+
+          <!--<plugin>
             <artifactId>maven-clean-plugin</artifactId>
             <version>2.5</version>
             <configuration>
@@ -23,17 +92,22 @@
                     <include>*</include>
                   </includes>
                 </fileset>
+                <fileset>
+                  <directory>node_modules</directory>
+                  <includes>
+                    <include>*</include>
+                  </includes>
+                </fileset>
               </filesets>
             </configuration>
-          </plugin>
+          </plugin>-->
 
-            <plugin>
+            <!--<plugin>
                 <artifactId>maven-resources-plugin</artifactId>
                 <version>2.7</version>
                 <executions>
                     <execution>
                         <id>copy-resources</id>
-                        <!-- here the phase you need -->
                         <phase>validate</phase>
                         <goals>
                             <goal>copy-resources</goal>
@@ -49,7 +123,6 @@
                     </execution>
                     <execution>
                         <id>copy-bower</id>
-                        <!-- here the phase you need -->
                         <phase>validate</phase>
                         <goals>
                             <goal>copy-resources</goal>
@@ -68,36 +141,7 @@
                     </execution>
                 </executions>
             </plugin>
-            <plugin>
-                <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-maven-plugin</artifactId>
-                <executions>
-                    <execution>
-                        <goals>
-                            <goal>repackage</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
-            <plugin>
-                <groupId>pl.allegro</groupId>
-                <artifactId>grunt-maven-plugin</artifactId>
-                <version>1.4.1</version>
-
-				<configuration>
-                    <gruntBuildDirectory>${project.basedir}</gruntBuildDirectory>
-				</configuration>
-                <executions>
-                    <execution>
-                        <phase>validate</phase>
-                        <goals>
-                            <goal>npm</goal>
-                            <goal>bower</goal>
-                            <goal>grunt</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
+  -->
         </plugins>
     </build>
 </project>

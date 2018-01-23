@@ -1,15 +1,16 @@
 import {Inject, Injectable} from "@angular/core";
-
-import {Observable} from "rxjs";
+import {Observable} from "rxjs/Rx";
 import 'rxjs/add/operator/map';
+import 'rxjs/add/observable/of';
 import {Instrument} from "../models/instrument";
 import {Position} from "../models/Position";
+
 /**
  * Created by xn01598 on 11.05.2017.
  */
 
 @Injectable()
-export class myfinanceDummyDataService{
+export class MyfinanceDummyDataService{
   constructor(
   ) {
     console.debug('Viele Grüße aus dem dummy Ctor!');
@@ -66,7 +67,6 @@ export class myfinanceDummyDataService{
         pos12, pos13, pos14, pos15, pos16, pos17, pos18, pos19, pos20,pos21, pos22, pos23, pos24, pos25, pos27, pos28,
         pos29, pos30, pos31, pos32, pos33, pos34, pos35, pos36]
     return Observable.of(positions);
-
 
   }
 

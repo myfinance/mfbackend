@@ -15,25 +15,13 @@ import { FinancialNumberPipe } from '../../pipes/financial-number.pipe';
 })
 export class WidgetCompositeLineChartComponent implements OnInit, OnDestroy, AfterViewInit {
 
-  private _config;
   private _chart;
-  private _hideHeader;
 
   @Input()
-  set config(config) {
-    this._config = config;
-  }
-  get config() {
-    return this._config;
-  }
+  hideHeader
 
   @Input()
-  set hideHeader(hideHeader: boolean) {
-    this._hideHeader = hideHeader;
-  }
-  get hideHeader() {
-    return this._hideHeader;
-  }
+  config
 
   @Input()
   resized: Subject<any>;
@@ -44,14 +32,14 @@ export class WidgetCompositeLineChartComponent implements OnInit, OnDestroy, Aft
 
   ngOnInit() {
     this.resized.subscribe(uuid => {
-      if(this._config.uuid == uuid) {
+      if(this.config.uuid == uuid) {
         this.resize();
       }
     })
   }
 
   ngAfterViewInit() {
-    this._chart = dc.compositeChart('#chart-' + this._config.uuid)
+    this._chart = dc.compositeChart('#chart-' + this.config.uuid)
       .width(this.chart.nativeElement.offsetWidth)
       .height(this.chart.nativeElement.offsetHeight - 40)
       .elasticX(true)
@@ -64,14 +52,14 @@ export class WidgetCompositeLineChartComponent implements OnInit, OnDestroy, Aft
 
     this._chart
       .compose(
-        this._config.lines.map(
+        this.config.lines.map(
           function(line, idx){
             let c = dc.lineChart(this._chart)
-              .dimension(this._dcService.getDimension(this._config.dimension))
-              .group(line.group(this._dcService.getDimension(this._config.dimension)), line.title)
+              .dimension(this._dcService.getDimension(this.config.dimension))
+              .group(line.group(this._dcService.getDimension(this.config.dimension)), line.title)
               .colors(line.color)
 
-            if(this._config.tooltip) c.title(this._buildTooltip(this._config.tooltip));
+            if(this.config.tooltip) c.title(this._buildTooltip(this.config.tooltip));
 
             return c;
           }, this
@@ -79,7 +67,7 @@ export class WidgetCompositeLineChartComponent implements OnInit, OnDestroy, Aft
       )
       .brushOn(false);
 
-    switch(this._config.xAxisFormat) {
+    switch(this.config.xAxisFormat) {
       case 'financial-number': {
         let pipe = new FinancialNumberPipe();
         this._chart.xAxis().tickFormat(d => pipe.transform(d));
@@ -96,7 +84,7 @@ export class WidgetCompositeLineChartComponent implements OnInit, OnDestroy, Aft
       default: break;
     }
 
-    switch(this._config.yAxisFormat) {
+    switch(this.config.yAxisFormat) {
       case 'financial-number': {
         let pipe = new FinancialNumberPipe();
         this._chart.yAxis().tickFormat(d => pipe.transform(d));

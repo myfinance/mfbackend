@@ -9,7 +9,7 @@ export class WidgetContentComponent implements OnInit {
 
   private _title: string;
   private _hideHeader: boolean;
-  
+
   @Input()
   set title(title: string) {
     this._title = title;
@@ -19,12 +19,7 @@ export class WidgetContentComponent implements OnInit {
   }
 
   @Input()
-  set hideHeader(hideHeader: boolean) {
-    this._hideHeader = hideHeader;
-  }
-  get hideHeader() {
-    return this._hideHeader;
-  }
+  hideHeader
 
   constructor() { }
 

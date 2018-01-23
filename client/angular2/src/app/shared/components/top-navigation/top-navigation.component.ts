@@ -7,8 +7,8 @@ import { Component, OnInit } from '@angular/core';
 })
 export class TopNavigationComponent implements OnInit {
 
-  private _isCollapsed: boolean = true;
-
+  _isCollapsed: boolean = true;
+  
   constructor() { }
 
   ngOnInit() {

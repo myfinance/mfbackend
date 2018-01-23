@@ -13,19 +13,13 @@ import { DefaultOptions } from './default-options';
 })
 export class DashboardGridComponent implements OnInit {
 
-  private _options: GridsterConfig = {};
-  private _dashboard: Array<GridsterItem> = [];
-  private _config;
-
-  private _resizedSubject: Subject<any> = new Subject();
+  _options: GridsterConfig = {};
+  _dashboard: Array<GridsterItem> = [];
 
   @Input()
-  set config(config) {
-    this._config = config;
-  }
-  get config() {
-    return this._config;
-  }
+  config
+
+  private _resizedSubject: Subject<any> = new Subject();
 
   constructor() { }
 
@@ -57,7 +51,7 @@ export class DashboardGridComponent implements OnInit {
 
   ngOnInit() {
     Object.assign(this._options, DefaultOptions, {
-      gridType: this._config.grid,
+      gridType: this.config.grid,
       itemChangeCallback: this.itemChange.bind(this),
       itemResizeCallback: this.itemResize.bind(this),
       itemInitCallback: this.itemInit.bind(this),
@@ -89,7 +83,7 @@ export class DashboardGridComponent implements OnInit {
   }
 
   private _buildDashboard(): void {
-    for(let widget of this._config.widgets) {
+    for(let widget of this.config.widgets) {
       this._generateUUIDs(widget);
 
       this._dashboard.push({

@@ -1,5 +1,5 @@
 <div class="widget-data-table-wrapper">
-  <app-widget-content [hideHeader]="_hideHeader" [title]="_config.title">
+  <app-widget-content [hideHeader]="hideHeader" [title]="config.title">
     <ag-grid-angular class="data-table ag-bootstrap" #table
       [gridOptions]="_gridOptions"
       (filterChanged)="_handleFilterChanged($event)">

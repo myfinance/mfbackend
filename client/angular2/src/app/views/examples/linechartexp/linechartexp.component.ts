@@ -15,9 +15,9 @@ const d3ParseDateDimension = timeParse('%Y-%m-%d');
 })
 export class LinechartexpComponent  implements OnInit {
 
-  private _loading: boolean = false;
-  private _preparing: boolean = false;
-  private _dataLoaded: boolean = false;
+  _loading: boolean = false;
+  _preparing: boolean = false;
+  _dataLoaded: boolean = false;
 
   private _config= {
     data: {

@@ -16,7 +16,7 @@ import {BasicLayoutComponent} from "./shared/components/basic-layout/basic-layou
 import { BarchartexpComponent } from './views/examples/barchartexp/barchartexp.component';
 import {WidgetModule} from "./modules/widget/widget.module";
 import {MyFinanceDataService} from "./shared/services/myfinance-data.service";
-import {myfinanceDummyDataService} from "./shared/services/myfinance-data-mock.service";
+import {MyfinanceDummyDataService} from "./shared/services/myfinance-data-mock.service";
 
 // ngx-bootstrap
 import { CollapseModule } from 'ngx-bootstrap/collapse';
@@ -37,7 +37,7 @@ let injector = ReflectiveInjector.resolveAndCreate([baseURLProvider]);
 
 export function myfinanceDataServiceFactory(http:Http){
   if(DEBUG) {
-    return new myfinanceDummyDataService();
+    return new MyfinanceDummyDataService();
   }
   else {
     return new MyFinanceDataService(http, injector.get(BASE_URL));

@@ -15,26 +15,14 @@ import { FinancialNumberPipe } from '../../pipes/financial-number.pipe';
 })
 export class WidgetDataTableComponent implements OnInit, OnDestroy, AfterViewInit {
 
-  private _config;
-  private _hideHeader;
-  private _gridOptions: GridOptions;
+  _gridOptions: GridOptions;
   private _subscriptions: Subscription[] = [];
 
   @Input()
-  set config(config) {
-    this._config = config;
-  }
-  get config() {
-    return this._config;
-  }
+  config
 
   @Input()
-  set hideHeader(hideHeader: boolean) {
-    this._hideHeader = hideHeader;
-  }
-  get hideHeader() {
-    return this._hideHeader;
-  }
+  hideHeader
 
   @Input()
   resized: Subject<any>;
@@ -46,7 +34,7 @@ export class WidgetDataTableComponent implements OnInit, OnDestroy, AfterViewIni
   ngOnInit() {
     this._subscriptions.push(
       this.resized.subscribe(event => {
-        if(this._config.uuid == event.uuid) {
+        if(this.config.uuid == event.uuid) {
           this.resize();
         }
       })
@@ -88,7 +76,7 @@ export class WidgetDataTableComponent implements OnInit, OnDestroy, AfterViewIni
   private _createColumnDefs(): any[] {
     let columns = [];
 
-    for(let column of this._config.columns) {
+    for(let column of this.config.columns) {
       let columnConfig = {
         field: column.value,
         headerName: column.title,
@@ -147,13 +135,13 @@ export class WidgetDataTableComponent implements OnInit, OnDestroy, AfterViewIni
   }
 
   private _createRowData(): any[] {
-    let dimension = this._dcService.getDimension(this._config.dimension);
+    let dimension = this._dcService.getDimension(this.config.dimension);
     return dimension.top(Infinity);
   }
 
-  private _handleFilterChanged(event): void {
+  _handleFilterChanged(event): void {
     let filters = event.api.getFilterModel();
-    let dimension = this._dcService.getDimension(this._config.dimension);
+    let dimension = this._dcService.getDimension(this.config.dimension);
     let dimensionCount = dimension.top(Infinity).length;
 
     dimension.filterFunction(row => {
@@ -231,7 +219,7 @@ export class WidgetDataTableComponent implements OnInit, OnDestroy, AfterViewIni
   refreshData(): void {
     this._gridOptions.rowData = this._createRowData();
     this._gridOptions.api.setRowData(this._gridOptions.rowData);
-    this._gridOptions.api.setFilterModel(this._dcService.filters[this._config.dimension]);
+    this._gridOptions.api.setFilterModel(this._dcService.filters[this.config.dimension]);
   }
 
   filters(): any {
@@ -247,7 +235,7 @@ export class WidgetDataTableComponent implements OnInit, OnDestroy, AfterViewIni
   }
 
   refreshView(): void {
-    if(this._config.view === 'fit') this._gridOptions.api.sizeColumnsToFit();
+    if(this.config.view === 'fit') this._gridOptions.api.sizeColumnsToFit();
   }
 
   ngOnDestroy() {

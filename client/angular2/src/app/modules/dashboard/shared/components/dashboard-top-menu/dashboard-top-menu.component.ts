@@ -16,6 +16,7 @@ export class DashboardTopMenuComponent implements OnInit {
   private _csv: boolean;
   private _service: boolean;
   private _csvFilepath: string;
+  _isCollapsed: boolean = true;
 
   @Input()
   set title(title: string) {

@@ -7,15 +7,9 @@ import { Component, OnInit, Input } from '@angular/core';
 })
 export class DimmerComponent implements OnInit {
 
-  private _isDimmed: boolean = false;
-
   @Input()
-  set isDimmed(isDimmed: boolean) {
-    this._isDimmed = isDimmed;
-  }
-  get isDimmed() {
-    return this._isDimmed;
-  }
+  isDimmed
+
 
   constructor() { }
 

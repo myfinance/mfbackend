@@ -1,6 +1,5 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { SuiModule } from 'ng2-semantic-ui';
 
 import { DcService } from './services/dc.service';
 import { WidgetHorizontalBarChartComponent } from './components/widget-horizontal-bar-chart/widget-horizontal-bar-chart.component';

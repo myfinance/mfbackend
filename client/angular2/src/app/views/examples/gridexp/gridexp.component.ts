@@ -11,9 +11,9 @@ import {MyFinanceDataService} from "../../../shared/services/myfinance-data.serv
   encapsulation: ViewEncapsulation.None
 })
 export class GridexpComponent implements OnInit {
-  private _loading: boolean = false;
-  private _preparing: boolean = false;
-  private _dataLoaded: boolean = false;
+  _loading: boolean = false;
+  _preparing: boolean = false;
+  _dataLoaded: boolean = false;
 
   private _config= {
     data: {

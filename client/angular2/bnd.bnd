@@ -1,0 +1,4 @@
+-metatype: *
+Web-ContextPath: myfinance
+Webapp-Context: myfinance
+Bundle-SymbolicName: ${project.artifactId}

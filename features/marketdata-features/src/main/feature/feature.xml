@@ -35,6 +35,7 @@
 
     <feature name="marketdata-features" version="${pom.version}">
         <feature>marketdata-restservice-feature</feature>
+        <bundle>mvn:de.hf.dac/angular/${project.version}</bundle>
     </feature>
 
 </features>

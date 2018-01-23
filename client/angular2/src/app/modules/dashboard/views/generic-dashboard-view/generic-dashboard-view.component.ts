@@ -11,10 +11,10 @@ import {DcService} from "../../../widget/services/dc.service";
 })
 export class GenericDashboardViewComponent implements OnInit, OnDestroy {
 
-  private _loading: boolean = false;
-  private _dataLoaded: boolean = false;
-  private _preparing: boolean = false;
-  private _config;
+  _loading: boolean = false;
+  _dataLoaded: boolean = false;
+  _preparing: boolean = false;
+  _config;
   private _routeSubscription;
 
   constructor(private _dataService: DataService, private _dcService: DcService, private _route: ActivatedRoute) { }
