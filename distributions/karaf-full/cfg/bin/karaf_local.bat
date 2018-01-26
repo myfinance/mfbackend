@@ -410,6 +410,7 @@ if "%KARAF_PROFILER%" == "" goto :RUN
         -Dkaraf.restart.jvm.supported=true ^
         -Djava.io.tmpdir="%KARAF_DATA%\tmp" ^
         -Dkaraf.data="%KARAF_DATA%" ^
+        -Djdk.http.auth.tunneling.disabledSchemes="" ^
         -Djava.util.logging.config.file="%KARAF_BASE%\etc\java.util.logging.properties" ^
         %KARAF_OPTS% %MAIN% %ARGS%
     ) else (

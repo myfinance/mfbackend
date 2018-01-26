@@ -276,6 +276,7 @@ run() {
                     -Dkaraf.home="${KARAF_HOME}" \
                     -Dkaraf.base="${KARAF_BASE}" \
                     -Dkaraf.data="${KARAF_DATA}" \
+                    -Djdk.http.auth.tunneling.disabledSchemes=""  \
                     -Dkaraf.etc="${KARAF_ETC}" \
                     -Dkaraf.restart.jvm.supported=true \
                     -Djava.io.tmpdir="${KARAF_DATA}/tmp" \

@@ -24,7 +24,10 @@ import de.hf.dac.marketdataprovider.api.application.OpType;
 import de.hf.dac.marketdataprovider.api.application.servicecontext.MDEnvironmentContext;
 import de.hf.dac.marketdataprovider.api.domain.Instrument;
 import de.hf.dac.marketdataprovider.api.domain.Product;
+import de.hf.dac.marketdataprovider.api.exceptions.MDException;
+import de.hf.dac.marketdataprovider.api.exceptions.MDMsgKey;
 import de.hf.dac.services.resources.BaseSecuredResource;
+import de.hf.dac.web.Http;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 
@@ -35,6 +38,7 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Link;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import java.io.IOException;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -127,6 +131,22 @@ public class EnvironmentDataResource extends BaseSecuredResource<OpType,OpLevel>
             returnvalue = marketDataEnvironment.getProductService().listProducts().toString();
         } catch (SQLException e) {
             e.printStackTrace();
+        }
+        return returnvalue;
+    }
+
+    @GET
+    @Path("/download")
+    @Produces(MediaType.APPLICATION_JSON)
+    @ApiOperation(value = "get Products", response = String.class)
+    public String getData() {
+        Http downloadHandler = new Http(10000);
+        String returnvalue = "No Products";
+        String url = "https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol=MSFT&apikey=Q6RLS6PGB55105EP";
+        try {
+            returnvalue=downloadHandler.getRequest(url, true, "proxy.dzbank.vrnet", 8080, "xn01598", "XN01598");
+        } catch (IOException e) {
+            throw new MDException(MDMsgKey.NO_RESPONSE_FROM_URL_EXCEPTION, "no response form "+url, e);
         }
         return returnvalue;
     }
