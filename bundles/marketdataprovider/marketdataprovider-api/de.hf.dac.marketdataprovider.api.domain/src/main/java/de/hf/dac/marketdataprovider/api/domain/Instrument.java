@@ -20,16 +20,17 @@
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
-import java.time.Instant;
-import java.util.HashSet;
-import java.util.Set;
+import java.time.LocalDate;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import static javax.persistence.GenerationType.IDENTITY;
 import javax.persistence.Id;
-import javax.persistence.OneToMany;
+import javax.persistence.Inheritance;
+import javax.persistence.InheritanceType;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 /**
@@ -37,145 +38,102 @@ import javax.persistence.Table;
 */
 @Entity
 @Table(
-    name="md_instrument")
+    name="mf_instrument")
+@Inheritance(strategy= InheritanceType.JOINED)
 @ApiModel
-public class Instrument  implements java.io.Serializable {
+public abstract class Instrument  implements java.io.Serializable {
     private static final long serialVersionUID = 1L;
 
 
-     private Integer id;
+     private Integer instrumentid;
+     private InstrumentType instrumentType;
+     private Integer liquiditytypeid;
      private String description;
-     private int hometradingcurrencyid;
-     private int instrumenttypeid;
-     private String isin;
-     private int sourceid;
-     private String ticker;
-     private Instant treelastchanged;
-     private String wkn;
-     private Set<EndOfDayPrice> endOfDayPrices = new HashSet<EndOfDayPrice>(0);
+     private boolean isactive;
+     private LocalDate maturitydate;
+     private LocalDate closingdate;
+     private LocalDate treelastchanged;
+     private Security security;
+     private Long instrumenttypeId;
 
     public Instrument() {
     }
 
-	
-    public Instrument(int hometradingcurrencyid, int instrumenttypeid, int sourceid) {
-        this.hometradingcurrencyid = hometradingcurrencyid;
-        this.instrumenttypeid = instrumenttypeid;
-        this.sourceid = sourceid;
-    }
-    public Instrument(String description, int hometradingcurrencyid, int instrumenttypeid, String isin, int sourceid, String ticker, Instant treelastchanged, String wkn, Set<EndOfDayPrice> endOfDayPrices) {
-       this.description = description;
-       this.hometradingcurrencyid = hometradingcurrencyid;
-       this.instrumenttypeid = instrumenttypeid;
-       this.isin = isin;
-       this.sourceid = sourceid;
-       this.ticker = ticker;
-       this.treelastchanged = treelastchanged;
-       this.wkn = wkn;
-       this.endOfDayPrices = endOfDayPrices;
+    public Instrument(Long instrumentTypeId, String description, boolean isactive, LocalDate treelastchanged) {
+        this.instrumenttypeId = instrumentTypeId;
+        this.description = description;
+        this.isactive = isactive;
+        this.treelastchanged = treelastchanged;
     }
 
     @Id @GeneratedValue(strategy=IDENTITY)    
-    @Column(name="id", unique=true, nullable=false)
+    @Column(name="instrumentid", unique=true, nullable=false)
     @ApiModelProperty(required = true)
-    public Integer getId() {
-        return this.id;
+    public Integer getInstrumentid() {
+        return this.instrumentid;
+    }
+    public void setInstrumentid(Integer instrumentid) {
+        this.instrumentid = instrumentid;
+    }
+
+    @Column(name = "instrumenttypeid", nullable=false)
+    @ApiModelProperty(required = true)
+    protected Long getInstrumentTypeId() {
+        return this.instrumenttypeId;
+    }
+    protected void setInstrumentTypeId(Long instrumentTypeId) {
+        this.instrumenttypeId = instrumenttypeId;
+    }
+
+    @Column(name="liquiditytypeid")
+    public Integer getLiquiditytypeid() {
+        return this.liquiditytypeid;
+    }
+    public void setLiquiditytypeid(Integer liquiditytypeid) {
+        this.liquiditytypeid = liquiditytypeid;
     }
     
-    public void setId(Integer id) {
-        this.id = id;
-    }
-    
-    @Column(name="description")
+    @Column(name="description", nullable=false, length=100)
     @ApiModelProperty(required = true)
     public String getDescription() {
         return this.description;
     }
-    
     public void setDescription(String description) {
         this.description = description;
     }
     
-    @Column(name="hometradingcurrencyid", nullable=false)
+    @Column(name="isactive", nullable=false)
     @ApiModelProperty(required = true)
-    public int getHometradingcurrencyid() {
-        return this.hometradingcurrencyid;
+    public boolean isIsactive() {
+        return this.isactive;
+    }
+    public void setIsactive(boolean isactive) {
+        this.isactive = isactive;
     }
     
-    public void setHometradingcurrencyid(int hometradingcurrencyid) {
-        this.hometradingcurrencyid = hometradingcurrencyid;
+    @Column(name="maturitydate", length=13)
+    public LocalDate getMaturitydate() {
+        return this.maturitydate;
+    }
+    public void setMaturitydate(LocalDate maturitydate) {
+        this.maturitydate = maturitydate;
     }
     
-    @Column(name="instrumenttypeid", nullable=false)
+    @Column(name="closingdate", length=13)
+    public LocalDate getClosingdate() {
+        return this.closingdate;
+    }
+    public void setClosingdate(LocalDate closingdate) {
+        this.closingdate = closingdate;
+    }
+    
+    @Column(name="treelastchanged", nullable=false, length=13)
     @ApiModelProperty(required = true)
-    public int getInstrumenttypeid() {
-        return this.instrumenttypeid;
-    }
-    
-    public void setInstrumenttypeid(int instrumenttypeid) {
-        this.instrumenttypeid = instrumenttypeid;
-    }
-    
-    @Column(name="isin")
-    @ApiModelProperty(required = true)
-    public String getIsin() {
-        return this.isin;
-    }
-    
-    public void setIsin(String isin) {
-        this.isin = isin;
-    }
-    
-    @Column(name="sourceid", nullable=false)
-    @ApiModelProperty(required = true)
-    public int getSourceid() {
-        return this.sourceid;
-    }
-    
-    public void setSourceid(int sourceid) {
-        this.sourceid = sourceid;
-    }
-    
-    @Column(name="ticker")
-    @ApiModelProperty(required = true)
-    public String getTicker() {
-        return this.ticker;
-    }
-    
-    public void setTicker(String ticker) {
-        this.ticker = ticker;
-    }
-    
-    @Column(name="treelastchanged", length=29)
-    @ApiModelProperty(required = true)
-    public Instant getTreelastchanged() {
+    public LocalDate getTreelastchanged() {
         return this.treelastchanged;
     }
-    
-    public void setTreelastchanged(Instant treelastchanged) {
+    public void setTreelastchanged(LocalDate treelastchanged) {
         this.treelastchanged = treelastchanged;
     }
-    
-    @Column(name="wkn")
-    @ApiModelProperty(required = true)
-    public String getWkn() {
-        return this.wkn;
-    }
-    
-    public void setWkn(String wkn) {
-        this.wkn = wkn;
-    }
-    @OneToMany(fetch=FetchType.LAZY, mappedBy="instrument")
-    @ApiModelProperty(required = true)
-    public Set<EndOfDayPrice> getEndOfDayPrices() {
-        return this.endOfDayPrices;
-    }
-    
-    public void setEndOfDayPrices(Set<EndOfDayPrice> endOfDayPrices) {
-        this.endOfDayPrices = endOfDayPrices;
-    }
-
-
-
 
 }

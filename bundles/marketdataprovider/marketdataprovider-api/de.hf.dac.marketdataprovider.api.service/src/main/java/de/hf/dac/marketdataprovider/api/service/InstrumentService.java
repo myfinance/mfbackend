@@ -19,12 +19,13 @@ package de.hf.dac.marketdataprovider.api.service;
 
 import de.hf.dac.marketdataprovider.api.domain.EndOfDayPrice;
 import de.hf.dac.marketdataprovider.api.domain.Instrument;
+import de.hf.dac.marketdataprovider.api.domain.Security;
 
 import java.util.List;
 
 public interface InstrumentService {
     List<Instrument> listInstruments();
     List<EndOfDayPrice> listPrices(String isin);
-    Instrument saveInstrument(Instrument instrument);
+    void saveSecurity(Security security);
     EndOfDayPrice savePrice(EndOfDayPrice price);
 }

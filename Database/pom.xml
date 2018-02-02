@@ -163,6 +163,18 @@
                 </configuration>
                 <executions>
                     <execution>
+                        <!--mvn liquibase:update@update_test-->
+                        <id>update_test</id>
+                        <configuration>
+                            <changeLogFile>changelog/changelog-master.xml</changeLogFile>
+                            <url>jdbc:postgresql://localhost:5432/marketdata</url>
+                        </configuration>
+                        <phase>none</phase>
+                        <goals>
+                            <goal>update</goal>
+                        </goals>
+                    </execution>
+                    <execution>
                         <!--mvn liquibase:update@update_dev-->
                         <id>update_dev</id>
                         <configuration>

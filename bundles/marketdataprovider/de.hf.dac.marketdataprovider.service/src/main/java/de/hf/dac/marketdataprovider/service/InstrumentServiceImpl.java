@@ -19,8 +19,7 @@ package de.hf.dac.marketdataprovider.service;
 
 import de.hf.dac.marketdataprovider.api.domain.EndOfDayPrice;
 import de.hf.dac.marketdataprovider.api.domain.Instrument;
-//import de.hf.marketdataprovider.persistence.repositories.EndOfDayPriceRepository;
-//import de.hf.marketdataprovider.persistence.repositories.InstrumentRepository;
+import de.hf.dac.marketdataprovider.api.domain.Security;
 import de.hf.dac.marketdataprovider.api.persistence.dao.InstrumentDao;
 import de.hf.dac.marketdataprovider.api.service.InstrumentService;
 import lombok.Data;
@@ -52,8 +51,8 @@ public class InstrumentServiceImpl implements InstrumentService {
     }
 
     @Override
-    public Instrument saveInstrument(Instrument instrument) {
-        return null;//instrumentRepository.save(instrument);
+    public void saveSecurity(Security security) {
+        instrumentDao.saveSecurity(security);
     }
 
     @Override

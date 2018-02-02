@@ -9,7 +9,6 @@
     <changeSet author="hf" id="md.1.0.1">
         <createTable tableName="md_endofdayprice">
             <column autoIncrement="true" name="id" type="SERIAL">
-            <!--<column name="id" type="INT">-->
                 <constraints nullable="false"/>
             </column>
             <column name="currencyid" type="INT">

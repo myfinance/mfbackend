@@ -19,9 +19,11 @@ package de.hf.dac.marketdataprovider.api.persistence.dao;
 
 
 import de.hf.dac.marketdataprovider.api.domain.Instrument;
+import de.hf.dac.marketdataprovider.api.domain.Security;
 
 import java.util.List;
 
 public interface InstrumentDao {
     List<Instrument> listInstruments();
+    void saveSecurity(Security instrument);
 }

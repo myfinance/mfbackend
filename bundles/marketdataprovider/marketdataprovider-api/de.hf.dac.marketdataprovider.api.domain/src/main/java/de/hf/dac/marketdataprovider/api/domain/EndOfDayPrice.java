@@ -20,13 +20,10 @@
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
-import java.time.Instant;
 import java.time.LocalDate;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import static javax.persistence.GenerationType.IDENTITY;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -37,64 +34,76 @@ import javax.persistence.Table;
 */
 @Entity
 @Table(
-    name="md_endofdayprice")
+    name="mf_endofdayprice")
 @ApiModel
 public class EndOfDayPrice  implements java.io.Serializable {
     private static final long serialVersionUID = 1L;
 
 
-     private Integer id;
-     private Instrument instrument;
-     private int currencyid;
+     private int endofdaypriceid;
+     private Currency currency;
+     private Security security;
+     private Source source;
      private LocalDate dayofprice;
-     private double endofdayprice;
-     private Instant lastchanged;
+     private Double value;
+     private LocalDate lastchanged;
 
     public EndOfDayPrice() {
     }
 
 	
-    public EndOfDayPrice(int currencyid, double endofdayprice) {
-        this.currencyid = currencyid;
-        this.endofdayprice = endofdayprice;
+    public EndOfDayPrice(int endofdaypriceid) {
+        this.endofdaypriceid = endofdaypriceid;
     }
-    public EndOfDayPrice(Instrument instrument, int currencyid, LocalDate dayofprice, double endofdayprice, Instant lastchanged) {
-       this.instrument = instrument;
-       this.currencyid = currencyid;
+    public EndOfDayPrice(int endofdaypriceid, Currency currency, Security security, Source source, LocalDate dayofprice, Double value, LocalDate lastchanged) {
+       this.endofdaypriceid = endofdaypriceid;
+       this.currency = currency;
+       this.security = security;
+       this.source = source;
        this.dayofprice = dayofprice;
-       this.endofdayprice = endofdayprice;
+       this.value = value;
        this.lastchanged = lastchanged;
     }
 
-    @Id @GeneratedValue(strategy=IDENTITY)    
-    @Column(name="id", unique=true, nullable=false)
+    @Id     
+    @Column(name="endofdaypriceid", unique=true, nullable=false)
     @ApiModelProperty(required = true)
-    public Integer getId() {
-        return this.id;
+    public int getEndofdaypriceid() {
+        return this.endofdaypriceid;
     }
     
-    public void setId(Integer id) {
-        this.id = id;
+    public void setEndofdaypriceid(int endofdaypriceid) {
+        this.endofdaypriceid = endofdaypriceid;
     }
     @ManyToOne(fetch=FetchType.LAZY)
-    @JoinColumn(name="instrument_id")
+    @JoinColumn(name="currencyid")
     @ApiModelProperty(required = true)
-    public Instrument getInstrument() {
-        return this.instrument;
+    public Currency getCurrency() {
+        return this.currency;
     }
     
-    public void setInstrument(Instrument instrument) {
-        this.instrument = instrument;
+    public void setCurrency(Currency currency) {
+        this.currency = currency;
     }
-    
-    @Column(name="currencyid", nullable=false)
+    @ManyToOne(fetch=FetchType.LAZY)
+    @JoinColumn(name="instrumentid")
     @ApiModelProperty(required = true)
-    public int getCurrencyid() {
-        return this.currencyid;
+    public Security getSecurity() {
+        return this.security;
     }
     
-    public void setCurrencyid(int currencyid) {
-        this.currencyid = currencyid;
+    public void setSecurity(Security security) {
+        this.security = security;
+    }
+    @ManyToOne(fetch=FetchType.LAZY)
+    @JoinColumn(name="sourceid")
+    @ApiModelProperty(required = true)
+    public Source getSource() {
+        return this.source;
+    }
+    
+    public void setSource(Source source) {
+        this.source = source;
     }
     
     @Column(name="dayofprice", length=13)
@@ -107,23 +116,23 @@ public class EndOfDayPrice  implements java.io.Serializable {
         this.dayofprice = dayofprice;
     }
     
-    @Column(name="endofdayprice", nullable=false, precision=17, scale=17)
+    @Column(name="value", precision=10)
     @ApiModelProperty(required = true)
-    public double getEndofdayprice() {
-        return this.endofdayprice;
+    public Double getValue() {
+        return this.value;
     }
     
-    public void setEndofdayprice(double endofdayprice) {
-        this.endofdayprice = endofdayprice;
+    public void setValue(Double value) {
+        this.value = value;
     }
     
-    @Column(name="lastchanged", length=29)
+    @Column(name="lastchanged", length=13)
     @ApiModelProperty(required = true)
-    public Instant getLastchanged() {
+    public LocalDate getLastchanged() {
         return this.lastchanged;
     }
     
-    public void setLastchanged(Instant lastchanged) {
+    public void setLastchanged(LocalDate lastchanged) {
         this.lastchanged = lastchanged;
     }
 

@@ -19,6 +19,7 @@ package de.hf.dac.marketdataprovider.persistence;
 
 import de.hf.dac.marketdataprovider.api.application.EnvTarget;
 import de.hf.dac.marketdataprovider.api.domain.Instrument;
+import de.hf.dac.marketdataprovider.api.domain.Security;
 import de.hf.dac.marketdataprovider.api.persistence.dao.InstrumentDao;
 import de.hf.dac.marketdataprovider.api.persistence.repositories.InstrumentRepository;
 
@@ -40,5 +41,12 @@ public class InstrumentDaoImpl  extends BaseDao implements InstrumentDao {
     @Override
     public List<Instrument> listInstruments() {
         return instrumentRepository.findAll();
+    }
+
+    @Override
+    public void saveSecurity(Security security) {
+        marketDataEm.getTransaction().begin();
+        marketDataEm.persist(security);
+        marketDataEm.getTransaction().commit();
     }
 }

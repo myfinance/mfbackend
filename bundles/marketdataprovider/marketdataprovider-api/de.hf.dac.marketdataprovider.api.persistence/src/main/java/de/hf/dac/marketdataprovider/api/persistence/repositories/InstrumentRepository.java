@@ -32,5 +32,5 @@ import java.util.Optional;
  * @author xn01598
  */
 public interface InstrumentRepository  extends JpaRepository<Instrument, Integer> {
-    Optional<Instrument> findByIsin(String isin);
+    //Optional<Instrument> findByIsin(String isin);
 }

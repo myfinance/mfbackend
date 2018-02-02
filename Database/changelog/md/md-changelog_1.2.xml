@@ -1,0 +1,153 @@
+<?xml version="1.1" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.5.xsd">
+    <changeSet author="hf" id="md.1.2.1">
+        <createTable tableName="mf_currency">
+            <column name="instrumentid" type="INT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="currencycode" type="CHAR(3)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet author="hf" id="md.1.2.2">
+        <createTable tableName="mf_endofdayprice">
+            <column autoIncrement="true" name="endofdaypriceid" type="SERIAL">
+                <constraints primaryKey="true" primaryKeyName="pk_mf_endofdayprice"/>
+            </column>
+            <column name="sourceid" type="INT"/>
+            <column name="instrumentid" type="INT"/>
+            <column name="dayofprice" type="date"/>
+            <column name="value" type="numeric(10, 2)"/>
+            <column name="lastchanged" type="date"/>
+            <column name="currencyid" type="INT"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="hf" id="md.1.2.3">
+        <createTable tableName="mf_importtype">
+            <column name="importtypeid" type="INT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="description" type="VARCHAR(100)"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="hf" id="md.1.2.4">
+        <createTable tableName="mf_instrument">
+            <column autoIncrement="true" name="instrumentid" type="SERIAL">
+                <constraints primaryKey="true" primaryKeyName="pk_mf_instrument"/>
+            </column>
+            <column name="instrumenttypeid" type="INT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="liquiditytypeid" type="INT"/>
+            <column name="description" type="VARCHAR(100)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="isactive" type="BOOLEAN">
+                <constraints nullable="false"/>
+            </column>
+            <column name="maturitydate" type="date"/>
+            <column name="closingdate" type="date"/>
+            <column name="treelastchanged" type="date">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet author="hf" id="md.1.2.5">
+        <createTable tableName="mf_instrumenttype">
+            <column name="instrumenttypeid" type="INT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="description" type="VARCHAR(100)"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="hf" id="md.1.2.6">
+        <createTable tableName="mf_security">
+            <column name="instrumentid" type="INT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="isin" type="CHAR(12)"/>
+            <column name="wkn" type="VARCHAR(10)"/>
+            <column name="ticker" type="VARCHAR(20)"/>
+            <column name="securitytypeid" type="INT"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="hf" id="md.1.2.7">
+        <createTable tableName="mf_securitysymbols">
+            <column autoIncrement="true" name="symbolid" type="SERIAL">
+                <constraints primaryKey="true" primaryKeyName="pk_mf_securitysymbols"/>
+            </column>
+            <column name="instrumentid" type="INT"/>
+            <column name="symbol" type="VARCHAR(20)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="currencyid" type="INT"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="hf" id="md.1.2.8">
+        <createTable tableName="mf_securitytyp">
+            <column name="securitytypeid" type="INT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="description" type="VARCHAR(100)"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="hf" id="md.1.2.9">
+        <createTable tableName="mf_source">
+            <column autoIncrement="true" name="sourceid" type="SERIAL">
+                <constraints primaryKey="true" primaryKeyName="pk_mf_source"/>
+            </column>
+            <column name="description" type="VARCHAR(100)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="prio" type="INT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="urlprefix" type="VARCHAR(255)"/>
+            <column name="urlpostfix" type="VARCHAR(255)"/>
+            <column name="importtypeid" type="INT"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="hf" id="md.1.2.10">
+        <addPrimaryKey columnNames="instrumentid" constraintName="pk_mf_currency" tableName="mf_currency"/>
+    </changeSet>
+    <changeSet author="hf" id="md.1.2.11">
+        <addPrimaryKey columnNames="importtypeid" constraintName="pk_mf_importtype" tableName="mf_importtype"/>
+    </changeSet>
+    <changeSet author="hf" id="md.1.2.12">
+        <addPrimaryKey columnNames="instrumenttypeid" constraintName="pk_mf_instrumenttype" tableName="mf_instrumenttype"/>
+    </changeSet>
+    <changeSet author="hf" id="md.1.2.13">
+        <addPrimaryKey columnNames="instrumentid" constraintName="pk_mf_security" tableName="mf_security"/>
+    </changeSet>
+    <changeSet author="hf" id="md.1.2.14">
+        <addPrimaryKey columnNames="securitytypeid" constraintName="pk_mf_securitytyp" tableName="mf_securitytyp"/>
+    </changeSet>
+    <changeSet author="hf" id="md.1.2.15">
+        <addForeignKeyConstraint baseColumnNames="instrumentid" baseTableName="mf_currency" constraintName="fk_mf_curre_security__mf_secur" deferrable="false" initiallyDeferred="false" onDelete="RESTRICT" onUpdate="RESTRICT" referencedColumnNames="instrumentid" referencedTableName="mf_security"/>
+    </changeSet>
+    <changeSet author="hf" id="md.1.2.16">
+        <addForeignKeyConstraint baseColumnNames="currencyid" baseTableName="mf_endofdayprice" constraintName="fk_mf_endof_fk_curren_mf_curre" deferrable="false" initiallyDeferred="false" onDelete="RESTRICT" onUpdate="RESTRICT" referencedColumnNames="instrumentid" referencedTableName="mf_currency"/>
+    </changeSet>
+    <changeSet author="hf" id="md.1.2.17">
+        <addForeignKeyConstraint baseColumnNames="instrumentid" baseTableName="mf_endofdayprice" constraintName="fk_mf_endof_fk_securi_mf_secur" deferrable="false" initiallyDeferred="false" onDelete="RESTRICT" onUpdate="RESTRICT" referencedColumnNames="instrumentid" referencedTableName="mf_security"/>
+    </changeSet>
+    <changeSet author="hf" id="md.1.2.18">
+        <addForeignKeyConstraint baseColumnNames="sourceid" baseTableName="mf_endofdayprice" constraintName="fk_mf_endof_fk_source_mf_sourc" deferrable="false" initiallyDeferred="false" onDelete="RESTRICT" onUpdate="RESTRICT" referencedColumnNames="sourceid" referencedTableName="mf_source"/>
+    </changeSet>
+    <changeSet author="hf" id="md.1.2.19">
+        <addForeignKeyConstraint baseColumnNames="instrumenttypeid" baseTableName="mf_instrument" constraintName="fk_mf_instr_fk_instru_mf_instr" deferrable="false" initiallyDeferred="false" onDelete="RESTRICT" onUpdate="RESTRICT" referencedColumnNames="instrumenttypeid" referencedTableName="mf_instrumenttype"/>
+    </changeSet>
+    <changeSet author="hf" id="md.1.2.20">
+        <addForeignKeyConstraint baseColumnNames="currencyid" baseTableName="mf_securitysymbols" constraintName="fk_mf_secur_fk_curren_mf_curre" deferrable="false" initiallyDeferred="false" onDelete="RESTRICT" onUpdate="RESTRICT" referencedColumnNames="instrumentid" referencedTableName="mf_currency"/>
+    </changeSet>
+    <changeSet author="hf" id="md.1.2.21">
+        <addForeignKeyConstraint baseColumnNames="securitytypeid" baseTableName="mf_security" constraintName="fk_mf_secur_fk_securi_mf_secur" deferrable="false" initiallyDeferred="false" onDelete="RESTRICT" onUpdate="RESTRICT" referencedColumnNames="securitytypeid" referencedTableName="mf_securitytyp"/>
+    </changeSet>
+    <changeSet author="hf" id="md.1.2.22">
+        <addForeignKeyConstraint baseColumnNames="instrumentid" baseTableName="mf_security" constraintName="fk_mf_secur_instrumen_mf_instr" deferrable="false" initiallyDeferred="false" onDelete="RESTRICT" onUpdate="RESTRICT" referencedColumnNames="instrumentid" referencedTableName="mf_instrument"/>
+    </changeSet>
+    <changeSet author="hf" id="md.1.2.23">
+        <addForeignKeyConstraint baseColumnNames="importtypeid" baseTableName="mf_source" constraintName="fk_mf_sourc_fk_import_mf_impor" deferrable="false" initiallyDeferred="false" onDelete="RESTRICT" onUpdate="RESTRICT" referencedColumnNames="importtypeid" referencedTableName="mf_importtype"/>
+    </changeSet>
+</databaseChangeLog>

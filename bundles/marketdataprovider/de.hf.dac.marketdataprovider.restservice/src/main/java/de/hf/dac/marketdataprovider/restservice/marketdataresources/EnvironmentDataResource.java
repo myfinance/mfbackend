@@ -23,7 +23,10 @@ import de.hf.dac.marketdataprovider.api.application.OpLevel;
 import de.hf.dac.marketdataprovider.api.application.OpType;
 import de.hf.dac.marketdataprovider.api.application.servicecontext.MDEnvironmentContext;
 import de.hf.dac.marketdataprovider.api.domain.Instrument;
+import de.hf.dac.marketdataprovider.api.domain.InstrumentType;
 import de.hf.dac.marketdataprovider.api.domain.Product;
+import de.hf.dac.marketdataprovider.api.domain.Security;
+import de.hf.dac.marketdataprovider.api.domain.SecurityType;
 import de.hf.dac.marketdataprovider.api.exceptions.MDException;
 import de.hf.dac.marketdataprovider.api.exceptions.MDMsgKey;
 import de.hf.dac.services.resources.BaseSecuredResource;
@@ -40,8 +43,9 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.io.IOException;
 import java.sql.SQLException;
+import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class EnvironmentDataResource extends BaseSecuredResource<OpType,OpLevel> {
 
@@ -84,9 +88,10 @@ public class EnvironmentDataResource extends BaseSecuredResource<OpType,OpLevel>
         response = List.class)
     public List<Instrument> getFilteredInstruments(@QueryParam("isin") @ApiParam(value="the isin") String isin) {
         checkOperationAllowed(OpType.READ);
-        List<Instrument> returnvalue =
-            marketDataEnvironment.getInstrumentService().listInstruments().stream().filter(i->i.getIsin().contains(isin)).collect(Collectors.toList());
-        return returnvalue;
+        //List<Instrument> returnvalue =
+        //    marketDataEnvironment.getInstrumentService().listInstruments().stream().filter(i->i.getIsin().contains(isin)).collect(Collectors.toList());
+        //return returnvalue;
+        return new ArrayList<>();
     }
 
     @GET
@@ -149,5 +154,17 @@ public class EnvironmentDataResource extends BaseSecuredResource<OpType,OpLevel>
             throw new MDException(MDMsgKey.NO_RESPONSE_FROM_URL_EXCEPTION, "no response form "+url, e);
         }
         return returnvalue;
+    }
+
+    @GET
+    @Path("/addEquity")
+    @Produces(MediaType.APPLICATION_JSON)
+    @ApiOperation(value = "save Instrument",
+        response = String.class)
+    public String addEquity(@QueryParam("isin") @ApiParam(value="the isin") String isin,
+        @QueryParam("description") @ApiParam(value="description") String description) {
+        Security i = new Security(description, true, LocalDate.now(), SecurityType.EQUITY, isin);
+        marketDataEnvironment.getInstrumentService().saveSecurity(i);
+        return "saved";
     }
 }
