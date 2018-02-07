@@ -10,6 +10,8 @@ VALUES(1, 'Security');
 
 INSERT INTO "mf_securitytyp"("securitytypeid", "description")
 VALUES(1, 'Equity');
+INSERT INTO "mf_securitytyp"("securitytypeid", "description")
+VALUES(2, 'Currency');
 
 INSERT INTO "mf_source"("description", "prio", "urlprefix", "urlpostfix", "importtypeid")
 VALUES('alphavantage_daily_EQ', 1, 'http://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol=', '&apikey=Q6RLS6PGB55105EP', 1);

@@ -27,8 +27,9 @@ import java.util.Set;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
+import javax.persistence.Inheritance;
+import javax.persistence.InheritanceType;
 import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
@@ -40,18 +41,18 @@ import javax.persistence.Table;
 @Table(
     name="mf_security")
 @PrimaryKeyJoinColumn(name="instrumentid")
+@Inheritance(strategy= InheritanceType.JOINED)
 @ApiModel
 public class Security extends Instrument implements java.io.Serializable {
     private static final long serialVersionUID = 1L;
 
-
-     private int instrumentid;
-     private String isin;
-     private String wkn;
-     private String ticker;
-     private Currency currency;
-     private Set<EndOfDayPrice> endOfDayPrices = new HashSet<EndOfDayPrice>(0);
-     private Long securityTypeId;
+    private String isin;
+    private String wkn;
+    private String ticker;
+    private Currency currency;
+    private Set<EndOfDayPrice> endOfDayPrices = new HashSet<EndOfDayPrice>(0);
+    private Set<SecuritySymbols> securitySymbols = new HashSet<SecuritySymbols>(0);
+    private Integer securityTypeId;
 
     public Security() {
     }
@@ -69,10 +70,10 @@ public class Security extends Instrument implements java.io.Serializable {
 
     @Column(name = "securitytypeid", nullable=false)
     @ApiModelProperty(required = true)
-    protected Long getSecurityTypeId() {
+    protected Integer getSecurityTypeId() {
         return this.securityTypeId;
     }
-    protected void setSecurityTypeId(Long securityTypeId) {
+    protected void setSecurityTypeId(Integer securityTypeId) {
         this.securityTypeId = securityTypeId;
     }
     
@@ -109,12 +110,19 @@ public class Security extends Instrument implements java.io.Serializable {
     public Set<EndOfDayPrice> getEndOfDayPrices() {
         return this.endOfDayPrices;
     }
-    
     public void setEndOfDayPrices(Set<EndOfDayPrice> endOfDayPrices) {
         this.endOfDayPrices = endOfDayPrices;
     }
 
-
+    @OneToMany(fetch=FetchType.LAZY)
+    @JoinColumn(name = "instrumentid")
+    @ApiModelProperty(required = true)
+    public Set<SecuritySymbols> getSecuritySymbols() {
+        return this.securitySymbols;
+    }
+    public void setSecuritySymbols(Set<SecuritySymbols> securitySymbols) {
+        this.securitySymbols = securitySymbols;
+    }
 
 
 }

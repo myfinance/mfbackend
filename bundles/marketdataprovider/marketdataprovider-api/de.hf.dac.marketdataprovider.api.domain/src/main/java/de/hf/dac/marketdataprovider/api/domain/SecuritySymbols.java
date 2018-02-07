@@ -43,7 +43,7 @@ public class SecuritySymbols  implements java.io.Serializable {
 
      private Integer symbolid;
      private Currency currency;
-     private Integer instrumentid;
+     private Instrument instrument;
      private String symbol;
 
     public SecuritySymbols() {
@@ -53,9 +53,9 @@ public class SecuritySymbols  implements java.io.Serializable {
     public SecuritySymbols(String symbol) {
         this.symbol = symbol;
     }
-    public SecuritySymbols(Currency currency, Integer instrumentid, String symbol) {
+    public SecuritySymbols(Currency currency, Instrument instrument, String symbol) {
        this.currency = currency;
-       this.instrumentid = instrumentid;
+       this.instrument = instrument;
        this.symbol = symbol;
     }
 
@@ -79,15 +79,15 @@ public class SecuritySymbols  implements java.io.Serializable {
     public void setCurrency(Currency currency) {
         this.currency = currency;
     }
-    
-    @Column(name="instrumentid")
+
+    @ManyToOne(fetch=FetchType.LAZY)
+    @JoinColumn(name = "instrumentid")
     @ApiModelProperty(required = true)
-    public Integer getInstrumentid() {
-        return this.instrumentid;
+    public Instrument getInstrument() {
+        return this.instrument;
     }
-    
-    public void setInstrumentid(Integer instrumentid) {
-        this.instrumentid = instrumentid;
+    public void setInstrument(Instrument instrument) {
+        this.instrument = instrument;
     }
     
     @Column(name="symbol", nullable=false, length=20)

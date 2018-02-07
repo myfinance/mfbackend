@@ -18,15 +18,19 @@
 package de.hf.dac.marketdataprovider.persistence;
 
 import de.hf.dac.marketdataprovider.api.application.EnvTarget;
+import de.hf.dac.marketdataprovider.api.domain.Currency;
 import de.hf.dac.marketdataprovider.api.domain.Instrument;
 import de.hf.dac.marketdataprovider.api.domain.Security;
+import de.hf.dac.marketdataprovider.api.domain.SecuritySymbols;
 import de.hf.dac.marketdataprovider.api.persistence.dao.InstrumentDao;
 import de.hf.dac.marketdataprovider.api.persistence.repositories.InstrumentRepository;
 
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.persistence.EntityManagerFactory;
+import javax.persistence.Query;
 import java.util.List;
+import java.util.Optional;
 
 public class InstrumentDaoImpl  extends BaseDao implements InstrumentDao {
 
@@ -44,9 +48,65 @@ public class InstrumentDaoImpl  extends BaseDao implements InstrumentDao {
     }
 
     @Override
+    public Optional<Instrument> getInstrument(int instrumentId) {
+
+        Optional<Instrument> result = Optional.empty();
+        Query query = marketDataEm.createQuery("select a FROM Instrument a WHERE instrumentid = :instrumentid");
+        query.setParameter("instrumentid", instrumentId);
+        List<Object> queryResult = (List<Object>) query.getResultList();
+        if(queryResult!=null && !queryResult.isEmpty()){
+            Object object = queryResult.get(0);
+            result = Optional.of((Instrument)object);
+        }
+        return result;
+    }
+
+    @Override
+    public Optional<Security>getSecurity(String isin) {
+
+        Optional<Security> result = Optional.empty();
+        Query query = marketDataEm.createQuery("select a FROM Security a WHERE isin = :isin");
+        query.setParameter("isin", isin);
+        List<Object> queryResult = (List<Object>) query.getResultList();
+        if(queryResult!=null && !queryResult.isEmpty()){
+            Object object = queryResult.get(0);
+            result = Optional.of((Security)object);
+        }
+        return result;
+    }
+
+    @Override
+    public Optional<Currency> getCurrency(String currencyCode) {
+
+        Optional<Currency> result = Optional.empty();
+        Query query = marketDataEm.createQuery("select a FROM Currency a WHERE currencycode = :currencycode");
+        query.setParameter("currencycode", currencyCode);
+        List<Object> queryResult = (List<Object>) query.getResultList();
+        if(queryResult!=null && !queryResult.isEmpty()){
+            Object object = queryResult.get(0);
+            result = Optional.of((Currency)object);
+        }
+        return result;
+    }
+
+    @Override
     public void saveSecurity(Security security) {
         marketDataEm.getTransaction().begin();
         marketDataEm.persist(security);
+        marketDataEm.getTransaction().commit();
+    }
+
+    @Override
+    public void saveCurrency(Currency currency) {
+        marketDataEm.getTransaction().begin();
+        marketDataEm.persist(currency);
+        marketDataEm.getTransaction().commit();
+    }
+
+    @Override
+    public void saveSymbol(SecuritySymbols symbol) {
+        marketDataEm.getTransaction().begin();
+        marketDataEm.persist(symbol);
         marketDataEm.getTransaction().commit();
     }
 }

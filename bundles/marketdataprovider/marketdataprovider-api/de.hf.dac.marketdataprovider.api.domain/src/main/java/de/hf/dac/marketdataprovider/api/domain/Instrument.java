@@ -54,12 +54,12 @@ public abstract class Instrument  implements java.io.Serializable {
      private LocalDate closingdate;
      private LocalDate treelastchanged;
      private Security security;
-     private Long instrumenttypeId;
+     private Integer instrumenttypeId;
 
     public Instrument() {
     }
 
-    public Instrument(Long instrumentTypeId, String description, boolean isactive, LocalDate treelastchanged) {
+    public Instrument(Integer instrumentTypeId, String description, boolean isactive, LocalDate treelastchanged) {
         this.instrumenttypeId = instrumentTypeId;
         this.description = description;
         this.isactive = isactive;
@@ -78,11 +78,11 @@ public abstract class Instrument  implements java.io.Serializable {
 
     @Column(name = "instrumenttypeid", nullable=false)
     @ApiModelProperty(required = true)
-    protected Long getInstrumentTypeId() {
+    protected Integer getInstrumentTypeId() {
         return this.instrumenttypeId;
     }
-    protected void setInstrumentTypeId(Long instrumentTypeId) {
-        this.instrumenttypeId = instrumenttypeId;
+    protected void setInstrumentTypeId(Integer instrumentTypeId) {
+        this.instrumenttypeId = instrumentTypeId;
     }
 
     @Column(name="liquiditytypeid")

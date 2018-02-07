@@ -18,12 +18,20 @@
 package de.hf.dac.marketdataprovider.api.persistence.dao;
 
 
+import de.hf.dac.marketdataprovider.api.domain.Currency;
 import de.hf.dac.marketdataprovider.api.domain.Instrument;
 import de.hf.dac.marketdataprovider.api.domain.Security;
+import de.hf.dac.marketdataprovider.api.domain.SecuritySymbols;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface InstrumentDao {
     List<Instrument> listInstruments();
+    Optional<Security> getSecurity(String isin);
+    Optional<Currency> getCurrency(String currencyCode);
+    Optional<Instrument> getInstrument(int instrumentId);
     void saveSecurity(Security instrument);
+    void saveCurrency(Currency currency);
+    void saveSymbol(SecuritySymbols symbol);
 }

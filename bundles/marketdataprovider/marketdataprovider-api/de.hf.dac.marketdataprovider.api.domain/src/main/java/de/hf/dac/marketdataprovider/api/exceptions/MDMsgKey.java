@@ -35,6 +35,7 @@ public enum MDMsgKey implements MsgKey {
     // 21000 - 24999: imports
     NO_RESPONSE_FROM_URL_EXCEPTION(21001),
     // 25000 - 29999: analysis
+    NO_INSTRUMENT_FOUND_EXCEPTION(25001),
     MD_UNSPECIFIED(30000);
 
     private final String globalPrefix = "MD";

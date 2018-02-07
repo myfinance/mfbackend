@@ -18,6 +18,7 @@
 package de.hf.dac.marketdataprovider.api.persistence.repositories;
 
 import de.hf.dac.marketdataprovider.api.domain.Instrument;
+import de.hf.dac.marketdataprovider.api.domain.Security;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;
@@ -32,5 +33,5 @@ import java.util.Optional;
  * @author xn01598
  */
 public interface InstrumentRepository  extends JpaRepository<Instrument, Integer> {
-    //Optional<Instrument> findByIsin(String isin);
+    //Optional<Security> findByIsin(String isin);
 }

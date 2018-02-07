@@ -17,14 +17,15 @@
  package de.hf.dac.marketdataprovider.api.domain;
 
 public enum SecurityType {
-    EQUITY(new Long(1));
+    EQUITY(new Integer(1)),
+    CURRENCY(new Integer(2));
 
-    private final Long value;
+    private final Integer value;
 
-    SecurityType(final Long newValue) {
+    SecurityType(final Integer newValue) {
         value = newValue;
     }
 
-    public Long getValue() { return value; }
+    public Integer getValue() { return value; }
 }
 

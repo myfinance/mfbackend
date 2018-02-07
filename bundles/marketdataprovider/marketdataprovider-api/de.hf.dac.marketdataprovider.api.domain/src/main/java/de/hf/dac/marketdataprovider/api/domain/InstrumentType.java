@@ -18,13 +18,13 @@
 package de.hf.dac.marketdataprovider.api.domain;
 
 public enum InstrumentType {
-    SECURITY(new Long(1));
+    SECURITY(new Integer(1));
 
-    private final Long value;
+    private final Integer value;
 
-    InstrumentType(final Long newValue) {
+    InstrumentType(final Integer newValue) {
         value = newValue;
     }
 
-    public Long getValue() { return value; }
+    public Integer getValue() { return value; }
 }

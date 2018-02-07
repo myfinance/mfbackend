@@ -20,11 +20,15 @@
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
+
+import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Set;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
+import javax.persistence.Inheritance;
+import javax.persistence.InheritanceType;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.PrimaryKeyJoinColumn;
@@ -37,20 +41,23 @@ import javax.persistence.Table;
 @Table(
     name="mf_currency")
 @PrimaryKeyJoinColumn(name="instrumentid")
+@Inheritance(strategy= InheritanceType.JOINED)
 @ApiModel
 public class Currency extends Security implements java.io.Serializable {
     private static final long serialVersionUID = 1L;
 
-
-     private int instrumentid;
-     private String currencycode;
-     private Set<EndOfDayPrice> endOfDayPrices = new HashSet<EndOfDayPrice>(0);
+    private String currencycode;
+    private Set<EndOfDayPrice> endOfDayPrices = new HashSet<EndOfDayPrice>(0);
 
     public Currency() {
     }
 
 	
-    public Currency(String currencycode) {
+    public Currency(String description,
+            boolean isactive,
+            LocalDate treelastchanged,
+            String currencycode) {
+        super(description, isactive, treelastchanged, SecurityType.CURRENCY, "PP0000000"+currencycode);
         this.currencycode = currencycode;
     }
 

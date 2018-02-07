@@ -35,6 +35,7 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 
 import javax.ws.rs.GET;
+import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
@@ -46,6 +47,8 @@ import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 
 public class EnvironmentDataResource extends BaseSecuredResource<OpType,OpLevel> {
 
@@ -143,7 +146,7 @@ public class EnvironmentDataResource extends BaseSecuredResource<OpType,OpLevel>
     @GET
     @Path("/download")
     @Produces(MediaType.APPLICATION_JSON)
-    @ApiOperation(value = "get Products", response = String.class)
+    @ApiOperation(value = "download", response = String.class)
     public String getData() {
         Http downloadHandler = new Http(10000);
         String returnvalue = "No Products";
@@ -157,14 +160,51 @@ public class EnvironmentDataResource extends BaseSecuredResource<OpType,OpLevel>
     }
 
     @GET
+    @Path("/getsecurity")
+    @Produces(MediaType.APPLICATION_JSON)
+    @ApiOperation(value = "get Security", response = String.class)
+    public Security getSecurity(@QueryParam("isin") @ApiParam(value="the isin") String isin) {
+        Optional<Security> security = marketDataEnvironment.getInstrumentService().getSecurity(isin);
+        if(security.isPresent()) return security.get();
+        else
+            throw new MDException(MDMsgKey.NO_INSTRUMENT_FOUND_EXCEPTION, "no Instrument found with ISIN "+isin);
+
+    }
+
+    @POST
     @Path("/addEquity")
     @Produces(MediaType.APPLICATION_JSON)
     @ApiOperation(value = "save Instrument",
         response = String.class)
     public String addEquity(@QueryParam("isin") @ApiParam(value="the isin") String isin,
         @QueryParam("description") @ApiParam(value="description") String description) {
-        Security i = new Security(description, true, LocalDate.now(), SecurityType.EQUITY, isin);
-        marketDataEnvironment.getInstrumentService().saveSecurity(i);
+
+        marketDataEnvironment.getInstrumentService().saveSecurity(isin, description);
+        return "saved";
+    }
+
+    @POST
+    @Path("/addSymbol")
+    @Produces(MediaType.APPLICATION_JSON)
+    @ApiOperation(value = "save Instrument",
+        response = String.class)
+    public String addSymbol(@QueryParam("isin") @ApiParam(value="the isin") String isin,
+        @QueryParam("symbol") @ApiParam(value="symbol") String symbol,
+        @QueryParam("currencycode") @ApiParam(value="the code of the currency in which the security is traded in the exchange referenced by the symbol") String currencyCode) {
+
+        marketDataEnvironment.getInstrumentService().saveSymbol(isin, symbol, currencyCode);
+        return "saved";
+    }
+
+    @POST
+    @Path("/addCurrency")
+    @Produces(MediaType.APPLICATION_JSON)
+    @ApiOperation(value = "save Instrument",
+        response = String.class)
+    public String addCurrency(@QueryParam("currencyCode") @ApiParam(value="the currencyCode") String currencyCode,
+        @QueryParam("description") @ApiParam(value="description") String description) {
+
+        marketDataEnvironment.getInstrumentService().saveCurrency(currencyCode, description);
         return "saved";
     }
 }
