@@ -76,6 +76,11 @@ public class Security extends Instrument implements java.io.Serializable {
     protected void setSecurityTypeId(Integer securityTypeId) {
         this.securityTypeId = securityTypeId;
     }
+    public SecurityType getSecurityType(){
+        if(getSecurityTypeId()==1) return SecurityType.EQUITY;
+        if(getSecurityTypeId()==1) return SecurityType.CURRENCY;
+        return SecurityType.UNKNOWN;
+    }
     
     @Column(name="isin", length=12)
     @ApiModelProperty(required = true)

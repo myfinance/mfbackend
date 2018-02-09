@@ -19,9 +19,11 @@ package de.hf.dac.marketdataprovider.persistence;
 
 import de.hf.dac.marketdataprovider.api.application.EnvTarget;
 import de.hf.dac.marketdataprovider.api.domain.Currency;
+import de.hf.dac.marketdataprovider.api.domain.EndOfDayPrice;
 import de.hf.dac.marketdataprovider.api.domain.Instrument;
 import de.hf.dac.marketdataprovider.api.domain.Security;
 import de.hf.dac.marketdataprovider.api.domain.SecuritySymbols;
+import de.hf.dac.marketdataprovider.api.domain.Source;
 import de.hf.dac.marketdataprovider.api.persistence.dao.InstrumentDao;
 import de.hf.dac.marketdataprovider.api.persistence.repositories.InstrumentRepository;
 
@@ -29,6 +31,7 @@ import javax.inject.Inject;
 import javax.inject.Named;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Query;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -76,6 +79,14 @@ public class InstrumentDaoImpl  extends BaseDao implements InstrumentDao {
     }
 
     @Override
+    public List<Security> getSecurities() {
+
+        Optional<Security> result = Optional.empty();
+        Query query = marketDataEm.createQuery("select a FROM Security a");
+        return (List<Security>) query.getResultList();;
+    }
+
+    @Override
     public Optional<Currency> getCurrency(String currencyCode) {
 
         Optional<Currency> result = Optional.empty();
@@ -87,6 +98,50 @@ public class InstrumentDaoImpl  extends BaseDao implements InstrumentDao {
             result = Optional.of((Currency)object);
         }
         return result;
+    }
+
+    @Override
+    public Optional<EndOfDayPrice>getEndOfDayPrice(int instrumentid, LocalDate dayofprice) {
+
+        Optional<EndOfDayPrice> result = Optional.empty();
+        Query query = marketDataEm.createQuery("select a FROM EndOfDayPrice a WHERE instrumentid = :instrumentid and dayofprice = :dayofprice");
+        query.setParameter("instrumentid", instrumentid);
+        query.setParameter("dayofprice", dayofprice);
+        List<Object> queryResult = (List<Object>) query.getResultList();
+        if(queryResult!=null && !queryResult.isEmpty()){
+            Object object = queryResult.get(0);
+            result = Optional.of((EndOfDayPrice)object);
+        }
+        return result;
+    }
+
+    @Override
+    public LocalDate getLastPricedDay(int instrumentid) {
+
+        Query query = marketDataEm.createQuery("select max(a.dayofprice) FROM EndOfDayPrice a WHERE instrumentid = :instrumentid");
+        query.setParameter("instrumentid", instrumentid);
+        return (LocalDate) query.getSingleResult();
+    }
+
+    @Override
+    public Optional<Source> getSource(String description) {
+
+        Optional<Source> result = Optional.empty();
+        Query query = marketDataEm.createQuery("select a FROM Source a WHERE description = :description");
+        query.setParameter("description", description);
+        List<Object> queryResult = (List<Object>) query.getResultList();
+        if(queryResult!=null && !queryResult.isEmpty()){
+            Object object = queryResult.get(0);
+            result = Optional.of((Source)object);
+        }
+        return result;
+    }
+
+    @Override
+    public List<Source> getActiveSources() {
+
+        Query query = marketDataEm.createQuery("select a FROM Source a WHERE isactive = true order by prio");
+        return (List<Source>) query.getResultList();
     }
 
     @Override
@@ -107,6 +162,13 @@ public class InstrumentDaoImpl  extends BaseDao implements InstrumentDao {
     public void saveSymbol(SecuritySymbols symbol) {
         marketDataEm.getTransaction().begin();
         marketDataEm.persist(symbol);
+        marketDataEm.getTransaction().commit();
+    }
+
+    @Override
+    public void saveEndOfDayPrice(EndOfDayPrice price) {
+        marketDataEm.getTransaction().begin();
+        marketDataEm.persist(price);
         marketDataEm.getTransaction().commit();
     }
 }

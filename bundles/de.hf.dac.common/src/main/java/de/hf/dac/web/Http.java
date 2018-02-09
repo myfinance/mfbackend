@@ -32,13 +32,19 @@ import java.util.Properties;
 public class Http {
 
     private final int timeOut;
+    private Boolean useProxy;
+    private String proxyUrl;
+    private  int proxyPort;
+    private String proxyUser;
+    private String proxyPw;
 
-    public Http(int timeOut){
+    public Http(int timeOut, Boolean useProxy, String proxyUrl, int proxyPort, String proxyUser, String proxyPw){
         this.timeOut=timeOut;
-    }
-
-    public String getRequest(String url) throws IOException {
-        return getRequest( url, false, null, 0, null, null);
+        this.useProxy=useProxy;
+        this.proxyUrl=proxyUrl;
+        this.proxyPort=proxyPort;
+        this.proxyUser=proxyUser;
+        this.proxyPw=proxyPw;
     }
 
     /**
@@ -47,15 +53,10 @@ public class Http {
      * option -Djdk.http.auth.tunneling.disabledSchemes="" have to be set to empty at startup (e.G: in karaf_local.bat, karaf or in java command )
      * only http is working otherwise. https do not get the credentials
      * @param url
-     * @param useProxy
-     * @param proxyUrl
-     * @param proxyPort
-     * @param proxyUser
-     * @param proxyPw
      * @return
      * @throws IOException
      */
-    public String getRequest(String url, Boolean useProxy, String proxyUrl, int proxyPort, String proxyUser, String proxyPw) throws IOException {
+    public String getRequest(String url) throws IOException {
         URL request = new URL(url);
         URLConnection connection;
         InputStreamReader inputStream = null;

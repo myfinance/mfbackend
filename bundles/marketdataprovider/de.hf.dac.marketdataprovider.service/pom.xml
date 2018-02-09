@@ -28,10 +28,19 @@
             <artifactId>de.hf.dac.marketdataprovider.api.persistence</artifactId>
         </dependency>
         <dependency>
+            <groupId>de.hf.dac</groupId>
+            <artifactId>de.hf.dac.common</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.google.code.gson</groupId>
+            <artifactId>gson</artifactId>
+        </dependency>
+        <!--<dependency>
             <groupId>javax.transaction</groupId>
             <artifactId>javax.transaction-api</artifactId>
             <version>1.2</version>
-        </dependency>
+        </dependency>-->
 
     </dependencies>
 

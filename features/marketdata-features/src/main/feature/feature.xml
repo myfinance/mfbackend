@@ -20,6 +20,7 @@
 
     <feature name="marketdata-service-feature" version="${pom.version}">
         <feature>marketdata-persistence-feature</feature>
+        <bundle>mvn:com.google.code.gson/gson/${gson.version}</bundle>
         <bundle>mvn:de.hf.dac.marketdataprovider.api/de.hf.dac.marketdataprovider.api.service/${project.version}</bundle>
         <bundle>mvn:de.hf.dac.marketdataprovider/de.hf.dac.marketdataprovider.service/${project.version}</bundle>
     </feature>

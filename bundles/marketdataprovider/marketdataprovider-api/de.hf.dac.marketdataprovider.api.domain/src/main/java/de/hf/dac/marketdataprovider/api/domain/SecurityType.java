@@ -18,7 +18,8 @@
 
 public enum SecurityType {
     EQUITY(new Integer(1)),
-    CURRENCY(new Integer(2));
+    CURRENCY(new Integer(2)),
+    UNKNOWN(new Integer(99));
 
     private final Integer value;
 

@@ -34,6 +34,7 @@ public enum MDMsgKey implements MsgKey {
     // 20000 - 20999: memory, caching, couchbase
     // 21000 - 24999: imports
     NO_RESPONSE_FROM_URL_EXCEPTION(21001),
+    UNKNOWN_SOURCE_EXCEPTION(21002),
     // 25000 - 29999: analysis
     NO_INSTRUMENT_FOUND_EXCEPTION(25001),
     MD_UNSPECIFIED(30000);

@@ -23,13 +23,15 @@ import de.hf.dac.marketdataprovider.api.domain.Instrument;
 import de.hf.dac.marketdataprovider.api.domain.Security;
 import de.hf.dac.marketdataprovider.api.domain.SecuritySymbols;
 import de.hf.dac.marketdataprovider.api.domain.SecurityType;
+import de.hf.dac.marketdataprovider.api.domain.Source;
+import de.hf.dac.marketdataprovider.api.domain.SourceName;
 import de.hf.dac.marketdataprovider.api.persistence.dao.InstrumentDao;
 import de.hf.dac.marketdataprovider.api.service.InstrumentService;
+import de.hf.dac.marketdataprovider.importhandler.ImportHandler;
 import lombok.Data;
 
 import javax.inject.Inject;
 import java.time.LocalDate;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -65,6 +67,31 @@ public class InstrumentServiceImpl implements InstrumentService {
     @Override
     public Optional<Security> getSecurity(String isin){
         return instrumentDao.getSecurity(isin);
+    }
+
+    @Override
+    public List<Security> getSecurities(){
+        return instrumentDao.getSecurities();
+    }
+
+
+    @Override
+    public Optional<EndOfDayPrice> getEndOfDayPrice(String isin, LocalDate date){
+        Optional<Security> security = getSecurity(isin);
+        if(!security.isPresent()) {
+            return Optional.empty();
+        }
+        return getEndOfDayPrice(getSecurity(isin).get().getInstrumentid(), date);
+    }
+
+    @Override
+    public Optional<EndOfDayPrice> getEndOfDayPrice(int instrumentId, LocalDate date){
+        return instrumentDao.getEndOfDayPrice(instrumentId, date);
+    }
+
+    @Override
+    public Optional<Source> getSource(String description){
+        return instrumentDao.getSource(description);
     }
 
     @Override
@@ -124,7 +151,44 @@ public class InstrumentServiceImpl implements InstrumentService {
     }
 
     @Override
-    public EndOfDayPrice savePrice(EndOfDayPrice price) {
-        return null;//endOfDayPriceRepository.save(price);
+    public String saveEndOfDayPrice(String currencyCode, String isin, LocalDate dayofprice, Double value, LocalDate lastchanged) {
+        return saveEndOfDayPrice(currencyCode, isin, SourceName.MAN.name(), dayofprice, value, lastchanged);
+    }
+
+    protected String saveEndOfDayPrice(String currencyCode, String isin, String sourceDescription, LocalDate dayofprice, Double value, LocalDate lastchanged) {
+        Optional<Currency> currency = getCurrency(currencyCode);
+        if(!currency.isPresent()){
+            return "Currency with code "+currencyCode+" is not available";
+        }
+        Optional<Security> security = getSecurity(isin);
+        if(!security.isPresent()){
+            return "Security with isin "+isin+" is not available";
+        }
+        Optional<Source> source = getSource(sourceDescription);
+        if(!source.isPresent()){
+            return "Source with description "+sourceDescription+" is not available";
+        }
+        EndOfDayPrice price = new EndOfDayPrice(currency.get(), security.get(), source.get(), dayofprice, value, lastchanged);
+        instrumentDao.saveEndOfDayPrice(price);
+        return("Saved");
+    }
+
+    @Override
+    public void importPrices(){
+        List<Source> sources = instrumentDao.getActiveSources();
+        List<Security> secuirities = getSecurities();
+        ImportHandler handler = new ImportHandler(true,"proxy.dzbank.vrnet",8080,"xn01598","XN01598");
+        for(Security security : secuirities){
+            //all prices are in EUR so we do not need prices for this currency
+            if(security.getDescription().equals("EUR")) continue;
+            LocalDate lastPricedDay = instrumentDao.getLastPricedDay(security.getInstrumentid());
+            for(Source source : sources){
+                handler.importSource(source, lastPricedDay, security);
+            }
+
+        }
+
+
+
     }
 }

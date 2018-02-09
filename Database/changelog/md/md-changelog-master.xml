@@ -7,7 +7,4 @@
 
     <include file="changelog\md\md-changelog_1.0.xml"/>
     <include file="changelog\md\md-changelog_1.0-data.sql"/>
-    <include file="changelog\md\md-changelog_1.1.xml"/>
-    <include file="changelog\md\md-changelog_1.2.xml"/>
-    <include file="changelog\md\md-changelog_1.2-data.sql"/>
 </databaseChangeLog>

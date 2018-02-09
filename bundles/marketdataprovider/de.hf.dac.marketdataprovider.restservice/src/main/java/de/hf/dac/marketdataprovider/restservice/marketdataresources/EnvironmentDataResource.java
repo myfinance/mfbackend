@@ -23,10 +23,8 @@ import de.hf.dac.marketdataprovider.api.application.OpLevel;
 import de.hf.dac.marketdataprovider.api.application.OpType;
 import de.hf.dac.marketdataprovider.api.application.servicecontext.MDEnvironmentContext;
 import de.hf.dac.marketdataprovider.api.domain.Instrument;
-import de.hf.dac.marketdataprovider.api.domain.InstrumentType;
 import de.hf.dac.marketdataprovider.api.domain.Product;
 import de.hf.dac.marketdataprovider.api.domain.Security;
-import de.hf.dac.marketdataprovider.api.domain.SecurityType;
 import de.hf.dac.marketdataprovider.api.exceptions.MDException;
 import de.hf.dac.marketdataprovider.api.exceptions.MDMsgKey;
 import de.hf.dac.services.resources.BaseSecuredResource;
@@ -42,12 +40,10 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Link;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import java.io.IOException;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 
 public class EnvironmentDataResource extends BaseSecuredResource<OpType,OpLevel> {
@@ -143,20 +139,13 @@ public class EnvironmentDataResource extends BaseSecuredResource<OpType,OpLevel>
         return returnvalue;
     }
 
-    @GET
-    @Path("/download")
+    @POST
+    @Path("/importprices")
     @Produces(MediaType.APPLICATION_JSON)
-    @ApiOperation(value = "download", response = String.class)
-    public String getData() {
-        Http downloadHandler = new Http(10000);
-        String returnvalue = "No Products";
-        String url = "https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol=MSFT&apikey=Q6RLS6PGB55105EP";
-        try {
-            returnvalue=downloadHandler.getRequest(url, true, "proxy.dzbank.vrnet", 8080, "xn01598", "XN01598");
-        } catch (IOException e) {
-            throw new MDException(MDMsgKey.NO_RESPONSE_FROM_URL_EXCEPTION, "no response form "+url, e);
-        }
-        return returnvalue;
+    @ApiOperation(value = "importprices", response = String.class)
+    public String importPrices() {
+        marketDataEnvironment.getInstrumentService().importPrices();
+        return "sucessful";
     }
 
     @GET
@@ -179,8 +168,8 @@ public class EnvironmentDataResource extends BaseSecuredResource<OpType,OpLevel>
     public String addEquity(@QueryParam("isin") @ApiParam(value="the isin") String isin,
         @QueryParam("description") @ApiParam(value="description") String description) {
 
-        marketDataEnvironment.getInstrumentService().saveSecurity(isin, description);
-        return "saved";
+        return marketDataEnvironment.getInstrumentService().saveSecurity(isin, description);
+
     }
 
     @POST
@@ -192,8 +181,7 @@ public class EnvironmentDataResource extends BaseSecuredResource<OpType,OpLevel>
         @QueryParam("symbol") @ApiParam(value="symbol") String symbol,
         @QueryParam("currencycode") @ApiParam(value="the code of the currency in which the security is traded in the exchange referenced by the symbol") String currencyCode) {
 
-        marketDataEnvironment.getInstrumentService().saveSymbol(isin, symbol, currencyCode);
-        return "saved";
+        return marketDataEnvironment.getInstrumentService().saveSymbol(isin, symbol, currencyCode);
     }
 
     @POST
@@ -204,7 +192,19 @@ public class EnvironmentDataResource extends BaseSecuredResource<OpType,OpLevel>
     public String addCurrency(@QueryParam("currencyCode") @ApiParam(value="the currencyCode") String currencyCode,
         @QueryParam("description") @ApiParam(value="description") String description) {
 
-        marketDataEnvironment.getInstrumentService().saveCurrency(currencyCode, description);
-        return "saved";
+        return marketDataEnvironment.getInstrumentService().saveCurrency(currencyCode, description);
+    }
+
+    @POST
+    @Path("/addPrice")
+    @Produces(MediaType.APPLICATION_JSON)
+    @ApiOperation(value = "save Price",
+        response = String.class)
+    public String addPrice(@QueryParam("currencyCode") @ApiParam(value="the currencyCode") String currencyCode,
+        @QueryParam("isin") @ApiParam(value="the isin") String isin,
+        @QueryParam("dayofprice") @ApiParam(value="the dayofprice(yyyy-mm-dd") String dayofprice,
+        @QueryParam("value") @ApiParam(value="value") double value) {
+
+        return marketDataEnvironment.getInstrumentService().saveEndOfDayPrice(currencyCode, isin, LocalDate.parse(dayofprice), value, LocalDate.now());
     }
 }
