@@ -42,6 +42,7 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.sql.SQLException;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -144,7 +145,7 @@ public class EnvironmentDataResource extends BaseSecuredResource<OpType,OpLevel>
     @Produces(MediaType.APPLICATION_JSON)
     @ApiOperation(value = "importprices", response = String.class)
     public String importPrices() {
-        marketDataEnvironment.getInstrumentService().importPrices();
+        marketDataEnvironment.getInstrumentService().importPrices(LocalDateTime.now());
         return "sucessful";
     }
 
@@ -205,6 +206,16 @@ public class EnvironmentDataResource extends BaseSecuredResource<OpType,OpLevel>
         @QueryParam("dayofprice") @ApiParam(value="the dayofprice(yyyy-mm-dd") String dayofprice,
         @QueryParam("value") @ApiParam(value="value") double value) {
 
-        return marketDataEnvironment.getInstrumentService().saveEndOfDayPrice(currencyCode, isin, LocalDate.parse(dayofprice), value, LocalDate.now());
+        return marketDataEnvironment.getInstrumentService().saveEndOfDayPrice(currencyCode, isin, LocalDate.parse(dayofprice), value, LocalDateTime.now());
+    }
+
+    @POST
+    @Path("/fillpricehistory")
+    @Produces(MediaType.APPLICATION_JSON)
+    @ApiOperation(value = "fillpricehistory", response = String.class)
+    public String fillPricesHistory(@QueryParam("sourceId") @ApiParam(value="the sourceId") int sourceId,
+        @QueryParam("isin") @ApiParam(value="the isin") String isin) {
+        marketDataEnvironment.getInstrumentService().fillPriceHistory(sourceId, isin, LocalDateTime.now());
+        return "sucessful";
     }
 }

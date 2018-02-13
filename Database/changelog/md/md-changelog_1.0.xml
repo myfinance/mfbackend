@@ -25,7 +25,7 @@
             <column name="instrumentid" type="INT"/>
             <column name="dayofprice" type="date"/>
             <column name="value" type="numeric(10, 2)"/>
-            <column name="lastchanged" type="date"/>
+            <column name="lastchanged" type="TIMESTAMP(6) WITHOUT TIME ZONE"/>
             <column name="currencyid" type="INT"/>
         </createTable>
     </changeSet>
@@ -46,7 +46,7 @@
             </column>
             <column name="maturitydate" type="date"/>
             <column name="closingdate" type="date"/>
-            <column name="treelastchanged" type="date">
+            <column name="treelastchanged" type="TIMESTAMP(6) WITHOUT TIME ZONE">
                 <constraints nullable="false"/>
             </column>
         </createTable>
@@ -96,9 +96,6 @@
                 <constraints nullable="false"/>
             </column>
             <column name="description" type="VARCHAR(100)">
-                <constraints nullable="false"/>
-            </column>
-            <column name="prio" type="INT">
                 <constraints nullable="false"/>
             </column>
             <column name="urlprefix" type="VARCHAR(255)"/>

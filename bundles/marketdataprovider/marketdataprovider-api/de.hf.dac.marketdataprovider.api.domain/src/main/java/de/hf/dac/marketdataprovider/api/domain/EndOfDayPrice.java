@@ -21,6 +21,7 @@
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -49,7 +50,7 @@ public class EndOfDayPrice  implements java.io.Serializable {
      private Source source;
      private LocalDate dayofprice;
      private Double value;
-     private LocalDate lastchanged;
+     private LocalDateTime lastchanged;
 
     public EndOfDayPrice() {
     }
@@ -58,7 +59,7 @@ public class EndOfDayPrice  implements java.io.Serializable {
     public EndOfDayPrice(int endofdaypriceid) {
         this.endofdaypriceid = endofdaypriceid;
     }
-    public EndOfDayPrice(Currency currency, Security security, Source source, LocalDate dayofprice, Double value, LocalDate lastchanged) {
+    public EndOfDayPrice(Currency currency, Security security, Source source, LocalDate dayofprice, Double value, LocalDateTime lastchanged) {
        this.endofdaypriceid = endofdaypriceid;
        this.currency = currency;
        this.security = security;
@@ -84,27 +85,26 @@ public class EndOfDayPrice  implements java.io.Serializable {
     public Currency getCurrency() {
         return this.currency;
     }
-    
     public void setCurrency(Currency currency) {
         this.currency = currency;
     }
+
     @ManyToOne(fetch=FetchType.LAZY)
     @JoinColumn(name="instrumentid")
     @ApiModelProperty(required = true)
     public Security getSecurity() {
         return this.security;
     }
-    
     public void setSecurity(Security security) {
         this.security = security;
     }
+
     @ManyToOne(fetch=FetchType.LAZY)
     @JoinColumn(name="sourceid")
     @ApiModelProperty(required = true)
     public Source getSource() {
         return this.source;
     }
-    
     public void setSource(Source source) {
         this.source = source;
     }
@@ -114,7 +114,6 @@ public class EndOfDayPrice  implements java.io.Serializable {
     public LocalDate getDayofprice() {
         return this.dayofprice;
     }
-    
     public void setDayofprice(LocalDate dayofprice) {
         this.dayofprice = dayofprice;
     }
@@ -124,18 +123,16 @@ public class EndOfDayPrice  implements java.io.Serializable {
     public Double getValue() {
         return this.value;
     }
-    
     public void setValue(Double value) {
         this.value = value;
     }
     
-    @Column(name="lastchanged", length=13)
+    @Column(name="lastchanged", length=19)
     @ApiModelProperty(required = true)
-    public LocalDate getLastchanged() {
+    public LocalDateTime getLastchanged() {
         return this.lastchanged;
     }
-    
-    public void setLastchanged(LocalDate lastchanged) {
+    public void setLastchanged(LocalDateTime lastchanged) {
         this.lastchanged = lastchanged;
     }
 

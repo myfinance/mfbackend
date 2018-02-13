@@ -17,58 +17,60 @@
 
 package de.hf.dac.marketdataprovider.importhandler;
 
+import de.hf.dac.marketdataprovider.api.domain.Currency;
+import de.hf.dac.marketdataprovider.api.domain.EndOfDayPrice;
 import de.hf.dac.marketdataprovider.api.domain.Security;
-import de.hf.dac.marketdataprovider.api.domain.SecuritySymbols;
 import de.hf.dac.marketdataprovider.api.domain.Source;
 import de.hf.dac.marketdataprovider.api.domain.SourceName;
-import de.hf.dac.marketdataprovider.api.exceptions.MDException;
-import de.hf.dac.marketdataprovider.api.exceptions.MDMsgKey;
 import de.hf.dac.web.Http;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
-import java.util.SortedSet;
-import java.util.TreeSet;
 
 public class ImportHandler {
     Http downloadHandler;
-    Map<Integer, Handler> importHandler = new HashMap<>();
+   List<Handler> importHandler = new ArrayList<>();
 
-    public ImportHandler(List<Source> sources, Boolean useProxy, String proxyUrl, int proxyPort, String proxyUser, String proxyPw){
-        downloadHandler = new Http(10000,
+    public ImportHandler(List<Source> sources, Boolean useProxy, String proxyUrl, int proxyPort, String proxyUser, String proxyPw,
+            Currency eur){
+        downloadHandler = new Http(30000,
             useProxy,
             proxyUrl,
             proxyPort,
             proxyUser,
             proxyPw);
+        //add all and only active sources
         for(Source source : sources){
-            if(source.getDescription().equals(SourceName.ALPHAVANTAGEEQ)) {
+            if(source.getDescription().equals(SourceName.ALPHAVANTAGEEQ.name())) {
                 AlphavantageHandler handler = new AlphavantageHandler(AlphavantageType.EQ,
-                    source.getUrlprefix(),
-                    source.getUrlpostfix(),
-                    downloadHandler);
-                importHandler.put(source.getPrio(), handler);
-            } else if (source.getDescription().equals(SourceName.ALPHAVANTAGEFX)) {
+                    source,
+                    downloadHandler, eur);
+                importHandler.add(handler);
+            } else if (source.getDescription().equals(SourceName.ALPHAVANTAGEFX.name())) {
                 AlphavantageHandler handler = new AlphavantageHandler(AlphavantageType.FX,
-                    source.getUrlprefix(),
-                    source.getUrlpostfix(),
-                    downloadHandler);
-                importHandler.put(source.getPrio(), handler);
+                    source,
+                    downloadHandler, eur);
+                importHandler.add(handler);
+            }else if (source.getDescription().equals(SourceName.ALPHAVANTAGEEQFULL.name())) {
+                AlphavantageHandler handler = new AlphavantageHandler(AlphavantageType.EQFULL,
+                    source,
+                    downloadHandler, eur);
+                importHandler.add(handler);
             }
         }
     }
 
-    public LocalDate importSource(LocalDate lastPricedDay, Security security){
-        SortedSet<Integer> keys = new TreeSet<Integer>(importHandler.keySet());
-        for (Integer key : keys) {
-            Handler handler = importHandler.get(key);
-            handler.importPrices(security);
+    public Map<LocalDate, EndOfDayPrice> importSource(Security security, LocalDate lastPricedDate, LocalDateTime ts){
+        Map<LocalDate, EndOfDayPrice> prices = new HashMap<>();
+        for (Handler handler : importHandler) {
+            prices.putAll(handler.importPrices(security, lastPricedDate, ts));
         }
-
-        Map<LocalDate, Double> prices = handler.importPrices("MSFT");
         return prices;
     }
+
+
 }

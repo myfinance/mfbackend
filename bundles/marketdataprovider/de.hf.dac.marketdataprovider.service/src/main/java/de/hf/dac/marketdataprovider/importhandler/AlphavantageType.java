@@ -19,5 +19,6 @@ package de.hf.dac.marketdataprovider.importhandler;
 
 public enum AlphavantageType {
     EQ,
+    EQFULL,
     FX;
 }

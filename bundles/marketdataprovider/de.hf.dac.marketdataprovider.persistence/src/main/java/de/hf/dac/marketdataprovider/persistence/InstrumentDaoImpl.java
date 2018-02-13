@@ -83,7 +83,7 @@ public class InstrumentDaoImpl  extends BaseDao implements InstrumentDao {
 
         Optional<Security> result = Optional.empty();
         Query query = marketDataEm.createQuery("select a FROM Security a");
-        return (List<Security>) query.getResultList();;
+        return (List<Security>) query.getResultList();
     }
 
     @Override
@@ -98,6 +98,16 @@ public class InstrumentDaoImpl  extends BaseDao implements InstrumentDao {
             result = Optional.of((Currency)object);
         }
         return result;
+    }
+
+    @Override
+    public List<EndOfDayPrice> listEndOfDayPrices(int instrumentid) {
+
+        Optional<EndOfDayPrice> result = Optional.empty();
+        Query query = marketDataEm.createQuery("select a FROM EndOfDayPrice a WHERE instrumentid = :instrumentid");
+        query.setParameter("instrumentid", instrumentid);
+        List<EndOfDayPrice> queryResult = (List<EndOfDayPrice>) query.getResultList();
+        return queryResult;
     }
 
     @Override
@@ -124,11 +134,11 @@ public class InstrumentDaoImpl  extends BaseDao implements InstrumentDao {
     }
 
     @Override
-    public Optional<Source> getSource(String description) {
+    public Optional<Source> getSource(int sourceId) {
 
         Optional<Source> result = Optional.empty();
-        Query query = marketDataEm.createQuery("select a FROM Source a WHERE description = :description");
-        query.setParameter("description", description);
+        Query query = marketDataEm.createQuery("select a FROM Source a WHERE id = :id");
+        query.setParameter("id", sourceId);
         List<Object> queryResult = (List<Object>) query.getResultList();
         if(queryResult!=null && !queryResult.isEmpty()){
             Object object = queryResult.get(0);
@@ -140,7 +150,7 @@ public class InstrumentDaoImpl  extends BaseDao implements InstrumentDao {
     @Override
     public List<Source> getActiveSources() {
 
-        Query query = marketDataEm.createQuery("select a FROM Source a WHERE isactive = true order by prio");
+        Query query = marketDataEm.createQuery("select a FROM Source a WHERE isactive = true");
         return (List<Source>) query.getResultList();
     }
 

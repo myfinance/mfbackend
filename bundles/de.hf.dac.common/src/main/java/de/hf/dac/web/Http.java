@@ -26,8 +26,6 @@ import java.net.PasswordAuthentication;
 import java.net.Proxy;
 import java.net.URL;
 import java.net.URLConnection;
-import java.util.Base64;
-import java.util.Properties;
 
 public class Http {
 
@@ -57,6 +55,7 @@ public class Http {
      * @throws IOException
      */
     public String getRequest(String url) throws IOException {
+
         URL request = new URL(url);
         URLConnection connection;
         InputStreamReader inputStream = null;

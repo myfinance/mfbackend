@@ -17,12 +17,13 @@
 
 package de.hf.dac.marketdataprovider.importhandler;
 
+import de.hf.dac.marketdataprovider.api.domain.EndOfDayPrice;
 import de.hf.dac.marketdataprovider.api.domain.Security;
-import de.hf.dac.marketdataprovider.api.domain.SecurityType;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Map;
 
 public interface Handler {
-    Map<LocalDate, Double> importPrices(Security security);
+    Map<LocalDate, EndOfDayPrice> importPrices(Security security, LocalDate lastPricedDate, LocalDateTime ts);
 }

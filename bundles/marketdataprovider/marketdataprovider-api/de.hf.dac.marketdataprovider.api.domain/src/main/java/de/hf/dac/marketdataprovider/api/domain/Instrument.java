@@ -46,14 +46,12 @@ public abstract class Instrument  implements java.io.Serializable {
 
 
      private Integer instrumentid;
-     private InstrumentType instrumentType;
      private Integer liquiditytypeid;
      private String description;
      private boolean isactive;
      private LocalDate maturitydate;
      private LocalDate closingdate;
      private LocalDate treelastchanged;
-     private Security security;
      private Integer instrumenttypeId;
 
     public Instrument() {

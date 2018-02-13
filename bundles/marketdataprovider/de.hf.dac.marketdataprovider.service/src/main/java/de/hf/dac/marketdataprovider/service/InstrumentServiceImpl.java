@@ -32,7 +32,11 @@ import lombok.Data;
 
 import javax.inject.Inject;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 
@@ -53,11 +57,7 @@ public class InstrumentServiceImpl implements InstrumentService {
         return instruments;
     }
 
-    @Override
-    public List<EndOfDayPrice> listPrices(String isin) {
 
-        return null;//endOfDayPriceRepository.findByInstrumentIsin(isin);
-    }
 
     @Override
     public Optional<Currency> getCurrency(String currencyCode){
@@ -74,6 +74,11 @@ public class InstrumentServiceImpl implements InstrumentService {
         return instrumentDao.getSecurities();
     }
 
+    @Override
+    public List<EndOfDayPrice> listEodPrices(int instrumentId) {
+
+        return instrumentDao.listEndOfDayPrices(instrumentId);
+    }
 
     @Override
     public Optional<EndOfDayPrice> getEndOfDayPrice(String isin, LocalDate date){
@@ -90,8 +95,8 @@ public class InstrumentServiceImpl implements InstrumentService {
     }
 
     @Override
-    public Optional<Source> getSource(String description){
-        return instrumentDao.getSource(description);
+    public Optional<Source> getSource(int sourceId){
+        return instrumentDao.getSource(sourceId);
     }
 
     @Override
@@ -151,11 +156,11 @@ public class InstrumentServiceImpl implements InstrumentService {
     }
 
     @Override
-    public String saveEndOfDayPrice(String currencyCode, String isin, LocalDate dayofprice, Double value, LocalDate lastchanged) {
-        return saveEndOfDayPrice(currencyCode, isin, SourceName.MAN.name(), dayofprice, value, lastchanged);
+    public String saveEndOfDayPrice(String currencyCode, String isin, LocalDate dayofprice, Double value, LocalDateTime lastchanged) {
+        return saveEndOfDayPrice(currencyCode, isin, SourceName.MAN.getValue(), dayofprice, value, lastchanged);
     }
 
-    protected String saveEndOfDayPrice(String currencyCode, String isin, String sourceDescription, LocalDate dayofprice, Double value, LocalDate lastchanged) {
+    protected String saveEndOfDayPrice(String currencyCode, String isin, int sourceId, LocalDate dayofprice, Double value, LocalDateTime lastchanged) {
         Optional<Currency> currency = getCurrency(currencyCode);
         if(!currency.isPresent()){
             return "Currency with code "+currencyCode+" is not available";
@@ -164,9 +169,9 @@ public class InstrumentServiceImpl implements InstrumentService {
         if(!security.isPresent()){
             return "Security with isin "+isin+" is not available";
         }
-        Optional<Source> source = getSource(sourceDescription);
+        Optional<Source> source = getSource(sourceId);
         if(!source.isPresent()){
-            return "Source with description "+sourceDescription+" is not available";
+            return "Source with id "+sourceId+" is not available";
         }
         EndOfDayPrice price = new EndOfDayPrice(currency.get(), security.get(), source.get(), dayofprice, value, lastchanged);
         instrumentDao.saveEndOfDayPrice(price);
@@ -174,21 +179,73 @@ public class InstrumentServiceImpl implements InstrumentService {
     }
 
     @Override
-    public void importPrices(){
+    public String importPrices(LocalDateTime ts){
         List<Source> sources = instrumentDao.getActiveSources();
         List<Security> secuirities = getSecurities();
-        ImportHandler handler = new ImportHandler(true,"proxy.dzbank.vrnet",8080,"xn01598","XN01598");
+        Optional<Currency> eur = instrumentDao.getCurrency("EUR");
+        if(!eur.isPresent()){
+            return "Currency EUR not available";
+        }
+
+        ImportHandler handler = new ImportHandler(sources, true,"proxy.dzbank.vrnet",8080,"xn01598","XN01598", eur.get());
         for(Security security : secuirities){
             //all prices are in EUR so we do not need prices for this currency
-            if(security.getDescription().equals("EUR")) continue;
+            if(security.getSecurityType()==SecurityType.CURRENCY && ((Currency)security).getCurrencycode().equals("EUR")) continue;
             LocalDate lastPricedDay = instrumentDao.getLastPricedDay(security.getInstrumentid());
-            for(Source source : sources){
-                handler.importSource(source, lastPricedDay, security);
+            Map<LocalDate, EndOfDayPrice> prices = new HashMap<>();
+            prices.putAll(handler.importSource(security, lastPricedDay, ts));
+            for (EndOfDayPrice price : prices.values()) {
+                instrumentDao.saveEndOfDayPrice(price);
+            }
+        }
+
+        return "sucessful";
+    }
+
+    @Override
+    public String fillPriceHistory(int sourceId, String isin, LocalDateTime ts){
+        Optional<Source> source = getSource(sourceId);
+        if(!source.isPresent()){
+            return "Source with id "+sourceId+" is not available";
+        }
+        Optional<Security> security = getSecurity(isin);
+        if(!security.isPresent()){
+            return "Security with isin "+isin+" is not available";
+        }
+        List<Source> sources = new ArrayList<>();
+        sources.add(source.get());
+
+        //all prices are in EUR so we do not need prices for this currency
+        if(security.get().getSecurityType()==SecurityType.CURRENCY && ((Currency)security.get()).getCurrencycode().equals("EUR")) {
+            return "Prices for currency EUR are not necessary";
+        }
+
+        Optional<Currency> eur = instrumentDao.getCurrency("EUR");
+        if(!eur.isPresent()){
+            return "Currency EUR not available";
+        }
+
+        ImportHandler handler = new ImportHandler(sources, true,"proxy.dzbank.vrnet",8080,"xn01598","XN01598", eur.get());
+
+        Map<LocalDate, EndOfDayPrice> prices = new HashMap<>();
+        prices.putAll(handler.importSource(security.get(), LocalDate.MIN, ts));
+
+        List<EndOfDayPrice> existingPrices = listEodPrices(security.get().getInstrumentid());
+        List<LocalDate> pricedDates = new ArrayList<>();
+        if (existingPrices != null) {
+            for (EndOfDayPrice price:existingPrices) {
+                pricedDates.add(price.getDayofprice());
+            }
+        }
+
+        for (EndOfDayPrice price : prices.values()) {
+            if(!pricedDates.contains(price.getDayofprice())){
+                instrumentDao.saveEndOfDayPrice(price);
+                pricedDates.add(price.getDayofprice());
             }
 
         }
 
-
-
+        return "sucessful";
     }
 }

@@ -20,7 +20,8 @@ package de.hf.dac.marketdataprovider.api.domain;
 public enum SourceName {
     MAN(new Integer(1)),
     ALPHAVANTAGEEQ(new Integer(2)),
-    ALPHAVANTAGEFX(new Integer(3));
+    ALPHAVANTAGEFX(new Integer(3)),
+    ALPHAVANTAGEEQFULL(new Integer(4));
 
     private final Integer value;
 

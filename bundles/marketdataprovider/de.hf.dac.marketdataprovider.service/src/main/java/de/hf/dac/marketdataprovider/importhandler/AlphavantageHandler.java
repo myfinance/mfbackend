@@ -20,80 +20,103 @@ package de.hf.dac.marketdataprovider.importhandler;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import de.hf.dac.marketdataprovider.api.domain.Currency;
+import de.hf.dac.marketdataprovider.api.domain.EndOfDayPrice;
 import de.hf.dac.marketdataprovider.api.domain.Security;
 import de.hf.dac.marketdataprovider.api.domain.SecuritySymbols;
 import de.hf.dac.marketdataprovider.api.domain.SecurityType;
-import de.hf.dac.marketdataprovider.api.exceptions.MDException;
-import de.hf.dac.marketdataprovider.api.exceptions.MDMsgKey;
+import de.hf.dac.marketdataprovider.api.domain.Source;
 import de.hf.dac.web.Http;
 import lombok.extern.slf4j.Slf4j;
 
-import java.io.IOException;
 import java.time.LocalDate;
-import java.util.Date;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
-import java.util.SortedSet;
-import java.util.TreeSet;
 
 @Slf4j
-public class AlphavantageHandler implements Handler{
+public class AlphavantageHandler extends AbsHandler implements Handler {
     AlphavantageType type;
-    String prefix;
-    String postfix;
-    Http downloadHandler;
+    Source source;
+    Currency eur;
 
     public AlphavantageHandler(AlphavantageType type,
-            String prefix,
-            String postfix,
-            Http downloadHandler){
+            Source source,
+            Http downloadHandler, Currency eur){
 
         this.type=type;
-        this.prefix=prefix;
-        this.postfix=postfix;
+        this.source = source;
         this.downloadHandler=downloadHandler;
+        this.eur = eur;
     }
 
-    public Map<LocalDate, Double> importPrices(Security security){
-        String url;
-        Map<LocalDate, Double> values = new HashMap<>();
+    public Map<LocalDate, EndOfDayPrice> importPrices(Security security, LocalDate lastPricedDate, LocalDateTime ts){
+        Map<LocalDate, EndOfDayPrice> values = new HashMap<>();
         SecurityType securityType = security.getSecurityType();
-        if(type == AlphavantageType.EQ){
-            if(!securityType.equals(SecurityType.EQUITY)) return values;
-
-            Set<SecuritySymbols> symbols = security.getSecuritySymbols();
-            if(symbols == null || symbols.size()==0){
-                return values;
-            }
-            for (SecuritySymbols symbol:symbols) {
-                String symbolString = symbol.getSymbol();
-                values.putAll(getEQPrices(symbolString));
-            }
+        if(type == AlphavantageType.EQ || type == AlphavantageType.EQFULL){
+            values.putAll(getEqPricesForSymbols(security, lastPricedDate, ts, securityType));
 
         } else {
             if(!securityType.equals(SecurityType.CURRENCY)) return values;
-            String currencyCode = ((Currency)security).getCurrencycode();
-            url = prefix+currencyCode+postfix;
-            Map<String, Object> map = getMapFromUrl(url);
-            Map<String, String> info = (Map<String, String>)map.get("Realtime Currency Exchange Rate");
             try{
-                LocalDate date = LocalDate.parse(info.get("6. Last Refreshed"));
-                Double value = Double.parseDouble(info.get("5. Exchange Rate"));
-                values.put(date, value);
+                values.putAll(convertToEndOfDayPrice(getFxPrices((Currency) security), lastPricedDate,
+                    eur, source,
+                    security,
+                    ts));
             }catch(Exception e){
-                log.error("can not pars value for Currency " + currencyCode);
+                log.error("can not load prices for currency " +security.getIsin() + ":"+e);
             }
         }
-
 
         return values;
     }
 
+    private Map<LocalDate, EndOfDayPrice> getEqPricesForSymbols(Security security, LocalDate lastPricedDate, LocalDateTime ts, SecurityType securityType) {
+        Map<LocalDate, EndOfDayPrice> values = new HashMap<>();
+        if(!securityType.equals(SecurityType.EQUITY))
+            return values;
+
+        Set<SecuritySymbols> symbols = security.getSecuritySymbols();
+        if(symbols == null || symbols.size()==0){
+            return values;
+        }
+        for (SecuritySymbols symbol:symbols) {
+            String symbolString = symbol.getSymbol();
+            try{
+                values.putAll(convertToEndOfDayPrice(getEQPrices(symbolString), lastPricedDate,
+                    symbol.getCurrency(), source,
+                    security,
+                    ts));
+            } catch(Exception e){
+                log.error("can not load prices for Security " +security.getIsin() + " and Symbol " + symbol.getSymbol() + ":"+e);
+            }
+
+        }
+        return values;
+    }
+
+    private Map<LocalDate, Double> getFxPrices(Currency security) {
+        String url;
+        Map<LocalDate, Double> prices = new HashMap<>();
+        String currencyCode = security.getCurrencycode();
+        url = source.getUrlprefix()+currencyCode+source.getUrlpostfix();
+        Map<String, Object> map = getJsonMapFromUrl(url);
+        Map<String, String> info = (Map<String, String>)map.get("Realtime Currency Exchange Rate");
+        try{
+            LocalDate date = LocalDateTime.parse(info.get("6. Last Refreshed"), DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")).toLocalDate();
+            Double value = Double.parseDouble(info.get("5. Exchange Rate"));
+            prices.put(date, value);
+        }catch(Exception e){
+            log.error("can not pars value for Currency " + currencyCode + ":"+e);
+        }
+        return prices;
+    }
+
     private Map<LocalDate, Double> getEQPrices(String symbol){
-        String url = prefix+symbol+postfix;
+        String url = source.getUrlprefix()+symbol+source.getUrlpostfix();
         Map<LocalDate, Double> values = new HashMap<>();
-        Map<String, Object> map = getMapFromUrl(url);
+        Map<String, Object> map = getJsonMapFromUrl(url);
         Map<String, Object> timeSeries = (Map<String, Object>)map.get("Time Series (Daily)");
 
 
@@ -103,6 +126,7 @@ public class AlphavantageHandler implements Handler{
                 String valueString = ((Map<String, String>)timeSeries.get(dateString)).get("4. close");
                 Double value = Double.parseDouble(valueString);
                 values.put(date, value);
+
             } catch(Exception e){
                 log.error("can not pars value for date"+dateString+ " and symbol " + symbol);
                 continue;
@@ -112,15 +136,5 @@ public class AlphavantageHandler implements Handler{
         return values;
     }
 
-    private Map<String, Object> getMapFromUrl(String url) {
-        String returnvalue;
-        try {
-            returnvalue=downloadHandler.getRequest(url);
-        } catch (IOException e) {
-            throw new MDException(MDMsgKey.NO_RESPONSE_FROM_URL_EXCEPTION, "no response form "+url, e);
-        }
-        Gson gson = new Gson();
 
-        return gson.fromJson(returnvalue, new TypeToken<Map<String, Object>>(){}.getType());
-    }
 }

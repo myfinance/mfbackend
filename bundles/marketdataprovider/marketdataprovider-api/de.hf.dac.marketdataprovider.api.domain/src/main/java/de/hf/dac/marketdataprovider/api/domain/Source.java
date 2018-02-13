@@ -48,7 +48,6 @@ public class Source  implements java.io.Serializable {
 
      private Integer sourceid;
      private String description;
-     private int prio;
      private String urlprefix;
      private String urlpostfix;
      private Set<EndOfDayPrice> endOfDayPrices = new HashSet<EndOfDayPrice>(0);
@@ -57,14 +56,12 @@ public class Source  implements java.io.Serializable {
     }
 
 	
-    public Source(String description, int prio) {
+    public Source(String description) {
         this.description = description;
-        this.prio = prio;
     }
-    public Source(String description, int prio, String urlprefix, String urlpostfix, Set<EndOfDayPrice> endOfDayPrices) {
+    public Source(String description, String urlprefix, String urlpostfix, Set<EndOfDayPrice> endOfDayPrices) {
 
        this.description = description;
-       this.prio = prio;
        this.urlprefix = urlprefix;
        this.urlpostfix = urlpostfix;
        this.endOfDayPrices = endOfDayPrices;
@@ -89,15 +86,6 @@ public class Source  implements java.io.Serializable {
         this.description = description;
     }
 
-    @Column(name="prio", nullable=false)
-    @ApiModelProperty(required = true)
-    public int getPrio() {
-        return this.prio;
-    }
-    public void setPrio(int prio) {
-        this.prio = prio;
-    }
-    
     @Column(name="urlprefix")
     @ApiModelProperty(required = true)
     public String getUrlprefix() {
