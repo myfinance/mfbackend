@@ -18,7 +18,8 @@
 package de.hf.dac.marketdataprovider.api.domain;
 
 public enum InstrumentType {
-    SECURITY(new Integer(1));
+    SECURITY(new Integer(1)),
+    UNKNOWN(new Integer(99));
 
     private final Integer value;
 

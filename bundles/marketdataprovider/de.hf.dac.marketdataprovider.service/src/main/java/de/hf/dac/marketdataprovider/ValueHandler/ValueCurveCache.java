@@ -6,7 +6,7 @@
  *
  *  Project     : dac
  *
- *  File        : ValueHandler.java
+ *  File        : ValueCurveCache.java
  *
  *  Author(s)   : hf
  *
@@ -17,11 +17,12 @@
 
 package de.hf.dac.marketdataprovider.ValueHandler;
 
-import de.hf.dac.marketdataprovider.api.domain.Instrument;
-
 import java.time.LocalDate;
 import java.util.TreeMap;
 
-public interface ValueHandler {
-    TreeMap<LocalDate, Double> calcValueCurve(Instrument instrument);
+public interface ValueCurveCache {
+    TreeMap<LocalDate, Double> getValueCurve(int instrumentId);
+    void addValueCurve(int instrumentId, TreeMap<LocalDate, Double> valueCurve);
+    void removeCurve(int instrumentId);
+    void flush();
 }

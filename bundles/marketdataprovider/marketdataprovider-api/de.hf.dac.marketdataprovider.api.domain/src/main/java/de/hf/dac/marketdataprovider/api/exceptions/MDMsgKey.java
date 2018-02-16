@@ -32,9 +32,11 @@ public enum MDMsgKey implements MsgKey {
     // 15000 - 19999: hibernate, database, sybase
     NO_TARGET_CONFIG_EXCEPTION(15001),
     // 20000 - 20999: memory, caching, couchbase
-    // 21000 - 24999: imports
+    // 21000 - 24999: imports and calculation
     NO_RESPONSE_FROM_URL_EXCEPTION(21001),
     UNKNOWN_SOURCE_EXCEPTION(21002),
+    UNKNOWN_INSTRUMENTTYPE_EXCEPTION(21003),
+    UNKNOWN_SECURITYTYPE_EXCEPTION(21004),
     // 25000 - 29999: analysis
     NO_INSTRUMENT_FOUND_EXCEPTION(25001),
     MD_UNSPECIFIED(30000);
