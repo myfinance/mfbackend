@@ -26,6 +26,7 @@ import de.hf.dac.marketdataprovider.api.domain.Source;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 public interface InstrumentService {
@@ -37,6 +38,9 @@ public interface InstrumentService {
     List<EndOfDayPrice> listEodPrices(int instrumentId);
     Optional<EndOfDayPrice> getEndOfDayPrice(int instrumentId, LocalDate date);
     Optional<Source> getSource(int sourceId);
+    Map<LocalDate, Double> getValueCurve(int instrumentId);
+    Map<LocalDate, Double> getValueCurve(int instrumentId, LocalDate startDate, LocalDate endDate);
+    double getValue(int instrumentId, LocalDate date);
 
     String saveSecurity(String isin, String description);
     String saveSymbol(String isin, String symbol, String currencyCode);

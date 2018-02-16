@@ -27,6 +27,7 @@ import de.hf.dac.marketdataprovider.api.domain.Source;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 public interface InstrumentDao {
