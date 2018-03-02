@@ -12,7 +12,7 @@
     <includeBaseDirectory>false</includeBaseDirectory>
 
     <fileSets>
-        <!--libs for the runner -->
+        <!--libs for the Runner -->
         <fileSet>
             <outputDirectory>MyFinance-${pom.version}/lib</outputDirectory>
             <directory>${project.build.directory}/../../run-job/target/lib</directory>
@@ -21,7 +21,7 @@
             </includes>
         </fileSet>
 
-        <!--runner -->
+        <!--Runner -->
         <fileSet>
             <outputDirectory>MyFinance-${pom.version}</outputDirectory>
             <directory>${project.build.directory}/../../run-job/target</directory>

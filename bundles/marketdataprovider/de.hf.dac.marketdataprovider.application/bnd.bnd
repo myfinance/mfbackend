@@ -3,4 +3,5 @@
 Import-Package \
     org.apache.karaf.shell.commands, \
     org.apache.karaf.shell.console, \
+    de.hf.dac.marketdataprovider.runner, \
     *

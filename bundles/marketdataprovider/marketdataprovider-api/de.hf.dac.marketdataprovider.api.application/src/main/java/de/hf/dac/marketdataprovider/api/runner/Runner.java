@@ -6,21 +6,17 @@
  *
  *  Project     : dac
  *
- *  File        : EnvironmentBasedBuilder.java
+ *  File        : Runner.java
  *
  *  Author(s)   : hf
  *
- *  Created     : 29.09.2016
+ *  Created     : 02.03.2018
  *
  * ----------------------------------------------------------------------------
  */
 
-package de.hf.dac.api.io.env;
+package de.hf.dac.marketdataprovider.api.runner;
 
-import java.sql.SQLException;
-import java.util.List;
-
-public interface EnvironmentBasedBuilder<T> {
-    T build(String environment);
-    List<String> getInfo();
+public interface Runner {
+    void run(BaseMDRunnerParameter params);
 }

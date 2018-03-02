@@ -6,7 +6,7 @@
  *
  *  Project     : dac
  *
- *  File        : BaseMDRunner.java
+ *  File        : BaseMDRunnerClient.java
  *
  *  Author(s)   : hf
  *
@@ -23,26 +23,26 @@ import de.hf.dac.api.io.routes.job.RunnerParameter;
 import de.hf.dac.io.config.resfile.Configuration;
 import de.hf.dac.marketdata.client.api.MDRunnerApi;
 import de.hf.dac.marketdataprovider.api.runner.BaseMDRunnerParameter;
-import de.hf.dac.marketdataprovider.importer.ImportRunnerParameter;
 import io.swagger.client.ApiClient;
 import io.swagger.client.ApiException;
 import org.apache.commons.codec.binary.Base64;
 import de.hf.dac.marketdata.client.model.JobInformation;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.util.HashMap;
 
-public abstract class BaseMDRunner extends BaseRestCommandLineRunner {
+public abstract class BaseMDRunnerClient extends BaseRestCommandLineRunner {
 
     private MDRunnerApi runnerClient;
     private String credentialsHeader;
 
     public static final String ENV_OPTION = "env";
 
-    public BaseMDRunner(){
+    public BaseMDRunnerClient(){
         super(new OptionsParser());
     }
+
+
+    public abstract String getJobType();
 
 
     @Override
@@ -54,11 +54,11 @@ public abstract class BaseMDRunner extends BaseRestCommandLineRunner {
     protected void passParamsToExternal(RunnerParameter runnerParameter) {
 
 
-        if (runnerParameter instanceof ImportRunnerParameter) {
-            ImportRunnerParameter p = (ImportRunnerParameter)runnerParameter;
+        if (runnerParameter instanceof BaseMDRunnerParameter) {
+            BaseMDRunnerParameter p = (BaseMDRunnerParameter)runnerParameter;
             MDRunnerApi client = createRestClient();
             try {
-                JobInformation start = client.start(p.getEnvironment(), ImportRunnerParameter.JOBTYPE, convertParam(p));
+                JobInformation start = client.start(p.getEnvironment(), getJobType(), convertParam(p));
                 int maxTimeWait = Configuration.getInt("MARKETDATA", "MD_LAUNCH_TIMEOUT", 60*60*1000);
 
                 String uid = start.getUuid();

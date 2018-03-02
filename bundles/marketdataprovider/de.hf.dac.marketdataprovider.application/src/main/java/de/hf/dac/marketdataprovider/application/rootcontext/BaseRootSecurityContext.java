@@ -23,11 +23,7 @@ import de.hf.dac.marketdataprovider.api.application.OpLevel;
 import de.hf.dac.marketdataprovider.api.application.OpType;
 import de.hf.dac.marketdataprovider.api.application.ServiceResourceType;
 import de.hf.dac.marketdataprovider.api.application.securitycontext.SecurityEnvProviderService;
-import org.osgi.service.component.annotations.Activate;
-import org.osgi.service.component.annotations.Reference;
-import org.osgi.service.metatype.annotations.ObjectClassDefinition;
 
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -46,11 +42,7 @@ public abstract class BaseRootSecurityContext extends BaseSecurityContext {
     public BaseRootSecurityContext(String id){
         super(id);
         SecurityServiceBuilder<OpType, OpLevel> securityServiceBuilder = getService(SecurityServiceBuilder.class);
-        try {
-            rootSecurityProvider = securityServiceBuilder.build(getService(SecurityEnvProviderService.class).getSecurityEnvironment());
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
+        rootSecurityProvider = securityServiceBuilder.build(getService(SecurityEnvProviderService.class).getSecurityEnvironment());
     }
 
 

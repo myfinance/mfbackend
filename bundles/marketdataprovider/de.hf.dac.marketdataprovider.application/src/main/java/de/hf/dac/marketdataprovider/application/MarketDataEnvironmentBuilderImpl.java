@@ -35,7 +35,7 @@ public class MarketDataEnvironmentBuilderImpl implements MarketDataEnvironmentBu
     MarketDataEnvironmentContextBuilder contextBuilder;
 
     @Override
-    public MarketDataEnvironment build(String environment) throws SQLException {
+    public MarketDataEnvironment build(String environment) {
         // create autowire applicationContext
         ApplicationContext applicationContext = contextBuilder.build(environment);
         return applicationContext.autowire(MarketDataEnvironment.class);

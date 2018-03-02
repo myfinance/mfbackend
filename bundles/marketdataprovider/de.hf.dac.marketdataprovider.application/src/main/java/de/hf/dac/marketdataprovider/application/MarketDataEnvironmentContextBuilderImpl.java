@@ -51,7 +51,7 @@ public class MarketDataEnvironmentContextBuilderImpl implements MarketDataEnviro
 
 
     @Override
-    public ApplicationContext build(String environment) throws SQLException {
+    public ApplicationContext build(String environment){
         MarketDataEnvironmentBuilderModule marketDataEnvironmentBuilderModule //
             = new MarketDataEnvironmentBuilderModule(envService, //
             emfb, //

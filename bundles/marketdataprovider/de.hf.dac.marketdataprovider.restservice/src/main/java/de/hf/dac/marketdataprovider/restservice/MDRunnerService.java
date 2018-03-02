@@ -42,7 +42,7 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.util.List;
 
-@Path("/runner")
+@Path("/Runner")
 @Api(value = "MDRunner") //must start with capital letter for client generation
 public class MDRunnerService extends TopLevelSecuredResource<OpType,OpLevel> {
 
@@ -60,7 +60,7 @@ public class MDRunnerService extends TopLevelSecuredResource<OpType,OpLevel> {
     @Consumes(MediaType.APPLICATION_JSON)
     @ApiOperation(value = "launch Job", notes = "Anything Else?")
     @ApiResponses(value = { @ApiResponse(code = HttpStatus.SC_INTERNAL_SERVER_ERROR, message = "Something wrong in Server") })
-    public MDRunnerResource getJobTypeRunner(@PathParam("jobtype") @ApiParam(name = "jobtype", value = "launching md jobs") String jobtype) {
+    public MDRunnerResource getJobTypeRunner(@PathParam("jobtype") @ApiParam(name = "jobtype", value = "launching md jobs z.b. de.hf.dac.marketdataprovider.importer.Import") String jobtype) {
         audit();
         // create RunnerResource
         return new MDRunnerResource(root.getMDRunnerJobTypeContext(jobtype));

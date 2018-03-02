@@ -28,7 +28,7 @@
     <feature name="marketdata-restservice-feature" version="${pom.version}">
         <feature>dac-rest-base-feature</feature>
         <feature>marketdata-service-feature</feature>
-        <bundle  dependency="true">mvn:de.hf.dac.marketdataprovider/de.hf.dac.marketdataprovider.importer/${project.version}</bundle>
+        <bundle  dependency="true">mvn:de.hf.dac.marketdataprovider/de.hf.dac.marketdataprovider.runner/${project.version}</bundle>
         <bundle>mvn:de.hf.dac.marketdataprovider.api/de.hf.dac.marketdataprovider.api.application/${project.version}</bundle>
         <bundle>mvn:de.hf.dac.marketdataprovider/de.hf.dac.marketdataprovider.restservice/${project.version}</bundle>
         <bundle>mvn:de.hf.dac.marketdataprovider/de.hf.dac.marketdataprovider.application/${project.version}</bundle>

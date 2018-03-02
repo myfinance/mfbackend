@@ -25,8 +25,8 @@ public class MDCoreRoutesProvider extends RouteBuilder {
     public static final int KEEP_ALIVE_TIME = 1000 * 60 * 60 * 2;
     private final MDCoreRoutesImpl mdCoreRoutes;
 
-    public static final String DIRECT_VM_MD_CORE_RUNNER_IN = "direct-vm:md-core-runner-in";
-    public static final String DIRECT_VM_MD_CORE_RUNNER_OUT = "direct-vm:md-core-runner-out";
+    public static final String DIRECT_VM_MD_CORE_RUNNER_IN = "direct-vm:md-core-Runner-in";
+    public static final String DIRECT_VM_MD_CORE_RUNNER_OUT = "direct-vm:md-core-Runner-out";
 
 
     public MDCoreRoutesProvider(MDCoreRoutesImpl mdCoreRoutes) {
@@ -40,8 +40,8 @@ public class MDCoreRoutesProvider extends RouteBuilder {
         /**
          * Route to handle incoming WrappedRunnerParamater. All Jobs need to contain a RunnerParameter wrapped into WrappedJobParameter.
          */
-        from(DIRECT_VM_MD_CORE_RUNNER_IN).id("runner-in").threads(2).keepAliveTime(KEEP_ALIVE_TIME). //
-            bean(mdCoreRoutes.getRunnerHandler(), "handleExchange").id("runner-handler") //
+        from(DIRECT_VM_MD_CORE_RUNNER_IN).id("Runner-in").threads(2).keepAliveTime(KEEP_ALIVE_TIME). //
+            bean(mdCoreRoutes.getRunnerHandler(), "handleExchange").id("Runner-handler") //
             .threads(2).keepAliveTime(KEEP_ALIVE_TIME) //
             // return back any results into Dispatching queue.
             // make sure base infrastructure knows about it
@@ -50,8 +50,8 @@ public class MDCoreRoutesProvider extends RouteBuilder {
         /**
          * Route to handle incoming JobResults
          */
-        from(DIRECT_VM_MD_CORE_RUNNER_OUT).id("runner-result-postprocessing").threads(2).keepAliveTime(KEEP_ALIVE_TIME). //
-            bean(mdCoreRoutes.getRunnerHandler(), "handleExchange").id("runner-result-handler");
+        from(DIRECT_VM_MD_CORE_RUNNER_OUT).id("Runner-result-postprocessing").threads(2).keepAliveTime(KEEP_ALIVE_TIME). //
+            bean(mdCoreRoutes.getRunnerHandler(), "handleExchange").id("Runner-result-handler");
     }
 
     public static String getInbox(String s) {

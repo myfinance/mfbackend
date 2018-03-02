@@ -19,8 +19,6 @@ package de.hf.dac.marketdataprovider.application.rootcontext;
 
 import de.hf.dac.api.security.RootSecurityProvider;
 import de.hf.dac.common.BaseDS;
-import de.hf.dac.marketdataprovider.api.application.OpLevel;
-import de.hf.dac.marketdataprovider.api.application.OpType;
 import de.hf.dac.marketdataprovider.api.application.ServiceResourceType;
 
 import java.util.ArrayList;

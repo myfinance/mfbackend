@@ -29,7 +29,7 @@
 
         <dependency>
             <groupId>de.hf.dac.marketdataprovider</groupId>
-            <artifactId>de.hf.dac.marketdataprovider.importer</artifactId>
+            <artifactId>de.hf.dac.marketdataprovider.runner</artifactId>
             <version>${project.version}</version>
         </dependency>
 

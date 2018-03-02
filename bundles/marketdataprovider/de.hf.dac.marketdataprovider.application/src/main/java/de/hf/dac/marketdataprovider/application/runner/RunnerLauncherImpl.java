@@ -23,8 +23,7 @@ import de.hf.dac.api.io.routes.RunnerLauncher;
 import de.hf.dac.api.io.routes.job.RunnerParameter;
 import de.hf.dac.marketdataprovider.api.application.MarketDataEnvironmentContextBuilder;
 import de.hf.dac.marketdataprovider.api.runner.BaseMDRunnerParameter;
-import de.hf.dac.marketdataprovider.importer.Import;
-import de.hf.dac.marketdataprovider.importer.ImportRunnerParameter;
+import de.hf.dac.marketdataprovider.api.runner.Runner;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
 import org.slf4j.Logger;
@@ -59,9 +58,9 @@ public class RunnerLauncherImpl implements RunnerLauncher {
             Object runnerBean = contextBuilder.build(params.getEnv()).autowire(clazz);
 
             try {
-                if (runnerBean instanceof Import) {
-                    Import st = (Import) runnerBean;
-                    st.run(new ImportRunnerParameter((BaseMDRunnerParameter) runnerParameter));
+                if (runnerBean instanceof Runner) {
+                    Runner st = (Runner) runnerBean;
+                    st.run(new BaseMDRunnerParameter((BaseMDRunnerParameter) runnerParameter));
                 }
                 // put actual results into the result instances here
                 // Actually all Runner only return 0 to indicate success. Here we add the call params as well

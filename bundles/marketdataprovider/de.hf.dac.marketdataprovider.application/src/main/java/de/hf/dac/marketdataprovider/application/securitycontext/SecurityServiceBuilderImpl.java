@@ -48,7 +48,7 @@ public class SecurityServiceBuilderImpl implements SecurityServiceBuilder {
 
 
     @Override
-    public RootSecurityProvider<OpType, OpLevel> build(String env) throws SQLException {
+    public RootSecurityProvider<OpType, OpLevel> build(String env) {
 
         MDSecurityApplicationContextModule mdSecurityApplicationContextModule
             = new MDSecurityApplicationContextModule(env,envService,emfb);

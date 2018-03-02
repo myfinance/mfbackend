@@ -32,12 +32,7 @@ public class MDEnvironmentContextImpl extends BaseSecurityContext implements MDE
 
     public MDEnvironmentContextImpl(MarketDataEnvironmentBuilder marketDataEnvironmentBuilder, String env, ServiceResourceType parent){
         super(env,parent);
-        try {
-            environment = marketDataEnvironmentBuilder.build(env);
-        } catch (SQLException e) {
-            //todo how to handle this?
-            e.printStackTrace();
-        }
+        environment = marketDataEnvironmentBuilder.build(env);
     }
 
     public MarketDataEnvironment getMarketDataEnvironment()  {

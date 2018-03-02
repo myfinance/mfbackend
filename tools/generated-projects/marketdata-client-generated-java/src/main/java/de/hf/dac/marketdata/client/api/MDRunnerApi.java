@@ -154,7 +154,7 @@ public class MDRunnerApi {
     }
     
     // create path and map variables
-    String localVarPath = "/runner/{jobtype}/{env}/start".replaceAll("\\{format\\}","json")
+    String localVarPath = "/Runner/{jobtype}/{env}/start".replaceAll("\\{format\\}","json")
       .replaceAll("\\{" + "env" + "\\}", apiClient.escapeString(env.toString()))
       .replaceAll("\\{" + "jobtype" + "\\}", apiClient.escapeString(jobtype.toString()));
 
