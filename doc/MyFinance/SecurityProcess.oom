@@ -5332,7 +5332,7 @@ Package.Comment 0</a:SymbolContent>
 <o:AssociationSymbol Id="o286">
 <a:CreationDate>1493191069</a:CreationDate>
 <a:ModificationDate>1493191069</a:ModificationDate>
-<a:Rect>((11958,14698), (33346,16645))</a:Rect>
+<a:Rect>((11958,14675), (33346,16622))</a:Rect>
 <a:ListOfPoints>((12358,15791),(32946,15791))</a:ListOfPoints>
 <a:CornerStyle>1</a:CornerStyle>
 <a:ArrowStyle>8</a:ArrowStyle>
@@ -17482,7 +17482,7 @@ DISPNAME 0 Arial,8,U</a:FontList>
 <a:Code>MyFinanceUML</a:Code>
 <a:CreationDate>1493191555</a:CreationDate>
 <a:Creator>xn01598</a:Creator>
-<a:ModificationDate>1493386458</a:ModificationDate>
+<a:ModificationDate>1519977465</a:ModificationDate>
 <a:Modifier>xn01598</a:Modifier>
 <a:TargetModelURL>file:///.</a:TargetModelURL>
 <a:TargetModelID>5C581C88-A664-4159-8B00-893A4E667DEC</a:TargetModelID>

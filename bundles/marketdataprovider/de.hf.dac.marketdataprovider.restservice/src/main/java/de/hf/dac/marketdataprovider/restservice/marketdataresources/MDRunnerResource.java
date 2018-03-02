@@ -67,8 +67,7 @@ public class MDRunnerResource extends BaseSecuredResource<OpType,OpLevel> {
     @Consumes(MediaType.APPLICATION_JSON)
     public Response start(@PathParam("env") @ApiParam(value="The env") String env,
             @ApiParam(name = "params", value = "Parameter") BaseMDRunnerParameter params) {
-        //todo berechtigungen glatt ziehen. Execute gibts noch nicht in der Tabelle
-        //checkOperationAllowed(OpType.EXECUTE);
+        checkOperationAllowed(OpType.EXECUTE);
         JobInformation jobInformation = ctx.getDispatcher()
             .sendJob(new WrappedJobParameter(params, env, ctx.getId(),null, WrappedJobParameter.RUNNER_REQUEST, WrappedJobParameter.RUNNER_RESULT));
 

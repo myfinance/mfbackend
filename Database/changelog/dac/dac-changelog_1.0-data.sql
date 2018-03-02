@@ -7,4 +7,10 @@ INSERT INTO "dac_serviceconfiguration"("serviceconfigurationid", "environment", 
   VALUES(2, 'md', 'mdb', 'db', 'DEVPOSTGRES', NULL, NULL);
 --changeset hf:dac-data.1.0.2
 INSERT INTO "dac_restauthorization"("restauthorizationid", "restapp", "resource", "restoptype", "restidpattern", "permissions", "description", "operations", "users")
-  VALUES(1, 'marketdataprovider', 'environment', 'READ', '.*', 'admin', 'mydescription', 'all', 's');
+VALUES(1, 'marketdataprovider', 'environment', 'READ', '.*', 'read', 'mydescription', 'all', 's');
+INSERT INTO "dac_restauthorization"("restauthorizationid", "restapp", "resource", "restoptype", "restidpattern", "permissions", "description", "operations", "users")
+VALUES(2, 'marketdataprovider', 'environment', 'WRITE', '.*', 'write', 'mydescription', 'all', 's');
+INSERT INTO "dac_restauthorization"("restauthorizationid", "restapp", "resource", "restoptype", "restidpattern", "permissions", "description", "operations", "users")
+VALUES(3, 'marketdataprovider', 'environment', 'EXECUTE', '.*', 'admin', 'mydescription', 'all', 's');
+INSERT INTO "dac_restauthorization"("restauthorizationid", "restapp", "resource", "restoptype", "restidpattern", "permissions", "description", "operations", "users")
+VALUES(4, 'marketdataprovider', 'runner', 'EXECUTE', '.*', 'exec', 'mydescription', 'all', 's');

@@ -83,7 +83,7 @@ public class EnvironmentDataResource extends BaseSecuredResource<OpType,OpLevel>
     @Produces(MediaType.APPLICATION_JSON)
     @ApiOperation(value = "importprices", response = String.class)
     public String importPrices() {
-        checkOperationAllowed(OpType.WRITE);
+        checkOperationAllowed(OpType.EXECUTE);
         marketDataEnvironment.getInstrumentService().importPrices(LocalDateTime.now());
         return "sucessful";
     }

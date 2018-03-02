@@ -19,9 +19,5 @@ package de.hf.dac.marketdataprovider.api.application;
 
 public enum OpLevel {
     environment,
-    instrument,
-    position,
-    portfolio, //a type of trades like loads or real estate
-    account,
     runner
 }
