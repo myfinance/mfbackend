@@ -13,8 +13,17 @@
     <modules>
         <module>restclient</module>
         <module>myfinancerunner</module>
-        <module>angular</module>
+
     </modules>
+
+    <profiles>
+        <profile>
+            <id>angularbuild</id>
+            <modules>
+                <module>angular</module>
+            </modules>
+        </profile>
+    </profiles>
 
 </project>
 

@@ -73,12 +73,12 @@ profiles:
 - docker if you like to run tests with karaf with the help of docker - activated on linux
 - clientgen to regenerate the Rest-Api-Client - cost some time 
     but you should do it for a release-build to be sure you haven't forgotten some changes in the api -activate by default
-- noclientgen select noclientgen to deactivate clientgen
--inttest to run integration tests with karaf. activatre by default
--nointtest to deactivate inttest
--angularbuild to build angular client (takes a lot of time) activated by default
--noangularbuild to deactivate angularbuild
+- noclientgen activated if property noclientgen is set (-Dnoclientgen) this deactivates clientgen. this profile is necessary due to build order issues
+ (module depended on profile clientgen will always build after the default modules) 
+- inttest to run integration tests with karaf. activatre by default. to deactivate set property -Dnointtest
+- angularbuild to build angular client (takes a lot of time) activated by default to deactivate set property -Dnoangular
+
 e.G. 
-mvn clean install -Pnoclientgen -Pnointtest -Pnoangularbuild
+mvn clean install -Dnoclientgen -Dnointtest -Dnoangular
 
 

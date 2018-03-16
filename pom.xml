@@ -539,27 +539,11 @@
             </activation>
         </profile>
         <profile>
-            <id>nointtest</id>
-            <activation>
-                <property>
-                    <name>nointtest</name>
-                </property>
-            </activation>
-        </profile>
-        <profile>
             <id>inttest</id>
             <activation>
                 <activeByDefault>true</activeByDefault>
                 <property>
                     <name>!nointtest</name>
-                </property>
-            </activation>
-        </profile>
-        <profile>
-            <id>noangularbuild</id>
-            <activation>
-                <property>
-                    <name>noangular</name>
                 </property>
             </activation>
         </profile>
