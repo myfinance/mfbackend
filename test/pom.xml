@@ -7,16 +7,20 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
     <packaging>pom</packaging>
-    <modules>
-        <module>dac-test-runner</module>
-    </modules>
     <artifactId>test</artifactId>
 
     <profiles>
         <profile>
             <id>deploy-win</id>
             <modules>
+                <module>md-int-test</module>
                 <module>pax-exam-test</module>
+            </modules>
+        </profile>
+        <profile>
+            <id>docker</id>
+            <modules>
+                <module>md-int-test</module>
             </modules>
         </profile>
     </profiles>

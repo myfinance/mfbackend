@@ -66,4 +66,19 @@ DAC uses Felix-GOGO-commands to start batch-jobs via ssh. Often it is necessary 
 Blueprint is a static DI and can not do this, so google guice is used.
 
 
+### Build ###
+
+profiles: 
+- deploy-win if you like to run tests with karaf in a windows environment - activated on windows
+- docker if you like to run tests with karaf with the help of docker - activated on linux
+- clientgen to regenerate the Rest-Api-Client - cost some time 
+    but you should do it for a release-build to be sure you haven't forgotten some changes in the api -activate by default
+- noclientgen select noclientgen to deactivate clientgen
+-inttest to run integration tests with karaf. activatre by default
+-nointtest to deactivate inttest
+-angularbuild to build angular client (takes a lot of time) activated by default
+-noangularbuild to deactivate angularbuild
+e.G. 
+mvn clean install -Pnoclientgen -Pnointtest -Pnoangularbuild
+
 

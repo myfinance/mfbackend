@@ -28,7 +28,7 @@
         </dependency>
         <dependency>
             <groupId>de.hf.dac.features</groupId>
-            <artifactId>marketdata-features</artifactId>
+            <artifactId>myfinance-features</artifactId>
             <version>${project.version}</version>
             <type>xml</type>
             <scope>runtime</scope>
@@ -91,7 +91,7 @@
                         <feature>dac-base-karaf-webconsoletools</feature>
 
                         <!-- the application -->
-                        <feature>marketdata-features</feature>
+                        <feature>myfinance-features</feature>
 
                     </bootFeatures>
 

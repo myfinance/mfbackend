@@ -1,0 +1,2 @@
+Export-Package: de.hf.dac.myfinance.service
+Bundle-SymbolicName: ${project.artifactId}

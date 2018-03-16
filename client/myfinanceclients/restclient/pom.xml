@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <artifactId>myfinanceclient</artifactId>
+        <groupId>de.hf.dac.myfinance.client</groupId>
+        <version>0.10.0-SNAPSHOT</version>
+    </parent>
+    <artifactId>restclient</artifactId>
+
+    <packaging>pom</packaging>
+    <version>0.10.0-SNAPSHOT</version>
+
+
+    <profiles>
+        <profile>
+            <id>clientgen</id>
+            <modules>
+                <module>deploykaraf4clientgen</module>
+                <module>myfinance-client-generator</module>
+                <module>myfinance-client-generation</module>
+                <module>cleanup-restclient-gen</module>
+                <module>generated-projects/myfinance-client-generated-java</module>
+            </modules>
+        </profile>
+        <profile>
+            <id>noclientgen</id>
+            <modules>
+                <module>generated-projects/myfinance-client-generated-java</module>
+            </modules>
+        </profile>
+    </profiles>
+
+
+
+
+</project>

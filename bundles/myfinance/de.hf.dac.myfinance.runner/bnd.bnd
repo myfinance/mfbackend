@@ -1,0 +1,2 @@
+Export-Package: de.hf.dac.myfinance.runner
+Bundle-SymbolicName: ${project.artifactId}

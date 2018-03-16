@@ -4441,7 +4441,7 @@ Shadow=0</a:DisplayPreferences>
 <a:PaperSource>7</a:PaperSource>
 <c:Symbols>
 <o:NoteSymbol Id="o183">
-<a:Text>de.hf.dac.marketdataprovider.application.runner.RunnerLauncherImpl
+<a:Text>de.hf.dac.myfinance.application.runner.RunnerLauncherImpl
 ist der entscheidende punkt. hier werden die Klassen zur Auswahl gestellt die gestartet werden können</a:Text>
 <a:CreationDate>1519977463</a:CreationDate>
 <a:ModificationDate>1519977528</a:ModificationDate>
@@ -6171,7 +6171,7 @@ LABL 0 Arial,8,N</a:FontList>
 <c:Packages>
 <o:Package Id="o283">
 <a:ObjectID>75B76157-7601-45E8-9BD2-994BEF33FE44</a:ObjectID>
-<a:Name>de.hf.dac.marketdataprovider.runner</a:Name>
+<a:Name>de.hf.dac.myfinance.runner</a:Name>
 <a:Code>de_hf_dac_marketdataprovider_runner</a:Code>
 <a:CreationDate>1493189832</a:CreationDate>
 <a:Creator>xn01598</a:Creator>
@@ -7695,7 +7695,7 @@ Shadow=0</a:DisplayPreferences>
 </o:Package>
 <o:Package Id="o197">
 <a:ObjectID>4385FBD8-0C33-4637-A4E8-B4D50A8C8976</a:ObjectID>
-<a:Name>de.hf.dac.marketdataprovider.restservice</a:Name>
+<a:Name>de.hf.dac.myfinance.restservice</a:Name>
 <a:Code>de_hf_dac_marketdataprovider_restservice</a:Code>
 <a:CreationDate>1493191509</a:CreationDate>
 <a:Creator>xn01598</a:Creator>
@@ -9668,7 +9668,7 @@ Shadow=0</a:DisplayPreferences>
 </o:Package>
 <o:Package Id="o185">
 <a:ObjectID>F478BC41-11CE-4056-AA36-543580FE10B2</a:ObjectID>
-<a:Name>de.hf.dac.marketdataprovider.application</a:Name>
+<a:Name>de.hf.dac.myfinance.application</a:Name>
 <a:Code>de_hf_dac_marketdataprovider_application</a:Code>
 <a:CreationDate>1493203913</a:CreationDate>
 <a:Creator>xn01598</a:Creator>
@@ -14189,7 +14189,7 @@ DISPNAME 0 Arial,8,U</a:FontList>
 <a:TargetStereotype/>
 <a:TargetID>B0A847B5-2114-466D-BE0A-9B8CFAC43D2D</a:TargetID>
 <a:TargetClassID>18112063-1A4B-11D1-83D9-444553540000</a:TargetClassID>
-<a:TargetPackagePath>&lt;Model&gt;::de.hf.dac.marketdataprovider.restservice</a:TargetPackagePath>
+<a:TargetPackagePath>&lt;Model&gt;::de.hf.dac.myfinance.restservice</a:TargetPackagePath>
 </o:Shortcut>
 <o:Shortcut Id="o312">
 <a:ObjectID>57346792-5063-48F0-A274-5AB32862A02D</a:ObjectID>
@@ -14202,7 +14202,7 @@ DISPNAME 0 Arial,8,U</a:FontList>
 <a:TargetStereotype/>
 <a:TargetID>BF6DE4A6-7227-4FE4-8F87-94366A11BAC6</a:TargetID>
 <a:TargetClassID>18112063-1A4B-11D1-83D9-444553540000</a:TargetClassID>
-<a:TargetPackagePath>&lt;Model&gt;::de.hf.dac.marketdataprovider.restservice</a:TargetPackagePath>
+<a:TargetPackagePath>&lt;Model&gt;::de.hf.dac.myfinance.restservice</a:TargetPackagePath>
 </o:Shortcut>
 <o:Shortcut Id="o313">
 <a:ObjectID>877BAA64-A26C-4200-9BBC-D99998AA5F7A</a:ObjectID>
@@ -14228,7 +14228,7 @@ DISPNAME 0 Arial,8,U</a:FontList>
 <a:TargetStereotype/>
 <a:TargetID>25D7653E-7BAA-4405-8C4C-CA70E92A345F</a:TargetID>
 <a:TargetClassID>18112063-1A4B-11D1-83D9-444553540000</a:TargetClassID>
-<a:TargetPackagePath>&lt;Model&gt;::de.hf.dac.marketdataprovider.application</a:TargetPackagePath>
+<a:TargetPackagePath>&lt;Model&gt;::de.hf.dac.myfinance.application</a:TargetPackagePath>
 </o:Shortcut>
 <o:Shortcut Id="o319">
 <a:ObjectID>1ED3698A-583C-4806-8398-17694DB482E3</a:ObjectID>
@@ -14280,7 +14280,7 @@ DISPNAME 0 Arial,8,U</a:FontList>
 <a:TargetStereotype/>
 <a:TargetID>5140C493-2A16-4645-BAF7-2A79E4069771</a:TargetID>
 <a:TargetClassID>18112063-1A4B-11D1-83D9-444553540000</a:TargetClassID>
-<a:TargetPackagePath>&lt;Model&gt;::de.hf.dac.marketdataprovider.application</a:TargetPackagePath>
+<a:TargetPackagePath>&lt;Model&gt;::de.hf.dac.myfinance.application</a:TargetPackagePath>
 </o:Shortcut>
 <o:Shortcut Id="o325">
 <a:ObjectID>10A53625-5E53-4C27-A85E-2EC35AA513FF</a:ObjectID>
@@ -14368,7 +14368,7 @@ DISPNAME 0 Arial,8,U</a:FontList>
 <a:TargetStereotype/>
 <a:TargetID>FEF1B005-8AC2-4AFC-80BC-AFFBAD179AA0</a:TargetID>
 <a:TargetClassID>18112063-1A4B-11D1-83D9-444553540000</a:TargetClassID>
-<a:TargetPackagePath>&lt;Model&gt;::de.hf.dac.marketdataprovider.application</a:TargetPackagePath>
+<a:TargetPackagePath>&lt;Model&gt;::de.hf.dac.myfinance.application</a:TargetPackagePath>
 </o:Shortcut>
 <o:Shortcut Id="o336">
 <a:ObjectID>C014446F-BE4B-4EE4-A23B-5CCAFB7A482F</a:ObjectID>
@@ -14381,7 +14381,7 @@ DISPNAME 0 Arial,8,U</a:FontList>
 <a:TargetStereotype/>
 <a:TargetID>B2256282-A125-4846-BE6E-30E97B70EE6A</a:TargetID>
 <a:TargetClassID>18112063-1A4B-11D1-83D9-444553540000</a:TargetClassID>
-<a:TargetPackagePath>&lt;Model&gt;::de.hf.dac.marketdataprovider.application</a:TargetPackagePath>
+<a:TargetPackagePath>&lt;Model&gt;::de.hf.dac.myfinance.application</a:TargetPackagePath>
 </o:Shortcut>
 </c:Classes>
 <c:Interfaces>
@@ -16195,7 +16195,7 @@ DISPNAME 0 Arial,8,U</a:FontList>
 <a:TargetStereotype/>
 <a:TargetID>2F7A05BE-2AE6-4380-9586-E23CA21176D3</a:TargetID>
 <a:TargetClassID>18112068-1A4B-11D1-83D9-444553540000</a:TargetClassID>
-<a:TargetPackagePath>&lt;Model&gt;::de.hf.dac.marketdataprovider.application</a:TargetPackagePath>
+<a:TargetPackagePath>&lt;Model&gt;::de.hf.dac.myfinance.application</a:TargetPackagePath>
 <c:LinkShortcutExtremities>
 <o:Shortcut Ref="o323"/>
 <o:Shortcut Ref="o322"/>
@@ -16278,7 +16278,7 @@ DISPNAME 0 Arial,8,U</a:FontList>
 <a:TargetStereotype/>
 <a:TargetID>A8AAE1A9-2C61-4CCE-A779-F87210847A6C</a:TargetID>
 <a:TargetClassID>18112068-1A4B-11D1-83D9-444553540000</a:TargetClassID>
-<a:TargetPackagePath>&lt;Model&gt;::de.hf.dac.marketdataprovider.application</a:TargetPackagePath>
+<a:TargetPackagePath>&lt;Model&gt;::de.hf.dac.myfinance.application</a:TargetPackagePath>
 <c:LinkShortcutExtremities>
 <o:Shortcut Ref="o334"/>
 <o:Shortcut Ref="o335"/>
@@ -16295,7 +16295,7 @@ DISPNAME 0 Arial,8,U</a:FontList>
 <a:TargetStereotype/>
 <a:TargetID>EC8BDE62-91BB-4289-90DC-9574C931275F</a:TargetID>
 <a:TargetClassID>18112068-1A4B-11D1-83D9-444553540000</a:TargetClassID>
-<a:TargetPackagePath>&lt;Model&gt;::de.hf.dac.marketdataprovider.application</a:TargetPackagePath>
+<a:TargetPackagePath>&lt;Model&gt;::de.hf.dac.myfinance.application</a:TargetPackagePath>
 <c:LinkShortcutExtremities>
 <o:Interface Ref="o331"/>
 <o:Shortcut Ref="o336"/>

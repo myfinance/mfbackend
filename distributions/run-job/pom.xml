@@ -26,7 +26,7 @@
         <!-- to be sure that the jar has always the same name without a version-->
         <finalName>run-job</finalName>
         <plugins>
-            <!--copy all jars necessary from dependency tree of de.hf.dac.marketdataprovider.Runner to ${collect.lib.dir} -->
+            <!--copy all jars necessary from dependency tree of de.hf.dac.myfinanceo ${collect.lib.dir} -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-dependency-plugin</artifactId>
@@ -64,7 +64,7 @@
                             <archive>
                                 <manifest>
                                     <addClasspath>true</addClasspath>
-                                    <mainClass>de.hf.dac.marketdataprovider.runner.ImportRunnerClient</mainClass>
+                                    <mainClass>de.hf.dac.myfinance.runner.ImportRunnerClient</mainClass>
                                 </manifest>
                                 <manifestEntries>
                                     <Class-Path>lib/mdrunner-${project.version}.jar</Class-Path>

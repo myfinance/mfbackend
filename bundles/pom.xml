@@ -17,9 +17,9 @@
 
     <modules>
         <module>api</module>
-        <module>security</module>
+        <module>de.hf.dac.security</module>
         <module>io</module>
-        <module>marketdataprovider</module>
+        <module>myfinance</module>
         <module>web</module>
         <module>de.hf.dac.common</module>
         <module>services</module>

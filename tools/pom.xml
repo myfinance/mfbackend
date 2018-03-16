@@ -10,9 +10,7 @@
     <artifactId>tools</artifactId>
     <packaging>pom</packaging>
     <modules>
-        <module>marketdata-client-generator</module>
-        <module>marketdata-client-generation</module>
-        <module>generated-projects/marketdata-client-generated-java</module>
+        <module>dac-test-runner</module>
     </modules>
 
 </project>

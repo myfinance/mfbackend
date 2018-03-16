@@ -1,8 +1,0 @@
--metatype: *
-Export-Package: \
- de.hf.dac.marketdataprovider.api.application, \
- de.hf.dac.marketdataprovider.api.application.rootcontext, \
- de.hf.dac.marketdataprovider.api.application.servicecontext, \
- de.hf.dac.marketdataprovider.api.application.securitycontext, \
- de.hf.dac.marketdataprovider.api.runner
-Bundle-SymbolicName: ${project.artifactId}

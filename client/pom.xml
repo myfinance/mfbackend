@@ -11,9 +11,8 @@
     <artifactId>client</artifactId>
     <packaging>pom</packaging>
     <modules>
-        <module>angular2</module>
         <module>baserunner</module>
-        <module>mdclients</module>
+        <module>myfinanceclients</module>
     </modules>
 
 </project>

@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<features name="myfinance-persistence-feature" xmlns="http://karaf.apache.org/xmlns/features/v1.3.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://karaf.apache.org/xmlns/features/v1.3.0 http://karaf.apache.org/xmlns/features/v1.3.0">
+
+    <repository>mvn:org.hibernate/hibernate-osgi/${hibernate.version}/xml/karaf</repository>
+    <repository>mvn:de.hf.dac.features/dac-base-features/${project.version}/xml/features</repository>
+
+    <feature name="myfinance-domain-feature" version="${pom.version}">
+        <feature version="${hibernate.version}">hibernate-envers</feature>
+        <bundle>mvn:de.hf.dac.api/de.hf.dac.api.base/${project.version}</bundle>
+        <bundle>mvn:de.hf.dac.myfinance.api/de.hf.dac.myfinance.api.domain/${project.version}</bundle>
+    </feature>
+
+    <feature name="myfinance-persistence-feature" version="${pom.version}">
+        <feature>dac-io-feature</feature>
+        <feature>dac-springdata-feature</feature>
+        <feature>myfinance-domain-feature</feature>
+        <bundle>mvn:de.hf.dac.myfinance.api/de.hf.dac.myfinance.api.persistence/${project.version}</bundle>
+        <bundle>mvn:de.hf.dac.myfinance/de.hf.dac.myfinance.persistence/${project.version}</bundle>
+    </feature>
+
+    <feature name="myfinance-service-feature" version="${pom.version}">
+        <feature>myfinance-persistence-feature</feature>
+        <bundle>mvn:com.google.code.gson/gson/${gson.version}</bundle>
+        <bundle>mvn:de.hf.dac.myfinance.api/de.hf.dac.myfinance.api.service/${project.version}</bundle>
+        <bundle>mvn:de.hf.dac.myfinance/de.hf.dac.myfinance.service/${project.version}</bundle>
+    </feature>
+
+    <feature name="myfinance-restservice-feature" version="${pom.version}">
+        <feature>dac-rest-base-feature</feature>
+        <feature>myfinance-service-feature</feature>
+        <bundle  dependency="true">mvn:de.hf.dac.myfinance/de.hf.dac.myfinance.runner/${project.version}</bundle>
+        <bundle>mvn:de.hf.dac.myfinance.api/de.hf.dac.myfinance.api.application/${project.version}</bundle>
+        <bundle>mvn:de.hf.dac.myfinance/de.hf.dac.myfinance.restservice/${project.version}</bundle>
+        <bundle>mvn:de.hf.dac.myfinance/de.hf.dac.myfinance.application/${project.version}</bundle>
+    </feature>
+
+    <feature name="myfinance-features" version="${pom.version}">
+        <feature>myfinance-restservice-feature</feature>
+        <bundle>mvn:de.hf.dac/angular/${project.version}</bundle>
+    </feature>
+
+</features>

@@ -1,0 +1,2 @@
+Export-Package: de.hf.dac.myfinance.persistence
+Bundle-SymbolicName: ${project.artifactId}

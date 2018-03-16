@@ -84,6 +84,7 @@
         <assembly-plugin.version>3.1.0</assembly-plugin.version>
         <dependency-plugin.version>3.0.2</dependency-plugin.version>
         <resource-plugin.version>3.0.2</resource-plugin.version>
+        <clean-plugin.version>3.0.0</clean-plugin.version>
 
 
     </properties>
@@ -97,11 +98,17 @@
     <modules>
         <module>Database</module>
         <module>bundles</module>
-        <module>tools</module>
         <module>features</module>
-        <module>distributions</module>
+        <module>basedistributions</module>
+        <module>tools</module>
         <module>client</module>
+        <module>distributions</module>
+
+
+        <!--
         <module>test</module>
+        -->
+
     </modules>
 
 
@@ -123,33 +130,33 @@
                 <version>${project.version}</version>
             </dependency>
             <dependency>
-                <groupId>de.hf.dac.marketdataprovider.api</groupId>
-                <artifactId>de.hf.dac.marketdataprovider.api.domain</artifactId>
+                <groupId>de.hf.dac.myfinance.api</groupId>
+                <artifactId>de.hf.dac.myfinance.api.domain</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
-                <groupId>de.hf.dac.marketdataprovider.api</groupId>
-                <artifactId>de.hf.dac.marketdataprovider.api.application</artifactId>
+                <groupId>de.hf.dac.myfinance.api</groupId>
+                <artifactId>de.hf.dac.myfinance.api.application</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
-                <groupId>de.hf.dac.marketdataprovider.api</groupId>
-                <artifactId>de.hf.dac.marketdataprovider.api.persistence</artifactId>
+                <groupId>de.hf.dac.myfinance.api</groupId>
+                <artifactId>de.hf.dac.myfinance.api.persistence</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
-                <groupId>de.hf.dac.marketdataprovider</groupId>
-                <artifactId>de.hf.dac.marketdataprovider.service</artifactId>
+                <groupId>de.hf.dac.myfinance</groupId>
+                <artifactId>de.hf.dac.myfinance.service</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
-                <groupId>de.hf.dac.marketdataprovider</groupId>
-                <artifactId>de.hf.dac.marketdataprovider.restservice</artifactId>
+                <groupId>de.hf.dac.myfinance</groupId>
+                <artifactId>de.hf.dac.myfinance.restservice</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
-                <groupId>de.hf.dac.marketdataprovider</groupId>
-                <artifactId>de.hf.dac.marketdataprovider.persistence</artifactId>
+                <groupId>de.hf.dac.myfinance</groupId>
+                <artifactId>de.hf.dac.myfinance.persistence</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
@@ -168,18 +175,18 @@
                 <version>${project.version}</version>
             </dependency>
             <dependency>
-                <groupId>de.hf.dac.marketdataprovider.api</groupId>
-                <artifactId>de.hf.dac.marketdataprovider.api.service</artifactId>
+                <groupId>de.hf.dac.myfinance.api</groupId>
+                <artifactId>de.hf.dac.myfinance.api.service</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
-                <groupId>de.hf.dac.marketdataprovider.api</groupId>
-                <artifactId>de.hf.dac.marketdataprovider.api.restservice</artifactId>
+                <groupId>de.hf.dac.myfinance.api</groupId>
+                <artifactId>de.hf.dac.myfinance.api.restservice</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
-                <groupId>de.hf.dac.marketdataprovider</groupId>
-                <artifactId>de.hf.dac.marketdataprovider.restsecurity</artifactId>
+                <groupId>de.hf.dac.myfinance</groupId>
+                <artifactId>de.hf.dac.myfinance.restsecurity</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
@@ -442,6 +449,11 @@
                     <artifactId>maven-resources-plugin</artifactId>
                     <version>${resource-plugin.version}</version>
                 </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-clean-plugin</artifactId>
+                    <version>${clean-plugin.version}</version>
+                </plugin>
             </plugins>
         </pluginManagement>
         <plugins>
@@ -493,6 +505,73 @@
 
 
     <profiles>
+        <profile>
+            <id>docker</id>
+            <activation>
+                <os>
+                    <name>linux</name>
+                </os>
+            </activation>
+        </profile>
+        <profile>
+            <id>deploy-win</id>
+            <activation>
+                <os>
+                    <family>Windows</family>
+                </os>
+            </activation>
+        </profile>
+        <profile>
+            <id>clientgen</id>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+                <property>
+                    <name>!noclientgen</name>
+                </property>
+            </activation>
+        </profile>
+        <profile>
+            <id>noclientgen</id>
+            <activation>
+                <property>
+                    <name>noclientgen</name>
+                </property>
+            </activation>
+        </profile>
+        <profile>
+            <id>nointtest</id>
+            <activation>
+                <property>
+                    <name>nointtest</name>
+                </property>
+            </activation>
+        </profile>
+        <profile>
+            <id>inttest</id>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+                <property>
+                    <name>!nointtest</name>
+                </property>
+            </activation>
+        </profile>
+        <profile>
+            <id>noangularbuild</id>
+            <activation>
+                <property>
+                    <name>noangular</name>
+                </property>
+            </activation>
+        </profile>
+        <profile>
+            <id>angularbuild</id>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+                <property>
+                    <name>!noangular</name>
+                </property>
+            </activation>
+        </profile>
         <profile>
             <id>javadoc</id>
 

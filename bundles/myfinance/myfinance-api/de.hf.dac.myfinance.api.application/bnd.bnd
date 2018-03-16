@@ -1,0 +1,8 @@
+-metatype: *
+Export-Package: \
+ de.hf.dac.myfinance.api.application, \
+ de.hf.dac.myfinance.api.application.rootcontext, \
+ de.hf.dac.myfinance.api.application.servicecontext, \
+ de.hf.dac.myfinance.api.application.securitycontext, \
+ de.hf.dac.myfinance.api.runner
+Bundle-SymbolicName: ${project.artifactId}
