@@ -17,7 +17,7 @@ testCases:
             reference: jsonResult
 
             params:
-               url: "/dac/rest/marketdata/environments/list"
+               url: "/dac/rest/myfinance/environments/list"
 
           - action: Assert
             params:
@@ -31,7 +31,7 @@ testCases:
             params:
                referenceType: JSON
                extractPath: "values"
-               url: "/dac/rest/marketdata/environments/list"
+               url: "/dac/rest/myfinance/environments/list"
 
           - action: Assert
             params:

@@ -40,7 +40,7 @@ import java.io.Serializable;
 /**
  * Link
  */
-@javax.annotation.Generated(value = "class de.hf.dac.myfinance.codegen.MyFinanceClient_JavaGenerator", date = "2018-03-16T16:41:55.220+01:00")
+@javax.annotation.Generated(value = "class de.hf.dac.myfinance.codegen.MyFinanceClient_JavaGenerator", date = "2018-03-23T16:39:56.372+01:00")
 public class Link  implements Serializable {
   @JsonProperty("type")
   private String type = null;
@@ -57,11 +57,11 @@ public class Link  implements Serializable {
   @JsonProperty("rel")
   private String rel = null;
 
-  @JsonProperty("uriBuilder")
-  private UriBuilder uriBuilder = null;
-
   @JsonProperty("rels")
   private List<String> rels = new ArrayList<String>();
+
+  @JsonProperty("uriBuilder")
+  private UriBuilder uriBuilder = null;
 
   public Link type(String type) {
     this.type = type;
@@ -158,24 +158,6 @@ public class Link  implements Serializable {
     this.rel = rel;
   }
 
-  public Link uriBuilder(UriBuilder uriBuilder) {
-    this.uriBuilder = uriBuilder;
-    return this;
-  }
-
-   /**
-   * Get uriBuilder
-   * @return uriBuilder
-  **/
-  @ApiModelProperty(example = "null", value = "")
-  public UriBuilder getUriBuilder() {
-    return uriBuilder;
-  }
-
-  public void setUriBuilder(UriBuilder uriBuilder) {
-    this.uriBuilder = uriBuilder;
-  }
-
   public Link rels(List<String> rels) {
     this.rels = rels;
     return this;
@@ -199,6 +181,24 @@ public class Link  implements Serializable {
     this.rels = rels;
   }
 
+  public Link uriBuilder(UriBuilder uriBuilder) {
+    this.uriBuilder = uriBuilder;
+    return this;
+  }
+
+   /**
+   * Get uriBuilder
+   * @return uriBuilder
+  **/
+  @ApiModelProperty(example = "null", value = "")
+  public UriBuilder getUriBuilder() {
+    return uriBuilder;
+  }
+
+  public void setUriBuilder(UriBuilder uriBuilder) {
+    this.uriBuilder = uriBuilder;
+  }
+
 
   @Override
   public boolean equals(java.lang.Object o) {
@@ -214,13 +214,13 @@ public class Link  implements Serializable {
         Objects.equals(this.title, link.title) &&
         Objects.equals(this.uri, link.uri) &&
         Objects.equals(this.rel, link.rel) &&
-        Objects.equals(this.uriBuilder, link.uriBuilder) &&
-        Objects.equals(this.rels, link.rels);
+        Objects.equals(this.rels, link.rels) &&
+        Objects.equals(this.uriBuilder, link.uriBuilder);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(type, params, title, uri, rel, uriBuilder, rels);
+    return Objects.hash(type, params, title, uri, rel, rels, uriBuilder);
   }
 
   @Override
@@ -233,8 +233,8 @@ public class Link  implements Serializable {
     sb.append("    title: ").append(toIndentedString(title)).append("\n");
     sb.append("    uri: ").append(toIndentedString(uri)).append("\n");
     sb.append("    rel: ").append(toIndentedString(rel)).append("\n");
-    sb.append("    uriBuilder: ").append(toIndentedString(uriBuilder)).append("\n");
     sb.append("    rels: ").append(toIndentedString(rels)).append("\n");
+    sb.append("    uriBuilder: ").append(toIndentedString(uriBuilder)).append("\n");
     sb.append("}");
     return sb.toString();
   }

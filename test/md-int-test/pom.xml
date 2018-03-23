@@ -1,13 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
-        <artifactId>marketdataprovider</artifactId>
-        <groupId>de.hf.dac.marketdataprovider</groupId>
+        <artifactId>test</artifactId>
+        <groupId>de.hf.dac</groupId>
         <version>0.10.0-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>md-int-test</artifactId>
+
+    <!--<properties>
+        <maven.test.failure.ignore>true</maven.test.failure.ignore>
+    </properties>-->
+
 
     <dependencies>
         <dependency>
@@ -25,14 +30,246 @@
             <artifactId>baserunner</artifactId>
             <version>${project.version}</version>
         </dependency>
-        <dependency>
-            <groupId>de.hf.dac</groupId>
-            <artifactId>deploy-myfinance</artifactId>
-            <version>${project.version}</version>
-            <scope>test</scope>
-        </dependency>
     </dependencies>
 
+    <profiles>
+        <profile>
+            <id>deploy-win</id>
+            <activation>
+                <os>
+                    <family>Windows</family>
+                </os>
+            </activation>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-antrun-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <id>deploy</id>
+                                <phase>pre-integration-test</phase>
+                                <configuration>
+                                    <tasks>
+                                        <exec executable="${project.basedir}/deploy.bat" spawn="true">
+                                            <arg value="-t" />
+                                            <arg value="${localdeployfolder}" />
+                                            <arg value="-f" />
+                                            <arg value="MyFinance-${project.version}" />
+                                        </exec>
+                                    </tasks>
+                                </configuration>
+                                <goals>
+                                    <goal>run</goal>
+                                </goals>
+                            </execution>
+                            <execution>
+                                <id>stopkaraf</id>
+                                <phase>post-integration-test</phase>
+                                <configuration>
+                                    <tasks>
+                                        <exec executable="${localdeployfolder}/karaf/MyFinance-${project.version}/karaf/bin/stop.bat">
+                                        </exec>
+                                    </tasks>
+                                </configuration>
+                                <goals>
+                                    <goal>run</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.codehaus.gmaven</groupId>
+                        <artifactId>groovy-maven-plugin</artifactId>
+                        <dependencies>
+                            <dependency>
+                                <groupId>org.codehaus.groovy</groupId>
+                                <artifactId>groovy-all</artifactId>
+                                <version>2.4.12</version>
+                            </dependency>
+                            <dependency>
+                                <groupId>com.jayway.restassured</groupId>
+                                <artifactId>rest-assured</artifactId>
+                                <version>1.8.1</version>
+                            </dependency>
+                        </dependencies>
+                        <executions>
+                            <execution>
+                                <phase>pre-integration-test</phase>
+                                <goals>
+                                    <goal>execute</goal>
+                                </goals>
+                                <configuration>
+                                    <properties>
+                                        <filelocation>${project.basedir}/target</filelocation>
+                                    </properties>
+                                    <source>
+                                        <![CDATA[
+                                        import static com.jayway.restassured.RestAssured.*
 
+                                        println("Wait for karaf to be available")
+                                        for (int i = 0; i < 30; i++) { try { def response = with().get("http://karaf:karaf@localhost:8181/system/console/bundles")
+                                            def status = response.getStatusLine()
+                                            println(status)
+                                            if (!(status ==~ /.*OK.*/)) {
+                                                Thread.sleep(1000)
+                                                continue
+                                            } else {
+                                                def inputStream = get("http://karaf:karaf@localhost:8181/dac/rest/swagger.json").asInputStream()
+                                                String filename = properties['filelocation']+'/swagger.json'
+                                                OutputStream outputStream = new FileOutputStream(new File(filename))
+                                                int read = 0;
+                                                byte[] bytes = new byte[1024]
+
+                                                while ((read = inputStream.read(bytes)) != -1) {
+                                                    outputStream.write(bytes, 0, read)
+                                                }
+
+                                                break
+                                            }
+                                        } catch (Exception e) {
+                                            println("got exception:" + e)
+                                            Thread.sleep(1000)
+                                            continue
+                                        } finally {
+                                            print(".")
+                                        }
+                                            println("got status")
+                                        }
+                                        ]]>
+                                    </source>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+        <profile>
+            <id>docker</id>
+            <activation>
+                <os>
+                    <name>linux</name>
+                </os>
+            </activation>
+
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-resources-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <id>copy-docker-compose</id>
+                                <!-- here the phase you need -->
+                                <phase>pre-integration-test</phase>
+                                <goals>
+                                    <goal>copy-resources</goal>
+                                </goals>
+                                <configuration>
+                                    <outputDirectory>${basedir}/target/</outputDirectory>
+                                    <resources>
+                                        <resource>
+                                            <directory>src/main/resources</directory>
+                                            <filtering>true</filtering>
+                                        </resource>
+                                    </resources>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-antrun-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <id>deploy</id>
+                                <phase>pre-integration-test</phase>
+                                <configuration>
+                                    <tasks>
+                                        <exec executable="${project.basedir}/deploy.sh">
+                                        </exec>
+                                    </tasks>
+                                </configuration>
+                                <goals>
+                                    <goal>run</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.codehaus.gmaven</groupId>
+                        <artifactId>groovy-maven-plugin</artifactId>
+                        <dependencies>
+                            <dependency>
+                                <groupId>org.codehaus.groovy</groupId>
+                                <artifactId>groovy-all</artifactId>
+                                <version>2.4.12</version>
+                            </dependency>
+                            <dependency>
+                                <groupId>com.jayway.restassured</groupId>
+                                <artifactId>rest-assured</artifactId>
+                                <version>1.8.1</version>
+                            </dependency>
+                        </dependencies>
+                        <executions>
+                            <execution>
+                                <phase>pre-integration-test</phase>
+                                <goals>
+                                    <goal>execute</goal>
+                                </goals>
+                                <configuration>
+                                    <source>
+                                        <![CDATA[
+                                        import static com.jayway.restassured.RestAssured.*;
+                                        def ip = InetAddress.getLocalHost().getHostAddress()
+                                        println("local ip ="+ip)
+                                        println("Wait for karaf to be available")
+                                        for (int i = 0; i < 30; i++) { try { def response = with().get("http://karaf:karaf@"+ip+":8181/dac/rest/hello")
+                                            def status = response.getStatusLine()
+                                            println(status)
+                                            if (!(status ==~ /.*OK.*/)) {
+                                                Thread.sleep(1000)
+                                                continue
+                                            } else break;
+                                        } catch (Exception e) {
+                                            println("got exception:" + e)
+                                            Thread.sleep(1000)
+                                            continue
+                                        } finally {
+                                            print(".")
+                                        }
+                                            println("got status")
+                                        }
+                                        ]]>
+                                    </source>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-antrun-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <id>removedockerservice</id>
+                                <phase>post-integration-test</phase>
+                                <configuration>
+                                    <tasks>
+                                        <exec executable="${project.basedir}/stopdockerservice.sh">
+                                        </exec>
+                                    </tasks>
+                                </configuration>
+                                <goals>
+                                    <goal>run</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+
+    </profiles>
 
 </project>

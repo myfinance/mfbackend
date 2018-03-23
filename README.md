@@ -77,6 +77,7 @@ profiles:
  (module depended on profile clientgen will always build after the default modules) 
 - inttest to run integration tests with karaf. activatre by default. to deactivate set property -Dnointtest
 - angularbuild to build angular client (takes a lot of time) activated by default to deactivate set property -Dnoangular
+- paxam to run pax exam
 
 e.G. 
 mvn clean install -Dnoclientgen -Dnointtest -Dnoangular

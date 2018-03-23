@@ -9,8 +9,8 @@ Name | Type | Description | Notes
 **title** | **String** |  |  [optional]
 **uri** | **String** |  |  [optional]
 **rel** | **String** |  |  [optional]
-**uriBuilder** | [**UriBuilder**](UriBuilder.md) |  |  [optional]
 **rels** | **List&lt;String&gt;** |  |  [optional]
+**uriBuilder** | [**UriBuilder**](UriBuilder.md) |  |  [optional]
 
 
 

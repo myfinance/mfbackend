@@ -37,6 +37,8 @@ public enum DACMsgKey implements MsgKey {
     CAMEL_START(21001),
     CAMEL_STOP(21002),
 
+    // 22000 - 22999: security
+    WRONG_SECURITY_CONFIG(22000),
     UNSPECIFIED(30000);
 
 

@@ -38,7 +38,7 @@ import java.io.Serializable;
 /**
  * BaseMFRunnerParameter
  */
-@javax.annotation.Generated(value = "class de.hf.dac.myfinance.codegen.MyFinanceClient_JavaGenerator", date = "2018-03-16T16:41:55.220+01:00")
+@javax.annotation.Generated(value = "class de.hf.dac.myfinance.codegen.MyFinanceClient_JavaGenerator", date = "2018-03-23T16:39:56.372+01:00")
 public class BaseMFRunnerParameter  implements Serializable {
   @JsonProperty("params")
   private Map<String, Object> params = new HashMap<String, Object>();

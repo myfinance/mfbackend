@@ -13,10 +13,14 @@
     <packaging>pom</packaging>
     <version>0.10.0-SNAPSHOT</version>
 
-
     <profiles>
         <profile>
             <id>clientgen</id>
+            <activation>
+                <property>
+                    <name>!noclientgen</name>
+                </property>
+            </activation>
             <modules>
                 <module>deploykaraf4clientgen</module>
                 <module>myfinance-client-generator</module>
@@ -27,6 +31,11 @@
         </profile>
         <profile>
             <id>noclientgen</id>
+            <activation>
+                <property>
+                    <name>noclientgen</name>
+                </property>
+            </activation>
             <modules>
                 <module>generated-projects/myfinance-client-generated-java</module>
             </modules>

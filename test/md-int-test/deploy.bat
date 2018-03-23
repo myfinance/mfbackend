@@ -54,7 +54,7 @@ if exist %targetdir%\karaf (
 call:cout %mydir%
 call:cout %filename%
 mkdir %targetdir%\karaf
-copy %mydir%\..\myfinance-full-packaging\target\%filename%-bin.zip %targetdir%\karaf
+copy %mydir%\..\..\distributions\myfinance-full-packaging\target\%filename%-bin.zip %targetdir%\karaf
 copy /y %mydir%\..\karaf-full\integrationtest.res %targetdir%\dac.res
 cd %targetdir%\karaf
 unzip %targetdir%\karaf\%filename%-bin.zip

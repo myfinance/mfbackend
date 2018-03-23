@@ -6,7 +6,7 @@
  *
  *  Project     : dac
  *
- *  File        : RestApiClientTest.java
+ *  File        : ITRestApiClientTest.java
  *
  *  Author(s)   : hf
  *
@@ -27,5 +27,5 @@ import org.junit.runner.RunWith;
 @AllScenarioRunner.TestPlugins(environemt = "local", value={MdRestAssuredPlugin.class, DefaultPlugin.class})
 @AllScenarioRunner.TestFileLocation(directory = "./src/test/resources/tests/apiclient")
 @AllScenarioRunner.TestResultReportGenerator(value = HtmlDashboardGenerator.class, resultDir = "./target/reports")
-public class RestApiClientTest {
+public class ITRestApiClientTest {
 }

@@ -17,6 +17,9 @@
 
 package de.hf.dac.security.restauthorization;
 
+
+import de.hf.dac.api.base.exceptions.DACException;
+import de.hf.dac.api.base.exceptions.DACMsgKey;
 import de.hf.dac.api.io.domain.DacRestauthorization;
 import de.hf.dac.api.security.AuthorizationEntry;
 import de.hf.dac.api.security.AuthorizationSubject;
@@ -74,8 +77,9 @@ public abstract class BaseSecurityProviderImpl<
         List<RESOURCE_LEVEL> opLevels;
         try {
             opLevels = getDistinctOpLevels(getResourceLevel(), getSystem());
-        } catch(Exception ex) {
-            throw new SecurityException("Can't parse resources",ex);
+            if(opLevels==null || opLevels.isEmpty()){
+                throw new DACException(DACMsgKey.WRONG_SECURITY_CONFIG, "No security Resources found for System:"+getSystem());
+            }
         } finally {
             rootAuthMatchers.clear();
             passThroughAuthMatchers.clear();
@@ -147,7 +151,6 @@ public abstract class BaseSecurityProviderImpl<
 
             Set<String> allowedPermissions = new HashSet<>();
             Set<String> allowedUsers = new HashSet<>();
-
             for(AuthMatcherImpl impl : impls) {
                 allowedPermissions.addAll(impl.getPossiblePermissions(resourceId,operationId));
                 allowedUsers.addAll(impl.getPossibleUsers(resourceId,operationId));

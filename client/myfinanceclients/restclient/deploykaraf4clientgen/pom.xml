@@ -50,6 +50,11 @@
     <profiles>
         <profile>
             <id>deploy-win</id>
+            <activation>
+                <os>
+                    <family>Windows</family>
+                </os>
+            </activation>
             <build>
                 <plugins>
                     <plugin>
@@ -145,6 +150,11 @@
         </profile>
         <profile>
             <id>docker</id>
+            <activation>
+                <os>
+                    <name>linux</name>
+                </os>
+            </activation>
             <build>
                 <plugins>
                     <plugin>

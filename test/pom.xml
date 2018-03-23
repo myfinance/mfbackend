@@ -9,18 +9,15 @@
     <packaging>pom</packaging>
     <artifactId>test</artifactId>
 
+    <modules>
+        <module>md-int-test</module>
+    </modules>
+
     <profiles>
         <profile>
-            <id>deploy-win</id>
+            <id>paxexam</id>
             <modules>
-                <module>md-int-test</module>
                 <module>pax-exam-test</module>
-            </modules>
-        </profile>
-        <profile>
-            <id>docker</id>
-            <modules>
-                <module>md-int-test</module>
             </modules>
         </profile>
     </profiles>

@@ -21,7 +21,6 @@ import de.hf.dac.api.security.AuthorizationSubject;
 import org.apache.karaf.jaas.boot.principal.RolePrincipal;
 
 import javax.security.auth.Subject;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;

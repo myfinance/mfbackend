@@ -5,8 +5,8 @@
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **family** | [**FamilyEnum**](#FamilyEnum) |  |  [optional]
-**statusCode** | **Integer** |  |  [optional]
 **reasonPhrase** | **String** |  |  [optional]
+**statusCode** | **Integer** |  |  [optional]
 
 
 <a name="FamilyEnum"></a>

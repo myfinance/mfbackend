@@ -16,8 +16,8 @@
 
     <dependencies>
         <dependency>
-            <groupId>de.hf.dac.marketdataprovider.client</groupId>
-            <artifactId>mdrunner</artifactId>
+            <groupId>de.hf.dac.myfinance.client</groupId>
+            <artifactId>myfinancerunner</artifactId>
             <version>${project.version}</version>
         </dependency>
     </dependencies>

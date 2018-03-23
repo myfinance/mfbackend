@@ -35,7 +35,7 @@ import java.io.Serializable;
 /**
  * StatusType
  */
-@javax.annotation.Generated(value = "class de.hf.dac.myfinance.codegen.MyFinanceClient_JavaGenerator", date = "2018-03-16T16:41:55.220+01:00")
+@javax.annotation.Generated(value = "class de.hf.dac.myfinance.codegen.MyFinanceClient_JavaGenerator", date = "2018-03-23T16:39:56.372+01:00")
 public class StatusType  implements Serializable {
   /**
    * Gets or Sets family
@@ -78,11 +78,11 @@ public class StatusType  implements Serializable {
   @JsonProperty("family")
   private FamilyEnum family = null;
 
-  @JsonProperty("statusCode")
-  private Integer statusCode = null;
-
   @JsonProperty("reasonPhrase")
   private String reasonPhrase = null;
+
+  @JsonProperty("statusCode")
+  private Integer statusCode = null;
 
   public StatusType family(FamilyEnum family) {
     this.family = family;
@@ -100,24 +100,6 @@ public class StatusType  implements Serializable {
 
   public void setFamily(FamilyEnum family) {
     this.family = family;
-  }
-
-  public StatusType statusCode(Integer statusCode) {
-    this.statusCode = statusCode;
-    return this;
-  }
-
-   /**
-   * Get statusCode
-   * @return statusCode
-  **/
-  @ApiModelProperty(example = "null", value = "")
-  public Integer getStatusCode() {
-    return statusCode;
-  }
-
-  public void setStatusCode(Integer statusCode) {
-    this.statusCode = statusCode;
   }
 
   public StatusType reasonPhrase(String reasonPhrase) {
@@ -138,6 +120,24 @@ public class StatusType  implements Serializable {
     this.reasonPhrase = reasonPhrase;
   }
 
+  public StatusType statusCode(Integer statusCode) {
+    this.statusCode = statusCode;
+    return this;
+  }
+
+   /**
+   * Get statusCode
+   * @return statusCode
+  **/
+  @ApiModelProperty(example = "null", value = "")
+  public Integer getStatusCode() {
+    return statusCode;
+  }
+
+  public void setStatusCode(Integer statusCode) {
+    this.statusCode = statusCode;
+  }
+
 
   @Override
   public boolean equals(java.lang.Object o) {
@@ -149,13 +149,13 @@ public class StatusType  implements Serializable {
     }
     StatusType statusType = (StatusType) o;
     return Objects.equals(this.family, statusType.family) &&
-        Objects.equals(this.statusCode, statusType.statusCode) &&
-        Objects.equals(this.reasonPhrase, statusType.reasonPhrase);
+        Objects.equals(this.reasonPhrase, statusType.reasonPhrase) &&
+        Objects.equals(this.statusCode, statusType.statusCode);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(family, statusCode, reasonPhrase);
+    return Objects.hash(family, reasonPhrase, statusCode);
   }
 
   @Override
@@ -164,8 +164,8 @@ public class StatusType  implements Serializable {
     sb.append("class StatusType {\n");
     
     sb.append("    family: ").append(toIndentedString(family)).append("\n");
-    sb.append("    statusCode: ").append(toIndentedString(statusCode)).append("\n");
     sb.append("    reasonPhrase: ").append(toIndentedString(reasonPhrase)).append("\n");
+    sb.append("    statusCode: ").append(toIndentedString(statusCode)).append("\n");
     sb.append("}");
     return sb.toString();
   }
