@@ -36,7 +36,7 @@
 
     <feature name="myfinance-features" version="${pom.version}">
         <feature>myfinance-restservice-feature</feature>
-        <bundle>mvn:de.hf.dac/angular/${project.version}</bundle>
+        <bundle>mvn:de.hf.dac.myfinance.client/angular/${project.version}</bundle>
     </feature>
 
 </features>

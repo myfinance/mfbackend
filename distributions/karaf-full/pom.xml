@@ -42,7 +42,7 @@
             <type>xml</type>
         </dependency>
         <dependency>
-            <groupId>de.hf.dac</groupId>
+            <groupId>de.hf.dac.myfinance.client</groupId>
             <artifactId>angular</artifactId>
             <version>${project.version}</version>
         </dependency>
