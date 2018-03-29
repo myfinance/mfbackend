@@ -1,5 +1,5 @@
 import { Injectable, OnDestroy } from '@angular/core';
-import crossfilter from 'crossfilter2';
+import * as crossfilter from 'crossfilter2';
 import { timeFormat } from 'd3-time-format';
 import {Subject} from "rxjs/Subject";
 import {ActivatedRoute, Router} from "@angular/router";
