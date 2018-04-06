@@ -68,6 +68,10 @@ Blueprint is a static DI and can not do this, so google guice is used.
 
 ### Build ###
 
+requirements:
+
+node-js must be installed. then npm install -g @angular/cli
+
 profiles: 
 - deploy-win if you like to run tests with karaf in a windows environment - activated on windows
 - docker if you like to run tests with karaf with the help of docker - activated on linux
