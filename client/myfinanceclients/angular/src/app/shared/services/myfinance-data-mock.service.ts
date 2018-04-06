@@ -3,7 +3,7 @@ import {Observable} from "rxjs/Rx";
 import 'rxjs/add/operator/map';
 import 'rxjs/add/observable/of';
 import {Instrument} from "../models/instrument";
-import {Position} from "../models/Position";
+import {Position} from "../models/position";
 
 /**
  * Created by xn01598 on 11.05.2017.
