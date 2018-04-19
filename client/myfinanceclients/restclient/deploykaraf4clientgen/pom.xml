@@ -197,7 +197,10 @@
                                 <goals>
                                     <goal>execute</goal>
                                 </goals>
-                                <configuration>
+				<configuration>
+				    <properties>
+					<filelocation>${project.basedir}/target</filelocation>
+				    </properties>		
                                     <source>
                                         <![CDATA[
                                         import static com.jayway.restassured.RestAssured.*;
@@ -210,7 +213,18 @@
                                             if (!(status ==~ /.*OK.*/)) {
                                                 Thread.sleep(1000)
                                                 continue
-                                            } else break;
+						} else {
+					        	Thread.sleep(5000)
+							def inputStream = get("http://karaf:karaf@"+ip+":8181/dac/rest/swagger.json").asInputStream()
+							String filename = properties['filelocation']+'/swagger.json'
+							OutputStream outputStream = new FileOutputStream(new File(filename))
+							int read = 0
+							byte[] bytes = new byte[1024]
+							while ((read = inputStream.read(bytes)) != -1) {
+								outputStream.write(bytes, 0, read)
+							}
+							break
+						}				
                                         } catch (Exception e) {
                                             println("got exception:" + e)
                                             Thread.sleep(1000)

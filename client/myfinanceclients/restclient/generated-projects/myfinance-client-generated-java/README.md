@@ -91,6 +91,7 @@ Class | Method | HTTP request | Description
 ------------ | ------------- | ------------- | -------------
 *HelloApi* | [**getHello**](docs/HelloApi.md#getHello) | **GET** /hello | 
 *HelloApi* | [**getProducts**](docs/HelloApi.md#getProducts) | **GET** /hello/list | 
+*JobsApi* | [**start**](docs/JobsApi.md#start) | **POST** /Runner/{jobtype}/{env}/start | execute myfinance launcher
 *MyFinanceApi* | [**addCurrency_envID_currencyCode_description**](docs/MyFinanceApi.md#addCurrency_envID_currencyCode_description) | **POST** /myfinance/environments/{envID}/addCurrency | save Instrument
 *MyFinanceApi* | [**addEquity_envID_isin_description**](docs/MyFinanceApi.md#addEquity_envID_isin_description) | **POST** /myfinance/environments/{envID}/addEquity | save Instrument
 *MyFinanceApi* | [**addPrice_envID_currencyCode_isin_dayofprice_value**](docs/MyFinanceApi.md#addPrice_envID_currencyCode_isin_dayofprice_value) | **POST** /myfinance/environments/{envID}/addPrice | save Price
@@ -105,6 +106,7 @@ Class | Method | HTTP request | Description
 *MyFinanceRunnerApi* | [**list**](docs/MyFinanceRunnerApi.md#list) | **GET** /Runner/list | list known cops jobs
 *MyFinanceRunnerApi* | [**start**](docs/MyFinanceRunnerApi.md#start) | **POST** /Runner/{jobtype}/{env}/start | execute myfinance launcher
 *MyFinanceRunnerApi* | [**status**](docs/MyFinanceRunnerApi.md#status) | **GET** /Runner/status/{uuid} | get status of cops jobs
+*UtilityResourcesApi* | [**getStringList**](docs/UtilityResourcesApi.md#getStringList) | **GET** /myfinance/environments/list | List Data
 
 
 ## Documentation for Models

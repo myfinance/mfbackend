@@ -17,7 +17,12 @@
 
     <profiles>
         <profile>
-            <id>docker</id>
+	    <id>docker</id>
+	    <activation>
+            	<os>
+			<name>linux</name>
+		</os>										              
+	    </activation>
             <modules>
                 <module>basedockerimages</module>
             </modules>

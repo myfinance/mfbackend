@@ -9,19 +9,14 @@
     <artifactId>myfinance-client-generation</artifactId>
 
 
-    <prerequisites>
-        <maven>3.3.3</maven>
-    </prerequisites>
-
     <dependencies>
         <dependency>
             <groupId>de.hf.dac.myfinance.client</groupId>
             <artifactId>myfinance-client-generator</artifactId>
             <version>${project.version}</version>
             <scope>compile</scope>
-        </dependency>
+    </dependency>
     </dependencies>
-
     <build>
     <plugins>
     <plugin>
@@ -42,11 +37,45 @@
                 </fileset>
             </filesets>
         </configuration>
-    </plugin>
+     </plugin>
+     <plugin>
+     	<groupId>org.codehaus.mojo</groupId>
+	<artifactId>exec-maven-plugin</artifactId>
+	<version>1.6.0</version>
+	<executions>
+		<execution>
+			<phase>compile</phase>
+			<goals>
+				<goal>java</goal>
+			</goals>
+		</execution>
+	</executions>
+	<configuration>
+		<mainClass>io.swagger.codegen.SwaggerCodegen</mainClass>
+		<classpathScope>runtime</classpathScope>
+		<cleanupDeamonThreads>false</cleanupDeamonThreads>
+		<arguments>
+			<argument>generate</argument>
+			<argument>-t</argument>
+			<argument>${project.basedir}/../myfinance-client-generator/templates/MyFinanceClient_Java</argument>
+			<argument>--library</argument>
+			<argument>jersey1</argument>
+			<argument>--additional-properties</argument>
+			<argument>serializableModel=true</argument>
+			<argument>--artifact-version</argument>
+			<argument>${project.version}</argument>
+			<argument>-l</argument>
+			<argument>de.hf.dac.myfinance.codegen.MyFinanceClient_JavaGenerator</argument>
+			<argument>-o</argument>
+			<argument>${project.basedir}/../generated-projects/myfinance-client-generated-java/</argument>
+			<argument>-i</argument>
+			<argument>${project.basedir}/../deploykaraf4clientgen/target/swagger.json</argument>
+		</arguments>
+	</configuration>																							     </plugin>
     </plugins>
     </build>
 
-    <profiles>
+    <!--<profiles>
         <profile>
             <id>deploy-win</id>
             <activation>
@@ -79,7 +108,40 @@
                     </plugin>
                 </plugins>
             </build>
-        </profile>
-    </profiles>
+    	</profile>
+	 <profile>
+		<id>docker</id>
+		<activation>
+			<os>
+				<name>linux</name>
+			</os>
+		</activation>            
+		<build>
+			<plugins>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-antrun-plugin</artifactId>
+					<executions>
+						<execution>
+							<id>deploy</id>
+							<phase>compile</phase>
+							<configuration>
+								<tasks>
+									<exec executable="${project.basedir}/create_clients_from_spec.sh" >
+										<arg value="${project.version}" />
+										<arg value="${project.basedir}/../deploykaraf4clientgen/target/swagger.json" />
+									</exec>
+								</tasks>
+							</configuration>
+							<goals>
+								<goal>run</goal>
+							</goals>
+						</execution>
+					</executions>
+				</plugin>
+			</plugins>
+		</build>
+	</profile>
+    </profiles>-->
 
 </project>

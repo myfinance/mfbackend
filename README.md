@@ -86,4 +86,5 @@ profiles:
 e.G. 
 mvn clean install -Dnoclientgen -Dnointtest -Dnoangular
 
+!attention! if you run integrationtests or clientgeneration under linux, you have to deploy the docker images first. so run mvn clean deploy instead of install
 
