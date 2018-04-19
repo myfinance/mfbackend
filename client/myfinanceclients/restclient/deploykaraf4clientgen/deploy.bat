@@ -57,7 +57,7 @@ mkdir %targetdir%\karaf_clientless
 copy %mydir%\..\..\..\..\basedistributions\karaf-rest-dist\target\%filename%.zip %targetdir%\karaf_clientless
 copy /y %mydir%\dac.res %targetdir%\dac.res
 cd %targetdir%\karaf_clientless
-unzip %targetdir%\karaf_clientless\%filename%.zip
+7z x -y %targetdir%\karaf_clientless\%filename%.zip
 Start "" "%targetdir%\karaf_clientless\%filename%\bin\karaf_local.bat"
 
 :end_with_msg

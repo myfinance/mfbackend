@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
         <artifactId>restclient</artifactId>
         <groupId>de.hf.dac.myfinance.client</groupId>
@@ -15,133 +16,64 @@
             <artifactId>myfinance-client-generator</artifactId>
             <version>${project.version}</version>
             <scope>compile</scope>
-    </dependency>
+        </dependency>
     </dependencies>
     <build>
-    <plugins>
-    <plugin>
-        <artifactId>maven-clean-plugin</artifactId>
-        <configuration>
-            <filesets>
-                <fileset>
-                    <directory>${project.basedir}/../generated-projects/myfinance-client-generated-java</directory>
-                    <includes>
-                        <include>**/*</include>
-                        <include>**/*</include>
-                    </includes>
-                    <excludes>
-                        <exclude>pom.xml</exclude>
-                        <exclude>**/*.iml</exclude>
-                    </excludes>
-                    <followSymlinks>false</followSymlinks>
-                </fileset>
-            </filesets>
-        </configuration>
-     </plugin>
-     <plugin>
-     	<groupId>org.codehaus.mojo</groupId>
-	<artifactId>exec-maven-plugin</artifactId>
-	<version>1.6.0</version>
-	<executions>
-		<execution>
-			<phase>compile</phase>
-			<goals>
-				<goal>java</goal>
-			</goals>
-		</execution>
-	</executions>
-	<configuration>
-		<mainClass>io.swagger.codegen.SwaggerCodegen</mainClass>
-		<classpathScope>runtime</classpathScope>
-		<cleanupDeamonThreads>false</cleanupDeamonThreads>
-		<arguments>
-			<argument>generate</argument>
-			<argument>-t</argument>
-			<argument>${project.basedir}/../myfinance-client-generator/templates/MyFinanceClient_Java</argument>
-			<argument>--library</argument>
-			<argument>jersey1</argument>
-			<argument>--additional-properties</argument>
-			<argument>serializableModel=true</argument>
-			<argument>--artifact-version</argument>
-			<argument>${project.version}</argument>
-			<argument>-l</argument>
-			<argument>de.hf.dac.myfinance.codegen.MyFinanceClient_JavaGenerator</argument>
-			<argument>-o</argument>
-			<argument>${project.basedir}/../generated-projects/myfinance-client-generated-java/</argument>
-			<argument>-i</argument>
-			<argument>${project.basedir}/../deploykaraf4clientgen/target/swagger.json</argument>
-		</arguments>
-	</configuration>																							     </plugin>
-    </plugins>
+        <plugins>
+            <plugin>
+                <artifactId>maven-clean-plugin</artifactId>
+                <configuration>
+                    <filesets>
+                        <fileset>
+                            <directory>${project.basedir}/../generated-projects/myfinance-client-generated-java</directory>
+                            <includes>
+                                <include>**/*</include>
+                                <include>**/*</include>
+                            </includes>
+                            <excludes>
+                                <exclude>pom.xml</exclude>
+                                <exclude>**/*.iml</exclude>
+                            </excludes>
+                            <followSymlinks>false</followSymlinks>
+                        </fileset>
+                    </filesets>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>exec-maven-plugin</artifactId>
+                <version>${exec-maven-plugin.version}</version>
+                <executions>
+                    <execution>
+                        <phase>compile</phase>
+                        <goals>
+                            <goal>java</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <mainClass>io.swagger.codegen.SwaggerCodegen</mainClass>
+                    <classpathScope>runtime</classpathScope>
+                    <cleanupDeamonThreads>false</cleanupDeamonThreads>
+                    <arguments>
+                        <argument>generate</argument>
+                        <argument>-t</argument>
+                        <argument>${project.basedir}/../myfinance-client-generator/templates/MyFinanceClient_Java</argument>
+                        <argument>--library</argument>
+                        <argument>jersey1</argument>
+                        <argument>--additional-properties</argument>
+                        <argument>serializableModel=true</argument>
+                        <argument>--artifact-version</argument>
+                        <argument>${project.version}</argument>
+                        <argument>-l</argument>
+                        <argument>de.hf.dac.myfinance.codegen.MyFinanceClient_JavaGenerator</argument>
+                        <argument>-o</argument>
+                        <argument>${project.basedir}/../generated-projects/myfinance-client-generated-java/</argument>
+                        <argument>-i</argument>
+                        <argument>${project.basedir}/../deploykaraf4clientgen/target/swagger.json</argument>
+                    </arguments>
+                </configuration>
+            </plugin>
+        </plugins>
     </build>
-
-    <!--<profiles>
-        <profile>
-            <id>deploy-win</id>
-            <activation>
-                <os>
-                    <family>Windows</family>
-                </os>
-            </activation>
-            <build>
-                <plugins>
-                    <plugin>
-                        <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-antrun-plugin</artifactId>
-                        <executions>
-                            <execution>
-                                <id>deploy</id>
-                                <phase>compile</phase>
-                                <configuration>
-                                    <tasks>
-                                        <exec executable="${project.basedir}/Create_Clients_FromSpec.bat" spawn="true">
-                                            <arg value="${project.version}" />
-                                            <arg value="${project.basedir}/../deploykaraf4clientgen/target/swagger.json" />
-                                        </exec>
-                                    </tasks>
-                                </configuration>
-                                <goals>
-                                    <goal>run</goal>
-                                </goals>
-                            </execution>
-                        </executions>
-                    </plugin>
-                </plugins>
-            </build>
-    	</profile>
-	 <profile>
-		<id>docker</id>
-		<activation>
-			<os>
-				<name>linux</name>
-			</os>
-		</activation>            
-		<build>
-			<plugins>
-				<plugin>
-					<groupId>org.apache.maven.plugins</groupId>
-					<artifactId>maven-antrun-plugin</artifactId>
-					<executions>
-						<execution>
-							<id>deploy</id>
-							<phase>compile</phase>
-							<configuration>
-								<tasks>
-									<exec executable="${project.basedir}/create_clients_from_spec.sh" >
-										<arg value="${project.version}" />
-										<arg value="${project.basedir}/../deploykaraf4clientgen/target/swagger.json" />
-									</exec>
-								</tasks>
-							</configuration>
-							<goals>
-								<goal>run</goal>
-							</goals>
-						</execution>
-					</executions>
-				</plugin>
-			</plugins>
-		</build>
-	</profile>
-    </profiles>-->
-
 </project>
