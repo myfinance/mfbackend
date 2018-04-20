@@ -1,6 +1,6 @@
 version: '3.4'
 services:
-  postgres_mf:
+  ipostgres_mf:
     image: holgerfischer/myfinance:${project.version}-mfdb
     deploy:
       replicas: 1
@@ -11,10 +11,10 @@ services:
     environment:
       POSTGRES_PASSWORD: vulkan
     volumes:
-      - "myfinancedata:/var/lib/postgresql/data"
+      - "imyfinancedata:/var/lib/postgresql/data"
     networks:
-      - myfinance-network
-  mf_db_model_upgrade:
+      - imyfinance-network
+  imf_db_model_upgrade:
     image: holgerfischer/myfinance:${project.version}-mfdbupgrade
     deploy:
       replicas: 1
@@ -27,13 +27,13 @@ services:
       DB_IMAGE: postgres_mf
       DB_USER: postgres
     volumes:
-      - mfdblogs:/database/logs
+      - imfdblogs:/database/logs
     networks:
-      - myfinance-network
+      - imyfinance-network
     depends_on:
-      - postgres_mf
-  myfinance:
-    image: holgerfischer/myfinance:${project.version}-myfinance
+      - ipostgres_mf
+  imyfinancefull:
+    image: holgerfischer/myfinance:${project.version}-myfinance-full
     tty: true
     deploy:
       replicas: 1
@@ -48,14 +48,14 @@ services:
     ports:
       - '8181:8181'
     volumes:
-      - "myfinancelogs:/MyFinance/data"
+      - "imyfinancelogs:/MyFinance/data"
     networks:
-      - myfinance-network
+      - imyfinance-network
     depends_on:
-      - mf_db_model_upgrade
+      - imf_db_model_upgrade
 networks:
-  myfinance-network:
+  imyfinance-network:
 volumes:
-  mfdblogs:
-  myfinancedata:
-  myfinancelogs:
+  imfdblogs:
+  imyfinancedata:
+  imyfinancelogs:

@@ -188,7 +188,7 @@
                             </execution>
                         </executions>
                     </plugin>
-                    <plugin>
+		    <plugin>
                         <groupId>org.codehaus.gmaven</groupId>
                         <artifactId>groovy-maven-plugin</artifactId>
                         <dependencies>
@@ -222,7 +222,10 @@
                                             if (!(status ==~ /.*OK.*/)) {
                                                 Thread.sleep(1000)
                                                 continue
-                                            } else break;
+						} else {
+							break
+							Thread.sleep(1000)
+						}
                                         } catch (Exception e) {
                                             println("got exception:" + e)
                                             Thread.sleep(1000)
@@ -238,7 +241,7 @@
                             </execution>
                         </executions>
                     </plugin>
-                    <plugin>
+		    <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-antrun-plugin</artifactId>
                         <executions>
@@ -256,7 +259,7 @@
                                 </goals>
                             </execution>
                         </executions>
-                    </plugin>
+		    </plugin>
                 </plugins>
             </build>
         </profile>
