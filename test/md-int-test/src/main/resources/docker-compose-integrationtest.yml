@@ -1,6 +1,6 @@
 version: '3.4'
 services:
-  ipostgres_mf:
+  postgres_mf:
     image: holgerfischer/myfinance:${project.version}-mfdb
     deploy:
       replicas: 1
@@ -14,7 +14,7 @@ services:
       - "imyfinancedata:/var/lib/postgresql/data"
     networks:
       - imyfinance-network
-  imf_db_model_upgrade:
+  mf_db_model_upgrade:
     image: holgerfischer/myfinance:${project.version}-mfdbupgrade
     deploy:
       replicas: 1
@@ -31,8 +31,8 @@ services:
     networks:
       - imyfinance-network
     depends_on:
-      - ipostgres_mf
-  imyfinancefull:
+      - postgres_mf
+  myfinancefull:
     image: holgerfischer/myfinance:${project.version}-myfinance-full
     tty: true
     deploy:
@@ -52,7 +52,7 @@ services:
     networks:
       - imyfinance-network
     depends_on:
-      - imf_db_model_upgrade
+      - mf_db_model_upgrade
 networks:
   imyfinance-network:
 volumes:

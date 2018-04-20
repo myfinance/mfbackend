@@ -35,7 +35,7 @@ services:
     depends_on:
       - postgres_mf
   myfinance:
-    image: holgerfischer/myfinance:${project.version}-myfinance
+    image: holgerfischer/myfinance:${project.version}-myfinance-full
     tty: true
     deploy:
       replicas: 1
