@@ -55,7 +55,7 @@ call:cout %mydir%
 call:cout %filename%
 mkdir %targetdir%\karaf
 copy %mydir%\..\..\distributions\myfinance-full-packaging\target\%filename%-bin.zip %targetdir%\karaf
-copy /y %mydir%\..\karaf-full\integrationtest.res %targetdir%\dac.res
+copy /y %mydir%\..\..\distributions\karaf-full\integrationtest.res %targetdir%\karaf\dac.res
 cd %targetdir%\karaf
 7z x %targetdir%\karaf\%filename%-bin.zip
 Start "" "%targetdir%\karaf\%filename%\karaf\bin\karaf_local.bat"

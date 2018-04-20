@@ -15,4 +15,18 @@
         <module>myfinance-full-packaging</module>
         <module>run-job</module>
     </modules>
+
+    <profiles>
+        <profile>
+            <id>docker</id>
+            <activation>
+                <os>
+                    <name>linux</name>
+                </os>
+            </activation>
+            <modules>
+                <module>mf-docker-images</module>
+            </modules>
+        </profile>
+    </profiles>
 </project>

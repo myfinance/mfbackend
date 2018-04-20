@@ -17,7 +17,7 @@
         <java-doc.version>3.0.0</java-doc.version>
 
         <!-- DB-->
-        <postgresql.version>9.4-1203-jdbc42</postgresql.version>
+        <postgresql.version>42.2.2</postgresql.version>
         <h2.version>1.4.186</h2.version>
         <liquibase.version>3.5.3</liquibase.version>
 
