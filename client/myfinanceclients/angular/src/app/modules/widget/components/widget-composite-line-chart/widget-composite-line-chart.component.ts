@@ -1,7 +1,7 @@
 import { Component, OnInit, OnDestroy, AfterViewInit, Input, ViewChild, ElementRef } from '@angular/core';
 import { DatePipe } from '@angular/common';
 import { Subject } from 'rxjs/Subject'
-import dc from 'dc';
+import * as dc from 'dc';
 import * as d3 from 'dc/node_modules/d3';
 import { timeFormat } from 'd3-time-format';
 

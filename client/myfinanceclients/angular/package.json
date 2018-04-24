@@ -35,7 +35,6 @@
     "ag-grid": "^15.0.0",
     "ag-grid-angular": "^15.0.0",
     "ag-grid-enterprise": "^15.0.0",
-    "typescript": "2.6.2",
     "crossfilter2": "^1.4.3"
   },
   "devDependencies": {

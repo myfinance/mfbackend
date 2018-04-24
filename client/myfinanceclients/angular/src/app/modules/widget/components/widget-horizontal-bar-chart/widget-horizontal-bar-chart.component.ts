@@ -1,6 +1,6 @@
 import { Component, OnInit, OnDestroy, AfterViewInit, Input, ViewChild, ElementRef } from '@angular/core';
 import { Subject } from 'rxjs/Subject'
-import dc from 'dc';
+import * as dc from 'dc';
 
 import { DcService } from '../../services/dc.service';
 import { FinancialNumberPipe } from '../../pipes/financial-number.pipe';
