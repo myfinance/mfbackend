@@ -17,8 +17,7 @@
 
 package de.hf.dac.myfinance.importhandler;
 
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
+
 import de.hf.dac.myfinance.api.domain.Currency;
 import de.hf.dac.myfinance.api.domain.EndOfDayPrice;
 import de.hf.dac.myfinance.api.domain.Security;
