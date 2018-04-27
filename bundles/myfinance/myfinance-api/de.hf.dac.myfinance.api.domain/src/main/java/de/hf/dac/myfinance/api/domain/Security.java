@@ -112,8 +112,12 @@ public class Security extends Instrument implements java.io.Serializable {
     }
 
 
-    @OneToMany(fetch=FetchType.LAZY, mappedBy="security")
-    @ApiModelProperty(required = true)
+    //lazy loading is not working here. so we get a loop if not transient
+    //@OneToMany(fetch=FetchType.LAZY, mappedBy="security")
+    //@OneToMany(fetch=FetchType.LAZY)
+    //@JoinColumn(name = "instrumentid")
+    //@ApiModelProperty(required = true)
+    @Transient
     public Set<EndOfDayPrice> getEndOfDayPrices() {
         return this.endOfDayPrices;
     }

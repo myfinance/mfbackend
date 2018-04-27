@@ -70,17 +70,4 @@ public class Currency extends Security implements java.io.Serializable {
         this.currencycode = currencycode;
     }
 
-
-    @OneToMany(fetch=FetchType.LAZY, mappedBy="currency")
-    @ApiModelProperty(required = true)
-    public Set<EndOfDayPrice> getEndOfDayPrices() {
-        return this.endOfDayPrices;
-    }
-    public void setEndOfDayPrices(Set<EndOfDayPrice> endOfDayPrices) {
-        this.endOfDayPrices = endOfDayPrices;
-    }
-
-
-
-
 }
