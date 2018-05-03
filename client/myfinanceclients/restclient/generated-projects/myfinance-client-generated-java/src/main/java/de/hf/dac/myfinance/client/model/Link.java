@@ -40,19 +40,10 @@ import java.io.Serializable;
 /**
  * Link
  */
-@javax.annotation.Generated(value = "class de.hf.dac.myfinance.codegen.MyFinanceClient_JavaGenerator", date = "2018-04-19T16:38:35.219+02:00")
+@javax.annotation.Generated(value = "class de.hf.dac.myfinance.codegen.MyFinanceClient_JavaGenerator", date = "2018-04-24T10:07:05.461+02:00")
 public class Link  implements Serializable {
-  @JsonProperty("uriBuilder")
-  private UriBuilder uriBuilder = null;
-
-  @JsonProperty("rel")
-  private String rel = null;
-
-  @JsonProperty("rels")
-  private List<String> rels = new ArrayList<String>();
-
-  @JsonProperty("title")
-  private String title = null;
+  @JsonProperty("type")
+  private String type = null;
 
   @JsonProperty("params")
   private Map<String, String> params = new HashMap<String, String>();
@@ -60,84 +51,34 @@ public class Link  implements Serializable {
   @JsonProperty("uri")
   private String uri = null;
 
-  @JsonProperty("type")
-  private String type = null;
+  @JsonProperty("title")
+  private String title = null;
 
-  public Link uriBuilder(UriBuilder uriBuilder) {
-    this.uriBuilder = uriBuilder;
+  @JsonProperty("uriBuilder")
+  private UriBuilder uriBuilder = null;
+
+  @JsonProperty("rels")
+  private List<String> rels = new ArrayList<String>();
+
+  @JsonProperty("rel")
+  private String rel = null;
+
+  public Link type(String type) {
+    this.type = type;
     return this;
   }
 
    /**
-   * Get uriBuilder
-   * @return uriBuilder
+   * Get type
+   * @return type
   **/
   @ApiModelProperty(example = "null", value = "")
-  public UriBuilder getUriBuilder() {
-    return uriBuilder;
+  public String getType() {
+    return type;
   }
 
-  public void setUriBuilder(UriBuilder uriBuilder) {
-    this.uriBuilder = uriBuilder;
-  }
-
-  public Link rel(String rel) {
-    this.rel = rel;
-    return this;
-  }
-
-   /**
-   * Get rel
-   * @return rel
-  **/
-  @ApiModelProperty(example = "null", value = "")
-  public String getRel() {
-    return rel;
-  }
-
-  public void setRel(String rel) {
-    this.rel = rel;
-  }
-
-  public Link rels(List<String> rels) {
-    this.rels = rels;
-    return this;
-  }
-
-  public Link addRelsItem(String relsItem) {
-    this.rels.add(relsItem);
-    return this;
-  }
-
-   /**
-   * Get rels
-   * @return rels
-  **/
-  @ApiModelProperty(example = "null", value = "")
-  public List<String> getRels() {
-    return rels;
-  }
-
-  public void setRels(List<String> rels) {
-    this.rels = rels;
-  }
-
-  public Link title(String title) {
-    this.title = title;
-    return this;
-  }
-
-   /**
-   * Get title
-   * @return title
-  **/
-  @ApiModelProperty(example = "null", value = "")
-  public String getTitle() {
-    return title;
-  }
-
-  public void setTitle(String title) {
-    this.title = title;
+  public void setType(String type) {
+    this.type = type;
   }
 
   public Link params(Map<String, String> params) {
@@ -181,22 +122,81 @@ public class Link  implements Serializable {
     this.uri = uri;
   }
 
-  public Link type(String type) {
-    this.type = type;
+  public Link title(String title) {
+    this.title = title;
     return this;
   }
 
    /**
-   * Get type
-   * @return type
+   * Get title
+   * @return title
   **/
   @ApiModelProperty(example = "null", value = "")
-  public String getType() {
-    return type;
+  public String getTitle() {
+    return title;
   }
 
-  public void setType(String type) {
-    this.type = type;
+  public void setTitle(String title) {
+    this.title = title;
+  }
+
+  public Link uriBuilder(UriBuilder uriBuilder) {
+    this.uriBuilder = uriBuilder;
+    return this;
+  }
+
+   /**
+   * Get uriBuilder
+   * @return uriBuilder
+  **/
+  @ApiModelProperty(example = "null", value = "")
+  public UriBuilder getUriBuilder() {
+    return uriBuilder;
+  }
+
+  public void setUriBuilder(UriBuilder uriBuilder) {
+    this.uriBuilder = uriBuilder;
+  }
+
+  public Link rels(List<String> rels) {
+    this.rels = rels;
+    return this;
+  }
+
+  public Link addRelsItem(String relsItem) {
+    this.rels.add(relsItem);
+    return this;
+  }
+
+   /**
+   * Get rels
+   * @return rels
+  **/
+  @ApiModelProperty(example = "null", value = "")
+  public List<String> getRels() {
+    return rels;
+  }
+
+  public void setRels(List<String> rels) {
+    this.rels = rels;
+  }
+
+  public Link rel(String rel) {
+    this.rel = rel;
+    return this;
+  }
+
+   /**
+   * Get rel
+   * @return rel
+  **/
+  @ApiModelProperty(example = "null", value = "")
+  public String getRel() {
+    return rel;
+  }
+
+  public void setRel(String rel) {
+    this.rel = rel;
   }
 
 
@@ -209,18 +209,18 @@ public class Link  implements Serializable {
       return false;
     }
     Link link = (Link) o;
-    return Objects.equals(this.uriBuilder, link.uriBuilder) &&
-        Objects.equals(this.rel, link.rel) &&
-        Objects.equals(this.rels, link.rels) &&
-        Objects.equals(this.title, link.title) &&
+    return Objects.equals(this.type, link.type) &&
         Objects.equals(this.params, link.params) &&
         Objects.equals(this.uri, link.uri) &&
-        Objects.equals(this.type, link.type);
+        Objects.equals(this.title, link.title) &&
+        Objects.equals(this.uriBuilder, link.uriBuilder) &&
+        Objects.equals(this.rels, link.rels) &&
+        Objects.equals(this.rel, link.rel);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(uriBuilder, rel, rels, title, params, uri, type);
+    return Objects.hash(type, params, uri, title, uriBuilder, rels, rel);
   }
 
   @Override
@@ -228,13 +228,13 @@ public class Link  implements Serializable {
     StringBuilder sb = new StringBuilder();
     sb.append("class Link {\n");
     
-    sb.append("    uriBuilder: ").append(toIndentedString(uriBuilder)).append("\n");
-    sb.append("    rel: ").append(toIndentedString(rel)).append("\n");
-    sb.append("    rels: ").append(toIndentedString(rels)).append("\n");
-    sb.append("    title: ").append(toIndentedString(title)).append("\n");
+    sb.append("    type: ").append(toIndentedString(type)).append("\n");
     sb.append("    params: ").append(toIndentedString(params)).append("\n");
     sb.append("    uri: ").append(toIndentedString(uri)).append("\n");
-    sb.append("    type: ").append(toIndentedString(type)).append("\n");
+    sb.append("    title: ").append(toIndentedString(title)).append("\n");
+    sb.append("    uriBuilder: ").append(toIndentedString(uriBuilder)).append("\n");
+    sb.append("    rels: ").append(toIndentedString(rels)).append("\n");
+    sb.append("    rel: ").append(toIndentedString(rel)).append("\n");
     sb.append("}");
     return sb.toString();
   }

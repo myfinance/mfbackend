@@ -1,7 +1,6 @@
 import { BrowserModule } from '@angular/platform-browser';
 import {NgModule, ReflectiveInjector} from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import {Http, HttpModule} from '@angular/http';
 
 import { AppComponent } from './app.component';
 import {InstrumentSearchComponent} from "./instrument-search/instrument-search.component";
@@ -24,9 +23,10 @@ import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
 import {MyFinanceCommonModule} from "./modules/myfinance-common/myfinance-common.module";
 import { LinechartexpComponent } from './views/examples/linechartexp/linechartexp.component';
 import { GridexpComponent } from './views/examples/gridexp/gridexp.component';
+import {HttpClient, HttpClientModule} from "@angular/common/http";
 
-const DEBUG=true;
-const BASEURL='http://localhost:8181/dac/rest/marketdata/environments/dev';
+const DEBUG=false;
+const BASEURL='http://localhost:8181/dac/rest/myfinance/environments/dev';
 
 
 export let baseURLProvider =
@@ -35,7 +35,7 @@ export let baseURLProvider =
 
 let injector = ReflectiveInjector.resolveAndCreate([baseURLProvider]);
 
-export function myfinanceDataServiceFactory(http:Http){
+export function myfinanceDataServiceFactory(http:HttpClient){
   if(DEBUG) {
     return new MyfinanceDummyDataService();
   }
@@ -47,7 +47,7 @@ export function myfinanceDataServiceFactory(http:Http){
 export let myFinanceDataServiceProvider =
   { provide: MyFinanceDataService,
     useFactory: myfinanceDataServiceFactory,
-    deps: [Http, BASE_URL]
+    deps: [HttpClientModule, BASE_URL]
   };
 
 
@@ -69,7 +69,7 @@ export let myFinanceDataServiceProvider =
   imports: [
     BrowserModule,
     FormsModule,
-    HttpModule,
+    HttpClientModule,
     AppRoutesModule,
     WidgetModule,
     MyFinanceCommonModule,
@@ -78,7 +78,8 @@ export let myFinanceDataServiceProvider =
   ],
   providers: [
     baseURLProvider,
-    myFinanceDataServiceProvider
+    MyFinanceDataService
+    //myFinanceDataServiceProvider
   ],
   bootstrap: [AppComponent]
 

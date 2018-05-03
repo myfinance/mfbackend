@@ -4,6 +4,7 @@ import {Subject} from "rxjs/Subject";
 import {DcService} from "../../../modules/widget/services/dc.service";
 import {MyFinanceDataService} from "../../../shared/services/myfinance-data.service";
 import {timeParse} from "d3-time-format";
+import {Position} from "../../../shared/models/position";
 
 const d3ParseDateDimension = timeParse('%Y-%m-%d');
 

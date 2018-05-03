@@ -36,7 +36,7 @@ import java.io.Serializable;
 /**
  * NewCookie
  */
-@javax.annotation.Generated(value = "class de.hf.dac.myfinance.codegen.MyFinanceClient_JavaGenerator", date = "2018-04-19T16:38:35.219+02:00")
+@javax.annotation.Generated(value = "class de.hf.dac.myfinance.codegen.MyFinanceClient_JavaGenerator", date = "2018-04-24T10:07:05.461+02:00")
 public class NewCookie  implements Serializable {
   @JsonProperty("name")
   private String name = null;

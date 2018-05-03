@@ -46,25 +46,16 @@ import java.io.Serializable;
 /**
  * Response
  */
-@javax.annotation.Generated(value = "class de.hf.dac.myfinance.codegen.MyFinanceClient_JavaGenerator", date = "2018-04-19T16:38:35.219+02:00")
+@javax.annotation.Generated(value = "class de.hf.dac.myfinance.codegen.MyFinanceClient_JavaGenerator", date = "2018-04-24T10:07:05.461+02:00")
 public class Response  implements Serializable {
-  @JsonProperty("stringHeaders")
-  private Map<String, List<String>> stringHeaders = new HashMap<String, List<String>>();
+  @JsonProperty("length")
+  private Integer length = null;
 
-  @JsonProperty("entityTag")
-  private EntityTag entityTag = null;
+  @JsonProperty("language")
+  private Locale language = null;
 
-  @JsonProperty("links")
-  private List<Link> links = new ArrayList<Link>();
-
-  @JsonProperty("statusInfo")
-  private StatusType statusInfo = null;
-
-  @JsonProperty("mediaType")
-  private MediaType mediaType = null;
-
-  @JsonProperty("allowedMethods")
-  private List<String> allowedMethods = new ArrayList<String>();
+  @JsonProperty("location")
+  private String location = null;
 
   @JsonProperty("date")
   private DateTime date = null;
@@ -75,148 +66,88 @@ public class Response  implements Serializable {
   @JsonProperty("headers")
   private Map<String, List<Object>> headers = new HashMap<String, List<Object>>();
 
-  @JsonProperty("metadata")
-  private Map<String, List<Object>> metadata = new HashMap<String, List<Object>>();
+  @JsonProperty("statusInfo")
+  private StatusType statusInfo = null;
 
-  @JsonProperty("cookies")
-  private Map<String, NewCookie> cookies = new HashMap<String, NewCookie>();
+  @JsonProperty("links")
+  private List<Link> links = new ArrayList<Link>();
 
-  @JsonProperty("entity")
-  private Object entity = null;
+  @JsonProperty("entityTag")
+  private EntityTag entityTag = null;
+
+  @JsonProperty("stringHeaders")
+  private Map<String, List<String>> stringHeaders = new HashMap<String, List<String>>();
 
   @JsonProperty("status")
   private Integer status = null;
 
-  @JsonProperty("length")
-  private Integer length = null;
+  @JsonProperty("entity")
+  private Object entity = null;
 
-  @JsonProperty("language")
-  private Locale language = null;
+  @JsonProperty("cookies")
+  private Map<String, NewCookie> cookies = new HashMap<String, NewCookie>();
 
-  @JsonProperty("location")
-  private String location = null;
+  @JsonProperty("metadata")
+  private Map<String, List<Object>> metadata = new HashMap<String, List<Object>>();
 
-  public Response stringHeaders(Map<String, List<String>> stringHeaders) {
-    this.stringHeaders = stringHeaders;
-    return this;
-  }
+  @JsonProperty("mediaType")
+  private MediaType mediaType = null;
 
-  public Response putStringHeadersItem(String key, List<String> stringHeadersItem) {
-    this.stringHeaders.put(key, stringHeadersItem);
-    return this;
-  }
+  @JsonProperty("allowedMethods")
+  private List<String> allowedMethods = new ArrayList<String>();
 
-   /**
-   * Get stringHeaders
-   * @return stringHeaders
-  **/
-  @ApiModelProperty(example = "null", value = "")
-  public Map<String, List<String>> getStringHeaders() {
-    return stringHeaders;
-  }
-
-  public void setStringHeaders(Map<String, List<String>> stringHeaders) {
-    this.stringHeaders = stringHeaders;
-  }
-
-  public Response entityTag(EntityTag entityTag) {
-    this.entityTag = entityTag;
+  public Response length(Integer length) {
+    this.length = length;
     return this;
   }
 
    /**
-   * Get entityTag
-   * @return entityTag
+   * Get length
+   * @return length
   **/
   @ApiModelProperty(example = "null", value = "")
-  public EntityTag getEntityTag() {
-    return entityTag;
+  public Integer getLength() {
+    return length;
   }
 
-  public void setEntityTag(EntityTag entityTag) {
-    this.entityTag = entityTag;
+  public void setLength(Integer length) {
+    this.length = length;
   }
 
-  public Response links(List<Link> links) {
-    this.links = links;
-    return this;
-  }
-
-  public Response addLinksItem(Link linksItem) {
-    this.links.add(linksItem);
+  public Response language(Locale language) {
+    this.language = language;
     return this;
   }
 
    /**
-   * Get links
-   * @return links
+   * Get language
+   * @return language
   **/
   @ApiModelProperty(example = "null", value = "")
-  public List<Link> getLinks() {
-    return links;
+  public Locale getLanguage() {
+    return language;
   }
 
-  public void setLinks(List<Link> links) {
-    this.links = links;
+  public void setLanguage(Locale language) {
+    this.language = language;
   }
 
-  public Response statusInfo(StatusType statusInfo) {
-    this.statusInfo = statusInfo;
+  public Response location(String location) {
+    this.location = location;
     return this;
   }
 
    /**
-   * Get statusInfo
-   * @return statusInfo
+   * Get location
+   * @return location
   **/
   @ApiModelProperty(example = "null", value = "")
-  public StatusType getStatusInfo() {
-    return statusInfo;
+  public String getLocation() {
+    return location;
   }
 
-  public void setStatusInfo(StatusType statusInfo) {
-    this.statusInfo = statusInfo;
-  }
-
-  public Response mediaType(MediaType mediaType) {
-    this.mediaType = mediaType;
-    return this;
-  }
-
-   /**
-   * Get mediaType
-   * @return mediaType
-  **/
-  @ApiModelProperty(example = "null", value = "")
-  public MediaType getMediaType() {
-    return mediaType;
-  }
-
-  public void setMediaType(MediaType mediaType) {
-    this.mediaType = mediaType;
-  }
-
-  public Response allowedMethods(List<String> allowedMethods) {
-    this.allowedMethods = allowedMethods;
-    return this;
-  }
-
-  public Response addAllowedMethodsItem(String allowedMethodsItem) {
-    this.allowedMethods.add(allowedMethodsItem);
-    return this;
-  }
-
-   /**
-   * Get allowedMethods
-   * @return allowedMethods
-  **/
-  @ApiModelProperty(example = "null", value = "")
-  public List<String> getAllowedMethods() {
-    return allowedMethods;
-  }
-
-  public void setAllowedMethods(List<String> allowedMethods) {
-    this.allowedMethods = allowedMethods;
+  public void setLocation(String location) {
+    this.location = location;
   }
 
   public Response date(DateTime date) {
@@ -278,27 +209,122 @@ public class Response  implements Serializable {
     this.headers = headers;
   }
 
-  public Response metadata(Map<String, List<Object>> metadata) {
-    this.metadata = metadata;
-    return this;
-  }
-
-  public Response putMetadataItem(String key, List<Object> metadataItem) {
-    this.metadata.put(key, metadataItem);
+  public Response statusInfo(StatusType statusInfo) {
+    this.statusInfo = statusInfo;
     return this;
   }
 
    /**
-   * Get metadata
-   * @return metadata
+   * Get statusInfo
+   * @return statusInfo
   **/
   @ApiModelProperty(example = "null", value = "")
-  public Map<String, List<Object>> getMetadata() {
-    return metadata;
+  public StatusType getStatusInfo() {
+    return statusInfo;
   }
 
-  public void setMetadata(Map<String, List<Object>> metadata) {
-    this.metadata = metadata;
+  public void setStatusInfo(StatusType statusInfo) {
+    this.statusInfo = statusInfo;
+  }
+
+  public Response links(List<Link> links) {
+    this.links = links;
+    return this;
+  }
+
+  public Response addLinksItem(Link linksItem) {
+    this.links.add(linksItem);
+    return this;
+  }
+
+   /**
+   * Get links
+   * @return links
+  **/
+  @ApiModelProperty(example = "null", value = "")
+  public List<Link> getLinks() {
+    return links;
+  }
+
+  public void setLinks(List<Link> links) {
+    this.links = links;
+  }
+
+  public Response entityTag(EntityTag entityTag) {
+    this.entityTag = entityTag;
+    return this;
+  }
+
+   /**
+   * Get entityTag
+   * @return entityTag
+  **/
+  @ApiModelProperty(example = "null", value = "")
+  public EntityTag getEntityTag() {
+    return entityTag;
+  }
+
+  public void setEntityTag(EntityTag entityTag) {
+    this.entityTag = entityTag;
+  }
+
+  public Response stringHeaders(Map<String, List<String>> stringHeaders) {
+    this.stringHeaders = stringHeaders;
+    return this;
+  }
+
+  public Response putStringHeadersItem(String key, List<String> stringHeadersItem) {
+    this.stringHeaders.put(key, stringHeadersItem);
+    return this;
+  }
+
+   /**
+   * Get stringHeaders
+   * @return stringHeaders
+  **/
+  @ApiModelProperty(example = "null", value = "")
+  public Map<String, List<String>> getStringHeaders() {
+    return stringHeaders;
+  }
+
+  public void setStringHeaders(Map<String, List<String>> stringHeaders) {
+    this.stringHeaders = stringHeaders;
+  }
+
+  public Response status(Integer status) {
+    this.status = status;
+    return this;
+  }
+
+   /**
+   * Get status
+   * @return status
+  **/
+  @ApiModelProperty(example = "null", value = "")
+  public Integer getStatus() {
+    return status;
+  }
+
+  public void setStatus(Integer status) {
+    this.status = status;
+  }
+
+  public Response entity(Object entity) {
+    this.entity = entity;
+    return this;
+  }
+
+   /**
+   * Get entity
+   * @return entity
+  **/
+  @ApiModelProperty(example = "null", value = "")
+  public Object getEntity() {
+    return entity;
+  }
+
+  public void setEntity(Object entity) {
+    this.entity = entity;
   }
 
   public Response cookies(Map<String, NewCookie> cookies) {
@@ -324,94 +350,68 @@ public class Response  implements Serializable {
     this.cookies = cookies;
   }
 
-  public Response entity(Object entity) {
-    this.entity = entity;
+  public Response metadata(Map<String, List<Object>> metadata) {
+    this.metadata = metadata;
+    return this;
+  }
+
+  public Response putMetadataItem(String key, List<Object> metadataItem) {
+    this.metadata.put(key, metadataItem);
     return this;
   }
 
    /**
-   * Get entity
-   * @return entity
+   * Get metadata
+   * @return metadata
   **/
   @ApiModelProperty(example = "null", value = "")
-  public Object getEntity() {
-    return entity;
+  public Map<String, List<Object>> getMetadata() {
+    return metadata;
   }
 
-  public void setEntity(Object entity) {
-    this.entity = entity;
+  public void setMetadata(Map<String, List<Object>> metadata) {
+    this.metadata = metadata;
   }
 
-  public Response status(Integer status) {
-    this.status = status;
+  public Response mediaType(MediaType mediaType) {
+    this.mediaType = mediaType;
     return this;
   }
 
    /**
-   * Get status
-   * @return status
+   * Get mediaType
+   * @return mediaType
   **/
   @ApiModelProperty(example = "null", value = "")
-  public Integer getStatus() {
-    return status;
+  public MediaType getMediaType() {
+    return mediaType;
   }
 
-  public void setStatus(Integer status) {
-    this.status = status;
+  public void setMediaType(MediaType mediaType) {
+    this.mediaType = mediaType;
   }
 
-  public Response length(Integer length) {
-    this.length = length;
+  public Response allowedMethods(List<String> allowedMethods) {
+    this.allowedMethods = allowedMethods;
+    return this;
+  }
+
+  public Response addAllowedMethodsItem(String allowedMethodsItem) {
+    this.allowedMethods.add(allowedMethodsItem);
     return this;
   }
 
    /**
-   * Get length
-   * @return length
+   * Get allowedMethods
+   * @return allowedMethods
   **/
   @ApiModelProperty(example = "null", value = "")
-  public Integer getLength() {
-    return length;
+  public List<String> getAllowedMethods() {
+    return allowedMethods;
   }
 
-  public void setLength(Integer length) {
-    this.length = length;
-  }
-
-  public Response language(Locale language) {
-    this.language = language;
-    return this;
-  }
-
-   /**
-   * Get language
-   * @return language
-  **/
-  @ApiModelProperty(example = "null", value = "")
-  public Locale getLanguage() {
-    return language;
-  }
-
-  public void setLanguage(Locale language) {
-    this.language = language;
-  }
-
-  public Response location(String location) {
-    this.location = location;
-    return this;
-  }
-
-   /**
-   * Get location
-   * @return location
-  **/
-  @ApiModelProperty(example = "null", value = "")
-  public String getLocation() {
-    return location;
-  }
-
-  public void setLocation(String location) {
-    this.location = location;
+  public void setAllowedMethods(List<String> allowedMethods) {
+    this.allowedMethods = allowedMethods;
   }
 
 
@@ -424,27 +424,27 @@ public class Response  implements Serializable {
       return false;
     }
     Response response = (Response) o;
-    return Objects.equals(this.stringHeaders, response.stringHeaders) &&
-        Objects.equals(this.entityTag, response.entityTag) &&
-        Objects.equals(this.links, response.links) &&
-        Objects.equals(this.statusInfo, response.statusInfo) &&
-        Objects.equals(this.mediaType, response.mediaType) &&
-        Objects.equals(this.allowedMethods, response.allowedMethods) &&
+    return Objects.equals(this.length, response.length) &&
+        Objects.equals(this.language, response.language) &&
+        Objects.equals(this.location, response.location) &&
         Objects.equals(this.date, response.date) &&
         Objects.equals(this.lastModified, response.lastModified) &&
         Objects.equals(this.headers, response.headers) &&
-        Objects.equals(this.metadata, response.metadata) &&
-        Objects.equals(this.cookies, response.cookies) &&
-        Objects.equals(this.entity, response.entity) &&
+        Objects.equals(this.statusInfo, response.statusInfo) &&
+        Objects.equals(this.links, response.links) &&
+        Objects.equals(this.entityTag, response.entityTag) &&
+        Objects.equals(this.stringHeaders, response.stringHeaders) &&
         Objects.equals(this.status, response.status) &&
-        Objects.equals(this.length, response.length) &&
-        Objects.equals(this.language, response.language) &&
-        Objects.equals(this.location, response.location);
+        Objects.equals(this.entity, response.entity) &&
+        Objects.equals(this.cookies, response.cookies) &&
+        Objects.equals(this.metadata, response.metadata) &&
+        Objects.equals(this.mediaType, response.mediaType) &&
+        Objects.equals(this.allowedMethods, response.allowedMethods);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(stringHeaders, entityTag, links, statusInfo, mediaType, allowedMethods, date, lastModified, headers, metadata, cookies, entity, status, length, language, location);
+    return Objects.hash(length, language, location, date, lastModified, headers, statusInfo, links, entityTag, stringHeaders, status, entity, cookies, metadata, mediaType, allowedMethods);
   }
 
   @Override
@@ -452,22 +452,22 @@ public class Response  implements Serializable {
     StringBuilder sb = new StringBuilder();
     sb.append("class Response {\n");
     
-    sb.append("    stringHeaders: ").append(toIndentedString(stringHeaders)).append("\n");
-    sb.append("    entityTag: ").append(toIndentedString(entityTag)).append("\n");
-    sb.append("    links: ").append(toIndentedString(links)).append("\n");
-    sb.append("    statusInfo: ").append(toIndentedString(statusInfo)).append("\n");
-    sb.append("    mediaType: ").append(toIndentedString(mediaType)).append("\n");
-    sb.append("    allowedMethods: ").append(toIndentedString(allowedMethods)).append("\n");
-    sb.append("    date: ").append(toIndentedString(date)).append("\n");
-    sb.append("    lastModified: ").append(toIndentedString(lastModified)).append("\n");
-    sb.append("    headers: ").append(toIndentedString(headers)).append("\n");
-    sb.append("    metadata: ").append(toIndentedString(metadata)).append("\n");
-    sb.append("    cookies: ").append(toIndentedString(cookies)).append("\n");
-    sb.append("    entity: ").append(toIndentedString(entity)).append("\n");
-    sb.append("    status: ").append(toIndentedString(status)).append("\n");
     sb.append("    length: ").append(toIndentedString(length)).append("\n");
     sb.append("    language: ").append(toIndentedString(language)).append("\n");
     sb.append("    location: ").append(toIndentedString(location)).append("\n");
+    sb.append("    date: ").append(toIndentedString(date)).append("\n");
+    sb.append("    lastModified: ").append(toIndentedString(lastModified)).append("\n");
+    sb.append("    headers: ").append(toIndentedString(headers)).append("\n");
+    sb.append("    statusInfo: ").append(toIndentedString(statusInfo)).append("\n");
+    sb.append("    links: ").append(toIndentedString(links)).append("\n");
+    sb.append("    entityTag: ").append(toIndentedString(entityTag)).append("\n");
+    sb.append("    stringHeaders: ").append(toIndentedString(stringHeaders)).append("\n");
+    sb.append("    status: ").append(toIndentedString(status)).append("\n");
+    sb.append("    entity: ").append(toIndentedString(entity)).append("\n");
+    sb.append("    cookies: ").append(toIndentedString(cookies)).append("\n");
+    sb.append("    metadata: ").append(toIndentedString(metadata)).append("\n");
+    sb.append("    mediaType: ").append(toIndentedString(mediaType)).append("\n");
+    sb.append("    allowedMethods: ").append(toIndentedString(allowedMethods)).append("\n");
     sb.append("}");
     return sb.toString();
   }

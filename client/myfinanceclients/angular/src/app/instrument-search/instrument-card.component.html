@@ -1,9 +1,9 @@
 <div class="card" [ngStyle]="{'background-color': 'orange' }">
 
   <h2>{{item.isin}}</h2>
-  <p>InstrumentId. #{{item.id}}</p>
-  <p>Description. #{{item.desc}}</p>
-  <p>Last change: {{item.lastUpdate | date:'dd.MM.yyyy HH:mm'}}</p>
+  <p>InstrumentId. #{{item.instrumentid}}</p>
+  <p>Description. #{{item.description}}</p>
+  <p>Last change: {{item.treelastchanged | date:'dd.MM.yyyy HH:mm'}}</p>
 
 
   <p>

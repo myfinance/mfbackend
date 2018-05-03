@@ -3,6 +3,7 @@ import {UUID} from "angular2-uuid";
 import {Subject} from "rxjs/Subject";
 import {DcService} from "../../../modules/widget/services/dc.service";
 import {MyFinanceDataService} from "../../../shared/services/myfinance-data.service";
+import {Position} from "../../../shared/models/position";
 
 @Component({
   selector: 'app-gridexp',

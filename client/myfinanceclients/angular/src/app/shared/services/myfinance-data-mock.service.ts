@@ -1,4 +1,4 @@
-import {Inject, Injectable} from "@angular/core";
+import {Injectable} from "@angular/core";
 import {Observable} from "rxjs/Rx";
 import 'rxjs/add/operator/map';
 import 'rxjs/add/observable/of';
@@ -18,8 +18,8 @@ export class MyfinanceDummyDataService{
 
   find(isin: string): Observable<Instrument[]> {
 
-    var instrument = { id: 1, isin: "isin00000001", desc:"testinstrument1", lastUpdate: "2017-12-24T17:00:00.000+01:00" };
-    var instrument2 = { id: 2, isin: "isin00000002", desc:"testinstrument2", lastUpdate: "2017-12-24T17:00:00.000+01:00" };
+    let instrument : Instrument = { instrumentid: 1, isin: "isin00000001", description:"testinstrument1", treelastchanged: "2017-12-24T17:00:00.000+01:00" };
+    let instrument2 : Instrument = { instrumentid: 2, isin: "isin00000002", description:"testinstrument2", treelastchanged: "2017-12-24T17:00:00.000+01:00" };
     let instruments: Instrument[]=[instrument, instrument2]
     let filteredinstruments: Instrument[]=instruments.filter(i=>i.isin.indexOf(isin)>=0);
     return Observable.of(filteredinstruments);

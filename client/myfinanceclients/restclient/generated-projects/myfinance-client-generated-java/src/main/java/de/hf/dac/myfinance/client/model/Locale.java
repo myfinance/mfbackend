@@ -37,22 +37,40 @@ import java.io.Serializable;
 /**
  * Locale
  */
-@javax.annotation.Generated(value = "class de.hf.dac.myfinance.codegen.MyFinanceClient_JavaGenerator", date = "2018-04-19T16:38:35.219+02:00")
+@javax.annotation.Generated(value = "class de.hf.dac.myfinance.codegen.MyFinanceClient_JavaGenerator", date = "2018-04-24T10:07:05.461+02:00")
 public class Locale  implements Serializable {
   @JsonProperty("language")
   private String language = null;
 
-  @JsonProperty("script")
-  private String script = null;
-
   @JsonProperty("country")
   private String country = null;
 
-  @JsonProperty("variant")
-  private String variant = null;
+  @JsonProperty("displayCountry")
+  private String displayCountry = null;
+
+  @JsonProperty("displayLanguage")
+  private String displayLanguage = null;
+
+  @JsonProperty("displayName")
+  private String displayName = null;
+
+  @JsonProperty("displayScript")
+  private String displayScript = null;
+
+  @JsonProperty("displayVariant")
+  private String displayVariant = null;
 
   @JsonProperty("extensionKeys")
   private List<String> extensionKeys = new ArrayList<String>();
+
+  @JsonProperty("iso3Country")
+  private String iso3Country = null;
+
+  @JsonProperty("iso3Language")
+  private String iso3Language = null;
+
+  @JsonProperty("script")
+  private String script = null;
 
   @JsonProperty("unicodeLocaleAttributes")
   private List<String> unicodeLocaleAttributes = new ArrayList<String>();
@@ -60,26 +78,8 @@ public class Locale  implements Serializable {
   @JsonProperty("unicodeLocaleKeys")
   private List<String> unicodeLocaleKeys = new ArrayList<String>();
 
-  @JsonProperty("iso3Language")
-  private String iso3Language = null;
-
-  @JsonProperty("iso3Country")
-  private String iso3Country = null;
-
-  @JsonProperty("displayLanguage")
-  private String displayLanguage = null;
-
-  @JsonProperty("displayScript")
-  private String displayScript = null;
-
-  @JsonProperty("displayCountry")
-  private String displayCountry = null;
-
-  @JsonProperty("displayVariant")
-  private String displayVariant = null;
-
-  @JsonProperty("displayName")
-  private String displayName = null;
+  @JsonProperty("variant")
+  private String variant = null;
 
   public Locale language(String language) {
     this.language = language;
@@ -97,24 +97,6 @@ public class Locale  implements Serializable {
 
   public void setLanguage(String language) {
     this.language = language;
-  }
-
-  public Locale script(String script) {
-    this.script = script;
-    return this;
-  }
-
-   /**
-   * Get script
-   * @return script
-  **/
-  @ApiModelProperty(example = "null", value = "")
-  public String getScript() {
-    return script;
-  }
-
-  public void setScript(String script) {
-    this.script = script;
   }
 
   public Locale country(String country) {
@@ -135,22 +117,94 @@ public class Locale  implements Serializable {
     this.country = country;
   }
 
-  public Locale variant(String variant) {
-    this.variant = variant;
+  public Locale displayCountry(String displayCountry) {
+    this.displayCountry = displayCountry;
     return this;
   }
 
    /**
-   * Get variant
-   * @return variant
+   * Get displayCountry
+   * @return displayCountry
   **/
   @ApiModelProperty(example = "null", value = "")
-  public String getVariant() {
-    return variant;
+  public String getDisplayCountry() {
+    return displayCountry;
   }
 
-  public void setVariant(String variant) {
-    this.variant = variant;
+  public void setDisplayCountry(String displayCountry) {
+    this.displayCountry = displayCountry;
+  }
+
+  public Locale displayLanguage(String displayLanguage) {
+    this.displayLanguage = displayLanguage;
+    return this;
+  }
+
+   /**
+   * Get displayLanguage
+   * @return displayLanguage
+  **/
+  @ApiModelProperty(example = "null", value = "")
+  public String getDisplayLanguage() {
+    return displayLanguage;
+  }
+
+  public void setDisplayLanguage(String displayLanguage) {
+    this.displayLanguage = displayLanguage;
+  }
+
+  public Locale displayName(String displayName) {
+    this.displayName = displayName;
+    return this;
+  }
+
+   /**
+   * Get displayName
+   * @return displayName
+  **/
+  @ApiModelProperty(example = "null", value = "")
+  public String getDisplayName() {
+    return displayName;
+  }
+
+  public void setDisplayName(String displayName) {
+    this.displayName = displayName;
+  }
+
+  public Locale displayScript(String displayScript) {
+    this.displayScript = displayScript;
+    return this;
+  }
+
+   /**
+   * Get displayScript
+   * @return displayScript
+  **/
+  @ApiModelProperty(example = "null", value = "")
+  public String getDisplayScript() {
+    return displayScript;
+  }
+
+  public void setDisplayScript(String displayScript) {
+    this.displayScript = displayScript;
+  }
+
+  public Locale displayVariant(String displayVariant) {
+    this.displayVariant = displayVariant;
+    return this;
+  }
+
+   /**
+   * Get displayVariant
+   * @return displayVariant
+  **/
+  @ApiModelProperty(example = "null", value = "")
+  public String getDisplayVariant() {
+    return displayVariant;
+  }
+
+  public void setDisplayVariant(String displayVariant) {
+    this.displayVariant = displayVariant;
   }
 
   public Locale extensionKeys(List<String> extensionKeys) {
@@ -174,6 +228,60 @@ public class Locale  implements Serializable {
 
   public void setExtensionKeys(List<String> extensionKeys) {
     this.extensionKeys = extensionKeys;
+  }
+
+  public Locale iso3Country(String iso3Country) {
+    this.iso3Country = iso3Country;
+    return this;
+  }
+
+   /**
+   * Get iso3Country
+   * @return iso3Country
+  **/
+  @ApiModelProperty(example = "null", value = "")
+  public String getIso3Country() {
+    return iso3Country;
+  }
+
+  public void setIso3Country(String iso3Country) {
+    this.iso3Country = iso3Country;
+  }
+
+  public Locale iso3Language(String iso3Language) {
+    this.iso3Language = iso3Language;
+    return this;
+  }
+
+   /**
+   * Get iso3Language
+   * @return iso3Language
+  **/
+  @ApiModelProperty(example = "null", value = "")
+  public String getIso3Language() {
+    return iso3Language;
+  }
+
+  public void setIso3Language(String iso3Language) {
+    this.iso3Language = iso3Language;
+  }
+
+  public Locale script(String script) {
+    this.script = script;
+    return this;
+  }
+
+   /**
+   * Get script
+   * @return script
+  **/
+  @ApiModelProperty(example = "null", value = "")
+  public String getScript() {
+    return script;
+  }
+
+  public void setScript(String script) {
+    this.script = script;
   }
 
   public Locale unicodeLocaleAttributes(List<String> unicodeLocaleAttributes) {
@@ -222,130 +330,22 @@ public class Locale  implements Serializable {
     this.unicodeLocaleKeys = unicodeLocaleKeys;
   }
 
-  public Locale iso3Language(String iso3Language) {
-    this.iso3Language = iso3Language;
+  public Locale variant(String variant) {
+    this.variant = variant;
     return this;
   }
 
    /**
-   * Get iso3Language
-   * @return iso3Language
+   * Get variant
+   * @return variant
   **/
   @ApiModelProperty(example = "null", value = "")
-  public String getIso3Language() {
-    return iso3Language;
+  public String getVariant() {
+    return variant;
   }
 
-  public void setIso3Language(String iso3Language) {
-    this.iso3Language = iso3Language;
-  }
-
-  public Locale iso3Country(String iso3Country) {
-    this.iso3Country = iso3Country;
-    return this;
-  }
-
-   /**
-   * Get iso3Country
-   * @return iso3Country
-  **/
-  @ApiModelProperty(example = "null", value = "")
-  public String getIso3Country() {
-    return iso3Country;
-  }
-
-  public void setIso3Country(String iso3Country) {
-    this.iso3Country = iso3Country;
-  }
-
-  public Locale displayLanguage(String displayLanguage) {
-    this.displayLanguage = displayLanguage;
-    return this;
-  }
-
-   /**
-   * Get displayLanguage
-   * @return displayLanguage
-  **/
-  @ApiModelProperty(example = "null", value = "")
-  public String getDisplayLanguage() {
-    return displayLanguage;
-  }
-
-  public void setDisplayLanguage(String displayLanguage) {
-    this.displayLanguage = displayLanguage;
-  }
-
-  public Locale displayScript(String displayScript) {
-    this.displayScript = displayScript;
-    return this;
-  }
-
-   /**
-   * Get displayScript
-   * @return displayScript
-  **/
-  @ApiModelProperty(example = "null", value = "")
-  public String getDisplayScript() {
-    return displayScript;
-  }
-
-  public void setDisplayScript(String displayScript) {
-    this.displayScript = displayScript;
-  }
-
-  public Locale displayCountry(String displayCountry) {
-    this.displayCountry = displayCountry;
-    return this;
-  }
-
-   /**
-   * Get displayCountry
-   * @return displayCountry
-  **/
-  @ApiModelProperty(example = "null", value = "")
-  public String getDisplayCountry() {
-    return displayCountry;
-  }
-
-  public void setDisplayCountry(String displayCountry) {
-    this.displayCountry = displayCountry;
-  }
-
-  public Locale displayVariant(String displayVariant) {
-    this.displayVariant = displayVariant;
-    return this;
-  }
-
-   /**
-   * Get displayVariant
-   * @return displayVariant
-  **/
-  @ApiModelProperty(example = "null", value = "")
-  public String getDisplayVariant() {
-    return displayVariant;
-  }
-
-  public void setDisplayVariant(String displayVariant) {
-    this.displayVariant = displayVariant;
-  }
-
-  public Locale displayName(String displayName) {
-    this.displayName = displayName;
-    return this;
-  }
-
-   /**
-   * Get displayName
-   * @return displayName
-  **/
-  @ApiModelProperty(example = "null", value = "")
-  public String getDisplayName() {
-    return displayName;
-  }
-
-  public void setDisplayName(String displayName) {
-    this.displayName = displayName;
+  public void setVariant(String variant) {
+    this.variant = variant;
   }
 
 
@@ -359,24 +359,24 @@ public class Locale  implements Serializable {
     }
     Locale locale = (Locale) o;
     return Objects.equals(this.language, locale.language) &&
-        Objects.equals(this.script, locale.script) &&
         Objects.equals(this.country, locale.country) &&
-        Objects.equals(this.variant, locale.variant) &&
+        Objects.equals(this.displayCountry, locale.displayCountry) &&
+        Objects.equals(this.displayLanguage, locale.displayLanguage) &&
+        Objects.equals(this.displayName, locale.displayName) &&
+        Objects.equals(this.displayScript, locale.displayScript) &&
+        Objects.equals(this.displayVariant, locale.displayVariant) &&
         Objects.equals(this.extensionKeys, locale.extensionKeys) &&
+        Objects.equals(this.iso3Country, locale.iso3Country) &&
+        Objects.equals(this.iso3Language, locale.iso3Language) &&
+        Objects.equals(this.script, locale.script) &&
         Objects.equals(this.unicodeLocaleAttributes, locale.unicodeLocaleAttributes) &&
         Objects.equals(this.unicodeLocaleKeys, locale.unicodeLocaleKeys) &&
-        Objects.equals(this.iso3Language, locale.iso3Language) &&
-        Objects.equals(this.iso3Country, locale.iso3Country) &&
-        Objects.equals(this.displayLanguage, locale.displayLanguage) &&
-        Objects.equals(this.displayScript, locale.displayScript) &&
-        Objects.equals(this.displayCountry, locale.displayCountry) &&
-        Objects.equals(this.displayVariant, locale.displayVariant) &&
-        Objects.equals(this.displayName, locale.displayName);
+        Objects.equals(this.variant, locale.variant);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(language, script, country, variant, extensionKeys, unicodeLocaleAttributes, unicodeLocaleKeys, iso3Language, iso3Country, displayLanguage, displayScript, displayCountry, displayVariant, displayName);
+    return Objects.hash(language, country, displayCountry, displayLanguage, displayName, displayScript, displayVariant, extensionKeys, iso3Country, iso3Language, script, unicodeLocaleAttributes, unicodeLocaleKeys, variant);
   }
 
   @Override
@@ -385,19 +385,19 @@ public class Locale  implements Serializable {
     sb.append("class Locale {\n");
     
     sb.append("    language: ").append(toIndentedString(language)).append("\n");
-    sb.append("    script: ").append(toIndentedString(script)).append("\n");
     sb.append("    country: ").append(toIndentedString(country)).append("\n");
-    sb.append("    variant: ").append(toIndentedString(variant)).append("\n");
+    sb.append("    displayCountry: ").append(toIndentedString(displayCountry)).append("\n");
+    sb.append("    displayLanguage: ").append(toIndentedString(displayLanguage)).append("\n");
+    sb.append("    displayName: ").append(toIndentedString(displayName)).append("\n");
+    sb.append("    displayScript: ").append(toIndentedString(displayScript)).append("\n");
+    sb.append("    displayVariant: ").append(toIndentedString(displayVariant)).append("\n");
     sb.append("    extensionKeys: ").append(toIndentedString(extensionKeys)).append("\n");
+    sb.append("    iso3Country: ").append(toIndentedString(iso3Country)).append("\n");
+    sb.append("    iso3Language: ").append(toIndentedString(iso3Language)).append("\n");
+    sb.append("    script: ").append(toIndentedString(script)).append("\n");
     sb.append("    unicodeLocaleAttributes: ").append(toIndentedString(unicodeLocaleAttributes)).append("\n");
     sb.append("    unicodeLocaleKeys: ").append(toIndentedString(unicodeLocaleKeys)).append("\n");
-    sb.append("    iso3Language: ").append(toIndentedString(iso3Language)).append("\n");
-    sb.append("    iso3Country: ").append(toIndentedString(iso3Country)).append("\n");
-    sb.append("    displayLanguage: ").append(toIndentedString(displayLanguage)).append("\n");
-    sb.append("    displayScript: ").append(toIndentedString(displayScript)).append("\n");
-    sb.append("    displayCountry: ").append(toIndentedString(displayCountry)).append("\n");
-    sb.append("    displayVariant: ").append(toIndentedString(displayVariant)).append("\n");
-    sb.append("    displayName: ").append(toIndentedString(displayName)).append("\n");
+    sb.append("    variant: ").append(toIndentedString(variant)).append("\n");
     sb.append("}");
     return sb.toString();
   }
