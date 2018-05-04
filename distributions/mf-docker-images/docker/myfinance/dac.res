@@ -15,6 +15,7 @@ POOL_SIZE=20
 pids=org.ops4j.pax.web,de.hf.dac.security.auth.DacJaasRealmService
 
 [CMPID_org.ops4j.pax.web]
+org.ops4j.pax.web.ssl.keystore=/MyFinance/data/devkeystore.jks
 org.ops4j.pax.web.ssl.password = password
 org.ops4j.pax.web.ssl.keypassword = password
 org.osgi.service.http.secure.enabled = true

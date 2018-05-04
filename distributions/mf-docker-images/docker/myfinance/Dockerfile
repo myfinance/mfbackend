@@ -3,6 +3,7 @@ FROM anapsix/alpine-java:8u144b01_jdk
 
 ADD ./MyFinance /MyFinance
 ADD ./dac.res /MyFinance
+ADD ./devkeystore.jks /MyFinance/data
 
 ENV DAC_RES_PATH=/MyFinance
 
