@@ -22,6 +22,7 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
 import javax.persistence.Column;
@@ -47,7 +48,6 @@ public class Currency extends Security implements java.io.Serializable {
     private static final long serialVersionUID = 1L;
 
     private String currencycode;
-    private Set<EndOfDayPrice> endOfDayPrices = new HashSet<EndOfDayPrice>(0);
 
     public Currency() {
     }
@@ -55,7 +55,7 @@ public class Currency extends Security implements java.io.Serializable {
 	
     public Currency(String description,
             boolean isactive,
-            LocalDate treelastchanged,
+            LocalDateTime treelastchanged,
             String currencycode) {
         super(description, isactive, treelastchanged, SecurityType.CURRENCY, "PP0000000"+currencycode);
         this.currencycode = currencycode;

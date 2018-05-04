@@ -10,16 +10,16 @@ Name | Type | Description | Notes
 **date** | [**DateTime**](DateTime.md) |  |  [optional]
 **lastModified** | [**DateTime**](DateTime.md) |  |  [optional]
 **headers** | [**Map&lt;String, List&lt;Object&gt;&gt;**](List.md) |  |  [optional]
-**statusInfo** | [**StatusType**](StatusType.md) |  |  [optional]
-**links** | [**List&lt;Link&gt;**](Link.md) |  |  [optional]
-**entityTag** | [**EntityTag**](EntityTag.md) |  |  [optional]
-**stringHeaders** | [**Map&lt;String, List&lt;String&gt;&gt;**](List.md) |  |  [optional]
 **status** | **Integer** |  |  [optional]
 **entity** | **Object** |  |  [optional]
 **cookies** | [**Map&lt;String, NewCookie&gt;**](NewCookie.md) |  |  [optional]
 **metadata** | [**Map&lt;String, List&lt;Object&gt;&gt;**](List.md) |  |  [optional]
-**mediaType** | [**MediaType**](MediaType.md) |  |  [optional]
 **allowedMethods** | **List&lt;String&gt;** |  |  [optional]
+**links** | [**List&lt;Link&gt;**](Link.md) |  |  [optional]
+**stringHeaders** | [**Map&lt;String, List&lt;String&gt;&gt;**](List.md) |  |  [optional]
+**statusInfo** | [**StatusType**](StatusType.md) |  |  [optional]
+**entityTag** | [**EntityTag**](EntityTag.md) |  |  [optional]
+**mediaType** | [**MediaType**](MediaType.md) |  |  [optional]
 
 
 

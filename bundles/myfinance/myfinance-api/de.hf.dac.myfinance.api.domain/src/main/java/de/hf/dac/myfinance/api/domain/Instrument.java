@@ -21,6 +21,8 @@
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -52,13 +54,13 @@ public abstract class Instrument  implements java.io.Serializable {
      private boolean isactive;
      private LocalDate maturitydate;
      private LocalDate closingdate;
-     private LocalDate treelastchanged;
+     private LocalDateTime treelastchanged;
      private Integer instrumenttypeId;
 
     public Instrument() {
     }
 
-    public Instrument(Integer instrumentTypeId, String description, boolean isactive, LocalDate treelastchanged) {
+    public Instrument(Integer instrumentTypeId, String description, boolean isactive, LocalDateTime treelastchanged) {
         this.instrumenttypeId = instrumentTypeId;
         this.description = description;
         this.isactive = isactive;
@@ -134,10 +136,10 @@ public abstract class Instrument  implements java.io.Serializable {
     
     @Column(name="treelastchanged", nullable=false, length=13)
     @ApiModelProperty(required = true)
-    public LocalDate getTreelastchanged() {
+    public LocalDateTime getTreelastchanged() {
         return this.treelastchanged;
     }
-    public void setTreelastchanged(LocalDate treelastchanged) {
+    public void setTreelastchanged(LocalDateTime treelastchanged) {
         this.treelastchanged = treelastchanged;
     }
 

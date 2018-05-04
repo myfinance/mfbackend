@@ -27,6 +27,7 @@ import de.hf.dac.myfinance.api.domain.Security;
 import de.hf.dac.myfinance.api.exceptions.MDException;
 import de.hf.dac.myfinance.api.exceptions.MDMsgKey;
 import de.hf.dac.services.resources.BaseSecuredResource;
+import de.hf.dac.services.resources.leaf.LeafResource;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 
@@ -44,7 +45,13 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
+import org.apache.http.HttpStatus;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 public class EnvironmentDataResource extends BaseSecuredResource<OpType,OpLevel> {
+
+    private static final Logger LOG = LoggerFactory.getLogger(EnvironmentDataResource.class);
 
     MarketDataEnvironment marketDataEnvironment;
     final protected static Gson gson = new Gson();
@@ -72,10 +79,18 @@ public class EnvironmentDataResource extends BaseSecuredResource<OpType,OpLevel>
     @Produces(MediaType.APPLICATION_JSON)
     @ApiOperation(value = "get Instruments",
         response = List.class)
-    public List<Instrument> getInstruments() {
+    public Response getInstruments() {
         checkOperationAllowed(OpType.READ);
-        List<Instrument> returnvalue = marketDataEnvironment.getInstrumentService().listInstruments();
-        return returnvalue;
+        try {
+            LocalDateTime returnvalue = LocalDateTime.now();
+            return Response.ok(LeafResource.SerializeToJSON(marketDataEnvironment.getInstrumentService().listInstruments())).build();
+        } catch(Exception ex) {
+            LOG.debug("Full Exception",ex);
+            return Response.status(HttpStatus.SC_NO_CONTENT)
+                           .entity(ex.getMessage())
+                           .type(MediaType.APPLICATION_JSON)
+                           .build();
+        }
     }
 
     @POST

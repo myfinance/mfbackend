@@ -22,6 +22,7 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
 import javax.persistence.Column;
@@ -59,7 +60,7 @@ public class Security extends Instrument implements java.io.Serializable {
 
     public Security(String description,
             boolean isactive,
-            LocalDate treelastchanged,
+            LocalDateTime treelastchanged,
             SecurityType securityType,
             String isin) {
         super(InstrumentType.SECURITY.getValue(), description, isactive, treelastchanged);

@@ -26,26 +26,31 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.UriInfo;
 import java.io.UnsupportedEncodingException;
 import java.net.URI;
-import java.text.SimpleDateFormat;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 public abstract class LeafResource {
     private static final String DATE_FORMAT = "yyyy-MM-dd";
-    private static final String DATETIME_FORMAT = "yyyy-MM-dd'T'HH:mm:ss.SSSXXX";
-    private static final SimpleDateFormat DATEIME_FORMATTER = new SimpleDateFormat(DATE_FORMAT);
+    private static final String DATETIME_FORMAT = "yyyy-MM-dd'T'HH:mm:ss.SSS";
 
-    private final static JsonSerializer<LocalDate> ser = (localDate, type, jsonSerializationContext) -> localDate == null ? null : new JsonPrimitive(DATEIME_FORMATTER.format(localDate));
+    private static final DateTimeFormatter DATE_FORMATTER = DateTimeFormatter.ofPattern(DATE_FORMAT);
+    private static final DateTimeFormatter DATETIME_FORMATTER = DateTimeFormatter.ofPattern(DATETIME_FORMAT);
+
+    private final static JsonSerializer<LocalDate> serDate = (localDate, type, jsonSerializationContext) -> localDate == null ? null : new JsonPrimitive(localDate.format(DATE_FORMATTER));
+    private final static JsonSerializer<LocalDateTime> serDateTime = (localDateTime, type, jsonSerializationContext) -> localDateTime == null ? null : new JsonPrimitive(localDateTime.format(DATETIME_FORMATTER));
 
     private final static Gson gson = new GsonBuilder()
         .setDateFormat(DATETIME_FORMAT)
-        .registerTypeAdapter(LocalDate.class,ser)
+        .registerTypeAdapter(LocalDate.class,serDate)
+        .registerTypeAdapter(LocalDateTime.class,serDateTime)
         .create();
 
     public static String SerializeToJSON(Object o) {
-        String ret = null;
+        String ret;
 
         String jsonString = gson.toJson(o);
-        byte[] utf8JsonString = new byte[0];
+        byte[] utf8JsonString;
         try {
             utf8JsonString = jsonString.getBytes("UTF8");
             ret = new String(utf8JsonString);

@@ -2,6 +2,7 @@
 -metatype: *
 Export-Package: \
 	de.hf.dac.services.resources, \
-	de.hf.dac.services.resources.leaf.list
+	de.hf.dac.services.resources.leaf.list, \
+	de.hf.dac.services.resources.leaf
 
 Bundle-SymbolicName: ${project.artifactId}

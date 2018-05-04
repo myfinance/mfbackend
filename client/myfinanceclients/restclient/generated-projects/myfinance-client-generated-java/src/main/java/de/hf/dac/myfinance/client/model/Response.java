@@ -46,7 +46,7 @@ import java.io.Serializable;
 /**
  * Response
  */
-@javax.annotation.Generated(value = "class de.hf.dac.myfinance.codegen.MyFinanceClient_JavaGenerator", date = "2018-04-24T10:07:05.461+02:00")
+@javax.annotation.Generated(value = "class de.hf.dac.myfinance.codegen.MyFinanceClient_JavaGenerator", date = "2018-05-03T09:44:46.536+02:00")
 public class Response  implements Serializable {
   @JsonProperty("length")
   private Integer length = null;
@@ -66,18 +66,6 @@ public class Response  implements Serializable {
   @JsonProperty("headers")
   private Map<String, List<Object>> headers = new HashMap<String, List<Object>>();
 
-  @JsonProperty("statusInfo")
-  private StatusType statusInfo = null;
-
-  @JsonProperty("links")
-  private List<Link> links = new ArrayList<Link>();
-
-  @JsonProperty("entityTag")
-  private EntityTag entityTag = null;
-
-  @JsonProperty("stringHeaders")
-  private Map<String, List<String>> stringHeaders = new HashMap<String, List<String>>();
-
   @JsonProperty("status")
   private Integer status = null;
 
@@ -90,11 +78,23 @@ public class Response  implements Serializable {
   @JsonProperty("metadata")
   private Map<String, List<Object>> metadata = new HashMap<String, List<Object>>();
 
-  @JsonProperty("mediaType")
-  private MediaType mediaType = null;
-
   @JsonProperty("allowedMethods")
   private List<String> allowedMethods = new ArrayList<String>();
+
+  @JsonProperty("links")
+  private List<Link> links = new ArrayList<Link>();
+
+  @JsonProperty("stringHeaders")
+  private Map<String, List<String>> stringHeaders = new HashMap<String, List<String>>();
+
+  @JsonProperty("statusInfo")
+  private StatusType statusInfo = null;
+
+  @JsonProperty("entityTag")
+  private EntityTag entityTag = null;
+
+  @JsonProperty("mediaType")
+  private MediaType mediaType = null;
 
   public Response length(Integer length) {
     this.length = length;
@@ -209,88 +209,6 @@ public class Response  implements Serializable {
     this.headers = headers;
   }
 
-  public Response statusInfo(StatusType statusInfo) {
-    this.statusInfo = statusInfo;
-    return this;
-  }
-
-   /**
-   * Get statusInfo
-   * @return statusInfo
-  **/
-  @ApiModelProperty(example = "null", value = "")
-  public StatusType getStatusInfo() {
-    return statusInfo;
-  }
-
-  public void setStatusInfo(StatusType statusInfo) {
-    this.statusInfo = statusInfo;
-  }
-
-  public Response links(List<Link> links) {
-    this.links = links;
-    return this;
-  }
-
-  public Response addLinksItem(Link linksItem) {
-    this.links.add(linksItem);
-    return this;
-  }
-
-   /**
-   * Get links
-   * @return links
-  **/
-  @ApiModelProperty(example = "null", value = "")
-  public List<Link> getLinks() {
-    return links;
-  }
-
-  public void setLinks(List<Link> links) {
-    this.links = links;
-  }
-
-  public Response entityTag(EntityTag entityTag) {
-    this.entityTag = entityTag;
-    return this;
-  }
-
-   /**
-   * Get entityTag
-   * @return entityTag
-  **/
-  @ApiModelProperty(example = "null", value = "")
-  public EntityTag getEntityTag() {
-    return entityTag;
-  }
-
-  public void setEntityTag(EntityTag entityTag) {
-    this.entityTag = entityTag;
-  }
-
-  public Response stringHeaders(Map<String, List<String>> stringHeaders) {
-    this.stringHeaders = stringHeaders;
-    return this;
-  }
-
-  public Response putStringHeadersItem(String key, List<String> stringHeadersItem) {
-    this.stringHeaders.put(key, stringHeadersItem);
-    return this;
-  }
-
-   /**
-   * Get stringHeaders
-   * @return stringHeaders
-  **/
-  @ApiModelProperty(example = "null", value = "")
-  public Map<String, List<String>> getStringHeaders() {
-    return stringHeaders;
-  }
-
-  public void setStringHeaders(Map<String, List<String>> stringHeaders) {
-    this.stringHeaders = stringHeaders;
-  }
-
   public Response status(Integer status) {
     this.status = status;
     return this;
@@ -373,24 +291,6 @@ public class Response  implements Serializable {
     this.metadata = metadata;
   }
 
-  public Response mediaType(MediaType mediaType) {
-    this.mediaType = mediaType;
-    return this;
-  }
-
-   /**
-   * Get mediaType
-   * @return mediaType
-  **/
-  @ApiModelProperty(example = "null", value = "")
-  public MediaType getMediaType() {
-    return mediaType;
-  }
-
-  public void setMediaType(MediaType mediaType) {
-    this.mediaType = mediaType;
-  }
-
   public Response allowedMethods(List<String> allowedMethods) {
     this.allowedMethods = allowedMethods;
     return this;
@@ -414,6 +314,106 @@ public class Response  implements Serializable {
     this.allowedMethods = allowedMethods;
   }
 
+  public Response links(List<Link> links) {
+    this.links = links;
+    return this;
+  }
+
+  public Response addLinksItem(Link linksItem) {
+    this.links.add(linksItem);
+    return this;
+  }
+
+   /**
+   * Get links
+   * @return links
+  **/
+  @ApiModelProperty(example = "null", value = "")
+  public List<Link> getLinks() {
+    return links;
+  }
+
+  public void setLinks(List<Link> links) {
+    this.links = links;
+  }
+
+  public Response stringHeaders(Map<String, List<String>> stringHeaders) {
+    this.stringHeaders = stringHeaders;
+    return this;
+  }
+
+  public Response putStringHeadersItem(String key, List<String> stringHeadersItem) {
+    this.stringHeaders.put(key, stringHeadersItem);
+    return this;
+  }
+
+   /**
+   * Get stringHeaders
+   * @return stringHeaders
+  **/
+  @ApiModelProperty(example = "null", value = "")
+  public Map<String, List<String>> getStringHeaders() {
+    return stringHeaders;
+  }
+
+  public void setStringHeaders(Map<String, List<String>> stringHeaders) {
+    this.stringHeaders = stringHeaders;
+  }
+
+  public Response statusInfo(StatusType statusInfo) {
+    this.statusInfo = statusInfo;
+    return this;
+  }
+
+   /**
+   * Get statusInfo
+   * @return statusInfo
+  **/
+  @ApiModelProperty(example = "null", value = "")
+  public StatusType getStatusInfo() {
+    return statusInfo;
+  }
+
+  public void setStatusInfo(StatusType statusInfo) {
+    this.statusInfo = statusInfo;
+  }
+
+  public Response entityTag(EntityTag entityTag) {
+    this.entityTag = entityTag;
+    return this;
+  }
+
+   /**
+   * Get entityTag
+   * @return entityTag
+  **/
+  @ApiModelProperty(example = "null", value = "")
+  public EntityTag getEntityTag() {
+    return entityTag;
+  }
+
+  public void setEntityTag(EntityTag entityTag) {
+    this.entityTag = entityTag;
+  }
+
+  public Response mediaType(MediaType mediaType) {
+    this.mediaType = mediaType;
+    return this;
+  }
+
+   /**
+   * Get mediaType
+   * @return mediaType
+  **/
+  @ApiModelProperty(example = "null", value = "")
+  public MediaType getMediaType() {
+    return mediaType;
+  }
+
+  public void setMediaType(MediaType mediaType) {
+    this.mediaType = mediaType;
+  }
+
 
   @Override
   public boolean equals(java.lang.Object o) {
@@ -430,21 +430,21 @@ public class Response  implements Serializable {
         Objects.equals(this.date, response.date) &&
         Objects.equals(this.lastModified, response.lastModified) &&
         Objects.equals(this.headers, response.headers) &&
-        Objects.equals(this.statusInfo, response.statusInfo) &&
-        Objects.equals(this.links, response.links) &&
-        Objects.equals(this.entityTag, response.entityTag) &&
-        Objects.equals(this.stringHeaders, response.stringHeaders) &&
         Objects.equals(this.status, response.status) &&
         Objects.equals(this.entity, response.entity) &&
         Objects.equals(this.cookies, response.cookies) &&
         Objects.equals(this.metadata, response.metadata) &&
-        Objects.equals(this.mediaType, response.mediaType) &&
-        Objects.equals(this.allowedMethods, response.allowedMethods);
+        Objects.equals(this.allowedMethods, response.allowedMethods) &&
+        Objects.equals(this.links, response.links) &&
+        Objects.equals(this.stringHeaders, response.stringHeaders) &&
+        Objects.equals(this.statusInfo, response.statusInfo) &&
+        Objects.equals(this.entityTag, response.entityTag) &&
+        Objects.equals(this.mediaType, response.mediaType);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(length, language, location, date, lastModified, headers, statusInfo, links, entityTag, stringHeaders, status, entity, cookies, metadata, mediaType, allowedMethods);
+    return Objects.hash(length, language, location, date, lastModified, headers, status, entity, cookies, metadata, allowedMethods, links, stringHeaders, statusInfo, entityTag, mediaType);
   }
 
   @Override
@@ -458,16 +458,16 @@ public class Response  implements Serializable {
     sb.append("    date: ").append(toIndentedString(date)).append("\n");
     sb.append("    lastModified: ").append(toIndentedString(lastModified)).append("\n");
     sb.append("    headers: ").append(toIndentedString(headers)).append("\n");
-    sb.append("    statusInfo: ").append(toIndentedString(statusInfo)).append("\n");
-    sb.append("    links: ").append(toIndentedString(links)).append("\n");
-    sb.append("    entityTag: ").append(toIndentedString(entityTag)).append("\n");
-    sb.append("    stringHeaders: ").append(toIndentedString(stringHeaders)).append("\n");
     sb.append("    status: ").append(toIndentedString(status)).append("\n");
     sb.append("    entity: ").append(toIndentedString(entity)).append("\n");
     sb.append("    cookies: ").append(toIndentedString(cookies)).append("\n");
     sb.append("    metadata: ").append(toIndentedString(metadata)).append("\n");
-    sb.append("    mediaType: ").append(toIndentedString(mediaType)).append("\n");
     sb.append("    allowedMethods: ").append(toIndentedString(allowedMethods)).append("\n");
+    sb.append("    links: ").append(toIndentedString(links)).append("\n");
+    sb.append("    stringHeaders: ").append(toIndentedString(stringHeaders)).append("\n");
+    sb.append("    statusInfo: ").append(toIndentedString(statusInfo)).append("\n");
+    sb.append("    entityTag: ").append(toIndentedString(entityTag)).append("\n");
+    sb.append("    mediaType: ").append(toIndentedString(mediaType)).append("\n");
     sb.append("}");
     return sb.toString();
   }

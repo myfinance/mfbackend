@@ -132,7 +132,7 @@ public class InstrumentServiceImpl implements InstrumentService {
         String isin = theisin.toUpperCase();
         Optional<Security> existingSec = getSecurity(isin);
         if(!existingSec.isPresent()) {
-            Security security = new Security(description, true, LocalDate.now(), SecurityType.EQUITY, isin);
+            Security security = new Security(description, true, LocalDateTime.now(), SecurityType.EQUITY, isin);
             instrumentDao.saveSecurity(security);
             return "new security saved sucessfully";
         } else {
@@ -174,7 +174,7 @@ public class InstrumentServiceImpl implements InstrumentService {
         String curCode = currencyCode.toUpperCase();
         Optional<Currency> existingCur = getCurrency(curCode);
         if(!existingCur.isPresent()) {
-            Currency currency = new Currency(description, true, LocalDate.now(), curCode);
+            Currency currency = new Currency(description, true, LocalDateTime.now(), curCode);
             instrumentDao.saveCurrency(currency);
             return "new currency saved sucessfully";
         } else {

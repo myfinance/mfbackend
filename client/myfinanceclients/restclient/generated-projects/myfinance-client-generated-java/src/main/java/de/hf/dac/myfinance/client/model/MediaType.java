@@ -38,7 +38,7 @@ import java.io.Serializable;
 /**
  * MediaType
  */
-@javax.annotation.Generated(value = "class de.hf.dac.myfinance.codegen.MyFinanceClient_JavaGenerator", date = "2018-04-24T10:07:05.461+02:00")
+@javax.annotation.Generated(value = "class de.hf.dac.myfinance.codegen.MyFinanceClient_JavaGenerator", date = "2018-05-03T09:44:46.536+02:00")
 public class MediaType  implements Serializable {
   @JsonProperty("type")
   private String type = null;
@@ -49,11 +49,11 @@ public class MediaType  implements Serializable {
   @JsonProperty("parameters")
   private Map<String, String> parameters = new HashMap<String, String>();
 
-  @JsonProperty("wildcardType")
-  private Boolean wildcardType = null;
-
   @JsonProperty("wildcardSubtype")
   private Boolean wildcardSubtype = null;
+
+  @JsonProperty("wildcardType")
+  private Boolean wildcardType = null;
 
   public MediaType type(String type) {
     this.type = type;
@@ -114,24 +114,6 @@ public class MediaType  implements Serializable {
     this.parameters = parameters;
   }
 
-  public MediaType wildcardType(Boolean wildcardType) {
-    this.wildcardType = wildcardType;
-    return this;
-  }
-
-   /**
-   * Get wildcardType
-   * @return wildcardType
-  **/
-  @ApiModelProperty(example = "null", value = "")
-  public Boolean getWildcardType() {
-    return wildcardType;
-  }
-
-  public void setWildcardType(Boolean wildcardType) {
-    this.wildcardType = wildcardType;
-  }
-
   public MediaType wildcardSubtype(Boolean wildcardSubtype) {
     this.wildcardSubtype = wildcardSubtype;
     return this;
@@ -150,6 +132,24 @@ public class MediaType  implements Serializable {
     this.wildcardSubtype = wildcardSubtype;
   }
 
+  public MediaType wildcardType(Boolean wildcardType) {
+    this.wildcardType = wildcardType;
+    return this;
+  }
+
+   /**
+   * Get wildcardType
+   * @return wildcardType
+  **/
+  @ApiModelProperty(example = "null", value = "")
+  public Boolean getWildcardType() {
+    return wildcardType;
+  }
+
+  public void setWildcardType(Boolean wildcardType) {
+    this.wildcardType = wildcardType;
+  }
+
 
   @Override
   public boolean equals(java.lang.Object o) {
@@ -163,13 +163,13 @@ public class MediaType  implements Serializable {
     return Objects.equals(this.type, mediaType.type) &&
         Objects.equals(this.subtype, mediaType.subtype) &&
         Objects.equals(this.parameters, mediaType.parameters) &&
-        Objects.equals(this.wildcardType, mediaType.wildcardType) &&
-        Objects.equals(this.wildcardSubtype, mediaType.wildcardSubtype);
+        Objects.equals(this.wildcardSubtype, mediaType.wildcardSubtype) &&
+        Objects.equals(this.wildcardType, mediaType.wildcardType);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(type, subtype, parameters, wildcardType, wildcardSubtype);
+    return Objects.hash(type, subtype, parameters, wildcardSubtype, wildcardType);
   }
 
   @Override
@@ -180,8 +180,8 @@ public class MediaType  implements Serializable {
     sb.append("    type: ").append(toIndentedString(type)).append("\n");
     sb.append("    subtype: ").append(toIndentedString(subtype)).append("\n");
     sb.append("    parameters: ").append(toIndentedString(parameters)).append("\n");
-    sb.append("    wildcardType: ").append(toIndentedString(wildcardType)).append("\n");
     sb.append("    wildcardSubtype: ").append(toIndentedString(wildcardSubtype)).append("\n");
+    sb.append("    wildcardType: ").append(toIndentedString(wildcardType)).append("\n");
     sb.append("}");
     return sb.toString();
   }
