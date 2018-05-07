@@ -90,7 +90,7 @@ mvn clean install -Dnoclientgen -Dnointtest -Dnoangular
 !attention! if you run integrationtests or clientgeneration under linux, you have to deploy the docker images first. so run mvn clean deploy instead of install
 
 ### get started ###
-
+copy a valid certificate to /var/lib/docker/volumes/myfinance_myfinancelogs/_data
 to start MYFinancein Docker: docker stack deploy -c distributions/myfinance-full-packaging/target/docker-compose.yml myfinance
 
 if Database is fresh: add via gui or api-Docs: currency eur and usd
