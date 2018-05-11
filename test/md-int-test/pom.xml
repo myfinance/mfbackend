@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
         <artifactId>test</artifactId>
         <groupId>de.hf.dac</groupId>
@@ -52,10 +53,10 @@
                                 <configuration>
                                     <tasks>
                                         <exec executable="${project.basedir}/deploy.bat" spawn="true">
-                                            <arg value="-t" />
-                                            <arg value="${localdeployfolder}" />
-                                            <arg value="-f" />
-                                            <arg value="MyFinance-${project.version}" />
+                                            <arg value="-t"/>
+                                            <arg value="${localdeployfolder}"/>
+                                            <arg value="-f"/>
+                                            <arg value="MyFinance-${project.version}"/>
                                         </exec>
                                     </tasks>
                                 </configuration>
@@ -108,23 +109,25 @@
                                         import static com.jayway.restassured.RestAssured.*
 
                                         println("Wait for karaf to be available")
-                                        for (int i = 0; i < 50; i++) { try { def response = with().get("http://karaf:karaf@localhost:8181/system/console/bundles")
-                                            def status = response.getStatusLine()
-                                            println(status)
-                                            if (!(status ==~ /.*OK.*/)) {
+                                        for (int i = 0; i < 50; i++) {
+                                            try {
+                                                def response = with().get("http://karaf:karaf@localhost:8181/system/console/bundles")
+                                                def status = response.getStatusLine()
+                                                println(status)
+                                                if (!(status ==~ /.*OK.*/)) {
+                                                    Thread.sleep(1000)
+                                                    continue
+                                                } else {
+                                                    Thread.sleep(5000)
+                                                    break
+                                                }
+                                            } catch (Exception e) {
+                                                println("got exception:" + e)
                                                 Thread.sleep(1000)
                                                 continue
-                                            } else {
-                                                Thread.sleep(5000)
-                                                break
+                                            } finally {
+                                                print(".")
                                             }
-                                        } catch (Exception e) {
-                                            println("got exception:" + e)
-                                            Thread.sleep(1000)
-                                            continue
-                                        } finally {
-                                            print(".")
-                                        }
                                             println("got status")
                                         }
                                         ]]>
@@ -185,22 +188,22 @@
                                 <goals>
                                     <goal>run</goal>
                                 </goals>
-				</execution>
-				<execution>
-					<id>removedockerservice</id>
-					<phase>post-integration-test</phase>
-					<configuration>
-						<tasks>
-							<exec executable="${project.basedir}/stopdockerservice.sh"/>
-						</tasks>
-					</configuration>
-					<goals>
-						<goal>run</goal>
-					</goals>
-				</execution>
+                            </execution>
+                            <execution>
+                                <id>removedockerservice</id>
+                                <phase>post-integration-test</phase>
+                                <configuration>
+                                    <tasks>
+                                        <exec executable="${project.basedir}/stopdockerservice.sh"/>
+                                    </tasks>
+                                </configuration>
+                                <goals>
+                                    <goal>run</goal>
+                                </goals>
+                            </execution>
                         </executions>
                     </plugin>
-		    <plugin>
+                    <plugin>
                         <groupId>org.codehaus.gmaven</groupId>
                         <artifactId>groovy-maven-plugin</artifactId>
                         <dependencies>
@@ -225,26 +228,29 @@
                                     <source>
                                         <![CDATA[
                                         import static com.jayway.restassured.RestAssured.*;
+
                                         def ip = InetAddress.getLocalHost().getHostAddress()
-                                        println("local ip ="+ip)
+                                        println("local ip =" + ip)
                                         println("Wait for karaf to be available")
-                                        for (int i = 0; i < 30; i++) { try { def response = with().get("http://karaf:karaf@"+ip+":8181/dac/rest/hello")
-                                            def status = response.getStatusLine()
-                                            println(status)
-                                            if (!(status ==~ /.*OK.*/)) {
+                                        for (int i = 0; i < 30; i++) {
+                                            try {
+                                                def response = with().get("http://karaf:karaf@" + ip + ":8181/dac/rest/hello");
+                                                def status = response.getStatusLine()
+                                                println(status)
+                                                if (!(status ==~ /.*OK.*/)) {
+                                                    Thread.sleep(5000)
+                                                    continue
+                                                } else {
+                                                    break
+                                                    Thread.sleep(1000)
+                                                }
+                                            } catch (Exception e) {
+                                                println("got exception:" + e)
                                                 Thread.sleep(1000)
                                                 continue
-						} else {
-							break
-							Thread.sleep(1000)
-						}
-                                        } catch (Exception e) {
-                                            println("got exception:" + e)
-                                            Thread.sleep(1000)
-                                            continue
-                                        } finally {
-                                            print(".")
-                                        }
+                                            } finally {
+                                                print(".")
+                                            }
                                             println("got status")
                                         }
                                         ]]>

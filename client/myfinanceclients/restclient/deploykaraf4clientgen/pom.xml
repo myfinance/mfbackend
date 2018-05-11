@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xmlns="http://maven.apache.org/POM/4.0.0"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
         <artifactId>restclient</artifactId>
@@ -67,10 +67,10 @@
                                 <configuration>
                                     <tasks>
                                         <exec executable="${project.basedir}/deploy.bat" spawn="true">
-                                            <arg value="-t" />
-                                            <arg value="${localdeployfolder}" />
-                                            <arg value="-f" />
-                                            <arg value="karaf-rest-dist-${project.version}" />
+                                            <arg value="-t"/>
+                                            <arg value="${localdeployfolder}"/>
+                                            <arg value="-f"/>
+                                            <arg value="karaf-rest-dist-${project.version}"/>
                                         </exec>
                                     </tasks>
                                 </configuration>
@@ -110,33 +110,35 @@
                                         import static com.jayway.restassured.RestAssured.*
 
                                         println("Wait for karaf to be available")
-                                        for (int i = 0; i < 50; i++) { try { def response = with().get("http://karaf:karaf@localhost:8181/system/console/bundles")
-                                            def status = response.getStatusLine()
-                                            println(status)
-                                            if (!(status ==~ /.*OK.*/)) {
+                                        for (int i = 0; i < 50; i++) {
+                                            try {
+                                                def response = with().get("http://karaf:karaf@localhost:8181/system/console/bundles")
+                                                def status = response.getStatusLine()
+                                                println(status)
+                                                if (!(status ==~ /.*OK.*/)) {
+                                                    Thread.sleep(1000)
+                                                    continue
+                                                } else {
+                                                    Thread.sleep(5000)
+                                                    def inputStream = get("http://karaf:karaf@localhost:8181/dac/rest/swagger.json").asInputStream()
+                                                    String filename = properties['filelocation'] + '/swagger.json'
+                                                    OutputStream outputStream = new FileOutputStream(new File(filename))
+                                                    int read = 0
+                                                    byte[] bytes = new byte[1024]
+
+                                                    while ((read = inputStream.read(bytes)) != -1) {
+                                                        outputStream.write(bytes, 0, read)
+                                                    }
+
+                                                    break
+                                                }
+                                            } catch (Exception e) {
+                                                println("got exception:" + e)
                                                 Thread.sleep(1000)
                                                 continue
-                                            } else {
-                                                Thread.sleep(5000)
-                                                def inputStream = get("http://karaf:karaf@localhost:8181/dac/rest/swagger.json").asInputStream()
-                                                String filename = properties['filelocation']+'/swagger.json'
-                                                OutputStream outputStream = new FileOutputStream(new File(filename))
-                                                int read = 0
-                                                byte[] bytes = new byte[1024]
-
-                                                while ((read = inputStream.read(bytes)) != -1) {
-                                                    outputStream.write(bytes, 0, read)
-                                                }
-
-                                                break
+                                            } finally {
+                                                print(".")
                                             }
-                                        } catch (Exception e) {
-                                            println("got exception:" + e)
-                                            Thread.sleep(1000)
-                                            continue
-                                        } finally {
-                                            print(".")
-                                        }
                                             println("got status")
                                         }
                                         ]]>
@@ -197,41 +199,44 @@
                                 <goals>
                                     <goal>execute</goal>
                                 </goals>
-				<configuration>
-				    <properties>
-					<filelocation>${project.basedir}/target</filelocation>
-				    </properties>		
+                                <configuration>
+                                    <properties>
+                                        <filelocation>${project.basedir}/target</filelocation>
+                                    </properties>
                                     <source>
                                         <![CDATA[
                                         import static com.jayway.restassured.RestAssured.*;
+
                                         def ip = InetAddress.getLocalHost().getHostAddress()
-                                        println("local ip ="+ip)
+                                        println("local ip =" + ip)
                                         println("Wait for karaf to be available")
-                                        for (int i = 0; i < 30; i++) { try { def response = with().get("http://karaf:karaf@"+ip+":8181/dac/rest/hello")
-                                            def status = response.getStatusLine()
-                                            println(status)
-                                            if (!(status ==~ /.*OK.*/)) {
+                                        for (int i = 0; i < 30; i++) {
+                                            try {
+                                                def response = with().get("http://karaf:karaf@" + ip + ":8181/dac/rest/hello");
+                                                def status = response.getStatusLine()
+                                                println(status)
+                                                if (!(status ==~ /.*OK.*/)) {
+                                                    Thread.sleep(5000)
+                                                    continue
+                                                } else {
+                                                    Thread.sleep(5000)
+                                                    def inputStream = get("http://karaf:karaf@" + ip + ":8181/dac/rest/swagger.json").asInputStream()
+                                                    String filename = properties['filelocation'] + '/swagger.json'
+                                                    OutputStream outputStream = new FileOutputStream(new File(filename))
+                                                    int read = 0
+                                                    byte[] bytes = new byte[1024]
+                                                    while ((read = inputStream.read(bytes)) != -1) {
+                                                        outputStream.write(bytes, 0, read)
+                                                    }
+                                                    break
+                                                }
+                                            } catch (Exception e) {
+                                                println("got exception:" + e)
                                                 Thread.sleep(1000)
                                                 continue
-						} else {
-					        	Thread.sleep(5000)
-							def inputStream = get("http://karaf:karaf@"+ip+":8181/dac/rest/swagger.json").asInputStream()
-							String filename = properties['filelocation']+'/swagger.json'
-							OutputStream outputStream = new FileOutputStream(new File(filename))
-							int read = 0
-							byte[] bytes = new byte[1024]
-							while ((read = inputStream.read(bytes)) != -1) {
-								outputStream.write(bytes, 0, read)
-							}
-							break
-						}				
-                                        } catch (Exception e) {
-                                            println("got exception:" + e)
-                                            Thread.sleep(1000)
-                                            continue
-                                        } finally {
-                                            print(".")
-                                        }
+                                            } finally {
+                                                print(".")
+                                            }
                                             println("got status")
                                         }
                                         ]]>
