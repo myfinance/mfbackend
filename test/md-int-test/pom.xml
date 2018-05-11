@@ -109,13 +109,14 @@
                                         import static com.jayway.restassured.RestAssured.*
 
                                         println("Wait for karaf to be available")
+                                        Thread.sleep(10000)
                                         for (int i = 0; i < 50; i++) {
                                             try {
                                                 def response = with().get("http://karaf:karaf@localhost:8181/system/console/bundles")
                                                 def status = response.getStatusLine()
                                                 println(status)
                                                 if (!(status ==~ /.*OK.*/)) {
-                                                    Thread.sleep(1000)
+                                                    Thread.sleep(5000)
                                                     continue
                                                 } else {
                                                     Thread.sleep(5000)
@@ -123,7 +124,7 @@
                                                 }
                                             } catch (Exception e) {
                                                 println("got exception:" + e)
-                                                Thread.sleep(1000)
+                                                Thread.sleep(5000)
                                                 continue
                                             } finally {
                                                 print(".")
@@ -232,6 +233,7 @@
                                         def ip = InetAddress.getLocalHost().getHostAddress()
                                         println("local ip =" + ip)
                                         println("Wait for karaf to be available")
+                                        Thread.sleep(10000)
                                         for (int i = 0; i < 30; i++) {
                                             try {
                                                 def response = with().get("http://karaf:karaf@" + ip + ":8181/dac/rest/hello");
@@ -242,11 +244,11 @@
                                                     continue
                                                 } else {
                                                     break
-                                                    Thread.sleep(1000)
+                                                    Thread.sleep(5000)
                                                 }
                                             } catch (Exception e) {
                                                 println("got exception:" + e)
-                                                Thread.sleep(1000)
+                                                Thread.sleep(5000)
                                                 continue
                                             } finally {
                                                 print(".")
