@@ -1,11 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xmlns="http://maven.apache.org/POM/4.0.0"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
         <artifactId>restclient</artifactId>
         <groupId>de.hf.dac.myfinance.client</groupId>
-        <version>0.10.0-SNAPSHOT</version>
+        <version>0.10.0</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
     <artifactId>deploykaraf4clientgen</artifactId>
@@ -67,10 +65,10 @@
                                 <configuration>
                                     <tasks>
                                         <exec executable="${project.basedir}/deploy.bat" spawn="true">
-                                            <arg value="-t"/>
-                                            <arg value="${localdeployfolder}"/>
-                                            <arg value="-f"/>
-                                            <arg value="karaf-rest-dist-${project.version}"/>
+                                            <arg value="-t" />
+                                            <arg value="${localdeployfolder}" />
+                                            <arg value="-f" />
+                                            <arg value="karaf-rest-dist-${project.version}" />
                                         </exec>
                                     </tasks>
                                 </configuration>
@@ -111,8 +109,7 @@
 
                                         println("Wait for karaf to be available")
                                         Thread.sleep(10000)
-                                        for (int i = 0; i < 50; i++) {
-                                            try {
+                                        for (int i = 0; i < 50; i++) { try {
                                                 def response = with().get("http://karaf:karaf@localhost:8181/system/console/bundles")
                                                 def status = response.getStatusLine()
                                                 println(status)
@@ -212,8 +209,7 @@
                                         println("local ip =" + ip)
                                         println("Wait for karaf to be available")
                                         Thread.sleep(10000)
-                                        for (int i = 0; i < 30; i++) {
-                                            try {
+                                        for (int i = 0; i < 30; i++) { try {
                                                 def response = with().get("http://karaf:karaf@" + ip + ":8181/dac/rest/hello");
                                                 def status = response.getStatusLine()
                                                 println(status)

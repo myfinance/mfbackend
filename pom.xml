@@ -3,7 +3,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>de.hf.dac</groupId>
     <artifactId>root</artifactId>
-    <version>0.10.0-SNAPSHOT</version>
+    <version>0.10.0</version>
     <packaging>pom</packaging>
     <properties>
         <java.version>1.8</java.version>
@@ -95,7 +95,7 @@
     <scm>
         <!--<developerConnection>scm:git:ssh://192.168.178.20:122/volume1/Data/workspace/repos/MarketDataProvider</developerConnection>-->
         <developerConnection>scm:git:https://holgerfischer@bitbucket.org/holgerfischer/dac.git</developerConnection>
-        <tag>dac-0.3.1</tag>
+        <tag>dac-0.10.0</tag>
     </scm>
 
     <modules>
