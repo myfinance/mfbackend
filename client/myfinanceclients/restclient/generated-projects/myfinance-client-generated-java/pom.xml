@@ -4,11 +4,11 @@
     <artifactId>myfinance-client-generated</artifactId>
     <packaging>jar</packaging>
     <name>myfinance-client-generated</name>
-    <version>0.10.0</version>
+    <version>0.11.0-SNAPSHOT</version>
     <parent>
         <artifactId>restclient</artifactId>
         <groupId>de.hf.dac.myfinance.client</groupId>
-        <version>0.10.0</version>
+        <version>0.11.0-SNAPSHOT</version>
         <relativePath>../../pom.xml</relativePath>
     </parent>
 
