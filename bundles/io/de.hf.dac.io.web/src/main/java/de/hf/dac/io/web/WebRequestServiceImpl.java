@@ -6,7 +6,7 @@
  *
  *  Project     : dac
  *
- *  File        : Http.java
+ *  File        : WebRequestServiceImpl.java
  *
  *  Author(s)   : hf
  *
@@ -15,7 +15,7 @@
  * ----------------------------------------------------------------------------
  */
 
-package de.hf.dac.web;
+package de.hf.dac.io.web;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -27,33 +27,30 @@ import java.net.Proxy;
 import java.net.URL;
 import java.net.URLConnection;
 
-public class Http {
+import javax.security.auth.login.AppConfigurationEntry;
 
-    private final int timeOut;
-    private Boolean useProxy;
-    private String proxyUrl;
-    private  int proxyPort;
-    private String proxyUser;
-    private String proxyPw;
+import org.osgi.framework.BundleContext;
+import org.osgi.service.component.annotations.Activate;
+import org.osgi.service.component.annotations.Component;
+import org.osgi.service.metatype.annotations.Designate;
 
-    public Http(int timeOut, Boolean useProxy, String proxyUrl, int proxyPort, String proxyUser, String proxyPw){
-        this.timeOut=timeOut;
-        this.useProxy=useProxy;
-        this.proxyUrl=proxyUrl;
-        this.proxyPort=proxyPort;
-        this.proxyUser=proxyUser;
-        this.proxyPw=proxyPw;
+import de.hf.dac.api.io.web.WebRequestService;
+
+@Designate(ocd = DacWebProxyConfiguration.class)
+@Component(immediate = true, name="DAC.WebRequestServiceImpl")
+public class WebRequestServiceImpl implements WebRequestService {
+
+    private DacWebProxyConfiguration dacWebProxyConfiguration;
+
+    @Activate
+    public void activate(BundleContext bc, DacWebProxyConfiguration dacWebProxyConfiguration)
+    {
+        this.dacWebProxyConfiguration=dacWebProxyConfiguration;
     }
 
-    /**
-     * Get Data from an URL
-     *
-     * option -Djdk.http.auth.tunneling.disabledSchemes="" have to be set to empty at startup (e.G: in karaf_local.bat, karaf or in java command )
-     * only http is working otherwise. https do not get the credentials
-     * @param url
-     * @return
-     * @throws IOException
-     */
+    public WebRequestServiceImpl(){
+    }
+
     public String getRequest(String url) throws IOException {
 
         URL request = new URL(url);
@@ -62,14 +59,14 @@ public class Http {
         BufferedReader bufferedReader = null;
         StringBuilder responseBuilder;
 
-        if(useProxy) {
+        if(dacWebProxyConfiguration.proxy_on()) {
 
-            Proxy proxy = new Proxy(Proxy.Type.HTTP, new InetSocketAddress(proxyUrl, proxyPort));
+            Proxy proxy = new Proxy(Proxy.Type.HTTP, new InetSocketAddress(dacWebProxyConfiguration.proxy_url(), dacWebProxyConfiguration.proxy_port()));
 
             Authenticator authenticator = new Authenticator() {
 
                 public PasswordAuthentication getPasswordAuthentication() {
-                    return (new PasswordAuthentication(proxyUser, proxyPw.toCharArray()));
+                    return (new PasswordAuthentication(dacWebProxyConfiguration.proxy_user(), dacWebProxyConfiguration.proxy_pw().toCharArray()));
                 }
             };
             Authenticator.setDefault(authenticator);
@@ -80,8 +77,8 @@ public class Http {
             connection = request.openConnection();
         }
 
-        connection.setConnectTimeout(timeOut);
-        connection.setReadTimeout(timeOut);
+        connection.setConnectTimeout(dacWebProxyConfiguration.proxy_timeout());
+        connection.setReadTimeout(dacWebProxyConfiguration.proxy_timeout());
 
         try {
             inputStream = new InputStreamReader(connection.getInputStream(), "UTF-8");

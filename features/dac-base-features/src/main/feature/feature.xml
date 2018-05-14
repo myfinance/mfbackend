@@ -59,12 +59,16 @@
         <bundle>mvn:de.hf.dac.api/de.hf.dac.api.io/${project.version}</bundle>
     </feature>
 
-
     <feature name="dac-io-jpa-feature" version="${pom.version}">
         <feature>dac-io-api-feature</feature>
         <bundle>mvn:de.hf.dac.io/de.hf.dac.io.efmb/${project.version}</bundle>
         <bundle>mvn:de.hf.dac.io/de.hf.dac.io.env/${project.version}</bundle>
         <bundle>mvn:de.hf.dac.io/de.hf.dac.io.configuration/${project.version}</bundle>
+    </feature>
+
+    <feature name="dac-io-web-feature" version="${pom.version}">
+        <feature>dac-io-api-feature</feature>
+        <bundle>mvn:de.hf.dac.io/de.hf.dac.io.web/${project.version}</bundle>
     </feature>
 
     <feature name="dac-io-routes-feature" version="${pom.version}">
@@ -84,6 +88,7 @@
         <feature>dac-base-commands</feature>
         <feature>dac-io-jpa-feature</feature>
         <feature>dac-io-routes-feature</feature>
+        <feature>dac-io-web-feature</feature>
     </feature>
 
     <feature name="dac-security-feature" version="${pom.version}">

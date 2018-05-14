@@ -23,6 +23,7 @@ import de.hf.dac.api.io.env.EnvironmentInfo;
 import de.hf.dac.api.io.env.EnvironmentService;
 import de.hf.dac.api.io.env.context.ApplicationContext;
 import de.hf.dac.api.io.env.context.ContextBuilder;
+import de.hf.dac.api.io.web.WebRequestService;
 import de.hf.dac.myfinance.api.application.MarketDataEnvironmentContextBuilder;
 import de.hf.dac.myfinance.api.application.MarketDataSystemDescriptor;
 import org.osgi.service.component.annotations.Component;
@@ -47,6 +48,9 @@ public class MFEnvironmentContextBuilderImpl implements MarketDataEnvironmentCon
     @Reference
     TransactionManager jtaManager;
 
+    @Reference
+    WebRequestService webRequestService;
+
 
 
     @Override
@@ -55,7 +59,7 @@ public class MFEnvironmentContextBuilderImpl implements MarketDataEnvironmentCon
             = new MFEnvironmentBuilderModule(envService, //
             emfb, //
             jtaManager, //
-            environment);
+            environment, webRequestService);
         return contextBuilder.build(MarketDataSystemDescriptor.CONTEXT+"/" + environment, new Module[] { marketDataEnvironmentBuilderModule });
     }
 

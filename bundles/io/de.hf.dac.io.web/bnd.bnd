@@ -3,4 +3,4 @@
 Bundle-SymbolicName: ${project.artifactId}
 Bundle-ClassPath= .
 Export-Package: \
-  de.hf.dac.common
+  de.hf.dac.web

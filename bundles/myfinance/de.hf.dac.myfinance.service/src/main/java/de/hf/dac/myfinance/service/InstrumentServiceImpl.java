@@ -17,6 +17,7 @@
 
 package de.hf.dac.myfinance.service;
 
+import de.hf.dac.api.io.web.WebRequestService;
 import de.hf.dac.myfinance.ValueHandler.ValueCurveService;
 import de.hf.dac.myfinance.api.domain.Currency;
 import de.hf.dac.myfinance.api.domain.EndOfDayPrice;
@@ -46,10 +47,12 @@ public class InstrumentServiceImpl implements InstrumentService {
 
     private InstrumentDao instrumentDao;
     private ValueCurveService service;
+    private WebRequestService webRequestService;
 
     @Inject
-    public InstrumentServiceImpl(InstrumentDao instrumentDao){
+    public InstrumentServiceImpl(InstrumentDao instrumentDao,WebRequestService webRequestService){
         this.instrumentDao = instrumentDao;
+        this.webRequestService = webRequestService;
         service = new ValueCurveService(instrumentDao);
     }
 
@@ -215,7 +218,7 @@ public class InstrumentServiceImpl implements InstrumentService {
             return "Currency EUR not available";
         }
 
-        ImportHandler handler = new ImportHandler(sources, true,"proxy.dzbank.vrnet",8080,"xn01598","XN01598", eur.get());
+        ImportHandler handler = new ImportHandler(sources, eur.get(), webRequestService);
         for(Security security : secuirities){
             //all prices are in EUR so we do not need prices for this currency
             if(security.getSecurityType()==SecurityType.CURRENCY && ((Currency)security).getCurrencycode().equals("EUR")) continue;
@@ -253,7 +256,7 @@ public class InstrumentServiceImpl implements InstrumentService {
             return "Currency EUR not available";
         }
 
-        ImportHandler handler = new ImportHandler(sources, true,"proxy.dzbank.vrnet",8080,"xn01598","XN01598", eur.get());
+        ImportHandler handler = new ImportHandler(sources, eur.get(), webRequestService);
 
         Map<LocalDate, EndOfDayPrice> prices = new HashMap<>();
         prices.putAll(handler.importSource(security.get(), LocalDate.MIN, ts));

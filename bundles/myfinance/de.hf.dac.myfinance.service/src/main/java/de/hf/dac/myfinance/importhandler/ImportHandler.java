@@ -17,12 +17,12 @@
 
 package de.hf.dac.myfinance.importhandler;
 
+import de.hf.dac.api.io.web.WebRequestService;
 import de.hf.dac.myfinance.api.domain.Currency;
 import de.hf.dac.myfinance.api.domain.EndOfDayPrice;
 import de.hf.dac.myfinance.api.domain.Security;
 import de.hf.dac.myfinance.api.domain.Source;
 import de.hf.dac.myfinance.api.domain.SourceName;
-import de.hf.dac.web.Http;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -31,18 +31,14 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class ImportHandler {
-    Http downloadHandler;
-   List<Handler> importHandler = new ArrayList<>();
 
-    public ImportHandler(List<Source> sources, Boolean useProxy, String proxyUrl, int proxyPort, String proxyUser, String proxyPw,
-            Currency eur){
-        downloadHandler = new Http(30000,
-            useProxy,
-            proxyUrl,
-            proxyPort,
-            proxyUser,
-            proxyPw);
+public class ImportHandler {
+
+    WebRequestService downloadHandler;
+    List<Handler> importHandler = new ArrayList<>();
+
+    public ImportHandler(List<Source> sources, Currency eur, WebRequestService downloadHandler){
+        this.downloadHandler = downloadHandler;
         //add all and only active sources
         for(Source source : sources){
             if(source.getDescription().equals(SourceName.ALPHAVANTAGEEQ.name())) {

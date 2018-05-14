@@ -12,7 +12,7 @@ H2DEV=jdbc:h2:file:./h2dev;AUTO_SERVER=TRUE,sa,sa,org.h2.Driver
 POOL_SIZE=20
 
 [CM_CONFIG]
-pids=org.ops4j.pax.web,de.hf.dac.security.auth.DacJaasRealmService
+pids=org.ops4j.pax.web,DAC.DacJaasRealmService
 
 [CMPID_org.ops4j.pax.web]
 org.ops4j.pax.web.ssl.password = password

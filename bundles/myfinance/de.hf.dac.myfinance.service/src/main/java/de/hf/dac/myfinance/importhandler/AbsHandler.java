@@ -19,24 +19,24 @@ package de.hf.dac.myfinance.importhandler;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+
+import de.hf.dac.api.io.web.WebRequestService;
 import de.hf.dac.myfinance.api.domain.Currency;
 import de.hf.dac.myfinance.api.domain.EndOfDayPrice;
 import de.hf.dac.myfinance.api.domain.Security;
 import de.hf.dac.myfinance.api.domain.Source;
 import de.hf.dac.myfinance.api.exceptions.MDException;
 import de.hf.dac.myfinance.api.exceptions.MDMsgKey;
-import de.hf.dac.web.Http;
 
 import java.io.IOException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 public abstract class AbsHandler {
 
-    Http downloadHandler;
+    WebRequestService downloadHandler;
 
     protected Map<LocalDate, EndOfDayPrice> convertToEndOfDayPrice(Map<LocalDate, Double> prices,
             LocalDate lastPricedDate,

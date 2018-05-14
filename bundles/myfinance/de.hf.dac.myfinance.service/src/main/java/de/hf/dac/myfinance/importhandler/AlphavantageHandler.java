@@ -18,13 +18,13 @@
 package de.hf.dac.myfinance.importhandler;
 
 
+import de.hf.dac.api.io.web.WebRequestService;
 import de.hf.dac.myfinance.api.domain.Currency;
 import de.hf.dac.myfinance.api.domain.EndOfDayPrice;
 import de.hf.dac.myfinance.api.domain.Security;
 import de.hf.dac.myfinance.api.domain.SecuritySymbols;
 import de.hf.dac.myfinance.api.domain.SecurityType;
 import de.hf.dac.myfinance.api.domain.Source;
-import de.hf.dac.web.Http;
 import lombok.extern.slf4j.Slf4j;
 
 import java.time.LocalDate;
@@ -42,7 +42,7 @@ public class AlphavantageHandler extends AbsHandler implements Handler {
 
     public AlphavantageHandler(AlphavantageType type,
             Source source,
-            Http downloadHandler, Currency eur){
+        WebRequestService downloadHandler, Currency eur){
 
         this.type=type;
         this.source = source;

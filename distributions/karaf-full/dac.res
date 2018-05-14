@@ -12,7 +12,7 @@ H2DEV=jdbc:h2:file:./h2dev;AUTO_SERVER=TRUE,sa,sa,org.h2.Driver
 POOL_SIZE=20
 
 [CM_CONFIG]
-pids=org.ops4j.pax.web,de.hf.dac.security.auth.DacJaasRealmService
+pids=org.ops4j.pax.web,DAC.DacJaasRealmService,DAC.WebRequestServiceImpl
 
 [CMPID_org.ops4j.pax.web]
 org.ops4j.pax.web.ssl.keystore=C:/devenv/repos/dac/distributions/karaf-full/devkeystore.jks
@@ -22,6 +22,13 @@ org.osgi.service.http.port.secure = 8443
 org.osgi.service.http.secure.enabled = true
 org.osgi.service.http.enabled = true
 
+[CMPID_DAC.WebRequestServiceImpl]
+proxy.on=true
+proxy.url=proxy.dzbank.vrnet
+proxy.port=8080
+proxy.user=xn01598
+proxy.pw=XN01598
+
 [CMPID_DAC.DacJaasRealmService]
 #ldap,off or some thing else for karaf default
 auth.mode=karaf
@@ -30,3 +37,4 @@ auth.mode=karaf
 MARKETDATA_LAUNCH_USER=karaf
 MARKETDATA_LAUNCH_PASSWORD=karaf
 MARKETDATA_LAUNCH_URL=http://localhost:8181/dac/rest
+

@@ -24,6 +24,7 @@ import de.hf.dac.api.io.efmb.EntityManagerFactorySetup;
 import de.hf.dac.api.io.efmb.tx.WrappedEntityManagerFactory;
 import de.hf.dac.api.io.env.EnvironmentService;
 import de.hf.dac.api.io.env.EnvironmentTargetInfo;
+import de.hf.dac.api.io.web.WebRequestService;
 import de.hf.dac.myfinance.api.application.EnvTarget;
 import de.hf.dac.myfinance.api.application.MarketDataEnvironment;
 import de.hf.dac.myfinance.api.domain.Product;
@@ -51,18 +52,21 @@ public class MFEnvironmentBuilderModule extends AbstractModule {
     private EntityManagerFactorySetup emfb;
     TransactionManager jtaManager;
     private String env;
+    WebRequestService webRequestService;
 
     public MFEnvironmentBuilderModule(EnvironmentService envService, EntityManagerFactorySetup emfb,
-        TransactionManager jtaManager, String env){
+        TransactionManager jtaManager, String env, WebRequestService webRequestService){
         this.envService=envService;
         this.emfb=emfb;
         this.jtaManager=jtaManager;
         this.env = env;
+        this.webRequestService = webRequestService;
     }
 
     @Override
     protected void configure() {
         bind(EnvironmentService.class).toInstance(envService);
+        bind(WebRequestService.class).toInstance(webRequestService);
 
         bind(EntityManagerFactory.class).annotatedWith(Names.named(EnvTarget.MDB)).toInstance(provideMdbEntityManagerFactory());
 
