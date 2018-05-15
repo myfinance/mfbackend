@@ -2,10 +2,11 @@
 FROM anapsix/alpine-java:8u144b01_jdk
 
 ADD ./MyFinance /MyFinance
-ADD ./dac.res /MyFinance
-ADD ./devkeystore.jks /MyFinance/data
+RUN mkdir /MyFinance/envconfig
+ADD ./dac.res /MyFinance/envconfig
+ADD ./devkeystore.jks /MyFinance/envconfig
 
-ENV DAC_RES_PATH=/MyFinance
+ENV DAC_RES_PATH=/MyFinance/envconfig
 
 WORKDIR /MyFinance/bin/
 
