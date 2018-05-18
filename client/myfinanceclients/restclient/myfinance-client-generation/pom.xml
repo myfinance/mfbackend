@@ -58,7 +58,7 @@
                         <argument>-t</argument>
                         <argument>${project.basedir}/../myfinance-client-generator/templates/MyFinanceClient_Java</argument>
                         <argument>--library</argument>
-                        <argument>jersey1</argument>
+                        <argument>jersey2</argument>
                         <argument>--additional-properties</argument>
                         <argument>java8=true,dateLibrary=java8-localdatetime</argument>
                         <argument>--artifact-version</argument>

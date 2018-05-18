@@ -142,6 +142,8 @@ public class MyFinanceClient_JavaGenerator extends JavaClientCodegen implements 
         this.supportingFiles.add(new SupportingFile("Configuration.mustache", invokerFolder, "Configuration.java"));
         this.supportingFiles.add(new SupportingFile("Pair.mustache", invokerFolder, "Pair.java"));
         this.supportingFiles.add(new SupportingFile("RFC3339DateFormat.mustache", invokerFolder, "RFC3339DateFormat.java"));
+
+        this.supportingFiles.add(new SupportingFile("JSON.mustache", invokerFolder, "JSON.java"));
     }
 
 
