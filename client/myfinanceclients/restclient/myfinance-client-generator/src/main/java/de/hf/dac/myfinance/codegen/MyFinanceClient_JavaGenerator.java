@@ -92,15 +92,8 @@ public class MyFinanceClient_JavaGenerator extends JavaClientCodegen implements 
          */
         additionalProperties.put("apiVersion", apiVersion);
 
-        /**
-         * Supporting Files.  You can write single files for the generator with the
-         * entire object tree available.  If the input file has a suffix of `.mustache
-         * it will be processed by the template engine.  Otherwise, it will be copied
-         */
-        //    supportingFiles.add(new SupportingFile("myFile.mustache",   // the input template or file
-        //      "",                                                       // the destination folder, relative `outputFolder`
-        //      "myFile.sample")                                          // the output file
-        //    );
+
+        supportingFiles.clear();
         supportingFiles.add(new SupportingFile("bnd.bnd","","bnd.bnd"));
 
         /**
@@ -111,15 +104,44 @@ public class MyFinanceClient_JavaGenerator extends JavaClientCodegen implements 
 
         groupId = "de.hf.dac.myfinance.client";
         artifactId = "myfinance-client-generated";
-        //artifactVersion = getClass().getPackage().getImplementationVersion();
 
 
         additionalProperties.put("invokerPackage", invokerPackage);
         additionalProperties.put("groupId", groupId);
         additionalProperties.put("artifactId", artifactId);
-        //additionalProperties.put("artifactVersion", artifactVersion);
 
 
+    }
+
+    @Override
+    public void processOpts(){
+        super.processOpts();
+
+        //remove all additional files to add only files needed
+        this.supportingFiles.clear();
+        /**
+         * Supporting Files.  You can write single files for the generator with the
+         * entire object tree available.  If the input file has a suffix of `.mustache
+         * it will be processed by the template engine.  Otherwise, it will be copied
+         */
+        //    supportingFiles.add(new SupportingFile("myFile.mustache",   // the input template or file
+        //      "",                                                       // the destination folder, relative `outputFolder`
+        //      "myFile.sample")                                          // the output file
+        //    );
+        this.supportingFiles.add(new SupportingFile("bnd.bnd","","bnd.bnd"));
+        String invokerFolder = (this.sourceFolder + '/' + this.invokerPackage).replace(".", "/");
+        this.supportingFiles.add(new SupportingFile("ApiClient.mustache", invokerFolder, "ApiClient.java"));
+        this.supportingFiles.add(new SupportingFile("StringUtil.mustache", invokerFolder, "StringUtil.java"));
+        String authFolder = (this.sourceFolder + '/' + this.invokerPackage + ".auth").replace(".", "/");
+        this.supportingFiles.add(new SupportingFile("auth/HttpBasicAuth.mustache", authFolder, "HttpBasicAuth.java"));
+        this.supportingFiles.add(new SupportingFile("auth/ApiKeyAuth.mustache", authFolder, "ApiKeyAuth.java"));
+        this.supportingFiles.add(new SupportingFile("auth/OAuth.mustache", authFolder, "OAuth.java"));
+        this.supportingFiles.add(new SupportingFile("auth/OAuthFlow.mustache", authFolder, "OAuthFlow.java"));
+        this.supportingFiles.add(new SupportingFile("auth/Authentication.mustache", authFolder, "Authentication.java"));
+        this.supportingFiles.add(new SupportingFile("apiException.mustache", invokerFolder, "ApiException.java"));
+        this.supportingFiles.add(new SupportingFile("Configuration.mustache", invokerFolder, "Configuration.java"));
+        this.supportingFiles.add(new SupportingFile("Pair.mustache", invokerFolder, "Pair.java"));
+        this.supportingFiles.add(new SupportingFile("RFC3339DateFormat.mustache", invokerFolder, "RFC3339DateFormat.java"));
     }
 
 

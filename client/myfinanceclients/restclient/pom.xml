@@ -23,6 +23,7 @@
                 <module>deploykaraf4clientgen</module>
                 <module>myfinance-client-generator</module>
                 <module>myfinance-client-generation</module>
+                <module>myfinance-tsclient-generation</module>
                 <module>cleanup-restclient-gen</module>
                 <module>generated-projects/myfinance-client-generated-java</module>
             </modules>

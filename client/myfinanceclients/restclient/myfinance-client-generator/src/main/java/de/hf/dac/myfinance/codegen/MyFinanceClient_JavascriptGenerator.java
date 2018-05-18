@@ -6,7 +6,7 @@
  *
  *  Project     : dac
  *
- *  File        : MarketDataClient_JavascriptGenerator.java
+ *  File        : MyFinanceClient_JavascriptGenerator.java
  *
  *  Author(s)   : hf
  *
@@ -17,11 +17,8 @@
 
 package de.hf.dac.myfinance.codegen;
 
-import io.swagger.codegen.CodegenConfig;
-import io.swagger.codegen.CodegenOperation;
-import io.swagger.codegen.CodegenParameter;
-import io.swagger.codegen.CodegenType;
-import io.swagger.codegen.languages.JavascriptClientCodegen;
+import io.swagger.codegen.*;
+import io.swagger.codegen.languages.TypeScriptAngularClientCodegen;
 import io.swagger.models.Model;
 import io.swagger.models.Operation;
 import io.swagger.models.Swagger;
@@ -29,7 +26,7 @@ import io.swagger.models.Swagger;
 import java.util.HashSet;
 import java.util.Map;
 
-public class MarketDataClient_JavascriptGenerator  extends JavascriptClientCodegen implements CodegenConfig {
+public class MyFinanceClient_JavascriptGenerator extends TypeScriptAngularClientCodegen implements CodegenConfig {
 
     protected String apiVersion = "1.0.0";
 
@@ -50,7 +47,7 @@ public class MarketDataClient_JavascriptGenerator  extends JavascriptClientCodeg
      * @return the friendly name for the generator
      */
     public String getName() {
-        return "MarketDataClient_Javascript";
+        return "MyFinanceClient_Javascript";
     }
 
     /**
@@ -63,7 +60,7 @@ public class MarketDataClient_JavascriptGenerator  extends JavascriptClientCodeg
         return "Generates a CCRClient client library.";
     }
 
-    public MarketDataClient_JavascriptGenerator() {
+    public MyFinanceClient_JavascriptGenerator() {
         super();
 
         // set the output folder here
@@ -73,12 +70,12 @@ public class MarketDataClient_JavascriptGenerator  extends JavascriptClientCodeg
         /**
          * Api Package.  Optional, if needed, this can be used in templates
          */
-        apiPackage = "MarketData.client.api";
+        apiPackage = "MyFinance.client.api";
 
         /**
          * Model Package.  Optional, if needed, this can be used in templates
          */
-        modelPackage = "MarketData.client.model";
+        modelPackage = "MyFinance.client.model";
 
         /**
          * Reserved words.  Override this with reserved words specific to your language
@@ -114,6 +111,12 @@ public class MarketDataClient_JavascriptGenerator  extends JavascriptClientCodeg
             op.nickname += "_" + p.paramName;
         }
         return op;
+    }
+
+    @Override
+    public void processOpts() {
+        super.processOpts();
+        supportingFiles.clear();
     }
 
 

@@ -66,8 +66,8 @@
 
         <!--rest-->
         <rs-api.version>2.0.1</rs-api.version>
-        <swagger.version>1.5.12</swagger.version>
-        <swagger-codegen.version>2.2.1</swagger-codegen.version>
+        <swagger.version>1.5.19</swagger.version>
+        <swagger-codegen.version>2.3.1</swagger-codegen.version>
         <jackson.version>2.8.6</jackson.version>
         <snakeyaml.version>1.18</snakeyaml.version>
         <aries.rsa.version>1.9.0</aries.rsa.version>

@@ -1,13 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
         <artifactId>restclient</artifactId>
         <groupId>de.hf.dac.myfinance.client</groupId>
         <version>0.11.0-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
-    <artifactId>myfinance-client-generation</artifactId>
 
+    <artifactId>myfinance-tsclient-generation</artifactId>
 
     <dependencies>
         <dependency>
@@ -24,15 +26,11 @@
                 <configuration>
                     <filesets>
                         <fileset>
-                            <directory>${project.basedir}/../generated-projects/myfinance-client-generated-java</directory>
+                            <directory>${project.basedir}/../../angular/src/app/shared/myfinance-tsclient-generated</directory>
                             <includes>
                                 <include>**/*</include>
                                 <include>**/*</include>
                             </includes>
-                            <excludes>
-                                <exclude>pom.xml</exclude>
-                                <exclude>**/*.iml</exclude>
-                            </excludes>
                             <followSymlinks>false</followSymlinks>
                         </fileset>
                     </filesets>
@@ -55,18 +53,12 @@
                     <classpathScope>runtime</classpathScope>
                     <arguments>
                         <argument>generate</argument>
-                        <argument>-t</argument>
-                        <argument>${project.basedir}/../myfinance-client-generator/templates/MyFinanceClient_Java</argument>
-                        <argument>--library</argument>
-                        <argument>jersey1</argument>
-                        <argument>--additional-properties</argument>
-                        <argument>java8=true,dateLibrary=java8-localdatetime</argument>
                         <argument>--artifact-version</argument>
                         <argument>${project.version}</argument>
                         <argument>-l</argument>
-                        <argument>de.hf.dac.myfinance.codegen.MyFinanceClient_JavaGenerator</argument>
+                        <argument>de.hf.dac.myfinance.codegen.MyFinanceClient_JavascriptGenerator</argument>
                         <argument>-o</argument>
-                        <argument>${project.basedir}/../generated-projects/myfinance-client-generated-java/</argument>
+                        <argument>${project.basedir}/../../angular/src/app/shared/myfinance-tsclient-generated/</argument>
                         <argument>-i</argument>
                         <argument>${project.basedir}/../deploykaraf4clientgen/target/swagger.json</argument>
                     </arguments>
