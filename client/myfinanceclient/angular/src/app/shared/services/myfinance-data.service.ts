@@ -5,12 +5,13 @@ import {BASE_URL} from "../../app.tokens";
 import {Instrument} from "../models/instrument";
 import {Position} from "../models/position";
 import {HttpClient} from "@angular/common/http";
+import {BASE_PATH} from "../myfinance-tsclient-generated/variables";
 
 @Injectable()
 export class MyFinanceDataService{
   constructor(
     private http: HttpClient,
-    @Inject(BASE_URL) private baseUrl: string
+    @Inject(BASE_PATH) private baseUrl: string
   ) {
   }
 

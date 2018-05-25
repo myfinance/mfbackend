@@ -1,5 +1,5 @@
 import { BrowserModule } from '@angular/platform-browser';
-import {NgModule, ReflectiveInjector} from '@angular/core';
+import {NgModule} from '@angular/core';
 import { FormsModule } from '@angular/forms';
 
 import { AppComponent } from './app.component';
@@ -14,8 +14,6 @@ import {TopNavigationComponent} from "./shared/components/top-navigation/top-nav
 import {BasicLayoutComponent} from "./shared/components/basic-layout/basic-layout.component";
 import { BarchartexpComponent } from './views/examples/barchartexp/barchartexp.component';
 import {WidgetModule} from "./modules/widget/widget.module";
-import {MyFinanceDataService} from "./shared/services/myfinance-data.service";
-import {MyfinanceDummyDataService} from "./shared/services/myfinance-data-mock.service";
 
 // ngx-bootstrap
 import { CollapseModule } from 'ngx-bootstrap/collapse';
@@ -25,30 +23,16 @@ import { LinechartexpComponent } from './views/examples/linechartexp/linechartex
 import { GridexpComponent } from './views/examples/gridexp/gridexp.component';
 import {HTTP_INTERCEPTORS, HttpClient, HttpClientModule} from "@angular/common/http";
 import {HttpInterceptor} from "./http-interceptor";
+import {ApiModule} from "./shared/myfinance-tsclient-generated/api.module";
+import {MyFinanceService} from "./shared/myfinance-tsclient-generated/api/myFinance.service";
+import {BASE_PATH} from "./shared/myfinance-tsclient-generated/variables";
 
 const DEBUG=false;
-const BASEURL='http://localhost:8181/dac/rest/myfinance/environments/dev';
+const BASEURL='https://localhost:8443/dac/rest';
 
 
 export let baseURLProvider =
-  { provide: BASE_URL, useValue: BASEURL
-  };
-
-let injector = ReflectiveInjector.resolveAndCreate([baseURLProvider]);
-
-export function myfinanceDataServiceFactory(http:HttpClient){
-  if(DEBUG) {
-    return new MyfinanceDummyDataService();
-  }
-  else {
-    return new MyFinanceDataService(http, injector.get(BASE_URL));
-  }
-}
-
-export let myFinanceDataServiceProvider =
-  { provide: MyFinanceDataService,
-    useFactory: myfinanceDataServiceFactory,
-    deps: [HttpClientModule, BASE_URL]
+  { provide: BASE_PATH, useValue: BASEURL
   };
 
 
@@ -74,6 +58,7 @@ export let myFinanceDataServiceProvider =
     AppRoutesModule,
     WidgetModule,
     MyFinanceCommonModule,
+    ApiModule,
     CollapseModule.forRoot(),
     BsDropdownModule.forRoot()
   ],
@@ -84,8 +69,7 @@ export let myFinanceDataServiceProvider =
       useClass: HttpInterceptor,
       multi: true
     },
-    MyFinanceDataService
-    //myFinanceDataServiceProvider
+    MyFinanceService
   ],
   bootstrap: [AppComponent]
 

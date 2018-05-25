@@ -12,7 +12,7 @@
     <packaging>pom</packaging>
     <modules>
         <module>baserunner</module>
-        <module>myfinanceclients</module>
+        <module>myfinanceclient</module>
     </modules>
 
 </project>

@@ -3,7 +3,7 @@
  */
 import { Component } from '@angular/core';
 import {Instrument} from "../shared/models/instrument";
-import {MyFinanceDataService} from "../shared/services/myfinance-data.service";
+import {MyFinanceService} from "../shared/myfinance-tsclient-generated/api/myFinance.service";
 
 @Component({
   selector: 'instrument-search',
@@ -13,11 +13,10 @@ export class InstrumentSearchComponent {
   isin: string;
   instruments: Array<Instrument>;
 
-  constructor(private instrumentService: MyFinanceDataService) { }
+  constructor(private instrumentService: MyFinanceService) { }
   search(): void{
     this
-      .instrumentService
-      .find(this.isin)
+      .instrumentService.getInstruments_envID('dev')
       .subscribe(
         (instruments: Instrument[]) => {
           this.instruments = instruments;

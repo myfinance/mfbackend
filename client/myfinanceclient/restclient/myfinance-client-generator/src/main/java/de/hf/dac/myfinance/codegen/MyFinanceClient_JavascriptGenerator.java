@@ -23,7 +23,9 @@ import io.swagger.models.Model;
 import io.swagger.models.Operation;
 import io.swagger.models.Swagger;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 
 public class MyFinanceClient_JavascriptGenerator extends TypeScriptAngularClientCodegen implements CodegenConfig {
@@ -63,19 +65,6 @@ public class MyFinanceClient_JavascriptGenerator extends TypeScriptAngularClient
     public MyFinanceClient_JavascriptGenerator() {
         super();
 
-        // set the output folder here
-        outputFolder = "generated-code/MarketDataClient_Javascript";
-
-
-        /**
-         * Api Package.  Optional, if needed, this can be used in templates
-         */
-        apiPackage = "MyFinance.client.api";
-
-        /**
-         * Model Package.  Optional, if needed, this can be used in templates
-         */
-        modelPackage = "MyFinance.client.model";
 
         /**
          * Reserved words.  Override this with reserved words specific to your language
@@ -116,7 +105,17 @@ public class MyFinanceClient_JavascriptGenerator extends TypeScriptAngularClient
     @Override
     public void processOpts() {
         super.processOpts();
+        List<SupportingFile> filteredFileList = new ArrayList<>();
+        for(SupportingFile file : supportingFiles){
+            if(!file.destinationFilename.equals("git_push.sh")
+                && !file.destinationFilename.equals(".gitignore")
+                && !file.destinationFilename.equals(".swagger-codegen-ignore")
+                ){
+                filteredFileList.add(file);
+            }
+        }
         supportingFiles.clear();
+        supportingFiles.addAll(filteredFileList);
     }
 
 
