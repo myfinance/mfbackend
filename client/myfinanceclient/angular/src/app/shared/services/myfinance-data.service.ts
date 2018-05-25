@@ -1,11 +1,11 @@
 
 import {Inject, Injectable} from "@angular/core";
-import {Observable} from "rxjs/Observable";
 import {BASE_URL} from "../../app.tokens";
 import {Instrument} from "../models/instrument";
 import {Position} from "../models/position";
 import {HttpClient} from "@angular/common/http";
 import {BASE_PATH} from "../myfinance-tsclient-generated/variables";
+import {Observable} from "rxjs/Rx";
 
 @Injectable()
 export class MyFinanceDataService{
@@ -18,7 +18,12 @@ export class MyFinanceDataService{
   find(isin: string): Observable<Instrument[]> {
 
 
-    return this.http.get<Instrument[]>(this.baseUrl + '/instruments');
+    //return this.http.get<Instrument[]>(this.baseUrl + '/instruments');
+    let instrument : Instrument = { instrumentid: 1, isin: "isin00000001", description:"testinstrument1", treelastchanged: "2017-12-24T17:00:00.000+01:00" };
+    let instrument2 : Instrument = { instrumentid: 2, isin: "isin00000002", description:"testinstrument2", treelastchanged: "2017-12-24T17:00:00.000+01:00" };
+    let instruments: Instrument[]=[instrument, instrument2]
+    let filteredinstruments: Instrument[]=instruments.filter(i=>i.isin.indexOf(isin)>=0);
+    return Observable.of(filteredinstruments);
 
   }
 

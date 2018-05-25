@@ -1,10 +1,9 @@
 import {ChangeDetectionStrategy, Component, OnInit} from '@angular/core';
 import {Subject} from "rxjs/Subject";
 import {DcService} from "../../../modules/widget/services/dc.service";
+import {MyFinanceDataService} from "../../../shared/services/myfinance-data.service";
 import {UUID} from "angular2-uuid";
 import {Position} from "../../../shared/models/position";
-import {MyFinanceDataService} from "../../../shared/services/myfinance-data.service";
-import {MyFinanceService} from "../../../shared/myfinance-tsclient-generated";
 
 
 @Component({
@@ -50,7 +49,7 @@ export class BarchartexpComponent implements OnInit {
   private _data;
   private _resizedSubject: Subject<any> = new Subject();
 
-  constructor(private _dcService: DcService, private dataService: MyFinanceService) { }
+  constructor(private _dcService: DcService, private dataService: MyFinanceDataService) { }
 
   ngOnInit() {
     this.loadData();
@@ -63,7 +62,7 @@ export class BarchartexpComponent implements OnInit {
   loadData(): void{
     this
       .dataService
-      .
+      .getPositions()
       .subscribe(
         (positions: Position[]) => {
           this._data = positions;

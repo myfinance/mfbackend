@@ -26,6 +26,7 @@ import {HttpInterceptor} from "./http-interceptor";
 import {ApiModule} from "./shared/myfinance-tsclient-generated/api.module";
 import {MyFinanceService} from "./shared/myfinance-tsclient-generated/api/myFinance.service";
 import {BASE_PATH} from "./shared/myfinance-tsclient-generated/variables";
+import {MyFinanceDataService} from "./shared/services/myfinance-data.service";
 
 const DEBUG=false;
 const BASEURL='https://localhost:8443/dac/rest';
@@ -69,7 +70,8 @@ export let baseURLProvider =
       useClass: HttpInterceptor,
       multi: true
     },
-    MyFinanceService
+    MyFinanceService,
+    MyFinanceDataService
   ],
   bootstrap: [AppComponent]
 
