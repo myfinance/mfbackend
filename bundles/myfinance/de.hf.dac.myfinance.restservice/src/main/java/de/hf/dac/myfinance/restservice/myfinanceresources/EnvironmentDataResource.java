@@ -26,6 +26,7 @@ import de.hf.dac.myfinance.api.domain.Instrument;
 import de.hf.dac.myfinance.api.domain.Security;
 import de.hf.dac.myfinance.api.exceptions.MDException;
 import de.hf.dac.myfinance.api.exceptions.MDMsgKey;
+import de.hf.dac.myfinance.api.restservice.InstrumentListModel;
 import de.hf.dac.services.resources.BaseSecuredResource;
 import de.hf.dac.services.resources.leaf.LeafResource;
 import io.swagger.annotations.ApiOperation;
@@ -78,6 +79,17 @@ public class EnvironmentDataResource extends BaseSecuredResource<OpType,OpLevel>
     @Path("/instruments")
     @Produces(MediaType.APPLICATION_JSON)
     @ApiOperation(value = "get Instruments",
+        response = InstrumentListModel.class)
+    public InstrumentListResource getInstruments() {
+        checkOperationAllowed(OpType.READ);
+        LocalDateTime returnvalue = LocalDateTime.now();
+        return new InstrumentListResource(new InstrumentListModel(marketDataEnvironment.getInstrumentService().listInstruments()));
+    }
+
+    /*@GET
+    @Path("/instruments")
+    @Produces(MediaType.APPLICATION_JSON)
+    @ApiOperation(value = "get Instruments",
         response = List.class)
     public Response getInstruments() {
         checkOperationAllowed(OpType.READ);
@@ -91,7 +103,7 @@ public class EnvironmentDataResource extends BaseSecuredResource<OpType,OpLevel>
                            .type(MediaType.APPLICATION_JSON)
                            .build();
         }
-    }
+    }*/
 
     @POST
     @Path("/importprices")

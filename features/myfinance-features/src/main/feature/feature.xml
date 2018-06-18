@@ -30,6 +30,7 @@
         <feature>myfinance-service-feature</feature>
         <bundle  dependency="true">mvn:de.hf.dac.myfinance/de.hf.dac.myfinance.runner/${project.version}</bundle>
         <bundle>mvn:de.hf.dac.myfinance.api/de.hf.dac.myfinance.api.application/${project.version}</bundle>
+        <bundle>mvn:de.hf.dac.myfinance.api/de.hf.dac.myfinance.api.restservice/${project.version}</bundle>
         <bundle>mvn:de.hf.dac.myfinance/de.hf.dac.myfinance.restservice/${project.version}</bundle>
         <bundle>mvn:de.hf.dac.myfinance/de.hf.dac.myfinance.application/${project.version}</bundle>
     </feature>

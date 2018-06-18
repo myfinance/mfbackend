@@ -1,0 +1,5 @@
+-metatype: *
+Export-Package: \
+	de.hf.dac.myfinance.api.restservice
+
+Bundle-SymbolicName: ${project.artifactId}

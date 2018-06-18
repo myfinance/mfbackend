@@ -4,7 +4,7 @@ import {BASE_URL} from "../../app.tokens";
 import {Instrument} from "../models/instrument";
 import {Position} from "../models/position";
 import {HttpClient} from "@angular/common/http";
-import {BASE_PATH} from "../myfinance-tsclient-generated/variables";
+import {BASE_PATH} from "../../modules/myfinance-tsclient-generated/variables";
 import {Observable} from "rxjs/Rx";
 
 @Injectable()

@@ -26,7 +26,7 @@
                 <configuration>
                     <filesets>
                         <fileset>
-                            <directory>${project.basedir}/../../angular/src/app/shared/myfinance-tsclient-generated</directory>
+                            <directory>${project.basedir}/../../angular/src/app/modules/myfinance-tsclient-generated</directory>
                             <includes>
                                 <include>**/*</include>
                                 <include>**/*</include>
@@ -58,7 +58,7 @@
                         <argument>-l</argument>
                         <argument>de.hf.dac.myfinance.codegen.MyFinanceClient_JavascriptGenerator</argument>
                         <argument>-o</argument>
-                        <argument>${project.basedir}/../../angular/src/app/shared/myfinance-tsclient-generated/</argument>
+                        <argument>${project.basedir}/../../angular/src/app/modules/myfinance-tsclient-generated/</argument>
                         <argument>-i</argument>
                         <argument>${project.basedir}/../deploykaraf4clientgen/target/swagger.json</argument>
                     </arguments>

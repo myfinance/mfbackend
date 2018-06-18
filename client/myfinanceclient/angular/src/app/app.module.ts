@@ -23,9 +23,9 @@ import { LinechartexpComponent } from './views/examples/linechartexp/linechartex
 import { GridexpComponent } from './views/examples/gridexp/gridexp.component';
 import {HTTP_INTERCEPTORS, HttpClient, HttpClientModule} from "@angular/common/http";
 import {HttpInterceptor} from "./http-interceptor";
-import {ApiModule} from "./shared/myfinance-tsclient-generated/api.module";
-import {MyFinanceService} from "./shared/myfinance-tsclient-generated/api/myFinance.service";
-import {BASE_PATH} from "./shared/myfinance-tsclient-generated/variables";
+import {ApiModule} from "./modules/myfinance-tsclient-generated/api.module";
+import {MyFinanceService} from "./modules/myfinance-tsclient-generated/api/myFinance.service";
+import {BASE_PATH} from "./modules/myfinance-tsclient-generated/variables";
 import {MyFinanceDataService} from "./shared/services/myfinance-data.service";
 
 const DEBUG=false;

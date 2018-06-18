@@ -48,8 +48,8 @@ rem ----------------------------------------------------------------------
 rem deploy
 rem ----------------------------------------------------------------------
 call:cout %targetdir%
-if exist %targetdir%\karaf (
-    rmdir %targetdir%\karaf /s /q
+if exist %targetdir%\karaf_clientless (
+    rmdir %targetdir%\karaf_clientless /s /q
 )
 call:cout %mydir%
 call:cout %filename%

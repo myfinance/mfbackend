@@ -13,7 +13,6 @@
     <modules>
         <module>restclient</module>
         <module>myfinancerunner</module>
-
     </modules>
 
     <profiles>

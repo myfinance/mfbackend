@@ -3,7 +3,7 @@
  */
 import { Component } from '@angular/core';
 import {Instrument} from "../shared/models/instrument";
-import {MyFinanceService} from "../shared/myfinance-tsclient-generated/api/myFinance.service";
+import {MyFinanceService} from "../modules/myfinance-tsclient-generated/api/myFinance.service";
 
 @Component({
   selector: 'instrument-search',

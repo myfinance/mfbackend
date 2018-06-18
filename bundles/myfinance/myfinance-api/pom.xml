@@ -14,6 +14,7 @@
         <module>de.hf.dac.myfinance.api.domain</module>
         <module>de.hf.dac.myfinance.api.persistence</module>
         <module>de.hf.dac.myfinance.api.application</module>
+        <module>de.hf.dac.myfinance.api.restservice</module>
     </modules>
 
 </project>
