@@ -1,2 +1,4 @@
 *.iml
-.idea/**.*
+.idea/*
+client/myfinanceclient/angular/package-lock.json
+**/target/*
