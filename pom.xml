@@ -43,7 +43,7 @@
         <hibernate-annotations.version>5.0.0.Final</hibernate-annotations.version>
         <karaf.version>4.1.2</karaf.version>
         <pax-jdbc.version>1.1.0</pax-jdbc.version><!--feature to create Datasources -->
-        <apache-cxf.version>3.2.4</apache-cxf.version><!-- rest für osgi -->
+        <apache-cxf.version>3.1.15</apache-cxf.version><!-- rest für osgi -->
         <servicemix-reflections.version>0.9.10_3</servicemix-reflections.version>
         <junit.version>4.12</junit.version>
         <httpcore-osgi.version>4.4.5</httpcore-osgi.version>

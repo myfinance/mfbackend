@@ -99,9 +99,22 @@
         <bundle>mvn:de.hf.dac/de.hf.dac.security/${project.version}</bundle>
     </feature>
 
+
+    <feature name="dac-cxf-jackson" version="${pom.version}">
+        <bundle start-level="35">mvn:org.yaml/snakeyaml/1.18</bundle>
+        <bundle start-level="35">mvn:com.fasterxml.jackson.dataformat/jackson-dataformat-yaml/${jackson.version}</bundle>
+        <bundle start-level="35">mvn:com.fasterxml.jackson.core/jackson-databind/${jackson.version}</bundle>
+        <bundle start-level="35">mvn:com.fasterxml.jackson.core/jackson-core/${jackson.version}</bundle>
+        <bundle start-level="35">mvn:com.fasterxml.jackson.jaxrs/jackson-jaxrs-base/${jackson.version}</bundle>
+        <bundle start-level="35">mvn:com.fasterxml.jackson.jaxrs/jackson-jaxrs-json-provider/${jackson.version}</bundle>
+    </feature>
+
     <feature name="dac-cxf-swagger" version="${pom.version}">
+        <feature>dac-cxf-jackson</feature>
+        <!--<feature version="${apache-cxf.version}">
+        cxf-jackson</feature> for a newer swagger version a higher jackson-version is necessary.
+        Unfortunatly upgrading the hole cfx-feature causes some problems, so I use my own jackson feature-->
         <feature version="${apache-cxf.version}">cxf-jaxrs</feature>
-        <feature version="${apache-cxf.version}">cxf-jackson</feature>
         <bundle>mvn:com.google.guava/guava/${guava-swagger.version}</bundle>
         <bundle>mvn:org.apache.commons/commons-lang3/${apache-commons-lang3.version}</bundle>
         <bundle>mvn:javax.validation/validation-api/1.1.0.Final</bundle>
