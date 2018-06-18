@@ -2,3 +2,9 @@
 .idea/*
 client/myfinanceclient/angular/package-lock.json
 **/target/*
+client/myfinanceclient/angular/src/app/modules/myfinance-tsclient-generated/*
+client/myfinanceclient/restclient/generated-projects/myfinance-client-generated-java/.swagger-codegen-ignore
+client/myfinanceclient/restclient/generated-projects/myfinance-client-generated-java/.swagger-codegen/*
+client/myfinanceclient/restclient/generated-projects/myfinance-client-generated-java/bnd.bnd
+client/myfinanceclient/restclient/generated-projects/myfinance-client-generated-java/docs/*
+client/myfinanceclient/restclient/generated-projects/myfinance-client-generated-java/src/*

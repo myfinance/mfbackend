@@ -2,8 +2,8 @@
  * Created by xn01598 on 11.05.2017.
  */
 import { Component } from '@angular/core';
-import {Instrument} from "../shared/models/instrument";
-import {MyFinanceService} from "../modules/myfinance-tsclient-generated/api/myFinance.service";
+import {Instrument, MyFinanceService} from "../modules/myfinance-tsclient-generated";
+import {InstrumentListModel} from "../modules/myfinance-tsclient-generated";
 
 @Component({
   selector: 'instrument-search',
@@ -18,8 +18,8 @@ export class InstrumentSearchComponent {
     this
       .instrumentService.getInstruments_envID('dev')
       .subscribe(
-        (instruments: Instrument[]) => {
-          this.instruments = instruments;
+        (instruments: InstrumentListModel) => {
+          this.instruments = instruments.values;
         },
         (errResp) => {
           console.error('error', errResp);
