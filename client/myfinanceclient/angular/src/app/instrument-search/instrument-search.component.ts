@@ -16,7 +16,7 @@ export class InstrumentSearchComponent {
   constructor(private instrumentService: MyFinanceService) { }
   search(): void{
     this
-      .instrumentService.getInstruments_envID('dev')
+      .instrumentService.getInstrumentList_envID('dev')
       .subscribe(
         (instruments: InstrumentListModel) => {
           this.instruments = instruments.values;

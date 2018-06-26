@@ -42,6 +42,7 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -75,11 +76,10 @@ public class EnvironmentDataResource extends BaseSecuredResource<OpType,OpLevel>
         return Response.ok(returnvalue).links(link).build();
     }
 
-    @GET
     @Path("/instruments")
     @Produces(MediaType.APPLICATION_JSON)
     @ApiOperation(value = "get Instruments",
-        response = InstrumentListModel.class)
+        response = InstrumentListResource.class)
     public InstrumentListResource getInstruments() {
         checkOperationAllowed(OpType.READ);
         LocalDateTime returnvalue = LocalDateTime.now();
