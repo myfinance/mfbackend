@@ -1,5 +1,5 @@
 import { BrowserModule } from '@angular/platform-browser';
-import {NgModule} from '@angular/core';
+import {APP_INITIALIZER, NgModule} from '@angular/core';
 import { FormsModule } from '@angular/forms';
 
 import { AppComponent } from './app.component';
@@ -27,14 +27,30 @@ import {ApiModule} from "./modules/myfinance-tsclient-generated/api.module";
 import {MyFinanceService} from "./modules/myfinance-tsclient-generated/api/myFinance.service";
 import {BASE_PATH} from "./modules/myfinance-tsclient-generated/variables";
 import {MyFinanceDataService} from "./shared/services/myfinance-data.service";
+import {ConfigService} from "./shared/services/config.service";
 
 const DEBUG=false;
-const BASEURL='https://localhost:8443/dac/rest';
+
+
+/**
+ * placeholder to replace baseurl in http-interceptor with url from configservice
+ * do not replace the baseurl here because it can change dynamicly
+ */
+const BASEURL='###';
 
 
 export let baseURLProvider =
   { provide: BASE_PATH, useValue: BASEURL
   };
+
+/**
+ * Loads the configuration of the given configuration service.
+ * @param configService The configuration service to be used to load the configuration.
+ */
+export function initConfiguration(configService: ConfigService): Function {
+  return () => configService.load();
+}
+
 
 
 @NgModule({
@@ -64,13 +80,20 @@ export let baseURLProvider =
     BsDropdownModule.forRoot()
   ],
   providers: [
-    baseURLProvider,
     {
       provide: HTTP_INTERCEPTORS,
       useClass: HttpInterceptor,
       multi: true
     },
+    {
+      provide: APP_INITIALIZER,
+      useFactory: initConfiguration,
+      deps: [ConfigService],
+      multi: true
+    },
     MyFinanceService,
+    baseURLProvider,
+    ConfigService,
     MyFinanceDataService
   ],
   bootstrap: [AppComponent]
