@@ -3,22 +3,26 @@
     {
       "name": "Localhost",
       "identifier": "local",
-      "url": "https://localhost:8443/dac/rest"
+      "url": "https://localhost:8443/dac/rest",
+      "defaultEnvironment": "dev"
     },
     {
       "name": "Selber Host",
       "identifier": "samehost",
-      "url": "/dac/rest"
+      "url": "/dac/rest",
+      "defaultEnvironment": "md"
     },
     {
       "name": "Produktion",
       "identifier": "prod",
-      "url": "https://babcom.myds.me:8443/dac/rest"
+      "url": "https://babcom.myds.me:8443/dac/rest",
+      "defaultEnvironment": "md"
     },
     {
       "name": "Mock",
       "identifier": "mock",
-      "url": "na"
+      "url": "na",
+      "defaultEnvironment": "na"
     }
 
   ],

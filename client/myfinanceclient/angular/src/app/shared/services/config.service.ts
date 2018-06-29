@@ -29,6 +29,15 @@ export class ConfigService {
         } else {
           this.setCurrentZone(data.defaultZone);
         }
+        // Check if environment is saved in local storage.
+        // Set the current environment to the saved env or else
+        // set it to the default environment in the configuration.
+        let env = localStorage.getItem('env');
+        if(env) {
+          this.setCurrentEnv(env);
+        } else {
+          this.setCurrentEnv(this.getDefaultEnv());
+        }
       });
   }
 
@@ -46,6 +55,21 @@ export class ConfigService {
         this._config.currentZone = zone;
         // Additionally save the zone in the local storage.
         localStorage.setItem('zone', identifier);
+      }
+    }
+  }
+
+  setCurrentEnv(env: string): void {
+    this._config.currentEnvironment = env;
+    // Additionally save the zone in the local storage.
+    localStorage.setItem('env', env);
+  }
+
+  getDefaultEnv(): string {
+    let currentZone = localStorage.getItem('zone');
+    for(let zone of this._config.zones) {
+      if(zone.identifier == currentZone) {
+        return zone.defaultEnvironment;
       }
     }
   }

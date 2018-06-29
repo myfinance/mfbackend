@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import {Observable} from "../../../../node_modules/rxjs";
-import {Instrument, InstrumentListModel} from "../../modules/myfinance-tsclient-generated";
+import {Instrument, InstrumentListModel, StringListModel} from "../../modules/myfinance-tsclient-generated";
 
 
 @Injectable()
@@ -17,6 +17,12 @@ export class MockDataProviderService {
     let instrumentList : InstrumentListModel = {values: instruments, url:"mock", id:"mockid"};
     return Observable.of(instrumentList);
 
+  }
+
+  getEnvironments(): Observable<StringListModel> {
+    let envs: string[]=["enva", "envb"];
+    let envList : StringListModel = {values: envs, url:"mock", id:"mockid"};
+    return Observable.of(envList);
   }
 
 }

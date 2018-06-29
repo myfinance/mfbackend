@@ -37,7 +37,7 @@ public class StringListResource extends ListResource<String> {
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    @ApiOperation(value = "List Data" , response = StringListModel.class)
+    @ApiOperation(value = "List Data" , response = StringListModel.class )
     public Response getStringList(@Context UriInfo uriInfo) {
         return super.getList(uriInfo);
 

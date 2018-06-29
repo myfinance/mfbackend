@@ -8,7 +8,7 @@ import {BASE_PATH} from "../../modules/myfinance-tsclient-generated/variables";
 import {Observable} from "rxjs/Rx";
 import {ConfigService} from "./config.service";
 import {MockDataProviderService} from "./mock-data-provider.service";
-import {InstrumentListModel, MyFinanceService} from "../../modules/myfinance-tsclient-generated";
+import {InstrumentListModel, MyFinanceService, StringListModel} from "../../modules/myfinance-tsclient-generated";
 import {Configuration} from "../../modules/myfinance-tsclient-generated/configuration";
 import {MyFinanceWrapperService} from "./my-finance-wrapper.service";
 
@@ -29,6 +29,17 @@ export class MyFinanceDataService{
     this.myfinanceService.setBasePath(this.configService.get('currentZone').url)
 
     return this.myfinanceService.getInstrumentList_envID('dev');
+
+  }
+
+  getEnvironments(): Observable<StringListModel> {
+
+    if(this.configService.get('currentZone').identifier.match("mock")){
+      return this.mock.getEnvironments()
+    }
+    this.myfinanceService.setBasePath(this.configService.get('currentZone').url)
+
+    return this.myfinanceService.getStringList();
 
   }
 

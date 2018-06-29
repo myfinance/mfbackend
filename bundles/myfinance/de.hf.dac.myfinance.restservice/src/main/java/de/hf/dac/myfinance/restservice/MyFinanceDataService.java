@@ -37,7 +37,7 @@ import javax.ws.rs.core.MediaType;
 import java.util.List;
 
 @Path("/myfinance")
-@Api(value = "MyFinance") //must start with capital letter for client generation
+@Api(value = "MyFinance",  tags = { "MyFinance"}) //must start with capital letter for client generation
 public class MyFinanceDataService extends TopLevelSecuredResource<OpType,OpLevel> {
     private DataServiceRoot root;
 
@@ -57,8 +57,19 @@ public class MyFinanceDataService extends TopLevelSecuredResource<OpType,OpLevel
 
     @Path("/environments/list")
     @Produces(MediaType.APPLICATION_JSON)
-    @ApiOperation(value = "List Environments", response = StringListResource.class)
+    @ApiOperation(value = "List Environments", response = StringListResource.class, nickname ="getEnvironmentList")
     public StringListResource getEnvironmentList() {
+        checkOperationAllowed(OpType.READ, "getEnvironmentList");
+        audit();
+        List<String> envs = root.getEnvironmentInfo();
+
+        return new StringListResource(new StringListModel(envs));
+    }
+
+    @Path("/environments/test")
+    @Produces(MediaType.APPLICATION_JSON)
+    @ApiOperation(value = "testlist", response = StringListResource.class, nickname ="getTestList")
+    public StringListResource getTestList() {
         checkOperationAllowed(OpType.READ, "getEnvironmentList");
         audit();
         List<String> envs = root.getEnvironmentInfo();
