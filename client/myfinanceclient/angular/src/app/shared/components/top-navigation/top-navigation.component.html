@@ -46,7 +46,7 @@
         <li class="nav-item dropdown settings" dropdown>
           <a class="nav-link dropdown-toggle" href dropdownToggle (click)="false">Einstellungen</a>
           <ul *dropdownMenu class="dropdown-menu dropdown-menu-right">
-            <h6 class="dropdown-header">Zonen</h6>
+            <h6 class="dropdown-header">Backend</h6>
             <li *ngFor="let zone of configService.get('zones')">
               <div (click)="handleZoneSelect(zone.identifier)" class="dropdown-item">{{ zone.name }}<span class="text-success" *ngIf="zone.identifier == configService.get('currentZone').identifier"><i class="icon-checkmark" aria-hidden="true"></i></span></div>
             </li>

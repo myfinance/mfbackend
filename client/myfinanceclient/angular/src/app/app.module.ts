@@ -28,20 +28,7 @@ import {MyFinanceService} from "./modules/myfinance-tsclient-generated/api/myFin
 import {BASE_PATH} from "./modules/myfinance-tsclient-generated/variables";
 import {MyFinanceDataService} from "./shared/services/myfinance-data.service";
 import {ConfigService} from "./shared/services/config.service";
-
-const DEBUG=false;
-
-
-/**
- * placeholder to replace baseurl in http-interceptor with url from configservice
- * do not replace the baseurl here because it can change dynamicly
- */
-const BASEURL='###';
-
-
-export let baseURLProvider =
-  { provide: BASE_PATH, useValue: BASEURL
-  };
+import {MyFinanceWrapperService} from "./shared/services/my-finance-wrapper.service";
 
 /**
  * Loads the configuration of the given configuration service.
@@ -91,8 +78,7 @@ export function initConfiguration(configService: ConfigService): Function {
       deps: [ConfigService],
       multi: true
     },
-    MyFinanceService,
-    baseURLProvider,
+    MyFinanceWrapperService,
     ConfigService,
     MyFinanceDataService
   ],

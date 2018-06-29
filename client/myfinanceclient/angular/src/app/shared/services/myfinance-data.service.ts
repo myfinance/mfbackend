@@ -3,27 +3,32 @@ import {Inject, Injectable} from "@angular/core";
 import {BASE_URL} from "../../app.tokens";
 import {Instrument} from "../models/instrument";
 import {Position} from "../models/position";
-import {HttpClient} from "@angular/common/http";
+import {HttpClient, HttpHeaders} from "@angular/common/http";
 import {BASE_PATH} from "../../modules/myfinance-tsclient-generated/variables";
 import {Observable} from "rxjs/Rx";
+import {ConfigService} from "./config.service";
+import {MockDataProviderService} from "./mock-data-provider.service";
+import {InstrumentListModel, MyFinanceService} from "../../modules/myfinance-tsclient-generated";
+import {Configuration} from "../../modules/myfinance-tsclient-generated/configuration";
+import {MyFinanceWrapperService} from "./my-finance-wrapper.service";
 
 @Injectable()
 export class MyFinanceDataService{
+  private mock:MockDataProviderService = new MockDataProviderService()
   constructor(
-    private http: HttpClient,
-    @Inject(BASE_PATH) private baseUrl: string
+    private myfinanceService: MyFinanceWrapperService,
+    private configService: ConfigService
   ) {
   }
 
-  find(isin: string): Observable<Instrument[]> {
+  getInstruments(): Observable<InstrumentListModel> {
 
+    if(this.configService.get('currentZone').identifier.match("mock")){
+      return this.mock.getInstruments()
+    }
+    this.myfinanceService.setBasePath(this.configService.get('currentZone').url)
 
-    //return this.http.get<Instrument[]>(this.baseUrl + '/instruments');
-    let instrument : Instrument = { instrumentid: 1, isin: "isin00000001", description:"testinstrument1", treelastchanged: "2017-12-24T17:00:00.000+01:00" };
-    let instrument2 : Instrument = { instrumentid: 2, isin: "isin00000002", description:"testinstrument2", treelastchanged: "2017-12-24T17:00:00.000+01:00" };
-    let instruments: Instrument[]=[instrument, instrument2]
-    let filteredinstruments: Instrument[]=instruments.filter(i=>i.isin.indexOf(isin)>=0);
-    return Observable.of(filteredinstruments);
+    return this.myfinanceService.getInstrumentList_envID('dev');
 
   }
 

@@ -12,20 +12,20 @@ export class HttpInterceptor implements BaseHttpInterceptor {
   constructor (private _injector: Injector) { }
 
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-    if(req.url.indexOf('assets/config.json') !== -1) {
-      return next.handle(req);
-    }
+    //if(req.url.indexOf('assets/config.json') !== -1) {
+    //  return next.handle(req);
+    //}
 
     // Workaround to prevent a cyclic dependency.
-    let configService = this._injector.get(ConfigService);
-    let currentZone = configService.get('currentZone');
+    //let configService = this._injector.get(ConfigService);
+    //let currentZone = configService.get('currentZone');
 
 
-    if(req.url.indexOf('http://') === -1 && req.url.indexOf('https://') === -1) {
-      return next.handle(req.clone({ url: currentZone.url + req.url.replace("###", ""), withCredentials: true}));
-    }
+    //if(req.url.indexOf('http://') === -1 && req.url.indexOf('https://') === -1) {
+    //  return next.handle(req.clone({ url: currentZone.url + req.url.replace("###", ""), withCredentials: true}));
+    //}
 
-    return next.handle(req);
+    return next.handle(req.clone({ url: req.url, withCredentials: true}));
   }
 
 }
