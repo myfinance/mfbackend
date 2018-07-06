@@ -2,8 +2,13 @@
 $bootstrap-path: '../node_modules/bootstrap/scss/bootstrap.scss';
 $fa-font-path : '../node_modules/font-awesome/fonts';
 
+$gray-700: #707172;
+$orange-100: #f08200;
+
 // Bootstrap Variables
-$primary: #f08200;
+$primary: $orange-100;
+
+
 
 $border-color: rgba(34,36,38,.15);
 

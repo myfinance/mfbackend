@@ -1,0 +1,29 @@
+@font-face {
+  font-family: 'mf-icons';
+  src:    url('/assets/fonts/mf-icons.eot?1xecrg');
+  src:    url('/assets/fonts/mf-icons.eot?1xecrg#iefix') format('embedded-opentype'),
+  url('/assets/fonts/mf-icons.ttf?1xecrg') format('truetype'),
+  url('/assets/fonts/mf-icons.woff?1xecrg') format('woff'),
+  url('/assets/fonts/mf-icons.svg?1xecrg#icomoon') format('svg');
+  font-weight: normal;
+  font-style: normal;
+}
+
+[class^="icon-"], [class*=" icon-"] {
+  /* use !important to prevent issues with browser extensions that change fonts */
+  font-family: 'mf-icons' !important;
+  speak: none;
+  font-style: normal;
+  font-weight: normal;
+  font-variant: normal;
+  text-transform: none;
+  line-height: 1;
+
+  /* Better Font Rendering =========== */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.icon-checkmark:before {
+  content: "\e917";
+}
