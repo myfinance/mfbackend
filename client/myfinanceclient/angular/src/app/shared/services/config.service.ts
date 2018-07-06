@@ -93,7 +93,7 @@ export class ConfigService {
       return this.getMockEnvironments()
     }
     this.myfinanceService.setBasePath(this.get('currentZone').url)
-    return this.myfinanceService.getStringList();
+    return this.myfinanceService.getEnvironmentList();
 
   }
 

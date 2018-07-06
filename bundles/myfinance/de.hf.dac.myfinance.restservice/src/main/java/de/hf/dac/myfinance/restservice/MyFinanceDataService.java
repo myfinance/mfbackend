@@ -24,8 +24,8 @@ import de.hf.dac.myfinance.api.application.OpLevel;
 import de.hf.dac.myfinance.api.application.OpType;
 import de.hf.dac.myfinance.api.application.rootcontext.DataServiceRoot;
 import de.hf.dac.myfinance.restservice.myfinanceresources.EnvironmentDataResource;
+import de.hf.dac.myfinance.restservice.myfinanceresources.leafresources.EnvironmentListResource;
 import de.hf.dac.services.resources.TopLevelSecuredResource;
-import de.hf.dac.services.resources.leaf.list.StringListResource;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
@@ -34,7 +34,6 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
-import java.util.List;
 
 @Path("/myfinance")
 @Api(value = "MyFinance",  tags = { "MyFinance"}) //must start with capital letter for client generation
@@ -57,24 +56,10 @@ public class MyFinanceDataService extends TopLevelSecuredResource<OpType,OpLevel
 
     @Path("/environments/list")
     @Produces(MediaType.APPLICATION_JSON)
-    @ApiOperation(value = "List Environments", response = StringListResource.class, nickname ="getEnvironmentList")
-    public StringListResource getEnvironmentList() {
+    @ApiOperation(value = "List Environments", response = EnvironmentListResource.class)
+    public EnvironmentListResource getEnvironmentList() {
         checkOperationAllowed(OpType.READ, "getEnvironmentList");
         audit();
-        List<String> envs = root.getEnvironmentInfo();
-
-        return new StringListResource(new StringListModel(envs));
+        return new EnvironmentListResource(new StringListModel(root.getEnvironmentInfo()));
     }
-
-    @Path("/environments/test")
-    @Produces(MediaType.APPLICATION_JSON)
-    @ApiOperation(value = "testlist", response = StringListResource.class, nickname ="getTestList")
-    public StringListResource getTestList() {
-        checkOperationAllowed(OpType.READ, "getEnvironmentList");
-        audit();
-        List<String> envs = root.getEnvironmentInfo();
-
-        return new StringListResource(new StringListModel(envs));
-    }
-
 }

@@ -27,8 +27,8 @@ import de.hf.dac.myfinance.api.domain.Security;
 import de.hf.dac.myfinance.api.exceptions.MDException;
 import de.hf.dac.myfinance.api.exceptions.MDMsgKey;
 import de.hf.dac.myfinance.api.restservice.InstrumentListModel;
+import de.hf.dac.myfinance.restservice.myfinanceresources.leafresources.InstrumentListResource;
 import de.hf.dac.services.resources.BaseSecuredResource;
-import de.hf.dac.services.resources.leaf.LeafResource;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 
@@ -42,12 +42,10 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
-import org.apache.http.HttpStatus;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
