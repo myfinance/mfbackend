@@ -18,11 +18,4 @@ export class MockDataProviderService {
     return Observable.of(instrumentList);
 
   }
-
-  getEnvironments(): Observable<StringListModel> {
-    let envs: string[]=["enva", "envb"];
-    let envList : StringListModel = {values: envs, url:"mock", id:"mockid"};
-    return Observable.of(envList);
-  }
-
 }

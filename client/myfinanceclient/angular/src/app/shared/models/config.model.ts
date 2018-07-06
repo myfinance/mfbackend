@@ -4,5 +4,4 @@ export interface ConfigModel {
   zones: ZoneModel[];
   defaultZone: string;
   currentZone: ZoneModel;
-  currentEnvironment: string;
 }

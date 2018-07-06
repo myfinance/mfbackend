@@ -48,8 +48,8 @@
             </li>
             <li class="divider dropdown-divider"></li>
             <h6 class="dropdown-header">Environment</h6>
-            <li *ngFor="let env of environments">
-              <div (click)="handleEnvSelect(env)" class="dropdown-item">{{ env }}<span class="text-success" *ngIf="env == currentEnv"><i class="icon-checkmark" aria-hidden="true"></i></span></div>
+            <li *ngFor="let env of configService.environments">
+              <div (click)="handleEnvSelect(env)" class="dropdown-item">{{ env }}<span class="text-success" *ngIf="env == configService.getCurrentEnv()"><i class="icon-checkmark" aria-hidden="true"></i></span></div>
             </li>
           </ul>
         </li>

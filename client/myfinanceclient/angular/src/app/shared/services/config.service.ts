@@ -1,13 +1,19 @@
 import { Injectable } from '@angular/core';
 import {ConfigModel} from "../models/config.model";
 import {HttpClient} from "@angular/common/http";
+import {StringListModel} from "../../modules/myfinance-tsclient-generated";
+import {MyFinanceDataService} from "./myfinance-data.service";
+import {MyFinanceWrapperService} from "./my-finance-wrapper.service";
+import {Observable} from "../../../../node_modules/rxjs";
 
 @Injectable()
 export class ConfigService {
 
   private _config: ConfigModel;
+  environments: string[]
+  private currentEnv: string
 
-  constructor(private _http: HttpClient) { }
+  constructor(private _http: HttpClient, private myfinanceService: MyFinanceWrapperService) { }
 
   /**
    * Loads the configuration.
@@ -29,15 +35,7 @@ export class ConfigService {
         } else {
           this.setCurrentZone(data.defaultZone);
         }
-        // Check if environment is saved in local storage.
-        // Set the current environment to the saved env or else
-        // set it to the default environment in the configuration.
-        let env = localStorage.getItem('env');
-        if(env) {
-          this.setCurrentEnv(env);
-        } else {
-          this.setCurrentEnv(this.getDefaultEnv());
-        }
+
       });
   }
 
@@ -49,18 +47,23 @@ export class ConfigService {
     return value;
   }
 
+  getCurrentEnv(){
+    return this.currentEnv
+  }
+
   setCurrentZone(identifier: string): void {
     for(let zone of this._config.zones) {
       if(zone.identifier == identifier) {
         this._config.currentZone = zone;
         // Additionally save the zone in the local storage.
         localStorage.setItem('zone', identifier);
+        this.loadEnvironments()
       }
     }
   }
 
   setCurrentEnv(env: string): void {
-    this._config.currentEnvironment = env;
+    this.currentEnv = env;
     // Additionally save the zone in the local storage.
     localStorage.setItem('env', env);
   }
@@ -72,5 +75,48 @@ export class ConfigService {
         return zone.defaultEnvironment;
       }
     }
+  }
+
+  private getMockEnvironments(): Observable<StringListModel> {
+    let envs: string[]=["enva", "envb"];
+    let envList : StringListModel = {values: envs, url:"mock", id:"mockid"};
+    return Observable.of(envList);
+  }
+
+  /**
+   * to avoid circuöar dependency the environment request can not be made via dataservice
+   * @returns {Observable<StringListModel>}
+   */
+  private getEnvironmentProvider(): Observable<StringListModel> {
+
+    if(this.get('currentZone').identifier.match("mock")){
+      return this.getMockEnvironments()
+    }
+    this.myfinanceService.setBasePath(this.get('currentZone').url)
+    return this.myfinanceService.getStringList();
+
+  }
+
+  private loadEnvironments(){
+    this.getEnvironmentProvider().subscribe(
+      (environments: StringListModel) => {
+        this.environments = environments.values;
+        // Check if environment is saved in local storage.
+        // Set the current environment to the saved env or else
+        // set it to the default environment in the configuration.
+        let env = localStorage.getItem('env');
+        if(env && this.environments.includes(env)) {
+          this.setCurrentEnv(env);
+        } else if(this.environments.includes(this.getDefaultEnv())){
+          this.setCurrentEnv(this.getDefaultEnv());
+        } else {
+          this.setCurrentEnv(this.environments[0])
+        }
+      },
+      (errResp) => {
+        console.error('error', errResp);
+
+      }
+    );
   }
 }

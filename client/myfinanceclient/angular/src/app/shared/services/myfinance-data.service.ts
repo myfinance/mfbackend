@@ -28,18 +28,7 @@ export class MyFinanceDataService{
     }
     this.myfinanceService.setBasePath(this.configService.get('currentZone').url)
 
-    return this.myfinanceService.getInstrumentList_envID('dev');
-
-  }
-
-  getEnvironments(): Observable<StringListModel> {
-
-    if(this.configService.get('currentZone').identifier.match("mock")){
-      return this.mock.getEnvironments()
-    }
-    this.myfinanceService.setBasePath(this.configService.get('currentZone').url)
-
-    return this.myfinanceService.getStringList();
+    return this.myfinanceService.getInstrumentList_envID(this.configService.getCurrentEnv());
 
   }
 

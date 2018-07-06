@@ -12,10 +12,8 @@ export class TopNavigationComponent implements OnInit {
 
   _isCollapsed: boolean = true;
   currentZone: string;
-  environments: string[]
-  currentEnv: string
 
-  constructor(private dataService: MyFinanceDataService, public configService: ConfigService) { }
+  constructor(public configService: ConfigService) { }
 
   ngOnInit() {
     this._updateCurrentZone();
@@ -27,6 +25,7 @@ export class TopNavigationComponent implements OnInit {
   }
 
   handleEnvSelect(env: string): void {
+    this.configService.setCurrentEnv(env)
   }
 
   private _updateCurrentZone(): void {
@@ -35,23 +34,5 @@ export class TopNavigationComponent implements OnInit {
     } catch(e) {
       setTimeout(this._updateCurrentZone.bind(this), 1000);
     }
-    try {
-      this.loadEnvironments()
-    } catch(e) {
-      setTimeout(this._updateCurrentZone.bind(this), 1000);
-    }
   }
-
-  private loadEnvironments(){
-    this.dataService.getEnvironments().subscribe(
-      (environments: StringListModel) => {
-        this.environments = environments.values;
-      },
-      (errResp) => {
-        console.error('error', errResp);
-
-      }
-    );
-  }
-
 }
