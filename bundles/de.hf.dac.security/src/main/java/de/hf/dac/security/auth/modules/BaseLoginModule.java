@@ -133,7 +133,7 @@ public abstract class BaseLoginModule extends AbstractKarafLoginModule implement
         if (useFirstPass) {
             Object identity = sharedState.get(CONTEXT_LOGIN_NAME);
             Object credential = sharedState.get(CONTEXT_LOGIN_PW);
-            if (identity != null & credential != null) {
+            if (identity != null && credential != null) {
                 loginSuccess = true;
             } else {
                 throw new FailedLoginException("No principal or credentials available");

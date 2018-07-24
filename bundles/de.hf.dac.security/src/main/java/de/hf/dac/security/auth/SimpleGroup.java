@@ -122,15 +122,4 @@ public class SimpleGroup extends SimplePrincipal implements Group, Cloneable, Se
         buf.setCharAt(buf.length() - 1, ']');
         return buf.toString();
     }
-
-    @Override
-    @SuppressWarnings("unchecked")
-    public synchronized Object clone() throws CloneNotSupportedException {
-        SimpleGroup clone = (SimpleGroup) super.clone();
-        if (clone != null) {
-            clone.members = (HashMap<Principal, Principal>) this.members.clone();
-        }
-
-        return clone;
-    }
 }

@@ -92,7 +92,7 @@ public class InstrumentServiceImpl implements InstrumentService {
         if(!security.isPresent()) {
             return Optional.empty();
         }
-        return getEndOfDayPrice(getSecurity(isin).get().getInstrumentid(), date);
+        return getEndOfDayPrice(security.get().getInstrumentid(), date);
     }
 
     @Override

@@ -27,5 +27,6 @@ import org.junit.runner.RunWith;
 @AllScenarioRunner.TestPlugins(environemt = "local", value={MdRestAssuredPlugin.class, DefaultPlugin.class})
 @AllScenarioRunner.TestFileLocation(directory = "./src/test/resources/tests/apiclient")
 @AllScenarioRunner.TestResultReportGenerator(value = HtmlDashboardGenerator.class, resultDir = "./target/reports")
+@SuppressWarnings("squid:S2187")
 public class ITRestApiClientTest {
 }
