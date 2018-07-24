@@ -37,3 +37,16 @@ testCases:
             params:
               condition: |
                   jsonValues.size==2
+
+          - action: GetRestUrl
+            reference: jsonValues
+
+            params:
+               referenceType: JSON
+               extractPath: "values"
+               url: "/dac/rest/myfinance/environments/dev/instruments"
+
+          - action: Assert
+            params:
+              condition: |
+                  jsonResult.getStatusCode()==200

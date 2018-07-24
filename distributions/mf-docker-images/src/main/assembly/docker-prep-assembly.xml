@@ -21,12 +21,22 @@
             </includes>
         </fileSet>
 
-        <!-- Dockerfile and dac.res -->
+        <!-- Dockerfile -->
         <fileSet>
             <outputDirectory>myfinance</outputDirectory>
             <directory>${project.build.directory}/../docker/myfinance</directory>
             <includes>
                 <include>**/*</include>
+            </includes>
+        </fileSet>
+
+        <!-- dac.res and keystore-->
+        <fileSet>
+            <outputDirectory>myfinance</outputDirectory>
+            <directory>${project.build.directory}/../../../basedockerimages/docker/myfinance</directory>
+            <includes>
+                <include>dac.res</include>
+                <include>devkeystore.jks</include>
             </includes>
         </fileSet>
 

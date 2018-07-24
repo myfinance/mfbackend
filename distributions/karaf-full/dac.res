@@ -15,11 +15,14 @@ POOL_SIZE=20
 pids=org.ops4j.pax.web,DAC.DacJaasRealmService,DAC.WebRequestServiceImpl
 
 [CMPID_org.ops4j.pax.web]
-org.ops4j.pax.web.ssl.keystore=C:/devenv/repos/dac/distributions/karaf-full/devkeystore.jks
+#replace in production with keystore containing trusted certificate
+#org.ops4j.pax.web.ssl.keystore=C:/devenv/repos/dac/distributions/karaf-full/devkeystore.jks
 org.ops4j.pax.web.ssl.password = password
 org.ops4j.pax.web.ssl.keypassword = password
 org.osgi.service.http.port.secure = 8443
-org.osgi.service.http.secure.enabled = true
+#should be true in Production
+org.osgi.service.http.secure.enabled = false
+#should be false in Production
 org.osgi.service.http.enabled = true
 
 [CMPID_DAC.WebRequestServiceImpl]
@@ -37,4 +40,3 @@ auth.mode=karaf
 MARKETDATA_LAUNCH_USER=karaf
 MARKETDATA_LAUNCH_PASSWORD=karaf
 MARKETDATA_LAUNCH_URL=http://localhost:8181/dac/rest
-

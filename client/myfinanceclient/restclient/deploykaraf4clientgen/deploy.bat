@@ -55,7 +55,8 @@ call:cout %mydir%
 call:cout %filename%
 mkdir %targetdir%\karaf_clientless
 copy %mydir%\..\..\..\..\basedistributions\karaf-rest-dist\target\%filename%.zip %targetdir%\karaf_clientless
-copy /y %mydir%\dac.res %targetdir%\dac.res
+copy /y %mydir%\..\..\..\..\distributions\karaf-full\dac.res %targetdir%\karaf\dac.res
+copy /y %mydir%\..\..\..\..\distributions\karaf-full\devkeystore.res %targetdir%\karaf\devkeystore.res
 cd %targetdir%\karaf_clientless
 7z x -y %targetdir%\karaf_clientless\%filename%.zip
 Start "" "%targetdir%\karaf_clientless\%filename%\bin\karaf_local.bat"
