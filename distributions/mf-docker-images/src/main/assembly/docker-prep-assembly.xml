@@ -33,7 +33,7 @@
         <!-- dac.res and keystore-->
         <fileSet>
             <outputDirectory>myfinance</outputDirectory>
-            <directory>${project.build.directory}/../../../basedockerimages/docker/myfinance</directory>
+	    <directory>${project.build.directory}/../../../basedistributions/basedockerimages/docker/myfinance</directory>
             <includes>
                 <include>dac.res</include>
                 <include>devkeystore.jks</include>
