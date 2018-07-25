@@ -3,7 +3,7 @@
     <parent>
         <artifactId>root</artifactId>
         <groupId>de.hf.dac</groupId>
-        <version>0.11.0-SNAPSHOT</version>
+        <version>0.11.0</version>
     </parent>
     <groupId>de.hf.dac.features</groupId>
     <modelVersion>4.0.0</modelVersion>
