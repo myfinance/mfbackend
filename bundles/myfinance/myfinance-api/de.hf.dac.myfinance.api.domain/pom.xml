@@ -6,7 +6,7 @@
     <parent>
         <groupId>de.hf.dac.myfinance.api</groupId>
         <artifactId>myfinance-api</artifactId>
-        <version>0.11.0</version>
+        <version>0.11.1-SNAPSHOT</version>
         <relativePath>../</relativePath>
     </parent>
     <dependencies> 
