@@ -73,6 +73,7 @@
 
         <!--rest-->
         <rs-api.version>2.0.1</rs-api.version>
+        <rs-api-jersey-client.version>2.1</rs-api-jersey-client.version>
         <swagger.version>1.5.19</swagger.version>
         <swagger-codegen.version>2.3.1</swagger-codegen.version>
         <jackson.version>2.9.5</jackson.version>
@@ -296,13 +297,6 @@
                 <groupId>org.osgi</groupId>
                 <artifactId>org.osgi.core</artifactId>
                 <version>${osgi-cmpn.version}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>javax.ws.rs</groupId>
-                <artifactId>javax.ws.rs-api</artifactId>
-                <version>${rs-api.version}</version>
-                <scope>provided</scope>
             </dependency>
 
             <dependency>

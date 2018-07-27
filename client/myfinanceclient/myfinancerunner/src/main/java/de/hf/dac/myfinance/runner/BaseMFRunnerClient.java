@@ -100,8 +100,15 @@ public abstract class BaseMFRunnerClient extends BaseRestCommandLineRunner {
             } else {
                 this.credentialsHeader = String.format("Basic %s", new String(Base64.encodeBase64((apiUser + ":" + password).getBytes())));
             }
-
-            ApiClient client = new ApiClient();
+            ApiClient client = null;
+            try{
+                client = new ApiClient();
+            } catch (Exception e){
+                log.error(e.getMessage());
+            }
+            finally {
+                log.info("bla");
+            }
             if (basePath != null) {client.setBasePath(basePath);}
 
             client.addDefaultHeader("Authorization", this.credentialsHeader);

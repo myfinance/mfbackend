@@ -67,7 +67,7 @@
                                     <mainClass>de.hf.dac.myfinance.runner.ImportRunnerClient</mainClass>
                                 </manifest>
                                 <manifestEntries>
-                                    <Class-Path>lib/mdrunner-${project.version}.jar</Class-Path>
+                                    <Class-Path>lib/myfinancerunner-${project.version}.jar</Class-Path>
                                 </manifestEntries>
                             </archive>
                         </configuration>
