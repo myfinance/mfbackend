@@ -36,7 +36,9 @@ proxy.pw=XN01598
 #ldap,off or some thing else for karaf default
 auth.mode=karaf
 
-[MARKETDATA]
-MARKETDATA_LAUNCH_USER=karaf
-MARKETDATA_LAUNCH_PASSWORD=karaf
-MARKETDATA_LAUNCH_URL=http://localhost:8181/dac/rest
+[MF_SERVER_CON]
+#connection config for the cmdline-client to the backend
+MF_LAUNCH_USER=karaf
+MF_LAUNCH_PASSWORD=karaf
+MF_LAUNCH_URL=http://localhost:8181/dac/rest
+#MF_LAUNCH_TIMEOUT=3600000

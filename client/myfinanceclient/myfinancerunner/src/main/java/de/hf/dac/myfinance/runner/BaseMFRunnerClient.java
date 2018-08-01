@@ -34,20 +34,12 @@ public abstract class BaseMFRunnerClient extends BaseRestCommandLineRunner {
 
     private MyFinanceRunnerApi runnerClient;
     private String credentialsHeader;
-
-    public static final String ENV_OPTION = "env";
-
-    public BaseMFRunnerClient(){
-        super(new OptionsParser());
-    }
-
+    private static final String CONFIG_SECTION = "MF_SERVER_CON";
 
     public abstract String getJobType();
 
-
     @Override
     protected void addCustomCommandLineOptions() {
-
     }
 
     @Override
@@ -59,7 +51,7 @@ public abstract class BaseMFRunnerClient extends BaseRestCommandLineRunner {
             MyFinanceRunnerApi client = createRestClient();
             try {
                 JobInformation start = client.start(p.getEnvironment(), getJobType(), convertParam(p));
-                int maxTimeWait = Configuration.getInt("MARKETDATA", "MD_LAUNCH_TIMEOUT", 60*60*1000);
+                int maxTimeWait = Configuration.getInt(CONFIG_SECTION, "MF_LAUNCH_TIMEOUT", 60*60*1000);
 
                 String uid = start.getUuid();
                 int count = 1;
@@ -85,30 +77,23 @@ public abstract class BaseMFRunnerClient extends BaseRestCommandLineRunner {
 
             } catch (ApiException e) {
                 e.printStackTrace();
-                throw new RuntimeException("Unable to call Externa Rest Resource");
+                throw new RuntimeException("Unable to call External Rest Resource");
             }
         }
     }
 
     private MyFinanceRunnerApi createRestClient() {
-        String apiUser = Configuration.getString("MARKETDATA", "MARKETDATA_LAUNCH_USER");
-        String password = Configuration.getString("MARKETDATA", "MARKETDATA_LAUNCH_PASSWORD");
-        String basePath = Configuration.getString("MARKETDATA", "MARKETDATA_LAUNCH_URL", "http://localhost:8181/dac/rest");
+        String apiUser = Configuration.getString(CONFIG_SECTION, "MF_LAUNCH_USER");
+        String password = Configuration.getString(CONFIG_SECTION, "MF_LAUNCH_PASSWORD");
+        String basePath = Configuration.getString(CONFIG_SECTION, "MF_LAUNCH_URL", "http://localhost:8181/dac/rest");
         if (this.runnerClient == null) {
             if (password.startsWith("Basic ")) {
                 this.credentialsHeader = password;
             } else {
                 this.credentialsHeader = String.format("Basic %s", new String(Base64.encodeBase64((apiUser + ":" + password).getBytes())));
             }
-            ApiClient client = null;
-            try{
-                client = new ApiClient();
-            } catch (Exception e){
-                log.error(e.getMessage());
-            }
-            finally {
-                log.info("bla");
-            }
+            ApiClient client = client = new ApiClient();
+
             if (basePath != null) {client.setBasePath(basePath);}
 
             client.addDefaultHeader("Authorization", this.credentialsHeader);

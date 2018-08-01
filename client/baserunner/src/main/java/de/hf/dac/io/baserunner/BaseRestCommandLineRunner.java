@@ -24,8 +24,8 @@ import de.hf.dac.api.io.routes.job.RunnerParameter;
  */
 public abstract class BaseRestCommandLineRunner extends BaseRunner {
 
-    public BaseRestCommandLineRunner(OptionsParser optionsParser) {
-        this.optionsParser = optionsParser;
+    public BaseRestCommandLineRunner() {
+        this.optionsParser = new OptionsParser();
     }
 
     /**

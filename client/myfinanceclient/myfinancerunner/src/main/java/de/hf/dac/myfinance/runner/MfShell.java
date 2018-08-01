@@ -12,12 +12,15 @@
 package de.hf.dac.myfinance.runner;
 
 import de.hf.dac.api.io.routes.job.RunnerParameter;
+import de.hf.dac.io.baserunner.OptionsParser;
 import de.hf.dac.myfinance.api.runner.BaseMFRunnerParameter;
 
 /**
  * command line runner for all mf commands
  */
 public class MfShell extends BaseMFRunnerClient {
+
+    protected Action action = Action.IMPORT;
 
     /**
      * @param args
@@ -33,17 +36,30 @@ public class MfShell extends BaseMFRunnerClient {
     }
 
     @Override
+    protected void addCustomCommandLineOptions() {
+        for (CmdLineOptions option:CmdLineOptions.values()) {
+            option.addOption(optionsParser);
+        }
+    }
+
+    @Override
     protected RunnerParameter extractParameters() {
         String env = "dev";
-        if (optionsParser.hasOption(ENV_OPTION)) {
-            env = optionsParser.getOptionArg(ENV_OPTION);
+        if (optionsParser.hasOption(CmdLineOptions.ENVIRONMENT.getShortName())) {
+            env = optionsParser.getOptionArg(CmdLineOptions.ENVIRONMENT.getShortName());
+        }
+
+        if (optionsParser.hasOption(CmdLineOptions.ACTIONTYPE.getShortName())) {
+            action = action.getActionByAlias(optionsParser.getOptionArg(CmdLineOptions.ACTIONTYPE.getShortName()));
         }
         return new BaseMFRunnerParameter(env);
     }
 
+
+
     @Override
     public String getJobType() {
-        return ImportRunner.class.getName();
+        return action.getJobType();
     }
 }
 
