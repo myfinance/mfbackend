@@ -35,6 +35,7 @@ public abstract class BaseRunner {
     private boolean exitOnShutdown = true;
     protected OptionsParser optionsParser;
     private Class<?> clazz;
+    protected String appName = "runner";
 
     /** The start time (System.currentTimeMillis) of the program set in the base constructor */
     protected long startTime;
@@ -65,12 +66,14 @@ public abstract class BaseRunner {
         // log build info if available
         logBuidInfo();
 
-        if (args != null) {
-            prepareCommandLineParser(args);
-        } else {
-            log.info("No Programm Arguments provided. ");
-            System.exit(0);
+        if (args == null) args = new String[]{};
+        prepareCommandLineParser(args);
+
+        if(optionsParser.hasHelpOption()){
+            setExitOnShutdown(true);
+            shutdown(0);
         }
+
         if(optionsParser.isVerbose()) {
             org.apache.log4j.Logger.getLogger(this.clazz).setLevel(Level.DEBUG);
         }
@@ -130,20 +133,12 @@ public abstract class BaseRunner {
         log.info("Runtime: {} seconds", secondsSinceStart());
     }
 
-    protected void logDatabaseConnection(String type, DatabaseInfo info) {
-        log.info(" connecting {} {} / {} / {}", type != null ? type : "", info.getServer(), info.getDatabase(), info.getUser());
-        log.info(" URL: {}", info.getUrl());
-    }
+
+    protected abstract String getAppName();
 
     protected void handleDefaultOptions(OptionsParser op) {
-        if (op.isVerboseSQL() || op.isExtraVerboseSQL()) {
-            CustomPropertyPlaceholderConfigurer.setOverrideProperty("jdbc.showSql", "true");
-            org.apache.log4j.Logger.getLogger("org.hibernate.id.IdentifierGeneratorHelper").setLevel(Level.DEBUG);
-
-        }
-        if (op.isExtraVerboseSQL()) {
-            // output binding parameters as well
-            org.apache.log4j.Logger.getLogger("org.hibernate.type.descriptor.sql.BasicBinder").setLevel(Level.TRACE);
+        if(op.hasHelpOption()){
+            op.printUsage(getAppName(), "options:");
         }
     }
 

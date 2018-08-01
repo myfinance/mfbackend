@@ -18,7 +18,6 @@
 package de.hf.dac.myfinance.runner;
 
 import de.hf.dac.io.baserunner.BaseRestCommandLineRunner;
-import de.hf.dac.io.baserunner.OptionsParser;
 import de.hf.dac.api.io.routes.job.RunnerParameter;
 import de.hf.dac.io.config.resfile.Configuration;
 import de.hf.dac.myfinance.api.runner.BaseMFRunnerParameter;

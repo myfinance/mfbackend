@@ -35,7 +35,7 @@ public abstract class BaseRestCommandLineRunner extends BaseRunner {
      * @throws Exception the exception
      */
     @Override
-    public void run(String[] args) throws Exception {
+    public void run(String[] args){
         int rc = 0;
 
         try {
@@ -43,7 +43,9 @@ public abstract class BaseRestCommandLineRunner extends BaseRunner {
 
             this.passParamsToExternal(this.extractParameters());
 
-        } catch (Exception e) {
+        }
+        catch (Exception e) {
+            this.optionsParser.printUsage("MfShell","");
             rc = -1;
             log.error(e.getLocalizedMessage(), e);
         } finally {

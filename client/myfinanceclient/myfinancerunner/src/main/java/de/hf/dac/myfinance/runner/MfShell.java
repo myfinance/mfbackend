@@ -12,7 +12,6 @@
 package de.hf.dac.myfinance.runner;
 
 import de.hf.dac.api.io.routes.job.RunnerParameter;
-import de.hf.dac.io.baserunner.OptionsParser;
 import de.hf.dac.myfinance.api.runner.BaseMFRunnerParameter;
 
 /**
@@ -28,11 +27,7 @@ public class MfShell extends BaseMFRunnerClient {
      */
     public static void main(String[] args) {
 
-        try {
-            new MfShell().run(args);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        new MfShell().run(args);
     }
 
     @Override
@@ -60,6 +55,11 @@ public class MfShell extends BaseMFRunnerClient {
     @Override
     public String getJobType() {
         return action.getJobType();
+    }
+
+    @Override
+    protected String getAppName() {
+        return "MfShell";
     }
 }
 

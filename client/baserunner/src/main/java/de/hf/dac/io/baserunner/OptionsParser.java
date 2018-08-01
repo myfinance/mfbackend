@@ -42,17 +42,17 @@ import java.util.List;
 // TODO New version of commons-cli has maybe better way to build options
 public class OptionsParser {
     public static final String DEBUG_OPTION = "debug";
+    public static final String HELP_OPTION = "help";
     private static final String DAC_LOGIN_INFO = ResfileConfigurationImpl.DAC_LOGIN_INFO;
 
     private static final String DEVPROPS_FILENAME = ResfileConfigurationImpl.DEVPROPS_FILENAME;
     private static final String DAC_RES_PATH_ENV = ResfileConfigurationImpl.DAC_RES_PATH_ENV;
 
-    private static final String VERBOSE_SQL_LONG = "vs";
-    private static final String EXTRA_VERBOSE_SQL_LONG = "vvs";
     private static final Logger LOG = LoggerFactory.getLogger(OptionsParser.class);
-    private static final String DBINI_SHORT_OPTION = "dbi";
     private static final String RES_FILE_SHORT_OPTION = "res";
     private static final String VERBOSE_SHORT = "v";
+
+    private Boolean hasHelpOption = false;
 
     /** The options expected */
     protected Options options = new Options();
@@ -70,10 +70,8 @@ public class OptionsParser {
         }
 
         options.addOption(OptionBuilder.isRequired(false).withDescription("Verbose mode").withLongOpt("verbose").create("v"));
-        options.addOption(OptionBuilder.isRequired(false).withDescription("Verbose SQL mode").withLongOpt(VERBOSE_SQL_LONG).create());
-        options.addOption(
-            OptionBuilder.isRequired(false).withDescription("Extra Verbose SQL mode (bind parameters)").withLongOpt(EXTRA_VERBOSE_SQL_LONG).create());
         options.addOption(OptionBuilder.hasArg().withDescription("Resource file").withLongOpt("resFile").create(RES_FILE_SHORT_OPTION));
+        options.addOption(OptionBuilder.isRequired(false).withDescription("print usage").withLongOpt("help").create(HELP_OPTION));
     }
 
     protected String getConfigSection() {
@@ -83,31 +81,6 @@ public class OptionsParser {
     /** Adds res file option. */
     public void addResOption() {
         options.addOption(OptionBuilder.hasArg().withDescription("Resource file").withLongOpt("resFile").create(RES_FILE_SHORT_OPTION));
-    }
-
-    /**
-     * Adds database option with the given prefix.
-     *
-     * @param prefix
-     *        The prefix (e.g. P would expect option -PdbKey etc.)
-     */
-    public void addDbOptions(String prefix) {
-        if (!options.hasOption(DBINI_SHORT_OPTION)) {
-            options.addOption(OptionBuilder.hasArg().withDescription("DatabaseFile <name> ").withLongOpt("dbIni").create(DBINI_SHORT_OPTION));
-        }
-
-        options.addOption(OptionBuilder.hasArg().withDescription("DatabaseURL <jdbc:sybase:Tds:server:port/DB> ").withLongOpt(prefix + "dbURL")
-            .create(prefix + "db"));
-        if (prefix.length() > 0) {
-            // the name of the database to connect to
-            options.addOption(OptionBuilder.hasArg().withDescription("DatabaseKey <name> ").withLongOpt(prefix + "dbKey").create(prefix));
-        }
-        options.addOption(OptionBuilder.hasArg().withDescription("DatabaseUser <user>").withLongOpt(prefix + "dbUser").create(prefix + "u"));
-        options
-            .addOption(OptionBuilder.hasArg().withDescription("DatabasePassword <password>").withLongOpt(prefix + "dbPassword").create(prefix + "p"));
-        options.addOption(
-            OptionBuilder.hasArg().isRequired(false).withDescription("DatabaseDriver <default com.sybase.jdbc4.jdbc.SybDriver> optional")
-                .withLongOpt(prefix + "dbDriver").create(prefix + "d"));
     }
 
     /**
@@ -129,72 +102,6 @@ public class OptionsParser {
 
     }
 
-    /**
-     * Returns the DatabaseInfo for the given database prefix.
-     *
-     * @param prefix The prefix {OptionsParser#addDbOptions(String)}
-     * @return The database info
-     */
-    public DatabaseInfo getDatabaseInfo(String prefix) {
-        String user;
-        String password;
-        String driver = "com.sybase.jdbc4.jdbc.SybDriver";
-        String url = commandLine.getOptionValue(prefix + "db");
-        if (commandLine.hasOption('d')) {
-            driver = commandLine.getOptionValue(prefix + 'd');
-        }
-        String dbServer = null;
-        String dbName = null;
-        if (url == null) {
-            // specified with dbKey
-            String dbIniFile = commandLine.getOptionValue(DBINI_SHORT_OPTION);
-            String dbKey = commandLine.getOptionValue(prefix);
-            if (dbIniFile == null || dbKey == null) {
-                throw new RuntimeException("Must specify either url or dbIni and dbKey for prefix " + prefix);
-            }
-            String dbLine = Configuration.getString("LOGIN_INFO", dbKey);
-            if (dbLine == null) {
-                throw new RuntimeException("For prefix " + prefix + ": Database Key " + dbKey + " not found in res files");
-            }
-            String[] parts = dbLine.split("\\s*,\\s*");
-
-            dbServer = parts[0];
-            if (dbServer == null) {
-                throw new RuntimeException("Server not found not for DB " + dbKey + " in res files");
-            }
-
-            dbName = parts[1];
-            user = parts[2];
-            password = ResFileParser.decrypt(parts[3]);
-            // @formatter:off
-            url = "jdbc:sybase:jndi:file://" + dbIniFile + "?" + dbServer + "&DATABASE=" + dbName
-                + "&HOMOGENEOUS_BATCH=false";//  "&ENABLE_BULK_LOAD=ARRAYINSERT" does not work TooManyRowsAffectedException
-            // @formatter:on
-            if (user == null) {
-                throw new RuntimeException("User not found not for DB " + dbKey + " in res files");
-            }
-            if (password == null) {
-                throw new RuntimeException("Password not found for DB " + dbKey + " in res files");
-            }
-
-            // special oracle handling
-            if (dbServer.startsWith("jdbc:oracle:thin")) {
-                url = dbServer;
-                driver = "oracle.jdbc.driver.OracleDriver";
-            }
-        } else {
-            user = commandLine.getOptionValue(prefix + "u");
-            password = commandLine.getOptionValue(prefix + "p");
-            if (user == null) {
-                throw new RuntimeException("User not specified on command line " + "-" + prefix + "u");
-            }
-            if (password == null) {
-                throw new RuntimeException("Password  not specified on command line " + "-" + prefix + "p");
-            }
-
-        }
-        return new DatabaseInfo(url, user, password, driver, dbServer, dbName);
-    }
 
     /**
      * Parses the given command line arguments, and processes the res files.
@@ -206,7 +113,7 @@ public class OptionsParser {
      */
     public void parse(String[] args) throws ParseException {
         parseCommandLineOptions(args);
-        parseResFilesOptions();
+        if(!hasHelpOption) parseResFilesOptions();
     }
 
     private void parseResFilesOptions() {
@@ -257,8 +164,6 @@ public class OptionsParser {
         if (commandLine.hasOption(DEBUG_OPTION)) {
             Configuration.setIsDebug(true);
             LOG.error("RUNNING IN DEBUG MODE");
-            LOG.error("RUNNING IN DEBUG MODE");
-            LOG.error("RUNNING IN DEBUG MODE");
         } else {
             Configuration.setIsDebug(false);
         }
@@ -302,22 +207,17 @@ public class OptionsParser {
                 }
                 arg = value;
             }
+            if(arg.equals("-h")|| arg.equals("-help")) {
+                hasHelpOption = true;
+                return;
+            }
             processedArgs[i] = arg;
         }
-
         commandLine = parseCmdLine(processedArgs);
     }
 
     protected CommandLine parseCmdLine(String[] processedArgs) throws ParseException {
         return new GnuParser().parse(options, processedArgs);
-    }
-
-    public String getFilename() {
-        return commandLine.getOptionValue('f');
-    }
-
-    public String getDescriptorFilename() {
-        return commandLine.getOptionValue("df");
     }
 
     /**
@@ -329,32 +229,6 @@ public class OptionsParser {
         return commandLine.getArgs();
     }
 
-    /**
-     * Adds the output directory option.
-     *
-     * @param required
-     *        If true, the argument must be present
-     */
-    public void addDirectoryOption(boolean required) {
-        addOptionWithArg("o", "output directory", "Directory where the CSV are stored", "directory", true);
-    }
-
-    public String getDirectory() {
-        return getOptionArg("o");
-    }
-
-    /**
-     * Gets the output directory, appends a slash if not already present at the end.
-     *
-     * @return The output directory, appends a slash if not already present at the end.
-     */
-    public String getDirectoryWithTrailingSlash() {
-        String directory = getOptionArg("o");
-        if (!directory.endsWith("/")) {
-            directory = directory + "/";
-        }
-        return directory;
-    }
 
     /**
      * Returns whether the option is present in the command line.
@@ -371,20 +245,10 @@ public class OptionsParser {
         return commandLine.hasOption(VERBOSE_SHORT);
     }
 
-    public boolean isVerboseSQL() {
-        return commandLine.hasOption(VERBOSE_SQL_LONG);
+    public boolean hasHelpOption() {
+        return hasHelpOption;
     }
 
-    public boolean isExtraVerboseSQL() {
-        return commandLine.hasOption(EXTRA_VERBOSE_SQL_LONG);
-    }
-
-    /**
-     * Adds the file option (is required).
-     */
-    public void addFileOption() {
-        options.addOption(OptionBuilder.hasArg().isRequired().withDescription("File <file1> required").withLongOpt("file").create("f"));
-    }
 
     /**
      * Adds a custom option, which has one argument.
@@ -464,19 +328,6 @@ public class OptionsParser {
         HelpFormatter hf = new HelpFormatter();
         hf.printHelp(app, header, options, "");
 
-    }
-
-    /**
-     * Returns the Sybase Interface file.
-     *
-     * @return name of the sybase interfacefile
-     */
-    public String getDbInterfaceFile() {
-        String dbi = null;
-        if (commandLine.hasOption(DBINI_SHORT_OPTION)) {
-            dbi = commandLine.getOptionValue(DBINI_SHORT_OPTION);
-        }
-        return dbi;
     }
 
     public Options getOptions() {
