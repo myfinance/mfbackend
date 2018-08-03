@@ -1,5 +1,8 @@
 package de.hf.dac.myfinance.runner;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import de.hf.dac.io.baserunner.OptionsParser;
 
 /**
@@ -15,7 +18,7 @@ import de.hf.dac.io.baserunner.OptionsParser;
 
 public enum CmdLineOptions {
     ENVIRONMENT("env", "environment", "the data environment of the backend", false),
-    ACTIONTYPE("a", "action", "the job to trigger", true);
+    ACTIONTYPE("a", "action", "the job to trigger", false);
 
     private String shortName;
     private String longName;
@@ -35,5 +38,10 @@ public enum CmdLineOptions {
         this.longName = longName;
         this.desc = desc;
         this.required = required;
+    }
+
+
+    public static String[] getBaseOptionGroupMembers(){
+        return new String[]{ACTIONTYPE.shortName};
     }
 }

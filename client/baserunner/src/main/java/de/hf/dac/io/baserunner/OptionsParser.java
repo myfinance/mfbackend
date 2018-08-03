@@ -39,10 +39,9 @@ import java.util.List;
 /**
  * Parses the arguments that were given on the command line.
  */
-// TODO New version of commons-cli has maybe better way to build options
 public class OptionsParser {
     public static final String DEBUG_OPTION = "debug";
-    public static final String HELP_OPTION = "help";
+    public static final String HELP_OPTION = "h";
     private static final String DAC_LOGIN_INFO = ResfileConfigurationImpl.DAC_LOGIN_INFO;
 
     private static final String DEVPROPS_FILENAME = ResfileConfigurationImpl.DEVPROPS_FILENAME;
@@ -52,7 +51,6 @@ public class OptionsParser {
     private static final String RES_FILE_SHORT_OPTION = "res";
     private static final String VERBOSE_SHORT = "v";
 
-    private Boolean hasHelpOption = false;
 
     /** The options expected */
     protected Options options = new Options();
@@ -113,7 +111,6 @@ public class OptionsParser {
      */
     public void parse(String[] args) throws ParseException {
         parseCommandLineOptions(args);
-        if(!hasHelpOption) parseResFilesOptions();
     }
 
     private void parseResFilesOptions() {
@@ -207,10 +204,6 @@ public class OptionsParser {
                 }
                 arg = value;
             }
-            if(arg.equals("-h")|| arg.equals("-help")) {
-                hasHelpOption = true;
-                return;
-            }
             processedArgs[i] = arg;
         }
         commandLine = parseCmdLine(processedArgs);
@@ -246,7 +239,7 @@ public class OptionsParser {
     }
 
     public boolean hasHelpOption() {
-        return hasHelpOption;
+        return commandLine.hasOption(HELP_OPTION);
     }
 
 

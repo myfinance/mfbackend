@@ -27,7 +27,7 @@
         <h2.version>1.4.186</h2.version>
         <liquibase.version>3.5.3</liquibase.version>
 
-        <commons-cli.version>1.2</commons-cli.version><!-- parsing commandline options in Module common-->
+        <commons-cli.version>1.4</commons-cli.version><!-- parsing commandline options in Module common-->
 
         <commons-io.version>2.5</commons-io.version>
         <packageadmin-plugin.version>1.0.4</packageadmin-plugin.version>

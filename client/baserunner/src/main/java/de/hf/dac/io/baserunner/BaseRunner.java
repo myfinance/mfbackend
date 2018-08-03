@@ -19,6 +19,8 @@ package de.hf.dac.io.baserunner;
 
 import de.hf.dac.api.io.efmb.DatabaseInfo;
 import de.hf.dac.common.BuildMetadataUtil;
+
+import org.apache.commons.cli.OptionGroup;
 import org.apache.commons.cli.ParseException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -27,6 +29,9 @@ import org.slf4j.bridge.SLF4JBridgeHandler;
 import org.apache.log4j.Level;
 
 import java.lang.management.ManagementFactory;
+import java.util.Arrays;
+
+import static de.hf.dac.io.baserunner.OptionsParser.HELP_OPTION;
 
 /** Base class for all runners, contains common method for initialization. */
 public abstract class BaseRunner {
@@ -108,6 +113,13 @@ public abstract class BaseRunner {
      * Subclass can add extra CLI Options here
      */
     protected abstract void addCustomCommandLineOptions();
+
+    protected void createBaseGroup(String[] arg, Boolean required){
+        int N = arg.length;
+        String[] args = Arrays.copyOf(arg, N + 1);
+        args[N] = HELP_OPTION;
+        optionsParser.createOptionGroup(args, required);
+    }
 
     protected void prepareCommandLineParser(String[] args) throws ParseException {
         addBaseCommandLineOptions();

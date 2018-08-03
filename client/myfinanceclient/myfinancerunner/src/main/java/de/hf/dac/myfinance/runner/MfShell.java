@@ -35,6 +35,7 @@ public class MfShell extends BaseMFRunnerClient {
         for (CmdLineOptions option:CmdLineOptions.values()) {
             option.addOption(optionsParser);
         }
+        createBaseGroup(CmdLineOptions.getBaseOptionGroupMembers(), true);
     }
 
     @Override
