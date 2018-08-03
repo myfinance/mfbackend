@@ -17,7 +17,7 @@
 
 package de.hf.dac.myfinance.test.plugin;
 
-import de.hf.dac.io.baserunner.OptionsParser;
+import de.hf.dac.io.baserunner.ResFileHandler;
 import de.hf.dac.io.config.resfile.ResFileParser;
 import de.hf.dac.testrunner.execution.ReferenceBag;
 import de.hf.dac.testrunner.execution.plugin.DefaultExecutionContext;
@@ -36,7 +36,7 @@ public class MdResfileExecutionContext extends DefaultExecutionContext {
     public MdResfileExecutionContext(Plugin plugin, String env) {
         super(env, plugin);
         this.env = env;
-        OptionsParser p = new OptionsParser();
+        ResFileHandler p = new ResFileHandler();
         parser = new ResFileParser();
 
         parser.load("./src/test/resources/dac.res");

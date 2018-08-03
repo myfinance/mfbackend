@@ -17,8 +17,8 @@
 
 package de.hf.dac.myfinance.runner;
 
-import de.hf.dac.io.baserunner.BaseRestCommandLineRunner;
 import de.hf.dac.api.io.routes.job.RunnerParameter;
+import de.hf.dac.io.baserunner.BaseRunner;
 import de.hf.dac.io.config.resfile.Configuration;
 import de.hf.dac.myfinance.api.runner.BaseMFRunnerParameter;
 import de.hf.dac.myfinance.client.api.MyFinanceRunnerApi;
@@ -29,7 +29,7 @@ import org.apache.commons.codec.binary.Base64;
 
 import java.util.HashMap;
 
-public abstract class BaseMFRunnerClient extends BaseRestCommandLineRunner {
+public abstract class BaseMFRunnerClient extends BaseRunner {
 
     private MyFinanceRunnerApi runnerClient;
     private String credentialsHeader;
@@ -37,14 +37,11 @@ public abstract class BaseMFRunnerClient extends BaseRestCommandLineRunner {
 
     public abstract String getJobType();
 
-    @Override
-    protected void addCustomCommandLineOptions() {
-    }
+    protected abstract RunnerParameter extractParameters();
 
     @Override
-    protected void passParamsToExternal(RunnerParameter runnerParameter) {
-
-
+    protected void run() {
+        RunnerParameter runnerParameter = extractParameters();
         if (runnerParameter instanceof BaseMFRunnerParameter) {
             BaseMFRunnerParameter p = (BaseMFRunnerParameter)runnerParameter;
             MyFinanceRunnerApi client = createRestClient();
@@ -61,7 +58,7 @@ public abstract class BaseMFRunnerClient extends BaseRestCommandLineRunner {
                         Thread.sleep(timeout);
                         maxTimeWait -= timeout;
                         if (count % 30 == 0) {
-                            log.info("Still waiting for Job {}", start.getStatus().toString());
+                            log.info("Still waiting for Import {}", start.getStatus().toString());
                         }
                         start = client.status(uid);
                     } catch (InterruptedException e) {
@@ -71,7 +68,7 @@ public abstract class BaseMFRunnerClient extends BaseRestCommandLineRunner {
                 }
 
                 if (start.getStatus().compareTo(JobInformation.StatusEnum.FINISHED) != 0) {
-                    throw new RuntimeException("Job Execution Failed " + start );
+                    throw new RuntimeException("Import Execution Failed " + start );
                 }
 
             } catch (ApiException e) {

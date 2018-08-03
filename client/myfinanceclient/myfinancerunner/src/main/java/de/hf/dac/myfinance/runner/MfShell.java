@@ -11,56 +11,34 @@
 
 package de.hf.dac.myfinance.runner;
 
-import de.hf.dac.api.io.routes.job.RunnerParameter;
-import de.hf.dac.myfinance.api.runner.BaseMFRunnerParameter;
+import de.hf.dac.io.baserunner.BaseRunner;
+import de.hf.dac.io.baserunner.SysExit;
+import de.hf.dac.myfinance.runner.commands.Import;
+import de.hf.dac.myfinance.runner.commands.ProcessTransactions;
+import picocli.CommandLine;
+import picocli.CommandLine.Command;
 
 /**
  * command line runner for all mf commands
  */
-public class MfShell extends BaseMFRunnerClient {
-
-    protected Action action = Action.IMPORT;
+@Command(description = "MyFinance shell. You can start Batch-jobs, view status ...",
+    name = "MfShell", mixinStandardHelpOptions = true, version = "MfShell 1.0", subcommands = {
+        Import.class, ProcessTransactions.class}
+)
+public class MfShell extends BaseRunner {
 
     /**
-     * @param args
-     *        The command line arguments
+     * only executed if no subcommanf is called -> print help a
+     * @return
      */
+    @Override
+    public void run() {
+        CommandLine.usage(this, System.out);
+        this.shutdown(SysExit.USAGE);
+    }
+
     public static void main(String[] args) {
-
-        new MfShell().run(args);
-    }
-
-    @Override
-    protected void addCustomCommandLineOptions() {
-        for (CmdLineOptions option:CmdLineOptions.values()) {
-            option.addOption(optionsParser);
-        }
-        createBaseGroup(CmdLineOptions.getBaseOptionGroupMembers(), true);
-    }
-
-    @Override
-    protected RunnerParameter extractParameters() {
-        String env = "dev";
-        if (optionsParser.hasOption(CmdLineOptions.ENVIRONMENT.getShortName())) {
-            env = optionsParser.getOptionArg(CmdLineOptions.ENVIRONMENT.getShortName());
-        }
-
-        if (optionsParser.hasOption(CmdLineOptions.ACTIONTYPE.getShortName())) {
-            action = action.getActionByAlias(optionsParser.getOptionArg(CmdLineOptions.ACTIONTYPE.getShortName()));
-        }
-        return new BaseMFRunnerParameter(env);
-    }
-
-
-
-    @Override
-    public String getJobType() {
-        return action.getJobType();
-    }
-
-    @Override
-    protected String getAppName() {
-        return "MfShell";
+        CommandLine.call(new MfShell(), args);
     }
 }
 

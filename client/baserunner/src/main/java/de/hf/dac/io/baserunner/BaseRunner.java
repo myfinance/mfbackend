@@ -17,11 +17,8 @@
 
 package de.hf.dac.io.baserunner;
 
-import de.hf.dac.api.io.efmb.DatabaseInfo;
 import de.hf.dac.common.BuildMetadataUtil;
 
-import org.apache.commons.cli.OptionGroup;
-import org.apache.commons.cli.ParseException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.slf4j.MDC;
@@ -29,18 +26,26 @@ import org.slf4j.bridge.SLF4JBridgeHandler;
 import org.apache.log4j.Level;
 
 import java.lang.management.ManagementFactory;
-import java.util.Arrays;
+import java.lang.reflect.Constructor;
+import java.util.concurrent.Callable;
 
-import static de.hf.dac.io.baserunner.OptionsParser.HELP_OPTION;
+import picocli.CommandLine;
+import picocli.CommandLine.Option;
+
 
 /** Base class for all runners, contains common method for initialization. */
-public abstract class BaseRunner {
-    protected static final String DATE_PATTERN = "yyyy-MM-dd";
+public abstract class BaseRunner implements Callable<Integer> {
     protected final Logger log = LoggerFactory.getLogger(getClass());
     private boolean exitOnShutdown = true;
-    protected OptionsParser optionsParser;
-    private Class<?> clazz;
-    protected String appName = "runner";
+
+    @Option(names = { "-v", "--verbose" }, description = "Be verbose.")
+    private boolean verbose = false;
+
+    @Option(names = { "-debug", "--debug" }, description = "Debug Options enabled. Use Debug Options like data filtering")
+    private boolean debug = false;
+
+    @Option(names = { "-res", "--res" }, split = ",", description = "Resource file")
+    private String[] resFiles;
 
     /** The start time (System.currentTimeMillis) of the program set in the base constructor */
     protected long startTime;
@@ -58,49 +63,64 @@ public abstract class BaseRunner {
         SLF4JBridgeHandler.install();
     }
 
-    /**
-     * Run.
-     *
-     * @param args the args
-     * @throws Exception the exception
-     */
-    public void run(String[] args) throws Exception {
+    public Integer call() {
+        if(verbose) {
+            org.apache.log4j.Logger.getLogger(getClass()).setLevel(Level.DEBUG);
+        }
         // log pid if available
         logPid();
 
         // log build info if available
-        logBuidInfo();
+        logBuildInfo();
 
-        if (args == null) args = new String[]{};
-        prepareCommandLineParser(args);
+        ResFileHandler.initFromResFile(resFiles, debug);
+        int rc = 0;
 
-        if(optionsParser.hasHelpOption()){
-            setExitOnShutdown(true);
-            shutdown(0);
+        try {
+            run();
+        }
+        catch (Exception e) {
+            new CommandLine(this).usage(System.err);
+            rc = SysExit.GENERIC_ERROR;
+            log.error(e.getLocalizedMessage(), e);
+        } finally {
+            this.shutdown(rc);
         }
 
-        if(optionsParser.isVerbose()) {
-            org.apache.log4j.Logger.getLogger(this.clazz).setLevel(Level.DEBUG);
-        }
+
+
+        return rc;
     }
+
+    /**
+     * Run.
+     *
+     * @throws Exception the exception
+     */
+    protected abstract void run();
 
     public boolean isExitOnShutdown() {
         return exitOnShutdown;
     }
 
-    public void setExitOnShutdown(boolean exitOnShutdown) {
+    protected void setExitOnShutdown(boolean exitOnShutdown) {
         this.exitOnShutdown = exitOnShutdown;
     }
 
-    public void shutdown(int rc) {
+    protected void shutdown(int rc) {
         this.logRuntime();
         if(this.isExitOnShutdown()) {
             System.exit(rc);
         }
-
     }
 
-    protected void logBuidInfo() {
+    protected void shutdown(int rc, String message, Object... params) {
+        log.error(message, params);
+        new CommandLine(this).usage(System.err);
+        shutdown(rc);
+    }
+
+    protected void logBuildInfo() {
         BuildMetadataUtil buildMetadata = BuildMetadataUtil.get(this.getClass());
         log.info("Dac Build version     : {} ", buildMetadata.getVersion());
         log.info("Dac Build timestamp   : {} ", buildMetadata.getBuildTimestamp());
@@ -109,49 +129,12 @@ public abstract class BaseRunner {
         MDC.put("DacVersion", buildMetadata.getVersion());
     }
 
-    /**
-     * Subclass can add extra CLI Options here
-     */
-    protected abstract void addCustomCommandLineOptions();
-
-    protected void createBaseGroup(String[] arg, Boolean required){
-        int N = arg.length;
-        String[] args = Arrays.copyOf(arg, N + 1);
-        args[N] = HELP_OPTION;
-        optionsParser.createOptionGroup(args, required);
-    }
-
-    protected void prepareCommandLineParser(String[] args) throws ParseException {
-        addBaseCommandLineOptions();
-        addCustomCommandLineOptions();
-
-        optionsParser.parse(args);
-
-        // handle defaults like db connect
-        handleDefaultOptions(optionsParser);
-
-    }
-
-    private void addBaseCommandLineOptions() {
-        // enable DEBUGGING by using Command Line Parameter
-        optionsParser.addOption(OptionsParser.DEBUG_OPTION, "Debug Options enabled", "Use Debug Options like data filtering .", false);
-    }
-
     protected int secondsSinceStart() {
         return (int) ((System.currentTimeMillis() - startTime) / 1000);
     }
 
     protected void logRuntime() {
         log.info("Runtime: {} seconds", secondsSinceStart());
-    }
-
-
-    protected abstract String getAppName();
-
-    protected void handleDefaultOptions(OptionsParser op) {
-        if(op.hasHelpOption()){
-            op.printUsage(getAppName(), "options:");
-        }
     }
 
     protected void logPid() {
