@@ -22,7 +22,7 @@ import picocli.CommandLine.Command;
  * command line runner for all mf commands
  */
 @Command(description = "MyFinance shell. You can start Batch-jobs, view status ...",
-    name = "MfShell", mixinStandardHelpOptions = true, version = "MfShell 1.0", subcommands = {
+    name = "MfShell", mixinStandardHelpOptions = true, versionProvider = de.hf.dac.io.baserunner.VersionProvider.class, subcommands = {
         Import.class, ProcessTransactions.class}
 )
 public class MfShell extends BaseRunner {
@@ -33,7 +33,7 @@ public class MfShell extends BaseRunner {
      */
     @Override
     public void run() {
-        CommandLine.usage(this, System.out);
+        CommandLine.usage(this, System.out, CommandLine.Help.Ansi.ON);
         this.shutdown(SysExit.USAGE);
     }
 
