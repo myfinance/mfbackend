@@ -1,1 +1,1 @@
-java -jar run-job-import.jar
+java -jar run-job-mfshell.jar

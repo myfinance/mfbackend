@@ -54,17 +54,17 @@
                 <executions>
                     <!-- build for each main-class a Runner-jar with a different classifier-->
                     <execution>
-                        <id>import-runner</id>
+                        <id>mfshell-runner</id>
                         <goals>
                             <goal>jar</goal>
                         </goals>
                         <phase>package</phase>
                         <configuration>
-                            <classifier>import</classifier>
+                            <classifier>mfshell</classifier>
                             <archive>
                                 <manifest>
                                     <addClasspath>true</addClasspath>
-                                    <mainClass>de.hf.dac.myfinance.runner.ImportRunnerClient</mainClass>
+                                    <mainClass>de.hf.dac.myfinance.runner.MfShell</mainClass>
                                 </manifest>
                                 <manifestEntries>
                                     <Class-Path>lib/myfinancerunner-${project.version}.jar</Class-Path>
