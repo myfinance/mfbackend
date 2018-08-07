@@ -40,7 +40,35 @@
             </includes>
         </fileSet>
 
-
+        <!--mfshell -->
+        <fileSet>
+            <outputDirectory>myshell/lib</outputDirectory>
+            <directory>${project.build.directory}/../../run-job/target/lib</directory>
+            <includes>
+                <include>**/*</include>
+            </includes>
+        </fileSet>
+        <fileSet>
+            <outputDirectory>myshell</outputDirectory>
+            <directory>${project.build.directory}/../../run-job/target</directory>
+            <includes>
+                <include>run-job-mfshell.jar</include>
+            </includes>
+        </fileSet>
+        <fileSet>
+            <outputDirectory>myshell</outputDirectory>
+            <directory>${project.build.directory}/../../../basedistributions/basedockerimages/docker/myfinance</directory>
+            <includes>
+                <include>dac.res</include>
+            </includes>
+        </fileSet>
+        <fileSet>
+            <outputDirectory>myshell</outputDirectory>
+            <directory>${project.build.directory}/../docker/myshell</directory>
+            <includes>
+                <include>**/*</include>
+            </includes>
+        </fileSet>
 
     </fileSets>
 

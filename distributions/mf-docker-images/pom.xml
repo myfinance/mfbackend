@@ -55,6 +55,13 @@
                                 <filter>@</filter>
                             </build>
                         </image>
+                        <image>
+                            <name>holgerfischer/myfinance:${project.version}-mfshell</name>
+                            <build>
+                                <dockerFileDir>${project.build.directory}/docker-prep/mfshell</dockerFileDir>
+                                <filter>@</filter>
+                            </build>
+                        </image>
                     </images>
                 </configuration>
                 <executions>
