@@ -231,7 +231,9 @@
                                         println("local ip =" + ip)
                                         println("Wait for karaf to be available")
                                         Thread.sleep(10000)
-                                        for (int i = 0; i < 30; i++) { try { def response = with().get("http://karaf:karaf@" + ip + ":8181/dac/rest/hello"); def status = response.getStatusLine() println(status)
+					for (int i = 0; i < 30; i++) { try { def response = with().get("http://karaf:karaf@" + ip + ":8181/dac/rest/hello"); 
+						def status = response.getStatusLine(); 
+						println(status);
                                                 if (!(status ==~ /.*OK.*/)) {
                                                     Thread.sleep(5000)
                                                     continue
