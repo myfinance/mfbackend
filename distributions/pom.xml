@@ -14,19 +14,6 @@
         <module>karaf-full</module>
         <module>myfinance-full-packaging</module>
         <module>run-job</module>
+        <module>mf-docker-images</module>
     </modules>
-
-    <profiles>
-        <profile>
-            <id>docker</id>
-            <activation>
-                <os>
-                    <name>linux</name>
-                </os>
-            </activation>
-            <modules>
-                <module>mf-docker-images</module>
-            </modules>
-        </profile>
-    </profiles>
 </project>

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>de.hf.dac</groupId>
@@ -7,7 +8,7 @@
     <parent>
         <artifactId>distributions</artifactId>
         <groupId>de.hf.dac</groupId>
-        <version>0.11.1-SNAPSHOT</version>
+        <version>0.12.0-SNAPSHOT</version>
     </parent>
     <packaging>pom</packaging>
 
@@ -20,71 +21,81 @@
         </dependency>
     </dependencies>
 
-    <build>
-        <plugins>
-            <plugin>
-                <artifactId>maven-assembly-plugin</artifactId>
-                <version>${assembly-plugin.version}</version>
-                <executions>
-                    <execution>
-                        <id>docker-assembly</id>
-                        <phase>package</phase>
-                        <goals>
-                            <goal>single</goal>
-                        </goals>
+    <profiles>
+        <profile>
+            <id>docker</id>
+            <activation>
+                <os>
+                    <name>linux</name>
+                </os>
+            </activation>
+            <build>
+                <plugins>
+                    <plugin>
+                        <artifactId>maven-assembly-plugin</artifactId>
+                        <version>${assembly-plugin.version}</version>
+                        <executions>
+                            <execution>
+                                <id>docker-assembly</id>
+                                <phase>package</phase>
+                                <goals>
+                                    <goal>single</goal>
+                                </goals>
+                                <configuration>
+                                    <finalName>docker</finalName>
+                                    <descriptors>
+                                        <descriptor>src/main/assembly/docker-prep-assembly.xml</descriptor>
+                                    </descriptors>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                    <plugin>
+                        <groupId>io.fabric8</groupId>
+                        <artifactId>docker-maven-plugin</artifactId>
+                        <version>0.23.0</version>
                         <configuration>
-                            <finalName>docker</finalName>
-                            <descriptors>
-                                <descriptor>src/main/assembly/docker-prep-assembly.xml</descriptor>
-                            </descriptors>
+                            <dockerHost>tcp://localhost:2375</dockerHost>
+                            <images>
+                                <image>
+                                    <name>holgerfischer/myfinance:${project.version}-myfinance-full</name>
+                                    <build>
+                                        <dockerFileDir>${project.build.directory}/docker-prep/myfinance</dockerFileDir>
+                                        <filter>@</filter>
+                                    </build>
+                                </image>
+                                <image>
+                                    <name>holgerfischer/myfinance:${project.version}-mfshell</name>
+                                    <build>
+                                        <dockerFileDir>${project.build.directory}/docker-prep/mfshell</dockerFileDir>
+                                        <filter>@</filter>
+                                    </build>
+                                </image>
+                            </images>
                         </configuration>
-                    </execution>
-                </executions>
-            </plugin>
-            <plugin>
-                <groupId>io.fabric8</groupId>
-                <artifactId>docker-maven-plugin</artifactId>
-                <version>0.23.0</version>
-                <configuration>
-                    <dockerHost>tcp://localhost:2375</dockerHost>
-                    <images>
-                        <image>
-                            <name>holgerfischer/myfinance:${project.version}-myfinance-full</name>
-                            <build>
-                                <dockerFileDir>${project.build.directory}/docker-prep/myfinance</dockerFileDir>
-                                <filter>@</filter>
-                            </build>
-                        </image>
-                        <image>
-                            <name>holgerfischer/myfinance:${project.version}-mfshell</name>
-                            <build>
-                                <dockerFileDir>${project.build.directory}/docker-prep/mfshell</dockerFileDir>
-                                <filter>@</filter>
-                            </build>
-                        </image>
-                    </images>
-                </configuration>
-                <executions>
-                    <execution>
-                        <id>build-docker</id>
-                        <phase>pre-integration-test</phase>
-                        <goals>
-                            <!-- "build" should be used to create the images with the
-                                 artifact -->
-                            <goal>build</goal>
-                        </goals>
-                    </execution>
-                    <execution>
-                        <id>push-docker</id>
-                        <phase>deploy</phase>
-                        <goals>
-                            <goal>push</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
-        </plugins>
-    </build>
+                        <executions>
+                            <execution>
+                                <id>build-docker</id>
+                                <phase>pre-integration-test</phase>
+                                <goals>
+                                    <!-- "build" should be used to create the images with the
+                                         artifact -->
+                                    <goal>build</goal>
+                                </goals>
+                            </execution>
+                            <execution>
+                                <id>push-docker</id>
+                                <phase>deploy</phase>
+                                <goals>
+                                    <goal>push</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
 
-    
+    </profiles>
+
 </project>

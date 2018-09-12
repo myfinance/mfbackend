@@ -11,19 +11,7 @@
 
     <modules>
         <module>karaf-rest-dist</module>
+        <module>basedockerimages</module>
     </modules>
 
-    <profiles>
-        <profile>
-	    <id>docker</id>
-	    <activation>
-            	<os>
-			<name>linux</name>
-		</os>										              
-	    </activation>
-            <modules>
-                <module>basedockerimages</module>
-            </modules>
-        </profile>
-    </profiles>
 </project>
