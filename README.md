@@ -92,6 +92,16 @@ Sonarqube load: mvn -Pjacoco -Dsonar.jacoco.reportPaths=C:/devenv/repos/dac/targ
 !attention! if you run integrationtests or clientgeneration under linux, you have to deploy the docker images first. so run mvn clean deploy instead of install
 
 ### get started ###
+
+install ansible on centos:
+yum install ansible
+create inventory-file with the IP to the myfinance-Server (CentOS) see doc/install/inventory.txt
+login via ssh from ansible-host to myfinance-server to create private key
+copy playbook from doc/install
+install build-environment on myfinanceserver: ansible-playbook myplaybook.yml -i inventory.txt
+login on myfinance-server with user build
+in repo/dac: mvn clean install
+
 copy a valid certificate to /var/lib/docker/volumes/myfinance_myfinancelogs/_data
 to start MYFinancein Docker: docker stack deploy -c distributions/myfinance-full-packaging/target/docker-compose.yml myfinance
 
