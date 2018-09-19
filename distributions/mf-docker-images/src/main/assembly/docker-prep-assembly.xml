@@ -85,6 +85,16 @@
                 <include>**/*</include>
             </includes>
         </fileSet>
+       
+        <!--mfshell -->
+        <fileSet>
+            <outputDirectory>scheduler</outputDirectory>
+            <directory>${project.build.directory}/../docker/scheduler</directory>
+            <includes>
+                <include>**/*</include>
+            </includes>
+        </fileSet>
+
 
     </fileSets>
 
