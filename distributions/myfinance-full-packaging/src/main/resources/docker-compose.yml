@@ -77,7 +77,7 @@ services:
   scheduler:
     image: holgerfischer/myfinance:${project.version}-scheduler
     volumes:
-     - "mfdumps:/var/dumps"
+     - "/mnt/data/dumps:/var/dumps" 
     networks:
      - myfinance-network
     depends_on:
@@ -89,4 +89,3 @@ volumes:
   myfinancedata:
   myfinancelogs:
   myfinanceconfig:
-  mfdumps:        

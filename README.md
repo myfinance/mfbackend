@@ -102,7 +102,7 @@ install build-environment on myfinanceserver: ansible-playbook myplaybook.yml -i
 login on myfinance-server with user build
 in repo/dac: mvn clean install
 
-copy a valid certificate to /var/lib/docker/volumes/myfinance_myfinancelogs/_data
+copy a valid certificate to /var/lib/docker/volumes/myfinance_myfinanceconfig/_data
 to start MYFinancein Docker: docker stack deploy -c distributions/myfinance-full-packaging/target/docker-compose.yml myfinance
 
 if Database is fresh: add via gui or api-Docs: currency eur and usd
