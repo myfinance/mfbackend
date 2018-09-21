@@ -8,5 +8,5 @@
 # │ │ │ │ │
 # * * * * *  command to execute
 
-* 7 * * * export PGPASSWORD="vulkan" && pg_dump -a -d marketdata -h postgres_mf -p 5432 -U postgres | gzip > /var/dumps/$(date +%Y-%m-%d-%H-%M).psql.gz
-@reboot export PGPASSWORD="vulkan" && pg_dump -a -d marketdata -h postgres_mf -p 5432 -U postgres | gzip > /var/dumps/$(date +%Y-%m-%d-%H-%M).psql.gz
+0 23 * * * export PGPASSWORD="vulkan" && pg_dump -a -d marketdata -h postgres_mf -p 5432 -U postgres | gzip > /var/dumps/$(date +%Y-%m-%d-%H-%M).psql.gz
+@reboot sleep 60 && export PGPASSWORD="vulkan" && pg_dump -a -d marketdata -h postgres_mf -p 5432 -U postgres | gzip > /var/dumps/$(date +%Y-%m-%d-%H-%M).psql.gz

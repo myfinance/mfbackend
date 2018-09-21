@@ -14,6 +14,8 @@ services:
       - "myfinancedata:/var/lib/postgresql/data"
     networks:
       - myfinance-network
+    ports:
+      - '5432:5432'
   mf_db_model_upgrade:
     image: holgerfischer/myfinance:${project.version}-mfdbupgrade
     deploy:
