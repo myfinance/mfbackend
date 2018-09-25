@@ -138,7 +138,7 @@ docker stack rm myfinance
 docker stack deploy -c distributions/myfinance-full-packaging/target/docker-compose.yml myfinance
 
 to restore a dump:
-docker run -v "/mnt/data/dumps:/var/dumps" holgerfischer/myfinance:0.12.0-SNAPSHOT-mfdumprestore //replace the version with the latest
-
+docker run -v "/mnt/data/dumps:/var/dumps" -e "PASSWORD=*****" -e "FILENAME=2018-09-25-16-46.psql.gz" holgerfischer/myfinance:0.12.0-SNAPSHOT-mfdumprestore
+  //replace the version with the latest
 
  
