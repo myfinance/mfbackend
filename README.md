@@ -124,6 +124,9 @@ if default ip http://192.168.100.71:8182/dac/rest is wrong then change dac.res i
 postgres-client to connect to the database. for admin-use in the intranet only.
 docker run -it --rm holgerfischer/myfinance:0.12.0-SNAPSHOT-psql postgresql://postgres:****@192.168.100.71:5432/marketdata
 
+e.G. select * from mf_instrument;
+to quit: \q
+
 ### dump and restore ###
 
 you can stop the docker services and copy the myfinancedata-volume to the new location or an nfs share.
