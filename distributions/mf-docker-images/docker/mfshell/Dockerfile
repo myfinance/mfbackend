@@ -1,3 +1,4 @@
+#alphine-image is not working here-I can not start basg scripts with alphine - don't lnow what is missing
 FROM openjdk:8u181-jre
 
 ADD ./mfshell /mfshell

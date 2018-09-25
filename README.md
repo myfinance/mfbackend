@@ -110,3 +110,32 @@ then add equities for example DE0005140008 deutsche Bank
                               US5949181045 Microsoft
                               add symbols MSFT, DBK
                               start import prices
+                              
+### mfshell ###                              
+
+admin shell to start jobs etc on myfinance. works only in intranet 
+(only http request at the moment - ssl not working and it is not recommended to puplish the http port outside the intranet)
+shouldn't ne necessary to use outside the scheduler but just in case:
+docker run -v "mfshellconfig:/mfshell/envconfig" holgerfischer/myfinance:0.12.0-SNAPSHOT-mfshell //replace the version with the latest
+if default ip http://192.168.100.71:8182/dac/rest is wrong then change dac.res in the mapped volume mfshellconfig
+
+### psql ###
+
+postgres-client to connect to the database. for admin-use in the intranet only.
+docker run -it --rm holgerfischer/myfinance:0.12.0-SNAPSHOT-psql postgresql://postgres:****@192.168.100.71:5432/marketdata
+
+### dump and restore ###
+
+you can stop the docker services and copy the myfinancedata-volume to the new location or an nfs share.
+to restore this volume create an empty volume myfinancedata and copy the saved volume-data to it
+
+just in case, if this process is not working due to an hardwarecrash e.G., a job is scheduled that dumps the database every day and on startup
+If you want to create a fresh dump: just restart the scheduling-service or the complete stack:
+docker stack rm myfinance
+docker stack deploy -c distributions/myfinance-full-packaging/target/docker-compose.yml myfinance
+
+to restore a dump:
+docker run -v "/mnt/data/dumps:/var/dumps" holgerfischer/myfinance:0.12.0-SNAPSHOT-mfdumprestore //replace the version with the latest
+
+
+ 

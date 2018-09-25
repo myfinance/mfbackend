@@ -109,6 +109,24 @@
             </includes>
         </fileSet>
 
+        <!--mfdumprestore -->
+        <fileSet>
+            <outputDirectory>mfdumprestore</outputDirectory>
+            <directory>${project.build.directory}/../docker/mfdumprestore</directory>
+            <includes>
+                <include>**/*</include>
+            </includes>
+        </fileSet>
+
+        <!--psql -->
+        <fileSet>
+            <outputDirectory>psql</outputDirectory>
+            <directory>${project.build.directory}/../docker/psql</directory>
+            <includes>
+                <include>**/*</include>
+            </includes>
+        </fileSet>
+
     </fileSets>
 
 
