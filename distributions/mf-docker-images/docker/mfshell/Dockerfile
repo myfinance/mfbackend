@@ -1,13 +1,13 @@
-# start from official java container
-FROM anapsix/alpine-java:8u144b01_jdk
+FROM openjdk:8u181-jre
 
 ADD ./mfshell /mfshell
 RUN mkdir /mfshell/envconfig
 ADD ./dac.res /mfshell/envconfig
+ADD ./runner.sh /mfshell
 
 ENV DAC_RES_PATH=/mfshell/envconfig
 
 WORKDIR /mfshell/
 
-
-ENTRYPOINT java -jar ./run-job-mfshell.jar
+#java call has to be wrapped to get arguments from outside the container
+ENTRYPOINT ["./runner.sh"]

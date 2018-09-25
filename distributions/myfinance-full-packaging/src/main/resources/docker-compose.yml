@@ -52,6 +52,7 @@ services:
       - '8101:8101'
       - '44444:44444'
       - '8443:8443'
+      - '8182:8181'
     volumes:
       - "myfinancelogs:/MyFinance/data/log"
       - "myfinanceconfig:/MyFinance/envconfig"  

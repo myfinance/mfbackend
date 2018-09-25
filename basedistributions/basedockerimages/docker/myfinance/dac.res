@@ -28,7 +28,8 @@ org.osgi.service.http.enabled = true
 #ldap,off or some thing else for karaf default
 auth.mode=karaf
 
-[MARKETDATA]
-MARKETDATA_LAUNCH_USER=karaf
-MARKETDATA_LAUNCH_PASSWORD=karaf
-MARKETDATA_LAUNCH_URL=https://localhost:8443/dac/rest
+[MF_SERVER_CON]
+#for internal use only, ssl is not working yet
+MF_LAUNCH_USER=karaf
+MF_LAUNCH_PASSWORD=karaf
+MF_LAUNCH_URL=http://192.168.100.71:8182/dac/rest
