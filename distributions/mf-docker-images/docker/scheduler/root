@@ -8,6 +8,6 @@
 # │ │ │ │ │
 # * * * * *  command to execute
 
-5 23 * * * export PGPASSWORD="vulkan" && pg_dump -a -d marketdata -h postgres_mf -p 5432 -U postgres | gzip > /var/dumps/$(date +%Y-%m-%d-%H-%M).psql.gz && sleep 30
+5 23 * * * export PGPASSWORD="vulkan" && pg_dump -c --if-exists -d marketdata -h postgres_mf -p 5432 -U postgres | gzip > /var/dumps/$(date +%Y-%m-%d-%H-%M).psql.gz && sleep 30
 0 23 * * * java -jar /mfshell/run-job-mfshell.jar i >> /var/dumps/log$(date +%Y-%m-%d).txt
-@reboot sleep 60 && export PGPASSWORD="vulkan" && pg_dump -a -d marketdata -h postgres_mf -p 5432 -U postgres | gzip > /var/dumps/$(date +%Y-%m-%d-%H-%M).psql.gz && sleep 30 && java -jar /mfshell/run-job-mfshell.jar i >> /var/dumps/log$(date +%Y-%m-%d).txt
+@reboot sleep 60 && export PGPASSWORD="vulkan" && pg_dump -c --if-exists -d marketdata -h postgres_mf -p 5432 -U postgres | gzip > /var/dumps/$(date +%Y-%m-%d-%H-%M).psql.gz && sleep 30 && java -jar /mfshell/run-job-mfshell.jar i >> /var/dumps/log$(date +%Y-%m-%d).txt
