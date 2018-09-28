@@ -243,7 +243,7 @@
                                                     continue
                                                 } else {
                                                     break
-                                                    Thread.sleep(10000)
+                                                    Thread.sleep(20000)
                                                 }
                                             } catch (Exception e) {
                                                 println("got exception:" + e)
