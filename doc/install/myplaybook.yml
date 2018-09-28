@@ -11,6 +11,9 @@
   maven_version: "apache-maven-3.5.4"
   maven_tar: "{{download_folder}}maven/{{maven_version}}-bin.tar.gz"
   username: "builder"
+  clientip: "192.168.100.71"
+  git_version: 2.19.0
+  git_url: "https://www.kernel.org/pub/software/scm/git/git-{{ git_version }}.tar.gz"
  tasks:
 # - name: upgrade all packages
 #   yum:
@@ -24,15 +27,15 @@
  - name: create dir for mnt
    file: path=/mnt/data state=directory
    tags:
-    - nfs
+    - nfs    
  - name: mount fileshare
    mount: path="/mnt/data" src="192.168.100.6://volume1/nfsshare" opts="rw" fstype="nfs" state="mounted"
    tags:
     - nfs
-# - name: set permission for mnt/data
-#   file: dest=/mnt/data mode=0755 recurse=yes
-#   tags:
-#    - nfs
+ - name: set permission for mnt/data
+   file: dest=/mnt/data mode=0755 recurse=yes
+   tags:
+    - nfs      
  - name: install java
    action: yum pkg={{java_pkg}} state=present
    tags:
@@ -40,31 +43,67 @@
  - name: create dir for maven
    file: path=/opt/maven state=directory
    tags:
-    - maven
- - name: Untar Maven
+    - maven      
+ - name: Untar Maven 
    unarchive: src="{{maven_tar}}" dest=/opt/maven remote_src="yes"
    tags:
     - maven
  - name: setup link to maven current
-   file: path="/opt/maven/current" src="/opt/maven/{{maven_version}}"
-          state=link
-          force=yes
+   file: path="/opt/maven/current" src="/opt/maven/{{maven_version}}" 
+          state=link 
+          force=yes  
    tags:
-    - maven
-#not working ich muss hier einen neuen user anlegen und das profil anpassen
-# - name: Update path for maven use
-#   shell: export PATH=/opt/maven/current/bin:$PATH
+    - maven  
+# - name: install git
+#   action: yum pkg=git state=absent
 #   tags:
-#    - maven
- - name: install git
-   action: yum pkg=git state=present
-   tags:
-    - git
+#    - git
+# - name: git uninstall
+#   yum:
+#    name: "git"
+#    state: absent
+ - name: Install yum package for git
+   yum:
+    name: "{{ item }}"
+   with_items:
+    - curl-devel
+    - expat-devel
+#    - gettext-devel
+    - openssl-devel
+    - zlib-devel
+    - wget
+    - gcc
+    - cpan
+ - name: Get git binary
+   unarchive:
+    src: "{{ git_url }}"
+    dest: "/tmp"
+    remote_src: yes
+   changed_when: false
+ - name: Make all git binary
+   make:
+    chdir: "/tmp/git-{{ git_version }}"
+    target: all
+    params:
+      prefix: "/usr/local"
+   changed_when: false
+ - name: Make install git binary
+   make:
+    chdir: "/tmp/git-{{ git_version }}"
+    target: install
+    params:
+      prefix: "/usr/local"
+   changed_when: false
+ - name: Remove file
+   file:
+    path: "/tmp/git-{{ git_version }}"
+    state: absent
+   changed_when: false
  - name: install docker prequisits
    action: yum pkg=yum-utils,device-mapper-persistent-data,lvm2 state=present
    tags:
     - docker
- - name: install yum repo for docker
+ - name: install yum repo for docker 
    get_url:
     url: https://download.docker.com/linux/centos/docker-ce.repo
     dest: /etc/yum.repos.d/docker-ce.repo
@@ -72,6 +111,15 @@
     - docker
  - name: install docker
    action: yum pkg=docker-ce state=present
+   tags:
+    - docker
+ # necessary f√ºr openshift
+ - copy:
+    dest: '/etc/docker/daemon.json'
+    content: |
+     {
+      "insecure-registries" : ["172.30.0.0/16", "{{clientip}}:5000", "local.openshift:5000"]
+     }
    tags:
     - docker
  - lineinfile:
@@ -92,20 +140,24 @@
    service:
     name: docker
     state: restarted
+ - name: "get docker info"
+   shell: docker info
+   register: docker_info
+   changed_when: false
  - name: init swarm
    shell: docker swarm init
-# net-tools ist ein paket von netzwerktools wie ifconfig. die meisten sind obsolet ifconfig z.b. durch ip addr. -> wirklich f¸r open shift benˆtigt?
+   when: "docker_info.stdout.find('Swarm: inactive') != -1"
+# net-tools ist ein paket von netzwerktools wie ifconfig. die meisten sind obsolet ifconfig z.b. durch ip addr. -> wirklich f√ºr open shift ben√∂tigt?
  - name: install net-tools
    action: yum pkg=net-tools state=present
    tags:
-    - nettools
+    - nettools 
  - name: install wget
    action: yum pkg=wget state=present
    tags:
     - wget
  - name: install some tools
-   action: yum pkg=bind-utils,iptables-services,bridge-utils,bash-completion,kexec-tools,sos,psacct,openssl-devel,httpd-tools,NetworkManager,python-cryptography,python-devel,python-
-passlib state=present
+   action: yum pkg=bind-utils,iptables-services,bridge-utils,bash-completion,kexec-tools,sos,psacct,openssl-devel,httpd-tools,NetworkManager,python-cryptography,python-devel,python-passlib state=present
  - name: Add the user
    user:
     name: '{{username}}'
@@ -113,14 +165,13 @@ passlib state=present
     uid: 1001
     #die wheel group ist bei centos automatisch mit sudo rechten in /etc/sudoers ausgestattet
     groups: wheel,docker
-    #eine SHA512 verschl¸sselung funktioniert nicht mit CentOS keine ahnung warum(wegen Salt-zufallswort von system davor gesetzt-pw muss auf dem rechner generiert werden). Das pw i
-st aus etc/shadow von dem user holger kopiert
-    password: '$6$735ANilOhfFE6moc$y7YmYDoYnxKC3UrX2eNicy7NRIvNdweqhCvT3YAPAHaoxqXu4fJJClh../0Wi1hYuvMUmFXzZfpszGHGhyDuC1'
- - lineinfile:
+    #eine SHA512 verschl√ºsselung funktioniert nicht mit CentOS keine ahnung warum(wegen Salt-zufallswort von system davor gesetzt-pw muss auf dem rechner generiert werden). Das pw ist aus etc/shadow von dem user holger kopiert
+    password: '$6$735ANilOhfFE6moc$y7YmYDoYnxKC3UrX2eNicy7NRIvNdweqhCvT3YAPAHaoxqXu4fJJClh../0Wi1hYuvMUmFXzZfpszGHGhyDuC1' 
+ - lineinfile: 
     path: '/home/{{username}}/.bash_profile'
     state: present
     line: 'export JAVA_HOME=/usr/java/latest'
- - lineinfile:
+ - lineinfile: 
     path: '/home/{{username}}/.bash_profile'
     state: present
     line: 'export M2_HOME=/opt/maven/current'
@@ -132,3 +183,40 @@ st aus etc/shadow von dem user holger kopiert
     repo: 'https://holgerfischer:Jopaul09!@bitbucket.org/holgerfischer/dac.git'
     dest: '/home/{{username}}/repo/dac'
     umask: '0'
+ - name: download openshift
+   get_url:
+    url: https://github.com/openshift/origin/releases/download/v3.9.0/openshift-origin-client-tools-v3.9.0-191fece-linux-64bit.tar.gz
+    dest: /tmp
+   tags:
+    - oc
+ - name: Untar open shift 
+   unarchive: src="/tmp/openshift-origin-client-tools-v3.9.0-191fece-linux-64bit.tar.gz" dest=/tmp/ remote_src="yes"
+   tags:
+    - oc
+ - name: copy open shift to user bin
+   copy:
+    src: /tmp/openshift-origin-client-tools-v3.9.0-191fece-linux-64bit/oc
+    dest: /usr/bin/
+    remote_src: yes
+    mode: 0755
+   tags:
+    - oc
+ - lineinfile:
+    path: '/etc/hosts'
+    state:  present
+    line: '{{clientip}}  local.openshift'
+   tags: 
+    - oc
+ - name: start oc
+   shell: oc cluster up
+   tags: 
+    - oc
+ - name: grant user oc-admin
+   shell: oc login -u system:admin && oc adm policy add-cluster-role-to-user cluster-admin {{username}}
+   tags:
+    - oc
+ - name: copy ansible file
+   copy:
+    src: ./myplaybook.yml
+    dest: /home/{{username}}/repo/dac/doc/install
+    mode: 0755
