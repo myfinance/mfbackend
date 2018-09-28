@@ -232,7 +232,7 @@
                                         def ip = InetAddress.getLocalHost().getHostAddress()
                                         println("local ip =" + ip)
                                         println("Wait for karaf to be available")
-                                        Thread.sleep(10000)
+                                        Thread.sleep(15000)
 					                    for (int i = 0; i < 30; i++) {
                                             try {
                                                 def response = with().get("http://karaf:karaf@" + ip + ":8181/dac/rest/hello");
@@ -243,11 +243,11 @@
                                                     continue
                                                 } else {
                                                     break
-                                                    Thread.sleep(5000)
+                                                    Thread.sleep(10000)
                                                 }
                                             } catch (Exception e) {
                                                 println("got exception:" + e)
-                                                Thread.sleep(5000)
+                                                Thread.sleep(10000)
                                                 continue
                                             } finally {
                                                 print(".")
