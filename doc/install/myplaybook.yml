@@ -183,38 +183,38 @@
     repo: 'https://holgerfischer:Jopaul09!@bitbucket.org/holgerfischer/dac.git'
     dest: '/home/{{username}}/repo/dac'
     umask: '0'
- - name: download openshift
-   get_url:
-    url: https://github.com/openshift/origin/releases/download/v3.9.0/openshift-origin-client-tools-v3.9.0-191fece-linux-64bit.tar.gz
-    dest: /tmp
-   tags:
-    - oc
- - name: Untar open shift 
-   unarchive: src="/tmp/openshift-origin-client-tools-v3.9.0-191fece-linux-64bit.tar.gz" dest=/tmp/ remote_src="yes"
-   tags:
-    - oc
- - name: copy open shift to user bin
-   copy:
-    src: /tmp/openshift-origin-client-tools-v3.9.0-191fece-linux-64bit/oc
-    dest: /usr/bin/
-    remote_src: yes
-    mode: 0755
-   tags:
-    - oc
- - lineinfile:
-    path: '/etc/hosts'
-    state:  present
-    line: '{{clientip}}  local.openshift'
-   tags: 
-    - oc
- - name: start oc
-   shell: oc cluster up
-   tags: 
-    - oc
- - name: grant user oc-admin
-   shell: oc login -u system:admin && oc adm policy add-cluster-role-to-user cluster-admin {{username}}
-   tags:
-    - oc
+# - name: download openshift
+#   get_url:
+#    url: https://github.com/openshift/origin/releases/download/v3.9.0/openshift-origin-client-tools-v3.9.0-191fece-linux-64bit.tar.gz
+#    dest: /tmp
+#   tags:
+#    - oc
+# - name: Untar open shift 
+#   unarchive: src="/tmp/openshift-origin-client-tools-v3.9.0-191fece-linux-64bit.tar.gz" dest=/tmp/ remote_src="yes"
+#   tags:
+#    - oc
+# - name: copy open shift to user bin
+#   copy:
+#    src: /tmp/openshift-origin-client-tools-v3.9.0-191fece-linux-64bit/oc
+#    dest: /usr/bin/
+#    remote_src: yes
+#    mode: 0755
+#   tags:
+#    - oc
+# - lineinfile:
+#    path: '/etc/hosts'
+#    state:  present
+#    line: '{{clientip}}  local.openshift'
+#   tags: 
+#    - oc
+# - name: start oc
+#   shell: oc cluster up
+#   tags: 
+#    - oc
+# - name: grant user oc-admin
+#   shell: oc login -u system:admin && oc adm policy add-cluster-role-to-user cluster-admin {{username}}
+#   tags:
+#    - oc
  - name: copy ansible file
    copy:
     src: ./myplaybook.yml
