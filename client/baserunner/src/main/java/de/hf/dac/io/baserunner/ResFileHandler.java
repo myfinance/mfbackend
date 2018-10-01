@@ -38,8 +38,11 @@ public class ResFileHandler {
 
     private static final Logger LOG = LoggerFactory.getLogger(ResFileHandler.class);
 
-
-    /** Default constructor. */
+    /**
+     *
+     * @param resFileArg
+     * @param debug
+     */
     public static void initFromResFile(String[] resFileArg, Boolean debug) {
         String devResFileName = System.getenv("DEV_RES_FILE") != null ? System.getenv("DEV_RES_FILE") : DEVPROPS_FILENAME;
         String[] resFiles = null;

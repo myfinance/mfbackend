@@ -13,6 +13,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <localdeployfolder>c:\Temp</localdeployfolder>
         <targetRepository>file:m2repo/</targetRepository>
+        <maven.javadoc.skip>true</maven.javadoc.skip>
 
         <!-- default Path to jacoco-Report. Should be overridden with command line argument to the absolute path of the parent target directory -->
         <sonar.jacoco.reportPaths>${project.build.directory}/jacoco-ut.exec</sonar.jacoco.reportPaths>

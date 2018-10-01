@@ -95,7 +95,6 @@ public abstract class BaseRunner implements Callable<Integer> {
     /**
      * Run.
      *
-     * @throws Exception the exception
      */
     protected abstract void run();
 
