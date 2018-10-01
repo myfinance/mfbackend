@@ -87,7 +87,7 @@
                     <plugin>
                         <groupId>io.fabric8</groupId>
                         <artifactId>docker-maven-plugin</artifactId>
-                        <version>0.23.0</version>
+                        <version>${docker-maven-plugin.version}</version>
                         <configuration>
                             <dockerHost>tcp://localhost:2375</dockerHost>
                             <images>
