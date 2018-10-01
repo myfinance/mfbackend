@@ -3,7 +3,7 @@
     <parent>
         <artifactId>restclient</artifactId>
         <groupId>de.hf.dac.myfinance.client</groupId>
-        <version>0.12.0</version>
+        <version>0.13.0-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
     <artifactId>deploykaraf4clientgen</artifactId>
@@ -109,8 +109,7 @@
 
                                         println("Wait for karaf to be available")
                                         Thread.sleep(15000)
-                                        for (int i = 0; i < 50; i++) { try {
-                                                def response = with().get("http://karaf:karaf@localhost:8181/system/console/bundles");
+                                        for (int i = 0; i < 50; i++) { try { def response = with().get("http://karaf:karaf@localhost:8181/system/console/bundles");
                                                 def status = response.getStatusLine()
                                                 println(status)
                                                 if (!(status ==~ /.*OK.*/)) {
@@ -209,8 +208,7 @@
                                         println("local ip =" + ip)
                                         println("Wait for karaf to be available")
                                         Thread.sleep(15000)
-					                    for (int i = 0; i < 30; i++) { try {
-					                            def response = with().get("http://karaf:karaf@" + ip + ":8181/dac/rest/hello");
+					                    for (int i = 0; i < 30; i++) { try { def response = with().get("http://karaf:karaf@" + ip + ":8181/dac/rest/hello");
 						                        def status = response.getStatusLine();
                                                 println(status);
                                                 if (!(status ==~ /.*OK.*/)) {
