@@ -242,8 +242,8 @@
                                                     Thread.sleep(5000)
                                                     continue
                                                 } else {
-                                                    break
                                                     Thread.sleep(20000)
+                                                    break
                                                 }
                                             } catch (Exception e) {
                                                 println("got exception:" + e)
