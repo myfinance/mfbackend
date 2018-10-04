@@ -1,0 +1,14 @@
+---
+# vars file for buildServer
+  # vars for java maven
+  download_folder: /mnt/data/software/
+  java_pkg: "{{download_folder}}java/jdk-8u181-linux-x64.rpm"
+  maven_version: "apache-maven-3.5.4"
+  maven_tar: "{{download_folder}}maven/{{maven_version}}-bin.tar.gz"
+  # vars for build user
+  username: "builder"
+  #eine SHA512 verschlüsselung funktioniert nicht mit CentOS keine ahnung warum(wegen Salt-zufallswort von system davor gesetzt-pw muss auf dem rechner generiert werden). Das pw ist aus etc/shadow von dem user holger kopiert
+  password: "$6$735ANilOhfFE6moc$y7YmYDoYnxKC3UrX2eNicy7NRIvNdweqhCvT3YAPAHaoxqXu4fJJClh../0Wi1hYuvMUmFXzZfpszGHGhyDuC1"
+  repouser: holgerfischer
+  repopw: Jopaul09!
+  repourl: "https://{{repouser}}:{{repopw}}@bitbucket.org/holgerfischer/dac.git"

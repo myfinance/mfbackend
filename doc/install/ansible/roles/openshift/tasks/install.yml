@@ -1,0 +1,33 @@
+---
+ - name: download openshift
+   get_url:
+    url: "{{oc_url}}"
+    dest: /tmp
+   tags:
+    - oc
+ - name: Untar open shift
+   unarchive: src="/tmp/{{oc_filename}}.tar.gz" dest=/tmp/ remote_src="yes"
+   tags:
+    - oc
+ - name: copy open shift to user bin
+   copy:
+    src: "/tmp/{{oc_filename}}/oc"
+    dest: /usr/bin/
+    remote_src: yes
+    mode: 0755
+   tags:
+    - oc
+ - lineinfile:
+    path: '/etc/hosts'
+    state:  present
+    line: '{{clientip}}  local.openshift'
+   tags:
+    - oc
+ - name: start oc
+   shell: oc cluster up
+   tags:
+    - oc
+ - name: grant user oc-admin
+   shell: "oc login -u system:admin && oc adm policy add-cluster-role-to-user cluster-admin {{username}}"
+   tags:
+    - oc

@@ -1,0 +1,4 @@
+---
+# tasks file for buildServer
+ - import_tasks: javaMaven.yml
+ - import_tasks: buildUser.yml

@@ -1,0 +1,3 @@
+RHEL7Server ansible_host=192.168.100.124 ansible_ssh_pass=StarLord1979$
+CentOSServer ansible_host=192.168.100.71 ansible_ssh_user=root ansible_ssh_pass=StarLord1979$
+

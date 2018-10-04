@@ -1,0 +1,3 @@
+---
+# tasks file for openshift
+ - import_tasks: install.yml

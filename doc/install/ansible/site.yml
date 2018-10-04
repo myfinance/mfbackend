@@ -1,0 +1,13 @@
+---
+  # This is a sitewide playbook
+  # filename: site.yml
+  - import_playbook: mfBuildServer.yml
+  #- import_playbook: myFinanceServer.yml
+  - name: myServers
+    hosts: CentOSServer
+    remote_user: holger
+    become: true
+    become_method: sudo
+    roles:
+     #- openshift
+     - ansibleStore
