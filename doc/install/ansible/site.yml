@@ -2,7 +2,7 @@
   # This is a sitewide playbook
   # filename: site.yml
   - import_playbook: mfBuildServer.yml
-  #- import_playbook: myFinanceServer.yml
+  - import_playbook: myFinanceServer.yml
   - name: save playbooks
     hosts: buildserver
     remote_user: holger

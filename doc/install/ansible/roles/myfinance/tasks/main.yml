@@ -1,2 +1,13 @@
 ---
 # tasks file for myfinance
+ - name: copy keystore
+   file:
+    src: prodkeystore.jks
+    dest: "/home/{{username}}/{{mf.ssl_keystore}}"
+    owner: "{{username}}"
+ - name: copy dac.res
+   template:
+    src: dac.res.j2
+    dest: "/home/{{username}}/dac.res"
+    owner: "{{username}}"
+

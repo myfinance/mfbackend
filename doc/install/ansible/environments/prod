@@ -24,7 +24,17 @@ password="$6$735ANilOhfFE6moc$y7YmYDoYnxKC3UrX2eNicy7NRIvNdweqhCvT3YAPAHaoxqXu4f
 repouser=holgerfischer
 repopw=Jopaul09!
 repourl="https://{{repouser}}:{{repopw}}@bitbucket.org/holgerfischer/dac.git"
-# vars file for docker
-clientip="192.168.100.71"
 # vars file for git
 git_version=2.19.0
+#vars for myfinance
+mf.mfsecureport="8443"
+mf.dbserver="postgres_mf"
+mf.dbport="5432"
+mf.dbuser="postgres"
+mf.dbpw="vulkan"
+mf.karaf_user="karaf"
+mf.karaf_pw="karaf"
+mf.http_enabled= "true"
+mf.ssl_pw="password"
+mf.ssl_keypw="password"
+mf.ssl_keystore="prodkeystore.jks"
