@@ -8,7 +8,8 @@
  - name: Add ansible folder
    file:
     path: "/home/{{username}}/repo/dac/doc/install/ansible"
-    state: directory 
+    state: directory
+    mode: 0755 
    tags:
     - ansiblecopy
  - name: copy ansible file
@@ -34,7 +35,14 @@
     - ansiblecopy
  - name: copy ansible file
    copy:
-    src: ./inventory.txt
+    src: ./environments
+    dest: /home/{{username}}/repo/dac/doc/install/ansible/
+    mode: 0755
+   tags:
+    - ansiblecopy
+ - name: copy ansible file
+   copy:
+    src: ./ansible.cfg
     dest: /home/{{username}}/repo/dac/doc/install/ansible/
     mode: 0755
    tags:

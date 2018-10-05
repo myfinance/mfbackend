@@ -3,8 +3,8 @@
   # filename: site.yml
   - import_playbook: mfBuildServer.yml
   #- import_playbook: myFinanceServer.yml
-  - name: myServers
-    hosts: CentOSServer
+  - name: save playbooks
+    hosts: buildserver
     remote_user: holger
     become: true
     become_method: sudo

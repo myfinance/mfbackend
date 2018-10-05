@@ -1,2 +1,3 @@
 ---
-# defaults file for ansibleStore
+# vars file for ansibleStore
+ username: "builder"

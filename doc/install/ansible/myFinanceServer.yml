@@ -1,6 +1,6 @@
 ---
   - name: MyFinance-Server
-    hosts: CentOSServer
+    hosts: myfinance
     remote_user: holger
     become: true
     become_method: sudo

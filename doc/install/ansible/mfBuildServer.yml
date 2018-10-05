@@ -1,6 +1,6 @@
 ---
   - name: MyFinance DevEv
-    hosts: CentOSServer
+    hosts: buildserver
     remote_user: holger
     become: true
     become_method: sudo
