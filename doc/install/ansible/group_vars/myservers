@@ -1,0 +1,31 @@
+---
+# vars file for copy and buildserver
+ username: "builder"
+# vars file for baseServer
+ nas_ip: "192.168.100.6"
+ nas_nfs_url: "{{nas_ip}}://volume1/nfsshare"
+# vars file for buildServer
+# vars for java maven
+ java_version: "8u181"
+ maven_version: "3.5.4"
+# vars for build user
+#eine SHA512 verschlüsselung funktioniert nicht mit CentOS keine ahnung warum(wegen Salt-zufallswort von system davor gesetzt-pw muss auf dem rechner generiert werden). Das pw ist aus etc/shadow von dem user holger kopiert
+ password: "$6$735ANilOhfFE6moc$y7YmYDoYnxKC3UrX2eNicy7NRIvNdweqhCvT3YAPAHaoxqXu4fJJClh../0Wi1hYuvMUmFXzZfpszGHGhyDuC1"
+ repouser: holgerfischer
+ repopw: Jopaul09!
+ repourl: "https://{{repouser}}:{{repopw}}@bitbucket.org/holgerfischer/dac.git"
+# vars file for git
+ git_version: 2.19.0
+#vars for myfinance
+ mf:
+  mfsecureport: "8443"
+  dbserver: "postgres_mf"
+  dbport: "5432"
+  dbuser: "postgres"
+  dbpw: "vulkan"
+  karaf_user: "karaf"
+  karaf_pw: "karaf"
+  http_enabled: "true"
+  ssl_pw: "password"
+  ssl_keypw: "password"
+#  ssl_keystore: "prodkeystore.jks"
