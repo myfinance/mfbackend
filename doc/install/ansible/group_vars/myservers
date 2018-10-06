@@ -8,6 +8,15 @@
 # vars for java maven
  java_version: "8u181"
  maven_version: "3.5.4"
+ docker:
+  user: holgerfischer
+  password: !vault |
+          $ANSIBLE_VAULT;1.2;AES256;prod
+          32623861376666303037343933396437363634303435613137393537383535343832393034616232
+          3332353030666239383839323639626636613634343032340a613564353631643466333665353234
+          38386337336636626537326335336539636564393466336434303737666130363738336263353233
+          3661373630363830320a633632306434346534633363633366336239383962336165373332393366
+          37343436663730623130623037623230643163646364616363643263623462623463
 # vars for build user
 #eine SHA512 verschluesselung funktioniert nicht mit CentOS keine ahnung warum(wegen Salt-zufallswort von system davor gesetzt-pw muss auf dem rechner generiert werden). Das pw ist aus etc/shadow von dem user holger kopiert
  password: "$6$735ANilOhfFE6moc$y7YmYDoYnxKC3UrX2eNicy7NRIvNdweqhCvT3YAPAHaoxqXu4fJJClh../0Wi1hYuvMUmFXzZfpszGHGhyDuC1"

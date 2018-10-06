@@ -12,3 +12,6 @@
   repouser: unknown 
   repopw: password
   repourl: "https://{{repouser}}:{{repopw}}@bitbucket.org/somerepo/dac.git"
+  docker:
+   user: theuser
+   password: thepw 
