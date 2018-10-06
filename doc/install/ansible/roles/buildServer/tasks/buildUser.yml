@@ -50,4 +50,10 @@
      dest: "/home/{{username}}/.m2/settings.xml"
      owner: "{{username}}"  
     tags:
-     - builduser        
+     - builduser 
+  - name: Log into DockerHub
+    shell: "docker login -u {{docker.user}} -p {{docker.password}}"   
+    become: yes
+    become_user: "{{username}}"
+    tags:
+     - builduser            

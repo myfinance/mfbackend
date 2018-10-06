@@ -9,7 +9,7 @@
     action: yum pkg=docker-ce state=present
     tags:
      - docker
-  # necessary für openshift
+  # necessary fuer openshift
   - copy:
      dest: '/etc/docker/daemon.json'
      content: |
