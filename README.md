@@ -96,10 +96,11 @@ Sonarqube load: mvn -Pjacoco -Dsonar.jacoco.reportPaths=C:/devenv/repos/dac/targ
 install ansible on centos:
 yum install ansible
 create .vault_prod in homedir with the vault-passwort - to use the encrypted passwords which are checked-in the repository you nee the password from my keepass-file ;) if you can not get it recreate all secrets with your vaul-password  ansible-vault encrypt_string --vault-id prod@~/.vault_prod 'thepasswaord' --name 'variable-name'
-create inventory-file with the IP to the myfinance-Server (CentOS) see doc/install/inventory.txt
+update the inventory-file with your IPs to the myfinance-Server (CentOS) doc/install/ansible/environments/prod
 login via ssh from ansible-host to myfinance-server to create private key
-copy playbook from doc/install
-install build-environment on myfinanceserver: ansible-playbook myplaybook.yml -i inventory.txt
+copy playbook from doc/install/ansible to ansible host
+prepare passwordless communication from ansible host to myfinanceserver "ssh-keygen -t rsa" ssh-copy-id "user@<your_ip>"
+install build-environment on myfinanceserver: ansible-playbook site.yml --vault-id prod@~/.vault_prod
 login on myfinance-server with user build
 in repo/dac: mvn clean install
 
