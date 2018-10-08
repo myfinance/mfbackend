@@ -43,5 +43,5 @@
   http_enabled: "true"
   ssl_pw: "password"
   ssl_keypw: "password"
+  version: "0.13.0-SNAPSHOT"
 #  ssl_keystore: "prodkeystore.jks"
-
