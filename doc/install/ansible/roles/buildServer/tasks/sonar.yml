@@ -5,7 +5,7 @@
     state=directory
   tags:
   - sonar
-- name: create dir for fm docker compose
+- name: create dir for sonar docker compose
   file: path=/home/{{username}}/docker/sonar
     state=directory
   tags:
@@ -18,7 +18,7 @@
   tags:
   - sonar
 #install myfinance to be sure that volumes are created
-- name: run the service for mf defined in docker-compose.yml
+- name: run the service for sonar defined in docker-compose.yml
   shell: docker stack deploy -c /home/{{username}}/docker/sonar/docker-compose.yml sonar
   tags:
   - sonar

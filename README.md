@@ -88,6 +88,7 @@ profiles:
 e.G. 
 mvn clean install -Dnoclientgen -Dnointtest -Dnoangular -Pjacoco -Dsonar.jacoco.reportPaths=C:/devenv/repos/dac/target/jacoco-ut.exec -Dsonar.jacoco.itReportPath=C:/devenv/repos/dac/target/jacoco-it.exec 
 Sonarqube load: mvn -Pjacoco -Dsonar.jacoco.reportPaths=C:/devenv/repos/dac/target/jacoco-ut.exec -Dsonar.jacoco.itReportPath=C:/devenv/repos/dac/target/jacoco-it.exec  sonar:sonar -Dsonar.host.url=http://localhost:9000 -Dsonar.login=bf889454ae88499d420851b077952ae71fd1740f
+or at the buildserver(see ansible): mvn -Pjacoco sonar:sonar -Dsonar.jacoco.reportPaths=~/repos/dac/target/jacoco-ut.exec -Dsonar.jacoco.itReportPath=~/repos/dac/target/jacoco-it.exec -Dsonar.host.url=http://localhost:9000 -Dsonar.login=f69597221e9ecb12812ebacba53dfe64c695d3c8
 
 !attention! if you run integrationtests or clientgeneration under linux, you have to deploy the docker images first. so run mvn clean deploy instead of install
 
@@ -102,6 +103,7 @@ copy playbook from doc/install/ansible to ansible host
 prepare passwordless communication from ansible host to myfinanceserver "ssh-keygen -t rsa" ssh-copy-id "user@<your_ip>"
 install build-environment on myfinanceserver: ansible-playbook site.yml --vault-id prod@~/.vault_prod
 login on myfinance-server with user build
+(to use sonarqube you must manually install the plugins java and git)
 in repo/dac: mvn clean install
 
 copy a valid certificate to /var/lib/docker/volumes/myfinance_myfinanceconfig/_data
