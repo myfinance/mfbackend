@@ -105,9 +105,9 @@ install build-environment on myfinanceserver: ansible-playbook site.yml --vault-
 login on myfinance-server with user build
 (to use sonarqube you must manually install the plugins java and git)
 and generate a login-token if it is a frsh installation 
-repo/dac: mvn clean install
+to run a full build with sonar: repo/dac: ./build.sh
 
-
+to install a test verison on the buildserver (port conflicts if prod version of myfinace is installed on the same server!):
 copy a valid certificate to /var/lib/docker/volumes/myfinance_myfinanceconfig/_data
 to start MYFinancein Docker: docker stack deploy -c distributions/myfinance-full-packaging/target/docker-compose.yml myfinance
 
