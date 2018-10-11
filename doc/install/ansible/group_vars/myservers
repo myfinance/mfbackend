@@ -45,3 +45,9 @@
   ssl_keypw: "password"
   version: "0.13.0-SNAPSHOT"
 #  ssl_keystore: "prodkeystore.jks"
+ sonar:
+  port: "9000"
+  version: "7.1-alpine"
+  db_version: "10.5-alpine"
+  user: "sonar"
+  password: "sonar"

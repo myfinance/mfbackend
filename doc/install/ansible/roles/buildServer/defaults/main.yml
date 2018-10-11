@@ -14,4 +14,10 @@
   repourl: "https://{{repouser}}:{{repopw}}@bitbucket.org/somerepo/dac.git"
   docker:
    user: theuser
-   password: thepw 
+   password: thepw
+  sonar:
+   port: "9000"
+   version: "7.1-alpine"
+   db_version: "10.5-alpine"
+   user: "sonar"
+   password: "sonar"
