@@ -44,6 +44,7 @@
         <hibernate-tools.version>5.2.5.Final</hibernate-tools.version>
         <hibernate-annotations.version>5.0.0.Final</hibernate-annotations.version>
         <karaf.version>4.1.2</karaf.version>
+        <decanter.version>2.0.0</decanter.version>
         <pax-jdbc.version>1.1.0</pax-jdbc.version><!--feature to create Datasources -->
         <apache-cxf.version>3.1.15</apache-cxf.version><!-- rest für osgi -->
         <servicemix-reflections.version>0.9.10_3</servicemix-reflections.version>
@@ -94,6 +95,7 @@
         <dependency-plugin.version>3.0.2</dependency-plugin.version>
         <resource-plugin.version>3.0.2</resource-plugin.version>
         <clean-plugin.version>3.0.0</clean-plugin.version>
+        <install-plugin.version>2.5.2</install-plugin.version>
         <failsaveplugin.version>2.21.0</failsaveplugin.version>
         <surefire-plugin.version>2.21.0</surefire-plugin.version>
         <exec-maven-plugin.version>1.6.0</exec-maven-plugin.version>
@@ -445,6 +447,16 @@
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-clean-plugin</artifactId>
                     <version>${clean-plugin.version}</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-install-plugin</artifactId>
+                    <version>${install-plugin.version}</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-install-plugin</artifactId>
+                    <version>${install-plugin.version}</version>
                 </plugin>
             </plugins>
         </pluginManagement>
