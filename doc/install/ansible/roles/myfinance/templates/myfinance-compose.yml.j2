@@ -85,6 +85,29 @@ services:
      - myfinance-network
     depends_on:
      - mf_db_model_upgrade
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:6.4.2
+    environment:
+      cluster.name: mf-cluster
+      ES_JAVA_OPTS: "-Xms512m -Xmx512m"
+    volumes:
+      - esdata1:/usr/share/elasticsearch/data
+      - esconfig:/usr/share/elasticsearch/config
+    ports:
+      - 9200:9200
+    networks:
+      - myfinance-network
+  kibana:
+    image: docker.elastic.co/kibana/kibana:6.4.2
+    environment:
+      server.host: localhost
+      server.port: 5601
+    ports:
+      - 9001:5601
+    volumes:
+      - "kibanaconf:/usr/share/kibana/config"
+    networks:
+      - myfinance-network
 networks:
   myfinance-network:
 volumes:
@@ -92,3 +115,6 @@ volumes:
   myfinancedata:
   myfinancelogs:
   myfinanceconfig:
+  esdata1:
+  esconfig:
+  kibanaconf:

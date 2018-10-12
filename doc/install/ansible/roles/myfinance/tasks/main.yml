@@ -1,5 +1,12 @@
 ---
 # tasks file for myfinance
+ - name: modify vm.max_map_count for elasticSearch(reboot necessary)
+   lineinfile:
+    path: '/etc/sysctl.conf'
+    state: present
+    line: 'vm.max_map_count=262144'
+   tags:
+    - mf  
  - name: create dir for docker
    file: path=/home/{{username}}/docker 
     state=directory
