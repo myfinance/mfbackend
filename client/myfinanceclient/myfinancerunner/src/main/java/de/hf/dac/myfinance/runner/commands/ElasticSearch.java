@@ -13,6 +13,7 @@ package de.hf.dac.myfinance.runner.commands;
 
 import java.io.IOException;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.Map;
 
 import de.hf.dac.io.baserunner.BaseRunner;
@@ -36,10 +37,10 @@ public class ElasticSearch  extends BaseRunner {
         int days = Configuration.getInt(CONFIG_SECTION, "ES_DAYS_AVAILABLE", 5);
         LocalDate lastDay = LocalDate.now().minusDays(days);
         try {
-            Map<String, Object> response = request.getJsonMapFromUrl(url+"/karaf-*/_alias");
+            Map<String, Object> response = request.getJsonMapFromUrl(url+"karaf-*/_alias");
             for (String index: response.keySet()) {
                 log.info("found index for day:" + index.substring(6));
-                LocalDate indexdate = LocalDate.parse(index.substring(6));
+                LocalDate indexdate = LocalDate.parse(index.substring(6), DateTimeFormatter.ofPattern("yyyy.MM.dd"));
                 if(indexdate.isBefore(lastDay)){
                     log.info(request.deleteRequest(url+index));
                 }
