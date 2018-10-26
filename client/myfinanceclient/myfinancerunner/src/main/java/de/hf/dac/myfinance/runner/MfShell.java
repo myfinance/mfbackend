@@ -15,6 +15,7 @@ import de.hf.dac.io.baserunner.BaseRunner;
 import de.hf.dac.io.baserunner.SysExit;
 import de.hf.dac.myfinance.runner.commands.Import;
 import de.hf.dac.myfinance.runner.commands.ProcessTransactions;
+import de.hf.dac.myfinance.runner.commands.ElasticSearch;
 import picocli.CommandLine;
 import picocli.CommandLine.Command;
 
@@ -23,7 +24,7 @@ import picocli.CommandLine.Command;
  */
 @Command(description = "MyFinance shell. You can start Batch-jobs, view status ...",
     name = "MfShell", mixinStandardHelpOptions = true, versionProvider = de.hf.dac.io.baserunner.VersionProvider.class, subcommands = {
-        Import.class, ProcessTransactions.class}
+        Import.class, ProcessTransactions.class, ElasticSearch.class}
 )
 public class MfShell extends BaseRunner {
 
