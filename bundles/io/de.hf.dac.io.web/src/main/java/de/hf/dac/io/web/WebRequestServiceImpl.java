@@ -52,15 +52,13 @@ public class WebRequestServiceImpl implements WebRequestService {
     }
 
     public String getRequest(String url) throws IOException {
-
-        return new WebRequest().getRequest(
-            url,
-            dacWebProxyConfiguration.proxy_on(),
+        WebRequest request = new WebRequest(dacWebProxyConfiguration.proxy_on(),
             dacWebProxyConfiguration.proxy_url(),
             dacWebProxyConfiguration.proxy_port(),
             dacWebProxyConfiguration.proxy_user(),
             dacWebProxyConfiguration.proxy_pw(),
-            dacWebProxyConfiguration.proxy_timeout()
-            );
+            dacWebProxyConfiguration.proxy_timeout());
+
+        return request.getRequest(url);
     }
 }

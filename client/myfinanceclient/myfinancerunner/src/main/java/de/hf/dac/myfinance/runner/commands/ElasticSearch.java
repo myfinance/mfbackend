@@ -26,17 +26,9 @@ public class ElasticSearch  extends BaseRunner {
 
     @Override
     protected void run() {
-        String url = "http://babcom.myds.me:9200/karaf-2018.10.16/decanter/_search";
+        String url = "http://192.168.100.71:9200/karaf-2018.10.16/decanter/_search";
         try {
-            new WebRequest().getRequest(
-                url,
-                false,
-                "",
-                8080,
-                "",
-                "",
-                20000
-            );
+            new WebRequest().deleteRequest(url);
         } catch (IOException e) {
             throw new MDException(MDMsgKey.NO_RESPONSE_FROM_URL_EXCEPTION, "no response form "+url, e);
         }
