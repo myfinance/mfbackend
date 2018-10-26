@@ -53,47 +53,14 @@ public class WebRequestServiceImpl implements WebRequestService {
 
     public String getRequest(String url) throws IOException {
 
-        URL request = new URL(url);
-        URLConnection connection;
-        InputStreamReader inputStream = null;
-        BufferedReader bufferedReader = null;
-        StringBuilder responseBuilder;
-
-        if(dacWebProxyConfiguration.proxy_on()) {
-
-            Proxy proxy = new Proxy(Proxy.Type.HTTP, new InetSocketAddress(dacWebProxyConfiguration.proxy_url(), dacWebProxyConfiguration.proxy_port()));
-
-            Authenticator authenticator = new Authenticator() {
-
-                public PasswordAuthentication getPasswordAuthentication() {
-                    return (new PasswordAuthentication(dacWebProxyConfiguration.proxy_user(), dacWebProxyConfiguration.proxy_pw().toCharArray()));
-                }
-            };
-            Authenticator.setDefault(authenticator);
-
-            connection = request.openConnection(proxy);
-
-        } else {
-            connection = request.openConnection();
-        }
-
-        connection.setConnectTimeout(dacWebProxyConfiguration.proxy_timeout());
-        connection.setReadTimeout(dacWebProxyConfiguration.proxy_timeout());
-
-        try {
-            inputStream = new InputStreamReader(connection.getInputStream(), "UTF-8");
-            bufferedReader = new BufferedReader(inputStream);
-            responseBuilder = new StringBuilder();
-
-            String line;
-            while ((line = bufferedReader.readLine()) != null) {
-                responseBuilder.append(line);
-            }
-
-        } finally {
-            if(inputStream!=null) inputStream.close();
-            if(bufferedReader!=null) bufferedReader.close();
-        }
-        return responseBuilder.toString();
+        return new WebRequest().getRequest(
+            url,
+            dacWebProxyConfiguration.proxy_on(),
+            dacWebProxyConfiguration.proxy_url(),
+            dacWebProxyConfiguration.proxy_port(),
+            dacWebProxyConfiguration.proxy_user(),
+            dacWebProxyConfiguration.proxy_pw(),
+            dacWebProxyConfiguration.proxy_timeout()
+            );
     }
 }

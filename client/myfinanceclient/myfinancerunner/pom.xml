@@ -43,7 +43,12 @@
             <groupId>commons-codec</groupId>
             <artifactId>commons-codec</artifactId>
         </dependency>
-
+        <dependency>
+            <groupId>de.hf.dac.io</groupId>
+            <artifactId>de.hf.dac.io.web</artifactId>
+            <version>0.13.0-SNAPSHOT</version>
+            <scope>compile</scope>
+        </dependency>
 
 
     </dependencies>
