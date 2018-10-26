@@ -64,7 +64,7 @@ public class WebRequest {
         return responseBuilder.toString();
     }
 
-    public void deleteRequest(String url) throws IOException {
+    public String deleteRequest(String url) throws IOException {
 
         InputStreamReader inputStream = null;
         BufferedReader bufferedReader = null;
@@ -73,15 +73,29 @@ public class WebRequest {
         HttpURLConnection connection = (HttpURLConnection)getUrlConnection(url);
 
         connection.setRequestMethod( "DELETE" );
-        connection.connect();
-        //connection.setRequestProperty( "Content-Type", "application/json");
+        connection.setRequestProperty( "Content-Type", "application/json");
+        try {
+            inputStream = new InputStreamReader(connection.getInputStream(), "UTF-8");
+            bufferedReader = new BufferedReader(inputStream);
+            responseBuilder = new StringBuilder();
 
+            String line;
+            while ((line = bufferedReader.readLine()) != null) {
+                responseBuilder.append(line);
+            }
+
+        } finally {
+            if(inputStream!=null) inputStream.close();
+            if(bufferedReader!=null) bufferedReader.close();
+        }
+ 
         /*conn.setDoOutput( true );
         conn.setInstanceFollowRedirects( false );
         conn.setRequestProperty( "Content-Type", "application/x-www-form-urlencoded");
         conn.setRequestProperty( "charset", "utf-8");
         conn.setRequestProperty( "Content-Length", Integer.toString( postDataLength ));
         conn.setUseCaches( false );*/
+        return responseBuilder.toString();
     }
 
     private URLConnection getUrlConnection(String url) throws IOException {

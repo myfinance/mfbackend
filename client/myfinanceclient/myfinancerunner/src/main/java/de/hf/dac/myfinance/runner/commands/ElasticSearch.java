@@ -26,7 +26,7 @@ public class ElasticSearch  extends BaseRunner {
 
     @Override
     protected void run() {
-        String url = "http://192.168.100.71:9200/karaf-2018.10.16/decanter/_search";
+        String url = "http://192.168.100.71:9200/karaf-2018.10.14";
         try {
             new WebRequest().deleteRequest(url);
         } catch (IOException e) {
