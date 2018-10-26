@@ -15,6 +15,10 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.*;
+import java.util.Map;
+
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
 public class WebRequest {
 
@@ -47,47 +51,20 @@ public class WebRequest {
 
         URLConnection connection = getUrlConnection(url);
 
-        try {
-            inputStream = new InputStreamReader(connection.getInputStream(), "UTF-8");
-            bufferedReader = new BufferedReader(inputStream);
-            responseBuilder = new StringBuilder();
-
-            String line;
-            while ((line = bufferedReader.readLine()) != null) {
-                responseBuilder.append(line);
-            }
-
-        } finally {
-            if(inputStream!=null) inputStream.close();
-            if(bufferedReader!=null) bufferedReader.close();
-        }
-        return responseBuilder.toString();
+        return getResponse(connection).toString();
     }
 
     public String deleteRequest(String url) throws IOException {
 
-        InputStreamReader inputStream = null;
-        BufferedReader bufferedReader = null;
+
         StringBuilder responseBuilder;
 
         HttpURLConnection connection = (HttpURLConnection)getUrlConnection(url);
 
         connection.setRequestMethod( "DELETE" );
         connection.setRequestProperty( "Content-Type", "application/json");
-        try {
-            inputStream = new InputStreamReader(connection.getInputStream(), "UTF-8");
-            bufferedReader = new BufferedReader(inputStream);
-            responseBuilder = new StringBuilder();
 
-            String line;
-            while ((line = bufferedReader.readLine()) != null) {
-                responseBuilder.append(line);
-            }
-
-        } finally {
-            if(inputStream!=null) inputStream.close();
-            if(bufferedReader!=null) bufferedReader.close();
-        }
+        responseBuilder = getResponse(connection);
  
         /*conn.setDoOutput( true );
         conn.setInstanceFollowRedirects( false );
@@ -96,6 +73,27 @@ public class WebRequest {
         conn.setRequestProperty( "Content-Length", Integer.toString( postDataLength ));
         conn.setUseCaches( false );*/
         return responseBuilder.toString();
+    }
+
+    private StringBuilder getResponse(URLConnection connection) throws IOException {
+        StringBuilder responseBuilder;
+        InputStreamReader inputStream = null;
+        BufferedReader bufferedReader = null;
+        try {
+            inputStream = new InputStreamReader(connection.getInputStream(), "UTF-8");
+            bufferedReader = new BufferedReader(inputStream);
+            responseBuilder = new StringBuilder();
+
+            String line;
+            while ((line = bufferedReader.readLine()) != null) {
+                responseBuilder.append(line);
+            }
+
+        } finally {
+            if(inputStream!=null) inputStream.close();
+            if(bufferedReader!=null) bufferedReader.close();
+        }
+        return responseBuilder;
     }
 
     private URLConnection getUrlConnection(String url) throws IOException {
@@ -123,5 +121,13 @@ public class WebRequest {
         connection.setConnectTimeout(timeout);
         connection.setReadTimeout(timeout);
         return connection;
+    }
+
+    public Map<String, Object> getJsonMapFromUrl(String url) throws IOException {
+        String returnvalue = getRequest(url);
+
+        Gson gson = new Gson();
+
+        return gson.fromJson(returnvalue, new TypeToken<Map<String, Object>>(){}.getType());
     }
 }

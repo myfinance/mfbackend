@@ -62,7 +62,7 @@ public abstract class AbsHandler {
         try {
             returnvalue=downloadHandler.getRequest(url);
         } catch (IOException e) {
-            throw new MDException(MDMsgKey.NO_RESPONSE_FROM_URL_EXCEPTION, "no response form "+url, e);
+            throw new MDException(MDMsgKey.NO_RESPONSE_FROM_URL_EXCEPTION, "no or empty response form "+url, e);
         }
         if(returnvalue== null || returnvalue.isEmpty()){
             throw new MDException(MDMsgKey.NO_RESPONSE_FROM_URL_EXCEPTION, "empty response form "+url);
