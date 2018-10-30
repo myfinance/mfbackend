@@ -42,7 +42,7 @@ public class ElasticSearch  extends BaseRunner {
                 log.info("found index for day:" + index.substring(6));
                 LocalDate indexdate = LocalDate.parse(index.substring(6), DateTimeFormatter.ofPattern("yyyy.MM.dd"));
                 if(indexdate.isBefore(lastDay)){
-                    log.info(request.deleteRequest(url+index));
+                    log.info("delete:" + request.deleteRequest(url+index));
                 }
             }
 

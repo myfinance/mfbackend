@@ -44,6 +44,8 @@
   ssl_pw: "password"
   ssl_keypw: "password"
   version: "0.13.0-SNAPSHOT"
+  elastic_port: "9200"
+  kibana_port: "9001"
 #  ssl_keystore: "prodkeystore.jks"
  sonar:
   port: "9000"

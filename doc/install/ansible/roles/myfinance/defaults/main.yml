@@ -16,3 +16,5 @@ mf:
  ssl_keypw: "password"
  ssl_keystore: "devkeystore.jks"
  version: "0.12.0-SNAPSHOT"
+ elastic_port: "9200"
+ kibana_port: "9001"
