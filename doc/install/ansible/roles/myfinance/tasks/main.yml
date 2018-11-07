@@ -30,9 +30,10 @@
    tags:
     - mf
  - name: copy keystore
-   file:
+   copy:
     src: prodkeystore.jks
     dest: "/var/lib/docker/volumes/myfinance_myfinanceconfig/_data/{{mf.ssl_keystore}}"
+    mode: 0755
    tags:
     - mf
  - name: copy dac.res
