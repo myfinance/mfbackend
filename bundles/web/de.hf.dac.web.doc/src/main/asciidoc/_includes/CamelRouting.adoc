@@ -1,0 +1,69 @@
+include::header.adoc[]
+
+= Apache Camel Routing
+
+Apache Camel ermöglicht die Verwendung sogenannter Routen zur Implementierung von Abläufen in der Anwendung.
+Routen sind grob definiert durch folgende Bestandteile.
+
+(Weitergehende Informationen finden sich zum Einen in der eigentlichen Apache Camel Dokumentation als auch im PDAC Framework Projekt.
+
+.Routen Bestandteile
+|===
+|Art|Beschreibung
+
+|Eingänge
+|(z.b. JMS Queues/Topics, Dateien in Verzeichnissen, Tabellen, HTTP Calls, ...)
+
+|Prozessoren
+|Verarbeiten die Eingänge (Java Beans, OSGI Services,...)
+
+|Entscheidungen
+|Innerhalb der Routen kann anhand der empfangenen Daten verzweigt werden
+
+|Ausgänge
+|Ergebnisse der Prozessoren oder direkt der Eingänge werden hier rausgeschrieben. Ziel z.b. Dateien, JMS Queues, REST, ...)
+|===
+
+.Vereinfacht: Camel Routen
+image::camel-simple.png[Camel Routing Simplified]
+
+Camel ermöglicht vereinfacht gesagt die Konfiguration von Workflows innerhalb einer Anwendung. Informationen werden in über die sog. Routen von Porzessor
+zu Prozessor geleitet. Innerhalb der Routen kann es beliebig Komplexe entscheiden geben, die bestimmen in welche Route das Datenpaket als nächstes geleitet wird.
+Prozessoren (z.b. Java Beans) verarbeiten die aus einer Route empfangenen Daten und liefern ein Ergebnis, welches wieder als neuer Input weitergereicht wird.
+
+
+== Aufbau der Routen
+Camel Support ist direkter Bestandteil des DAC Frameworks. Dazu wird ein Service exportiert vom Typ
+*RouteContextBuilder*.
+
+[source,java]
+----
+include::{sourcesdir}/de/dzbank/poet/dac/api/routes/RouteContextBuilder.java[]
+----
+
+Über *sendMessage(...)* können Daten in die vorhandenen Camel Routen geschickt werden. Hier sind eine Menge Formate möglich.
+Details sind der Camel Dokumentation zu entnehmen. Grundsätzlich sind Strings und POJOs ohne Probleme als Nachricht
+versendbar.
+
+Wichtig sind URI, die mit *_direct-vm:_* beginnen,. Diese sind in einer VM global verfügbar und können dadurch auch
+in jedem beliebigen Camel Context adressiert werden.
+
+Dem Builder ist unter anderem ein Camel *RouteBuilder* zu übergeben. Dort werden dann die eigentlichen Camel Route
+Setups implementiert.
+Der ebenfalls als DAC Framework implementierte *JobDispatcher* kann dafür als Beispiel verwendet werden:
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

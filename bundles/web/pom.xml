@@ -11,6 +11,7 @@
     <packaging>pom</packaging>
     <modules>
         <module>de.hf.dac.web.swaggerui</module>
+        <module>de.hf.dac.web.doc</module>
     </modules>
 
 

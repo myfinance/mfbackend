@@ -1,0 +1,33 @@
+include::header.adoc[]
+
+= DAC Job Dispatcher
+Als Basiskomponente des Frameworks wurde die Möglichkeit geschaffen, sogenannte Jobs über Camel Routen
+asynchron abzuarbeiten. Der sogenannte *_JobDispatcher_* wird als Service exportiert und ermöglicht jeder anderen
+Komponente im Container sog. Jobs zu starten.
+
+
+Die Jobs werden in vom Job Dispatcher in einer Eingangsroute (Camel) empfangen
+und an registrierte *_JobHandler_* weitergereicht.
+
+
+Jede *JobParameter* Instanz, die im Dispatcher erhalten wird, liefert genau eine RoutingID. Diese
+dient dem Dispatcher dazu einen entsprechenden JobHandler zu finden, der sich für diese RoutingID registtriert hat.
+Ist einer gefunden, wird im letzten Schritt der Handler nach einer Camel URI (Inbox) gefragt, in die dann
+letztlich das JobParameter Objekt weitergereicht wird.
+
+JobHandler werden vom DAC Framework selber keine Implementiert. Diese sind konkret in zusätzlichen Bundles zu realisieren.
+Jeder JobHandler ist für 1-n RoutingIDs zuständig und muss zwingen mind. eine Camel Route als Inbox definieren. Es bleibt den Implementierungen
+überlassen, ob alle RoutingIDs über eine Inbox laufen sollen, oder ob es je RoutingID eigene Camel Routen geben muss.
+
+[WARNING]
+Da JobDispatcher und JobHandler nur lose über die Inbox verbunden sind, ist es notwendig dass der JobHandler etwaige Ergebnisse zurück an den Dispatcher
+sendet. Dies entweder durch direktes versenden in die URI _direct-vm:dac-core-job-results-in_ oder durch einen Ausgang in einer internen Route.
+_.to(JobDispatcher.DIRECT_VM_DAC_JOB_RESULT_IN);_
+
+
+
+
+
+
+
+

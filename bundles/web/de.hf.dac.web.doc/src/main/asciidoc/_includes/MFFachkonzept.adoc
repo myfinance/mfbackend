@@ -1,0 +1,16 @@
+include::header.adoc[]
+
+= Instrumente und Konten
+
+Jede Entität die einen Wert hat wird in MF als Instrument abgebildet. Somit z.B: auch Budgets
+Folgende Instrumenttypen gibt es:
+
+*Instrumenttyp-tabelle*
+
+[cols=",",]
+|=====================================================================================
+|*Typ* |*Beschreibung*
+|security |Wertpapiere wie Aktien, Anleihen und Währungen die einen Marktpreis haben den man von externen Quellen auf Tagesbasis importieren kann
+|cashaccount | Giro und Tagesgelder und Bausparverträge, deren Wert sich hauptsächlich aus Transvers Einzahlungen und Auszahlungen ergibt
+|Budget | Ähnlich wie Cashaccount aber virtuell
+|=====================================================================================

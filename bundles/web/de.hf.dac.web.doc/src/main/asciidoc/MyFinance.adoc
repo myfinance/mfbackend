@@ -1,0 +1,404 @@
+:doctype: book
+:page-layout!:
+:toc: left
+:toclevels: 4
+:sectanchors:
+:sectlinks:
+:sectnums:
+:linkattrs:
+:icons: font
+:source-highlighter: coderay
+:source-language: asciidoc
+:experimental:
+:stem:
+:idprefix:
+:idseparator: -
+:ast: &ast;
+:dagger: pass:normal[^&dagger;^]
+:endash: &#8211;
+:y: icon:check[role="green"]
+:n: icon:times[role="red"]
+:c: icon:file-text-o[role="blue"]
+:table-caption!:
+:example-caption!:
+:figure-caption!:
+:imagesdir: ./images
+:stylesdir: ./styles
+:scriptsdir: ./js
+:includedir: _includes
+:underscore: _
+:adp: AsciiDoc Python
+:adr: Asciidoctor
+
+= MyFinance Handbuch
+Holger Fischer
+:description: This guide describes the Asciidoctor attributes, values, and layout options available for producing a customized and polished document.
+:keywords: AsciiDoc, MyFinance, Analyse, how to
+
+
+
+[NOTE]
+.Dieses Dokument wird aktiv entwickelt und diskutiert!
+====
+Gefundene Fehler und Ergänzungswünsche werden gerne entgegengenommen!
+====
+
+*Versionstabelle*
+
+[cols=",,,",]
+|=====================================================================================
+|*Autor* |*Version* |*Änderungsdatum* |*Bemerkungen*
+|Holger Fischer |01 |09.11.2018 | Erste Strukturierung
+|=====================================================================================
+
+== Quickstarts
+
+== MyFinance Fachkonzept
+
+include::_includes/MFFachkonzept.adoc[leveloffset=2]
+
+== MyFinance DV-Konzept
+
+=== APIs
+
+Die von der MyFinance Infrastruktur bereitgestellten Funktionalitäten und werden über APIs zugänglich gemacht. Eine API bündelt eine fachliche und/oder technische Menge von Funktionen, mit denen der Funktionsumfang einer Anwendung möglichst vollständig und kontrolliert über standardisierte Schnittstellen zugänglich gemacht wird.
+
+[plantuml]
+.APIs machen Funktionalität zugänglich
+....
+@startuml
+!pragma graphviz_dot jdot
+skinparam componentStyle uml2
+
+cloud {
+    [Client1]
+    [Client2]
+}
+
+frame "APIs" {
+    RESTAPI1 - [API1]
+    RESTAPI2 - [API2]
+}
+
+frame Applications {
+    [Application1]
+    [Application2]
+}
+
+frame SharedComponents {
+    [SharedComponent1]
+    [SharedComponent2]
+}
+
+
+[Client1] --> RESTAPI1
+[Client2] --> RESTAPI1
+[Client2] --> RESTAPI2
+[API1] --> [Application1]
+[API2] --> [Application2]
+[Application1] --> [SharedComponent1]
+[Application1] --> [SharedComponent2]
+[Application2] --> [SharedComponent1]
+@enduml
+....
+
+
+=== Environments
+
+Environments bündeln Backend-Systeme nach fachlichen oder auch technischen Kriterien, und stellen damit Anwendungen den Kontext zur Verfügung.
+
+[plantuml]
+.Environments bündeln Backends
+....
+@startuml
+!pragma graphviz_dot jdot
+skinparam componentStyle uml2
+
+
+frame Applications {
+    [Application1]
+    [Application2]
+}
+
+frame Environments {
+    folder Environment1 {
+        database db1a {
+        }
+        database db2a {
+        }
+    }
+    folder Environment2 {
+        database db1b {
+        }
+        database db2b {
+        }
+    }
+}
+
+Request - [Environment]: determines
+[Environment] --> [Application1]: execute
+[Environment] --> db1a: with
+[Environment] --> db2a: with
+
+@enduml
+....
+
+
+=== Implementierte APIs
+
+Es existieren aktuell folgende APIs, die produktiv genutzt werden:
+
+[%autowidth.spread,cols=3*,options="header"]
+|===
+|Name|Environment-basiert (*) |Beschreibung
+|link:/api-docs/#/MyFinance[MyFinance]
+|Ja
+|mit dieser Api können Daten für MyFinance gepflegt und abgefragt werden
+
+|link:/api-docs/#/Jobs[Jobs]
+|Ja
+|Eine Api zum Starten von Jobs>.
+
+|===
+
+(*) Environment-basiert: Die APIs können je nach übergebener EnvironmentID in unterschiedlichen fachlichen und technischen System-Umgebungen wirken
+
+TIP: Unter link:/api-docs3[Api Docs] sind noch mehr als die oben gelisteten Kategorien / API-Top Level zu sehen - dies hat einerseits technische Gründe, andererseits sind dort auch Test- und abzuschaltende APIs aufgelistet.
+
+== Basistechnologien - Java Frameworks
+
+=== JPA
+
+link:https://www.objectdb.com/api/java/jpa[Recht gute JPA referenz, auch wenn wir diese Implementierung nicht benutzen]
+
+link:http://hibernate.org/orm/documentation/5.2/[Hibernate 5.2]
+
+=== JTA
+
+link:http://narayana.io//docs/project/index.html[Narayna]
+
+=== JAAS und LDAP
+
+link:https://docs.oracle.com/javase/8/docs/technotes/guides/security/jgss/tutorials/AcnOnly.html[JAAS]
+
+link:http://karaf.apache.org/manual/latest/#_security_2[Karaf Security]
+
+=== JAX-RS
+
+link:https://en.wikipedia.org/wiki/Java_API_for_RESTful_Web_Services[JAX-RS]
+
+CXF
+
+link:http://cxf.apache.org/[CXF]
+
+=== Swagger bzw. OpenAPI
+
+link:https://github.com/swagger-api[Swagger]
+
+=== Karaf und OSGi
+
+link:http://karaf.apache.org/manual/latest/[Karaf Documentation]
+
+link:https://www.osgi.org/developer/architecture/[OSGi Architecture]
+
+link:https://www.osgi.org/developer/benefits-of-using-osgi/[OSGi Benefits]
+
+==== Components und Declarative Services
+
+link:http://enroute.osgi.org/services/org.osgi.service.component.html[So geht's richtig mit Declarative Services]
+
+==== Configuration
+
+link:http://enroute.osgi.org/services/org.osgi.service.cm.html[Config Admin]
+
+===== Bundles
+
+link:https://developer.atlassian.com/server/framework/atlassian-sdk/lifecycle-of-a-bundle/[Bundle Lifecycle explained]
+
+==== Features
+
+Ein zentraler Mechanisums, wie mehrere <<Bundles>> zu einer lauffähigen Teilapplikation, einem Modul oder einer wohldefinierten technischen Komponente zusammengeführt werden können.
+
+link:https://karaf.apache.org/manual/latest/#_provisioning[Features in Karaf]
+
+=== Dependency Injection
+
+Mit den oben beschriebenen <<Components und Declarative Services>> verknüpfen wir Module und Subsysteme zu einer funktionierenden Einheit.
+
+In Abgrenzung dazu verwenden wir für dynamische Dependency Injection - basierend auf Information und Konfiguration, die erst zur Laufzeit existiert, verwenden wir link:https://github.com/google/guice/wiki/Motivation[Google Guice].
+
+=== Transformation und Routing
+
+include::_includes/CamelRouting.adoc[leveloffset=3]
+
+=== Jobs und Jobsteuerung
+
+include::{includedir}/JobDispatcher.adoc[leveloffset=3]
+
+=== Authorisierung und Authentifizierung
+
+todo
+
+=== Konfiguration
+
+Config-Admin und res-Files
+
+=== Web-Service
+
+CXF und Swagger
+
+=== Datenbank-Anbindung
+
+Der Zugriff auf Datenbanken erfolgt über die Interfaces JPA – Java Persistence API – unabhängig von unterliegenden Datenbank- und ORM (Object Relational Mapper)-Implementierungen.
+
+Für spezifische Funktionen muss an wenigen Stellen auf die Implementierung des ORM (Hibernate) zugegriffen werden, da die JPA-Interfaces nicht genügend Information zur Verfügung stellen.
+
+Die Domain-Objekte/Entities, die zum Datenbankzugriff verwendet weden (über dynamische Queries und DAOS (Data Access Objects)), stammen überwiegend aus der domain-Komponente
+
+Die DataSources für den JPA Zugriff werden vom Container bereitgestellt.
+
+== Lokale Installation und Konfiguration
+
+=== Installation des Containers
+
+=== Konfiguration des Containers
+
+=== Start und Stop
+
+=== Diagnose
+
+==== Logging
+
+==== Hawtio
+
+==== Debugging
+
+[appendix]
+== Entwicklungsumgebung
+
+=== Tools
+
+==== Maven
+
+Benötigt wird Maven in Version >= 3.5.2, zu finden hier: link:http://maven.apache.org/download.cgi[Maven Download]
+
+Das Archiv *maven-<version>-bin.zip* herunterladen, in einen Tools-Ordner entpacken, den ausgepackten Ordner nach maven umbenennen, und Tools-Ordner/maven/bin in den PATH (Umgebungsvariable) eintragen
+
+==== Java JDK
+
+Ein JDK (Java Developmemnt Kit) wird benötigt, um  Java-Sourcen mit Hilfe von zB Maven zu kompilieren.
+
+Ein JDK kann auf zwei verschiedene Arten installiert werden:
+
+
+==== Git
+
+[appendix]
+== Monitoring und Profiling
+
+=== Elasticsearch & Decanter
+
+Mit Hilfe von link:http://karaf.apache.org/manual/decanter/latest-2/[Apache Decanter] können Diagnose-Informationen aus dem Container mit  link:http://karaf.apache.org/manual/decanter/latest-2/#_collectors[Collectors] in link:http://karaf.apache.org/manual/decanter/latest-2/#_appenders[Appender] geschrieben werden.
+
+==== Appenders
+
+===== Custom Elasticsearch Appender
+
+Der DacElasticAppender Appender schreibt Decanter-Events in eine Elasticsearch-Instanz
+
+Die Konfiguration erfolgt über den ConfigAdmin mit den Quellen (in aufsteigender Präzedenz):
+
+- Defaults im Code (Designate DacElasticAppenderConfig)
+- File KARAF_HOME/etc/DAC.appender.elasticsearch.rest.cfg
+- Abschnitt [CMPID_DAC.appender.elasticsearch.rest] im .res.File
+
+====== Konfiguration .res-Datei
+
+Dies ist die Minimal-Default Konfiguration, um Appending in einen Elasticsearch Instanz zu aktivieren:
+
+[source]
+.....
+[CMPID_DAC.appender.elasticsearch.rest]
+addresses=https://dfvve01ciops.dzbank.vrnet/elasticsearch
+sendingEnabled=true
+.....
+
+CAUTION: Um die Einträge zur PID DAC.appender.elasticsearch.rest in den ConfigAdmin zu übertragen, muss in der res-File-Section [CM_CONFIG] die PID zur Liste "pids" hinzugefügt werden.
+
+==== Collectors
+
+===== JMX
+
+Siehe link:https://karaf.apache.org/manual/decanter/latest-2/#_jmx[Decanter Doku] und etc/org.apache.karaf.decanter.collector.jmx-local.cfg
+
+Hier wird konfiguriert, welche Attribute welcher MBeans collected werden.
+
+===== EventAdmin
+
+Siehe link:https://karaf.apache.org/manual/decanter/latest-2/#_eventadmin[Decanter Doku] und org.apache.karaf.decanter.collector.eventadmin-pdac.cfg
+
+Hier wird konfiguriert, dass Event-Topics, die mit "de/dzbank/poet/" beginnen, collected werden.
+
+=== Tools
+
+==== JMC - Java Mission Control
+
+Teil der JDK ist unter ./bin das Tool jmc - Java Mission  Control - welches sowohl MBeans abgefragt wie auch Flight Gecordings ausgewertet werden können.
+
+Details siehe bei link:http://www.oracle.com/technetwork/java/javaseproducts/mission-control/java-mission-control-1998576.html[Oracle zu Java Mission Control]
+
+Es ist dringend zu empfehlen, die Java 9-JDK hierfür zu verwenden, das das mitgelieferte Tool hier wesentlich umfangreicher und komfortabler ist.
+
+==== Yourkit
+
+Teil des Service Deployments ist der Yourkit Profiler Agent, mit
+
+Yourkit ist ein leistungsfähiges Standardwerkzeug zur Laufzeit-Analyse von JVM-Anwendungen - siehe link:https://www.yourkit.com/java/profiler/features/[Yourkit.com]
+
+=== Lokal
+
+Beim Starten einer lokalen Karaf-Instanz über bin/karaf.cmd bzw. bin/karaf.sh muss als Argument _profile_ übergeben werden. Dann kann die Yourkit Anwendung gegen den lokal laufenden Contaienr connecten.
+
+=== Remote
+
+In der .res-Konfiguration der entfernten Karaf-Instanz muss der RMI-Zugang konfiguriert werden.
+
+Die Autorisierung erfolgt über die JAAS-Komponenten, der RMI/Diagnostik Zugriff ist somit geschützt.
+
+[source,ini]
+.Beispielhafte Konfiguration
+.........
+[CMPID_org.apache.karaf.management]
+#
+# The service URL for the JMXConnectorServer
+#
+serviceUrl = service:jmx:rmi://0.0.0.0:44444/jndi/rmi://0.0.0.0:1099/karaf-root
+#
+# Port number for RMI registry connection
+#
+rmiRegistryPort = 1099
+
+#
+# Port number for RMI server connection
+#
+rmiServerPort = 44444
+.........
+
+
+
+[glossary]
+== Glossar
+
+API:: Application Programming Interface
+
+[index]
+== Index
+
+NOTE: Section pending
+
+[bibliography]
+== Referenzen
+- [[[mfdvk]]] MyFinance DV Fachkonzept
+
+
+u

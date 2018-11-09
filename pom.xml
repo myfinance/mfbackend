@@ -101,6 +101,11 @@
         <exec-maven-plugin.version>1.6.0</exec-maven-plugin.version>
         <docker-maven-plugin.version>0.27.1</docker-maven-plugin.version>
 
+        <asciidoc.version>1.5.8.1</asciidoc.version>
+        <asciidoc-plugin.version>1.5.7.1</asciidoc-plugin.version>
+        <asciidoctorj-diagram.version>1.5.10</asciidoctorj-diagram.version>
+        <asciidoctorj-pdf.version>1.5.0-alpha.16</asciidoctorj-pdf.version>
+
     </properties>
 
     <scm>
