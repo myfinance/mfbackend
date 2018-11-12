@@ -11,6 +11,55 @@ Folgende Instrumenttypen gibt es:
 |=====================================================================================
 |*Typ* |*Beschreibung*
 |security |Wertpapiere wie Aktien, Anleihen und Währungen die einen Marktpreis haben den man von externen Quellen auf Tagesbasis importieren kann
-|cashaccount | Giro und Tagesgelder und Bausparverträge, deren Wert sich hauptsächlich aus Transvers Einzahlungen und Auszahlungen ergibt
+|portfolio | Zusammenfassungen von mehreren instrumenten. entsprechenden auch Portfolio von Portfolios möglich. Virtuell aber auch real wie z.b.Depots und bausparer
 |Budget | Ähnlich wie Cashaccount aber virtuell
+|LifeInsurance | Lebensversicherung
+|DepreciationObject | Abschreibungsobjekte wie z.b. Autos
+|RealEstate | Immobilien
+|Loan | Kredite
+|CashAccount | Konten wie Giro, Tages- und Festgeld
 |=====================================================================================
+
+== CashAccount
+
+Die Gemeinsamkeit von allen CashAccounts ist, dass sich ihr Wert durch die Summe aller Transaktionen(Einzahlungen, Auszahlungen) ergibt.
+
+=== Girokonto
+
+Auf einen Girokonto können Einnahmen und ausgaben sowie Transfers von bzw. zu anderen Konten stattfinden
+
+=== Tagesgeld
+
+Im Gegensatz zu Giro können hier nur Transfers aber keinen Einnahmen und Ausgaben verbucht werden.
+Dies dient auch der Einschränken von diversen Auswahldialogen bei Ausgabenformularen.
+Auf dem Konto gilt ein Zinssatz für eine bestimmte Periode.
+Die zu zahlenden Zinsen an definierten Zahltagen können berechnet und automatisch verbucht werden.
+So muss meist nur ein mal Jährlich eine kleine korrekturbuchung vorgenommen werden um ggf Abweichungen auszugleichen
+[NOTE]
+die Automatische Zinsberechnung wird zunächst nicht umgesetzt da die Zinsen zu volatil sind und es einfaches ist einmalig im Jahr alle Zinsen nachzutragen
+
+=== Festgeld
+
+Wie Tagesgeld. Transfers finden aber nur am Anfang und am Ende der Laufzeit statt.
+
+=== Bausparkonto
+
+Wie Tagesgeld. Es sind aber nur Eingangstransfers möglich. Ausgehende Transfers nur bei Auflösung
+
+== Portfolio
+
+Ein Portfolio beinhaltet ein oder mehrere Instrumente. Dies dient der Abbildung von Depots und Baussparverträgen, sowie diversen virtuellen zusammenfassungen von Instrumenten zur Analyse
+
+=== Depot
+
+hier werden diverse Securites verlinkt die sich in einem Depot-Account befinden.
+
+=== Bausparvertrag
+
+ein Bausparvertrag besteht aus dem Cashaccount vom Typ Bausparkonto und ggf aus einen Bausparkredit (Loan)
+
+== Securities
+
+Wertpapiere wie Aktien, Anleihen und Währungen die einen Marktpreis haben den man von externen Quellen auf Tagesbasis importieren kann.-
+[NOTE]
+Bei Anleihen ist noch zu prüfen woher man Marktpresie bekommt oder ob der Preis berechnet werden muss.
