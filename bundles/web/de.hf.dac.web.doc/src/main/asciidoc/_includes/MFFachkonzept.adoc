@@ -2,35 +2,70 @@ include::header.adoc[]
 
 = Instrumente und Konten
 
-Jede Entität die einen Wert hat wird in MF als Instrument abgebildet. Somit z.B: auch Budgets
-Folgende Instrumenttypen gibt es:
+Jede Entität die einen Wert hat wird in MF als Instrument abgebildet. Somit z.B: auch Accounts, Wertpaiere, Portfolien...
 
-*Instrumenttyp-tabelle*
+Instrument wird als eigene Datenbanktabelle abgebildet, die alle Properties beinhaltet die von jedem Instrumenttyp benötigt werden:
 
 [cols=",",]
 |=====================================================================================
 |*Typ* |*Beschreibung*
-|security |Wertpapiere wie Aktien, Anleihen und Währungen die einen Marktpreis haben den man von externen Quellen auf Tagesbasis importieren kann
-|portfolio | Zusammenfassungen von mehreren instrumenten. entsprechenden auch Portfolio von Portfolios möglich. Virtuell aber auch real wie z.b.Depots und bausparer
-|Budget | Ähnlich wie Cashaccount aber virtuell
-|LifeInsurance | Lebensversicherung
-|DepreciationObject | Abschreibungsobjekte wie z.b. Autos
-|RealEstate | Immobilien
-|Loan | Kredite
-|CashAccount | Konten wie Giro, Tages- und Festgeld
+|Description |Der Fachliche Schlüssel
+|isActive | einfaches Flag das anzeigt dass das Instrument ausgeblendet werden kann (ausser bei historischen betrachtungen) da sein ClosingDate überschritten wurde -> nur für einfachere Queries nötig (besser als Date vergleich)
+|closingDate | Tag an dem der Account/dasInstrument Tatsächlich abgeschlossen wurde (kann abweichen von MaturityDate: z.b. ein Kredit endet an Tag x das kreditkonto wird aber erst ein paar tage später geschlossen)
+|MaturityDate | geplanter Ablaufzeitpunkt
+|TreeLastChanged | TimeStamp an dem zu erkennen ist wann sich zuletzt etwas an dem Instrument oder damit verbundenen Entitäten(z.b.Cashflow) geändert hat, so dass die Wertkurve neu gerechnet werden muss
+|=====================================================================================
+
+
+Da diese Tabelle eine reine Dimension ohne Fakten ist wurde auf validFrom und ValidUntil verzichtet. Alle Instrumente existieren nur einmal und für immer(Die Tabelle beinhaltet keine veränderlichen Felder)
+Unveränderlich meint in dem Context nicht dass sie nicht verändert werden dürfen wenn man versehentlich den falschen wert eingetragen hat sondern dass die Werte sich in der Realität nicht ändern. Der closingDate ist fix auch wenn ich mich vertippt habe und der wert nochmal ändern muss.
+
+Dass kein Cashflow... nach dem closingDate standfindet wird von der Anwendung sichergestellt
+
+Zusätzliche Informationen für einzelne Instrumenttypen sollen, solange sie nicht für SQL-Auswertungen benötigt werden,
+generisch in einer Key-Value-Tabelle InstrumentProperties abgebildet werden.
+
+
+Folgende Instrumenttypen gibt es:
+
+*Instrumenttyp-tabelle*
+
+[cols=",,",]
+|=====================================================================================
+|*Typ* | *Typgruppe* | *Beschreibung*
+|Giro| CashAccount | Girokonto
+|MoneyAtCall| CashAccount | Tagesgeld
+|TimeDeposit| CashAccount | Festgeld
+|BuildingsavingAccount| CashAccount | Bausparkonto
+|Budget| CashAccount | Budget. Ähnlich wie Giro aber virtuell
+|artificialPortfolio |portfolio | künstliche Zusammenfassungen von mehreren instrumenten. entsprechenden auch Portfolio von Portfolios möglich.
+|BudgetGroup |portfolio | Zusammenfassung von Portfolien
+|Depot |portfolio | Zusammenfassung von Positionen und somit Securities
+|Buildingsaving |portfolio | Zusammenfassung von BuildingsavingAccount und einen Loan
+|Currency| security |Währungen
+|Equity| security | Aktien
+|Fonds| security | Fonds Zusammenfassung von Wertpapieren die als ganzes gehandelt wird
+|ETF| security |Exchange Traded fond
+|Index| security |Index wie z.b. Dax -> obsolet da durch ETF abgebildet
+|Bond| security |Anleihen
+|AnnuityLoan| security |Annuitätenkredite wie z.b. von Kapilendo
+|LifeInsurance |LifeInsurance | Lebensversicherung
+|DepreciationObject |DepreciationObject | Abschreibungsobjekte wie z.b. Autos
+|RealEstate |RealEstate | Immobilien
+|Loan |Loan | Kredite
 |=====================================================================================
 
 == CashAccount
 
 Die Gemeinsamkeit von allen CashAccounts ist, dass sich ihr Wert durch die Summe aller Transaktionen(Einzahlungen, Auszahlungen) ergibt.
 
-=== Girokonto
+=== Giro
 
 Auf einen Girokonto können Einnahmen und ausgaben sowie Transfers von bzw. zu anderen Konten stattfinden
 
-=== Tagesgeld
+=== MoneyAtCall
 
-Im Gegensatz zu Giro können hier nur Transfers aber keinen Einnahmen und Ausgaben verbucht werden.
+Tagesgeld. Im Gegensatz zu Giro können hier nur Transfers aber keinen Einnahmen und Ausgaben verbucht werden.
 Dies dient auch der Einschränken von diversen Auswahldialogen bei Ausgabenformularen.
 Auf dem Konto gilt ein Zinssatz für eine bestimmte Periode.
 Die zu zahlenden Zinsen an definierten Zahltagen können berechnet und automatisch verbucht werden.
@@ -38,28 +73,112 @@ So muss meist nur ein mal Jährlich eine kleine korrekturbuchung vorgenommen wer
 [NOTE]
 die Automatische Zinsberechnung wird zunächst nicht umgesetzt da die Zinsen zu volatil sind und es einfaches ist einmalig im Jahr alle Zinsen nachzutragen
 
-=== Festgeld
+=== TimeDeposit
 
-Wie Tagesgeld. Transfers finden aber nur am Anfang und am Ende der Laufzeit statt.
+festgeld. Wie Tagesgeld. Transfers finden aber nur am Anfang und am Ende der Laufzeit statt.
 
-=== Bausparkonto
+=== BuildingsavingAccount
 
-Wie Tagesgeld. Es sind aber nur Eingangstransfers möglich. Ausgehende Transfers nur bei Auflösung
+Bausparkonto wie Tagesgeld. Es sind aber nur Eingangstransfers möglich. Ausgehende Transfers nur bei Auflösung
+
+=== Budget
+
+Ähnlich wie giro aber virtuell
+
+==== AltersvorsorgeBudget
+
+der sollte den wert von allen immobilien zzgl krediten und den bausparer sein die auch wirklich zur finanzierung von immobilien gedacht sind. dies sind zur zeit alle bis auf den 30k hausbausparer und der 18k vertrag
+das depot wird zur zeit auch noch dazugezaehlt. da dies aber nicht wirklich langfristig ist sollte man es vielleicht eher einem anderen budget zu zaehlen. wird aber erst relevant wenn mehr als vermoegenswirksame leistungen im depot sind
+
 
 == Portfolio
 
 Ein Portfolio beinhaltet ein oder mehrere Instrumente. Dies dient der Abbildung von Depots und Baussparverträgen, sowie diversen virtuellen zusammenfassungen von Instrumenten zur Analyse
 
+=== artificialPortfolio
+
+künstliche Zusammenfassungen von mehreren instrumenten. entsprechenden auch Portfolio von Portfolios möglich.
+Nur für Analysen gedacht.
+
+=== BudgetGroup
+
+zusammenfassung von mehreren Budgets. z.b. für Immobilien benötigt
+
 === Depot
 
-hier werden diverse Securites verlinkt die sich in einem Depot-Account befinden.
+hier werden diverse Trades verlinkt um Positionen zu bilden die sich in einem Depot-Account befinden.
+Somit ist das Depot nur indirekt ein Portfolio. Es besteht zwar aus Securities aber nur über Positionen die nicht in der Datenbank abgebildet sind
 
-=== Bausparvertrag
+=== Buildingsaving
 
-ein Bausparvertrag besteht aus dem Cashaccount vom Typ Bausparkonto und ggf aus einen Bausparkredit (Loan)
+Ein Bausparvertrag besteht aus dem Cashaccount vom Typ Bausparkonto und ggf aus einen Bausparkredit (Loan)
+
 
 == Securities
 
 Wertpapiere wie Aktien, Anleihen und Währungen die einen Marktpreis haben den man von externen Quellen auf Tagesbasis importieren kann.-
 [NOTE]
-Bei Anleihen ist noch zu prüfen woher man Marktpresie bekommt oder ob der Preis berechnet werden muss.
+Bei Anleihen ist noch zu prüfen woher man Marktpreise bekommt oder ob der Preis berechnet werden muss.
+
+Die Währung in der eine Security notiert muss eindeutig hinterlegt sein. Diese Währung ist unabhängig von der WÄhrung in der die Marktpresie geliefert werden.
+Dies ist die Währung in der das Wertpapier im Depot liegt und daran hängt ob ein Währungsrisiko besteht oder nicht.
+Die Währung der Position hängt ebenfalls davon ab
+
+=== Currency
+
+Währungen haben nur einen Marktpreis. Auf Währungen gibt es keine direkten Positionen. Positionen von Aktien oder Anleihen können aber in einer bestimmten währung sein
+
+=== Equity
+
+Standard Aktien die Jährliche und quartärliche Dividenten zahlen und einen Marktpreis in einer Währung haben.
+Die Höhe der Dividente ist dynamisch muss also Import oder manuell eingegeben werden
+
+=== Fonds
+
+Fonds Zusammenfassung von Wertpapieren die als ganzes gehandelt wird. Es gibt einen Martpreis wenn auch ggf von anderen Quellen
+und verhält sich ähnlich der Equity. Diventen werden aber in der Regel nicht ausgeschüttet sondern wieder angelegt
+
+=== ETF
+
+Exchange Traded fond. Verhält sich wie Fond. Es handhabung von Dividenten kann aber unterschiedlich sein
+Statt der Wiederanlage wird der wert erhöht.(sonst wird der ETF einfach als Fond abgebildet)
+
+=== Index
+
+Auf einem Index existieren keine Positionen. Ein Index wie z.b. der Dax wird nur benötigt für Performancevergeliche und Analysen
+Es ist unklar ob es Quellen für den Martwert gibt. Es existieren aber ETFs für jeden Index. Somit ist dieser Typ ggf. obsolet
+
+=== Bonds
+
+Anleihen, daher Wertpaieren mit Laufzeit und Regelmäßigen CouponZahlungen. Die Coupons sind fix bei kauf.
+(floater sind auch denkbar werden dann aber als extra typ abgebildet)
+
+=== AnnuityLoan
+
+Annuitätenkredit wie z.b. Kapilende mit regelmäßigen Zins und Tilgungszahlungen. Dabei ist die Rate=zins+Tilgung fix
+
+
+== Position
+
+Positionen stellen eine Menge von einzelnen Securities dar. In welcher Währung eine Position ist hängt an dem darunter liegenden Instrument
+Die Positionen können jeder Zeit aus den Trades ermittelt werden. Somit müssen sie nicht in der Datenbank abgelegt werden.
+
+== LifeInsurance
+
+Lebensversicherungen besitzen zwar wie CashAccount Cashflows, daraus bestimmt sich aber nicht der Wert.
+Der Wert wird von der Versicherungsgesellschaft ermittelt und Jährlich bekanntgegeben.
+Eigentlich werden mehrere Werte angegeben. Der Rückkauswert ist das Minimum was man erhält wenn man sofort der Vertrag kündigt.
+Der garantierte Wert ist das was man bei Einstellung der Zahlung Mindestens bekommt ...
+
+== RealEstate
+
+
+Investitionen werden als ausgabe auf commonbudget mit referenz auf das haus abgebildet
+
+== DepreciationObject
+
+Abschreibungsobjekt.
+
+== Loan
+
+Kredit

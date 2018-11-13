@@ -390,6 +390,9 @@ rmiServerPort = 44444
 == Glossar
 
 API:: Application Programming Interface
+Yield:: Rendite
+InitialCost:: Anschaffungspreis
+Profit:: Überschuss
 
 [index]
 == Index
