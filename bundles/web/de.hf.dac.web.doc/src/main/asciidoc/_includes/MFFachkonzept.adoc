@@ -1,6 +1,17 @@
 include::header.adoc[]
 
-= Instrumente und Konten
+= Tenant
+
+Ein Tenant ist ein Mandant. Ein Mandant ist der zentrale Aufhängungspunkt im Accounting an dem alle realen und Virtuellen Werte eines Haushalts hängen.
+Die ist so abgebildet,dass jeder Mandant ein Rootportfolio besitzt.
+Das Root-Portfolio wiederum beinhaltet ein BudgetGroupPortfio und ein Account-Portfolio.
+Die wie der Name sagt Budget-Gruppen oder Konten beinhalten.
+Die Werte dieser beiden Portfolien müssen gleich sein siehe <<Konten und Budgets>>.
+In den einzelnen BudgetGroupPortfolios befinden sich dann die einzelnen Budgets.
+Weitere Unterteilungen sind denkbar(z.b. nach Liquidität oder InstrumentType) passieren aber nicht in der Datenbank sondern nur in Memory
+
+
+= Instrumente
 
 Jede Entität die einen Wert hat wird in MF als Instrument abgebildet. Somit z.B: auch Accounts, Wertpaiere, Portfolien...
 
@@ -25,6 +36,84 @@ Dass kein Cashflow... nach dem closingDate standfindet wird von der Anwendung si
 Zusätzliche Informationen für einzelne Instrumenttypen sollen, solange sie nicht für SQL-Auswertungen benötigt werden,
 generisch in einer Key-Value-Tabelle InstrumentProperties abgebildet werden.
 
+== Liquidität
+
+Jedes Instrument hat einen LiquidityType, der beschreibt wie schnell man es verkaufen kann ohne zusätzliche Kosten bzw. ob man jeder Zeit Geld Transferieren kann.
+Bei den meisten Instrumenten kann man den LiquidityType implizit am InstrumentType(z.b. Giro=Liquide) oder an der Maturity festmachen, so dass der Type nicht explizit in der DB stehen muss.
+
+
+*LiquidityType-tabelle*
+
+[cols=",",]
+|=====================================================================================
+|*Typ* | *Beschreibung*
+| Liquide | jeder Zeit auflösbar
+| ShortTerm | innerhalb weniger Tage
+| MidTerm | bis zu einem Jahr
+| LongTerm | länger als ein Jahr
+|=====================================================================================
+
+Der LiquidityType soll dazu benutzt werden eine Liquiditätsablaufbilanz(LAB) zu erstellen um potentielle Liquiditätsengpässe zu identifizieren
+
+== Konten und Budgets
+
+Auch wenn Konten und Budget beide als Instrument abgebildet sind, gint es einen wesentlichen fachlichen Unterschied:
+Die Konten stellen in der Summer die reale Vermögensverteilung dar, während Budgets virtuell sind und der Ausgabenplanung dienen.
+Die Summe aller Konten muss muss gleich der Summe alle Budgets sein.
+
+== Transactions und Cashflows
+
+Es gibt verschiedene Typen von Cashflows:
+
+=== Transfers
+
+Unter Transfers versteht man Cashflows die von einem Instrument zu einem anderen fliessen, also von einem Budget A zu einem Budget B oder von einem Konto C zu einem KontoD.
+Es fliesst niemals ein Cashflow von einem Budget zu einem Konto oder umgekehrt.
+
+
+=== Einnahmen und Ausgaben
+
+Hier fliesst Geld aus einem Vermögen ab oder zu. Für eine Ausgabe gibt es z.B. nur einen Cashflow von Konto A aber keinen zu einem anderen Konto hin.
+Dafür existiert bei einer Ausgabe bzw Einnahme für jeden Cashflow auf einem Konto auch ein Cashflow auf einem Budget in gleicher Höe mit gleichem Vorzeichen.
+
+=== Dividenden
+
+Bei einer Dividende gibt es drei cashflows: einen Eingang auf einem Giro, ein Cashflow auf einem Budget und einer auf dem Wertpapier.
+Bei dem Wertpapieren ändert das aber nichts am Wert da im Gegensatz zum Giro der Wert sich nicht aus der Summe der Cashflows ergibt, sondern gleich dem markwert bzw einem berechneten Wert (bei Bonds) ist(hier kann der cashflow natürlich eingehen).
+bei Zinsen bzw Gebühren kann das ähnlich sein: bei einem Depot gibt es auch 3 Cashflows: auf dem Giro wo der Betrag abgezogen wird, auf einem Budget und im Depot wo er nicht in den wert eingeht (wert = wert der securities) aber für analyse herangezogen werden kann(Depotertrag abzüglich gebühren)
+
+
+=== Abbildung von Cashflows
+
+Für jede Transaktion(Einnahme, Ausgabe bzw. Transfer) gibt es immer zwei Cashflows, d.h. je einer auf jedem der beteiligten Instrumente
+Die Zusammengehörigkeit von Cashflows wird in der Tabelle Transactions abgebildet.
+
+
+
+Auf eine Historisisierung in der Tabelle wird verzichtet da sie bisher nur benötigt wurde wenn Daten versehentlich gelöscht oder verändert wurden und dies auch nur selten.
+Stattdessen sollen edit und delete für alle tabellen in einer message-tabelle protokolliert werden.
+Inserts sollten ggf auch dort protokolliert werden damit der user festgehalten wird der das insert vorgenommen hat(ist aber kaum relevant sollange nur einer die Daten pflegt -> konfigurierbar machen)
+
+[plantuml]
+....
+@startuml
+!pragma graphviz_dot jdot
+skinparam componentStyle uml2
+
+Transaction *-- Cashflow
+
+Transaction : Int TransactionId
+Transaction : String Description
+Transaction : Date TransactionDate
+
+Cashflow : Int CashflowId
+Cashflow : Int TransactionId
+Cashflow : Int InstrumentId
+Cashflow : Double Value
+
+@enduml
+
+== Instrumenttypen
 
 Folgende Instrumenttypen gibt es:
 
@@ -39,7 +128,7 @@ Folgende Instrumenttypen gibt es:
 |BuildingsavingAccount| CashAccount | Bausparkonto
 |Budget| CashAccount | Budget. Ähnlich wie Giro aber virtuell
 |artificialPortfolio |portfolio | künstliche Zusammenfassungen von mehreren instrumenten. entsprechenden auch Portfolio von Portfolios möglich.
-|BudgetGroup |portfolio | Zusammenfassung von Portfolien
+|BudgetGroup |portfolio | Zusammenfassung von Budgets
 |Depot |portfolio | Zusammenfassung von Positionen und somit Securities
 |Buildingsaving |portfolio | Zusammenfassung von BuildingsavingAccount und einen Loan
 |Currency| security |Währungen
@@ -49,21 +138,24 @@ Folgende Instrumenttypen gibt es:
 |Index| security |Index wie z.b. Dax -> obsolet da durch ETF abgebildet
 |Bond| security |Anleihen
 |AnnuityLoan| security |Annuitätenkredite wie z.b. von Kapilendo
+|Position| portfolio |Zusammenfassung von Securities
 |LifeInsurance |LifeInsurance | Lebensversicherung
 |DepreciationObject |DepreciationObject | Abschreibungsobjekte wie z.b. Autos
 |RealEstate |RealEstate | Immobilien
 |Loan |Loan | Kredite
 |=====================================================================================
 
-== CashAccount
+=== CashAccount
 
 Die Gemeinsamkeit von allen CashAccounts ist, dass sich ihr Wert durch die Summe aller Transaktionen(Einzahlungen, Auszahlungen) ergibt.
 
-=== Giro
+==== Giro
 
-Auf einen Girokonto können Einnahmen und ausgaben sowie Transfers von bzw. zu anderen Konten stattfinden
+Auf einen Girokonto können Einnahmen und Ausgaben sowie Transfers von bzw. zu anderen Konten stattfinden.
+Der LiquidityType ist immer Liquid.
 
-=== MoneyAtCall
+
+==== MoneyAtCall
 
 Tagesgeld. Im Gegensatz zu Giro können hier nur Transfers aber keinen Einnahmen und Ausgaben verbucht werden.
 Dies dient auch der Einschränken von diversen Auswahldialogen bei Ausgabenformularen.
@@ -73,48 +165,63 @@ So muss meist nur ein mal Jährlich eine kleine korrekturbuchung vorgenommen wer
 [NOTE]
 die Automatische Zinsberechnung wird zunächst nicht umgesetzt da die Zinsen zu volatil sind und es einfaches ist einmalig im Jahr alle Zinsen nachzutragen
 
-=== TimeDeposit
+Der LiquidityType ist immer ShortTerm.
+
+==== TimeDeposit
 
 festgeld. Wie Tagesgeld. Transfers finden aber nur am Anfang und am Ende der Laufzeit statt.
 
-=== BuildingsavingAccount
+Der LiquidityType wird anhand der Maturity berechnet.
+
+==== BuildingsavingAccount
 
 Bausparkonto wie Tagesgeld. Es sind aber nur Eingangstransfers möglich. Ausgehende Transfers nur bei Auflösung
 
-=== Budget
+Der LiquidityType ist immer MidTerm, da man das Bausparkonto innerhalb von 3 Monatgen auflösen kann und nur den Anspruch auf das Darlehen verliert.
+Das Darlehen ist aber nicht immer sinnvoll weshalb es nicht berücksichtigt wird.
+
+==== Budget
 
 Ähnlich wie giro aber virtuell
 
-==== AltersvorsorgeBudget
+Der LiquidityType ist im Default Liquide, aber es kann Budgets geben die für z.b. Jährliche Ausgabe vorgesehen sind.
+Hier muss der LiquidityType extra angegeben werden. Dazu ist in den InstrumentProperties LiquidityType zu hinterlegen
+Es ist auch möglich, dass ein Budget mit einem anderen Instrument verknüft ist (z.B. DeprecationObject) dann wird der LiquidityType davon abgeleitet
+
+
+
+===== AltersvorsorgeBudget
 
 der sollte den wert von allen immobilien zzgl krediten und den bausparer sein die auch wirklich zur finanzierung von immobilien gedacht sind. dies sind zur zeit alle bis auf den 30k hausbausparer und der 18k vertrag
 das depot wird zur zeit auch noch dazugezaehlt. da dies aber nicht wirklich langfristig ist sollte man es vielleicht eher einem anderen budget zu zaehlen. wird aber erst relevant wenn mehr als vermoegenswirksame leistungen im depot sind
 
 
-== Portfolio
+=== Portfolio
 
 Ein Portfolio beinhaltet ein oder mehrere Instrumente. Dies dient der Abbildung von Depots und Baussparverträgen, sowie diversen virtuellen zusammenfassungen von Instrumenten zur Analyse
 
-=== artificialPortfolio
+Der LiquidityType, wenn überhaupt benötigt, ergibt sich aus dem langfristigsten Wert der beinhalteten Instrumente
+
+==== artificialPortfolio
 
 künstliche Zusammenfassungen von mehreren instrumenten. entsprechenden auch Portfolio von Portfolios möglich.
 Nur für Analysen gedacht.
 
-=== BudgetGroup
+==== BudgetGroup
 
 zusammenfassung von mehreren Budgets. z.b. für Immobilien benötigt
 
-=== Depot
+==== Depot
 
 hier werden diverse Trades verlinkt um Positionen zu bilden die sich in einem Depot-Account befinden.
 Somit ist das Depot nur indirekt ein Portfolio. Es besteht zwar aus Securities aber nur über Positionen die nicht in der Datenbank abgebildet sind
 
-=== Buildingsaving
+==== Buildingsaving
 
 Ein Bausparvertrag besteht aus dem Cashaccount vom Typ Bausparkonto und ggf aus einen Bausparkredit (Loan)
 
 
-== Securities
+=== Securities
 
 Wertpapiere wie Aktien, Anleihen und Währungen die einen Marktpreis haben den man von externen Quellen auf Tagesbasis importieren kann.-
 [NOTE]
@@ -124,61 +231,79 @@ Die Währung in der eine Security notiert muss eindeutig hinterlegt sein. Diese 
 Dies ist die Währung in der das Wertpapier im Depot liegt und daran hängt ob ein Währungsrisiko besteht oder nicht.
 Die Währung der Position hängt ebenfalls davon ab
 
-=== Currency
+
+==== Currency
 
 Währungen haben nur einen Marktpreis. Auf Währungen gibt es keine direkten Positionen. Positionen von Aktien oder Anleihen können aber in einer bestimmten währung sein
 
-=== Equity
+==== Equity
 
 Standard Aktien die Jährliche und quartärliche Dividenten zahlen und einen Marktpreis in einer Währung haben.
 Die Höhe der Dividente ist dynamisch muss also Import oder manuell eingegeben werden
 
-=== Fonds
+Der LiquidityType ist MidTerm.
+
+==== Fonds
 
 Fonds Zusammenfassung von Wertpapieren die als ganzes gehandelt wird. Es gibt einen Martpreis wenn auch ggf von anderen Quellen
 und verhält sich ähnlich der Equity. Diventen werden aber in der Regel nicht ausgeschüttet sondern wieder angelegt
 
-=== ETF
+==== ETF
 
 Exchange Traded fond. Verhält sich wie Fond. Es handhabung von Dividenten kann aber unterschiedlich sein
 Statt der Wiederanlage wird der wert erhöht.(sonst wird der ETF einfach als Fond abgebildet)
 
-=== Index
+Der LiquidityType ist MidTerm.
+
+==== Index
 
 Auf einem Index existieren keine Positionen. Ein Index wie z.b. der Dax wird nur benötigt für Performancevergeliche und Analysen
 Es ist unklar ob es Quellen für den Martwert gibt. Es existieren aber ETFs für jeden Index. Somit ist dieser Typ ggf. obsolet
 
-=== Bonds
+==== Bonds
 
 Anleihen, daher Wertpaieren mit Laufzeit und Regelmäßigen CouponZahlungen. Die Coupons sind fix bei kauf.
 (floater sind auch denkbar werden dann aber als extra typ abgebildet)
 
-=== AnnuityLoan
+Der LiquidityType ist MidTerm, es sei denn die Maturity ist kurzfristiger.
+
+==== AnnuityLoan
 
 Annuitätenkredit wie z.b. Kapilende mit regelmäßigen Zins und Tilgungszahlungen. Dabei ist die Rate=zins+Tilgung fix
 
+Der LiquidityType berechnet sich aus der Maturity, da das Instrument nicht eher verkauft werden kann
 
-== Position
+=== Position
 
 Positionen stellen eine Menge von einzelnen Securities dar. In welcher Währung eine Position ist hängt an dem darunter liegenden Instrument
 Die Positionen können jeder Zeit aus den Trades ermittelt werden. Somit müssen sie nicht in der Datenbank abgelegt werden.
 
-== LifeInsurance
+Der LiquidityType hängt am InstrumentType
+
+=== LifeInsurance
 
 Lebensversicherungen besitzen zwar wie CashAccount Cashflows, daraus bestimmt sich aber nicht der Wert.
 Der Wert wird von der Versicherungsgesellschaft ermittelt und Jährlich bekanntgegeben.
 Eigentlich werden mehrere Werte angegeben. Der Rückkauswert ist das Minimum was man erhält wenn man sofort der Vertrag kündigt.
 Der garantierte Wert ist das was man bei Einstellung der Zahlung Mindestens bekommt ...
 
-== RealEstate
+Der LiquidityType berechnet sich aus der Maturity
+
+=== RealEstate
 
 
 Investitionen werden als ausgabe auf commonbudget mit referenz auf das haus abgebildet
 
-== DepreciationObject
+Der LiquidityType ist LongTerm
+
+=== DepreciationObject
 
 Abschreibungsobjekt.
 
-== Loan
+Der LiquidityType berechnet sich aus der Maturity
+
+=== Loan
 
 Kredit
+
+Der LiquidityType berechnet sich aus der Maturity
