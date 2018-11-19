@@ -63,6 +63,8 @@ Beziehungen zwischen Tabellen werden in der closure Table instrumentGraph als ge
 Es gibt verschiedene Arten von Beziehungen die über den Edgetype abgebildet werden:
 
  * Value-Budgets: Einem Budget werden ein oder mehrer Konten zugewiesen <<verlinkte Budget>>. Jeder Account darf nur einmal mit diesem Edgetype vorkommen
+ * defaultBudget: Einem Account(ancestor) kann genau ein DefaultBudget zugewiesen werden. Jedes Budget darf mehrfach mit diesem Edgetype vorkommen (als descendant)
+ wird verwendet als StandardBudget zur Verbuchung von regelmäßigen Einnahmen/Ausgaben z.B. <<Loan>>
  * Analyse Portfolien: hier sollen die beziehungen von artificial Portfolien und deviersen Accounts und Positionen abegildet werden (Soll noch nicht umgesetzt werden)
  * Tenent-Graph: Abbildung des realen und virtuellen Vermögens eines Mandanten <<Tenant>>
 
@@ -289,7 +291,7 @@ Es ist auch möglich, dass ein Budget mit einem anderen Instrument verknüft ist
 
 ===== verlinkte Budget
 
-der Wert mancher Accounts hängt am Wertwerkt oder anderen Faktoren. Damit dieser Wert in die Budgetierung eingeht muss er einem Budget zugewiesen werden.
+der Wert mancher Accounts hängt am Marktwert oder anderen Faktoren. Damit dieser Wert in die Budgetierung eingeht muss er einem Budget zugewiesen werden.
 Der Wert dieses Budgets berechnet sich dann aus dem Wert der verlinkten Accounts zzgl. der Cashflows die am Budget selbst hängen.
 
 es ist z.b. Sinnvoll ein Rentenbudget zu haben. Dem sollte der wert von allen immobilien zzgl krediten, LV und Depot sein.
@@ -405,20 +407,6 @@ additional properties:
 * firstCouponDate
 * couponFrequency
 
-==== AnnuityLoan
-
-Annuitätenkredit wie z.b. Kapilendo mit regelmäßigen Zins und Tilgungszahlungen. Dabei ist die Rate=zins+Tilgung fix
-
-Der LiquidityType berechnet sich aus der Maturity, da das Instrument nicht eher verkauft werden kann
-
-additional properties:
-
-* annuity
-* interestrate
-* annuityFrequency
-
-Kapilendo verkauft im Prinzip Anuitätenkredite von Firmen. Diese AnnuityLoans haben keinen Marktpreis. Sie verhalten sich wie ein Loan mit umgekehrten Besitzverhältnissen
-
 === Position
 
 Positionen stellen eine Menge von einzelnen Securities dar. In welcher Währung eine Position ist hängt an dem darunter liegenden Instrument
@@ -436,24 +424,100 @@ Der garantierte Wert ist das was man bei Einstellung der Zahlung Mindestens beko
 
 Der LiquidityType berechnet sich aus der Maturity
 
+additional properties:
+
+ * SurrenderValue für einen Zeitpunkt(validFrom): Der Rückkaufswert der LV
+
 
 === RealEstate
 
+Immobilen werden getrennt von ihren krediten betrachtet
+Der wert ergibt sich aus dem monatlichen Betrag den man jeweils meint herausnehmen zu können (z.B. tilgung zinsen + überschuss) auf das jahr hochgerechnet und mit zielrendite dann den wert berechnen
+fuer die ermittlung der ueberschuesse gibt es zwei varianten, entweder werden die ueberschuesse fix definiert(RealEstateProfit) fur einen zeitraum(wie auch die zielrendite YieldGoal)
+oder sie werden berechnet als mittel der transfers zu anderen budgetgruppen z.b. der letzten 12 monate. dieser zeitraum sollte parametrisierbar sein, ebenso ob die ueberschuesse berechnet oder fix sind. Die Moeglichkeit der fixen Angabe ist vorallem in der Anfangsphase noetig wenn noch nicht hinreichend viele Daten vorhanden sind.
+Die fixen ueberschuessen sind dabei nur grundlage der wertberechnung und muessen nicht identisch mit den tatsaechlichen leistungen des hauses an den mandenten uebereinstimmen. sie stellen vielmehr einen mittelwert der realen leistungen dar.
+Die dynamische Berechnung der Überschüsse ist starken schwankungen ausgesetzt weshalb dies zunächst nicht umgesetzt wird.
+
+Wie oben angedeutet besitz jede Immobilie eine eigene BudgetGruppe. Dies ist so damit zur Verwaltung einer Immobilie extra Budgets angelegt werden können
+z.B. für regelmäßige Wartungskosten etc.
+
+
+investitionen in das haus(zb wohnungsausbau) werden als kredit von mandanten zu sich selber dargestellt dass das haus mit zins und tilgung zurückzahlt. Dies wird aber nicht extra in der Datenbank abgelegt sondern nur in der Berechnung des wertes und der rendite der oben genannten sicht beruecksichtigt.
+alle sonstigen kosten und rücklagen werden über budget geglättet -> alle hausbudget spielen keine rolle für den hauswert bzw dessen rendite
+
+Hauseinnahmen fuellen Hausbudget. Dies gilt auch fuer das Eigenheim. Hier ist die Einnahme die virtuale Miete des Mandanten an sich selbst. Dabei ist zu beachten das die Miete an sich selbst durch eine ausgabe auf einem nicht hausbudget und einer einnahme auf dem haus abgebildet wird. Dies deckt hier anfangs aber nur Zinsen. Die Tilgung sollte wieder ueber einen Kredit an sich selbst abgebildet werden.
+
+wertsteigernde investitionen werden durch ausgaben auf budgets ausserhalb der hausbudgetgruppe dargestellt(aehnlich wie trade). Der Hauswert sollte sich entsprechend steigern durch erhoehten ertrag. Ggf muss noch ein link zu der investition hergestellt werden
+
+Wertsteigernde Investitionen werden wie der initiale Kaufpreis als Ausgabe auf der common budgetgroup abgebildet mit einem link(refaccount) zu der immobilie
 
 Investitionen werden als ausgabe auf commonbudget mit referenz auf das haus abgebildet
 
 Der LiquidityType ist LongTerm
 
+Der Berechnete Wert muss einem valueBudget zugewiesen werden <<Beziehungen zwischen Instrumenten>>
+
+additional properties:
+
+ * YieldGoal in einem Zeitraum(validFrom, ValidTo): DIe zielrendite in einem Zeitraum
+ * RealEstateProfit in einem Zeitraum(validFrom, ValidTo): Wird der monatl. Gewinn der Immobilie nicht berechnet muss er grob geschätzt und hier hinterlegt werden
+ * BudgetGroup
+ * Optional CalculateProfit: Default=no Es ist möglich anhand von Cashflows zu ermitteln wie hoch der Profit ist.
+ Dies ist aber starken schwankungen ausgesetzt weshalb dies zunächst nicht umgesetzt wird
+ * Optional periodForCalcInMonth: Anzahl der Monate die für die Berechnung des Profits herangezogen werden. Nicht verwendet da die Berechnung nicht umgesetzt wurde
 
 === DepreciationObject
 
-Abschreibungsobjekt.
+Abschreibungsobjekt. Große Konsumausgaben wie z.B: Autos die noch über einige Jahre einen Wiederverkaufswert besitzen werden über einen größeren Zeitraum abgeschrieben.
+So werden auch größere Sprünge in der Gesamtbesitzkurve vermieden
+
+
+Bei Anlage des DepreciationObject wird eine Ausgabe auf einem Giro mit einem Budget durchgeführt(ganz normale Ausgabe)
+Die Höhe entsprecht dem initialvalue.
+Das Transactiondate wird sich im AcquisitionDate gemerkt.
+Im folgenden wird der Wert des DepreciationObject berechnet in dem der initiale Wert vom AcquisitionDate bis zu Maturity linear(je nach deprecationType) bis auf 0 gesenkt wird.
+Damit sich die Abschreibung auch in der Budgetsicht wiederspiegelt muss der Wert einem valueBudget zugewiesen werden <<Beziehungen zwischen Instrumenten>>
+
+
 
 Der LiquidityType berechnet sich aus der Maturity
+
+additional properties:
+
+ * transactionid: Die Id der initialen Ausgabe. Dient nur als Zusatzinfo.
+ * AcquisitionDate: entspricht dem TransactionDate der Ausgabe. könnte man auch aus der Transaction lesen. als Property direkt am Instrument ist es aber einfacher
+ * initialvalue: Könnte man auch aus der initialen Trasnaction lesen. Aber neben dem,dass es einfacher ist die info aus demn Properties zu lesen, könnte der Wert auch abweichen
+ es ist z.b. denkbar dass den wert des gekauften Autos direkt nach kauf reduziert und erst danach linear abschreibt
+ * optional deprecationType: Default ist Linear
 
 
 === Loan
 
-Kredit
+Ein Kredit wird zunächst mit Wert=0 angelegt. Jede Auszahlung wird durch einen Transfer auf ein Giro abgebildet, wodurch der Wert ins Minus rutscht.
+Nachdem die komplette ContractSize ausgezahlt wurde(ContractSize ist negativ) beginnt ab RedemtionStart die Annuitätenzahlung.
+Hier wird automatisch in einer bestimmten AnnuityFrequenzy(monatlich, Jährlich, Quartärlich) eine Annuity gebucht.
+Diese besteht aus einer Zinszahlung von einem GiroAccount und einem AnnuityBudget, sowie einer Tilgung (Transfer von Giro nach Loan)
+
+Neben dem eigenen Kredit ist es auch möglich über Plattformen wie Kapilendo selbst Kreditgeber zu werden. Hier sind die Cashflows umgekehrt.
+Der Kredit wird ebenfalls mit 0 angelegt aber hier wird vom Giro eingezahlt bis die ContractSize erreicht ist(ContractSize ist positiv)
+Die Annuitäten bestehen entsprechend aus den Zinsen(Einnahme auf einem Giro) und der Tilgung (Transfer von Loan nach Giro)
+
+Die beiden Formen unterscheiden sich nur anhand der ContractSize(positiv bzw negativ)
+
+Neben der Automatischen Annuity Zahlung können vor RedemptionStart(Zinszahlungen) bzw auch später zum ausgleich von ungenauigkeiten in der Zinsberechnung, manuelle Cashflows verbucht werden
 
 Der LiquidityType berechnet sich aus der Maturity
+
+AnnuityBudget: Zur Buchung der Zinszahlungen wird ein Budget benötigt.
+Die Verlinkung wird in der Tabelle InstrumentGraph über den Edgetype defaultBudget abgebildet
+
+additional properties:
+
+ * InterestRate: Der ZinsSatz für den Kredit (fix)
+ * RedemptionStart: Tilgungsstart. Bei Teilauszahlungen ist es üblich das die Tilgung erst bei vollständiger Auszahlung startet.
+ Bei Kapilendo ist es auch üblich dass man zuerst den Betrag zahlt und die Tilgung später losgeht.
+ * NextAnnuity: Datum der nächsten Annuitätenzahlung um schneller festzustellen ob die nächste Zahlung fällig ist
+ * AnnuityValue: Höhe der Rate
+ * ContractSize: initiale Kredithöhe vor der ersten Tilgung
+ * AnnuityFrequenzy: Frequenz der Ratenzahlung(Monatlich, Quartälich, Jährlich)
+
