@@ -361,6 +361,15 @@ Dies ist die Währung in der das Wertpapier im Depot liegt und daran hängt ob e
 Die Währung der Position hängt ebenfalls davon ab
 
 
+==== SecuritySymbol und Preisimporte
+
+Für den Import von Tagespreisen wird meist ein sogenanntes Symbol benötigt. Dies ist nicht eindeutig je Instrument sondern je Instrument und Börse.
+Entsprechend können die Preise für jedes Symbol in einer anderen Währung geliefert werden.
+
+Es wurde überlegt das Symbol in einer generischen Tabelle als Instrumenteigenschaft abzulegen. Dies wurde aber verworfen:
+Zum Einen ist so kein Constraint auf die Währung möglich zum anderen ist das Symbol eher als eine Price-Order und somit als eigene Entität zu verstehen anstatt als InstrumentEigenschaft
+
+
 ==== Currency
 
 Währungen haben nur einen Marktpreis. Auf Währungen gibt es keine direkten Positionen. Positionen von Aktien oder Anleihen können aber in einer bestimmten Währung sein
