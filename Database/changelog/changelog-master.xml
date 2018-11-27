@@ -6,5 +6,5 @@
                       http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
 
     <include file="changelog\dac\dac-changelog-master.xml"/>
-    <include file="changelog\md\md-changelog-master.xml"/>
+    <include file="changelog\mf\mf-changelog-master.xml"/>
 </databaseChangeLog>

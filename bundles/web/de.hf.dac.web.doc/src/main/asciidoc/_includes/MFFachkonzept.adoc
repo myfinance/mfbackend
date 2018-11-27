@@ -17,8 +17,6 @@ Instrument wird als eigene Datenbanktabelle abgebildet, die alle Properties bein
 |BusinessKey | ein zusätzlicher Fachlicher Schlüssel zur besseren Identifizierung z.B. ISIN bei Equity CurrencyCode oder IBAN bei Giro
 |=====================================================================================
 
-Der Businesskey muss nicht unique sein. Bei einem Buasparvertrag z.b. steht dort die gleiche Vertragsnummer wie bei dem entsprechenden Bausparkonto und dem Darlehen.
-So können die einzelnen Teile auch schneller selektiert werden
 
 Da diese Tabelle eine reine Dimension ohne Fakten ist wurde auf validFrom und ValidUntil verzichtet. Alle Instrumente existieren nur einmal und für immer(Die Tabelle beinhaltet keine veränderlichen Felder)
 Unveränderlich meint in dem Context nicht dass sie nicht verändert werden dürfen wenn man versehentlich den falschen wert eingetragen hat sondern dass die Werte sich in der Realität nicht ändern. Der closingDate ist fix auch wenn ich mich vertippt habe und der wert nochmal ändern muss.
@@ -27,6 +25,21 @@ Dass kein Cashflow... nach dem closingDate standfindet wird von der Anwendung si
 
 Zusätzliche Informationen für einzelne Instrumenttypen sollen, solange sie nicht für SQL-Auswertungen benötigt werden,
 generisch in einer Key-Value-Tabelle InstrumentProperties abgebildet werden.
+
+== warum ist der BusinessKey nicht der PrimaryKey
+
+Ein Primarykey muss unique sein. Bei einem Bausparvertrag z.b. steht im Businesskey die gleiche Vertragsnummer wie bei dem entsprechenden Bausparkonto und dem Darlehen.
+So können die einzelnen Teile auch schneller selektiert werden. um denoch unique zu sein wird ein Prefix benötigt.
+Der BusinessKey hat für die meisten Instrumenttypen ausser für Currency(currencyCode) nur eine Beschreibende Bedeutung(ISIN zur leichteren Suche, IBAN, Shortdesc)
+und ist nicht wirklich besser zu merken als eine ID
+Dazu ist der Businesskey als VarChar viel länger und benötigt mehr speicher als ein Int.
+Das größte Hinderniss ist aber dass nicht für alle InstrumetnTypen ein sprechender varcahr - businesskey erzeugt werden kann, der Garantiert frei von Sonderzeichen, eindeutig und unveränderlich ist.
+Bei Budgets z.B. gibt es nur die Description. Durch Validierung kann man zwar sicherstellen, dass es Eindeutig ist, kurz und Sonderzeichenfrei, dadurch wird der Key aber wiederum kryptisch so dass er auch besser wieder als int generiert wird.
+auch kann sich bei budgets die bezeichnung ändern, der Key muss aber gleich bleiben.
+
+Im Prizip ist die ID dem Businesskey in jedem Punkt überlegen, ausser bei currencies. Verwende ich hier eine ID muss ich jede tabelle erst mit instrument joinen um an den currencycode zu kommen.
+auch muss dann die Eindeutigkeit des currencycodes noch sichergestellt werden. Dies wird durch ein Unique-Constraint auf dem BusinessKey erreicht
+(Businesskey ist Nullable da er z.B. bei Budgets keinen Mehrwert liefert. Null-Werte werden nie als gleich behandelt)
 
 == Liquidität
 
@@ -186,7 +199,7 @@ recurrenttransaction : Int securityid
 ....
 
 
-recurrentfrequence= Monthly, Quaterly, Yearly in der DB aber nur als id abgebildet, sa dass die Software ohne DB-Änderungen erweitert werden kann
+recurrentfrequence= Monthly, Quaterly, Yearly in der DB aber nur als id abgebildet, so dass die Software ohne DB-Änderungen erweitert werden kann
 recurrencytype= Einnahme/Ausgabe oder Transfer -> wie recurrentfrequence nur als ID abgebildet. Benötigt um zu wissen ob auf den Instrumenten jeweils ein positiver oder negativer cashflow fliesst
 Die SecurityId ist optional für den Fall, dass ein Coupon oder andere Zahlungen auf Securities abgebildet werden sollen
 
@@ -218,12 +231,11 @@ Folgende Instrumenttypen gibt es:
 |ETF| security |Exchange Traded fond
 |Index| security |Index wie z.b. Dax -> obsolet da durch ETF abgebildet
 |Bond| security |Anleihen
-|AnnuityLoan| security |Annuitätenkredite wie z.b. von Kapilendo
 |Position| portfolio |Zusammenfassung von Securities
 |LifeInsurance |LifeInsurance | Lebensversicherung
 |DepreciationObject |DepreciationObject | Abschreibungsobjekte wie z.b. Autos
 |RealEstate |RealEstate | Immobilien
-|Loan |Loan | Kredite
+|Loan |Loan | Kredite bei Banken oder man ist selbst Gläubiger wie z.b. von Kapilendo
 |=====================================================================================
 
 === CashAccount
@@ -236,7 +248,7 @@ Die Gemeinsamkeit von allen CashAccounts ist, dass sich ihr Wert durch die Summe
 Auf einen Girokonto können Einnahmen und Ausgaben sowie Transfers von bzw. zu anderen Konten stattfinden.
 Der LiquidityType ist immer Liquid.
 
-optional BusinessKey=IBAN
+BusinessKey=IBAN
 
 
 ==== MoneyAtCall
@@ -252,7 +264,7 @@ die Automatische Zinsberechnung wird zunächst nicht umgesetzt da die Zinsen zu 
 Der LiquidityType ist immer ShortTerm.
 
 
-optional BusinessKey=IBAN
+BusinessKey=IBAN
 
 additional properties:
 
@@ -267,7 +279,7 @@ Der LiquidityType wird anhand der Maturity berechnet.
 Für Zinszahlungen gilt auch das gleichen wie für das Tagesgeld nur das der Zinssatz sich nicht ändert
 
 
-optional BusinessKey=IBAN
+BusinessKey=IBAN
 
 ==== BuildingsavingAccount
 
@@ -288,6 +300,7 @@ Der LiquidityType ist im Default Liquide, aber es kann Budgets geben die für z.
 Hier muss der LiquidityType extra angegeben werden. Dazu ist in den InstrumentProperties LiquidityType zu hinterlegen
 Es ist auch möglich, dass ein Budget mit einem anderen Instrument verknüft ist (z.B. DeprecationObject) dann wird der LiquidityType davon abgeleitet
 
+BusinessKey= a short description without spaces, all lower case
 
 ===== verlinkte Budget
 
@@ -305,6 +318,7 @@ Ein Portfolio beinhaltet ein oder mehrere Instrumente. Dies dient der Abbildung 
 
 Der LiquidityType, wenn überhaupt benötigt, ergibt sich aus dem langfristigsten Wert der beinhalteten Instrumente
 
+BusinessKey= a short description without spaces, all lower case
 
 ==== Tenant
 
@@ -343,7 +357,7 @@ zusammenfassung von mehreren Budgets. z.b. für Immobilien benötigt
 hier werden diverse Trades verlinkt um Positionen zu bilden die sich in einem Depot-Account befinden.
 Somit ist das Depot nur indirekt ein Portfolio. Es besteht zwar aus Securities aber nur über Positionen die nicht in der Datenbank abgebildet sind
 
-optional BusinessKey=IBAN
+BusinessKey=IBAN
 
 ==== Buildingsaving
 
