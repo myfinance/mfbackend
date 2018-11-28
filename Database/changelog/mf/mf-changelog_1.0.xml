@@ -6,7 +6,7 @@
             <dbms type="h2" />
         </or>
     </preConditions>
-    <changeSet author="xn01598 (generated)" id="1543333510263-1">
+    <changeSet author="hf" id="mf.1.0.">
         <createTable tableName="mf_cashflow">
             <column autoIncrement="true" name="cashflowid" type="SERIAL">
                 <constraints primaryKey="true" primaryKeyName="pk_mf_cashflow"/>
@@ -22,7 +22,7 @@
             </column>
         </createTable>
     </changeSet>
-    <changeSet author="xn01598 (generated)" id="1543333510263-2">
+    <changeSet author="hf" id="mf.1.0.2">
         <createTable remarks="Alle consolidierten Tagespreise in der Hometradingcurrency" tableName="mf_endofdayprice">
             <column autoIncrement="true" name="endofdaypriceid" type="SERIAL">
                 <constraints primaryKey="true" primaryKeyName="pk_mf_endofdayprice"/>
@@ -35,7 +35,7 @@
             <column name="currencyid" type="INT"/>
         </createTable>
     </changeSet>
-    <changeSet author="xn01598 (generated)" id="1543333510263-3">
+    <changeSet author="hf" id="mf.1.0.3">
         <createTable remarks="enthaelt alle Instrument. Instrumente sind Accounts, Wertpaiere, Portfolien... Alles was einen Wert besitzt und ueber das man Analysen ueber die Zeit machen kann.&#10;&#10;Der Fachliche Schluessel ist &quot;Description&quot;&#10;&#10;Da dieses Feld eine reine Dimension ohne Fakten ist wurde auf validFrom und ValidUntil verzichtet. Alle Instrumente existieren nur einmal und fuer immer(Die Tabelle beinhaltet keine veraenderlichen Felder)&#10;isActive wird nur verwendet um einige Instrumente die nicht mehr benoetigt werden ausblenden zu koennen&#10;&#10;Unveraenderlich meint in dem Context nicht dass sie nicht veraendert werden duerfen wenn man versehentlich den falschen wert eingetragen hat sondern dass die Werte sich in der Realitaet nicht aendern. Der closingDate(der Tag an dem z.B. der Account geschlossenen wurde) ist fix auch wenn ich mich vertippt habe und der wert nochmal aendern muss.&#10;&#10;MaturityDate-geplanter Ablaufzeitpunkt&#10;closingDate-tag an dem der Account/dasInstrument Tatsaechlich abgeschlossen wurde (kann abweichen von MaturityDate: z.b. ein Kredit endet an Tag x das kreditkonto wird aber erst ein paar tage spaeter geschlossen)&#10;isActive-einfaches Flag das anzeigt dass das Instrument ausgeblendet werden kann (ausser bei historischen betrachtungen) da sein ClosingDate ueberschritten wurde -&gt; nur fuer einfachere Queries noetig (besser als Date vergleich) &#10;&#10;Dass kein Cashflow... nach dem closingDate standfindet wird von der Anwendung sichergestellt" tableName="mf_instrument">
             <column autoIncrement="true" name="instrumentid" type="SERIAL">
                 <constraints primaryKey="true" primaryKeyName="pk_mf_instrument"/>
@@ -57,7 +57,7 @@
             <column name="businesskey" type="VARCHAR(32)"/>
         </createTable>
     </changeSet>
-    <changeSet author="xn01598 (generated)" id="1543333510263-4">
+    <changeSet author="hf" id="mf.1.0.4">
         <createTable tableName="mf_instrumentgraph">
             <column name="ancestor" type="INT">
                 <constraints nullable="false"/>
@@ -73,7 +73,7 @@
             </column>
         </createTable>
     </changeSet>
-    <changeSet author="xn01598 (generated)" id="1543333510263-5">
+    <changeSet author="hf" id="mf.1.0.5">
         <createTable tableName="mf_instrumentproperties">
             <column autoIncrement="true" name="propertyid" type="SERIAL">
                 <constraints primaryKey="true" primaryKeyName="pk_mf_instrumentproperties"/>
@@ -94,7 +94,7 @@
             <column name="validto" type="date"/>
         </createTable>
     </changeSet>
-    <changeSet author="xn01598 (generated)" id="1543333510263-6">
+    <changeSet author="hf" id="mf.1.0.6">
         <createTable tableName="mf_instrumenttype">
             <column name="instrumenttypeid" type="INT">
                 <constraints nullable="false"/>
@@ -103,7 +103,7 @@
             <column name="typegroup" type="VARCHAR(100)"/>
         </createTable>
     </changeSet>
-    <changeSet author="xn01598 (generated)" id="1543333510263-7">
+    <changeSet author="hf" id="mf.1.0.7">
         <createTable remarks="recurrentfrequence= Monthly, Quaterly, Yearly in der DB aber nur als id abgebildet, sa dass die Software ohne DB-Änderungen erweitert werden kann&#10;recurrencytype= Einnahme/Ausgabe oder Transfer -&gt; wie recurrentfrequence nur als ID abgebildet. Benötigt um zu wissen ob auf den Instrumenten jeweils ein positiver oder negativer cashflow fliesst" tableName="mf_recurrenttransaction">
             <column autoIncrement="true" name="recurrenttransactionid" type="SERIAL">
                 <constraints primaryKey="true" primaryKeyName="pk_mf_recurrenttransaction"/>
@@ -138,7 +138,7 @@
             <column name="securityid" type="INT"/>
         </createTable>
     </changeSet>
-    <changeSet author="xn01598 (generated)" id="1543333510263-8">
+    <changeSet author="hf" id="mf.1.0.8">
         <createTable tableName="mf_securitysymbols">
             <column autoIncrement="true" name="symbolid" type="SERIAL">
                 <constraints primaryKey="true" primaryKeyName="pk_mf_securitysymbols"/>
@@ -150,7 +150,7 @@
             <column name="currencyid" type="INT"/>
         </createTable>
     </changeSet>
-    <changeSet author="xn01598 (generated)" id="1543333510263-9">
+    <changeSet author="hf" id="mf.1.0.9">
         <createTable tableName="mf_source">
             <column name="sourceid" type="INT">
                 <constraints nullable="false"/>
@@ -165,7 +165,7 @@
             </column>
         </createTable>
     </changeSet>
-    <changeSet author="xn01598 (generated)" id="1543333510263-10">
+    <changeSet author="hf" id="mf.1.0.10">
         <createTable tableName="mf_trade">
             <column autoIncrement="true" name="tradeid" type="SERIAL">
                 <constraints primaryKey="true" primaryKeyName="pk_mf_trade"/>
@@ -184,7 +184,7 @@
             </column>
         </createTable>
     </changeSet>
-    <changeSet author="xn01598 (generated)" id="1543333510263-11">
+    <changeSet author="hf" id="mf.1.0.11">
         <createTable tableName="mf_transaction">
             <column autoIncrement="true" name="transactionid" type="SERIAL">
                 <constraints primaryKey="true" primaryKeyName="pk_mf_transaction"/>
@@ -200,68 +200,68 @@
             </column>
         </createTable>
     </changeSet>
-    <changeSet author="xn01598 (generated)" id="1543333510263-12">
+    <changeSet author="hf" id="mf.1.0.12">
         <addPrimaryKey columnNames="ancestor, descendant, edgetype" constraintName="pk_mf_instrumentgraph" tableName="mf_instrumentgraph"/>
     </changeSet>
-    <changeSet author="xn01598 (generated)" id="1543333510263-13">
+    <changeSet author="hf" id="mf.1.0.13">
         <addPrimaryKey columnNames="instrumenttypeid" constraintName="pk_mf_instrumenttype" tableName="mf_instrumenttype"/>
     </changeSet>
-    <changeSet author="xn01598 (generated)" id="1543333510263-14">
+    <changeSet author="hf" id="mf.1.0.14">
         <addPrimaryKey columnNames="sourceid" constraintName="pk_mf_source" tableName="mf_source"/>
     </changeSet>
-    <changeSet author="xn01598 (generated)" id="1543333510263-15">
+    <changeSet author="hf" id="mf.1.0.15">
         <createIndex indexName="instrumenttype_fk" tableName="mf_instrument">
             <column name="instrumenttypeid"/>
         </createIndex>
     </changeSet>
-    <changeSet author="xn01598 (generated)" id="1543333510263-16">
+    <changeSet author="hf" id="mf.1.0.16">
         <createIndex indexName="pricesource_fk" tableName="mf_endofdayprice">
             <column name="sourceid"/>
         </createIndex>
     </changeSet>
-    <changeSet author="xn01598 (generated)" id="1543333510263-17">
+    <changeSet author="hf" id="mf.1.0.17">
         <addForeignKeyConstraint baseColumnNames="instrumentid" baseTableName="mf_cashflow" constraintName="fk_mf_cashf_fk_cashfl_mf_instr" deferrable="false" initiallyDeferred="false" onDelete="RESTRICT" onUpdate="RESTRICT" referencedColumnNames="instrumentid" referencedTableName="mf_instrument"/>
     </changeSet>
-    <changeSet author="xn01598 (generated)" id="1543333510263-18">
+    <changeSet author="hf" id="mf.1.0.18">
         <addForeignKeyConstraint baseColumnNames="transactionid" baseTableName="mf_cashflow" constraintName="fk_mf_cashf_fk_transa_mf_trans" deferrable="false" initiallyDeferred="false" onDelete="RESTRICT" onUpdate="RESTRICT" referencedColumnNames="transactionid" referencedTableName="mf_transaction"/>
     </changeSet>
-    <changeSet author="xn01598 (generated)" id="1543333510263-19">
+    <changeSet author="hf" id="mf.1.0.19">
         <addForeignKeyConstraint baseColumnNames="instrumentid" baseTableName="mf_endofdayprice" constraintName="fk_mf_endof_fk_endofd_mf_instr" deferrable="false" initiallyDeferred="false" onDelete="RESTRICT" onUpdate="RESTRICT" referencedColumnNames="instrumentid" referencedTableName="mf_instrument"/>
     </changeSet>
-    <changeSet author="xn01598 (generated)" id="1543333510263-20">
+    <changeSet author="hf" id="mf.1.0.20">
         <addForeignKeyConstraint baseColumnNames="sourceid" baseTableName="mf_endofdayprice" constraintName="fk_mf_endof_fk_source_mf_sourc" deferrable="false" initiallyDeferred="false" onDelete="RESTRICT" onUpdate="RESTRICT" referencedColumnNames="sourceid" referencedTableName="mf_source"/>
     </changeSet>
-    <changeSet author="xn01598 (generated)" id="1543333510263-21">
+    <changeSet author="hf" id="mf.1.0.21">
         <addForeignKeyConstraint baseColumnNames="ancestor" baseTableName="mf_instrumentgraph" constraintName="fk_mf_instr_fk_ancest_mf_instr" deferrable="false" initiallyDeferred="false" onDelete="RESTRICT" onUpdate="RESTRICT" referencedColumnNames="instrumentid" referencedTableName="mf_instrument"/>
     </changeSet>
-    <changeSet author="xn01598 (generated)" id="1543333510263-22">
+    <changeSet author="hf" id="mf.1.0.22">
         <addForeignKeyConstraint baseColumnNames="descendant" baseTableName="mf_instrumentgraph" constraintName="fk_mf_instr_fk_descen_mf_instr" deferrable="false" initiallyDeferred="false" onDelete="RESTRICT" onUpdate="RESTRICT" referencedColumnNames="instrumentid" referencedTableName="mf_instrument"/>
     </changeSet>
-    <changeSet author="xn01598 (generated)" id="1543333510263-23">
+    <changeSet author="hf" id="mf.1.0.23">
         <addForeignKeyConstraint baseColumnNames="instrumenttypeid" baseTableName="mf_instrument" constraintName="fk_mf_instr_fk_instru_mf_instr" deferrable="false" initiallyDeferred="false" onDelete="RESTRICT" onUpdate="RESTRICT" referencedColumnNames="instrumenttypeid" referencedTableName="mf_instrumenttype"/>
     </changeSet>
-    <changeSet author="xn01598 (generated)" id="1543333510263-24">
+    <changeSet author="hf" id="mf.1.0.24">
         <addForeignKeyConstraint baseColumnNames="securityid" baseTableName="mf_recurrenttransaction" constraintName="fk_mf_recur_fk_recurr_mf_instr" deferrable="false" initiallyDeferred="false" onDelete="RESTRICT" onUpdate="RESTRICT" referencedColumnNames="instrumentid" referencedTableName="mf_instrument"/>
     </changeSet>
-    <changeSet author="xn01598 (generated)" id="1543333510263-25">
+    <changeSet author="hf" id="mf.1.0.25">
         <addForeignKeyConstraint baseColumnNames="instrumentid1" baseTableName="mf_recurrenttransaction" constraintName="fk_mf_recur_instr1" deferrable="false" initiallyDeferred="false" onDelete="RESTRICT" onUpdate="RESTRICT" referencedColumnNames="instrumentid" referencedTableName="mf_instrument"/>
     </changeSet>
-    <changeSet author="xn01598 (generated)" id="1543333510263-26">
+    <changeSet author="hf" id="mf.1.0.26">
         <addForeignKeyConstraint baseColumnNames="instrumentid2" baseTableName="mf_recurrenttransaction" constraintName="fk_mf_recur_instr2" deferrable="false" initiallyDeferred="false" onDelete="RESTRICT" onUpdate="RESTRICT" referencedColumnNames="instrumentid" referencedTableName="mf_instrument"/>
     </changeSet>
-    <changeSet author="xn01598 (generated)" id="1543333510263-27">
+    <changeSet author="hf" id="mf.1.0.27">
         <addForeignKeyConstraint baseColumnNames="currencyid" baseTableName="mf_securitysymbols" constraintName="fk_mf_secur_fk_curren_mf_instr" deferrable="false" initiallyDeferred="false" onDelete="RESTRICT" onUpdate="RESTRICT" referencedColumnNames="instrumentid" referencedTableName="mf_instrument"/>
     </changeSet>
-    <changeSet author="xn01598 (generated)" id="1543333510263-28">
+    <changeSet author="hf" id="mf.1.0.28">
         <addForeignKeyConstraint baseColumnNames="instrumentid" baseTableName="mf_securitysymbols" constraintName="fk_mf_secur_fk_instru_mf_instr" deferrable="false" initiallyDeferred="false" onDelete="RESTRICT" onUpdate="RESTRICT" referencedColumnNames="instrumentid" referencedTableName="mf_instrument"/>
     </changeSet>
-    <changeSet author="xn01598 (generated)" id="1543333510263-29">
+    <changeSet author="hf" id="mf.1.0.29">
         <addForeignKeyConstraint baseColumnNames="depotid" baseTableName="mf_trade" constraintName="fk_mf_trade_depot" deferrable="false" initiallyDeferred="false" onDelete="RESTRICT" onUpdate="RESTRICT" referencedColumnNames="instrumentid" referencedTableName="mf_instrument"/>
     </changeSet>
-    <changeSet author="xn01598 (generated)" id="1543333510263-30">
+    <changeSet author="hf" id="mf.1.0.30">
         <addForeignKeyConstraint baseColumnNames="transactionid" baseTableName="mf_trade" constraintName="fk_mf_trade_fk_transa_mf_trans" deferrable="false" initiallyDeferred="false" onDelete="RESTRICT" onUpdate="RESTRICT" referencedColumnNames="transactionid" referencedTableName="mf_transaction"/>
     </changeSet>
-    <changeSet author="xn01598 (generated)" id="1543333510263-31">
+    <changeSet author="hf" id="mf.1.0.31">
         <addForeignKeyConstraint baseColumnNames="instrumentid" baseTableName="mf_trade" constraintName="fk_mf_trade_security" deferrable="false" initiallyDeferred="false" onDelete="RESTRICT" onUpdate="RESTRICT" referencedColumnNames="instrumentid" referencedTableName="mf_instrument"/>
     </changeSet>
 </databaseChangeLog>

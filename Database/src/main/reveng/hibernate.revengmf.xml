@@ -66,12 +66,45 @@
         </primary-key>
     </table>
 
-    <table schema="public" name="mf_currency" class="de.hf.dac.myfinance.api.domain.Currency"/>
+    <table schema="public" name="mf_cashflow" class="de.hf.dac.myfinance.api.domain.Cashflow">
+        <primary-key>
+            <generator class="identity">
+            </generator>
+        </primary-key>
+    </table>
+
+    <table schema="public" name="mf_instrumentproperties" class="de.hf.dac.myfinance.api.domain.InstrumentProperties">
+        <primary-key>
+            <generator class="identity">
+            </generator>
+        </primary-key>
+    </table>
+
+    <table schema="public" name="mf_recurrenttransaction" class="de.hf.dac.myfinance.api.domain.RecurrentTransaction">
+        <primary-key>
+            <generator class="identity">
+            </generator>
+        </primary-key>
+    </table>
+
+    <table schema="public" name="mf_trade" class="de.hf.dac.myfinance.api.domain.Trade">
+        <primary-key>
+            <generator class="identity">
+            </generator>
+        </primary-key>
+    </table>
+
+    <table schema="public" name="mf_transaction" class="de.hf.dac.myfinance.api.domain.Transaction">
+        <primary-key>
+            <generator class="identity">
+            </generator>
+        </primary-key>
+    </table>
+
     <table schema="public" name="mf_endofdayprice" class="de.hf.dac.myfinance.api.domain.EndOfDayPrice"/>
     <table schema="public" name="mf_importtype" class="de.hf.dac.myfinance.api.domain.ImportType"/>
     <table schema="public" name="mf_instrumenttype" class="de.hf.dac.myfinance.api.domain.InstrumentType"/>
-    <table schema="public" name="mf_security" class="de.hf.dac.myfinance.api.domain.Security"/>
-    <table schema="public" name="mf_securitytyp" class="de.hf.dac.myfinance.api.domain.SecurityType"/>
+    <table schema="public" name="mf_instrumentgraph" class="de.hf.dac.myfinance.api.domain.InstrumentGraph"/>
 
 
 </hibernate-reverse-engineering>
