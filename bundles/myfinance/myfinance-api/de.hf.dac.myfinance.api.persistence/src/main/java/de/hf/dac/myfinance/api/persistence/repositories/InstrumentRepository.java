@@ -18,10 +18,8 @@
 package de.hf.dac.myfinance.api.persistence.repositories;
 
 import de.hf.dac.myfinance.api.domain.Instrument;
-import de.hf.dac.myfinance.api.domain.Security;
-import org.springframework.data.jpa.repository.JpaRepository;
 
-import java.util.Optional;
+import org.springframework.data.jpa.repository.JpaRepository;
 
 /**
  * The Spring Data JPA CRUD Repository is a feature of Spring Data JPA.

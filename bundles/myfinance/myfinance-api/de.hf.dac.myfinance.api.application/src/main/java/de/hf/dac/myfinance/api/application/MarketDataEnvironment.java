@@ -17,15 +17,8 @@
 
 package de.hf.dac.myfinance.api.application;
 
-import de.hf.dac.api.io.routes.job.JobDispatcher;
-import de.hf.dac.api.io.routes.job.JobParameter;
-import de.hf.dac.api.security.IdentifiableResource;
-import de.hf.dac.api.security.RootSecurityProvider;
-import de.hf.dac.api.security.Secured;
-import de.hf.dac.myfinance.api.service.ProductService;
 import de.hf.dac.myfinance.api.service.InstrumentService;
 
 public interface MarketDataEnvironment {
-    ProductService getProductService();
     InstrumentService getInstrumentService();
 }

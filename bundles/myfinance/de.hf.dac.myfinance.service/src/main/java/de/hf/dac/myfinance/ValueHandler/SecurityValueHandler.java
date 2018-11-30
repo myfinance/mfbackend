@@ -43,7 +43,7 @@ public class SecurityValueHandler implements ValueHandler{
     public TreeMap<LocalDate, Double> calcValueCurve(Instrument instrument){
         TreeMap<LocalDate, Double> valueCurve = new TreeMap<>();
 
-        Map<LocalDate, EndOfDayPrice> prices = instrumentDao.listEndOfDayPrices(instrument.getInstrumentid()).stream().collect(
+        /*Map<LocalDate, EndOfDayPrice> prices = instrumentDao.listEndOfDayPrices(instrument.getInstrumentid()).stream().collect(
             Collectors.toMap(x->x.getDayofprice(), x->x));
 
         SortedSet<LocalDate> sortedDates = new TreeSet<>(prices.keySet());
@@ -78,7 +78,7 @@ public class SecurityValueHandler implements ValueHandler{
             nextDate = nextDate.plusDays(1);
             lastPrice=valueInEUr;
         }
-
+*/
         return valueCurve;
     }
 

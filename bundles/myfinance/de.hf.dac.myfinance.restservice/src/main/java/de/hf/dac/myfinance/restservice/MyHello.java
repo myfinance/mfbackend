@@ -21,7 +21,6 @@ package de.hf.dac.myfinance.restservice;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 
-import de.hf.dac.myfinance.api.persistence.dao.ProductDao;
 import io.swagger.annotations.Api;
 
 @Path("/hello")

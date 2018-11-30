@@ -18,9 +18,6 @@
 package de.hf.dac.myfinance.application;
 
 import de.hf.dac.myfinance.api.application.MarketDataEnvironment;
-import de.hf.dac.myfinance.api.application.OpLevel;
-import de.hf.dac.myfinance.api.application.OpType;
-import de.hf.dac.myfinance.api.service.ProductService;
 import de.hf.dac.myfinance.api.service.InstrumentService;
 
 import javax.inject.Inject;
@@ -28,21 +25,14 @@ import javax.inject.Named;
 
 public class MFEnvironmentImpl implements MarketDataEnvironment{
 
-    final private ProductService productService;
     final private InstrumentService instrumentService;
     final private String environment;
 
     @Inject
-    public MFEnvironmentImpl(ProductService productService, InstrumentService instrumentService, @Named("envID") String environment){
-        this.productService=productService;
+    public MFEnvironmentImpl(InstrumentService instrumentService, @Named("envID") String environment){
+
         this.instrumentService=instrumentService;
         this.environment=environment;
-    }
-
-
-    @Override
-    public ProductService getProductService() {
-        return productService;
     }
 
     @Override

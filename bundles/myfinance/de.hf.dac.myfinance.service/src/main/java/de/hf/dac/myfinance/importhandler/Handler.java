@@ -18,12 +18,12 @@
 package de.hf.dac.myfinance.importhandler;
 
 import de.hf.dac.myfinance.api.domain.EndOfDayPrice;
-import de.hf.dac.myfinance.api.domain.Security;
+import de.hf.dac.myfinance.api.domain.Instrument;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Map;
 
 public interface Handler {
-    Map<LocalDate, EndOfDayPrice> importPrices(Security security, LocalDate lastPricedDate, LocalDateTime ts);
+    Map<LocalDate, EndOfDayPrice> importPrices(Instrument security, LocalDate lastPricedDate, LocalDateTime ts);
 }

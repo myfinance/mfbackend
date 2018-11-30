@@ -27,17 +27,13 @@ import de.hf.dac.api.io.env.EnvironmentTargetInfo;
 import de.hf.dac.api.io.web.WebRequestService;
 import de.hf.dac.myfinance.api.application.EnvTarget;
 import de.hf.dac.myfinance.api.application.MarketDataEnvironment;
-import de.hf.dac.myfinance.api.domain.Product;
+import de.hf.dac.myfinance.api.domain.Instrument;
 import de.hf.dac.myfinance.api.exceptions.MDException;
 import de.hf.dac.myfinance.api.exceptions.MDMsgKey;
 import de.hf.dac.myfinance.api.persistence.dao.InstrumentDao;
-import de.hf.dac.myfinance.api.persistence.dao.ProductDao;
 import de.hf.dac.myfinance.persistence.InstrumentDaoImpl;
-import de.hf.dac.myfinance.persistence.ProductDaoImpl;
-import de.hf.dac.myfinance.api.service.ProductService;
 import de.hf.dac.myfinance.api.service.InstrumentService;
 import de.hf.dac.myfinance.service.InstrumentServiceImpl;
-import de.hf.dac.myfinance.service.ProductServiceImpl;
 
 import javax.persistence.EntityManagerFactory;
 import javax.transaction.TransactionManager;
@@ -71,9 +67,7 @@ public class MFEnvironmentBuilderModule extends AbstractModule {
         bind(EntityManagerFactory.class).annotatedWith(Names.named(EnvTarget.MDB)).toInstance(provideMdbEntityManagerFactory());
 
         bind(String.class).annotatedWith(Names.named("envID")).toInstance(env);
-        bind(ProductDao.class).to(ProductDaoImpl.class);
         bind(InstrumentDao.class).to(InstrumentDaoImpl.class);
-        bind(ProductService.class).to(ProductServiceImpl.class);
         bind(InstrumentService.class).to(InstrumentServiceImpl.class);
 
         bind(MarketDataEnvironment.class).to(MFEnvironmentImpl.class);
@@ -93,7 +87,7 @@ public class MFEnvironmentBuilderModule extends AbstractModule {
                 emfb.getOrCreateEntityManagerFactory(EnvTarget.MDB,
                     EntityManagerFactorySetup.PoolSize.SMALL,
                     new Class[] {},
-                    new ClassLoader[] { Product.class.getClassLoader() },
+                    new ClassLoader[] { Instrument.class.getClassLoader() },
                     dbi));
         } else {
             throw new MDException(MDMsgKey.NO_TARGET_CONFIG_EXCEPTION,

@@ -19,12 +19,7 @@ package de.hf.dac.myfinance.importhandler;
 
 
 import de.hf.dac.api.io.web.WebRequestService;
-import de.hf.dac.myfinance.api.domain.Currency;
-import de.hf.dac.myfinance.api.domain.EndOfDayPrice;
-import de.hf.dac.myfinance.api.domain.Security;
-import de.hf.dac.myfinance.api.domain.SecuritySymbols;
-import de.hf.dac.myfinance.api.domain.SecurityType;
-import de.hf.dac.myfinance.api.domain.Source;
+import de.hf.dac.myfinance.api.domain.*;
 import lombok.extern.slf4j.Slf4j;
 
 import java.time.LocalDate;
@@ -38,11 +33,11 @@ import java.util.Set;
 public class AlphavantageHandler extends AbsHandler implements Handler {
     AlphavantageType type;
     Source source;
-    Currency eur;
+    Instrument eur;
 
     public AlphavantageHandler(AlphavantageType type,
             Source source,
-        WebRequestService downloadHandler, Currency eur){
+        WebRequestService downloadHandler, Instrument eur){
 
         this.type=type;
         this.source = source;
@@ -50,30 +45,30 @@ public class AlphavantageHandler extends AbsHandler implements Handler {
         this.eur = eur;
     }
 
-    public Map<LocalDate, EndOfDayPrice> importPrices(Security security, LocalDate lastPricedDate, LocalDateTime ts){
+    public Map<LocalDate, EndOfDayPrice> importPrices(Instrument security, LocalDate lastPricedDate, LocalDateTime ts){
         Map<LocalDate, EndOfDayPrice> values = new HashMap<>();
-        SecurityType securityType = security.getSecurityType();
+        /*SecurityType securityType = security.getSecurityType();
         if(type == AlphavantageType.EQ || type == AlphavantageType.EQFULL){
             values.putAll(getEqPricesForSymbols(security, lastPricedDate, ts, securityType));
 
         } else {
             if(!securityType.equals(SecurityType.CURRENCY)) return values;
             try{
-                values.putAll(convertToEndOfDayPrice(getFxPrices((Currency) security), lastPricedDate,
+                values.putAll(convertToEndOfDayPrice(getFxPrices((Instrument) security), lastPricedDate,
                     eur, source,
                     security,
                     ts));
             }catch(Exception e){
                 log.error("can not load prices for currency " +security.getIsin() + ":"+e);
             }
-        }
+        }*/
 
         return values;
     }
 
-    private Map<LocalDate, EndOfDayPrice> getEqPricesForSymbols(Security security, LocalDate lastPricedDate, LocalDateTime ts, SecurityType securityType) {
+    private Map<LocalDate, EndOfDayPrice> getEqPricesForSymbols(Instrument security, LocalDate lastPricedDate, LocalDateTime ts, SecurityType securityType) {
         Map<LocalDate, EndOfDayPrice> values = new HashMap<>();
-        if(!securityType.equals(SecurityType.EQUITY))
+        /*if(!securityType.equals(SecurityType.EQUITY))
             return values;
 
         Set<SecuritySymbols> symbols = security.getSecuritySymbols();
@@ -91,14 +86,14 @@ public class AlphavantageHandler extends AbsHandler implements Handler {
                 log.error("can not load prices for Security " +security.getIsin() + " and Symbol " + symbol.getSymbol() + ":"+e);
             }
 
-        }
+        }*/
         return values;
     }
 
-    private Map<LocalDate, Double> getFxPrices(Currency security) {
+    private Map<LocalDate, Double> getFxPrices(Instrument security) {
         String url;
         Map<LocalDate, Double> prices = new HashMap<>();
-        String currencyCode = security.getCurrencycode();
+        /*String currencyCode = security.getCurrencycode();
         url = source.getUrlprefix()+currencyCode+source.getUrlpostfix();
         Map<String, Object> map = getJsonMapFromUrl(url);
         Map<String, String> info = (Map<String, String>)map.get("Realtime Currency Exchange Rate");
@@ -108,7 +103,7 @@ public class AlphavantageHandler extends AbsHandler implements Handler {
             prices.put(date, value);
         }catch(Exception e){
             log.error("can not pars value for Currency " + currencyCode + ":"+e);
-        }
+        }*/
         return prices;
     }
 

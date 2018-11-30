@@ -17,10 +17,8 @@
 
 package de.hf.dac.myfinance.api.service;
 
-import de.hf.dac.myfinance.api.domain.Currency;
 import de.hf.dac.myfinance.api.domain.EndOfDayPrice;
 import de.hf.dac.myfinance.api.domain.Instrument;
-import de.hf.dac.myfinance.api.domain.Security;
 import de.hf.dac.myfinance.api.domain.Source;
 
 import java.time.LocalDate;
@@ -31,9 +29,9 @@ import java.util.Optional;
 
 public interface InstrumentService {
     List<Instrument> listInstruments();
-    Optional<Currency> getCurrency(String currencyCode);
-    Optional<Security> getSecurity(String isin);
-    List<Security> getSecurities();
+    Optional<Instrument> getCurrency(String currencyCode);
+    Optional<Instrument> getSecurity(String isin);
+    List<Instrument> getSecurities();
     Optional<EndOfDayPrice> getEndOfDayPrice(String isin, LocalDate date);
     List<EndOfDayPrice> listEodPrices(int instrumentId);
     Optional<EndOfDayPrice> getEndOfDayPrice(int instrumentId, LocalDate date);

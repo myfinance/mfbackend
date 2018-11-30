@@ -18,9 +18,8 @@
 package de.hf.dac.myfinance.importhandler;
 
 import de.hf.dac.api.io.web.WebRequestService;
-import de.hf.dac.myfinance.api.domain.Currency;
 import de.hf.dac.myfinance.api.domain.EndOfDayPrice;
-import de.hf.dac.myfinance.api.domain.Security;
+import de.hf.dac.myfinance.api.domain.Instrument;
 import de.hf.dac.myfinance.api.domain.Source;
 import de.hf.dac.myfinance.api.domain.SourceName;
 
@@ -37,7 +36,7 @@ public class ImportHandler {
     WebRequestService downloadHandler;
     List<Handler> importHandler = new ArrayList<>();
 
-    public ImportHandler(List<Source> sources, Currency eur, WebRequestService downloadHandler){
+    public ImportHandler(List<Source> sources, Instrument eur, WebRequestService downloadHandler){
         this.downloadHandler = downloadHandler;
         //add all and only active sources
         for(Source source : sources){
@@ -60,7 +59,7 @@ public class ImportHandler {
         }
     }
 
-    public Map<LocalDate, EndOfDayPrice> importSource(Security security, LocalDate lastPricedDate, LocalDateTime ts){
+    public Map<LocalDate, EndOfDayPrice> importSource(Instrument security, LocalDate lastPricedDate, LocalDateTime ts){
         Map<LocalDate, EndOfDayPrice> prices = new HashMap<>();
         for (Handler handler : importHandler) {
             prices.putAll(handler.importPrices(security, lastPricedDate, ts));

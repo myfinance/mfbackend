@@ -45,8 +45,8 @@ public class EndOfDayPrice  implements java.io.Serializable {
 
 
      private int endofdaypriceid;
-     private Currency currency;
-     private Security security;
+     private Instrument currency;
+     private Instrument security;
      private Source source;
      private LocalDate dayofprice;
      private Double value;
@@ -59,7 +59,7 @@ public class EndOfDayPrice  implements java.io.Serializable {
     public EndOfDayPrice(int endofdaypriceid) {
         this.endofdaypriceid = endofdaypriceid;
     }
-    public EndOfDayPrice(Currency currency, Security security, Source source, LocalDate dayofprice, Double value, LocalDateTime lastchanged) {
+    public EndOfDayPrice(Instrument currency, Instrument security, Source source, LocalDate dayofprice, Double value, LocalDateTime lastchanged) {
        this.currency = currency;
        this.security = security;
        this.source = source;
@@ -81,20 +81,20 @@ public class EndOfDayPrice  implements java.io.Serializable {
     @ManyToOne(fetch=FetchType.LAZY)
     @JoinColumn(name="currencyid")
     @ApiModelProperty(required = true)
-    public Currency getCurrency() {
+    public Instrument getCurrency() {
         return this.currency;
     }
-    public void setCurrency(Currency currency) {
+    public void setCurrency(Instrument currency) {
         this.currency = currency;
     }
 
     @ManyToOne(fetch=FetchType.LAZY)
     @JoinColumn(name="instrumentid")
     @ApiModelProperty(required = true)
-    public Security getSecurity() {
+    public Instrument getSecurity() {
         return this.security;
     }
-    public void setSecurity(Security security) {
+    public void setSecurity(Instrument security) {
         this.security = security;
     }
 

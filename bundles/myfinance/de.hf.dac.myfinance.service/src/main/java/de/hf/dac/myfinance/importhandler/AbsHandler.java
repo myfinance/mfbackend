@@ -21,9 +21,8 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
 import de.hf.dac.api.io.web.WebRequestService;
-import de.hf.dac.myfinance.api.domain.Currency;
 import de.hf.dac.myfinance.api.domain.EndOfDayPrice;
-import de.hf.dac.myfinance.api.domain.Security;
+import de.hf.dac.myfinance.api.domain.Instrument;
 import de.hf.dac.myfinance.api.domain.Source;
 import de.hf.dac.myfinance.api.exceptions.MDException;
 import de.hf.dac.myfinance.api.exceptions.MDMsgKey;
@@ -40,9 +39,9 @@ public abstract class AbsHandler {
 
     protected Map<LocalDate, EndOfDayPrice> convertToEndOfDayPrice(Map<LocalDate, Double> prices,
             LocalDate lastPricedDate,
-            Currency currency,
+            Instrument currency,
             Source source,
-            Security security,
+            Instrument security,
             LocalDateTime ts){
         Map<LocalDate, EndOfDayPrice> eodPrices = new HashMap<>();
         if(lastPricedDate==null){

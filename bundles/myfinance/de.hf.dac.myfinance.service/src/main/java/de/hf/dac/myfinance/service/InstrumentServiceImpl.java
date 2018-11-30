@@ -19,14 +19,7 @@ package de.hf.dac.myfinance.service;
 
 import de.hf.dac.api.io.web.WebRequestService;
 import de.hf.dac.myfinance.ValueHandler.ValueCurveService;
-import de.hf.dac.myfinance.api.domain.Currency;
-import de.hf.dac.myfinance.api.domain.EndOfDayPrice;
-import de.hf.dac.myfinance.api.domain.Instrument;
-import de.hf.dac.myfinance.api.domain.Security;
-import de.hf.dac.myfinance.api.domain.SecuritySymbols;
-import de.hf.dac.myfinance.api.domain.SecurityType;
-import de.hf.dac.myfinance.api.domain.Source;
-import de.hf.dac.myfinance.api.domain.SourceName;
+import de.hf.dac.myfinance.api.domain.*;
 import de.hf.dac.myfinance.api.persistence.dao.InstrumentDao;
 import de.hf.dac.myfinance.api.service.InstrumentService;
 import de.hf.dac.myfinance.importhandler.ImportHandler;
@@ -50,7 +43,7 @@ public class InstrumentServiceImpl implements InstrumentService {
     private WebRequestService webRequestService;
 
     @Inject
-    public InstrumentServiceImpl(InstrumentDao instrumentDao,WebRequestService webRequestService){
+    public InstrumentServiceImpl(InstrumentDao instrumentDao, WebRequestService webRequestService){
         this.instrumentDao = instrumentDao;
         this.webRequestService = webRequestService;
         service = new ValueCurveService(instrumentDao);
@@ -66,17 +59,17 @@ public class InstrumentServiceImpl implements InstrumentService {
 
 
     @Override
-    public Optional<Currency> getCurrency(String currencyCode){
+    public Optional<Instrument> getCurrency(String currencyCode){
         return instrumentDao.getCurrency(currencyCode);
     }
 
     @Override
-    public Optional<Security> getSecurity(String isin){
+    public Optional<Instrument> getSecurity(String isin){
         return instrumentDao.getSecurity(isin);
     }
 
     @Override
-    public List<Security> getSecurities(){
+    public List<Instrument> getSecurities(){
         return instrumentDao.getSecurities();
     }
 
@@ -88,7 +81,7 @@ public class InstrumentServiceImpl implements InstrumentService {
 
     @Override
     public Optional<EndOfDayPrice> getEndOfDayPrice(String isin, LocalDate date){
-        Optional<Security> security = getSecurity(isin);
+        Optional<Instrument> security = getSecurity(isin);
         if(!security.isPresent()) {
             return Optional.empty();
         }
@@ -133,10 +126,10 @@ public class InstrumentServiceImpl implements InstrumentService {
     @Override
     public String saveSecurity(String theisin, String description) {
         String isin = theisin.toUpperCase();
-        Optional<Security> existingSec = getSecurity(isin);
+        Optional<Instrument> existingSec = getSecurity(isin);
         if(!existingSec.isPresent()) {
-            Security security = new Security(description, true, LocalDateTime.now(), SecurityType.EQUITY, isin);
-            instrumentDao.saveSecurity(security);
+            /*Security security = new Security(description, true, LocalDateTime.now(), SecurityType.EQUITY, isin);
+            instrumentDao.saveSecurity(security);*/
             return "new security saved sucessfully";
         } else {
             existingSec.get().setDescription(description);
@@ -147,15 +140,15 @@ public class InstrumentServiceImpl implements InstrumentService {
     @Override
     public String saveSymbol(String theisin, String thesymbol, String thecurrencyCode){
 
-        String isin = theisin.toUpperCase();
+        /*String isin = theisin.toUpperCase();
         String symbol = thesymbol.toUpperCase();
         String currencyCode = thecurrencyCode.toUpperCase();
 
-        Optional<Currency> currency = getCurrency(currencyCode);
+        Optional<Instrument> currency = getCurrency(currencyCode);
         if(!currency.isPresent()) {
             return "Symbol not saved: unknown currency:"+currencyCode;
         }
-        Optional<Security> existingSec = getSecurity(isin);
+        Optional<Instrument> existingSec = getSecurity(isin);
         if(!existingSec.isPresent()){
             return "Symbol not saved: unknown security:"+isin;
         }
@@ -168,17 +161,18 @@ public class InstrumentServiceImpl implements InstrumentService {
                 newSymbol.setCurrency(currency.get());
             }
         }
-        instrumentDao.saveSymbol(newSymbol);
+        instrumentDao.saveSymbol(newSymbol);*/
         return "Symbol saved";
     }
 
     @Override
     public String saveCurrency(String currencyCode, String description) {
         String curCode = currencyCode.toUpperCase();
-        Optional<Currency> existingCur = getCurrency(curCode);
+        Optional<Instrument> existingCur = getCurrency(curCode);
         if(!existingCur.isPresent()) {
-            Currency currency = new Currency(description, true, LocalDateTime.now(), curCode);
-            instrumentDao.saveCurrency(currency);
+            Instrument currency = new Instrument(InstrumentType.Currency, description, true, LocalDateTime.now());
+            currency.setBusinesskey(currencyCode);
+            instrumentDao.saveInstrument(currency);
             return "new currency saved sucessfully";
         } else {
             existingCur.get().setDescription(description);
@@ -192,7 +186,7 @@ public class InstrumentServiceImpl implements InstrumentService {
     }
 
     protected String saveEndOfDayPrice(String currencyCode, String isin, int sourceId, LocalDate dayofprice, Double value, LocalDateTime lastchanged) {
-        Optional<Currency> currency = getCurrency(currencyCode);
+        /*Optional<Instrument> currency = getCurrency(currencyCode);
         if(!currency.isPresent()){
             return "Currency with code "+currencyCode+" is not available";
         }
@@ -205,23 +199,23 @@ public class InstrumentServiceImpl implements InstrumentService {
             return "Source with id "+sourceId+" is not available";
         }
         EndOfDayPrice price = new EndOfDayPrice(currency.get(), security.get(), source.get(), dayofprice, value, lastchanged);
-        instrumentDao.saveEndOfDayPrice(price);
+        instrumentDao.saveEndOfDayPrice(price);*/
         return("Saved");
     }
 
     @Override
     public String importPrices(LocalDateTime ts){
-        List<Source> sources = instrumentDao.getActiveSources();
-        List<Security> secuirities = getSecurities();
-        Optional<Currency> eur = instrumentDao.getCurrency("EUR");
+        /*List<Source> sources = instrumentDao.getActiveSources();
+        List<Instrument> secuirities = getSecurities();
+        Optional<Instrument> eur = instrumentDao.getCurrency("EUR");
         if(!eur.isPresent()){
             return "Currency EUR not available";
         }
 
         ImportHandler handler = new ImportHandler(sources, eur.get(), webRequestService);
-        for(Security security : secuirities){
+        for(Instrument security : secuirities){
             //all prices are in EUR so we do not need prices for this currency
-            if(security.getSecurityType()==SecurityType.CURRENCY && ((Currency)security).getCurrencycode().equals("EUR")) continue;
+            if(security.getSecurityType()==SecurityType.CURRENCY && ((Instrument)security).getCurrencycode().equals("EUR")) continue;
             LocalDate lastPricedDay = instrumentDao.getLastPricedDay(security.getInstrumentid());
             Map<LocalDate, EndOfDayPrice> prices = new HashMap<>();
             prices.putAll(handler.importSource(security, lastPricedDay, ts));
@@ -229,17 +223,17 @@ public class InstrumentServiceImpl implements InstrumentService {
                 instrumentDao.saveEndOfDayPrice(price);
             }
         }
-
+*/
         return "sucessful";
     }
 
     @Override
     public String fillPriceHistory(int sourceId, String isin, LocalDateTime ts){
-        Optional<Source> source = getSource(sourceId);
+       /* Optional<Source> source = getSource(sourceId);
         if(!source.isPresent()){
             return "Source with id "+sourceId+" is not available";
         }
-        Optional<Security> security = getSecurity(isin);
+        Optional<Instrument> security = getSecurity(isin);
         if(!security.isPresent()){
             return "Security with isin "+isin+" is not available";
         }
@@ -247,11 +241,11 @@ public class InstrumentServiceImpl implements InstrumentService {
         sources.add(source.get());
 
         //all prices are in EUR so we do not need prices for this currency
-        if(security.get().getSecurityType()==SecurityType.CURRENCY && ((Currency)security.get()).getCurrencycode().equals("EUR")) {
+        if(security.get().getSecurityType()==SecurityType.CURRENCY && ((Instrument)security.get()).getCurrencycode().equals("EUR")) {
             return "Prices for currency EUR are not necessary";
         }
 
-        Optional<Currency> eur = instrumentDao.getCurrency("EUR");
+        Optional<Instrument> eur = instrumentDao.getCurrency("EUR");
         if(!eur.isPresent()){
             return "Currency EUR not available";
         }
@@ -276,7 +270,7 @@ public class InstrumentServiceImpl implements InstrumentService {
             }
 
         }
-
+*/
         return "sucessful";
     }
 }

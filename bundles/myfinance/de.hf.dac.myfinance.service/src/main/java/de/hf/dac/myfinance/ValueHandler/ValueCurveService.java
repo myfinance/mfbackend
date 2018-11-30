@@ -54,13 +54,13 @@ public class ValueCurveService {
 
     public ValueHandler getValueHandler(InstrumentType instrumentType){
         ValueHandler valueHandler = null;
-        switch(instrumentType){
+        /*switch(instrumentType){
             case SECURITY:
                 valueHandler = new SecurityValueHandler(instrumentDao);
                 break;
             case UNKNOWN:
                 throw new MDException(MDMsgKey.UNKNOWN_INSTRUMENTTYPE_EXCEPTION, "Type:"+instrumentType);
-        }
+        }*/
         return valueHandler;
     }
 

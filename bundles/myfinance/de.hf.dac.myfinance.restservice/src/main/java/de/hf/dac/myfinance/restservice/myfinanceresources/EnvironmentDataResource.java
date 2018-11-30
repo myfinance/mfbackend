@@ -23,7 +23,6 @@ import de.hf.dac.myfinance.api.application.OpLevel;
 import de.hf.dac.myfinance.api.application.OpType;
 import de.hf.dac.myfinance.api.application.servicecontext.MDEnvironmentContext;
 import de.hf.dac.myfinance.api.domain.Instrument;
-import de.hf.dac.myfinance.api.domain.Security;
 import de.hf.dac.myfinance.api.exceptions.MDException;
 import de.hf.dac.myfinance.api.exceptions.MDMsgKey;
 import de.hf.dac.myfinance.api.restservice.InstrumentListModel;
@@ -117,9 +116,9 @@ public class EnvironmentDataResource extends BaseSecuredResource<OpType,OpLevel>
     @Path("/getsecurity")
     @Produces(MediaType.APPLICATION_JSON)
     @ApiOperation(value = "get Security", response = String.class)
-    public Security getSecurity(@QueryParam("isin") @ApiParam(value="the isin") String isin) {
+    public Instrument getSecurity(@QueryParam("isin") @ApiParam(value="the isin") String isin) {
         checkOperationAllowed(OpType.READ);
-        Optional<Security> security = marketDataEnvironment.getInstrumentService().getSecurity(isin);
+        Optional<Instrument> security = marketDataEnvironment.getInstrumentService().getSecurity(isin);
         if(security.isPresent()) return security.get();
         else
             throw new MDException(MDMsgKey.NO_INSTRUMENT_FOUND_EXCEPTION, "no Instrument found with ISIN "+isin);
