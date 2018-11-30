@@ -170,8 +170,7 @@ public class InstrumentServiceImpl implements InstrumentService {
         String curCode = currencyCode.toUpperCase();
         Optional<Instrument> existingCur = getCurrency(curCode);
         if(!existingCur.isPresent()) {
-            Instrument currency = new Instrument(InstrumentType.Currency, description, true, LocalDateTime.now());
-            currency.setBusinesskey(currencyCode);
+            Instrument currency = new Currency(currencyCode, description, true, LocalDateTime.now());
             instrumentDao.saveInstrument(currency);
             return "new currency saved sucessfully";
         } else {

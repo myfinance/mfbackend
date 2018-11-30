@@ -36,7 +36,9 @@ import static javax.persistence.GenerationType.IDENTITY;
 @Table(
     name="mf_instrument")
 @ApiModel
-public class Instrument  implements java.io.Serializable {
+@Inheritance(strategy= InheritanceType.SINGLE_TABLE)
+@DiscriminatorColumn(name="instrumenttypeid", discriminatorType = DiscriminatorType.INTEGER)
+public abstract class Instrument  implements java.io.Serializable {
     private static final long serialVersionUID = 1L;
 
 
@@ -70,7 +72,7 @@ public class Instrument  implements java.io.Serializable {
         this.instrumentid = instrumentid;
     }
 
-    @Column(name = "instrumenttypeid", nullable=false)
+    @Column(name = "instrumenttypeid", nullable=false, insertable=false, updatable=false)
     @ApiModelProperty(required = true)
     protected Integer getInstrumentTypeId() {
         return this.instrumenttypeId;

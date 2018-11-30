@@ -65,27 +65,26 @@ public class SecuritySymbols  implements java.io.Serializable {
     public Integer getSymbolid() {
         return this.symbolid;
     }
-    
     public void setSymbolid(Integer symbolid) {
         this.symbolid = symbolid;
     }
+
     @ManyToOne(fetch=FetchType.LAZY)
     @JoinColumn(name="currencyid")
     @ApiModelProperty(required = true)
     public Instrument getInstrumentByCurrencyid() {
         return this.instrumentByCurrencyid;
     }
-    
     public void setInstrumentByCurrencyid(Instrument instrumentByCurrencyid) {
         this.instrumentByCurrencyid = instrumentByCurrencyid;
     }
+
     @ManyToOne(fetch=FetchType.LAZY)
     @JoinColumn(name="instrumentid")
     @ApiModelProperty(required = true)
     public Instrument getInstrumentByInstrumentid() {
         return this.instrumentByInstrumentid;
     }
-    
     public void setInstrumentByInstrumentid(Instrument instrumentByInstrumentid) {
         this.instrumentByInstrumentid = instrumentByInstrumentid;
     }

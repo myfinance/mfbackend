@@ -88,7 +88,7 @@ public class InstrumentDaoImpl  extends BaseDao implements InstrumentDao {
     public Optional<Instrument> getCurrency(String currencyCode) {
 
         Optional<Instrument> result = Optional.empty();
-        Query query = marketDataEm.createQuery("select a FROM Instrument a WHERE businesskey = :currencycode");
+        Query query = marketDataEm.createQuery("select a FROM Currency a WHERE businesskey = :currencycode");
         query.setParameter("currencycode", currencyCode);
         List<Object> queryResult = (List<Object>) query.getResultList();
         if(queryResult!=null && !queryResult.isEmpty()){
