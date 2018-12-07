@@ -23,6 +23,7 @@ import org.osgi.framework.ServiceReference;
 
 /**
  * Declarative Services can not reference OSGI Components in abstract classes with the Reference annotation, so we have to use the bundle-context
+ * Another reason is that cxf did not use declaritiv services in default configuration for injection so it try and fail to find the referenced object in his own environment
  */
 public abstract class BaseDS {
     protected <T> T getService(Class<T> clazz) {
