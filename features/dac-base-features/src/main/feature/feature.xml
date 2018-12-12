@@ -86,7 +86,7 @@
     </feature>
 
     <feature name="dac-io-feature" version="${pom.version}">
-        <feature>dac-base-commands</feature>
+        <!--<feature>dac-base-commands</feature>-->
         <feature>dac-io-jpa-feature</feature>
         <feature>dac-io-routes-feature</feature>
         <feature>dac-io-web-feature</feature>
