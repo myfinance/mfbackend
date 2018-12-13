@@ -42,6 +42,29 @@ public enum InstrumentType {
     Loan(new Integer(22)),
     UNKNOWN(new Integer(99));
 
+    public static final String GIRO_IDSTRING = "1";
+    public static final String MONEYATCALL_IDSTRING = "2";
+    public static final String TIMEDEPOSIT_IDSTRING = "3";
+    public static final String BUILDINGSAVINGACCOUNT_IDSTRING = "4";
+    public static final String BUDGET_IDSTRING = "5";
+    public static final String TENANT_IDSTRING = "6";
+    public static final String BUDGETGROUPPORTFOLIO_IDSTRING = "7";
+    public static final String ACCOUNTPORTFOLIO_IDSTRING = "8";
+    public static final String ARTIFICIALPORTFOLIO_IDSTRING = "9";
+    public static final String BUDGETGROUP_IDSTRING = "10";
+    public static final String DEPOT_IDSTRING = "11";
+    public static final String BUILDINGSAVING_IDSTRING = "12";
+    public static final String CURRENCY_IDSTRING = "13";
+    public static final String EQUITY_IDSTRING = "14";
+    public static final String FONDS_IDSTRING = "15";
+    public static final String ETF_IDSTRING = "16";
+    public static final String INDEX_IDSTRING = "17";
+    public static final String BOND_IDSTRING = "18";
+    public static final String LIFEINSURANCE_IDSTRING = "19";
+    public static final String DEPRECATIONOBJECT_IDSTRING = "20";
+    public static final String REALESTATE_IDSTRING = "21";
+    public static final String LOAN_IDSTRING = "22";
+
     private final Integer value;
 
     InstrumentType(final Integer newValue) {

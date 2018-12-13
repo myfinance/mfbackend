@@ -18,6 +18,7 @@
 package de.hf.dac.myfinance.api.service;
 
 import de.hf.dac.myfinance.api.domain.EndOfDayPrice;
+import de.hf.dac.myfinance.api.domain.Equity;
 import de.hf.dac.myfinance.api.domain.Instrument;
 import de.hf.dac.myfinance.api.domain.Source;
 
@@ -30,8 +31,8 @@ import java.util.Optional;
 public interface InstrumentService {
     List<Instrument> listInstruments();
     Optional<Instrument> getCurrency(String currencyCode);
-    Optional<Instrument> getSecurity(String isin);
-    List<Instrument> getSecurities();
+    Optional<Equity> getEquity(String isin);
+    //List<Instrument> getSecurities();
     Optional<EndOfDayPrice> getEndOfDayPrice(String isin, LocalDate date);
     List<EndOfDayPrice> listEodPrices(int instrumentId);
     Optional<EndOfDayPrice> getEndOfDayPrice(int instrumentId, LocalDate date);
@@ -40,7 +41,7 @@ public interface InstrumentService {
     Map<LocalDate, Double> getValueCurve(int instrumentId, LocalDate startDate, LocalDate endDate);
     double getValue(int instrumentId, LocalDate date);
 
-    String saveSecurity(String isin, String description);
+    String saveEquity(String isin, String description);
     String saveSymbol(String isin, String symbol, String currencyCode);
     String saveCurrency(String currencyCode, String description);
     String saveEndOfDayPrice(String currencyCode, String isin, LocalDate dayofprice, Double value, LocalDateTime lastchanged);

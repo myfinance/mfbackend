@@ -22,13 +22,11 @@ import de.hf.dac.myfinance.ValueHandler.ValueCurveService;
 import de.hf.dac.myfinance.api.domain.*;
 import de.hf.dac.myfinance.api.persistence.dao.InstrumentDao;
 import de.hf.dac.myfinance.api.service.InstrumentService;
-import de.hf.dac.myfinance.importhandler.ImportHandler;
 import lombok.Data;
 
 import javax.inject.Inject;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -64,14 +62,14 @@ public class InstrumentServiceImpl implements InstrumentService {
     }
 
     @Override
-    public Optional<Instrument> getSecurity(String isin){
-        return instrumentDao.getSecurity(isin);
+    public Optional<Equity> getEquity(String isin){
+        return instrumentDao.getEquity(isin);
     }
 
-    @Override
+    /*@Override
     public List<Instrument> getSecurities(){
         return instrumentDao.getSecurities();
-    }
+    }*/
 
     @Override
     public List<EndOfDayPrice> listEodPrices(int instrumentId) {
@@ -81,7 +79,7 @@ public class InstrumentServiceImpl implements InstrumentService {
 
     @Override
     public Optional<EndOfDayPrice> getEndOfDayPrice(String isin, LocalDate date){
-        Optional<Instrument> security = getSecurity(isin);
+        Optional<Equity> security = getEquity(isin);
         if(!security.isPresent()) {
             return Optional.empty();
         }
@@ -124,12 +122,12 @@ public class InstrumentServiceImpl implements InstrumentService {
 
 
     @Override
-    public String saveSecurity(String theisin, String description) {
+    public String saveEquity(String theisin, String description) {
         String isin = theisin.toUpperCase();
-        Optional<Instrument> existingSec = getSecurity(isin);
+        Optional<Equity> existingSec = getEquity(isin);
         if(!existingSec.isPresent()) {
-            /*Security security = new Security(description, true, LocalDateTime.now(), SecurityType.EQUITY, isin);
-            instrumentDao.saveSecurity(security);*/
+            Equity equity = new Equity(isin, description, true, LocalDateTime.now());
+            instrumentDao.saveInstrument(equity);
             return "new security saved sucessfully";
         } else {
             existingSec.get().setDescription(description);
@@ -140,7 +138,7 @@ public class InstrumentServiceImpl implements InstrumentService {
     @Override
     public String saveSymbol(String theisin, String thesymbol, String thecurrencyCode){
 
-        /*String isin = theisin.toUpperCase();
+        String isin = theisin.toUpperCase();
         String symbol = thesymbol.toUpperCase();
         String currencyCode = thecurrencyCode.toUpperCase();
 
@@ -148,11 +146,11 @@ public class InstrumentServiceImpl implements InstrumentService {
         if(!currency.isPresent()) {
             return "Symbol not saved: unknown currency:"+currencyCode;
         }
-        Optional<Instrument> existingSec = getSecurity(isin);
+        Optional<Equity> existingSec = getEquity(isin);
         if(!existingSec.isPresent()){
             return "Symbol not saved: unknown security:"+isin;
         }
-        Set<SecuritySymbols> symbols = existingSec.get().getSecuritySymbols();
+        /*Set<SecuritySymbols> symbols = existingSec.get().getSecuritySymbols();
         SecuritySymbols newSymbol = new SecuritySymbols(currency.get(), existingSec.get().getInstrumentid(), symbol);
         if(symbols!=null && !symbols.isEmpty()){
             Optional<SecuritySymbols> existingSymbol = symbols.stream().filter(i->i.getSymbol().equals(symbol)).findFirst();
@@ -189,7 +187,7 @@ public class InstrumentServiceImpl implements InstrumentService {
         if(!currency.isPresent()){
             return "Currency with code "+currencyCode+" is not available";
         }
-        Optional<Security> security = getSecurity(isin);
+        Optional<Security> security = getEquity(isin);
         if(!security.isPresent()){
             return "Security with isin "+isin+" is not available";
         }
@@ -232,7 +230,7 @@ public class InstrumentServiceImpl implements InstrumentService {
         if(!source.isPresent()){
             return "Source with id "+sourceId+" is not available";
         }
-        Optional<Instrument> security = getSecurity(isin);
+        Optional<Instrument> security = getEquity(isin);
         if(!security.isPresent()){
             return "Security with isin "+isin+" is not available";
         }

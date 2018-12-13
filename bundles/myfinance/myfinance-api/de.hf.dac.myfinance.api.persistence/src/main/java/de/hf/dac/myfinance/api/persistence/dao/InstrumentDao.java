@@ -18,10 +18,7 @@
 package de.hf.dac.myfinance.api.persistence.dao;
 
 
-import de.hf.dac.myfinance.api.domain.EndOfDayPrice;
-import de.hf.dac.myfinance.api.domain.Instrument;
-import de.hf.dac.myfinance.api.domain.SecuritySymbols;
-import de.hf.dac.myfinance.api.domain.Source;
+import de.hf.dac.myfinance.api.domain.*;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -29,8 +26,8 @@ import java.util.Optional;
 
 public interface InstrumentDao {
     List<Instrument> listInstruments();
-    Optional<Instrument> getSecurity(String isin);
-    List<Instrument> getSecurities();
+    Optional<Equity> getEquity(String isin);
+    //List<Instrument> getSecurities();
     Optional<Instrument> getCurrency(String currencyCode);
     Optional<Instrument> getInstrument(int instrumentId);
     Optional<EndOfDayPrice>getEndOfDayPrice(int instrumentid, LocalDate dayofprice);

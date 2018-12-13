@@ -18,10 +18,7 @@
 package de.hf.dac.myfinance.persistence;
 
 import de.hf.dac.myfinance.api.application.EnvTarget;
-import de.hf.dac.myfinance.api.domain.EndOfDayPrice;
-import de.hf.dac.myfinance.api.domain.Instrument;
-import de.hf.dac.myfinance.api.domain.SecuritySymbols;
-import de.hf.dac.myfinance.api.domain.Source;
+import de.hf.dac.myfinance.api.domain.*;
 import de.hf.dac.myfinance.api.persistence.dao.InstrumentDao;
 import de.hf.dac.myfinance.api.persistence.repositories.InstrumentRepository;
 
@@ -63,26 +60,27 @@ public class InstrumentDaoImpl  extends BaseDao implements InstrumentDao {
     }
 
     @Override
-    public Optional<Instrument>getSecurity(String isin) {
+    public Optional<Equity> getEquity(String isin) {
 
-        Optional<Instrument> result = Optional.empty();
-        /*Query query = marketDataEm.createQuery("select a FROM Security a WHERE isin = :isin");
+        Optional<Equity> result = Optional.empty();
+        Query query = marketDataEm.createQuery("select a FROM Instrument a WHERE instrumentTypeId= :instrumentTypeId and businesskey = :isin");
+        query.setParameter("instrumentTypeId", InstrumentType.Equity.getValue());
         query.setParameter("isin", isin);
         List<Object> queryResult = (List<Object>) query.getResultList();
         if(queryResult!=null && !queryResult.isEmpty()){
             Object object = queryResult.get(0);
-            result = Optional.of((Security)object);
-        }*/
+            result = Optional.of((Equity)object);
+        }
         return result;
     }
 
-    @Override
+    /*@Override
     public List<Instrument> getSecurities() {
 
         Optional<Instrument> result = Optional.empty();
         Query query = marketDataEm.createQuery("select a FROM Instrument a");
         return (List<Instrument>) query.getResultList();
-    }
+    }*/
 
     @Override
     public Optional<Instrument> getCurrency(String currencyCode) {
