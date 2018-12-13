@@ -150,8 +150,8 @@ public class InstrumentServiceImpl implements InstrumentService {
         if(!existingSec.isPresent()){
             return "Symbol not saved: unknown security:"+isin;
         }
-        /*Set<SecuritySymbols> symbols = existingSec.get().getSecuritySymbols();
-        SecuritySymbols newSymbol = new SecuritySymbols(currency.get(), existingSec.get().getInstrumentid(), symbol);
+        Set<SecuritySymbols> symbols = existingSec.get().getSymbols();
+        SecuritySymbols newSymbol = new SecuritySymbols(currency.get(), existingSec.get(), symbol);
         if(symbols!=null && !symbols.isEmpty()){
             Optional<SecuritySymbols> existingSymbol = symbols.stream().filter(i->i.getSymbol().equals(symbol)).findFirst();
             if(existingSymbol.isPresent()) {
@@ -159,7 +159,7 @@ public class InstrumentServiceImpl implements InstrumentService {
                 newSymbol.setCurrency(currency.get());
             }
         }
-        instrumentDao.saveSymbol(newSymbol);*/
+        instrumentDao.saveSymbol(newSymbol);
         return "Symbol saved";
     }
 

@@ -42,20 +42,16 @@ public class SecuritySymbols  implements java.io.Serializable {
 
 
      private Integer symbolid;
-     private Instrument instrumentByCurrencyid;
-     private Instrument instrumentByInstrumentid;
+     private Instrument currency;
+     private Instrument instrument;
      private String symbol;
 
     public SecuritySymbols() {
     }
 
-	
-    public SecuritySymbols(String symbol) {
-        this.symbol = symbol;
-    }
-    public SecuritySymbols(Instrument instrumentByCurrencyid, Instrument instrumentByInstrumentid, String symbol) {
-       this.instrumentByCurrencyid = instrumentByCurrencyid;
-       this.instrumentByInstrumentid = instrumentByInstrumentid;
+    public SecuritySymbols(Instrument currency, Instrument instrument, String symbol) {
+       this.currency = currency;
+       this.instrument = instrument;
        this.symbol = symbol;
     }
 
@@ -72,21 +68,21 @@ public class SecuritySymbols  implements java.io.Serializable {
     @ManyToOne(fetch=FetchType.LAZY)
     @JoinColumn(name="currencyid")
     @ApiModelProperty(required = true)
-    public Instrument getInstrumentByCurrencyid() {
-        return this.instrumentByCurrencyid;
+    public Instrument getCurrency() {
+        return this.currency;
     }
-    public void setInstrumentByCurrencyid(Instrument instrumentByCurrencyid) {
-        this.instrumentByCurrencyid = instrumentByCurrencyid;
+    public void setCurrency(Instrument instrumentByCurrencyid) {
+        this.currency = instrumentByCurrencyid;
     }
 
     @ManyToOne(fetch=FetchType.LAZY)
     @JoinColumn(name="instrumentid")
     @ApiModelProperty(required = true)
-    public Instrument getInstrumentByInstrumentid() {
-        return this.instrumentByInstrumentid;
+    public Instrument getInstrument() {
+        return this.instrument;
     }
-    public void setInstrumentByInstrumentid(Instrument instrumentByInstrumentid) {
-        this.instrumentByInstrumentid = instrumentByInstrumentid;
+    public void setInstrument(Instrument instrumentByInstrumentid) {
+        this.instrument = instrumentByInstrumentid;
     }
     
     @Column(name="symbol", nullable=false, length=20)

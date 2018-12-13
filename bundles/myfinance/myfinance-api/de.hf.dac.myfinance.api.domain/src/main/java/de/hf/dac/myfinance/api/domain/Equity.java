@@ -12,10 +12,13 @@
 package de.hf.dac.myfinance.api.domain;
 
 import java.time.LocalDateTime;
+import java.util.HashSet;
+import java.util.Set;
 
 import javax.persistence.*;
 
 import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 
 @Entity
 @Table(
@@ -25,8 +28,24 @@ import io.swagger.annotations.ApiModel;
 @Inheritance(strategy= InheritanceType.SINGLE_TABLE)
 @DiscriminatorValue(InstrumentType.EQUITY_IDSTRING)
 public class Equity extends Instrument {
+
+    private Set<SecuritySymbols> symbols = new HashSet<SecuritySymbols>(0);
+
+    public Equity(){
+        super();
+    }
+
     public Equity(String isin, String description, boolean isactive, LocalDateTime treelastchanged){
         super(InstrumentType.Equity, description, isactive, treelastchanged);
         setBusinesskey(isin);
+    }
+
+    @OneToMany(fetch=FetchType.LAZY, mappedBy="instrument")
+    @ApiModelProperty(required = true)
+    public Set<SecuritySymbols> getSymbols() {
+        return this.symbols;
+    }
+    public void setSymbols(Set<SecuritySymbols> trades) {
+        this.symbols = trades;
     }
 }
