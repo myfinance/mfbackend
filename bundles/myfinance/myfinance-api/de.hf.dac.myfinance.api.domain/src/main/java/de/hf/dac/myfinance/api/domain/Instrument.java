@@ -27,6 +27,8 @@ import java.util.Set;
 
 import javax.persistence.*;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import static javax.persistence.GenerationType.IDENTITY;
 
 /**
@@ -38,6 +40,7 @@ import static javax.persistence.GenerationType.IDENTITY;
 @ApiModel
 @Inheritance(strategy= InheritanceType.SINGLE_TABLE)
 @DiscriminatorColumn(name="instrumenttypeid", discriminatorType = DiscriminatorType.INTEGER)
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public abstract class Instrument  implements java.io.Serializable {
     private static final long serialVersionUID = 1L;
 

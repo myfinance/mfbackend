@@ -42,16 +42,16 @@ public class SecuritySymbols  implements java.io.Serializable {
 
 
      private Integer symbolid;
-     private Instrument currency;
-     private Instrument instrument;
+     private Integer currencyId;
+     private Integer instrumentId;
      private String symbol;
 
     public SecuritySymbols() {
     }
 
-    public SecuritySymbols(Instrument currency, Instrument instrument, String symbol) {
-       this.currency = currency;
-       this.instrument = instrument;
+    public SecuritySymbols(Integer currencyId, Integer instrumentId, String symbol) {
+       this.currencyId = currencyId;
+       this.instrumentId = instrumentId;
        this.symbol = symbol;
     }
 
@@ -65,24 +65,22 @@ public class SecuritySymbols  implements java.io.Serializable {
         this.symbolid = symbolid;
     }
 
-    @ManyToOne(fetch=FetchType.LAZY)
-    @JoinColumn(name="currencyid")
+    @Column(name = "currencyid", nullable=false)
     @ApiModelProperty(required = true)
-    public Instrument getCurrency() {
-        return this.currency;
+    public Integer getCurrency() {
+        return this.currencyId;
     }
-    public void setCurrency(Instrument instrumentByCurrencyid) {
-        this.currency = instrumentByCurrencyid;
+    public void setCurrency(Integer currencyId) {
+        this.currencyId = currencyId;
     }
 
-    @ManyToOne(fetch=FetchType.LAZY)
-    @JoinColumn(name="instrumentid")
+    @Column(name = "instrumentId", nullable=false)
     @ApiModelProperty(required = true)
-    public Instrument getInstrument() {
-        return this.instrument;
+    protected Integer getInstrumentId() {
+        return this.instrumentId;
     }
-    public void setInstrument(Instrument instrumentByInstrumentid) {
-        this.instrument = instrumentByInstrumentid;
+    protected void setInstrumentId(Integer instrumentId) {
+        this.instrumentId = instrumentId;
     }
     
     @Column(name="symbol", nullable=false, length=20)

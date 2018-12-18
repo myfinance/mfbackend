@@ -40,7 +40,8 @@ public class Equity extends Instrument {
         setBusinesskey(isin);
     }
 
-    @OneToMany(fetch=FetchType.LAZY, mappedBy="instrument")
+    @OneToMany(fetch=FetchType.LAZY)
+    @JoinColumn(name = "instrumentid")
     @ApiModelProperty(required = true)
     public Set<SecuritySymbols> getSymbols() {
         return this.symbols;

@@ -151,12 +151,12 @@ public class InstrumentServiceImpl implements InstrumentService {
             return "Symbol not saved: unknown security:"+isin;
         }
         Set<SecuritySymbols> symbols = existingSec.get().getSymbols();
-        SecuritySymbols newSymbol = new SecuritySymbols(currency.get(), existingSec.get(), symbol);
+        SecuritySymbols newSymbol = new SecuritySymbols(currency.get().getInstrumentid(), existingSec.get().getInstrumentid(), symbol);
         if(symbols!=null && !symbols.isEmpty()){
             Optional<SecuritySymbols> existingSymbol = symbols.stream().filter(i->i.getSymbol().equals(symbol)).findFirst();
             if(existingSymbol.isPresent()) {
                 newSymbol = existingSymbol.get();
-                newSymbol.setCurrency(currency.get());
+                newSymbol.setCurrency(currency.get().getInstrumentid());
             }
         }
         instrumentDao.saveSymbol(newSymbol);
