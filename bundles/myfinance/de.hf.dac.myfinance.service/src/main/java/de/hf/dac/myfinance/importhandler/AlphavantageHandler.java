@@ -47,31 +47,31 @@ public class AlphavantageHandler extends AbsHandler implements Handler {
 
     public Map<LocalDate, EndOfDayPrice> importPrices(Instrument security, LocalDate lastPricedDate, LocalDateTime ts){
         Map<LocalDate, EndOfDayPrice> values = new HashMap<>();
-        /*SecurityType securityType = security.getSecurityType();
+        InstrumentType securityType = security.getInstrumentType();
         if(type == AlphavantageType.EQ || type == AlphavantageType.EQFULL){
             values.putAll(getEqPricesForSymbols(security, lastPricedDate, ts, securityType));
 
         } else {
-            if(!securityType.equals(SecurityType.CURRENCY)) return values;
+            if(!securityType.equals(InstrumentType.Currency)) return values;
             try{
                 values.putAll(convertToEndOfDayPrice(getFxPrices((Instrument) security), lastPricedDate,
                     eur, source,
                     security,
                     ts));
             }catch(Exception e){
-                log.error("can not load prices for currency " +security.getIsin() + ":"+e);
+                log.error("can not load prices for currency " +security.getBusinesskey() + ":"+e);
             }
-        }*/
+        }
 
         return values;
     }
 
-    private Map<LocalDate, EndOfDayPrice> getEqPricesForSymbols(Instrument security, LocalDate lastPricedDate, LocalDateTime ts){//}, SecurityType securityType) {
+    private Map<LocalDate, EndOfDayPrice> getEqPricesForSymbols(Instrument security, LocalDate lastPricedDate, LocalDateTime ts, InstrumentType securityType) {
         Map<LocalDate, EndOfDayPrice> values = new HashMap<>();
-        /*if(!securityType.equals(SecurityType.EQUITY))
+        if(!securityType.equals(InstrumentType.Equity))
             return values;
 
-        Set<SecuritySymbols> symbols = security.getSecuritySymbols();
+        Set<SecuritySymbols> symbols = ((Equity)security).getSymbols();
         if(symbols == null || symbols.size()==0){
             return values;
         }
@@ -83,17 +83,17 @@ public class AlphavantageHandler extends AbsHandler implements Handler {
                     security,
                     ts));
             } catch(Exception e){
-                log.error("can not load prices for Security " +security.getIsin() + " and Symbol " + symbol.getSymbol() + ":"+e);
+                log.error("can not load prices for Security " +security.getBusinesskey() + " and Symbol " + symbol.getSymbol() + ":"+e);
             }
 
-        }*/
+        }
         return values;
     }
 
     private Map<LocalDate, Double> getFxPrices(Instrument security) {
         String url;
         Map<LocalDate, Double> prices = new HashMap<>();
-        /*String currencyCode = security.getCurrencycode();
+        String currencyCode = security.getBusinesskey();
         url = source.getUrlprefix()+currencyCode+source.getUrlpostfix();
         Map<String, Object> map = getJsonMapFromUrl(url);
         Map<String, String> info = (Map<String, String>)map.get("Realtime Currency Exchange Rate");
@@ -103,7 +103,7 @@ public class AlphavantageHandler extends AbsHandler implements Handler {
             prices.put(date, value);
         }catch(Exception e){
             log.error("can not pars value for Currency " + currencyCode + ":"+e);
-        }*/
+        }
         return prices;
     }
 

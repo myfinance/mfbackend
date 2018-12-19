@@ -22,6 +22,7 @@ import de.hf.dac.myfinance.ValueHandler.ValueCurveService;
 import de.hf.dac.myfinance.api.domain.*;
 import de.hf.dac.myfinance.api.persistence.dao.InstrumentDao;
 import de.hf.dac.myfinance.api.service.InstrumentService;
+import de.hf.dac.myfinance.importhandler.ImportHandler;
 import lombok.Data;
 
 import javax.inject.Inject;
@@ -66,10 +67,10 @@ public class InstrumentServiceImpl implements InstrumentService {
         return instrumentDao.getEquity(isin);
     }
 
-    /*@Override
+    @Override
     public List<Instrument> getSecurities(){
         return instrumentDao.getSecurities();
-    }*/
+    }
 
     @Override
     public List<EndOfDayPrice> listEodPrices(int instrumentId) {
@@ -151,12 +152,12 @@ public class InstrumentServiceImpl implements InstrumentService {
             return "Symbol not saved: unknown security:"+isin;
         }
         Set<SecuritySymbols> symbols = existingSec.get().getSymbols();
-        SecuritySymbols newSymbol = new SecuritySymbols(currency.get().getInstrumentid(), existingSec.get().getInstrumentid(), symbol);
+        SecuritySymbols newSymbol = new SecuritySymbols(currency.get(), existingSec.get().getInstrumentid(), symbol);
         if(symbols!=null && !symbols.isEmpty()){
             Optional<SecuritySymbols> existingSymbol = symbols.stream().filter(i->i.getSymbol().equals(symbol)).findFirst();
             if(existingSymbol.isPresent()) {
                 newSymbol = existingSymbol.get();
-                newSymbol.setCurrency(currency.get().getInstrumentid());
+                newSymbol.setCurrency(currency.get());
             }
         }
         instrumentDao.saveSymbol(newSymbol);
@@ -182,27 +183,27 @@ public class InstrumentServiceImpl implements InstrumentService {
         return saveEndOfDayPrice(currencyCode, isin, SourceName.MAN.getValue(), dayofprice, value, lastchanged);
     }
 
-    protected String saveEndOfDayPrice(String currencyCode, String isin, int sourceId, LocalDate dayofprice, Double value, LocalDateTime lastchanged) {
-        /*Optional<Instrument> currency = getCurrency(currencyCode);
+    protected String saveEndOfDayPrice(String currencyCode, String businesskey, int sourceId, LocalDate dayofprice, Double value, LocalDateTime lastchanged) {
+        Optional<Instrument> currency = getCurrency(currencyCode);
         if(!currency.isPresent()){
             return "Currency with code "+currencyCode+" is not available";
         }
-        Optional<Security> security = getEquity(isin);
+        Optional<Instrument> security = instrumentDao.getSecurity(businesskey);
         if(!security.isPresent()){
-            return "Security with isin "+isin+" is not available";
+            return "Security with businesskey "+businesskey+" is not available";
         }
         Optional<Source> source = getSource(sourceId);
         if(!source.isPresent()){
             return "Source with id "+sourceId+" is not available";
         }
         EndOfDayPrice price = new EndOfDayPrice(currency.get(), security.get(), source.get(), dayofprice, value, lastchanged);
-        instrumentDao.saveEndOfDayPrice(price);*/
+        instrumentDao.saveEndOfDayPrice(price);
         return("Saved");
     }
 
     @Override
     public String importPrices(LocalDateTime ts){
-        /*List<Source> sources = instrumentDao.getActiveSources();
+        List<Source> sources = instrumentDao.getActiveSources();
         List<Instrument> secuirities = getSecurities();
         Optional<Instrument> eur = instrumentDao.getCurrency("EUR");
         if(!eur.isPresent()){
@@ -212,7 +213,7 @@ public class InstrumentServiceImpl implements InstrumentService {
         ImportHandler handler = new ImportHandler(sources, eur.get(), webRequestService);
         for(Instrument security : secuirities){
             //all prices are in EUR so we do not need prices for this currency
-            if(security.getSecurityType()==SecurityType.CURRENCY && ((Instrument)security).getCurrencycode().equals("EUR")) continue;
+            if(security.getInstrumentType()==InstrumentType.Currency && security.getBusinesskey().equals("EUR")) continue;
             LocalDate lastPricedDay = instrumentDao.getLastPricedDay(security.getInstrumentid());
             Map<LocalDate, EndOfDayPrice> prices = new HashMap<>();
             prices.putAll(handler.importSource(security, lastPricedDay, ts));
@@ -220,7 +221,7 @@ public class InstrumentServiceImpl implements InstrumentService {
                 instrumentDao.saveEndOfDayPrice(price);
             }
         }
-*/
+
         return "sucessful";
     }
 

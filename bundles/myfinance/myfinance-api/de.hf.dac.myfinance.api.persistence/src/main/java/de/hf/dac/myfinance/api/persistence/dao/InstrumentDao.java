@@ -27,7 +27,8 @@ import java.util.Optional;
 public interface InstrumentDao {
     List<Instrument> listInstruments();
     Optional<Equity> getEquity(String isin);
-    //List<Instrument> getSecurities();
+    Optional<Instrument> getSecurity(String businesskey);
+    List<Instrument> getSecurities();
     Optional<Instrument> getCurrency(String currencyCode);
     Optional<Instrument> getInstrument(int instrumentId);
     Optional<EndOfDayPrice>getEndOfDayPrice(int instrumentid, LocalDate dayofprice);

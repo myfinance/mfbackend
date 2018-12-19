@@ -27,6 +27,8 @@ import javax.inject.Named;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Query;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.EnumSet;
 import java.util.List;
 import java.util.Optional;
 
@@ -74,13 +76,37 @@ public class InstrumentDaoImpl  extends BaseDao implements InstrumentDao {
         return result;
     }
 
-    /*@Override
-    public List<Instrument> getSecurities() {
+    @Override
+    public Optional<Instrument> getSecurity(String businesskey) {
+        List instrumentTypeIds = new ArrayList<Integer>();
+        EnumSet.allOf(InstrumentType.class).stream().filter(i->i.getTypeGroup()==InstrumentTypeGroup.SECURITY).forEach(i-> instrumentTypeIds.add(i.getValue()));
 
         Optional<Instrument> result = Optional.empty();
-        Query query = marketDataEm.createQuery("select a FROM Instrument a");
+        Query query = marketDataEm.createQuery(
+            "select a FROM Instrument a WHERE a.instrumentTypeId IN :instrumentTypeIds and businesskey = :businesskey"
+        );
+        query.setParameter("instrumentTypeIds", instrumentTypeIds);
+        query.setParameter("businesskey", businesskey);
+        List<Object> queryResult = (List<Object>) query.getResultList();
+        if(queryResult!=null && !queryResult.isEmpty()){
+            Object object = queryResult.get(0);
+            result = Optional.of((Instrument)object);
+        }
+        return result;
+    }
+
+    @Override
+    public List<Instrument> getSecurities() {
+        List instrumentTypeIds = new ArrayList<Integer>();
+        EnumSet.allOf(InstrumentType.class).stream().filter(i->i.getTypeGroup()==InstrumentTypeGroup.SECURITY).forEach(i-> instrumentTypeIds.add(i.getValue()));
+
+        Optional<Instrument> result = Optional.empty();
+        Query query = marketDataEm.createQuery(
+            "select a FROM Instrument a WHERE a.instrumentTypeId IN :instrumentTypeIds"
+        );
+        query.setParameter("instrumentTypeIds", instrumentTypeIds);
         return (List<Instrument>) query.getResultList();
-    }*/
+    }
 
     @Override
     public Optional<Instrument> getCurrency(String currencyCode) {
