@@ -196,4 +196,21 @@ public class InstrumentDaoImpl  extends BaseDao implements InstrumentDao {
         marketDataEm.persist(price);
         marketDataEm.getTransaction().commit();
     }
+
+    @Override
+    public List<InstrumentGraphEntry> getAncestorGraphEntries(int instrumentId, EdgeType edgeType) {
+
+        Query query = marketDataEm.createQuery("select a FROM InstrumentGraphEntry a WHERE a.id.descendant= :instrumentid and a.id.edgetype= :edgetype");
+        query.setParameter("instrumentid", instrumentId);
+        query.setParameter("edgetype", edgeType);
+        List<InstrumentGraphEntry> queryResult = (List<InstrumentGraphEntry>) query.getResultList();
+        return queryResult;
+    }
+
+    @Override
+    public void saveGraphEntry(InstrumentGraphEntry instrumentGraphEntry) {
+        marketDataEm.getTransaction().begin();
+        marketDataEm.persist(instrumentGraphEntry);
+        marketDataEm.getTransaction().commit();
+    }
 }

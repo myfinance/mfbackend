@@ -78,8 +78,9 @@ Es gibt verschiedene Arten von Beziehungen die über den Edgetype abgebildet wer
  * Value-Budgets: Einem Budget werden ein oder mehrer Konten zugewiesen <<verlinkte Budget>>. Jeder Account darf nur einmal mit diesem Edgetype vorkommen
  * defaultBudget: Einem Account(ancestor) kann genau ein DefaultBudget zugewiesen werden. Jedes Budget darf mehrfach mit diesem Edgetype vorkommen (als descendant)
  wird verwendet als StandardBudget zur Verbuchung von regelmäßigen Einnahmen/Ausgaben z.B. <<Loan>>
- * Analyse Portfolien: hier sollen die beziehungen von artificial Portfolien und deviersen Accounts und Positionen abegildet werden (Soll noch nicht umgesetzt werden)
- * Tenent-Graph: Abbildung des realen und virtuellen Vermögens eines Mandanten <<Tenant>>
+ * Custom: hier sollen die beziehungen von artificial Portfolien und deviersen Accounts und Positionen abegildet werden (Soll noch nicht umgesetzt werden)
+ * Tenant-Graph: Abbildung des realen und virtuellen Vermögens eines Mandanten <<Tenant>>
+ * RealEstateBudgetGroup: An jede Immobilie wird eine BudgetGroup gehängt über die die budgetierung erfolgt
 
 [plantuml]
 ....
@@ -88,31 +89,33 @@ Es gibt verschiedene Arten von Beziehungen die über den Edgetype abgebildet wer
 skinparam componentStyle uml2
 
 rectangle Tenant
-rectangle BudgetGroupPortfolio
 rectangle AccountPortfolio
-rectangle BudgetsGroup1
-rectangle BudgetsGroup2
+rectangle BudgetGroup
 rectangle Budget1
 rectangle Budget2
 rectangle Budget3
+rectangle Budget4
 rectangle Depot1
 rectangle Giro
 rectangle Bausparvertrag
 rectangle Bausparkonto
 rectangle Bauspardarlehen
+rectangle Haus
+rectangle HausBudgetGroup
 
-Tenant --> BudgetGroupPortfolio
+Tenant --> BudgetGroup
 Tenant --> AccountPortfolio
-BudgetGroupPortfolio --> BudgetsGroup1
-BudgetGroupPortfolio --> BudgetsGroup2
-BudgetsGroup1 --> Budget1
-BudgetsGroup1 --> Budget2
-BudgetsGroup2 --> Budget3
+BudgetGroup --> Budget1
+BudgetGroup --> Budget2
 AccountPortfolio --> Depot1
 AccountPortfolio --> Giro
 AccountPortfolio --> Bausparvertrag
 Bausparvertrag --> Bausparkonto
 Bausparvertrag --> Bauspardarlehen
+AccountPortfolio --> Haus
+Haus --> HausBudgetGroup
+HausBudgetGroup --> Budget3
+HausBudgetGroup --> Budget4
 
 @enduml
 ....
@@ -219,7 +222,6 @@ Folgende Instrumenttypen gibt es:
 |BuildingsavingAccount| CashAccount | Bausparkonto
 |Budget| CashAccount | Budget. Ähnlich wie Giro aber virtuell
 |tenant |portfolio | Ein Mandant
-|BudgetGroupPortfolio |portfolio | Ein Portfolio mit allen Budget-Gruppen eines Mandanten
 |AccountPortfolio |portfolio | Ein Portfolio mit allen Accounts eines Mandanten
 |artificialPortfolio |portfolio | künstliche Zusammenfassungen von mehreren instrumenten. entsprechenden auch Portfolio von Portfolios möglich.
 |BudgetGroup |portfolio | Zusammenfassung von Budgets
@@ -329,11 +331,6 @@ Die wie der Name sagt Budget-Gruppen oder Konten beinhalten.
 Die Werte dieser beiden Portfolien müssen gleich sein siehe <<Konten und Budgets>>.
 In den einzelnen BudgetGroupPortfolios befinden sich dann die einzelnen Budgets.
 Weitere Unterteilungen sind denkbar(z.b. nach Liquidität oder InstrumentType) passieren aber nicht in der Datenbank sondern nur in Memory
-
-
-==== BudgetGroupPortfolio
-
-beinhaltet alle Budget-Gruppe eines Mandanten. Dies ist eigentlich ein ganz normales Portfolio. Der Typ ist nur benötigt, da jeder Mandant genau ein BudgetGroupPortfolio und ein AccountPortfolio haben muss die den geleichen Wert besitzen sollen
 
 
 ==== AccountPortfolio

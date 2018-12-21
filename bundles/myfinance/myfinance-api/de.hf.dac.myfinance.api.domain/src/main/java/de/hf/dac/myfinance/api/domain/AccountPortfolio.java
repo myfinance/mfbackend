@@ -3,9 +3,9 @@
  * ---          HF - Application Development                       ---
  * Copyright (c) 2014, ... All Rights Reserved
  * Project     : dac
- * File        : Currency.java
+ * File        : AccountPortfolio.java
  * Author(s)   : hf
- * Created     : 30.11.2018
+ * Created     : 21.12.2018
  * ----------------------------------------------------------------------------
  */
 
@@ -23,15 +23,13 @@ import io.swagger.annotations.ApiModel;
 @ApiModel
 @PrimaryKeyJoinColumn(name="instrumentid")
 @Inheritance(strategy= InheritanceType.SINGLE_TABLE)
-@DiscriminatorValue(InstrumentType.CURRENCY_IDSTRING)
-public class Currency extends Instrument {
-
-    public Currency(){
+@DiscriminatorValue(InstrumentType.ACCOUNTPORTFOLIO_IDSTRING)
+public class AccountPortfolio  extends Instrument {
+    public AccountPortfolio(){
         super();
     }
 
-    public Currency(String currencyCode, String description, boolean isactive, LocalDateTime treelastchanged){
-        super(InstrumentType.Currency, description, isactive, treelastchanged);
-        setBusinesskey(currencyCode);
+    public AccountPortfolio(String description, boolean isactive, LocalDateTime treelastchanged){
+        super(InstrumentType.AccountPortfolio, description, isactive, treelastchanged);
     }
 }

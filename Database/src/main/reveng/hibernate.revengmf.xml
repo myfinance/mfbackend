@@ -104,7 +104,7 @@
     <table schema="public" name="mf_endofdayprice" class="de.hf.dac.myfinance.api.domain.EndOfDayPrice"/>
     <table schema="public" name="mf_importtype" class="de.hf.dac.myfinance.api.domain.ImportType"/>
     <table schema="public" name="mf_instrumenttype" class="de.hf.dac.myfinance.api.domain.InstrumentType"/>
-    <table schema="public" name="mf_instrumentgraph" class="de.hf.dac.myfinance.api.domain.InstrumentGraph"/>
+    <table schema="public" name="mf_instrumentgraph" class="de.hf.dac.myfinance.api.domain.InstrumentGraphEntry"/>
 
 
 </hibernate-reverse-engineering>

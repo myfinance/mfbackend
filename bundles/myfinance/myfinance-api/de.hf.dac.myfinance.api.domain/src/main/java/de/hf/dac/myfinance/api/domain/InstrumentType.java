@@ -24,7 +24,7 @@ public enum InstrumentType {
     BuildingsavingAccount(new Integer(4)),
     Budget(new Integer(5)),
     Tenant(new Integer(6)),
-    BudgetGroupPortfolio(new Integer(7)),
+    //BudgetGroupPortfolio(new Integer(7)),
     AccountPortfolio(new Integer(8)),
     ArtificialPortfolio(new Integer(9)),
     BudgetGroup(new Integer(10)),
@@ -48,7 +48,7 @@ public enum InstrumentType {
     public static final String BUILDINGSAVINGACCOUNT_IDSTRING = "4";
     public static final String BUDGET_IDSTRING = "5";
     public static final String TENANT_IDSTRING = "6";
-    public static final String BUDGETGROUPPORTFOLIO_IDSTRING = "7";
+    //public static final String BUDGETGROUPPORTFOLIO_IDSTRING = "7";
     public static final String ACCOUNTPORTFOLIO_IDSTRING = "8";
     public static final String ARTIFICIALPORTFOLIO_IDSTRING = "9";
     public static final String BUDGETGROUP_IDSTRING = "10";
@@ -76,7 +76,7 @@ public enum InstrumentType {
     public InstrumentTypeGroup getTypeGroup(){
         switch(value){
             case 6: return InstrumentTypeGroup.PORTFOLIO;
-            case 7: return InstrumentTypeGroup.PORTFOLIO;
+            //case 7: return InstrumentTypeGroup.PORTFOLIO;
             case 8: return InstrumentTypeGroup.PORTFOLIO;
             case 9: return InstrumentTypeGroup.PORTFOLIO;
             case 10: return InstrumentTypeGroup.PORTFOLIO;
@@ -104,7 +104,7 @@ public enum InstrumentType {
             case 4: return InstrumentType.BuildingsavingAccount;
             case 5: return InstrumentType.Budget;
             case 6: return InstrumentType.Tenant;
-            case 7: return InstrumentType.BudgetGroupPortfolio;
+            //case 7: return InstrumentType.BudgetGroupPortfolio;
             case 8: return InstrumentType.AccountPortfolio;
             case 9: return InstrumentType.ArtificialPortfolio;
             case 10: return InstrumentType.BudgetGroup;

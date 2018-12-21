@@ -1,10 +1,10 @@
 /**
  * ----------------------------------------------------------------------------
- * ---          DZ Bank FfM - Application Development                       ---
+ * ---          HF - Application Development                       ---
  * Copyright (c) 2014, ... All Rights Reserved
  * Project     : dac
  * File        : Equity.java
- * Author(s)   : xn01598
+ * Author(s)   : hf
  * Created     : 13.12.2018
  * ----------------------------------------------------------------------------
  */

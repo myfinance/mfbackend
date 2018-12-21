@@ -20,6 +20,7 @@ package de.hf.dac.myfinance.service;
 import de.hf.dac.api.io.web.WebRequestService;
 import de.hf.dac.myfinance.ValueHandler.ValueCurveService;
 import de.hf.dac.myfinance.api.domain.*;
+import de.hf.dac.myfinance.api.domain.Currency;
 import de.hf.dac.myfinance.api.persistence.dao.InstrumentDao;
 import de.hf.dac.myfinance.api.service.InstrumentService;
 import de.hf.dac.myfinance.importhandler.ImportHandler;
@@ -28,11 +29,7 @@ import lombok.Data;
 import javax.inject.Inject;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 
 @Data
 public class InstrumentServiceImpl implements InstrumentService {
@@ -226,20 +223,20 @@ public class InstrumentServiceImpl implements InstrumentService {
     }
 
     @Override
-    public String fillPriceHistory(int sourceId, String isin, LocalDateTime ts){
-       /* Optional<Source> source = getSource(sourceId);
+    public String fillPriceHistory(int sourceId, String businesskey, LocalDateTime ts){
+        Optional<Source> source = getSource(sourceId);
         if(!source.isPresent()){
             return "Source with id "+sourceId+" is not available";
         }
-        Optional<Instrument> security = getEquity(isin);
+        Optional<Instrument> security = instrumentDao.getSecurity(businesskey);
         if(!security.isPresent()){
-            return "Security with isin "+isin+" is not available";
+            return "Security with isin "+businesskey+" is not available";
         }
         List<Source> sources = new ArrayList<>();
         sources.add(source.get());
 
         //all prices are in EUR so we do not need prices for this currency
-        if(security.get().getSecurityType()==SecurityType.CURRENCY && ((Instrument)security.get()).getCurrencycode().equals("EUR")) {
+        if(security.get().getInstrumentType()==InstrumentType.Currency && security.get().getBusinesskey().equals("EUR")) {
             return "Prices for currency EUR are not necessary";
         }
 
@@ -268,7 +265,67 @@ public class InstrumentServiceImpl implements InstrumentService {
             }
 
         }
-*/
         return "sucessful";
     }
+
+    @Override
+    public String newTenant(String description, LocalDateTime ts) {
+        Tenant tenant = new Tenant(description, true, ts);
+        newBudgetGroup("budgetGroup_"+description, ts);
+        newBudget("defaultBudget_"+description, ts);
+        newBudget("onetimeIncome_"+description, ts);
+        newAccountPortfolio("accountPf_"+description, ts);
+        instrumentDao.saveInstrument(tenant);
+        addInstrumentToGraph(tenant.getInstrumentid(),tenant.getInstrumentid(),EdgeType.TENANTGRAPH);
+        //hier sollten die budgets etc folgen dazu muss newBudget aber die instrumentid zurückgeben
+        return "new Tenant saved sucessfully";
+    }
+
+    protected void addInstrumentToGraph(int instrumentId, int ancestorId, EdgeType edgeType){
+        List<InstrumentGraphEntry> ancestorGraphEntries = instrumentDao.getAncestorGraphEntries(ancestorId, edgeType);
+        for (InstrumentGraphEntry entry : ancestorGraphEntries) {
+            InstrumentGraphEntry newEntry = new InstrumentGraphEntry(entry.getId().getAncestor(), instrumentId, edgeType);
+            newEntry.setPathlength(entry.getPathlength()+1);
+            instrumentDao.saveGraphEntry(newEntry);
+        }
+        InstrumentGraphEntry newEntry = new InstrumentGraphEntry(instrumentId, instrumentId, edgeType);
+        newEntry.setPathlength(0);
+        instrumentDao.saveGraphEntry(newEntry);
+    }
+
+    @Override
+    public String newBudget(String description, LocalDateTime ts) {
+        Budget budget = new Budget(description, true, ts);
+        instrumentDao.saveInstrument(budget);
+        return "new budget saved sucessfully";
+    }
+
+    protected String newBudgetGroup(String description, LocalDateTime ts) {
+        BudgetGroup budgetGroup = new BudgetGroup(description, true, ts);
+        instrumentDao.saveInstrument(budgetGroup);
+        return "new budgetGroup saved sucessfully";
+    }
+
+    protected String newAccountPortfolio(String description, LocalDateTime ts) {
+        AccountPortfolio accountPortfolio = new AccountPortfolio(description, true, ts);
+        instrumentDao.saveInstrument(accountPortfolio);
+        return "new accountPortfolio saved sucessfully";
+    }
+
+    @Override
+    public String newGiroAccount(String description, int tenantId) {
+        return null;
+    }
+
+    @Override
+    public String updateInstrumentDesc(int instrumentId, String description) {
+        return null;
+    }
+
+    @Override
+    public String deactivateInstrument(int instrumentId) {
+        return null;
+    }
+
+
 }

@@ -3,15 +3,16 @@
  * ---          HF - Application Development                       ---
  * Copyright (c) 2014, ... All Rights Reserved
  * Project     : dac
- * File        : Currency.java
+ * File        : Tenant.java
  * Author(s)   : hf
- * Created     : 30.11.2018
+ * Created     : 20.12.2018
  * ----------------------------------------------------------------------------
  */
 
 package de.hf.dac.myfinance.api.domain;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 import javax.persistence.*;
 
@@ -23,15 +24,16 @@ import io.swagger.annotations.ApiModel;
 @ApiModel
 @PrimaryKeyJoinColumn(name="instrumentid")
 @Inheritance(strategy= InheritanceType.SINGLE_TABLE)
-@DiscriminatorValue(InstrumentType.CURRENCY_IDSTRING)
-public class Currency extends Instrument {
+@DiscriminatorValue(InstrumentType.TENANT_IDSTRING)
+public class Tenant extends Instrument {
 
-    public Currency(){
+    List<InstrumentGraph> instrumentGraph;
+
+    public Tenant(){
         super();
     }
 
-    public Currency(String currencyCode, String description, boolean isactive, LocalDateTime treelastchanged){
-        super(InstrumentType.Currency, description, isactive, treelastchanged);
-        setBusinesskey(currencyCode);
+    public Tenant(String description, boolean isactive, LocalDateTime treelastchanged){
+        super(InstrumentType.Tenant, description, isactive, treelastchanged);
     }
 }

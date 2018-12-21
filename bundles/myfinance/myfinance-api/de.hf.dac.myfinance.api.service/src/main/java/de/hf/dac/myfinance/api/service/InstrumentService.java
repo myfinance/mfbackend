@@ -17,10 +17,7 @@
 
 package de.hf.dac.myfinance.api.service;
 
-import de.hf.dac.myfinance.api.domain.EndOfDayPrice;
-import de.hf.dac.myfinance.api.domain.Equity;
-import de.hf.dac.myfinance.api.domain.Instrument;
-import de.hf.dac.myfinance.api.domain.Source;
+import de.hf.dac.myfinance.api.domain.*;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -47,4 +44,11 @@ public interface InstrumentService {
     String saveEndOfDayPrice(String currencyCode, String isin, LocalDate dayofprice, Double value, LocalDateTime lastchanged);
     String importPrices(LocalDateTime ts);
     String fillPriceHistory(int sourceId, String isin, LocalDateTime ts);
+
+    String newTenant(String description, LocalDateTime ts);
+    String newGiroAccount(String description, int tenantId);
+    String updateInstrumentDesc(int instrumentId, String description);
+    String deactivateInstrument(int instrumentId);
+    String newBudget(String description, LocalDateTime ts);
+
 }
