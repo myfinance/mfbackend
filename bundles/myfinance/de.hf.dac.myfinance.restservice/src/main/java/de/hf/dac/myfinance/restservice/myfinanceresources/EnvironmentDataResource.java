@@ -29,6 +29,7 @@ import de.hf.dac.myfinance.api.exceptions.MDMsgKey;
 import de.hf.dac.myfinance.api.restservice.InstrumentListModel;
 import de.hf.dac.myfinance.restservice.myfinanceresources.leafresources.InstrumentListResource;
 import de.hf.dac.services.resources.BaseSecuredResource;
+import de.hf.dac.services.resources.leaf.LeafResource;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 
@@ -46,6 +47,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
+import org.apache.http.HttpStatus;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -74,7 +76,7 @@ public class EnvironmentDataResource extends BaseSecuredResource<OpType,OpLevel>
         return Response.ok(returnvalue).links(link).build();
     }
 
-    @Path("/instruments")
+    /*@Path("/instruments")
     @Produces(MediaType.APPLICATION_JSON)
     @ApiOperation(value = "get Instruments",
         response = InstrumentListResource.class)
@@ -82,9 +84,9 @@ public class EnvironmentDataResource extends BaseSecuredResource<OpType,OpLevel>
         checkOperationAllowed(OpType.READ);
         LocalDateTime returnvalue = LocalDateTime.now();
         return new InstrumentListResource(new InstrumentListModel(marketDataEnvironment.getInstrumentService().listInstruments()));
-    }
+    }*/
 
-    /*@GET
+    @GET
     @Path("/instruments")
     @Produces(MediaType.APPLICATION_JSON)
     @ApiOperation(value = "get Instruments",
@@ -92,7 +94,6 @@ public class EnvironmentDataResource extends BaseSecuredResource<OpType,OpLevel>
     public Response getInstruments() {
         checkOperationAllowed(OpType.READ);
         try {
-            LocalDateTime returnvalue = LocalDateTime.now();
             return Response.ok(LeafResource.SerializeToJSON(marketDataEnvironment.getInstrumentService().listInstruments())).build();
         } catch(Exception ex) {
             LOG.debug("Full Exception",ex);
@@ -101,7 +102,7 @@ public class EnvironmentDataResource extends BaseSecuredResource<OpType,OpLevel>
                            .type(MediaType.APPLICATION_JSON)
                            .build();
         }
-    }*/
+    }
 
     @POST
     @Path("/importprices")
@@ -184,6 +185,17 @@ public class EnvironmentDataResource extends BaseSecuredResource<OpType,OpLevel>
         checkOperationAllowed(OpType.WRITE);
         marketDataEnvironment.getInstrumentService().fillPriceHistory(sourceId, isin, LocalDateTime.now());
         return "sucessful";
+    }
+
+    @POST
+    @Path("/addtenant")
+    @Produces(MediaType.APPLICATION_JSON)
+    @ApiOperation(value = "save Tenant",
+        response = String.class)
+    public String addTenant(@QueryParam("description") @ApiParam(value="description") String description) {
+        checkOperationAllowed(OpType.WRITE);
+        return marketDataEnvironment.getInstrumentService().newTenant(description, LocalDateTime.now());
+
     }
 
     @GET

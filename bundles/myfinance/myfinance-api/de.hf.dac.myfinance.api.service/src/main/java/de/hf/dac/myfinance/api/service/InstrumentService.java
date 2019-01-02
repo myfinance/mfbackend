@@ -42,13 +42,15 @@ public interface InstrumentService {
     String saveSymbol(String isin, String symbol, String currencyCode);
     String saveCurrency(String currencyCode, String description);
     String saveEndOfDayPrice(String currencyCode, String isin, LocalDate dayofprice, Double value, LocalDateTime lastchanged);
-    String importPrices(LocalDateTime ts);
-    String fillPriceHistory(int sourceId, String isin, LocalDateTime ts);
+
 
     String newTenant(String description, LocalDateTime ts);
     String newGiroAccount(String description, int tenantId);
     String updateInstrumentDesc(int instrumentId, String description);
     String deactivateInstrument(int instrumentId);
-    String newBudget(String description, LocalDateTime ts);
+    String newBudget(String description, int budgetGroupId, LocalDateTime ts);
+
+    String importPrices(LocalDateTime ts);
+    String fillPriceHistory(int sourceId, String isin, LocalDateTime ts);
 
 }

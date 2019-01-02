@@ -271,13 +271,14 @@ public class InstrumentServiceImpl implements InstrumentService {
     @Override
     public String newTenant(String description, LocalDateTime ts) {
         Tenant tenant = new Tenant(description, true, ts);
-        newBudgetGroup("budgetGroup_"+description, ts);
-        newBudget("defaultBudget_"+description, ts);
-        newBudget("onetimeIncome_"+description, ts);
-        newAccountPortfolio("accountPf_"+description, ts);
         instrumentDao.saveInstrument(tenant);
         addInstrumentToGraph(tenant.getInstrumentid(),tenant.getInstrumentid(),EdgeType.TENANTGRAPH);
-        //hier sollten die budgets etc folgen dazu muss newBudget aber die instrumentid zurückgeben
+        int budgetGroupId = newBudgetGroup("budgetGroup_"+description, ts);
+        addInstrumentToGraph(budgetGroupId, tenant.getInstrumentid(), EdgeType.TENANTGRAPH);
+        newBudget("defaultBudget_"+description, budgetGroupId, ts);
+        newBudget("onetimeIncome_"+description, budgetGroupId, ts);
+        int accPfId = newAccountPortfolio("accountPf_"+description, ts);
+        addInstrumentToGraph(accPfId, tenant.getInstrumentid(), EdgeType.TENANTGRAPH);
         return "new Tenant saved sucessfully";
     }
 
@@ -294,22 +295,35 @@ public class InstrumentServiceImpl implements InstrumentService {
     }
 
     @Override
-    public String newBudget(String description, LocalDateTime ts) {
-        Budget budget = new Budget(description, true, ts);
-        instrumentDao.saveInstrument(budget);
+    public String newBudget(String description, int budgetGroupId, LocalDateTime ts) {
+        Optional<Instrument> budgetGroup = instrumentDao.getInstrument(budgetGroupId);
+        if(!budgetGroup.isPresent()){
+            return "Budget not saved: unknown budgetGroupId:"+budgetGroupId;
+        }
+        if(budgetGroup.get().getInstrumentType() != InstrumentType.BudgetGroup){
+            return "Budget not saved: Instrument with Id "+budgetGroupId + " is not a Budgetgroup";
+        }
+        int budgetId = createBudget(description, ts);
+        addInstrumentToGraph(budgetId, budgetGroupId, EdgeType.TENANTGRAPH);
         return "new budget saved sucessfully";
     }
 
-    protected String newBudgetGroup(String description, LocalDateTime ts) {
-        BudgetGroup budgetGroup = new BudgetGroup(description, true, ts);
-        instrumentDao.saveInstrument(budgetGroup);
-        return "new budgetGroup saved sucessfully";
+    protected int createBudget(String description, LocalDateTime ts) {
+        Budget budget = new Budget(description, true, ts);
+        instrumentDao.saveInstrument(budget);
+        return budget.getInstrumentid();
     }
 
-    protected String newAccountPortfolio(String description, LocalDateTime ts) {
+    protected int newBudgetGroup(String description, LocalDateTime ts) {
+        BudgetGroup budgetGroup = new BudgetGroup(description, true, ts);
+        instrumentDao.saveInstrument(budgetGroup);
+        return budgetGroup.getInstrumentid();
+    }
+
+    protected int newAccountPortfolio(String description, LocalDateTime ts) {
         AccountPortfolio accountPortfolio = new AccountPortfolio(description, true, ts);
         instrumentDao.saveInstrument(accountPortfolio);
-        return "new accountPortfolio saved sucessfully";
+        return accountPortfolio.getInstrumentid();
     }
 
     @Override
