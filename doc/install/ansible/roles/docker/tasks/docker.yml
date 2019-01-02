@@ -9,6 +9,10 @@
     action: yum pkg=docker-ce state=present
     tags:
      - docker
+  - name: Create directory etc/docker
+    file: path=/etc/docker state=directory mode=0755  
+    tags:
+     - docker   
   # necessary fuer openshift
   - copy:
      dest: '/etc/docker/daemon.json'
@@ -42,17 +46,6 @@
       ExecStart=
       ExecStart=/usr/bin/dockerd -H tcp://0.0.0.0:2375 -H unix://var/run/docker.sock
     notify: restart docker daemon
-    tags:
-     - docker
-  - name: "get docker info"
-    shell: docker info
-    register: docker_info
-    changed_when: false
-    tags:
-     - docker
-  - name: init swarm
-    shell: docker swarm init
-    when: "docker_info.stdout.find('Swarm: inactive') != -1"
     tags:
      - docker
 

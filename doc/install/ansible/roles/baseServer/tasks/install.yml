@@ -1,9 +1,9 @@
 ---
-  - name: upgrade all packages
-    yum:
-     name: '*'
-     state: latest
-     exclude: kernel*
+  #- name: upgrade all packages
+  #  yum:
+  #   name: '*'
+  #   state: latest
+  #   exclude: kernel*
   - name: Install some base yum package for git compile etc
     yum:
      name: "{{ item }}"
