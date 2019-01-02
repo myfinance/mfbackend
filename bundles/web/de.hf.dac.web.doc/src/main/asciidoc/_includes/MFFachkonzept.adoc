@@ -76,11 +76,10 @@ Beziehungen zwischen Tabellen werden in der closure Table instrumentGraph als ge
 Es gibt verschiedene Arten von Beziehungen die über den Edgetype abgebildet werden:
 
  * Value-Budgets: Einem Budget werden ein oder mehrer Konten zugewiesen <<verlinkte Budget>>. Jeder Account darf nur einmal mit diesem Edgetype vorkommen
- * defaultBudget: Einem Account(ancestor) kann genau ein DefaultBudget zugewiesen werden. Jedes Budget darf mehrfach mit diesem Edgetype vorkommen (als descendant)
- wird verwendet als StandardBudget zur Verbuchung von regelmäßigen Einnahmen/Ausgaben z.B. <<Loan>>
  * Custom: hier sollen die beziehungen von artificial Portfolien und deviersen Accounts und Positionen abegildet werden (Soll noch nicht umgesetzt werden)
  * Tenant-Graph: Abbildung des realen und virtuellen Vermögens eines Mandanten <<Tenant>>
  * RealEstateBudgetGroup: An jede Immobilie wird eine BudgetGroup gehängt über die die budgetierung erfolgt
+ * incomeBudget: Einem Account(ancestor) kann genau ein incomeBudget zugewiesen werden. Jedes Budget darf mehrfach mit diesem Edgetype vorkommen (als descendant) wird verwendet als StandardBudget zur Verbuchung von regelmäßigen Einnahmen z.B. Loan
 
 [plantuml]
 ....
@@ -302,7 +301,17 @@ Der LiquidityType ist im Default Liquide, aber es kann Budgets geben die für z.
 Hier muss der LiquidityType extra angegeben werden. Dazu ist in den InstrumentProperties LiquidityType zu hinterlegen
 Es ist auch möglich, dass ein Budget mit einem anderen Instrument verknüft ist (z.B. DeprecationObject) dann wird der LiquidityType davon abgeleitet
 
-BusinessKey= a short description without spaces, all lower case
+===== besondere Budgets
+
+ * Income: wird für jeden Tenant automatisch angelegt. Hier gehen alle regelmäßigen Einnahmen ein.
+Wie hoch das Regeleinkommen eines Tenant pro Monat ist kann auch ohne Income-budget ermittelt werden, indem die wiederkehrenden Einnahmen aller budgets des Tenant addiert werden.
+Diese Ermittlung ist aber etwas aufwändiger
+ * OneTimeIncome: Ein Budget um Einmal-Einnahmen zu verbuchen. Dieses Budget wir nicht automatisch angelegt und es hat sich auch nicht als praktikabel erwiesen es zu verwenden,
+ da die meisten Einnahmen etweder sowieso zweckgebunden sind(von der Oma für die Enkel...) oder sonstige Einnahmen wie Bonus oder Mehrarbeit sowieso auf die Reserve oder für Einmalanschaffungen verbucht werden.
+ Somit ist der Zwang Einnahmen auf ein bestimmtes Budget zu buchen nur mit mehraufwand verbunden ohne Vorteile
+ will man die Gesamteinahmen wissen (auch wenn dies durch sondereffekte sellten interessant ist)kann man auch alle Einnahmen über alle Budgets des Tenants betrachten
+
+Die Verbuchung von Einnahmen auf ein bestimmtes Budget(Income) wird nur bei Regeleinnahmen erzwungen, da diese anschliessend vollständig auf die übrigen Budgets verteilt werden sollen
 
 ===== verlinkte Budget
 

@@ -198,6 +198,13 @@ public class InstrumentDaoImpl  extends BaseDao implements InstrumentDao {
     }
 
     @Override
+    public void saveTransaction(Transaction transaction) {
+        marketDataEm.getTransaction().begin();
+        marketDataEm.persist(transaction);
+        marketDataEm.getTransaction().commit();
+    }
+
+    @Override
     public List<InstrumentGraphEntry> getAncestorGraphEntries(int instrumentId, EdgeType edgeType) {
 
         Query query = marketDataEm.createQuery("select a FROM InstrumentGraphEntry a WHERE a.id.descendant= :instrumentid and a.id.edgetype= :edgetype");
@@ -229,6 +236,22 @@ public class InstrumentDaoImpl  extends BaseDao implements InstrumentDao {
         if(queryResult!=null && !queryResult.isEmpty()){
             Object object = queryResult.get(0);
             result = Optional.of((Instrument)object);
+        }
+        return result;
+    }
+
+    @Override
+    public Optional<Integer> getRootInstrument(int instrumentId, EdgeType edgeType) {
+        Optional<Integer> result = Optional.empty();
+        Query query = marketDataEm.createQuery("select a.id.ancestor FROM InstrumentGraphEntry a "
+            + "WHERE a.id.descendant= :instrumentid and a.id.edgetype= :edgetype "
+            + "ORDER BY a.pathlength desc ");
+        query.setParameter("instrumentid", instrumentId);
+        query.setParameter("edgetype", edgeType);
+        List<Object> queryResult = (List<Object>) query.getResultList();
+        if(queryResult!=null && !queryResult.isEmpty()){
+            Object object = queryResult.get(0);
+            result = Optional.of((Integer)object);
         }
         return result;
     }

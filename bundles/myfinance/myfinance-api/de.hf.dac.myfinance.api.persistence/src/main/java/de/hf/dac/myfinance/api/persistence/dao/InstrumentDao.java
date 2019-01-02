@@ -39,8 +39,11 @@ public interface InstrumentDao {
     void saveInstrument(Instrument instrument);
     void saveSymbol(SecuritySymbols symbol);
     void saveEndOfDayPrice(EndOfDayPrice price);
+    void saveTransaction(Transaction transaction);
     List<InstrumentGraphEntry> getAncestorGraphEntries(int instrumentId, EdgeType edgeType);
+    Optional<Integer> getRootInstrument(int instrumentId, EdgeType edgeType);
     void saveGraphEntry(InstrumentGraphEntry instrumentGraphEntry);
     List<Instrument> getInstrumentChilds(int instrumentId, EdgeType edgeType);
     Optional<Instrument> getAccountPortfolio(int tenantId);
+
 }

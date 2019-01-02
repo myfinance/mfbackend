@@ -42,16 +42,15 @@ public class Cashflow  implements java.io.Serializable {
 
 
      private Integer cashflowid;
-     private Instrument instrument;
-     private Transaction transaction;
+     private Integer instrumentId;
+     private Integer transactionId;
      private double value;
 
     public Cashflow() {
     }
 
-    public Cashflow(Instrument instrument, Transaction transaction, double value) {
-       this.instrument = instrument;
-       this.transaction = transaction;
+    public Cashflow(Integer instrumentId, double value) {
+       this.instrumentId = instrumentId;
        this.value = value;
     }
 
@@ -61,37 +60,33 @@ public class Cashflow  implements java.io.Serializable {
     public Integer getCashflowid() {
         return this.cashflowid;
     }
-    
     public void setCashflowid(Integer cashflowid) {
         this.cashflowid = cashflowid;
     }
-    @ManyToOne(fetch=FetchType.LAZY)
-    @JoinColumn(name="instrumentid", nullable=false)
+
+    @Column(name = "instrumentid", nullable=false)
     @ApiModelProperty(required = true)
-    public Instrument getInstrument() {
-        return this.instrument;
+    protected Integer getInstrumentId() {
+        return this.instrumentId;
     }
-    
-    public void setInstrument(Instrument instrument) {
-        this.instrument = instrument;
+    protected void setInstrumentId(Integer instrumentId) {
+        this.instrumentId = instrumentId;
     }
-    @ManyToOne(fetch=FetchType.LAZY)
-    @JoinColumn(name="transactionid", nullable=false)
+
+    @Column(name = "transactionid", nullable=false)
     @ApiModelProperty(required = true)
-    public Transaction getTransaction() {
-        return this.transaction;
+    protected Integer getTransactionId() {
+        return this.transactionId;
     }
-    
-    public void setTransaction(Transaction transaction) {
-        this.transaction = transaction;
+    protected void setTransactionId(Integer transactionId) {
+        this.transactionId = transactionId;
     }
-    
+
     @Column(name="value", nullable=false, precision=10)
     @ApiModelProperty(required = true)
     public double getValue() {
         return this.value;
     }
-    
     public void setValue(double value) {
         this.value = value;
     }

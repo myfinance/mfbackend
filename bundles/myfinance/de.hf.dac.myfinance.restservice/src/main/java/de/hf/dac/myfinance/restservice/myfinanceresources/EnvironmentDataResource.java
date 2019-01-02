@@ -219,6 +219,20 @@ public class EnvironmentDataResource extends BaseSecuredResource<OpType,OpLevel>
         return marketDataEnvironment.getInstrumentService().newGiroAccount(description, tenantId, LocalDateTime.now());
     }
 
+    @POST
+    @Path("/addIncomeExpense")
+    @Produces(MediaType.APPLICATION_JSON)
+    @ApiOperation(value = "save Income or Expense",
+        response = String.class)
+    public String addIncomeExpense(@QueryParam("description") @ApiParam(value="description") String description,
+        @QueryParam("accId") @ApiParam(value="the accountId of the income or expense") int accId,
+        @QueryParam("budgetId") @ApiParam(value="the budgetId of the income or expense") int budgetId,
+        @QueryParam("value") @ApiParam(value="the value of the income or expense") double value,
+        @QueryParam("transactiondate") @ApiParam(value="the transactiondate(yyyy-mm-dd") String transactiondate) {
+        checkOperationAllowed(OpType.WRITE);
+        return marketDataEnvironment.getInstrumentService().newIncomeExpense(description, accId, budgetId, value, LocalDate.parse(transactiondate), LocalDateTime.now());
+    }
+
     @GET
     @Path("/getvaluecurve")
     @Produces(MediaType.APPLICATION_JSON)

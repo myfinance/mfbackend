@@ -275,8 +275,8 @@ public class InstrumentServiceImpl implements InstrumentService {
         addInstrumentToGraph(tenant.getInstrumentid(),tenant.getInstrumentid(),EdgeType.TENANTGRAPH);
         int budgetGroupId = newBudgetGroup("budgetGroup_"+description, ts);
         addInstrumentToGraph(budgetGroupId, tenant.getInstrumentid(), EdgeType.TENANTGRAPH);
-        newBudget("defaultBudget_"+description, budgetGroupId, ts);
-        newBudget("onetimeIncome_"+description, budgetGroupId, ts);
+        int incomeBudgetId = createBudget("incomeBudget_"+description, budgetGroupId, ts);
+        addInstrumentToGraph(incomeBudgetId, tenant.getInstrumentid(), EdgeType.INCOMEBUDGET);
         int accPfId = newAccountPortfolio("accountPf_"+description, ts);
         addInstrumentToGraph(accPfId, tenant.getInstrumentid(), EdgeType.TENANTGRAPH);
         return "new Tenant saved sucessfully";
@@ -303,15 +303,16 @@ public class InstrumentServiceImpl implements InstrumentService {
         if(budgetGroup.get().getInstrumentType() != InstrumentType.BudgetGroup){
             return "Budget not saved: Instrument with Id "+budgetGroupId + " is not a Budgetgroup";
         }
-        int budgetId = createBudget(description, ts);
-        addInstrumentToGraph(budgetId, budgetGroupId, EdgeType.TENANTGRAPH);
+        createBudget(description, budgetGroupId, ts);
         return "new budget saved sucessfully";
     }
 
-    protected int createBudget(String description, LocalDateTime ts) {
+    protected int createBudget(String description, int budgetGroupId, LocalDateTime ts) {
         Budget budget = new Budget(description, true, ts);
         instrumentDao.saveInstrument(budget);
-        return budget.getInstrumentid();
+        int budgetId = budget.getInstrumentid();
+        addInstrumentToGraph(budgetId, budgetGroupId, EdgeType.TENANTGRAPH);
+        return budgetId;
     }
 
     protected int newBudgetGroup(String description, LocalDateTime ts) {
@@ -349,8 +350,32 @@ public class InstrumentServiceImpl implements InstrumentService {
     }
 
     @Override
-    public String newIncomeExpense(String description, int accId, int budgetId, double value, LocalDateTime ts){
-        return null;
+    public String newIncomeExpense(String description, int accId, int budgetId, double value, LocalDate transactionDate, LocalDateTime ts){
+        Optional<Instrument> account = instrumentDao.getInstrument(accId);
+        if(!account.isPresent() || account.get().getInstrumentType()!=InstrumentType.Giro){
+            return "IncomeExpense not saved: unknown account oder wrong account type:"+accId;
+        }
+        Optional<Instrument> budget = instrumentDao.getInstrument(budgetId);
+        if(!budget.isPresent() || budget.get().getInstrumentType()!=InstrumentType.Budget){
+            return "IncomeExpense not saved: unknown budget:"+budgetId;
+        }
+        Optional<Integer> tenantOfAcc = instrumentDao.getRootInstrument(accId, EdgeType.TENANTGRAPH);
+        Optional<Integer> tenantOfBudget = instrumentDao.getRootInstrument(budgetId, EdgeType.TENANTGRAPH);
+
+        if(!tenantOfAcc.isPresent()
+            || !tenantOfBudget.isPresent()
+            || tenantOfAcc.get()!=tenantOfBudget.get()){
+            return "IncomeExpense not saved: budget and account have not the same tenant";
+        }
+        Cashflow accountCashflow = new Cashflow(accId, value);
+        Cashflow budgetCashflow = new Cashflow(budgetId, value);
+        Set<Cashflow> cashflows = new HashSet<>();
+        cashflows.add(accountCashflow);
+        cashflows.add(budgetCashflow);
+        Transaction transaction = new Transaction(description, transactionDate, ts);
+        transaction.setCashflows(cashflows);
+        instrumentDao.saveTransaction(transaction);
+        return "transaction saved sucessfully";
     }
 
 }

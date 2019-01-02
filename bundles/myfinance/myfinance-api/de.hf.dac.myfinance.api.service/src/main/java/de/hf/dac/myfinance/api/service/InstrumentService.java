@@ -50,7 +50,7 @@ public interface InstrumentService {
     String newBudget(String description, int budgetGroupId, LocalDateTime ts);
     String newGiroAccount(String description, int tenantId, LocalDateTime ts);
 
-    String newIncomeExpense(String description, int accId, int budgetId, double value, LocalDateTime ts);
+    String newIncomeExpense(String description, int accId, int budgetId, double value, LocalDate transactionDate, LocalDateTime ts);
 
     String importPrices(LocalDateTime ts);
     String fillPriceHistory(int sourceId, String isin, LocalDateTime ts);
