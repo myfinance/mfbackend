@@ -45,10 +45,12 @@ public interface InstrumentService {
 
 
     String newTenant(String description, LocalDateTime ts);
-    String newGiroAccount(String description, int tenantId);
     String updateInstrumentDesc(int instrumentId, String description);
     String deactivateInstrument(int instrumentId);
     String newBudget(String description, int budgetGroupId, LocalDateTime ts);
+    String newGiroAccount(String description, int tenantId, LocalDateTime ts);
+
+    String newIncomeExpense(String description, int accId, int budgetId, double value, LocalDateTime ts);
 
     String importPrices(LocalDateTime ts);
     String fillPriceHistory(int sourceId, String isin, LocalDateTime ts);

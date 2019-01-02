@@ -327,8 +327,15 @@ public class InstrumentServiceImpl implements InstrumentService {
     }
 
     @Override
-    public String newGiroAccount(String description, int tenantId) {
-        return null;
+    public String newGiroAccount(String description, int tenantId, LocalDateTime ts) {
+        Optional<Instrument> accportfolio = instrumentDao.getAccountPortfolio(tenantId);
+        if(!accportfolio.isPresent()) {
+            return "Giro not saved: tenant for the id:"+tenantId+" not exists or has no accountPortfolio";
+        }
+        Giro giro = new Giro(description, true, ts);
+        instrumentDao.saveInstrument(giro);
+        addInstrumentToGraph(giro.getInstrumentid(), accportfolio.get().getInstrumentid(), EdgeType.TENANTGRAPH);
+        return "new giro saved sucessfully";
     }
 
     @Override
@@ -341,5 +348,9 @@ public class InstrumentServiceImpl implements InstrumentService {
         return null;
     }
 
+    @Override
+    public String newIncomeExpense(String description, int accId, int budgetId, double value, LocalDateTime ts){
+        return null;
+    }
 
 }

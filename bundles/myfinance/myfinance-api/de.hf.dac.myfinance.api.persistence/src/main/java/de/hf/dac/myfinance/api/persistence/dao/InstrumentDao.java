@@ -41,4 +41,6 @@ public interface InstrumentDao {
     void saveEndOfDayPrice(EndOfDayPrice price);
     List<InstrumentGraphEntry> getAncestorGraphEntries(int instrumentId, EdgeType edgeType);
     void saveGraphEntry(InstrumentGraphEntry instrumentGraphEntry);
+    List<Instrument> getInstrumentChilds(int instrumentId, EdgeType edgeType);
+    Optional<Instrument> getAccountPortfolio(int tenantId);
 }

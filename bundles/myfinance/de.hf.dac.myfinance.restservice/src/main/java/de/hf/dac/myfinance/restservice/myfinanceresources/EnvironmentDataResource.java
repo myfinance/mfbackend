@@ -188,14 +188,35 @@ public class EnvironmentDataResource extends BaseSecuredResource<OpType,OpLevel>
     }
 
     @POST
-    @Path("/addtenant")
+    @Path("/addBudget")
+    @Produces(MediaType.APPLICATION_JSON)
+    @ApiOperation(value = "add Budget",
+        response = String.class)
+    public String addBudget(@QueryParam("description") @ApiParam(value="description") String description,
+                            @QueryParam("budgetGroupId") @ApiParam(value="the Id of the budgetGroup which the budget is attached to") int budgetGroupId) {
+        checkOperationAllowed(OpType.WRITE);
+        return marketDataEnvironment.getInstrumentService().newBudget(description, budgetGroupId, LocalDateTime.now());
+    }
+
+    @POST
+    @Path("/addTenant")
     @Produces(MediaType.APPLICATION_JSON)
     @ApiOperation(value = "save Tenant",
         response = String.class)
     public String addTenant(@QueryParam("description") @ApiParam(value="description") String description) {
         checkOperationAllowed(OpType.WRITE);
         return marketDataEnvironment.getInstrumentService().newTenant(description, LocalDateTime.now());
+    }
 
+    @POST
+    @Path("/addGiro")
+    @Produces(MediaType.APPLICATION_JSON)
+    @ApiOperation(value = "save Giro",
+        response = String.class)
+    public String addGiro(@QueryParam("description") @ApiParam(value="description") String description,
+        @QueryParam("tenantId") @ApiParam(value="the Id of the tenant which the giro is attached to") int tenantId) {
+        checkOperationAllowed(OpType.WRITE);
+        return marketDataEnvironment.getInstrumentService().newGiroAccount(description, tenantId, LocalDateTime.now());
     }
 
     @GET

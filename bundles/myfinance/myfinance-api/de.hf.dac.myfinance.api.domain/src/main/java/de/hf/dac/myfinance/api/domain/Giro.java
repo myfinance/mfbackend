@@ -3,16 +3,15 @@
  * ---          HF - Application Development                       ---
  * Copyright (c) 2014, ... All Rights Reserved
  * Project     : dac
- * File        : Tenant.java
+ * File        : Giro.java
  * Author(s)   : hf
- * Created     : 20.12.2018
+ * Created     : 02.01.2019
  * ----------------------------------------------------------------------------
  */
 
 package de.hf.dac.myfinance.api.domain;
 
 import java.time.LocalDateTime;
-import java.util.List;
 
 import javax.persistence.*;
 
@@ -24,14 +23,13 @@ import io.swagger.annotations.ApiModel;
 @ApiModel
 @PrimaryKeyJoinColumn(name="instrumentid")
 @Inheritance(strategy= InheritanceType.SINGLE_TABLE)
-@DiscriminatorValue(InstrumentType.TENANT_IDSTRING)
-public class Tenant extends Instrument {
-
-    public Tenant(){
+@DiscriminatorValue(InstrumentType.GIRO_IDSTRING)
+public class Giro  extends Instrument {
+    public Giro(){
         super();
     }
 
-    public Tenant(String description, boolean isactive, LocalDateTime treelastchanged){
-        super(InstrumentType.Tenant, description, isactive, treelastchanged);
+    public Giro(String description, boolean isactive, LocalDateTime treelastchanged){
+        super(InstrumentType.Giro, description, isactive, treelastchanged);
     }
 }

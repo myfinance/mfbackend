@@ -208,6 +208,32 @@ public class InstrumentDaoImpl  extends BaseDao implements InstrumentDao {
     }
 
     @Override
+    public List<Instrument> getInstrumentChilds(int instrumentId, EdgeType edgeType) {
+
+        Query query = marketDataEm.createQuery("select i FROM InstrumentGraphEntry a JOIN Instrument i ON i.instrumentid=a.instrumentid WHERE a.id.ancestor= :instrumentid and a.id.edgetype= :edgetype and a.pathlength=1");
+        query.setParameter("instrumentid", instrumentId);
+        query.setParameter("edgetype", edgeType);
+        List<Instrument> queryResult = (List<Instrument>) query.getResultList();
+        return queryResult;
+    }
+
+    @Override
+    public Optional<Instrument> getAccountPortfolio(int tenantId){
+        Optional<Instrument> result = Optional.empty();
+        Query query = marketDataEm.createQuery("select i FROM InstrumentGraphEntry a JOIN Instrument i ON i.instrumentid=a.id.descendant "
+            + "WHERE a.id.ancestor= :instrumentid and a.id.edgetype= :edgetype and a.pathlength=1 and i.instrumentTypeId= :instrumenttype");
+        query.setParameter("instrumentid", tenantId);
+        query.setParameter("edgetype", EdgeType.TENANTGRAPH);
+        query.setParameter("instrumenttype", InstrumentType.AccountPortfolio.getValue());
+        List<Object> queryResult = (List<Object>) query.getResultList();
+        if(queryResult!=null && !queryResult.isEmpty()){
+            Object object = queryResult.get(0);
+            result = Optional.of((Instrument)object);
+        }
+        return result;
+    }
+
+    @Override
     public void saveGraphEntry(InstrumentGraphEntry instrumentGraphEntry) {
         marketDataEm.getTransaction().begin();
         marketDataEm.persist(instrumentGraphEntry);

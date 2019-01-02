@@ -46,7 +46,7 @@ public abstract class Instrument  implements java.io.Serializable {
 
 
     private Integer instrumentid;
-    private Integer instrumenttypeId;
+    private Integer instrumentTypeId;
     private String description;
     private boolean isactive;
     private LocalDate maturitydate;
@@ -78,10 +78,10 @@ public abstract class Instrument  implements java.io.Serializable {
     @Column(name = "instrumenttypeid", nullable=false, insertable=false, updatable=false)
     @ApiModelProperty(required = true)
     protected Integer getInstrumentTypeId() {
-        return this.instrumenttypeId;
+        return this.instrumentTypeId;
     }
     protected void setInstrumentTypeId(Integer instrumentTypeId) {
-        this.instrumenttypeId = instrumentTypeId;
+        this.instrumentTypeId = instrumentTypeId;
         instrumentType = InstrumentType.getInstrumentTypeById(instrumentTypeId);
     }
 
