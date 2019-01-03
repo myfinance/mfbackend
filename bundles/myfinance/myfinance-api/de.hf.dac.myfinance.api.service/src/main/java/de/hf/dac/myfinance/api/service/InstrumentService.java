@@ -51,6 +51,7 @@ public interface InstrumentService {
     String newGiroAccount(String description, int tenantId, LocalDateTime ts);
 
     String newIncomeExpense(String description, int accId, int budgetId, double value, LocalDate transactionDate, LocalDateTime ts);
+    List<Transaction> listTransactions();
 
     String importPrices(LocalDateTime ts);
     String fillPriceHistory(int sourceId, String isin, LocalDateTime ts);

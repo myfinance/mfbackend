@@ -24,6 +24,7 @@ import de.hf.dac.myfinance.api.application.OpType;
 import de.hf.dac.myfinance.api.application.servicecontext.MDEnvironmentContext;
 import de.hf.dac.myfinance.api.domain.Equity;
 import de.hf.dac.myfinance.api.domain.Instrument;
+import de.hf.dac.myfinance.api.domain.Transaction;
 import de.hf.dac.myfinance.api.exceptions.MDException;
 import de.hf.dac.myfinance.api.exceptions.MDMsgKey;
 import de.hf.dac.myfinance.api.restservice.InstrumentListModel;
@@ -231,6 +232,16 @@ public class EnvironmentDataResource extends BaseSecuredResource<OpType,OpLevel>
         @QueryParam("transactiondate") @ApiParam(value="the transactiondate(yyyy-mm-dd") String transactiondate) {
         checkOperationAllowed(OpType.WRITE);
         return marketDataEnvironment.getInstrumentService().newIncomeExpense(description, accId, budgetId, value, LocalDate.parse(transactiondate), LocalDateTime.now());
+    }
+
+    @GET
+    @Path("/listTransactions")
+    @Produces(MediaType.APPLICATION_JSON)
+    @ApiOperation(value = "get Transactions", response = String.class)
+    public List<Transaction> getTransaction() {
+        checkOperationAllowed(OpType.READ);
+        return marketDataEnvironment.getInstrumentService().listTransactions();
+
     }
 
     @GET

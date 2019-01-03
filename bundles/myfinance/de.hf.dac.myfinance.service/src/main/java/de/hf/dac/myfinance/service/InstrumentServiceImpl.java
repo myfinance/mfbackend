@@ -367,15 +367,24 @@ public class InstrumentServiceImpl implements InstrumentService {
             || tenantOfAcc.get()!=tenantOfBudget.get()){
             return "IncomeExpense not saved: budget and account have not the same tenant";
         }
-        Cashflow accountCashflow = new Cashflow(accId, value);
-        Cashflow budgetCashflow = new Cashflow(budgetId, value);
+        Transaction transaction = new Transaction(description, transactionDate, ts);
+
+        Cashflow accountCashflow = new Cashflow(account.get(), value);
+        accountCashflow.setTransaction(transaction);
+        Cashflow budgetCashflow = new Cashflow(budget.get(), value);
+        budgetCashflow.setTransaction(transaction);
         Set<Cashflow> cashflows = new HashSet<>();
         cashflows.add(accountCashflow);
         cashflows.add(budgetCashflow);
-        Transaction transaction = new Transaction(description, transactionDate, ts);
+
         transaction.setCashflows(cashflows);
         instrumentDao.saveTransaction(transaction);
         return "transaction saved sucessfully";
     }
 
+    @Override
+    public List<Transaction> listTransactions(){
+        List<Transaction> transactions = instrumentDao.listTransactions();
+        return transactions;
+    }
 }

@@ -36,6 +36,7 @@ public interface InstrumentDao {
     LocalDate getLastPricedDay(int instrumentid);
     Optional<Source> getSource(int sourceId);
     List<Source> getActiveSources();
+    List<Transaction> listTransactions();
     void saveInstrument(Instrument instrument);
     void saveSymbol(SecuritySymbols symbol);
     void saveEndOfDayPrice(EndOfDayPrice price);

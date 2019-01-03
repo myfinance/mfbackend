@@ -62,6 +62,12 @@ public class InstrumentDaoImpl  extends BaseDao implements InstrumentDao {
     }
 
     @Override
+    public List<Transaction> listTransactions(){
+        Query query = marketDataEm.createQuery("select a FROM Transaction a");
+        return (List<Transaction>) query.getResultList();
+    }
+
+    @Override
     public Optional<Equity> getEquity(String isin) {
 
         Optional<Equity> result = Optional.empty();
