@@ -166,6 +166,7 @@ Transaction "1" *--  "many" Cashflow
 Transaction : Int TransactionId
 Transaction : String Description
 Transaction : Date TransactionDate
+Transaction : Int TransactionTypeId
 
 Cashflow : Int CashflowId
 Cashflow : Int TransactionId

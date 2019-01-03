@@ -48,22 +48,25 @@ public class Transaction  implements java.io.Serializable {
      private LocalDateTime lastchanged;
      private Set<Trade> trades = new HashSet<Trade>(0);
      private Set<Cashflow> cashflows = new HashSet<Cashflow>(0);
+     private TransactionType transactionType;
 
     public Transaction() {
     }
 
 	
-    public Transaction(String description, LocalDate transactiondate, LocalDateTime lastchanged) {
+    public Transaction(String description, LocalDate transactiondate, LocalDateTime lastchanged, TransactionType transactionType) {
         this.description = description;
         this.transactiondate = transactiondate;
         this.lastchanged = lastchanged;
+        this.transactionType = transactionType;
     }
-    public Transaction(String description, LocalDate transactiondate, LocalDateTime lastchanged, Set<Trade> trades, Set<Cashflow> cashflows) {
+    public Transaction(String description, LocalDate transactiondate, LocalDateTime lastchanged, TransactionType transactionType, Set<Trade> trades, Set<Cashflow> cashflows) {
        this.description = description;
        this.transactiondate = transactiondate;
        this.lastchanged = lastchanged;
        this.trades = trades;
        this.cashflows = cashflows;
+        this.transactionType = transactionType;
     }
 
     @Id @GeneratedValue(strategy=IDENTITY)    
@@ -124,7 +127,16 @@ public class Transaction  implements java.io.Serializable {
         this.cashflows = cashflows;
     }
 
+    @Enumerated
+    @Column(name="transactiontypeid", nullable=false)
+    @ApiModelProperty(required = true)
+    public TransactionType getTransactionType() {
+        return this.transactionType;
+    }
 
+    public void setEdgetype(TransactionType transactionType) {
+        this.transactionType = transactionType;
+    }
 
 
 }

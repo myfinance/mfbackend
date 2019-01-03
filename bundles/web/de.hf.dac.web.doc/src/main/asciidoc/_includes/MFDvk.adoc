@@ -3,7 +3,10 @@ include::header.adoc[]
 = DB Model
 
 .MyFinance Data Model
-image::dbmodel.png[MyFinance Data Model]
+image::mf_db_model.png[MyFinance Data Model]
+
+.Dac Data Model
+image::dac_db_model.png[Dac Data Model]
 
 = APIs
 

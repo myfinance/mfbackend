@@ -367,7 +367,7 @@ public class InstrumentServiceImpl implements InstrumentService {
             || tenantOfAcc.get()!=tenantOfBudget.get()){
             return "IncomeExpense not saved: budget and account have not the same tenant";
         }
-        Transaction transaction = new Transaction(description, transactionDate, ts);
+        Transaction transaction = new Transaction(description, transactionDate, ts, TransactionType.INCOMEEXPENSES);
 
         Cashflow accountCashflow = new Cashflow(account.get(), value);
         accountCashflow.setTransaction(transaction);
