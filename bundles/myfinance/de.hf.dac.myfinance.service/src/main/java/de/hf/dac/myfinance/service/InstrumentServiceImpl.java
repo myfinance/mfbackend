@@ -17,6 +17,8 @@
 
 package de.hf.dac.myfinance.service;
 
+import de.hf.dac.api.io.audit.AuditService;
+import de.hf.dac.api.io.domain.Severity;
 import de.hf.dac.api.io.web.WebRequestService;
 import de.hf.dac.myfinance.ValueHandler.ValueCurveService;
 import de.hf.dac.myfinance.api.domain.*;
@@ -27,6 +29,7 @@ import de.hf.dac.myfinance.importhandler.ImportHandler;
 import lombok.Data;
 
 import javax.inject.Inject;
+
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.*;
@@ -37,12 +40,15 @@ public class InstrumentServiceImpl implements InstrumentService {
     private InstrumentDao instrumentDao;
     private ValueCurveService service;
     private WebRequestService webRequestService;
+    private AuditService auditService;
+    private static final String AUDIT_MSG_TYPE="InstrumentService_User_Event";
 
     @Inject
-    public InstrumentServiceImpl(InstrumentDao instrumentDao, WebRequestService webRequestService){
+    public InstrumentServiceImpl(InstrumentDao instrumentDao, WebRequestService webRequestService, AuditService auditService){
         this.instrumentDao = instrumentDao;
         this.webRequestService = webRequestService;
         service = new ValueCurveService(instrumentDao);
+        this.auditService = auditService;
     }
 
     @Override
@@ -167,6 +173,7 @@ public class InstrumentServiceImpl implements InstrumentService {
         Optional<Instrument> existingCur = getCurrency(curCode);
         if(!existingCur.isPresent()) {
             Instrument currency = new Currency(currencyCode, description, true, LocalDateTime.now());
+            auditService.saveMessage("Currency inserted:" + currencyCode, Severity.INFO, AUDIT_MSG_TYPE);
             instrumentDao.saveInstrument(currency);
             return "new currency saved sucessfully";
         } else {

@@ -155,7 +155,7 @@ public class DacJournal  implements java.io.Serializable {
         this.lastupdate = lastupdate;
     }
     
-    @Column(name="user", length=100)
+    @Column(name="username", length=100)
     @ApiModelProperty(required = true)
     public String getUser() {
         return this.user;

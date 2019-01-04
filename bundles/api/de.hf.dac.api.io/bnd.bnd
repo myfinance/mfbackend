@@ -7,6 +7,7 @@ Export-Package: \
 	de.hf.dac.api.io.domain, \
 	de.hf.dac.api.io.env.context, \
 	de.hf.dac.api.io.lookup, \
+	de.hf.dac.api.io.audit, \
 	de.hf.dac.api.io.web
 Import-Package: \
     javax.persistence, \

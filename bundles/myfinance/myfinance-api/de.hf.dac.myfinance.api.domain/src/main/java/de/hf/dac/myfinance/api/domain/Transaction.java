@@ -133,8 +133,7 @@ public class Transaction  implements java.io.Serializable {
     public TransactionType getTransactionType() {
         return this.transactionType;
     }
-
-    public void setEdgetype(TransactionType transactionType) {
+    public void setTransactionType(TransactionType transactionType) {
         this.transactionType = transactionType;
     }
 

@@ -9,10 +9,10 @@
             <column name="status" type="VARCHAR(100)"/>
             <column name="processstep" type="VARCHAR(100)"/>
             <column name="arguments" type="VARCHAR(100)"/>
-            <column name="startts" type="date"/>
-            <column name="endts" type="date"/>
-            <column name="lastupdate" type="date"/>
-            <column name="user" type="VARCHAR(100)"/>
+            <column name="startts" type="TIMESTAMP(6) WITHOUT TIME ZONE"/>
+            <column name="endts" type="TIMESTAMP(6) WITHOUT TIME ZONE"/>
+            <column name="lastupdate" type="TIMESTAMP(6) WITHOUT TIME ZONE"/>
+            <column name="username" type="VARCHAR(100)"/>
         </createTable>
     </changeSet>
     <changeSet author="hf" id="dac.1.1.2">
@@ -27,10 +27,10 @@
             <column name="severity" type="VARCHAR(10)">
                 <constraints nullable="false"/>
             </column>
-            <column name="ts" type="date">
+            <column name="ts" type="TIMESTAMP(6) WITHOUT TIME ZONE">
                 <constraints nullable="false"/>
             </column>
-            <column name="user" type="VARCHAR(100)"/>
+            <column name="username" type="VARCHAR(100)"/>
             <column name="messagetype" type="VARCHAR(100)"/>
         </createTable>
     </changeSet>

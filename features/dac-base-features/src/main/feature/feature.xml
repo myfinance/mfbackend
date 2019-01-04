@@ -90,6 +90,7 @@
         <feature>dac-io-jpa-feature</feature>
         <feature>dac-io-routes-feature</feature>
         <feature>dac-io-web-feature</feature>
+        <bundle>mvn:de.hf.dac.io/de.hf.dac.io.audit/${project.version}</bundle>
     </feature>
 
     <feature name="dac-security-feature" version="${pom.version}">
