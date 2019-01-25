@@ -58,8 +58,6 @@ public class InstrumentServiceImpl implements InstrumentService {
         return instruments;
     }
 
-
-
     @Override
     public Optional<Instrument> getCurrency(String currencyCode){
         return instrumentDao.getCurrency(currencyCode);
@@ -131,10 +129,13 @@ public class InstrumentServiceImpl implements InstrumentService {
         Optional<Equity> existingSec = getEquity(isin);
         if(!existingSec.isPresent()) {
             Equity equity = new Equity(isin, description, true, LocalDateTime.now());
+            auditService.saveMessage("Equity inserted:" + theisin, Severity.INFO, AUDIT_MSG_TYPE);
             instrumentDao.saveInstrument(equity);
             return "new security saved sucessfully";
         } else {
             existingSec.get().setDescription(description);
+            auditService.saveMessage("Equity " + theisin +" updated with new description: " + description, Severity.INFO, AUDIT_MSG_TYPE);
+            instrumentDao.saveInstrument(existingSec.get());
             return "security updated sucessfully";
         }
     }
@@ -161,6 +162,10 @@ public class InstrumentServiceImpl implements InstrumentService {
             if(existingSymbol.isPresent()) {
                 newSymbol = existingSymbol.get();
                 newSymbol.setCurrency(currency.get());
+                auditService.saveMessage("Symbol " + thesymbol +" updated with new currency: " + thecurrencyCode, Severity.INFO, AUDIT_MSG_TYPE);
+            }
+            else {
+                auditService.saveMessage("Symbol with currency "+thecurrencyCode+" inserted:" + thesymbol, Severity.INFO, AUDIT_MSG_TYPE);
             }
         }
         instrumentDao.saveSymbol(newSymbol);
@@ -177,6 +182,7 @@ public class InstrumentServiceImpl implements InstrumentService {
             instrumentDao.saveInstrument(currency);
             return "new currency saved sucessfully";
         } else {
+            auditService.saveMessage("Currency " + currencyCode +" updated with new description: " + description, Severity.INFO, AUDIT_MSG_TYPE);
             existingCur.get().setDescription(description);
             return "security updated sucessfully";
         }
@@ -201,6 +207,8 @@ public class InstrumentServiceImpl implements InstrumentService {
             return "Source with id "+sourceId+" is not available";
         }
         EndOfDayPrice price = new EndOfDayPrice(currency.get(), security.get(), source.get(), dayofprice, value, lastchanged);
+        auditService.saveMessage("Price inserted for instrument " + security.get().getInstrumentid() +" and date " + dayofprice + " : " + value + " " + currency.get().getBusinesskey()
+            , Severity.INFO, AUDIT_MSG_TYPE);
         instrumentDao.saveEndOfDayPrice(price);
         return("Saved");
     }
@@ -278,6 +286,7 @@ public class InstrumentServiceImpl implements InstrumentService {
     @Override
     public String newTenant(String description, LocalDateTime ts) {
         Tenant tenant = new Tenant(description, true, ts);
+        auditService.saveMessage("Tenant inserted:" + description, Severity.INFO, AUDIT_MSG_TYPE);
         instrumentDao.saveInstrument(tenant);
         addInstrumentToGraph(tenant.getInstrumentid(),tenant.getInstrumentid(),EdgeType.TENANTGRAPH);
         int budgetGroupId = newBudgetGroup("budgetGroup_"+description, ts);
@@ -316,6 +325,7 @@ public class InstrumentServiceImpl implements InstrumentService {
 
     protected int createBudget(String description, int budgetGroupId, LocalDateTime ts) {
         Budget budget = new Budget(description, true, ts);
+        auditService.saveMessage("budget inserted:" + description, Severity.INFO, AUDIT_MSG_TYPE);
         instrumentDao.saveInstrument(budget);
         int budgetId = budget.getInstrumentid();
         addInstrumentToGraph(budgetId, budgetGroupId, EdgeType.TENANTGRAPH);
@@ -341,6 +351,7 @@ public class InstrumentServiceImpl implements InstrumentService {
             return "Giro not saved: tenant for the id:"+tenantId+" not exists or has no accountPortfolio";
         }
         Giro giro = new Giro(description, true, ts);
+        auditService.saveMessage("new giro inserted:" + description, Severity.INFO, AUDIT_MSG_TYPE);
         instrumentDao.saveInstrument(giro);
         addInstrumentToGraph(giro.getInstrumentid(), accportfolio.get().getInstrumentid(), EdgeType.TENANTGRAPH);
         return "new giro saved sucessfully";
@@ -385,6 +396,8 @@ public class InstrumentServiceImpl implements InstrumentService {
         cashflows.add(budgetCashflow);
 
         transaction.setCashflows(cashflows);
+        auditService.saveMessage("new transaction saved for Account "+accId+" and Budget "+budgetId+". Date:" + transactionDate + ", value:" + value + ", desc:" +description,
+            Severity.INFO, AUDIT_MSG_TYPE);
         instrumentDao.saveTransaction(transaction);
         return "transaction saved sucessfully";
     }
