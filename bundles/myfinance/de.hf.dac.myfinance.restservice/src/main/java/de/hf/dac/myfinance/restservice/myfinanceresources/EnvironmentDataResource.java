@@ -248,6 +248,16 @@ public class EnvironmentDataResource extends BaseSecuredResource<OpType,OpLevel>
         return marketDataEnvironment.getInstrumentService().newTransfer(description, srcId, trgId, value, LocalDate.parse(transactiondate), LocalDateTime.now());
     }
 
+    @POST
+    @Path("/delTransfer")
+    @Produces(MediaType.APPLICATION_JSON)
+    @ApiOperation(value = "delete Transfer",
+        response = String.class)
+    public String delTransfer(@QueryParam("transactionId") @ApiParam(value="transactionId") int transactionId) {
+        checkOperationAllowed(OpType.WRITE);
+        return marketDataEnvironment.getInstrumentService().deleteTransaction(transactionId);
+    }
+
     @GET
     @Path("/listTransactions")
     @Produces(MediaType.APPLICATION_JSON)

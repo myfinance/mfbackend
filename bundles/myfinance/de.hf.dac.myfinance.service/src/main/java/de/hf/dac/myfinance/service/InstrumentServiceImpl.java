@@ -449,6 +449,18 @@ public class InstrumentServiceImpl implements InstrumentService {
         return "transaction saved sucessfully";
     }
 
+    @Override
+    public String deleteTransaction(int transactionId){
+        Optional<Transaction> transaction = instrumentDao.getTransaction(transactionId);
+        if(transaction.isPresent()){
+            auditService.saveMessage(" transaction with id "+transactionId+" ,desc: '"+transaction.get().getDescription()+
+                    "' and Transactiondate:" + transaction.get().getTransactiondate() + "deleted",
+                Severity.INFO, AUDIT_MSG_TYPE);
+            instrumentDao.deleteTransaction(transaction.get());
+        }
+        return "transaction deleted:"+transactionId;
+    }
+
     protected boolean isAccountTransferAllowed(Instrument instrument){
         switch(instrument.getInstrumentType()){
             case Giro:

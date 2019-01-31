@@ -37,6 +37,8 @@ public interface InstrumentDao {
     Optional<Source> getSource(int sourceId);
     List<Source> getActiveSources();
     List<Transaction> listTransactions();
+    Optional<Transaction> getTransaction(int transactionid);
+    void deleteTransaction(Transaction transaction);
     void saveInstrument(Instrument instrument);
     void saveSymbol(SecuritySymbols symbol);
     void saveEndOfDayPrice(EndOfDayPrice price);

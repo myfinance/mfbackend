@@ -68,6 +68,26 @@ public class InstrumentDaoImpl  extends BaseDao implements InstrumentDao {
     }
 
     @Override
+    public Optional<Transaction> getTransaction(int transactionid){
+        Optional<Transaction> result = Optional.empty();
+        Query query = marketDataEm.createQuery("select a FROM Transaction a WHERE transactionid= :transactionid");
+        query.setParameter("transactionid", transactionid);
+        List<Object> queryResult = (List<Object>) query.getResultList();
+        if(queryResult!=null && !queryResult.isEmpty()){
+            Object object = queryResult.get(0);
+            result = Optional.of((Transaction)object);
+        }
+        return result;
+    }
+
+    @Override
+    public void deleteTransaction(Transaction transaction){
+        marketDataEm.getTransaction().begin();
+        marketDataEm.remove(transaction);
+        marketDataEm.getTransaction().commit();
+    }
+
+    @Override
     public Optional<Equity> getEquity(String isin) {
 
         Optional<Equity> result = Optional.empty();
