@@ -403,6 +403,64 @@ public class InstrumentServiceImpl implements InstrumentService {
     }
 
     @Override
+    public String newTransfer(String description, int srcInstrumentId, int trgInstrumentId, double value, LocalDate transactionDate, LocalDateTime ts){
+        Optional<Instrument> src = instrumentDao.getInstrument(srcInstrumentId);
+        TransactionType transactionType =TransactionType.TRANSFER;
+        if(!src.isPresent()){
+            return "Transfer not saved: unknown instrument:"+srcInstrumentId;
+        }
+        Optional<Instrument> trg = instrumentDao.getInstrument(trgInstrumentId);
+        if(!trg.isPresent()){
+            return "Transfer not saved: unknown instrument:"+trgInstrumentId;
+        }
+        if(trg.get().getInstrumentType() == InstrumentType.Budget){
+            transactionType =TransactionType.BUDGETTRANSFER;
+            if(src.get().getInstrumentType() != InstrumentType.Budget){
+                return "Only transfers from budget to Budget or from Account to Account are allowed:";
+            }
+        } else {
+            if( !isAccountTransferAllowed(trg.get()) || !isAccountTransferAllowed(src.get()) ){
+                return "No Transfer allowed for this accounts:";
+            }
+        }
+
+        Optional<Integer> tenantSrc = instrumentDao.getRootInstrument(srcInstrumentId, EdgeType.TENANTGRAPH);
+        Optional<Integer> tenantTrg = instrumentDao.getRootInstrument(trgInstrumentId, EdgeType.TENANTGRAPH);
+
+        if(!tenantSrc.isPresent()
+            || !tenantTrg.isPresent()
+            || tenantSrc.get()!=tenantTrg.get()){
+            return "IncomeExpense not saved: budget and account have not the same tenant";
+        }
+        Transaction transaction = new Transaction(description, transactionDate, ts, transactionType);
+
+        Cashflow srcCashflow = new Cashflow(src.get(), value * -1);
+        srcCashflow.setTransaction(transaction);
+        Cashflow trgCashflow = new Cashflow(trg.get(), value);
+        trgCashflow.setTransaction(transaction);
+        Set<Cashflow> cashflows = new HashSet<>();
+        cashflows.add(srcCashflow);
+        cashflows.add(trgCashflow);
+
+        transaction.setCashflows(cashflows);
+        auditService.saveMessage("new transaction saved for Instrument "+srcInstrumentId+" and  "+trgInstrumentId+". Date:" + transactionDate + ", value:" + value + ", desc:" +description,
+            Severity.INFO, AUDIT_MSG_TYPE);
+        instrumentDao.saveTransaction(transaction);
+        return "transaction saved sucessfully";
+    }
+
+    protected boolean isAccountTransferAllowed(Instrument instrument){
+        switch(instrument.getInstrumentType()){
+            case Giro:
+            case MoneyAtCall:
+            case TimeDeposit:
+            case BuildingsavingAccount:
+            case LifeInsurance: return true;
+            default: return false;
+        }
+    }
+
+    @Override
     public List<Transaction> listTransactions(){
         List<Transaction> transactions = instrumentDao.listTransactions();
         return transactions;

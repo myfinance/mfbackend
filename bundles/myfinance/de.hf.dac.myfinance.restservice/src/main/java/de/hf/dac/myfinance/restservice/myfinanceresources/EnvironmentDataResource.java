@@ -234,6 +234,20 @@ public class EnvironmentDataResource extends BaseSecuredResource<OpType,OpLevel>
         return marketDataEnvironment.getInstrumentService().newIncomeExpense(description, accId, budgetId, value, LocalDate.parse(transactiondate), LocalDateTime.now());
     }
 
+    @POST
+    @Path("/addTransfer")
+    @Produces(MediaType.APPLICATION_JSON)
+    @ApiOperation(value = "save Transfer",
+        response = String.class)
+    public String addTransfer(@QueryParam("description") @ApiParam(value="description") String description,
+        @QueryParam("srcId") @ApiParam(value="the instrumentId of the source") int srcId,
+        @QueryParam("trgId") @ApiParam(value="the instrumentId of the target") int trgId,
+        @QueryParam("value") @ApiParam(value="the value of the income or expense") double value,
+        @QueryParam("transactiondate") @ApiParam(value="the transactiondate(yyyy-mm-dd") String transactiondate) {
+        checkOperationAllowed(OpType.WRITE);
+        return marketDataEnvironment.getInstrumentService().newTransfer(description, srcId, trgId, value, LocalDate.parse(transactiondate), LocalDateTime.now());
+    }
+
     @GET
     @Path("/listTransactions")
     @Produces(MediaType.APPLICATION_JSON)
