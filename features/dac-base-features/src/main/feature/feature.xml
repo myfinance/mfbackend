@@ -144,9 +144,7 @@
 
     <feature name="dac-rest-base-feature" version="${pom.version}">
         <feature>dac-cxf-base</feature>
-        <feature>decanter-collector-log</feature>
-        <feature>decanter-appender-log</feature>
-        <feature>decanter-appender-elasticsearch-rest</feature>
+
         <bundle>mvn:de.hf.dac.web/de.hf.dac.web.swaggerui/${project.version}</bundle>
         <feature>dac-security-feature</feature>
         <bundle>mvn:com.google.code.gson/gson/${gson.version}</bundle>
@@ -161,5 +159,14 @@
         <feature>dac-springdata-feature</feature>
         <feature>dac-rest-base-feature</feature>
     </feature>
+
+
+    <feature name="dac-decanter-features" version="${pom.version}">
+        <feature>decanter-collector-log</feature>
+        <feature>decanter-appender-log</feature>
+        <feature>decanter-appender-elasticsearch-rest</feature>
+    </feature>
+
+
 
 </features>
