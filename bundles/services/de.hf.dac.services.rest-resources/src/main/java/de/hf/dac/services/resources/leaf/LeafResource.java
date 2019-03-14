@@ -23,12 +23,18 @@ import com.google.gson.JsonPrimitive;
 import com.google.gson.JsonSerializer;
 
 import javax.ws.rs.core.Context;
+import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 import java.io.UnsupportedEncodingException;
 import java.net.URI;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+
+import org.apache.http.HttpStatus;
+
+import de.hf.dac.api.rest.model.ModelBase;
 
 public abstract class LeafResource {
     private static final String DATE_FORMAT = "yyyy-MM-dd";
@@ -39,6 +45,8 @@ public abstract class LeafResource {
 
     private final static JsonSerializer<LocalDate> serDate = (localDate, type, jsonSerializationContext) -> localDate == null ? null : new JsonPrimitive(localDate.format(DATE_FORMATTER));
     private final static JsonSerializer<LocalDateTime> serDateTime = (localDateTime, type, jsonSerializationContext) -> localDateTime == null ? null : new JsonPrimitive(localDateTime.format(DATETIME_FORMATTER));
+
+    protected ModelBase data;
 
     private final static Gson gson = new GsonBuilder()
         .setDateFormat(DATETIME_FORMAT)
@@ -67,6 +75,27 @@ public abstract class LeafResource {
 
         return uri == null ? ""
             : uri.toString();
+    }
+
+    public Response getData(@Context UriInfo uriInfo) {
+        try {
+            URI uri = uriInfo == null ? null
+                : uriInfo.getRequestUri();
+
+            String urs = uri == null ? ""
+                : uri.toString();
+
+            data.setUrl(urs);
+
+            return uriInfo == null ? Response.ok(SerializeToJSON(data)).build()
+                : Response.ok(SerializeToJSON(data)).location(uriInfo.getRequestUri()).build();
+        } catch(Exception ex) {
+            return Response.status(HttpStatus.SC_NO_CONTENT)
+                           .entity(ex.getMessage())
+                           .type(MediaType.APPLICATION_JSON)
+                           .build();
+        }
+
     }
 }
 

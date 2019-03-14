@@ -18,6 +18,8 @@
 package de.hf.dac.myfinance.restservice.myfinanceresources;
 
 import com.google.gson.Gson;
+
+import de.hf.dac.api.rest.model.data.DateDoubleModel;
 import de.hf.dac.myfinance.api.application.MarketDataEnvironment;
 import de.hf.dac.myfinance.api.application.OpLevel;
 import de.hf.dac.myfinance.api.application.OpType;
@@ -29,16 +31,12 @@ import de.hf.dac.myfinance.api.exceptions.MDException;
 import de.hf.dac.myfinance.api.exceptions.MDMsgKey;
 import de.hf.dac.myfinance.api.restservice.InstrumentListModel;
 import de.hf.dac.myfinance.restservice.myfinanceresources.leafresources.InstrumentListResource;
+import de.hf.dac.myfinance.restservice.myfinanceresources.leafresources.ValueMapResource;
 import de.hf.dac.services.resources.BaseSecuredResource;
-import de.hf.dac.services.resources.leaf.LeafResource;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 
-import javax.ws.rs.GET;
-import javax.ws.rs.POST;
-import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
-import javax.ws.rs.QueryParam;
+import javax.ws.rs.*;
 import javax.ws.rs.core.Link;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
@@ -48,7 +46,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
-import org.apache.http.HttpStatus;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -83,8 +80,21 @@ public class EnvironmentDataResource extends BaseSecuredResource<OpType,OpLevel>
         response = InstrumentListResource.class)
     public InstrumentListResource getInstruments() {
         checkOperationAllowed(OpType.READ);
-        LocalDateTime returnvalue = LocalDateTime.now();
         return new InstrumentListResource(new InstrumentListModel(marketDataEnvironment.getInstrumentService().listInstruments()));
+    }
+
+
+    @Path("/getvaluecurve/{instrumentId}")
+    @Produces(MediaType.APPLICATION_JSON)
+    @ApiOperation(value = "get value curve", response = ValueMapResource.class)
+    public ValueMapResource getValueCurve(@PathParam("instrumentId") @ApiParam(value="the instrumentId") int instrumentId,
+        @QueryParam("startdate") @ApiParam(value="startdate in Format yyyy-mm-dd") String startdate,
+        @QueryParam("enddate") @ApiParam(value="enddate in Format yyyy-mm-dd") String enddate) {
+        checkOperationAllowed(OpType.READ);
+        LocalDate start = LocalDate.parse(startdate);
+        LocalDate end = LocalDate.parse(enddate);
+        return new ValueMapResource(new DateDoubleModel(marketDataEnvironment.getInstrumentService().getValueCurve(instrumentId, start, end)));
+
     }
 
     @POST
@@ -250,17 +260,5 @@ public class EnvironmentDataResource extends BaseSecuredResource<OpType,OpLevel>
 
     }
 
-    @GET
-    @Path("/getvaluecurve")
-    @Produces(MediaType.APPLICATION_JSON)
-    @ApiOperation(value = "get Security", response = String.class)
-    public Map<LocalDate, Double> getValueCurve(@QueryParam("instrumentId") @ApiParam(value="the instrumentId") int instrumentId,
-            @QueryParam("startdate") @ApiParam(value="startdate in Format yyyy-mm-dd") String startdate,
-            @QueryParam("enddate") @ApiParam(value="enddate in Format yyyy-mm-dd") String enddate) {
-        checkOperationAllowed(OpType.READ);
-        LocalDate start = LocalDate.parse(startdate);
-        LocalDate end = LocalDate.parse(enddate);
-        return marketDataEnvironment.getInstrumentService().getValueCurve(instrumentId, start, end);
 
-    }
 }

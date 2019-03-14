@@ -108,7 +108,6 @@ public class InstrumentServiceImpl implements InstrumentService {
         Map<LocalDate, Double> adjValueCurve = new HashMap();
         if(startDate.isAfter(endDate) || startDate.getYear()<1970) return adjValueCurve;
         Map<LocalDate, Double> valueCurve = getValueCurve(instrumentId);
-        Set<LocalDate> dates = valueCurve.keySet();
         for (LocalDate date:valueCurve.keySet()) {
             if(!date.isBefore(startDate) && !date.isAfter(endDate)){
                 adjValueCurve.put(date, valueCurve.get(date));
