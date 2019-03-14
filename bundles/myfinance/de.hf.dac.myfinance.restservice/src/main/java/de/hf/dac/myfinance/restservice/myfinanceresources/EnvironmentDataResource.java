@@ -77,7 +77,7 @@ public class EnvironmentDataResource extends BaseSecuredResource<OpType,OpLevel>
         return Response.ok(returnvalue).links(link).build();
     }
 
-    /*@Path("/instruments")
+    @Path("/instruments")
     @Produces(MediaType.APPLICATION_JSON)
     @ApiOperation(value = "get Instruments",
         response = InstrumentListResource.class)
@@ -85,24 +85,6 @@ public class EnvironmentDataResource extends BaseSecuredResource<OpType,OpLevel>
         checkOperationAllowed(OpType.READ);
         LocalDateTime returnvalue = LocalDateTime.now();
         return new InstrumentListResource(new InstrumentListModel(marketDataEnvironment.getInstrumentService().listInstruments()));
-    }*/
-
-    @GET
-    @Path("/instruments")
-    @Produces(MediaType.APPLICATION_JSON)
-    @ApiOperation(value = "get Instruments",
-        response = List.class)
-    public Response getInstruments() {
-        checkOperationAllowed(OpType.READ);
-        try {
-            return Response.ok(LeafResource.SerializeToJSON(marketDataEnvironment.getInstrumentService().listInstruments())).build();
-        } catch(Exception ex) {
-            LOG.debug("Full Exception",ex);
-            return Response.status(HttpStatus.SC_NO_CONTENT)
-                           .entity(ex.getMessage())
-                           .type(MediaType.APPLICATION_JSON)
-                           .build();
-        }
     }
 
     @POST

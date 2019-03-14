@@ -86,6 +86,7 @@ public abstract class Instrument  implements java.io.Serializable {
     }
 
     @Transient
+    @ApiModelProperty(required = true)
     public InstrumentType getInstrumentType(){
         return instrumentType;
     }
@@ -134,11 +135,9 @@ public abstract class Instrument  implements java.io.Serializable {
     }
 
     @Column(name="businesskey", length=32)
-    @ApiModelProperty(required = true)
     public String getBusinesskey() {
         return this.businesskey;
     }
-
     public void setBusinesskey(String businesskey) {
         this.businesskey = businesskey;
     }
