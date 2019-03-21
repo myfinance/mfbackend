@@ -20,6 +20,7 @@ package de.hf.dac.myfinance.restservice.myfinanceresources;
 import com.google.gson.Gson;
 
 import de.hf.dac.api.rest.model.data.DateDoubleModel;
+import de.hf.dac.api.rest.model.data.StringModel;
 import de.hf.dac.myfinance.api.application.MarketDataEnvironment;
 import de.hf.dac.myfinance.api.application.OpLevel;
 import de.hf.dac.myfinance.api.application.OpType;
@@ -33,19 +34,23 @@ import de.hf.dac.myfinance.api.restservice.InstrumentListModel;
 import de.hf.dac.myfinance.restservice.myfinanceresources.leafresources.InstrumentListResource;
 import de.hf.dac.myfinance.restservice.myfinanceresources.leafresources.ValueMapResource;
 import de.hf.dac.services.resources.BaseSecuredResource;
+import de.hf.dac.services.resources.leaf.LeafResource;
+import de.hf.dac.services.resources.leaf.simple.StringResource;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
 
 import javax.ws.rs.*;
-import javax.ws.rs.core.Link;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 
+import org.apache.http.HttpStatus;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -59,19 +64,6 @@ public class EnvironmentDataResource extends BaseSecuredResource<OpType,OpLevel>
     public EnvironmentDataResource(MDEnvironmentContext envContext) {
         super(envContext);
         this.marketDataEnvironment = envContext.getMarketDataEnvironment();
-    }
-
-    @GET
-    @Path("/instrumentshateos")
-    @Produces(MediaType.APPLICATION_JSON)
-    @ApiOperation(value = "get Instruments",
-        response = List.class)
-    public Response getInstrumentshateos() {
-        checkOperationAllowed(OpType.READ);
-        List<Instrument> returnvalue = marketDataEnvironment.getInstrumentService().listInstruments();
-        Link link = Link.fromUri("http://foo.bar/employee/john").rel("manager").rel("friend")
-            .title("employee").type("application/xml").build();
-        return Response.ok(returnvalue).links(link).build();
     }
 
     @Path("/instruments")
@@ -101,14 +93,14 @@ public class EnvironmentDataResource extends BaseSecuredResource<OpType,OpLevel>
     @Path("/importprices")
     @Produces(MediaType.APPLICATION_JSON)
     @ApiOperation(value = "importprices", response = String.class)
-    public String importPrices() {
+    public Response importPrices() {
         checkOperationAllowed(OpType.EXECUTE);
         marketDataEnvironment.getInstrumentService().importPrices(LocalDateTime.now());
-        return "sucessful";
+        return Response.ok().build();
     }
 
     @GET
-    @Path("/getsecurity")
+    @Path("/getequity")
     @Produces(MediaType.APPLICATION_JSON)
     @ApiOperation(value = "get Equity", response = String.class)
     public Instrument getEquity(@QueryParam("isin") @ApiParam(value="the isin") String isin) {

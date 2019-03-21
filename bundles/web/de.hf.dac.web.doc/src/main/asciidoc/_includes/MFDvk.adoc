@@ -113,3 +113,23 @@ Es existieren aktuell folgende APIs, die produktiv genutzt werden:
 (*) Environment-basiert: Die APIs können je nach übergebener EnvironmentID in unterschiedlichen fachlichen und technischen System-Umgebungen wirken
 
 TIP: Unter link:/api-docs3[Api Docs] sind noch mehr als die oben gelisteten Kategorien / API-Top Level zu sehen - dies hat einerseits technische Gründe, andererseits sind dort auch Test- und abzuschaltende APIs aufgelistet.
+
+
+= coding conventions for Rest:
+
+== When should you use Path Variable, and how about Query Parameter?
+If you want to identify a resource, you should use Path Variable. But if you want to sort or filter items, then you should use query parameter.
+/users # Fetch a list of users
+/users?occupation=programer # Fetch a list of programer user
+/users/123 # Fetch a user who has id 123
+
+== Response
+
+in case of an error throw a runtime exception -> a http 500 message will be sent with the exception and the client know what happens
+
+In case of success without a returnvalue: Response.ok().build();
+
+Allways return the type "response" and convert the returnvalue to json Response.ok(LeafResource.SerializeToJSON("test")).build();
+If you return a String you will get "can't parse JSON.  Raw result:"
+
+Return value type should allways(if you use the Get methode) inherit from LeafResource to get the url and data embedded in the response json
