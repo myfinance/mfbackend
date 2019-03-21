@@ -20,22 +20,21 @@ package de.hf.dac.myfinance.restservice.myfinanceresources;
 import com.google.gson.Gson;
 
 import de.hf.dac.api.rest.model.data.DateDoubleModel;
-import de.hf.dac.api.rest.model.data.StringModel;
 import de.hf.dac.myfinance.api.application.MarketDataEnvironment;
 import de.hf.dac.myfinance.api.application.OpLevel;
 import de.hf.dac.myfinance.api.application.OpType;
 import de.hf.dac.myfinance.api.application.servicecontext.MDEnvironmentContext;
 import de.hf.dac.myfinance.api.domain.Equity;
-import de.hf.dac.myfinance.api.domain.Instrument;
-import de.hf.dac.myfinance.api.domain.Transaction;
 import de.hf.dac.myfinance.api.exceptions.MDException;
 import de.hf.dac.myfinance.api.exceptions.MDMsgKey;
 import de.hf.dac.myfinance.api.restservice.InstrumentListModel;
+import de.hf.dac.myfinance.api.restservice.InstrumentModel;
+import de.hf.dac.myfinance.api.restservice.TransactionListModel;
 import de.hf.dac.myfinance.restservice.myfinanceresources.leafresources.InstrumentListResource;
+import de.hf.dac.myfinance.restservice.myfinanceresources.leafresources.InstrumentResource;
+import de.hf.dac.myfinance.restservice.myfinanceresources.leafresources.TransactionListResource;
 import de.hf.dac.myfinance.restservice.myfinanceresources.leafresources.ValueMapResource;
 import de.hf.dac.services.resources.BaseSecuredResource;
-import de.hf.dac.services.resources.leaf.LeafResource;
-import de.hf.dac.services.resources.leaf.simple.StringResource;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import io.swagger.annotations.ApiResponse;
@@ -47,7 +46,6 @@ import javax.ws.rs.core.Response;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.List;
 import java.util.Optional;
 
 import org.apache.http.HttpStatus;
@@ -75,6 +73,15 @@ public class EnvironmentDataResource extends BaseSecuredResource<OpType,OpLevel>
         return new InstrumentListResource(new InstrumentListModel(marketDataEnvironment.getInstrumentService().listInstruments()));
     }
 
+    @GET
+    @Path("/listTransactions")
+    @Produces(MediaType.APPLICATION_JSON)
+    @ApiOperation(value = "get Transactions", response = TransactionListResource.class)
+    public TransactionListResource getTransaction() {
+        checkOperationAllowed(OpType.READ);
+        return new TransactionListResource(new TransactionListModel(marketDataEnvironment.getInstrumentService().listTransactions()));
+
+    }
 
     @Path("/getvaluecurve/{instrumentId}")
     @Produces(MediaType.APPLICATION_JSON)
@@ -92,21 +99,23 @@ public class EnvironmentDataResource extends BaseSecuredResource<OpType,OpLevel>
     @POST
     @Path("/importprices")
     @Produces(MediaType.APPLICATION_JSON)
-    @ApiOperation(value = "importprices", response = String.class)
+    @ApiOperation(value = "importprices")
+    @ApiResponses(value = {
+        @ApiResponse(code = HttpStatus.SC_NO_CONTENT, message = "Prices imported"),
+        @ApiResponse(code = HttpStatus.SC_INTERNAL_SERVER_ERROR, message = "Something wrong in Server")})
     public Response importPrices() {
         checkOperationAllowed(OpType.EXECUTE);
         marketDataEnvironment.getInstrumentService().importPrices(LocalDateTime.now());
         return Response.ok().build();
     }
 
-    @GET
     @Path("/getequity")
     @Produces(MediaType.APPLICATION_JSON)
-    @ApiOperation(value = "get Equity", response = String.class)
-    public Instrument getEquity(@QueryParam("isin") @ApiParam(value="the isin") String isin) {
+    @ApiOperation(value = "get Equity", response = InstrumentResource.class)
+    public InstrumentResource getEquity(@QueryParam("isin") @ApiParam(value="the isin") String isin) {
         checkOperationAllowed(OpType.READ);
         Optional<Equity> equity = marketDataEnvironment.getInstrumentService().getEquity(isin);
-        if(equity.isPresent()) return equity.get();
+        if(equity.isPresent()) return new InstrumentResource(new InstrumentModel(equity.get()));
         else
             throw new MDException(MDMsgKey.NO_INSTRUMENT_FOUND_EXCEPTION, "no Instrument found with ISIN "+isin);
 
@@ -115,142 +124,161 @@ public class EnvironmentDataResource extends BaseSecuredResource<OpType,OpLevel>
     @POST
     @Path("/addEquity")
     @Produces(MediaType.APPLICATION_JSON)
-    @ApiOperation(value = "save Instrument",
-        response = String.class)
-    public String addEquity(@QueryParam("isin") @ApiParam(value="the isin") String isin,
+    @ApiOperation(value = "save Instrument")
+    @ApiResponses(value = {
+        @ApiResponse(code = HttpStatus.SC_NO_CONTENT, message = "added"),
+        @ApiResponse(code = HttpStatus.SC_INTERNAL_SERVER_ERROR, message = "Something wrong in Server")})
+    public Response addEquity(@QueryParam("isin") @ApiParam(value="the isin") String isin,
         @QueryParam("description") @ApiParam(value="description") String description) {
         checkOperationAllowed(OpType.WRITE);
-
-        return marketDataEnvironment.getInstrumentService().saveEquity(isin, description);
-
+        marketDataEnvironment.getInstrumentService().saveEquity(isin, description);
+        return Response.ok().build();
     }
 
     @POST
     @Path("/addSymbol")
     @Produces(MediaType.APPLICATION_JSON)
-    @ApiOperation(value = "save Instrument",
-        response = String.class)
-    public String addSymbol(@QueryParam("isin") @ApiParam(value="the isin") String isin,
+    @ApiOperation(value = "save Instrument")
+    @ApiResponses(value = {
+        @ApiResponse(code = HttpStatus.SC_NO_CONTENT, message = "added"),
+        @ApiResponse(code = HttpStatus.SC_INTERNAL_SERVER_ERROR, message = "Something wrong in Server")})
+    public Response addSymbol(@QueryParam("isin") @ApiParam(value="the isin") String isin,
         @QueryParam("symbol") @ApiParam(value="symbol") String symbol,
         @QueryParam("currencycode") @ApiParam(value="the code of the currency in which the security is traded in the exchange referenced by the symbol") String currencyCode) {
         checkOperationAllowed(OpType.WRITE);
-        return marketDataEnvironment.getInstrumentService().saveSymbol(isin, symbol, currencyCode);
+        marketDataEnvironment.getInstrumentService().saveSymbol(isin, symbol, currencyCode);
+        return Response.ok().build();
     }
 
     @POST
     @Path("/addCurrency")
     @Produces(MediaType.APPLICATION_JSON)
-    @ApiOperation(value = "save Instrument",
-        response = String.class)
-    public String addCurrency(@QueryParam("currencyCode") @ApiParam(value="the currencyCode") String currencyCode,
+    @ApiOperation(value = "save Instrument")
+    @ApiResponses(value = {
+        @ApiResponse(code = HttpStatus.SC_NO_CONTENT, message = "added"),
+        @ApiResponse(code = HttpStatus.SC_INTERNAL_SERVER_ERROR, message = "Something wrong in Server")})
+    public Response addCurrency(@QueryParam("currencyCode") @ApiParam(value="the currencyCode") String currencyCode,
         @QueryParam("description") @ApiParam(value="description") String description) {
         checkOperationAllowed(OpType.WRITE);
-        return marketDataEnvironment.getInstrumentService().saveCurrency(currencyCode, description);
+        marketDataEnvironment.getInstrumentService().saveCurrency(currencyCode, description);
+        return Response.ok().build();
     }
 
     @POST
     @Path("/addPrice")
     @Produces(MediaType.APPLICATION_JSON)
-    @ApiOperation(value = "save Price",
-        response = String.class)
-    public String addPrice(@QueryParam("currencyCode") @ApiParam(value="the currencyCode") String currencyCode,
+    @ApiOperation(value = "save Price")
+    @ApiResponses(value = {
+        @ApiResponse(code = HttpStatus.SC_NO_CONTENT, message = "added"),
+        @ApiResponse(code = HttpStatus.SC_INTERNAL_SERVER_ERROR, message = "Something wrong in Server")})
+    public Response addPrice(@QueryParam("currencyCode") @ApiParam(value="the currencyCode") String currencyCode,
         @QueryParam("isin") @ApiParam(value="the isin") String isin,
         @QueryParam("dayofprice") @ApiParam(value="the dayofprice(yyyy-mm-dd") String dayofprice,
         @QueryParam("value") @ApiParam(value="value") double value) {
         checkOperationAllowed(OpType.WRITE);
-        return marketDataEnvironment.getInstrumentService().saveEndOfDayPrice(currencyCode, isin, LocalDate.parse(dayofprice), value, LocalDateTime.now());
+        marketDataEnvironment.getInstrumentService().saveEndOfDayPrice(currencyCode, isin, LocalDate.parse(dayofprice), value, LocalDateTime.now());
+        return Response.ok().build();
     }
 
     @POST
     @Path("/fillpricehistory")
     @Produces(MediaType.APPLICATION_JSON)
-    @ApiOperation(value = "fillpricehistory", response = String.class)
-    public String fillPricesHistory(@QueryParam("sourceId") @ApiParam(value="the sourceId") int sourceId,
+    @ApiOperation(value = "fillpricehistory")
+    @ApiResponses(value = {
+        @ApiResponse(code = HttpStatus.SC_NO_CONTENT, message = "added"),
+        @ApiResponse(code = HttpStatus.SC_INTERNAL_SERVER_ERROR, message = "Something wrong in Server")})
+    public Response fillPricesHistory(@QueryParam("sourceId") @ApiParam(value="the sourceId") int sourceId,
         @QueryParam("isin") @ApiParam(value="the isin") String isin) {
         checkOperationAllowed(OpType.WRITE);
         marketDataEnvironment.getInstrumentService().fillPriceHistory(sourceId, isin, LocalDateTime.now());
-        return "sucessful";
+        return Response.ok().build();
     }
 
     @POST
     @Path("/addBudget")
     @Produces(MediaType.APPLICATION_JSON)
-    @ApiOperation(value = "add Budget",
-        response = String.class)
-    public String addBudget(@QueryParam("description") @ApiParam(value="description") String description,
+    @ApiOperation(value = "add Budget")
+    @ApiResponses(value = {
+        @ApiResponse(code = HttpStatus.SC_NO_CONTENT, message = "added"),
+        @ApiResponse(code = HttpStatus.SC_INTERNAL_SERVER_ERROR, message = "Something wrong in Server")})
+    public Response addBudget(@QueryParam("description") @ApiParam(value="description") String description,
                             @QueryParam("budgetGroupId") @ApiParam(value="the Id of the budgetGroup which the budget is attached to") int budgetGroupId) {
         checkOperationAllowed(OpType.WRITE);
-        return marketDataEnvironment.getInstrumentService().newBudget(description, budgetGroupId, LocalDateTime.now());
+        marketDataEnvironment.getInstrumentService().newBudget(description, budgetGroupId, LocalDateTime.now());
+        return Response.ok().build();
     }
 
     @POST
     @Path("/addTenant")
     @Produces(MediaType.APPLICATION_JSON)
-    @ApiOperation(value = "save Tenant",
-        response = String.class)
-    public String addTenant(@QueryParam("description") @ApiParam(value="description") String description) {
+    @ApiOperation(value = "save Tenant")
+    @ApiResponses(value = {
+        @ApiResponse(code = HttpStatus.SC_NO_CONTENT, message = "added"),
+        @ApiResponse(code = HttpStatus.SC_INTERNAL_SERVER_ERROR, message = "Something wrong in Server")})
+    public Response addTenant(@QueryParam("description") @ApiParam(value="description") String description) {
         checkOperationAllowed(OpType.WRITE);
-        return marketDataEnvironment.getInstrumentService().newTenant(description, LocalDateTime.now());
+        marketDataEnvironment.getInstrumentService().newTenant(description, LocalDateTime.now());
+        return Response.ok().build();
     }
 
     @POST
     @Path("/addGiro")
     @Produces(MediaType.APPLICATION_JSON)
-    @ApiOperation(value = "save Giro",
-        response = String.class)
-    public String addGiro(@QueryParam("description") @ApiParam(value="description") String description,
+    @ApiOperation(value = "save Giro")
+    @ApiResponses(value = {
+        @ApiResponse(code = HttpStatus.SC_NO_CONTENT, message = "added"),
+        @ApiResponse(code = HttpStatus.SC_INTERNAL_SERVER_ERROR, message = "Something wrong in Server")})
+    public Response addGiro(@QueryParam("description") @ApiParam(value="description") String description,
         @QueryParam("tenantId") @ApiParam(value="the Id of the tenant which the giro is attached to") int tenantId) {
         checkOperationAllowed(OpType.WRITE);
-        return marketDataEnvironment.getInstrumentService().newGiroAccount(description, tenantId, LocalDateTime.now());
+        marketDataEnvironment.getInstrumentService().newGiroAccount(description, tenantId, LocalDateTime.now());
+        return Response.ok().build();
     }
 
     @POST
     @Path("/addIncomeExpense")
     @Produces(MediaType.APPLICATION_JSON)
-    @ApiOperation(value = "save Income or Expense",
-        response = String.class)
-    public String addIncomeExpense(@QueryParam("description") @ApiParam(value="description") String description,
+    @ApiOperation(value = "save Income or Expense")
+    @ApiResponses(value = {
+        @ApiResponse(code = HttpStatus.SC_NO_CONTENT, message = "added"),
+        @ApiResponse(code = HttpStatus.SC_INTERNAL_SERVER_ERROR, message = "Something wrong in Server")})
+    public Response addIncomeExpense(@QueryParam("description") @ApiParam(value="description") String description,
         @QueryParam("accId") @ApiParam(value="the accountId of the income or expense") int accId,
         @QueryParam("budgetId") @ApiParam(value="the budgetId of the income or expense") int budgetId,
         @QueryParam("value") @ApiParam(value="the value of the income or expense") double value,
         @QueryParam("transactiondate") @ApiParam(value="the transactiondate(yyyy-mm-dd") String transactiondate) {
         checkOperationAllowed(OpType.WRITE);
-        return marketDataEnvironment.getInstrumentService().newIncomeExpense(description, accId, budgetId, value, LocalDate.parse(transactiondate), LocalDateTime.now());
+        marketDataEnvironment.getInstrumentService().newIncomeExpense(description, accId, budgetId, value, LocalDate.parse(transactiondate), LocalDateTime.now());
+        return Response.ok().build();
     }
 
     @POST
     @Path("/addTransfer")
     @Produces(MediaType.APPLICATION_JSON)
-    @ApiOperation(value = "save Transfer",
-        response = String.class)
-    public String addTransfer(@QueryParam("description") @ApiParam(value="description") String description,
+    @ApiOperation(value = "save Transfer")
+    @ApiResponses(value = {
+        @ApiResponse(code = HttpStatus.SC_NO_CONTENT, message = "added"),
+        @ApiResponse(code = HttpStatus.SC_INTERNAL_SERVER_ERROR, message = "Something wrong in Server")})
+    public Response addTransfer(@QueryParam("description") @ApiParam(value="description") String description,
         @QueryParam("srcId") @ApiParam(value="the instrumentId of the source") int srcId,
         @QueryParam("trgId") @ApiParam(value="the instrumentId of the target") int trgId,
         @QueryParam("value") @ApiParam(value="the value of the income or expense") double value,
         @QueryParam("transactiondate") @ApiParam(value="the transactiondate(yyyy-mm-dd") String transactiondate) {
         checkOperationAllowed(OpType.WRITE);
-        return marketDataEnvironment.getInstrumentService().newTransfer(description, srcId, trgId, value, LocalDate.parse(transactiondate), LocalDateTime.now());
+        marketDataEnvironment.getInstrumentService().newTransfer(description, srcId, trgId, value, LocalDate.parse(transactiondate), LocalDateTime.now());
+        return Response.ok().build();
     }
 
     @POST
     @Path("/delTransfer")
     @Produces(MediaType.APPLICATION_JSON)
-    @ApiOperation(value = "delete Transfer",
-        response = String.class)
-    public String delTransfer(@QueryParam("transactionId") @ApiParam(value="transactionId") int transactionId) {
+    @ApiOperation(value = "delete Transfer")
+    @ApiResponses(value = {
+        @ApiResponse(code = HttpStatus.SC_NO_CONTENT, message = "deleted"),
+        @ApiResponse(code = HttpStatus.SC_INTERNAL_SERVER_ERROR, message = "Something wrong in Server")})
+    public Response delTransfer(@QueryParam("transactionId") @ApiParam(value="transactionId") int transactionId) {
         checkOperationAllowed(OpType.WRITE);
-        return marketDataEnvironment.getInstrumentService().deleteTransaction(transactionId);
+        marketDataEnvironment.getInstrumentService().deleteTransaction(transactionId);
+        return Response.ok().build();
     }
-
-    @GET
-    @Path("/listTransactions")
-    @Produces(MediaType.APPLICATION_JSON)
-    @ApiOperation(value = "get Transactions", response = String.class)
-    public List<Transaction> getTransaction() {
-        checkOperationAllowed(OpType.READ);
-        return marketDataEnvironment.getInstrumentService().listTransactions();
-
-    }
-
-
 }

@@ -11,5 +11,23 @@
 
 package de.hf.dac.myfinance.api.restservice;
 
-public class InstrumentModel {
+import java.io.Serializable;
+
+import de.hf.dac.api.rest.model.ModelBase;
+import de.hf.dac.myfinance.api.domain.Instrument;
+import io.swagger.annotations.ApiModel;
+
+@ApiModel
+public class InstrumentModel  extends ModelBase implements Serializable {
+
+    final protected Instrument value;
+
+    public InstrumentModel(Instrument value) {
+        this.value = value;
+    }
+
+    public Instrument getValue() {
+        return value;
+    }
+
 }
