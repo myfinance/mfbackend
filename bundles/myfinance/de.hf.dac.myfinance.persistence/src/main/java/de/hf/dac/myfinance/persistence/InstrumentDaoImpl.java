@@ -68,6 +68,13 @@ public class InstrumentDaoImpl  extends BaseDao implements InstrumentDao {
     }
 
     @Override
+    public List<Cashflow> listInstrumentCashflows(int instrumentId){
+        Query query = marketDataEm.createQuery("select a FROM Cashflow a WHERE instrumentid = :instrumentid");
+        query.setParameter("instrumentid", instrumentId);
+        return (List<Cashflow>) query.getResultList();
+    }
+
+    @Override
     public Optional<Transaction> getTransaction(int transactionid){
         Optional<Transaction> result = Optional.empty();
         Query query = marketDataEm.createQuery("select a FROM Transaction a WHERE transactionid= :transactionid");

@@ -37,6 +37,7 @@ public interface InstrumentDao {
     Optional<Source> getSource(int sourceId);
     List<Source> getActiveSources();
     List<Transaction> listTransactions();
+    List<Cashflow> listInstrumentCashflows(int instrumentId);
     Optional<Transaction> getTransaction(int transactionid);
     void deleteTransaction(Transaction transaction);
     void saveInstrument(Instrument instrument);

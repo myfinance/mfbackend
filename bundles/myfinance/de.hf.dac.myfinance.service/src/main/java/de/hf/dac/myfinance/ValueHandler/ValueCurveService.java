@@ -54,10 +54,12 @@ public class ValueCurveService {
 
     public ValueHandler getValueHandler(InstrumentType instrumentType){
         ValueHandler valueHandler = null;
-        switch(instrumentType){
-            case Currency:
-            case Equity:
+        switch(instrumentType.getTypeGroup()){
+            case SECURITY:
                 valueHandler = new SecurityValueHandler(instrumentDao);
+                break;
+            case CASHACCOUNT:
+                valueHandler = new CashAccValueHandler(instrumentDao);
                 break;
             case UNKNOWN:
                 throw new MDException(MDMsgKey.UNKNOWN_INSTRUMENTTYPE_EXCEPTION, "Type:"+instrumentType);
