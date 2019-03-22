@@ -27,6 +27,7 @@ import {ApiModule} from "./modules/myfinance-tsclient-generated/api.module";
 import {MyFinanceDataService} from "./shared/services/myfinance-data.service";
 import {ConfigService} from "./shared/services/config.service";
 import {MyFinanceWrapperService} from "./shared/services/my-finance-wrapper.service";
+import {MfAccountManagerModule} from "./modules/mfaccountmanager/mfaccountmanager.module";
 
 /**
  * Loads the configuration of the given configuration service.
@@ -60,6 +61,7 @@ export function initConfiguration(configService: ConfigService): Function {
     AppRoutesModule,
     WidgetModule,
     MyFinanceCommonModule,
+    MfAccountManagerModule,
     ApiModule,
     CollapseModule.forRoot(),
     BsDropdownModule.forRoot()

@@ -3,7 +3,7 @@
     {
       "name": "Localhost",
       "identifier": "local",
-      "url": "https://localhost:8443/dac/rest",
+      "url": "http://localhost:8181/dac/rest",
       "defaultEnvironment": "dev"
     },
     {

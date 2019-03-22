@@ -16,11 +16,9 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 import de.hf.dac.myfinance.api.domain.Cashflow;
-import de.hf.dac.myfinance.api.domain.EndOfDayPrice;
 import de.hf.dac.myfinance.api.domain.Instrument;
 import de.hf.dac.myfinance.api.persistence.dao.InstrumentDao;
 
-import static java.time.temporal.ChronoUnit.DAYS;
 
 public class CashAccValueHandler implements ValueHandler{
     private InstrumentDao instrumentDao;
