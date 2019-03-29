@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { WidgetDataTableComponent } from './widget-data-table.component';
+import { TransactiontableComponent } from './transactiontable.component';
 
-describe('WidgetDataTableComponent', () => {
-  let component: WidgetDataTableComponent;
-  let fixture: ComponentFixture<WidgetDataTableComponent>;
+describe('TransactiontableComponent', () => {
+  let component: TransactiontableComponent;
+  let fixture: ComponentFixture<TransactiontableComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ WidgetDataTableComponent ]
+      declarations: [ TransactiontableComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(WidgetDataTableComponent);
+    fixture = TestBed.createComponent(TransactiontableComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

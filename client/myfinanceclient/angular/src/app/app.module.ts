@@ -1,10 +1,6 @@
-import { BrowserModule } from '@angular/platform-browser';
-import {APP_INITIALIZER, NgModule} from '@angular/core';
-import { FormsModule } from '@angular/forms';
 
-import { AppComponent } from './app.component';
 import {InstrumentSearchComponent} from "./instrument-search/instrument-search.component";
-import {BASE_URL} from "./app.tokens";
+
 import {InstrumentCardComponent} from "./instrument-search/instrument-card.component";
 import {AppRoutesModule} from "./app.routes";
 import {NotFoundViewComponent} from "./views/not-found-view/not-found-view.component";
@@ -21,13 +17,17 @@ import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
 import {MyFinanceCommonModule} from "./modules/myfinance-common/myfinance-common.module";
 import { LinechartexpComponent } from './views/examples/linechartexp/linechartexp.component';
 import { GridexpComponent } from './views/examples/gridexp/gridexp.component';
-import {HTTP_INTERCEPTORS, HttpClient, HttpClientModule} from "@angular/common/http";
 import {HttpInterceptor} from "./http-interceptor";
 import {ApiModule} from "./modules/myfinance-tsclient-generated/api.module";
 import {MyFinanceDataService} from "./shared/services/myfinance-data.service";
 import {ConfigService} from "./shared/services/config.service";
 import {MyFinanceWrapperService} from "./shared/services/my-finance-wrapper.service";
 import {MfAccountManagerModule} from "./modules/mfaccountmanager/mfaccountmanager.module";
+import {BrowserModule} from "@angular/platform-browser";
+import {APP_INITIALIZER, NgModule} from "@angular/core";
+import {AppComponent} from "./app.component";
+import {FormsModule} from "@angular/forms";
+import {HTTP_INTERCEPTORS, HttpClientModule} from "@angular/common/http";
 
 /**
  * Loads the configuration of the given configuration service.
@@ -42,6 +42,7 @@ export function initConfiguration(configService: ConfigService): Function {
 @NgModule({
 
   declarations: [
+
     AppComponent,
     NotFoundViewComponent,
     ErrorViewComponent,

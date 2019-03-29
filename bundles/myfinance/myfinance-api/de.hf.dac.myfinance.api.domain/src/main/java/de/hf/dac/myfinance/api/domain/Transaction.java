@@ -27,7 +27,6 @@ import java.util.Set;
 
 import javax.persistence.*;
 
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import static javax.persistence.GenerationType.IDENTITY;
 
@@ -108,7 +107,7 @@ public class Transaction  implements java.io.Serializable {
 
     @OneToMany(fetch=FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "tradeid")
-    @ApiModelProperty(required = true)
+    @ApiModelProperty(required = false)
     public Set<Trade> getTrades() {
         return this.trades;
     }
@@ -118,7 +117,6 @@ public class Transaction  implements java.io.Serializable {
 
     @OneToMany(fetch=FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "transaction")
     @Column(nullable = false)
-    @JsonManagedReference
     @ApiModelProperty(required = true)
     public Set<Cashflow> getCashflows() {
         return this.cashflows;

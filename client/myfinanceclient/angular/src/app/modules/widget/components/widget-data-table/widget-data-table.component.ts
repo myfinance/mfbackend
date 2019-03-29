@@ -2,7 +2,7 @@ import { Component, OnInit, OnDestroy, AfterViewInit, Input, ViewChild, ElementR
 import { DecimalPipe } from '@angular/common';
 import { Subscription } from 'rxjs/Subscription';
 import { Subject } from 'rxjs/Subject';
-import { GridOptions } from "ag-grid";
+import { GridOptions } from 'ag-grid-community';
 import dc from 'dc';
 
 import { DcService } from '../../services/dc.service';

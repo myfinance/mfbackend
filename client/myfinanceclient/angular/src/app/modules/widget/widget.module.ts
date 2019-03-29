@@ -8,6 +8,7 @@ import { WidgetCompositeLineChartComponent } from './components/widget-composite
 import {WidgetContentComponent} from "./shared/component/widget-content/widget-content.component";
 import {WidgetDataTableComponent} from "./components/widget-data-table/widget-data-table.component";
 import {AgGridModule} from "ag-grid-angular";
+import {BooleanPipe} from "./pipes/boolean.pipe";
 
 @NgModule({
   imports: [
@@ -19,7 +20,8 @@ import {AgGridModule} from "ag-grid-angular";
     WidgetCompositeLineChartComponent,
     WidgetContentComponent,
     WidgetDataTableComponent,
-    FinancialNumberPipe
+    FinancialNumberPipe,
+    BooleanPipe
   ],
   exports: [
     WidgetHorizontalBarChartComponent,

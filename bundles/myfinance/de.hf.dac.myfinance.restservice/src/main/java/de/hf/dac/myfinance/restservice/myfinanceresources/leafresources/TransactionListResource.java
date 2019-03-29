@@ -20,7 +20,7 @@ import javax.ws.rs.core.UriInfo;
 
 import de.hf.dac.api.rest.model.data.ListModel;
 import de.hf.dac.myfinance.api.domain.Transaction;
-import de.hf.dac.myfinance.api.restservice.InstrumentListModel;
+import de.hf.dac.myfinance.api.restservice.TransactionListModel;
 import de.hf.dac.services.resources.leaf.list.ListResource;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -34,7 +34,7 @@ public class TransactionListResource extends ListResource<Transaction> {
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    @ApiOperation(value = "List Data", response = InstrumentListModel.class)
+    @ApiOperation(value = "List Data", response = TransactionListModel.class)
     public Response getTransactionList(
         @Context
             UriInfo uriInfo) {

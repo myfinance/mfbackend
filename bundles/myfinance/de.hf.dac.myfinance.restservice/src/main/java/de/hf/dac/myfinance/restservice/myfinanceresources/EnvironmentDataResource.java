@@ -73,7 +73,6 @@ public class EnvironmentDataResource extends BaseSecuredResource<OpType,OpLevel>
         return new InstrumentListResource(new InstrumentListModel(marketDataEnvironment.getInstrumentService().listInstruments()));
     }
 
-    @GET
     @Path("/listTransactions")
     @Produces(MediaType.APPLICATION_JSON)
     @ApiOperation(value = "get Transactions", response = TransactionListResource.class)

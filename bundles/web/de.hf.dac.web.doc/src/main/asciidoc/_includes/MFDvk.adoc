@@ -133,3 +133,71 @@ Allways return the type "response" and convert the returnvalue to json Response.
 If you return a String you will get "can't parse JSON.  Raw result:"
 
 Return value type should allways(if you use the Get methode) inherit from LeafResource to get the url and data embedded in the response json
+
+== Hibernate Domain classes as transfer objects
+
+To use Hibernate Domain classes as transfer objects for Rest you have to mind smome things:
+
+=== One to Many and Many to One
+
+If you have bidirectional references you get a circular dependency and so a stack overflow during the json serialization
+So you have to do the following
+
+* define an annotation (the is done in de.hf.dac.api.base.json)
+[source,java]
+----
+   @Retention(RetentionPolicy.RUNTIME)
+   @Target(ElementType.FIELD)
+   public @interface Exclude {}
+----
+* Exclude the field
+[source,java]
+----
+    @Exclude
+    private String field;
+----
+* add exclude Strategy
+[source,java]
+----
+ExclusionStrategy strategy = new ExclusionStrategy() {
+        @Override
+        public boolean shouldSkipClass(Class<?> clazz) {
+            return false;
+        }
+
+        @Override
+        public boolean shouldSkipField(FieldAttributes field) {
+            return field.getAnnotation(Exclude.class) != null;
+        }
+};
+----
+* use the strategy
+[source,java]
+----
+Gson gson = new GsonBuilder()
+  .excludeFieldsWithoutExposeAnnotation()
+  .create();
+String jsonString = gson.toJson(source);
+----
+
+*If your Resource derives from de.hf.dac.services.resources.leaf.LeafResource you just have to make the fieldannotation*
+
+
+
+= coding conventions for Angular
+
+== module vs component vs view
+
+A module in Angular is something which is made from components, directives, services etc.
+One or many modules combine to make an Application. ...
+Components in Angular are classes where you write your logic for the page you want to display. Components control the view (html).
+
+Modules consist of one or more components. They do not control any html. Your modules declare which components can be used by components belonging to other modules, which classes will be injected by the dependency injector and which component gets bootstrapped. Modules allow you to manage your components to bring modularity to your app.
+
+A view is a component in angular, but it is more or less just a composition or configuration of other components and has no logic by himself
+
+== package.json
+
+^4.15.2 is equal to >= 4.15.2 < 5.0.0
+the version which is used is locked in package-lock.json
+but if you delete the  package-lock.json it is unpredictable which version you get and if everthing is working then

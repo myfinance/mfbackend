@@ -10,7 +10,7 @@ import {BasicLayoutComponent} from "./shared/components/basic-layout/basic-layou
 import {BarchartexpComponent} from "./views/examples/barchartexp/barchartexp.component";
 import {LinechartexpComponent} from "./views/examples/linechartexp/linechartexp.component";
 import {GridexpComponent} from "./views/examples/gridexp/gridexp.component";
-import {IncomeexpenseseditorComponent} from "./modules/mfaccountmanager/incomeexpenseseditor/incomeexpenseseditor.component";
+import {IncomeexpenseseditorComponent} from "./modules/mfaccountmanager/views/incomeexpenseseditor/incomeexpenseseditor.component";
 
 const APP_ROUTES: Routes = [
   {
