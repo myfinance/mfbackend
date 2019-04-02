@@ -1,7 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import {ConfigService} from "../../services/config.service";
-import {MyFinanceDataService} from "../../services/myfinance-data.service";
-import {InstrumentListModel, StringListModel} from "../../../modules/myfinance-tsclient-generated";
 
 @Component({
   selector: 'app-top-navigation',

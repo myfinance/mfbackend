@@ -2,9 +2,8 @@ import { Injectable } from '@angular/core';
 import {ConfigModel} from "../models/config.model";
 import {HttpClient} from "@angular/common/http";
 import {StringListModel} from "../../modules/myfinance-tsclient-generated";
-import {MyFinanceDataService} from "./myfinance-data.service";
 import {MyFinanceWrapperService} from "./my-finance-wrapper.service";
-import {Observable} from "../../../../node_modules/rxjs";
+import {Observable, Subject} from "../../../../node_modules/rxjs";
 
 @Injectable()
 export class ConfigService {
@@ -12,13 +11,15 @@ export class ConfigService {
   private _config: ConfigModel;
   environments: string[]
   private currentEnv: string
+  configLoaded: Subject<boolean> = new Subject<boolean>()
 
-  constructor(private _http: HttpClient, private myfinanceService: MyFinanceWrapperService) { }
+  constructor(private _http: HttpClient, private myfinanceService: MyFinanceWrapperService) {  }
 
   /**
    * Loads the configuration.
    */
   load(): void {
+
     this._config = null;
 
     this._http
@@ -35,10 +36,23 @@ export class ConfigService {
         } else {
           this.setCurrentZone(data.defaultZone);
         }
-
+        // Check if environment is saved in local storage.
+        // Set the current environment to the saved env or else
+        // set it to the default environment in the configuration.
+        let env = localStorage.getItem('env');
+        if(env) {
+          this.setCurrentEnv(env);
+        } else {
+          this.setCurrentEnv(this.getDefaultEnv());
+        }
+        this.configLoaded.next(true);
       });
   }
 
+  /**
+   * deprecated because due to async load function it is not sure the _config is already initialized. better return an observable
+   * @param property
+   */
   get(property: string): any {
     let value = this._config;
     for(let p of property.split('.')) {

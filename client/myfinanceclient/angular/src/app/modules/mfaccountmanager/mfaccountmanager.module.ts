@@ -4,6 +4,7 @@ import { IncomeexpenseseditorComponent } from './views/incomeexpenseseditor/inco
 import { TransactiontableComponent } from './views/incomeexpenseseditor/components/transactiontable/transactiontable.component';
 import { AgGridModule } from 'ag-grid-angular';
 import {MyFinanceService} from "../myfinance-tsclient-generated";
+import {ConfigService} from "../../shared/services/config.service";
 
 @NgModule({
   imports: [
@@ -15,7 +16,7 @@ import {MyFinanceService} from "../myfinance-tsclient-generated";
     IncomeexpenseseditorComponent
   ],
   providers: [
-    MyFinanceService
+    MyFinanceService, ConfigService
   ]
 })
 export class MfAccountManagerModule { }

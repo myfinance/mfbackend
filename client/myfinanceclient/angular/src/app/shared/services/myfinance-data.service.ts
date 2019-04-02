@@ -1,20 +1,58 @@
 
-import {Inject, Injectable} from "@angular/core";
+import {Injectable, OnInit} from "@angular/core";
 import {Position} from "../models/position";
 import {Observable} from "rxjs/Rx";
 import {ConfigService} from "./config.service";
 import {MockDataProviderService} from "./mock-data-provider.service";
-import {InstrumentListModel, MyFinanceService, StringListModel, TransactionListModel} from "../../modules/myfinance-tsclient-generated";
+import {InstrumentListModel, TransactionListModel} from "../../modules/myfinance-tsclient-generated";
 import {MyFinanceWrapperService} from "./my-finance-wrapper.service";
+import {Subject} from "rxjs";
 
 @Injectable()
-export class MyFinanceDataService{
+export class MyFinanceDataService implements OnInit{
   private mock:MockDataProviderService = new MockDataProviderService()
+  private isMock:boolean = true
+  private currentEnv:string
+  private isInit:boolean = false
+  transactionSubject:Subject<boolean>= new Subject<boolean>();
+
+
   constructor(
     private myfinanceService: MyFinanceWrapperService,
     private configService: ConfigService
   ) {
   }
+
+  ngOnInit(){
+    this.configService.configLoaded.subscribe(
+      (isConfigLoaded:boolean) => {
+        this.isInit = isConfigLoaded;
+        if(isConfigLoaded){
+          if(this.configService.get('currentZone').identifier.match("mock")){
+            this.isMock = true
+          } else {
+            this.isMock = false
+          }
+          this.myfinanceService.setBasePath(this.configService.get('currentZone').url);
+          this.currentEnv = this.configService.getCurrentEnv();
+          this.transactionSubject.next(true);
+        }
+      },
+      (errResp) => {
+        console.error('error', errResp);
+      }
+    );
+  }
+
+  getTransactions(): Observable<TransactionListModel> {
+    //if(!this.isInit) { return null  }
+    if(!this.isInit || this.isMock){
+      return this.mock.getTransactions()
+    }
+    return this.myfinanceService.getTransactionList_envID(this.currentEnv);
+
+  }
+
 
   getInstruments(): Observable<InstrumentListModel> {
 
@@ -27,16 +65,7 @@ export class MyFinanceDataService{
 
   }
 
-  getTransactions(): Observable<TransactionListModel> {
 
-    if(this.configService.get('currentZone').identifier.match("mock")){
-      return this.mock.getTransactions()
-    }
-    this.myfinanceService.setBasePath(this.configService.get('currentZone').url)
-
-    return this.myfinanceService.getTransactionList_envID(this.configService.getCurrentEnv());
-
-  }
 
   getPositions(): Observable<Position[]> {
 
