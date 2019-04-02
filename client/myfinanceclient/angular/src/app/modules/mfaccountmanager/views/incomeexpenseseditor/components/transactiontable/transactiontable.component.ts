@@ -1,7 +1,6 @@
 import {Component, Input, OnInit} from '@angular/core';
 import { GridOptions } from 'ag-grid-community';
 
-import {TransactionService} from "../../../../services/transaction.service";
 import {TransactionListModel} from "../../../../../myfinance-tsclient-generated";
 import {MyFinanceDataService} from "../../../../../../shared/services/myfinance-data.service";
 
@@ -9,7 +8,6 @@ import {MyFinanceDataService} from "../../../../../../shared/services/myfinance-
   selector: 'transactiontable',
   templateUrl: './transactiontable.component.html',
   styleUrls: ['./transactiontable.component.scss'],
-  providers: [TransactionService]
 })
 export class TransactiontableComponent implements OnInit{
 
@@ -21,7 +19,7 @@ export class TransactiontableComponent implements OnInit{
 
   columnDefs = [
     {headerName: 'Id', field: 'transactionid' },
-    {headerName: 'Beschreibung', field: 'description' },
+    {headerName: 'Beschreibung', field: 'description'},
     {headerName: 'Datum', field: 'transactiondate'}
   ];
 
@@ -33,6 +31,19 @@ export class TransactiontableComponent implements OnInit{
 
   constructor(
     private myFinanceService: MyFinanceDataService) {
+
+    this.options = <GridOptions>{
+      //columnDefs: this.columnDefs,
+      //rowData: this.rowData,
+      //getDataPath: (data) => data.path,
+      rowSelection: 'single',
+      onSelectionChanged: () => this.onSelectionChanged(),
+      floatingFilter: true,
+      enableColResize: true,
+      enableSorting: true,
+      sideBar: 'filters',
+      suppressPropertyNamesCheck: true
+    };//
 
   }
 
@@ -54,6 +65,8 @@ export class TransactiontableComponent implements OnInit{
     )
   }
 
-
+  onSelectionChanged(): void {
+    //this.applicationLogService.selectedLogEntry = this.options.api.getSelectedRows()[0];
+  }
 
 }
