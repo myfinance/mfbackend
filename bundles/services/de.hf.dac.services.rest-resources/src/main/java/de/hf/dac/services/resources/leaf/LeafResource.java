@@ -101,7 +101,7 @@ public abstract class LeafResource {
             return uriInfo == null ? Response.ok(SerializeToJSON(data)).build()
                 : Response.ok(SerializeToJSON(data)).location(uriInfo.getRequestUri()).build();
         } catch(Exception ex) {
-            return Response.status(HttpStatus.SC_NO_CONTENT)
+            return Response.status(HttpStatus.SC_INTERNAL_SERVER_ERROR)
                            .entity(ex.getMessage())
                            .type(MediaType.APPLICATION_JSON)
                            .build();

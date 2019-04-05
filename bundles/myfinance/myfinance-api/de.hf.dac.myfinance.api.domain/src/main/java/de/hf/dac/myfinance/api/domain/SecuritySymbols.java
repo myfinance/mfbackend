@@ -65,7 +65,7 @@ public class SecuritySymbols  implements java.io.Serializable {
         this.symbolid = symbolid;
     }
 
-    @ManyToOne(fetch=FetchType.LAZY)
+    @ManyToOne(fetch=FetchType.EAGER)
     @JoinColumn(name="currencyid")
     @ApiModelProperty(required = true)
     public Instrument getCurrency() {
@@ -89,12 +89,8 @@ public class SecuritySymbols  implements java.io.Serializable {
     public String getSymbol() {
         return this.symbol;
     }
-    
     public void setSymbol(String symbol) {
         this.symbol = symbol;
     }
-
-
-
 
 }
