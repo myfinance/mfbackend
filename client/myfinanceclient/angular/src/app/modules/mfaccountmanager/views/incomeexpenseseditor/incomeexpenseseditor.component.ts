@@ -12,6 +12,22 @@ import {DashboardService} from "../../../dashboard/services/dashboard.service";
 })
 export class IncomeexpenseseditorComponent extends AbstractDashboard implements OnInit {
 
+  title = 'Einnahmen und Ausgaben';
+  view = 'fit';
+
+  widgets = [
+    {
+      uuid: '5cbceb3d-a766-4ed0-8b83-467490bd3c9b',
+      title: 'Alle Einnahmen und Ausgaben',
+      x: 0,
+      y: 0,
+      rows: 1,
+      cols: 1,
+      draggable: true,
+      resizable: true
+    }
+  ];
+
   constructor(    dashboardService: DashboardService,
                   changeDetectorRef: ChangeDetectorRef) {
     super(dashboardService, changeDetectorRef);
