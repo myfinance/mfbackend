@@ -5,10 +5,14 @@ import { TransactiontableComponent } from './views/incomeexpenseseditor/componen
 import { AgGridModule } from 'ag-grid-angular';
 import {MyFinanceService} from "../myfinance-tsclient-generated";
 import {ConfigService} from "../../shared/services/config.service";
+import {WidgetModule} from "../widget/widget.module";
+import {DashboardModule} from "../dashboard/dashboard.module";
 
 @NgModule({
   imports: [
     AgGridModule.withComponents([]),
+    DashboardModule,
+    WidgetModule,
     CommonModule
   ],
   declarations: [IncomeexpenseseditorComponent, TransactiontableComponent],

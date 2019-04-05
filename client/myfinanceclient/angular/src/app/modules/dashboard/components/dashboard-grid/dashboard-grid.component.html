@@ -1,0 +1,17 @@
+<div class="dashboard-grid-wrapper">
+  <app-dashboard-content>
+    <gridster [options]="options">
+      <gridster-item [item]="item" *ngFor="let item of dashboard">
+        <div *ngIf="item.dragEnabled" class="drag-handler"><i class="fa fa-arrows" aria-hidden="true"></i></div>
+        <app-widget 
+          [title]="item.widget.title"
+          [uuid]="item.widget.uuid"
+          [resized]="resizedSubject">
+          <ng-container body [ngTemplateOutlet]="getTemplateByUuid(item.widget.uuid)"></ng-container>
+        </app-widget>
+      </gridster-item>
+    </gridster>
+    <ng-content></ng-content>
+  </app-dashboard-content>
+</div>
+  

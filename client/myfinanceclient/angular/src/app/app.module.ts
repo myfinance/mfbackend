@@ -28,6 +28,10 @@ import {APP_INITIALIZER, NgModule} from "@angular/core";
 import {AppComponent} from "./app.component";
 import {FormsModule} from "@angular/forms";
 import {HTTP_INTERCEPTORS, HttpClientModule} from "@angular/common/http";
+import { LicenseManager } from 'ag-grid-enterprise';
+import {ToastrModule} from "ngx-toastr";
+
+LicenseManager.setLicenseKey('Comparex_AG_on_behalf_of_DZ_Bank_PoET_3Devs21_March_2019__MTU1MzEyNjQwMDAwMA==fa9bf4344688f8dea02f51fe8a82aba0');
 
 /**
  * Loads the configuration of the given configuration service.
@@ -65,7 +69,16 @@ export function initConfiguration(configService: ConfigService): Function {
     MfAccountManagerModule,
     ApiModule,
     CollapseModule.forRoot(),
-    BsDropdownModule.forRoot()
+    BsDropdownModule.forRoot(),
+    ToastrModule.forRoot({
+      preventDuplicates: true,
+      iconClasses: {
+        error: 'toast-error-wo-icon',
+        info: 'toast-info',
+        success: 'toast-success',
+        warning: 'toast-warning'
+      }
+    })
   ],
   providers: [
     {
