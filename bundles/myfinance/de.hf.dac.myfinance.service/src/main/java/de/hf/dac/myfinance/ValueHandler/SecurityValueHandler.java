@@ -19,6 +19,7 @@ package de.hf.dac.myfinance.ValueHandler;
 
 import de.hf.dac.myfinance.api.domain.EndOfDayPrice;
 import de.hf.dac.myfinance.api.domain.Instrument;
+import de.hf.dac.myfinance.api.persistence.dao.EndOfDayPriceDao;
 import de.hf.dac.myfinance.api.persistence.dao.InstrumentDao;
 
 import java.time.LocalDate;
@@ -34,16 +35,18 @@ import static java.time.temporal.ChronoUnit.DAYS;
 
 public class SecurityValueHandler implements ValueHandler{
     private InstrumentDao instrumentDao;
+    private EndOfDayPriceDao endOfDayPriceDao;
 
-    public SecurityValueHandler(InstrumentDao instrumentDao){
+    public SecurityValueHandler(InstrumentDao instrumentDao, EndOfDayPriceDao endOfDayPriceDao){
         this.instrumentDao = instrumentDao;
+        this.endOfDayPriceDao = endOfDayPriceDao;
     }
 
 
     public TreeMap<LocalDate, Double> calcValueCurve(Instrument instrument){
         TreeMap<LocalDate, Double> valueCurve = new TreeMap<>();
 
-        Map<LocalDate, EndOfDayPrice> prices = instrumentDao.listEndOfDayPrices(instrument.getInstrumentid()).stream().collect(
+        Map<LocalDate, EndOfDayPrice> prices = endOfDayPriceDao.listEndOfDayPrices(instrument.getInstrumentid()).stream().collect(
             Collectors.toMap(x->x.getDayofprice(), x->x));
 
         SortedSet<LocalDate> sortedDates = new TreeSet<>(prices.keySet());
@@ -84,7 +87,7 @@ public class SecurityValueHandler implements ValueHandler{
 
     private double convertValueToEur(EndOfDayPrice price){
         double valueInEUr;
-        ValueCurveService service = new ValueCurveService(instrumentDao);
+        ValueCurveService service = new ValueCurveService(instrumentDao, endOfDayPriceDao);
         double curValue = service.getValue(price.getCurrency().getInstrumentid(), price.getDayofprice());
         valueInEUr = price.getValue() * curValue;
         return valueInEUr;

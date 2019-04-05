@@ -31,23 +31,14 @@ public interface InstrumentDao {
     List<Instrument> getSecurities();
     Optional<Instrument> getCurrency(String currencyCode);
     Optional<Instrument> getInstrument(int instrumentId);
-    Optional<EndOfDayPrice>getEndOfDayPrice(int instrumentid, LocalDate dayofprice);
-    List<EndOfDayPrice> listEndOfDayPrices(int instrumentid);
-    LocalDate getLastPricedDay(int instrumentid);
     Optional<Source> getSource(int sourceId);
     List<Source> getActiveSources();
-    List<Transaction> listTransactions();
     List<Cashflow> listInstrumentCashflows(int instrumentId);
-    Optional<Transaction> getTransaction(int transactionid);
-    void deleteTransaction(Transaction transaction);
     void saveInstrument(Instrument instrument);
     void saveSymbol(SecuritySymbols symbol);
-    void saveEndOfDayPrice(EndOfDayPrice price);
-    void saveTransaction(Transaction transaction);
     List<InstrumentGraphEntry> getAncestorGraphEntries(int instrumentId, EdgeType edgeType);
     Optional<Integer> getRootInstrument(int instrumentId, EdgeType edgeType);
     void saveGraphEntry(InstrumentGraphEntry instrumentGraphEntry);
     List<Instrument> getInstrumentChilds(int instrumentId, EdgeType edgeType);
     Optional<Instrument> getAccountPortfolio(int tenantId);
-
 }

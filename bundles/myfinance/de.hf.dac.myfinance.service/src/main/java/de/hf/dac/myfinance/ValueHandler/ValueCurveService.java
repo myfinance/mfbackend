@@ -21,6 +21,7 @@ import de.hf.dac.myfinance.api.domain.Instrument;
 import de.hf.dac.myfinance.api.domain.InstrumentType;
 import de.hf.dac.myfinance.api.exceptions.MDException;
 import de.hf.dac.myfinance.api.exceptions.MDMsgKey;
+import de.hf.dac.myfinance.api.persistence.dao.EndOfDayPriceDao;
 import de.hf.dac.myfinance.api.persistence.dao.InstrumentDao;
 
 import java.time.LocalDate;
@@ -30,9 +31,11 @@ import java.util.TreeMap;
 public class ValueCurveService {
 
     private InstrumentDao instrumentDao;
+    private EndOfDayPriceDao endOfDayPriceDao;
 
-    public ValueCurveService(InstrumentDao instrumentDao){
+    public ValueCurveService(InstrumentDao instrumentDao, EndOfDayPriceDao endOfDayPriceDao){
         this.instrumentDao = instrumentDao;
+        this.endOfDayPriceDao = endOfDayPriceDao;
     }
 
     ValueCurveCache cache = new SimpleCurveCache();
@@ -56,7 +59,7 @@ public class ValueCurveService {
         ValueHandler valueHandler = null;
         switch(instrumentType.getTypeGroup()){
             case SECURITY:
-                valueHandler = new SecurityValueHandler(instrumentDao);
+                valueHandler = new SecurityValueHandler(instrumentDao, endOfDayPriceDao);
                 break;
             case CASHACCOUNT:
                 valueHandler = new CashAccValueHandler(instrumentDao);

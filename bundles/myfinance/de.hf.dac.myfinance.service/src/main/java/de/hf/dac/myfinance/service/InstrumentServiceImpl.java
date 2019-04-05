@@ -23,7 +23,9 @@ import de.hf.dac.api.io.web.WebRequestService;
 import de.hf.dac.myfinance.ValueHandler.ValueCurveService;
 import de.hf.dac.myfinance.api.domain.*;
 import de.hf.dac.myfinance.api.domain.Currency;
+import de.hf.dac.myfinance.api.persistence.dao.EndOfDayPriceDao;
 import de.hf.dac.myfinance.api.persistence.dao.InstrumentDao;
+import de.hf.dac.myfinance.api.persistence.dao.TransactionDao;
 import de.hf.dac.myfinance.api.service.InstrumentService;
 import de.hf.dac.myfinance.importhandler.ImportHandler;
 import lombok.Data;
@@ -38,16 +40,20 @@ import java.util.*;
 public class InstrumentServiceImpl implements InstrumentService {
 
     private InstrumentDao instrumentDao;
+    private EndOfDayPriceDao endOfDayPriceDao;
+    private TransactionDao transactionDao;
     private ValueCurveService service;
     private WebRequestService webRequestService;
     private AuditService auditService;
     private static final String AUDIT_MSG_TYPE="InstrumentService_User_Event";
 
     @Inject
-    public InstrumentServiceImpl(InstrumentDao instrumentDao, WebRequestService webRequestService, AuditService auditService){
+    public InstrumentServiceImpl(InstrumentDao instrumentDao, EndOfDayPriceDao endOfDayPriceDao, TransactionDao transactionDao, WebRequestService webRequestService, AuditService auditService){
         this.instrumentDao = instrumentDao;
+        this.endOfDayPriceDao = endOfDayPriceDao;
+        this.transactionDao = transactionDao;
         this.webRequestService = webRequestService;
-        service = new ValueCurveService(instrumentDao);
+        service = new ValueCurveService(instrumentDao, endOfDayPriceDao);
         this.auditService = auditService;
     }
 
@@ -76,7 +82,7 @@ public class InstrumentServiceImpl implements InstrumentService {
     @Override
     public List<EndOfDayPrice> listEodPrices(int instrumentId) {
 
-        return instrumentDao.listEndOfDayPrices(instrumentId);
+        return endOfDayPriceDao.listEndOfDayPrices(instrumentId);
     }
 
     @Override
@@ -90,7 +96,7 @@ public class InstrumentServiceImpl implements InstrumentService {
 
     @Override
     public Optional<EndOfDayPrice> getEndOfDayPrice(int instrumentId, LocalDate date){
-        return instrumentDao.getEndOfDayPrice(instrumentId, date);
+        return endOfDayPriceDao.getEndOfDayPrice(instrumentId, date);
     }
 
     @Override
@@ -208,7 +214,7 @@ public class InstrumentServiceImpl implements InstrumentService {
         EndOfDayPrice price = new EndOfDayPrice(currency.get(), security.get(), source.get(), dayofprice, value, lastchanged);
         auditService.saveMessage("Price inserted for instrument " + security.get().getInstrumentid() +" and date " + dayofprice + " : " + value + " " + currency.get().getBusinesskey()
             , Severity.INFO, AUDIT_MSG_TYPE);
-        instrumentDao.saveEndOfDayPrice(price);
+        endOfDayPriceDao.saveEndOfDayPrice(price);
         return("Saved");
     }
 
@@ -225,11 +231,11 @@ public class InstrumentServiceImpl implements InstrumentService {
         for(Instrument security : secuirities){
             //all prices are in EUR so we do not need prices for this currency
             if(security.getInstrumentType()==InstrumentType.Currency && security.getBusinesskey().equals("EUR")) continue;
-            LocalDate lastPricedDay = instrumentDao.getLastPricedDay(security.getInstrumentid());
+            LocalDate lastPricedDay = endOfDayPriceDao.getLastPricedDay(security.getInstrumentid());
             Map<LocalDate, EndOfDayPrice> prices = new HashMap<>();
             prices.putAll(handler.importSource(security, lastPricedDay, ts));
             for (EndOfDayPrice price : prices.values()) {
-                instrumentDao.saveEndOfDayPrice(price);
+                endOfDayPriceDao.saveEndOfDayPrice(price);
             }
         }
 
@@ -274,7 +280,7 @@ public class InstrumentServiceImpl implements InstrumentService {
 
         for (EndOfDayPrice price : prices.values()) {
             if(!pricedDates.contains(price.getDayofprice())){
-                instrumentDao.saveEndOfDayPrice(price);
+                endOfDayPriceDao.saveEndOfDayPrice(price);
                 pricedDates.add(price.getDayofprice());
             }
 
@@ -397,7 +403,7 @@ public class InstrumentServiceImpl implements InstrumentService {
         transaction.setCashflows(cashflows);
         auditService.saveMessage("new transaction saved for Account "+accId+" and Budget "+budgetId+". Date:" + transactionDate + ", value:" + value + ", desc:" +description,
             Severity.INFO, AUDIT_MSG_TYPE);
-        instrumentDao.saveTransaction(transaction);
+        transactionDao.saveTransaction(transaction);
         return "transaction saved sucessfully";
     }
 
@@ -444,18 +450,18 @@ public class InstrumentServiceImpl implements InstrumentService {
         transaction.setCashflows(cashflows);
         auditService.saveMessage("new transaction saved for Instrument "+srcInstrumentId+" and  "+trgInstrumentId+". Date:" + transactionDate + ", value:" + value + ", desc:" +description,
             Severity.INFO, AUDIT_MSG_TYPE);
-        instrumentDao.saveTransaction(transaction);
+        transactionDao.saveTransaction(transaction);
         return "transaction saved sucessfully";
     }
 
     @Override
     public String deleteTransaction(int transactionId){
-        Optional<Transaction> transaction = instrumentDao.getTransaction(transactionId);
+        Optional<Transaction> transaction = transactionDao.getTransaction(transactionId);
         if(transaction.isPresent()){
             auditService.saveMessage(" transaction with id "+transactionId+" ,desc: '"+transaction.get().getDescription()+
                     "' and Transactiondate:" + transaction.get().getTransactiondate() + "deleted",
                 Severity.INFO, AUDIT_MSG_TYPE);
-            instrumentDao.deleteTransaction(transaction.get());
+            transactionDao.deleteTransaction(transaction.get());
         }
         return "transaction deleted:"+transactionId;
     }
@@ -473,7 +479,7 @@ public class InstrumentServiceImpl implements InstrumentService {
 
     @Override
     public List<Transaction> listTransactions(){
-        List<Transaction> transactions = instrumentDao.listTransactions();
+        List<Transaction> transactions = transactionDao.listTransactions();
         return transactions;
     }
 
