@@ -48,9 +48,5 @@ export interface DashboardGridInterface {
    */
   resetDashboard(): void;
 
-  /**
-   * Clears the dashboard / removes all data.
-   */
-  clearDashboard(): void;
 
 }

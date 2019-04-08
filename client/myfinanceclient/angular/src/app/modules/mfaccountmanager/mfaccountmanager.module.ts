@@ -7,12 +7,15 @@ import {MyFinanceService} from "../myfinance-tsclient-generated";
 import {ConfigService} from "../../shared/services/config.service";
 import {WidgetModule} from "../widget/widget.module";
 import {DashboardModule} from "../dashboard/dashboard.module";
+import {MyFinanceCommonModule} from "../myfinance-common/myfinance-common.module";
+import {GridsterModule} from "angular-gridster2";
 
 @NgModule({
   imports: [
     AgGridModule.withComponents([]),
     DashboardModule,
     WidgetModule,
+    GridsterModule,
     CommonModule
   ],
   declarations: [IncomeexpenseseditorComponent, TransactiontableComponent],

@@ -8,7 +8,6 @@ import { DefaultOptions } from './default-options';
 import { DashboardLayoutModel } from '../../models/dashboard-layout.model';
 import { DashboardModel } from '../../models/dashboard.model';
 import { DashboardItemModel } from '../../models/dashboard-item.model';
-import { DashboardService } from '../../services/dashboard.service';
 import { DashboardGridInterface } from '../../dashboard-grid.interface';
 import { DashboardWidgetDirective } from '../../directives/dashboard-widget.directive';
 
@@ -42,7 +41,6 @@ export class DashboardGridComponent implements DashboardGridInterface, OnInit, A
   @ContentChildren(DashboardWidgetDirective) templates: QueryList<DashboardWidgetDirective>;
 
   constructor(
-    public dashboardService: DashboardService,
     public changeDetectorRef: ChangeDetectorRef) { }
 
   eventStop(item, itemComponent, event): void {
@@ -67,6 +65,7 @@ export class DashboardGridComponent implements DashboardGridInterface, OnInit, A
 
   ngOnInit() {
     this.setDefaultOptions();
+    this.refresh();
   }
 
   ngAfterViewInit() {
@@ -194,6 +193,7 @@ export class DashboardGridComponent implements DashboardGridInterface, OnInit, A
   }
 
   getTemplateByUuid(uuid: string): TemplateRef<any> {
+    if(this.templates==null) return null;
     return this.templates.toArray().find(t => t.uuid === uuid).template;
   }
 
@@ -222,9 +222,4 @@ export class DashboardGridComponent implements DashboardGridInterface, OnInit, A
     const dashboard = localStorage.getItem(this.title.toLowerCase().replace(' ', '_'));
     return dashboard != null ? JSON.parse(dashboard) : null;
   }
-
-  clearDashboard() {
-    this.dashboardService.reset();
-  }
-
 }

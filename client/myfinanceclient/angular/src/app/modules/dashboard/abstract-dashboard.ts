@@ -1,9 +1,7 @@
 import { ViewChild, ChangeDetectorRef } from '@angular/core';
 
 import { DashboardGridComponent } from './components/dashboard-grid/dashboard-grid.component';
-import { DashboardService } from './services/dashboard.service';
 import { DashboardGridInterface } from './dashboard-grid.interface';
-import { DashboardDataLoadedEventModel } from './models/dashboard-data-loaded-event.model';
 
 /**
  * Base class for dashboards.
@@ -19,16 +17,8 @@ export abstract class AbstractDashboard {
   grid: DashboardGridInterface;
 
   constructor(
-    public dashboardService: DashboardService,
     public changeDetectorRef: ChangeDetectorRef) { }
 
-  /**
-   * Handler to react on loading events.
-   * @param loading Boolean value indicating if the dashboard is loading.
-   */
-  handleLoading(loading: boolean): void {
-    this.dashboardService.loading = loading;
-  }
 
   /**
    * Handler to react on refresh events.
@@ -66,31 +56,7 @@ export abstract class AbstractDashboard {
     if (this.grid) this.grid.resetDashboard();
   }
 
-  /**
-   * Handler to react on data change.
-   * @param event The fired event.
-   */
-  abstract handleDataLoaded(event: DashboardDataLoadedEventModel): void;
 
-  /**
-   * Default handler to be called when the dashboard was successfully loaded.
-   */
-  dashboardLoaded(): void {
-    this.dashboardService.dataLoaded = true;
-    if (this.grid) this.grid.refresh();
-    this.dashboardService.preparing = false;
-    this.dashboardService.loaded = true;
-  }
 
-  /**
-   * Default handler to be called when the dashboard could not be loaded.
-   */
-  dashboardNotLoaded(error: any): void {
-    console.error(error);
-    this.dashboardService.dataLoaded = false;
-    this.dashboardService.preparing = false;
-    this.dashboardService.loaded = false;
-    this.dashboardService.toastr.error('Daten konnten nicht geladen werden.');
-  }
 
 }
