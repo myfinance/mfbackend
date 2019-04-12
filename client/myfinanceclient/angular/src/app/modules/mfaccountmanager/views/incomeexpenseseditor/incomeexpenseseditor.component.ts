@@ -21,6 +21,16 @@ export class IncomeexpenseseditorComponent extends AbstractDashboard implements 
       cols: 1,
       draggable: true,
       resizable: true
+    },
+    {
+      uuid: '3870110e-6bfb-4cdc-9c3e-14d4c1924c72',
+      title: 'Editor',
+      x: 0,
+      y: 1,
+      rows: 1,
+      cols: 1,
+      draggable: true,
+      resizable: true
     }
   ];
 

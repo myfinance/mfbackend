@@ -1,7 +1,7 @@
 import {Component, Input, OnInit} from '@angular/core';
 import { GridOptions } from 'ag-grid-community';
 
-import {TransactionListModel} from "../../../../../myfinance-tsclient-generated";
+import {Cashflow, Instrument, Transaction, TransactionListModel} from "../../../../../myfinance-tsclient-generated";
 import {MyFinanceDataService} from "../../../../../../shared/services/myfinance-data.service";
 
 @Component({
@@ -20,13 +20,27 @@ export class TransactiontableComponent implements OnInit{
   columnDefs = [
     {headerName: 'Id', field: 'transactionid' },
     {headerName: 'Beschreibung', field: 'description'},
-    {headerName: 'Datum', field: 'transactiondate'}
+    {headerName: 'Datum', field: 'transactiondate'},
+    {headerName: 'Zuletzt geändert', field: 'lastchanged'},
+    {headerName: 'Cashflows', field: 'cashflows'}
   ];
+  instrument = {
+    instrumentid: 1,
+    description: 'testinstrument',
+    isactive: true,
+    treelastchanged: new Date(),
+    instrumentType: Instrument.InstrumentTypeEnum.Giro
+  };
+
+  cashflows = [
+    {cashflowid: 1,  instrument: this.instrument, value: 138.5},
+    {cashflowid: 2,  instrument: this.instrument, value: -138.5}
+  ]
 
   rowData = [
-    { transactionid: 1, description: 'Celica', transactiondate: '2019-01-01' },
-    { transactionid: 2, description: 'Mondeo', transactiondate: '2019-01-01' },
-    { transactionid: 3, description: 'Boxter', transactiondate: '2019-01-01' }
+    { transactionid: 1, description: 'Celica', transactiondate: '2019-01-01', lastchanged: new Date(), cashflows: this.cashflows},
+    { transactionid: 2, description: 'Mondeo', transactiondate: '2019-01-01', lastchanged: new Date(), cashflows: this.cashflows},
+    { transactionid: 3, description: 'Boxter', transactiondate: '2019-01-01', lastchanged: new Date(), cashflows: this.cashflows}
   ];
 
   constructor(

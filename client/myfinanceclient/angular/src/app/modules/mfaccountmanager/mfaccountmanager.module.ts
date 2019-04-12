@@ -9,6 +9,7 @@ import {WidgetModule} from "../widget/widget.module";
 import {DashboardModule} from "../dashboard/dashboard.module";
 import {MyFinanceCommonModule} from "../myfinance-common/myfinance-common.module";
 import {GridsterModule} from "angular-gridster2";
+import { IncomeexpensesinputformComponent } from './views/incomeexpenseseditor/components/incomeexpensesinputform/incomeexpensesinputform.component';
 
 @NgModule({
   imports: [
@@ -18,7 +19,7 @@ import {GridsterModule} from "angular-gridster2";
     GridsterModule,
     CommonModule
   ],
-  declarations: [IncomeexpenseseditorComponent, TransactiontableComponent],
+  declarations: [IncomeexpenseseditorComponent, TransactiontableComponent, IncomeexpensesinputformComponent],
   exports: [
     IncomeexpenseseditorComponent
   ],
