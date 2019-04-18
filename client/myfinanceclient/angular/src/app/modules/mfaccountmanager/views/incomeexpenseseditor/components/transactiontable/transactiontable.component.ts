@@ -18,32 +18,6 @@ export class TransactiontableComponent implements OnInit{
 
   title = 'app';
 
-  columnDefs = [
-    {headerName: 'Id', field: 'transactionid' },
-    {headerName: 'Beschreibung', field: 'description'},
-    {headerName: 'Datum', field: 'transactiondate'},
-    {headerName: 'Zuletzt geändert', field: 'lastchanged'},
-    {headerName: 'Cashflows', field: 'cashflows'}
-  ];
-  instrument = {
-    instrumentid: 1,
-    description: 'testinstrument',
-    isactive: true,
-    treelastchanged: new Date(),
-    instrumentType: Instrument.InstrumentTypeEnum.Giro
-  };
-
-  cashflows = [
-    {cashflowid: 1,  instrument: this.instrument, value: 138.5},
-    {cashflowid: 2,  instrument: this.instrument, value: -138.5}
-  ]
-
-  rowData = [
-    { transactionid: 1, description: 'Celica', transactiondate: '2019-01-01', lastchanged: new Date(), cashflows: this.cashflows},
-    { transactionid: 2, description: 'Mondeo', transactiondate: '2019-01-01', lastchanged: new Date(), cashflows: this.cashflows},
-    { transactionid: 3, description: 'Boxter', transactiondate: '2019-01-01', lastchanged: new Date(), cashflows: this.cashflows}
-  ];
-
   constructor(
     private myFinanceService: MyFinanceDataService,
     private widgetService: WidgetService) {
@@ -55,13 +29,19 @@ export class TransactiontableComponent implements OnInit{
       enableColResize: true,
       enableSorting: true,
       sideBar: 'filters',
-      suppressPropertyNamesCheck: true
+      suppressPropertyNamesCheck: true,
+      columnDefs: [
+        {headerName: 'Id', field: 'transactionid' },
+        {headerName: 'Beschreibung', field: 'description'},
+        {headerName: 'Datum', field: 'transactiondate'},
+        {headerName: 'Zuletzt geändert', field: 'lastchanged'},
+        {headerName: 'Cashflows', field: 'cashflows'}
+      ]
     };
 
   }
 
   ngOnInit() {
-    this.myFinanceService.ngOnInit();
     this.widgetService.handleLoading();
     if(this.myFinanceService.getIsInit()){
       this.loadData();
@@ -78,7 +58,9 @@ export class TransactiontableComponent implements OnInit{
       .subscribe(
         (transactions: TransactionListModel) => {
           this.widgetService.handleDataPreparing();
-          this.rowData = transactions.values;
+          if (this.options.api) {
+            this.options.api.setRowData(transactions.values);
+          }
           this.widgetService.handleDataLoaded();
         },
         (errResp) => {

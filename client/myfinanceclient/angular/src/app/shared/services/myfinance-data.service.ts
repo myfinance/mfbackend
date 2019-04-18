@@ -9,7 +9,7 @@ import {MyFinanceWrapperService} from "./my-finance-wrapper.service";
 import {Subject} from "rxjs";
 
 @Injectable()
-export class MyFinanceDataService implements OnInit{
+export class MyFinanceDataService {
   private mock:MockDataProviderService = new MockDataProviderService()
   private isMock:boolean = true
   private currentEnv:string
@@ -21,9 +21,6 @@ export class MyFinanceDataService implements OnInit{
     private myfinanceService: MyFinanceWrapperService,
     private configService: ConfigService
   ) {
-  }
-
-  ngOnInit(){
     if(this.configService.getIsInit()){
       this.loadConfig(true);
     } else {
