@@ -14,7 +14,7 @@ export class MyFinanceDataService {
   private isMock:boolean = true
   private currentEnv:string
   private isInit:boolean = false
-  transactionSubject:Subject<boolean>= new Subject<boolean>();
+  transactionSubject:Subject<any>= new Subject<any>();
 
 
   constructor(
@@ -22,11 +22,11 @@ export class MyFinanceDataService {
     private configService: ConfigService
   ) {
     if(this.configService.getIsInit()){
-      this.loadConfig(true);
+      this.loadConfig();
     } else {
       this.configService.configLoaded.subscribe(
-        (isConfigLoaded:boolean) => {
-          this.loadConfig(isConfigLoaded);
+        () => {
+          this.loadConfig();
         },
         (errResp) => {
           console.error('error', errResp);
@@ -35,18 +35,16 @@ export class MyFinanceDataService {
     }
   }
 
-  private loadConfig(isConfigLoaded:boolean){
-    this.isInit = isConfigLoaded;
-    if(isConfigLoaded){
-      if(this.configService.get('currentZone').identifier.match("mock")){
-        this.isMock = true
-      } else {
-        this.isMock = false
-      }
-      this.myfinanceService.setBasePath(this.configService.get('currentZone').url);
-      this.currentEnv = this.configService.getCurrentEnv();
-      this.transactionSubject.next(true);
+  private loadConfig(){
+    this.isInit = true;
+    if(this.configService.get('currentZone').identifier.match("mock")){
+      this.isMock = true
+    } else {
+      this.isMock = false
     }
+    this.myfinanceService.setBasePath(this.configService.get('currentZone').url);
+    this.currentEnv = this.configService.getCurrentEnv();
+    this.transactionSubject.next();
   }
 
   getIsInit(): boolean{
@@ -54,8 +52,10 @@ export class MyFinanceDataService {
   }
 
   getTransactions(): Observable<TransactionListModel> {
-    //if(!this.isInit) { return null  }
-    if(!this.isInit || this.isMock){
+    if(!this.isInit) {
+      return null;
+    }
+    else if(this.isMock){
       return this.mock.getTransactions()
     }
     return this.myfinanceService.getTransactionList_envID(this.currentEnv);

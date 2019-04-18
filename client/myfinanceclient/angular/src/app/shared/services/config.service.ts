@@ -11,7 +11,7 @@ export class ConfigService {
   private _config: ConfigModel;
   environments: string[]
   private currentEnv: string
-  configLoaded: Subject<boolean> = new Subject<boolean>()
+  configLoaded: Subject<any> = new Subject<any>()
   private isInit:boolean = false
 
   constructor(private _http: HttpClient, private myfinanceService: MyFinanceWrapperService) {  }

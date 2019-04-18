@@ -1,4 +1,5 @@
 import {Injectable, OnDestroy} from "@angular/core";
+import {ToastrService} from "ngx-toastr";
 
 
 @Injectable()
@@ -21,7 +22,7 @@ export class WidgetService implements OnDestroy {
   preparing = false;
 
 
-  constructor() { }
+  constructor(public toastr: ToastrService) { }
 
   /**
    * Default handler if data could not be loaded.
@@ -29,7 +30,7 @@ export class WidgetService implements OnDestroy {
   handleDataNotLoaded(error: any) {
     this.loading = false;
     console.error(error);
-    //this.toastr.error('Daten konnten nicht geladen werden.');
+    this.toastr.error('Daten konnten nicht geladen werden.');
   }
 
   handleLoading(): void {

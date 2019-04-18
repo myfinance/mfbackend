@@ -1,7 +1,7 @@
 import {Component, Input, OnInit} from '@angular/core';
 import { GridOptions } from 'ag-grid-community';
 
-import {Cashflow, Instrument, Transaction, TransactionListModel} from "../../../../../myfinance-tsclient-generated";
+import {TransactionListModel} from "../../../../../myfinance-tsclient-generated";
 import {MyFinanceDataService} from "../../../../../../shared/services/myfinance-data.service";
 import {WidgetService} from "../../../../../widget/services/widget.service";
 
@@ -47,7 +47,7 @@ export class TransactiontableComponent implements OnInit{
       this.loadData();
     } else {
       this.myFinanceService.transactionSubject.subscribe(
-        (configUpdated:boolean) => {
+        () => {
           this.loadData()}
       )
     }

@@ -20,3 +20,24 @@ html, body {
 .btn {
   border-radius: 0;
 }
+
+// Toastr
+#toast-container {
+  .toast, .toast:hover {
+    border-radius: 0;
+    box-shadow: none;
+  }
+
+  .toast-success {
+    background-color: $success;
+  }
+  .toast-error, .toast-error-wo-icon {
+    background-color: $danger;
+  }
+  .toast-info {
+    background-color: $info;
+  }
+  .toast-warning {
+    background-color: $warning;
+  }
+}
