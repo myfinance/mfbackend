@@ -24,24 +24,36 @@ export class MyFinanceDataService implements OnInit{
   }
 
   ngOnInit(){
-    this.configService.configLoaded.subscribe(
-      (isConfigLoaded:boolean) => {
-        this.isInit = isConfigLoaded;
-        if(isConfigLoaded){
-          if(this.configService.get('currentZone').identifier.match("mock")){
-            this.isMock = true
-          } else {
-            this.isMock = false
-          }
-          this.myfinanceService.setBasePath(this.configService.get('currentZone').url);
-          this.currentEnv = this.configService.getCurrentEnv();
-          this.transactionSubject.next(true);
+    if(this.configService.getIsInit()){
+      this.loadConfig(true);
+    } else {
+      this.configService.configLoaded.subscribe(
+        (isConfigLoaded:boolean) => {
+          this.loadConfig(isConfigLoaded);
+        },
+        (errResp) => {
+          console.error('error', errResp);
         }
-      },
-      (errResp) => {
-        console.error('error', errResp);
+      );
+    }
+  }
+
+  private loadConfig(isConfigLoaded:boolean){
+    this.isInit = isConfigLoaded;
+    if(isConfigLoaded){
+      if(this.configService.get('currentZone').identifier.match("mock")){
+        this.isMock = true
+      } else {
+        this.isMock = false
       }
-    );
+      this.myfinanceService.setBasePath(this.configService.get('currentZone').url);
+      this.currentEnv = this.configService.getCurrentEnv();
+      this.transactionSubject.next(true);
+    }
+  }
+
+  getIsInit(): boolean{
+    return this.isInit;
   }
 
   getTransactions(): Observable<TransactionListModel> {

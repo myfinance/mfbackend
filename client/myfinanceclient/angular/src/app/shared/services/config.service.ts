@@ -12,6 +12,7 @@ export class ConfigService {
   environments: string[]
   private currentEnv: string
   configLoaded: Subject<boolean> = new Subject<boolean>()
+  private isInit:boolean = false
 
   constructor(private _http: HttpClient, private myfinanceService: MyFinanceWrapperService) {  }
 
@@ -30,7 +31,7 @@ export class ConfigService {
         // Check if zone is saved in local storage.
         // Set the current zone to the saved zone or else
         // set it to the default zone in the configuration.
-        let zone = localStorage.getItem('zone');
+        let zone = localStorage.getItem('mfzone');
         if(zone) {
           this.setCurrentZone(zone);
         } else {
@@ -45,8 +46,13 @@ export class ConfigService {
         } else {
           this.setCurrentEnv(this.getDefaultEnv());
         }
+        this.isInit=true;
         this.configLoaded.next(true);
       });
+  }
+
+  getIsInit(): boolean{
+    return this.isInit;
   }
 
   /**
@@ -70,7 +76,7 @@ export class ConfigService {
       if(zone.identifier == identifier) {
         this._config.currentZone = zone;
         // Additionally save the zone in the local storage.
-        localStorage.setItem('zone', identifier);
+        localStorage.setItem('mfzone', identifier);
         this.loadEnvironments()
       }
     }
@@ -83,7 +89,7 @@ export class ConfigService {
   }
 
   getDefaultEnv(): string {
-    let currentZone = localStorage.getItem('zone');
+    let currentZone = localStorage.getItem('mfzone');
     for(let zone of this._config.zones) {
       if(zone.identifier == currentZone) {
         return zone.defaultEnvironment;

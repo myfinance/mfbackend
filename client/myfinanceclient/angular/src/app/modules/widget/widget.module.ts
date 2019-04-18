@@ -10,10 +10,12 @@ import {WidgetDataTableComponent} from "./components/widget-data-table/widget-da
 import {AgGridModule} from "ag-grid-angular";
 import {BooleanPipe} from "./pipes/boolean.pipe";
 import {WidgetComponent} from "./shared/component/widget/widget.component";
+import {MyFinanceCommonModule} from "../myfinance-common/myfinance-common.module";
 
 @NgModule({
   imports: [
     CommonModule,
+    MyFinanceCommonModule,
     AgGridModule.withComponents([])
   ],
   declarations: [

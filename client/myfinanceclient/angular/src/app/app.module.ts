@@ -30,6 +30,7 @@ import {FormsModule} from "@angular/forms";
 import {HTTP_INTERCEPTORS, HttpClientModule} from "@angular/common/http";
 import { LicenseManager } from 'ag-grid-enterprise';
 import {ToastrModule} from "ngx-toastr";
+import {WidgetService} from "./modules/widget/services/widget.service";
 
 LicenseManager.setLicenseKey('Comparex_AG_on_behalf_of_DZ_Bank_PoET_3Devs21_March_2019__MTU1MzEyNjQwMDAwMA==fa9bf4344688f8dea02f51fe8a82aba0');
 
@@ -94,7 +95,8 @@ export function initConfiguration(configService: ConfigService): Function {
     },
     MyFinanceWrapperService,
     ConfigService,
-    MyFinanceDataService
+    MyFinanceDataService,
+    WidgetService
   ],
   bootstrap: [AppComponent]
 

@@ -3,6 +3,7 @@ import { GridOptions } from 'ag-grid-community';
 
 import {Cashflow, Instrument, Transaction, TransactionListModel} from "../../../../../myfinance-tsclient-generated";
 import {MyFinanceDataService} from "../../../../../../shared/services/myfinance-data.service";
+import {WidgetService} from "../../../../../widget/services/widget.service";
 
 @Component({
   selector: 'transactiontable',
@@ -44,12 +45,10 @@ export class TransactiontableComponent implements OnInit{
   ];
 
   constructor(
-    private myFinanceService: MyFinanceDataService) {
+    private myFinanceService: MyFinanceDataService,
+    private widgetService: WidgetService) {
 
     this.options = <GridOptions>{
-      //columnDefs: this.columnDefs,
-      //rowData: this.rowData,
-      //getDataPath: (data) => data.path,
       rowSelection: 'single',
       onSelectionChanged: () => this.onSelectionChanged(),
       floatingFilter: true,
@@ -57,26 +56,39 @@ export class TransactiontableComponent implements OnInit{
       enableSorting: true,
       sideBar: 'filters',
       suppressPropertyNamesCheck: true
-    };//
+    };
 
   }
 
   ngOnInit() {
-    this.myFinanceService.ngOnInit()
-    this.myFinanceService.transactionSubject.subscribe(
-      (configUpdated:boolean) => {
-        this.myFinanceService.getTransactions()
-          .subscribe(
-            (transactions: TransactionListModel) => {
-              this.rowData = transactions.values;
-            },
-            (errResp) => {
-              console.error('error', errResp);
+    this.myFinanceService.ngOnInit();
+    this.widgetService.handleLoading();
+    if(this.myFinanceService.getIsInit()){
+      this.loadData();
+    } else {
+      this.myFinanceService.transactionSubject.subscribe(
+        (configUpdated:boolean) => {
+          this.loadData()}
+      )
+    }
+  }
 
-            }), (errResp) => {
+  private loadData(): void {
+    this.myFinanceService.getTransactions()
+      .subscribe(
+        (transactions: TransactionListModel) => {
+          this.widgetService.handleDataPreparing();
+          this.rowData = transactions.values;
+          this.widgetService.handleDataLoaded();
+        },
+        (errResp) => {
           console.error('error', errResp);
-      }}
-    )
+          this.widgetService.handleDataNotLoaded(errResp);
+
+        }), (errResp) => {
+      console.error('error', errResp);
+      this.widgetService.handleDataNotLoaded(errResp);
+    }
   }
 
   onSelectionChanged(): void {

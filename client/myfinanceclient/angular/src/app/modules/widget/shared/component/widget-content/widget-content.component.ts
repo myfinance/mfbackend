@@ -1,4 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
+import {WidgetService} from "../../../services/widget.service";
 
 @Component({
   selector: 'app-widget-content',
@@ -21,7 +22,7 @@ export class WidgetContentComponent implements OnInit {
   @Input()
   hideHeader
 
-  constructor() { }
+  constructor(public widgetService: WidgetService) { }
 
   ngOnInit() {
   }
