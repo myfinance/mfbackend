@@ -6,7 +6,7 @@ import {MyFinanceDataService} from "../../../../../../shared/services/myfinance-
 import {WidgetService} from "../../../../../widget/services/widget.service";
 
 @Component({
-  selector: 'transactiontable',
+  selector: 'app-transactiontable',
   templateUrl: './transactiontable.component.html',
   styleUrls: ['./transactiontable.component.scss'],
 })
@@ -35,7 +35,7 @@ export class TransactiontableComponent implements OnInit{
         {headerName: 'Beschreibung', field: 'description'},
         {headerName: 'Datum', field: 'transactiondate'},
         {headerName: 'Zuletzt geändert', field: 'lastchanged'},
-        {headerName: 'Cashflows', field: 'cashflows'}
+        {headerName: 'TransactionType', field: 'transactionType'}
       ]
     };
 
