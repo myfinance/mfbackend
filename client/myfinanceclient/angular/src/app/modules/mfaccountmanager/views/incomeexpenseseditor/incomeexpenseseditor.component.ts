@@ -1,12 +1,13 @@
-import {ChangeDetectorRef, Component, OnInit} from '@angular/core';
+import {ChangeDetectorRef, Component, OnDestroy, OnInit} from '@angular/core';
 import {AbstractDashboard} from "../../../dashboard/abstract-dashboard";
+import {DashboardService} from "../../../dashboard/services/dashboard.service";
 
 @Component({
   selector: 'incomeexpenseseditor',
   templateUrl: './incomeexpenseseditor.component.html',
   styleUrls: ['./incomeexpenseseditor.component.scss']
 })
-export class IncomeexpenseseditorComponent extends AbstractDashboard implements OnInit {
+export class IncomeexpenseseditorComponent extends AbstractDashboard implements OnInit, OnDestroy {
 
   title = 'Einnahmen und Ausgaben';
   view = 'fit';
@@ -64,12 +65,15 @@ export class IncomeexpenseseditorComponent extends AbstractDashboard implements 
     }
   ];
 
-  constructor(    changeDetectorRef: ChangeDetectorRef) {
+  constructor( public dashboardService: DashboardService, changeDetectorRef: ChangeDetectorRef ) {
     super(changeDetectorRef);
   }
 
   ngOnInit() {
+
   }
 
-
+  ngOnDestroy() {
+    this.dashboardService.reset();
+  }
 }

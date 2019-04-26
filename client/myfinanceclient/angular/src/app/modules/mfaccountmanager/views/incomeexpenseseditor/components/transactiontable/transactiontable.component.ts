@@ -3,12 +3,12 @@ import { GridOptions } from 'ag-grid-community';
 
 import {TransactionListModel} from "../../../../../myfinance-tsclient-generated";
 import {MyFinanceDataService} from "../../../../../../shared/services/myfinance-data.service";
-import {WidgetService} from "../../../../../widget/services/widget.service";
+import {DashboardService} from "../../../../../dashboard/services/dashboard.service";
 
 @Component({
   selector: 'app-transactiontable',
   templateUrl: './transactiontable.component.html',
-  styleUrls: ['./transactiontable.component.scss'],
+  styleUrls: ['./transactiontable.component.scss']
 })
 export class TransactiontableComponent implements OnInit{
 
@@ -20,7 +20,7 @@ export class TransactiontableComponent implements OnInit{
 
   constructor(
     private myFinanceService: MyFinanceDataService,
-    private widgetService: WidgetService) {
+    private widgetService: DashboardService) {
 
     this.options = <GridOptions>{
       rowSelection: 'single',

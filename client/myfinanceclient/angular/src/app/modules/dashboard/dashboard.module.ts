@@ -6,6 +6,7 @@ import {GridsterModule} from "angular-gridster2";
 import {DashboardContentComponent} from "./components/dashboard-content/dashboard-content.component";
 import {WidgetModule} from "../widget/widget.module";
 import {MyFinanceCommonModule} from "../myfinance-common/myfinance-common.module";
+import {DashboardService} from "./services/dashboard.service";
 
 @NgModule({
   imports: [
@@ -25,6 +26,7 @@ import {MyFinanceCommonModule} from "../myfinance-common/myfinance-common.module
     DashboardWidgetDirective
   ],
   providers: [
+    DashboardService
   ]
 })
 export class DashboardModule { }

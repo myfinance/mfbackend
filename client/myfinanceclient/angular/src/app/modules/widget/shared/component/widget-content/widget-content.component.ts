@@ -1,5 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
-import {WidgetService} from "../../../services/widget.service";
+import {DashboardService} from "../../../../dashboard/services/dashboard.service";
 
 @Component({
   selector: 'app-widget-content',
@@ -22,7 +22,7 @@ export class WidgetContentComponent implements OnInit {
   @Input()
   hideHeader
 
-  constructor(public widgetService: WidgetService) { }
+  constructor() { }
 
   ngOnInit() {
   }

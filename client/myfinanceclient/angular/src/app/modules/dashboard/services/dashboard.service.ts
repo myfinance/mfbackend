@@ -3,7 +3,7 @@ import {ToastrService} from "ngx-toastr";
 
 
 @Injectable()
-export class WidgetService implements OnDestroy {
+export class DashboardService implements OnDestroy {
 
 
   /**

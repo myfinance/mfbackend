@@ -201,3 +201,8 @@ A view is a component in angular, but it is more or less just a composition or c
 ^4.15.2 is equal to >= 4.15.2 < 5.0.0
 the version which is used is locked in package-lock.json
 but if you delete the  package-lock.json it is unpredictable which version you get and if everthing is working then
+
+== Widget vs Dashboard
+
+In a dashboard a more then one widget action at the same time. So it is difficult to handle widget status like isLoading in a global generic widgetService. You have to save the stutus for each widget individual
+Due to interaction between widgets it is better anyway to save status and manage data loading in the dashboard.

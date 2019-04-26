@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import {DashboardService} from "../../services/dashboard.service";
 
 
 @Component({
@@ -8,6 +9,6 @@ import { Component } from '@angular/core';
 })
 export class DashboardContentComponent {
 
-  constructor() { }
+  constructor(public dashboardService: DashboardService) { }
 
 }

@@ -7,12 +7,12 @@ import {MyFinanceService} from "../myfinance-tsclient-generated";
 import {ConfigService} from "../../shared/services/config.service";
 import {WidgetModule} from "../widget/widget.module";
 import {DashboardModule} from "../dashboard/dashboard.module";
-import {MyFinanceCommonModule} from "../myfinance-common/myfinance-common.module";
 import {GridsterModule} from "angular-gridster2";
 import { IncomeexpensesinputformComponent } from './views/incomeexpenseseditor/components/incomeexpensesinputform/incomeexpensesinputform.component';
 import { ControllerComponent } from './views/incomeexpenseseditor/components/controller/controller.component';
 import { CashflowtableComponent } from './views/incomeexpenseseditor/components/cashflowtable/cashflowtable.component';
 import { ValuegraphComponent } from './views/incomeexpenseseditor/components/valuegraph/valuegraph.component';
+import {TransactionService} from "./views/incomeexpenseseditor/services/transaction.service";
 
 @NgModule({
   imports: [
@@ -27,7 +27,7 @@ import { ValuegraphComponent } from './views/incomeexpenseseditor/components/val
     IncomeexpenseseditorComponent
   ],
   providers: [
-    MyFinanceService, ConfigService
+    MyFinanceService, ConfigService, TransactionService
   ]
 })
 export class MfAccountManagerModule { }
