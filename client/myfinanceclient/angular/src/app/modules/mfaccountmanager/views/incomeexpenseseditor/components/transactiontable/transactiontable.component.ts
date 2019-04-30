@@ -4,6 +4,7 @@ import { GridOptions } from 'ag-grid-community';
 import {TransactionListModel} from "../../../../../myfinance-tsclient-generated";
 import {MyFinanceDataService} from "../../../../../../shared/services/myfinance-data.service";
 import {DashboardService} from "../../../../../dashboard/services/dashboard.service";
+import {TransactionService} from "../../services/transaction.service";
 
 @Component({
   selector: 'app-transactiontable',
@@ -16,11 +17,9 @@ export class TransactiontableComponent implements OnInit{
 
   options: GridOptions;
 
-  title = 'app';
+  title = 'Transactions';
 
-  constructor(
-    private myFinanceService: MyFinanceDataService,
-    private widgetService: DashboardService) {
+  constructor(private transactionservice: TransactionService) {
 
     this.options = <GridOptions>{
       rowSelection: 'single',
@@ -42,11 +41,10 @@ export class TransactiontableComponent implements OnInit{
   }
 
   ngOnInit() {
-    this.widgetService.handleLoading();
-    if(this.myFinanceService.getIsInit()){
+    if(this.transactionservice.getIsInit()){
       this.loadData();
     } else {
-      this.myFinanceService.transactionSubject.subscribe(
+      this.transactionservice.transactionSubject.subscribe(
         () => {
           this.loadData()}
       )
@@ -54,23 +52,7 @@ export class TransactiontableComponent implements OnInit{
   }
 
   private loadData(): void {
-    this.myFinanceService.getTransactions()
-      .subscribe(
-        (transactions: TransactionListModel) => {
-          this.widgetService.handleDataPreparing();
-          if (this.options.api) {
-            this.options.api.setRowData(transactions.values);
-          }
-          this.widgetService.handleDataLoaded();
-        },
-        (errResp) => {
-          console.error('error', errResp);
-          this.widgetService.handleDataNotLoaded(errResp);
-
-        }), (errResp) => {
-      console.error('error', errResp);
-      this.widgetService.handleDataNotLoaded(errResp);
-    }
+    this.options.api.setRowData(this.transactionservice.getTransactions());
   }
 
   onSelectionChanged(): void {
