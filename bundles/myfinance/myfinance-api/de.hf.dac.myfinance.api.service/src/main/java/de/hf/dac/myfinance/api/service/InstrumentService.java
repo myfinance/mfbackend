@@ -52,7 +52,7 @@ public interface InstrumentService {
 
     String newIncomeExpense(String description, int accId, int budgetId, double value, LocalDate transactionDate, LocalDateTime ts);
     String newTransfer(String description, int srcInstrumentId, int trgInstrumentId, double value, LocalDate transactionDate, LocalDateTime ts);
-    List<Transaction> listTransactions();
+    List<Transaction> listTransactions(LocalDate startDate, LocalDate endDate);
     List<Cashflow> listInstrumentCashflows(int instrumentId);
     String deleteTransaction(int transactionId);
 

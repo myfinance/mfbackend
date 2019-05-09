@@ -30,7 +30,8 @@ export class CashflowtableComponent  implements OnInit{
       suppressPropertyNamesCheck: true,
       columnDefs: [
         {headerName: 'Id', field: 'cashflowid' },
-        {headerName: 'value', field: 'value'}
+        {headerName: 'value', field: 'value'},
+        {headerName: 'Instrument', field: 'instrument.description'}
       ]
     };
 

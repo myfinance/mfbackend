@@ -478,8 +478,8 @@ public class InstrumentServiceImpl implements InstrumentService {
     }
 
     @Override
-    public List<Transaction> listTransactions(){
-        List<Transaction> transactions = transactionDao.listTransactions();
+    public List<Transaction> listTransactions(LocalDate startDate, LocalDate endDate){
+        List<Transaction> transactions = transactionDao.listTransactions(startDate, endDate);
         return transactions;
     }
 

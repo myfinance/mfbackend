@@ -7,6 +7,7 @@ import {MockDataProviderService} from "./mock-data-provider.service";
 import {InstrumentListModel, TransactionListModel} from "../../modules/myfinance-tsclient-generated";
 import {MyFinanceWrapperService} from "./my-finance-wrapper.service";
 import {Subject} from "rxjs";
+import {DatePipe} from "@angular/common";
 
 @Injectable()
 export class MyFinanceDataService {
@@ -51,15 +52,20 @@ export class MyFinanceDataService {
     return this.isInit;
   }
 
-  getTransactions(): Observable<TransactionListModel> {
+  getTransactions(start:Date, end:Date): Observable<TransactionListModel> {
     if(!this.isInit) {
       return null;
     }
     else if(this.isMock){
       return this.mock.getTransactions()
     }
-    return this.myfinanceService.getTransactionList_envID(this.currentEnv);
+    return this.myfinanceService.getTransactionList_envID_startdate_enddate(this.currentEnv, this.getDateString(start), this.getDateString(end));
 
+  }
+
+  private getDateString(date:Date):string{
+
+    return new DatePipe("de-De").transform(date, 'yyyy-MM-dd');
   }
 
 

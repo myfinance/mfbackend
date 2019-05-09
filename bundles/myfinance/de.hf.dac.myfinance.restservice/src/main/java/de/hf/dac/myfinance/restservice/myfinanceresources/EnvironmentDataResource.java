@@ -76,9 +76,12 @@ public class EnvironmentDataResource extends BaseSecuredResource<OpType,OpLevel>
     @Path("/listTransactions")
     @Produces(MediaType.APPLICATION_JSON)
     @ApiOperation(value = "get Transactions", response = TransactionListResource.class)
-    public TransactionListResource getTransaction() {
+    public TransactionListResource getTransaction(@QueryParam("startdate") @ApiParam(value="startdate in Format yyyy-mm-dd") String startdate,
+        @QueryParam("enddate") @ApiParam(value="enddate in Format yyyy-mm-dd") String enddate) {
         checkOperationAllowed(OpType.READ);
-        return new TransactionListResource(new TransactionListModel(marketDataEnvironment.getInstrumentService().listTransactions()));
+        LocalDate start = LocalDate.parse(startdate);
+        LocalDate end = LocalDate.parse(enddate);
+        return new TransactionListResource(new TransactionListModel(marketDataEnvironment.getInstrumentService().listTransactions(start, end)));
 
     }
 

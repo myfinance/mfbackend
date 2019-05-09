@@ -11,6 +11,7 @@
 
 package de.hf.dac.myfinance.persistence;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -32,8 +33,18 @@ public class TransactionDaoImpl  extends BaseDao<Transaction> implements Transac
     }
 
     @Override
-    public List<Transaction> listTransactions() {
-        return listQueryResult("select a FROM Transaction a");
+    public List<Transaction> listTransactions(LocalDate startDate, LocalDate endDate) {
+        List<Transaction> result;
+        try{
+            marketDataEm = this.marketDataEmf.createEntityManager();
+            Query query = marketDataEm.createQuery("select a FROM Transaction a WHERE transactiondate >= :startDate and transactiondate <= :endDate");
+            query.setParameter("startDate", startDate);
+            query.setParameter("endDate", endDate);
+            result=(List<Transaction>) query.getResultList();
+        } finally {
+            marketDataEm.close();
+        }
+        return result;
     }
 
     @Override

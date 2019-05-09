@@ -9,7 +9,9 @@ export class TransactionService {
 
   transactions: Array<Transaction>;
   transactionSubject:Subject<any>= new Subject<any>();
-  private isInit:boolean = false
+  private isInit:boolean = false;
+  start = new Date(new Date().getFullYear(), new Date().getMonth()-6, new Date().getDate());
+  end = new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate());
 
   constructor(private myFinanceService: MyFinanceDataService, public dashboardService: DashboardService) {
     this.dashboardService.handleLoading();
@@ -26,7 +28,7 @@ export class TransactionService {
 
 
   private loadData(): void {
-    this.myFinanceService.getTransactions()
+    this.myFinanceService.getTransactions(this.start, this.end)
       .subscribe(
         (transactions: TransactionListModel) => {
           this.dashboardService.handleDataPreparing();
