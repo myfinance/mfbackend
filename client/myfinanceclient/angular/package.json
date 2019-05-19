@@ -34,7 +34,6 @@
     "core-js": "^2.5.4",
     "crossfilter2": "1.4.6",
     "d3": "4.13.0",
-    "d3.parcoords.js": "https://github.com/skidr0w/parallel-coordinates/tarball/423e784abe84e6e3a858032ea9c194eee4fb3bbe",
     "dc": "^2.2.2",
     "file-saver": "^1.3.3",
     "font-awesome": "^4.7.0",
