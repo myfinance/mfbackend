@@ -12,8 +12,13 @@ export class TransactionService {
   private isInit:boolean = false;
   start = new Date(new Date().getFullYear(), new Date().getMonth()-6, new Date().getDate());
   end = new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate());
+  daterange: Date[] = new Date[2];
+
+
 
   constructor(private myFinanceService: MyFinanceDataService, public dashboardService: DashboardService) {
+    this.daterange[0] =this.start;
+    this.daterange[1] =this.end;
     this.dashboardService.handleLoading();
     if(this.myFinanceService.getIsInit()){
       this.loadData();

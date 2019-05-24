@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import {BsDatepickerConfig} from "ngx-bootstrap";
+import {TransactionService} from "../../services/transaction.service";
 
 @Component({
   selector: 'app-controller',
@@ -9,9 +10,9 @@ import {BsDatepickerConfig} from "ngx-bootstrap";
 export class ControllerComponent implements OnInit {
 
   bsConfig: Partial<BsDatepickerConfig>;
-  daterangepickerModel: Date[];
+  daterange: Date[];
 
-  constructor() { }
+  constructor(private transactionservice: TransactionService) { }
 
   ngOnInit() {
     this.bsConfig = Object.assign({}, { containerClass: 'theme-default', rangeInputFormat: 'YYYY-MM-DD',  });
