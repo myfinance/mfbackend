@@ -31,6 +31,8 @@
               }
             ],
             "styles": [
+              "./node_modules/bootstrap/dist/css/bootstrap.min.css",
+              "./node_modules/ngx-bootstrap/datepicker/bs-datepicker.css",
               "node_modules/dc/dc.min.css",
               "node_modules/ngx-toastr/toastr.css",
               "src/styles.scss"
@@ -105,6 +107,8 @@
             "tsConfig": "src/tsconfig.spec.json",
             "scripts": [],
             "styles": [
+              "./node_modules/bootstrap/dist/css/bootstrap.min.css",
+              "./node_modules/ngx-bootstrap/datepicker/bs-datepicker.css",
               "node_modules/dc/dc.min.css",
               "node_modules/ngx-toastr/toastr.css",
               "src/styles.scss"

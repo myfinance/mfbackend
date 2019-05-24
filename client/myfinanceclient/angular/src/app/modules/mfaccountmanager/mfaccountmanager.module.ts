@@ -13,6 +13,8 @@ import { ControllerComponent } from './views/incomeexpenseseditor/components/con
 import { CashflowtableComponent } from './views/incomeexpenseseditor/components/cashflowtable/cashflowtable.component';
 import { ValuegraphComponent } from './views/incomeexpenseseditor/components/valuegraph/valuegraph.component';
 import {TransactionService} from "./views/incomeexpenseseditor/services/transaction.service";
+import {BsDatepickerModule } from 'ngx-bootstrap/datepicker';
+import {FormsModule} from "@angular/forms";
 
 @NgModule({
   imports: [
@@ -20,7 +22,9 @@ import {TransactionService} from "./views/incomeexpenseseditor/services/transact
     DashboardModule,
     WidgetModule,
     GridsterModule,
-    CommonModule
+    CommonModule,
+    FormsModule,
+    BsDatepickerModule.forRoot()
   ],
   declarations: [IncomeexpenseseditorComponent, TransactiontableComponent, IncomeexpensesinputformComponent, ControllerComponent, CashflowtableComponent, ValuegraphComponent],
   exports: [
