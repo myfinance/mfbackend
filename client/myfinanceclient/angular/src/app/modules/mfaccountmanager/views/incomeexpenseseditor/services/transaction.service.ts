@@ -3,6 +3,7 @@ import {DashboardService} from "../../../../dashboard/services/dashboard.service
 import {MyFinanceDataService} from "../../../../../shared/services/myfinance-data.service";
 import {Transaction, TransactionListModel} from "../../../../myfinance-tsclient-generated";
 import {Subject} from "rxjs";
+import * as moment from 'moment';
 
 @Injectable()
 export class TransactionService {
@@ -57,6 +58,16 @@ export class TransactionService {
   }
 
   getTransactions(): Array<Transaction>{
-    return this.transactions;
+    return this.transactions.filter(i => moment(i.transactiondate, 'YYYY-MM-DD').isSameOrAfter(this.daterange[0]) &&
+      moment(i.transactiondate, 'YYYY-MM-DD').isSameOrBefore(this.daterange[1]));
+  }
+
+  setDaterange(daterange: Array<Date>){
+    this.daterange=daterange;
+    this.transactionSubject.next();
+  }
+
+  getDaterange(): Array<Date>{
+    return this.daterange;
   }
 }

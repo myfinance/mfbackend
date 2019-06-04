@@ -10,12 +10,18 @@ import {TransactionService} from "../../services/transaction.service";
 export class ControllerComponent implements OnInit {
 
   bsConfig: Partial<BsDatepickerConfig>;
-  daterange: Date[];
+  daterange:  Array<Date>;
 
-  constructor(private transactionservice: TransactionService) { }
+  constructor(private transactionservice: TransactionService) {
+    this.daterange = this.transactionservice.getDaterange()
+  }
 
   ngOnInit() {
-    this.bsConfig = Object.assign({}, { containerClass: 'theme-default', rangeInputFormat: 'YYYY-MM-DD',  });
+    this.bsConfig = Object.assign({}, { containerClass: 'theme-default', rangeInputFormat: 'YYYY-MM-DD', });
+  }
+
+  onValueChange(value: Date[]): void {
+    this.transactionservice.setDaterange(value);
   }
 
 }
