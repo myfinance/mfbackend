@@ -19,11 +19,13 @@ export class TransactiontableComponent implements OnInit{
 
   title = 'Transactions';
 
-  constructor(private transactionservice: TransactionService) {
+  constructor(private transactionservice: TransactionService) { }
 
+  ngOnInit() {
     this.options = <GridOptions>{
       rowSelection: 'single',
       onSelectionChanged: () => this.onSelectionChanged(),
+      onGridReady: () => this.onGridReady(),
       floatingFilter: true,
       enableColResize: true,
       enableSorting: true,
@@ -37,18 +39,6 @@ export class TransactiontableComponent implements OnInit{
         {headerName: 'TransactionType', field: 'transactionType'}
       ]
     };
-
-  }
-
-  ngOnInit() {
-    if(this.transactionservice.getIsInit()){
-      this.loadData();
-    } else {
-      this.transactionservice.transactionSubject.subscribe(
-        () => {
-          this.loadData()}
-      )
-    }
   }
 
   private loadData(): void {
@@ -57,6 +47,17 @@ export class TransactiontableComponent implements OnInit{
 
   onSelectionChanged(): void {
     //this.applicationLogService.selectedLogEntry = this.options.api.getSelectedRows()[0];
+  }
+
+  onGridReady(): void {
+    if(this.transactionservice.getIsInit()){
+      this.loadData();
+    } else {
+      this.transactionservice.transactionSubject.subscribe(
+        () => {
+          this.loadData()}
+      )
+    }
   }
 
 }

@@ -19,14 +19,16 @@ export class CashflowtableComponent  implements OnInit{
   title = 'cashflows';
   cashflows: Array<Cashflow>;
 
-  constructor( private transactionservice: TransactionService) {
+  constructor( private transactionservice: TransactionService) { }
 
+  ngOnInit() {
     this.options = <GridOptions>{
       rowSelection: 'single',
       floatingFilter: true,
       enableColResize: true,
       enableSorting: true,
       sideBar: 'filters',
+      onGridReady: () => this.onGridReady(),
       suppressPropertyNamesCheck: true,
       columnDefs: [
         {headerName: 'Id', field: 'cashflowid' },
@@ -34,18 +36,6 @@ export class CashflowtableComponent  implements OnInit{
         {headerName: 'Instrument', field: 'instrument.description'}
       ]
     };
-
-  }
-
-  ngOnInit() {
-    if(this.transactionservice.getIsInit()){
-      this.loadData();
-    } else {
-      this.transactionservice.transactionSubject.subscribe(
-        () => {
-          this.loadData()}
-      )
-    }
   }
 
   private loadData(): void {
@@ -53,6 +43,17 @@ export class CashflowtableComponent  implements OnInit{
     this.transactionservice.getTransactions().forEach(x => this.cashflows=this.cashflows.concat(x.cashflows))
     if (this.options.api) {
       this.options.api.setRowData(this.cashflows);
+    }
+  }
+
+  onGridReady(): void {
+    if(this.transactionservice.getIsInit()){
+      this.loadData();
+    } else {
+      this.transactionservice.transactionSubject.subscribe(
+        () => {
+          this.loadData()}
+      )
     }
   }
 }

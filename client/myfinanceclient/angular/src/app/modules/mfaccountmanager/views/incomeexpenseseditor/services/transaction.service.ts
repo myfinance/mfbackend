@@ -7,12 +7,12 @@ import {Subject} from "rxjs";
 @Injectable()
 export class TransactionService {
 
-  transactions: Array<Transaction>;
+  transactions: Array<Transaction> = new Array<Transaction>();
   transactionSubject:Subject<any>= new Subject<any>();
   private isInit:boolean = false;
   start = new Date(new Date().getFullYear(), new Date().getMonth()-6, new Date().getDate());
   end = new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate());
-  daterange: Date[] = new Date[2];
+  daterange:  Array<Date> = new Array<Date>();
 
 
 

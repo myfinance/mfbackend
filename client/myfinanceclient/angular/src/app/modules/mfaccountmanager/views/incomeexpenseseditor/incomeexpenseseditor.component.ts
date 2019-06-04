@@ -74,6 +74,5 @@ export class IncomeexpenseseditorComponent extends AbstractDashboard implements 
   }
 
   ngOnDestroy() {
-    this.dashboardService.reset();
   }
 }
