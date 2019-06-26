@@ -11,6 +11,11 @@ export class ControllerComponent implements OnInit {
 
   bsConfig: Partial<BsDatepickerConfig>;
   daterange:  Array<Date>;
+  items: string[] = [
+    'The first choice!',
+    'And another choice for you.',
+    'but wait! A third!'
+  ];
 
   constructor(private transactionservice: TransactionService) {
     this.daterange = this.transactionservice.getDaterange()

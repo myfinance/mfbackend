@@ -15,6 +15,7 @@ import { ValuegraphComponent } from './views/incomeexpenseseditor/components/val
 import {TransactionService} from "./views/incomeexpenseseditor/services/transaction.service";
 import {BsDatepickerModule } from 'ngx-bootstrap/datepicker';
 import {FormsModule} from "@angular/forms";
+import {BsDropdownModule} from "ngx-bootstrap";
 
 @NgModule({
   imports: [
@@ -24,7 +25,8 @@ import {FormsModule} from "@angular/forms";
     GridsterModule,
     CommonModule,
     FormsModule,
-    BsDatepickerModule.forRoot()
+    BsDatepickerModule.forRoot(),
+    BsDropdownModule.forRoot()
   ],
   declarations: [IncomeexpenseseditorComponent, TransactiontableComponent, IncomeexpensesinputformComponent, ControllerComponent, CashflowtableComponent, ValuegraphComponent],
   exports: [
