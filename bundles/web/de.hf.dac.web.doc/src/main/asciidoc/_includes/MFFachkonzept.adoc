@@ -143,6 +143,10 @@ Bei einer Dividende gibt es drei cashflows: einen Eingang auf einem Giro, ein Ca
 Bei dem Wertpapieren ändert das aber nichts am Wert da im Gegensatz zum Giro der Wert sich nicht aus der Summe der Cashflows ergibt, sondern gleich dem markwert bzw einem berechneten Wert (bei Bonds) ist(hier kann der cashflow natürlich eingehen).
 bei Zinsen bzw Gebühren kann das ähnlich sein: bei einem Depot gibt es auch 3 Cashflows: auf dem Giro wo der Betrag abgezogen wird, auf einem Budget und im Depot wo er nicht in den wert eingeht (wert = wert der securities) aber für analyse herangezogen werden kann(Depotertrag abzüglich gebühren)
 
+=== Trades
+
+Trades werden abgebildet wie Einnahmen bzw Ausgaben allerdings werden zusätzliche Informationen in einer extra Tabelle Trade gespeichert:
+Ammount, security und depot
 
 === Abbildung von Cashflows
 

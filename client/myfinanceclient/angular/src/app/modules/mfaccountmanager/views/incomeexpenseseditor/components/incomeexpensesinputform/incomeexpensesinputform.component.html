@@ -1,4 +1,17 @@
 <p>Konto</p>
+<div class="btn-group">
+  <label class="btn btn-primary myradio" [(ngModel)]="transactiontype"
+         btnRadio="INCOMEEXPENSES" tabindex="0" role="Transactiontype">Ein-/Ausgaben</label>
+  <label class="btn btn-primary myradio" [(ngModel)]="transactiontype"
+         btnRadio="TRANSFER" tabindex="0" role="Transactiontype">Transfers</label>
+  <label class="btn btn-primary myradio" [(ngModel)]="transactiontype"
+         btnRadio="BUDGETTRANSFER" tabindex="0" role="Transactiontype">BudgetTransfers</label>
+  <label class="btn btn-primary myradio" [(ngModel)]="transactiontype"
+         btnRadio="SECURITYCASHFLOW" tabindex="0" role="Transactiontype">Cashflows</label>
+  <label class="btn btn-primary myradio" [(ngModel)]="transactiontype"
+         btnRadio="TRADE" tabindex="0" role="Transactiontype">Trades</label>
+</div>
+<br>
 <div class="btn-group" dropdown>
   <button id="button-basic" dropdownToggle type="button" class="btn btn-primary dropdown-toggle"
           aria-controls="dropdown-basic">Instrument <span class="caret"></span>

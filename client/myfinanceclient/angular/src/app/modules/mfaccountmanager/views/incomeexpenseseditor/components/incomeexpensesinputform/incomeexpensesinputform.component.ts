@@ -10,6 +10,7 @@ import {TransactionService} from "../../services/transaction.service";
 export class IncomeexpensesinputformComponent implements OnInit {
 
   instruments: Instrument[]
+  transactiontype = 'INCOMEEXPENSES';
 
   constructor(private transactionservice: TransactionService) { }
 

@@ -15,5 +15,6 @@ public enum TransactionType {
     INCOMEEXPENSES,
     TRANSFER,
     BUDGETTRANSFER,
-    SECURITYCASHFLOW
+    SECURITYCASHFLOW,
+    TRADE
 }
