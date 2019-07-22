@@ -1,26 +1,23 @@
-<br>
-<p class="mytext">Konto:</p>
-<div class="btn-group" dropdown>
-  <button id="button-basic" dropdownToggle type="button" class="btn btn-primary dropdown-toggle"
-          aria-controls="dropdown-basic">{{getActiveGiroDesc()}}<span class="caret"></span>
-  </button>
-  <ul id="dropdown-basic" *dropdownMenu class="dropdown-menu"
-      role="menu" aria-labelledby="button-basic">
-    <li *ngFor="let choice of giros">
-      <button type="button" class="dropdown-item" (click)="giroSelected(choice)">{{choice.description}}</button>
-    </li>
-  </ul>
-</div>
-<br>
-<p class="mytext">Budget:</p>
-<div class="btn-group" dropdown>
-  <button id="button-basic" dropdownToggle type="button" class="btn btn-primary dropdown-toggle"
-          aria-controls="dropdown-basic">{{getActiveBudgetDesc()}}<span class="caret"></span>
-  </button>
-  <ul id="dropdown-basic" *dropdownMenu class="dropdown-menu"
-      role="menu" aria-labelledby="button-basic">
-    <li *ngFor="let choice of budgets">
-      <button type="button" class="dropdown-item" (click)="budgetSelected(choice)">{{choice.description}}</button>
-    </li>
-  </ul>
-</div>
+<form class="mytext" (ngSubmit)="onSubmit()" #f="ngForm">
+  <div class="form-group">
+    <p>Konto:</p>
+    <select class="btn btn-primary dropdown-toggle" ngModel name="giro" required [(ngModel)]="giroDefault">
+      <option class="mydropdown-item" [ngValue]="giro" *ngFor="let giro of giros" >
+        {{giro.description}}
+      </option>
+    </select>
+  </div>
+  <div class="form-group">
+    <p>Budget:</p>
+    <select class="btn btn-primary dropdown-toggle" ngModel name="budget" required [(ngModel)]="budgetDefault">
+      <option class="mydropdown-item" [ngValue]="budget" *ngFor="let budget of budgets" >
+        {{budget.description}}
+      </option>
+    </select>
+  </div>
+  <div class="form-group">
+    <label>Betrag:</label>
+    <input type="number" class="form-control" ngModel name="value" required/>
+  </div>
+  <button class="btn btn-primary" type="submit">Speichern</button>
+</form>

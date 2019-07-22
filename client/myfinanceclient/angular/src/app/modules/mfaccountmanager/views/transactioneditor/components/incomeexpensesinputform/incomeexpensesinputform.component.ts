@@ -1,7 +1,7 @@
-import { Component, OnInit } from '@angular/core';
-import {Cashflow, Instrument, Transaction} from "../../../../../myfinance-tsclient-generated";
+import {Component, OnInit, ViewChild} from '@angular/core';
+import {Instrument} from "../../../../../myfinance-tsclient-generated";
 import {TransactionService} from "../../services/transaction.service";
-import TransactionTypeEnum = Transaction.TransactionTypeEnum;
+import {NgForm} from "@angular/forms";
 
 @Component({
   selector: 'app-incomeexpensesinputform',
@@ -10,10 +10,12 @@ import TransactionTypeEnum = Transaction.TransactionTypeEnum;
 })
 export class IncomeexpensesinputformComponent implements OnInit {
 
-  giros: Instrument[]
-  activeGiro: Instrument
-  budgets: Instrument[]
-  activeBudget: Instrument
+  giros: Instrument[];
+  budgets: Instrument[];
+  @ViewChild('f')
+  form:NgForm;
+  giroDefault:Instrument;
+  budgetDefault:Instrument;
 
   constructor(private transactionservice: TransactionService) { }
 
@@ -30,22 +32,13 @@ export class IncomeexpensesinputformComponent implements OnInit {
 
   private loadData(): void {
     this.giros = this.transactionservice.getGiros();
+    this.giroDefault = this.giros[0];
     this.budgets = this.transactionservice.getBudgets();
+    this.budgetDefault = this.budgets[0];
   }
 
-  private getActiveGiroDesc(): string {
-    return this.activeGiro == null ? "Select Giro" : this.activeGiro.description
-  }
+  onSubmit(){
+    console.log(this.form)
 
-  private getActiveBudgetDesc(): string {
-    return this.activeBudget == null ? "Select Budget" : this.activeBudget.description
-  }
-
-  private giroSelected(selectedInstrument: Instrument){
-    this.activeGiro=selectedInstrument;
-  }
-
-  private budgetSelected(selectedInstrument: Instrument){
-    this.activeBudget=selectedInstrument;
   }
 }
