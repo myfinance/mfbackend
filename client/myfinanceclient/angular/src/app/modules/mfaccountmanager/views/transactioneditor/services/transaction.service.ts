@@ -5,6 +5,7 @@ import {Instrument, InstrumentListModel, Transaction, TransactionListModel} from
 import {Subject} from "rxjs";
 import * as moment from 'moment';
 import TransactionTypeEnum = Transaction.TransactionTypeEnum;
+import InstrumentTypeEnum = Instrument.InstrumentTypeEnum;
 
 @Injectable()
 export class TransactionService {
@@ -100,9 +101,13 @@ export class TransactionService {
     return this.instruments;
   }
 
-  /*getAccounts(): Array<Instrument>{
-    return this.instruments.filter(i => i.instrumentType);
-  }*/
+  getGiros(): Array<Instrument>{
+    return this.instruments.filter(i => i.instrumentType == InstrumentTypeEnum.Giro);
+  }
+
+  getBudgets(): Array<Instrument>{
+    return this.instruments.filter(i => i.instrumentType == InstrumentTypeEnum.Budget);
+  }
 
   setDaterange(daterange: Array<Date>){
     if(daterange != null){

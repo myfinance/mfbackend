@@ -10,7 +10,10 @@ import TransactionTypeEnum = Transaction.TransactionTypeEnum;
 })
 export class IncomeexpensesinputformComponent implements OnInit {
 
-  instruments: Instrument[]
+  giros: Instrument[]
+  activeGiro: Instrument
+  budgets: Instrument[]
+  activeBudget: Instrument
 
   constructor(private transactionservice: TransactionService) { }
 
@@ -26,8 +29,23 @@ export class IncomeexpensesinputformComponent implements OnInit {
   }
 
   private loadData(): void {
-    this.instruments = this.transactionservice.getInstruments();
+    this.giros = this.transactionservice.getGiros();
+    this.budgets = this.transactionservice.getBudgets();
   }
 
+  private getActiveGiroDesc(): string {
+    return this.activeGiro == null ? "Select Giro" : this.activeGiro.description
+  }
 
+  private getActiveBudgetDesc(): string {
+    return this.activeBudget == null ? "Select Budget" : this.activeBudget.description
+  }
+
+  private giroSelected(selectedInstrument: Instrument){
+    this.activeGiro=selectedInstrument;
+  }
+
+  private budgetSelected(selectedInstrument: Instrument){
+    this.activeBudget=selectedInstrument;
+  }
 }

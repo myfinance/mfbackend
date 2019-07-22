@@ -1,12 +1,26 @@
-<p>Konto:</p>
+<br>
+<p class="mytext">Konto:</p>
 <div class="btn-group" dropdown>
   <button id="button-basic" dropdownToggle type="button" class="btn btn-primary dropdown-toggle"
-          aria-controls="dropdown-basic">Instrument<span class="caret"></span>
+          aria-controls="dropdown-basic">{{getActiveGiroDesc()}}<span class="caret"></span>
   </button>
   <ul id="dropdown-basic" *dropdownMenu class="dropdown-menu"
       role="menu" aria-labelledby="button-basic">
-    <li *ngFor="let choice of instruments">
-      {{choice.description}}
+    <li *ngFor="let choice of giros">
+      <button type="button" class="dropdown-item" (click)="giroSelected(choice)">{{choice.description}}</button>
+    </li>
+  </ul>
+</div>
+<br>
+<p class="mytext">Budget:</p>
+<div class="btn-group" dropdown>
+  <button id="button-basic" dropdownToggle type="button" class="btn btn-primary dropdown-toggle"
+          aria-controls="dropdown-basic">{{getActiveBudgetDesc()}}<span class="caret"></span>
+  </button>
+  <ul id="dropdown-basic" *dropdownMenu class="dropdown-menu"
+      role="menu" aria-labelledby="button-basic">
+    <li *ngFor="let choice of budgets">
+      <button type="button" class="dropdown-item" (click)="budgetSelected(choice)">{{choice.description}}</button>
     </li>
   </ul>
 </div>
