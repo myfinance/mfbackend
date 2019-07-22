@@ -4,6 +4,7 @@ import {MyFinanceDataService} from "../../../../../shared/services/myfinance-dat
 import {Instrument, InstrumentListModel, Transaction, TransactionListModel} from "../../../../myfinance-tsclient-generated";
 import {Subject} from "rxjs";
 import * as moment from 'moment';
+import TransactionTypeEnum = Transaction.TransactionTypeEnum;
 
 @Injectable()
 export class TransactionService {
@@ -99,6 +100,10 @@ export class TransactionService {
     return this.instruments;
   }
 
+  /*getAccounts(): Array<Instrument>{
+    return this.instruments.filter(i => i.instrumentType);
+  }*/
+
   setDaterange(daterange: Array<Date>){
     if(daterange != null){
       this.daterange=daterange;
@@ -110,5 +115,9 @@ export class TransactionService {
 
   getDaterange(): Array<Date>{
     return this.daterange;
+  }
+
+  updateTransactionTypeFilter(transactionType : TransactionTypeEnum): void{
+
   }
 }

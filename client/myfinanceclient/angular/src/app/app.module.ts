@@ -32,7 +32,7 @@ import { LicenseManager } from 'ag-grid-enterprise';
 import {ToastrModule} from "ngx-toastr";
 import {DashboardService} from "./modules/dashboard/services/dashboard.service";
 import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
-import {TransactionService} from "./modules/mfaccountmanager/views/incomeexpenseseditor/services/transaction.service";
+import {TransactionService} from "./modules/mfaccountmanager/views/transactioneditor/services/transaction.service";
 import {registerLocaleData} from "@angular/common";
 import localeDe from '@angular/common/locales/de';
 

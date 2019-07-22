@@ -3,13 +3,13 @@ import {AbstractDashboard} from "../../../dashboard/abstract-dashboard";
 import {DashboardService} from "../../../dashboard/services/dashboard.service";
 
 @Component({
-  selector: 'incomeexpenseseditor',
-  templateUrl: './incomeexpenseseditor.component.html',
-  styleUrls: ['./incomeexpenseseditor.component.scss']
+  selector: 'transactioneditor',
+  templateUrl: './transactioneditor.component.html',
+  styleUrls: ['./transactioneditor.component.scss']
 })
-export class IncomeexpenseseditorComponent extends AbstractDashboard implements OnInit, OnDestroy {
+export class TransactioneditorComponent extends AbstractDashboard implements OnInit, OnDestroy {
 
-  title = 'Einnahmen und Ausgaben';
+  title = 'Transactions';
   view = 'fit';
 
   widgets = [

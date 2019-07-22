@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import {Cashflow, Instrument} from "../../../../../myfinance-tsclient-generated";
+import {Cashflow, Instrument, Transaction} from "../../../../../myfinance-tsclient-generated";
 import {TransactionService} from "../../services/transaction.service";
+import TransactionTypeEnum = Transaction.TransactionTypeEnum;
 
 @Component({
   selector: 'app-incomeexpensesinputform',
@@ -10,7 +11,6 @@ import {TransactionService} from "../../services/transaction.service";
 export class IncomeexpensesinputformComponent implements OnInit {
 
   instruments: Instrument[]
-  transactiontype = 'INCOMEEXPENSES';
 
   constructor(private transactionservice: TransactionService) { }
 
@@ -28,5 +28,6 @@ export class IncomeexpensesinputformComponent implements OnInit {
   private loadData(): void {
     this.instruments = this.transactionservice.getInstruments();
   }
+
 
 }
