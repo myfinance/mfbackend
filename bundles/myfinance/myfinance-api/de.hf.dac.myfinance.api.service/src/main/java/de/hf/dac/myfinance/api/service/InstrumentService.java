@@ -38,25 +38,25 @@ public interface InstrumentService {
     Map<LocalDate, Double> getValueCurve(int instrumentId, LocalDate startDate, LocalDate endDate);
     double getValue(int instrumentId, LocalDate date);
 
-    String saveEquity(String isin, String description);
-    String saveSymbol(String isin, String symbol, String currencyCode);
-    String saveCurrency(String currencyCode, String description);
-    String saveEndOfDayPrice(String currencyCode, String isin, LocalDate dayofprice, Double value, LocalDateTime lastchanged);
+    void saveEquity(String isin, String description);
+    void saveSymbol(String isin, String symbol, String currencyCode);
+    void saveCurrency(String currencyCode, String description);
+    void saveEndOfDayPrice(String currencyCode, String isin, LocalDate dayofprice, Double value, LocalDateTime lastchanged);
 
 
-    String newTenant(String description, LocalDateTime ts);
-    String updateInstrumentDesc(int instrumentId, String description);
-    String deactivateInstrument(int instrumentId);
-    String newBudget(String description, int budgetGroupId, LocalDateTime ts);
-    String newGiroAccount(String description, int tenantId, LocalDateTime ts);
+    void newTenant(String description, LocalDateTime ts);
+    void updateInstrumentDesc(int instrumentId, String description);
+    void deactivateInstrument(int instrumentId);
+    void newBudget(String description, int budgetGroupId, LocalDateTime ts);
+    void newGiroAccount(String description, int tenantId, LocalDateTime ts);
 
-    String newIncomeExpense(String description, int accId, int budgetId, double value, LocalDate transactionDate, LocalDateTime ts);
-    String newTransfer(String description, int srcInstrumentId, int trgInstrumentId, double value, LocalDate transactionDate, LocalDateTime ts);
+    void newIncomeExpense(String description, int accId, int budgetId, double value, LocalDate transactionDate, LocalDateTime ts);
+    void newTransfer(String description, int srcInstrumentId, int trgInstrumentId, double value, LocalDate transactionDate, LocalDateTime ts);
     List<Transaction> listTransactions(LocalDate startDate, LocalDate endDate);
     List<Cashflow> listInstrumentCashflows(int instrumentId);
-    String deleteTransaction(int transactionId);
+    void deleteTransaction(int transactionId);
 
-    String importPrices(LocalDateTime ts);
-    String fillPriceHistory(int sourceId, String isin, LocalDateTime ts);
+    void importPrices(LocalDateTime ts);
+    void fillPriceHistory(int sourceId, String isin, LocalDateTime ts);
 
 }

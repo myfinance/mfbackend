@@ -23,6 +23,8 @@ import de.hf.dac.api.io.web.WebRequestService;
 import de.hf.dac.myfinance.ValueHandler.ValueCurveService;
 import de.hf.dac.myfinance.api.domain.*;
 import de.hf.dac.myfinance.api.domain.Currency;
+import de.hf.dac.myfinance.api.exceptions.MFException;
+import de.hf.dac.myfinance.api.exceptions.MFMsgKey;
 import de.hf.dac.myfinance.api.persistence.dao.EndOfDayPriceDao;
 import de.hf.dac.myfinance.api.persistence.dao.InstrumentDao;
 import de.hf.dac.myfinance.api.persistence.dao.TransactionDao;
@@ -129,24 +131,22 @@ public class InstrumentServiceImpl implements InstrumentService {
 
 
     @Override
-    public String saveEquity(String theisin, String description) {
+    public void saveEquity(String theisin, String description) {
         String isin = theisin.toUpperCase();
         Optional<Equity> existingSec = getEquity(isin);
         if(!existingSec.isPresent()) {
             Equity equity = new Equity(isin, description, true, LocalDateTime.now());
             auditService.saveMessage("Equity inserted:" + theisin, Severity.INFO, AUDIT_MSG_TYPE);
             instrumentDao.saveInstrument(equity);
-            return "new security saved sucessfully";
         } else {
             existingSec.get().setDescription(description);
             auditService.saveMessage("Equity " + theisin +" updated with new description: " + description, Severity.INFO, AUDIT_MSG_TYPE);
             instrumentDao.saveInstrument(existingSec.get());
-            return "security updated sucessfully";
         }
     }
 
     @Override
-    public String saveSymbol(String theisin, String thesymbol, String thecurrencyCode){
+    public void saveSymbol(String theisin, String thesymbol, String thecurrencyCode){
 
         String isin = theisin.toUpperCase();
         String symbol = thesymbol.toUpperCase();
@@ -154,11 +154,11 @@ public class InstrumentServiceImpl implements InstrumentService {
 
         Optional<Instrument> currency = getCurrency(currencyCode);
         if(!currency.isPresent()) {
-            return "Symbol not saved: unknown currency:"+currencyCode;
+            throw new MFException(MFMsgKey.UNKNOWN_CURRENCY_EXCEPTION, "Symbol not saved: unknown currency:"+currencyCode);
         }
         Optional<Equity> existingSec = getEquity(isin);
         if(!existingSec.isPresent()){
-            return "Symbol not saved: unknown security:"+isin;
+            throw new MFException(MFMsgKey.UNKNOWN_INSTRUMENT_EXCEPTION, "Symbol not saved: unknown security:"+isin);
         }
         Set<SecuritySymbols> symbols = existingSec.get().getSymbols();
         SecuritySymbols newSymbol = new SecuritySymbols(currency.get(), existingSec.get().getInstrumentid(), symbol);
@@ -174,57 +174,53 @@ public class InstrumentServiceImpl implements InstrumentService {
             }
         }
         instrumentDao.saveSymbol(newSymbol);
-        return "Symbol saved";
     }
 
     @Override
-    public String saveCurrency(String currencyCode, String description) {
+    public void saveCurrency(String currencyCode, String description) {
         String curCode = currencyCode.toUpperCase();
         Optional<Instrument> existingCur = getCurrency(curCode);
         if(!existingCur.isPresent()) {
             Instrument currency = new Currency(currencyCode, description, true, LocalDateTime.now());
             auditService.saveMessage("Currency inserted:" + currencyCode, Severity.INFO, AUDIT_MSG_TYPE);
             instrumentDao.saveInstrument(currency);
-            return "new currency saved sucessfully";
         } else {
             auditService.saveMessage("Currency " + currencyCode +" updated with new description: " + description, Severity.INFO, AUDIT_MSG_TYPE);
             existingCur.get().setDescription(description);
-            return "security updated sucessfully";
         }
     }
 
     @Override
-    public String saveEndOfDayPrice(String currencyCode, String isin, LocalDate dayofprice, Double value, LocalDateTime lastchanged) {
-        return saveEndOfDayPrice(currencyCode, isin, SourceName.MAN.getValue(), dayofprice, value, lastchanged);
+    public void saveEndOfDayPrice(String currencyCode, String isin, LocalDate dayofprice, Double value, LocalDateTime lastchanged) {
+        saveEndOfDayPrice(currencyCode, isin, SourceName.MAN.getValue(), dayofprice, value, lastchanged);
     }
 
-    protected String saveEndOfDayPrice(String currencyCode, String businesskey, int sourceId, LocalDate dayofprice, Double value, LocalDateTime lastchanged) {
+    protected void saveEndOfDayPrice(String currencyCode, String businesskey, int sourceId, LocalDate dayofprice, Double value, LocalDateTime lastchanged) {
         Optional<Instrument> currency = getCurrency(currencyCode);
         if(!currency.isPresent()){
-            return "Currency with code "+currencyCode+" is not available";
+            throw new MFException(MFMsgKey.UNKNOWN_CURRENCY_EXCEPTION, "Currency with code "+currencyCode+" is not available");
         }
         Optional<Instrument> security = instrumentDao.getSecurity(businesskey);
         if(!security.isPresent()){
-            return "Security with businesskey "+businesskey+" is not available";
+            throw new MFException(MFMsgKey.UNKNOWN_INSTRUMENT_EXCEPTION, "Security with businesskey "+businesskey+" is not available");
         }
         Optional<Source> source = getSource(sourceId);
         if(!source.isPresent()){
-            return "Source with id "+sourceId+" is not available";
+            throw new MFException(MFMsgKey.UNKNOWN_SOURCE_EXCEPTION, "Source with id "+sourceId+" is not available");
         }
         EndOfDayPrice price = new EndOfDayPrice(currency.get(), security.get(), source.get(), dayofprice, value, lastchanged);
         auditService.saveMessage("Price inserted for instrument " + security.get().getInstrumentid() +" and date " + dayofprice + " : " + value + " " + currency.get().getBusinesskey()
             , Severity.INFO, AUDIT_MSG_TYPE);
         endOfDayPriceDao.saveEndOfDayPrice(price);
-        return("Saved");
     }
 
     @Override
-    public String importPrices(LocalDateTime ts){
+    public void importPrices(LocalDateTime ts){
         List<Source> sources = instrumentDao.getActiveSources();
         List<Instrument> secuirities = getSecurities();
         Optional<Instrument> eur = instrumentDao.getCurrency("EUR");
         if(!eur.isPresent()){
-            return "Currency EUR not available";
+            throw new MFException(MFMsgKey.UNKNOWN_CURRENCY_EXCEPTION, "Currency EUR not available");
         }
 
         ImportHandler handler = new ImportHandler(sources, eur.get(), webRequestService);
@@ -238,31 +234,29 @@ public class InstrumentServiceImpl implements InstrumentService {
                 endOfDayPriceDao.saveEndOfDayPrice(price);
             }
         }
-
-        return "sucessful";
     }
 
     @Override
-    public String fillPriceHistory(int sourceId, String businesskey, LocalDateTime ts){
+    public void fillPriceHistory(int sourceId, String businesskey, LocalDateTime ts){
         Optional<Source> source = getSource(sourceId);
         if(!source.isPresent()){
-            return "Source with id "+sourceId+" is not available";
+            throw new MFException(MFMsgKey.UNKNOWN_SOURCE_EXCEPTION, "Source with id "+sourceId+" is not available");
         }
         Optional<Instrument> security = instrumentDao.getSecurity(businesskey);
         if(!security.isPresent()){
-            return "Security with isin "+businesskey+" is not available";
+            throw new MFException(MFMsgKey.UNKNOWN_INSTRUMENT_EXCEPTION, "Security with isin "+businesskey+" is not available");
         }
         List<Source> sources = new ArrayList<>();
         sources.add(source.get());
 
         //all prices are in EUR so we do not need prices for this currency
         if(security.get().getInstrumentType()==InstrumentType.Currency && security.get().getBusinesskey().equals("EUR")) {
-            return "Prices for currency EUR are not necessary";
+            throw new MFException(MFMsgKey.WRONG_REQUEST_EXCEPTION, "Prices for currency EUR are not necessary");
         }
 
         Optional<Instrument> eur = instrumentDao.getCurrency("EUR");
         if(!eur.isPresent()){
-            return "Currency EUR not available";
+            throw new MFException(MFMsgKey.UNKNOWN_CURRENCY_EXCEPTION, "Currency EUR not available");
         }
 
         ImportHandler handler = new ImportHandler(sources, eur.get(), webRequestService);
@@ -285,11 +279,10 @@ public class InstrumentServiceImpl implements InstrumentService {
             }
 
         }
-        return "sucessful";
     }
 
     @Override
-    public String newTenant(String description, LocalDateTime ts) {
+    public void newTenant(String description, LocalDateTime ts) {
         Tenant tenant = new Tenant(description, true, ts);
         auditService.saveMessage("Tenant inserted:" + description, Severity.INFO, AUDIT_MSG_TYPE);
         instrumentDao.saveInstrument(tenant);
@@ -300,7 +293,6 @@ public class InstrumentServiceImpl implements InstrumentService {
         addInstrumentToGraph(incomeBudgetId, tenant.getInstrumentid(), EdgeType.INCOMEBUDGET);
         int accPfId = newAccountPortfolio("accountPf_"+description, ts);
         addInstrumentToGraph(accPfId, tenant.getInstrumentid(), EdgeType.TENANTGRAPH);
-        return "new Tenant saved sucessfully";
     }
 
     protected void addInstrumentToGraph(int instrumentId, int ancestorId, EdgeType edgeType){
@@ -316,16 +308,15 @@ public class InstrumentServiceImpl implements InstrumentService {
     }
 
     @Override
-    public String newBudget(String description, int budgetGroupId, LocalDateTime ts) {
+    public void newBudget(String description, int budgetGroupId, LocalDateTime ts) {
         Optional<Instrument> budgetGroup = instrumentDao.getInstrument(budgetGroupId);
         if(!budgetGroup.isPresent()){
-            return "Budget not saved: unknown budgetGroupId:"+budgetGroupId;
+            throw new MFException(MFMsgKey.UNKNOWN_BUDGETGROUP_EXCEPTION, "Budget not saved: unknown budgetGroupId:"+budgetGroupId);
         }
         if(budgetGroup.get().getInstrumentType() != InstrumentType.BudgetGroup){
-            return "Budget not saved: Instrument with Id "+budgetGroupId + " is not a Budgetgroup";
+            throw new MFException(MFMsgKey.UNKNOWN_BUDGETGROUP_EXCEPTION,  "Budget not saved: Instrument with Id "+budgetGroupId + " is not a Budgetgroup");
         }
         createBudget(description, budgetGroupId, ts);
-        return "new budget saved sucessfully";
     }
 
     protected int createBudget(String description, int budgetGroupId, LocalDateTime ts) {
@@ -350,37 +341,35 @@ public class InstrumentServiceImpl implements InstrumentService {
     }
 
     @Override
-    public String newGiroAccount(String description, int tenantId, LocalDateTime ts) {
+    public void newGiroAccount(String description, int tenantId, LocalDateTime ts) {
         Optional<Instrument> accportfolio = instrumentDao.getAccountPortfolio(tenantId);
         if(!accportfolio.isPresent()) {
-            return "Giro not saved: tenant for the id:"+tenantId+" not exists or has no accountPortfolio";
+            throw new MFException(MFMsgKey.UNKNOWN_INSTRUMENT_EXCEPTION,  "Giro not saved: tenant for the id:"+tenantId+" not exists or has no accountPortfolio");
         }
         Giro giro = new Giro(description, true, ts);
         auditService.saveMessage("new giro inserted:" + description, Severity.INFO, AUDIT_MSG_TYPE);
         instrumentDao.saveInstrument(giro);
         addInstrumentToGraph(giro.getInstrumentid(), accportfolio.get().getInstrumentid(), EdgeType.TENANTGRAPH);
-        return "new giro saved sucessfully";
     }
 
     @Override
-    public String updateInstrumentDesc(int instrumentId, String description) {
-        return null;
+    public void updateInstrumentDesc(int instrumentId, String description) {
     }
 
     @Override
-    public String deactivateInstrument(int instrumentId) {
-        return null;
+    public void deactivateInstrument(int instrumentId) {
+
     }
 
     @Override
-    public String newIncomeExpense(String description, int accId, int budgetId, double value, LocalDate transactionDate, LocalDateTime ts){
+    public void newIncomeExpense(String description, int accId, int budgetId, double value, LocalDate transactionDate, LocalDateTime ts){
         Optional<Instrument> account = instrumentDao.getInstrument(accId);
         if(!account.isPresent() || account.get().getInstrumentType()!=InstrumentType.Giro){
-            return "IncomeExpense not saved: unknown account oder wrong account type:"+accId;
+            throw new MFException(MFMsgKey.UNKNOWN_INSTRUMENT_EXCEPTION, "IncomeExpense not saved: unknown account oder wrong account type:"+accId);
         }
         Optional<Instrument> budget = instrumentDao.getInstrument(budgetId);
         if(!budget.isPresent() || budget.get().getInstrumentType()!=InstrumentType.Budget){
-            return "IncomeExpense not saved: unknown budget:"+budgetId;
+            throw new MFException(MFMsgKey.UNKNOWN_INSTRUMENT_EXCEPTION, "IncomeExpense not saved: unknown budget:"+budgetId);
         }
         Optional<Integer> tenantOfAcc = instrumentDao.getRootInstrument(accId, EdgeType.TENANTGRAPH);
         Optional<Integer> tenantOfBudget = instrumentDao.getRootInstrument(budgetId, EdgeType.TENANTGRAPH);
@@ -388,7 +377,7 @@ public class InstrumentServiceImpl implements InstrumentService {
         if(!tenantOfAcc.isPresent()
             || !tenantOfBudget.isPresent()
             || tenantOfAcc.get()!=tenantOfBudget.get()){
-            return "IncomeExpense not saved: budget and account have not the same tenant";
+            throw new MFException(MFMsgKey.WRONG_TENENT_EXCEPTION, "IncomeExpense not saved: budget and account have not the same tenant");
         }
         Transaction transaction = new Transaction(description, transactionDate, ts, TransactionType.INCOMEEXPENSES);
 
@@ -404,28 +393,27 @@ public class InstrumentServiceImpl implements InstrumentService {
         auditService.saveMessage("new transaction saved for Account "+accId+" and Budget "+budgetId+". Date:" + transactionDate + ", value:" + value + ", desc:" +description,
             Severity.INFO, AUDIT_MSG_TYPE);
         transactionDao.saveTransaction(transaction);
-        return "transaction saved sucessfully";
     }
 
     @Override
-    public String newTransfer(String description, int srcInstrumentId, int trgInstrumentId, double value, LocalDate transactionDate, LocalDateTime ts){
+    public void newTransfer(String description, int srcInstrumentId, int trgInstrumentId, double value, LocalDate transactionDate, LocalDateTime ts){
         Optional<Instrument> src = instrumentDao.getInstrument(srcInstrumentId);
         TransactionType transactionType =TransactionType.TRANSFER;
         if(!src.isPresent()){
-            return "Transfer not saved: unknown instrument:"+srcInstrumentId;
+            throw new MFException(MFMsgKey.UNKNOWN_INSTRUMENT_EXCEPTION, "Transfer not saved: unknown instrument:"+srcInstrumentId);
         }
         Optional<Instrument> trg = instrumentDao.getInstrument(trgInstrumentId);
         if(!trg.isPresent()){
-            return "Transfer not saved: unknown instrument:"+trgInstrumentId;
+            throw new MFException(MFMsgKey.UNKNOWN_INSTRUMENT_EXCEPTION, "Transfer not saved: unknown instrument:"+trgInstrumentId);
         }
         if(trg.get().getInstrumentType() == InstrumentType.Budget){
             transactionType =TransactionType.BUDGETTRANSFER;
             if(src.get().getInstrumentType() != InstrumentType.Budget){
-                return "Only transfers from budget to Budget or from Account to Account are allowed:";
+                throw new MFException(MFMsgKey.WRONG_INSTRUMENTTYPE_EXCEPTION, "Only transfers from budget to Budget or from Account to Account are allowed");
             }
         } else {
             if( !isAccountTransferAllowed(trg.get()) || !isAccountTransferAllowed(src.get()) ){
-                return "No Transfer allowed for this accounts:";
+                throw new MFException(MFMsgKey.WRONG_INSTRUMENTTYPE_EXCEPTION, "No Transfer allowed for this accounts:");
             }
         }
 
@@ -435,7 +423,7 @@ public class InstrumentServiceImpl implements InstrumentService {
         if(!tenantSrc.isPresent()
             || !tenantTrg.isPresent()
             || tenantSrc.get()!=tenantTrg.get()){
-            return "IncomeExpense not saved: budget and account have not the same tenant";
+            throw new MFException(MFMsgKey.WRONG_TENENT_EXCEPTION, "IncomeExpense not saved: budget and account have not the same tenant");
         }
         Transaction transaction = new Transaction(description, transactionDate, ts, transactionType);
 
@@ -451,11 +439,10 @@ public class InstrumentServiceImpl implements InstrumentService {
         auditService.saveMessage("new transaction saved for Instrument "+srcInstrumentId+" and  "+trgInstrumentId+". Date:" + transactionDate + ", value:" + value + ", desc:" +description,
             Severity.INFO, AUDIT_MSG_TYPE);
         transactionDao.saveTransaction(transaction);
-        return "transaction saved sucessfully";
     }
 
     @Override
-    public String deleteTransaction(int transactionId){
+    public void deleteTransaction(int transactionId){
         Optional<Transaction> transaction = transactionDao.getTransaction(transactionId);
         if(transaction.isPresent()){
             auditService.saveMessage(" transaction with id "+transactionId+" ,desc: '"+transaction.get().getDescription()+
@@ -463,7 +450,6 @@ public class InstrumentServiceImpl implements InstrumentService {
                 Severity.INFO, AUDIT_MSG_TYPE);
             transactionDao.deleteTransaction(transaction.get());
         }
-        return "transaction deleted:"+transactionId;
     }
 
     protected boolean isAccountTransferAllowed(Instrument instrument){

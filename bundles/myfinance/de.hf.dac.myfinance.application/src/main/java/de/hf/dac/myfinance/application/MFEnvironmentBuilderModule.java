@@ -34,8 +34,8 @@ import de.hf.dac.io.audit.AuditServiceImpl;
 import de.hf.dac.myfinance.api.application.EnvTarget;
 import de.hf.dac.myfinance.api.application.MarketDataEnvironment;
 import de.hf.dac.myfinance.api.domain.Instrument;
-import de.hf.dac.myfinance.api.exceptions.MDException;
-import de.hf.dac.myfinance.api.exceptions.MDMsgKey;
+import de.hf.dac.myfinance.api.exceptions.MFException;
+import de.hf.dac.myfinance.api.exceptions.MFMsgKey;
 import de.hf.dac.myfinance.api.persistence.dao.EndOfDayPriceDao;
 import de.hf.dac.myfinance.api.persistence.dao.InstrumentDao;
 import de.hf.dac.myfinance.api.persistence.dao.TransactionDao;
@@ -101,7 +101,7 @@ public class MFEnvironmentBuilderModule extends AbstractModule {
                 emfb.getOrCreateEntityManagerFactory(targetName, EntityManagerFactorySetup.PoolSize.SMALL, new Class[] {},
                     new ClassLoader[] { classLoader }, dbi));
         } else {
-            throw new MDException(MDMsgKey.NO_TARGET_CONFIG_EXCEPTION,
+            throw new MFException(MFMsgKey.NO_TARGET_CONFIG_EXCEPTION,
                 "No Config for Target " + targetName + " and Environment " + env + " found.");
         }
     }

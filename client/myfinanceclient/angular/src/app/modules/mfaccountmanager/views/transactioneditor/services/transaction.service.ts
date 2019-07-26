@@ -4,7 +4,6 @@ import {MyFinanceDataService} from "../../../../../shared/services/myfinance-dat
 import {Instrument, InstrumentListModel, Transaction, TransactionListModel} from "../../../../myfinance-tsclient-generated";
 import {Subject} from "rxjs";
 import * as moment from 'moment';
-import TransactionTypeEnum = Transaction.TransactionTypeEnum;
 import InstrumentTypeEnum = Instrument.InstrumentTypeEnum;
 
 @Injectable()
@@ -122,7 +121,7 @@ export class TransactionService {
     return this.daterange;
   }
 
-  updateTransactionTypeFilter(transactionType : TransactionTypeEnum): void{
-
+  saveIncomeExpenses(desc: string, srcInstrumentId: number, trgInstrumentId: number, value: number, transactionDate: Date) {
+    this.myFinanceService.saveIncomeExpenses(desc, srcInstrumentId, trgInstrumentId, value, transactionDate);
   }
 }

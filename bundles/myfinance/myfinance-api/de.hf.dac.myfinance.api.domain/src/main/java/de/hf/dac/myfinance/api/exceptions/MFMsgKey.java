@@ -6,7 +6,7 @@
  *
  *  Project     : dac
  *
- *  File        : MDMsgKey.java
+ *  File        : MFMsgKey.java
  *
  *  Author(s)   : hf
  *
@@ -20,7 +20,7 @@ package de.hf.dac.myfinance.api.exceptions;
 import de.hf.dac.api.base.exceptions.MsgKey;
 
 /** Message key to be part of CCRException providing a unique id and a unique type (message type) */
-public enum MDMsgKey implements MsgKey {
+public enum MFMsgKey implements MsgKey {
     // 10000 - 14999: system errors
     SYSTEM(10001),
     NULL_POINTER(10003),
@@ -37,6 +37,12 @@ public enum MDMsgKey implements MsgKey {
     UNKNOWN_SOURCE_EXCEPTION(21002),
     UNKNOWN_INSTRUMENTTYPE_EXCEPTION(21003),
     UNKNOWN_SECURITYTYPE_EXCEPTION(21004),
+    WRONG_INSTRUMENTTYPE_EXCEPTION(21005),
+    UNKNOWN_INSTRUMENT_EXCEPTION(21006),
+    WRONG_TENENT_EXCEPTION(21007),
+    UNKNOWN_CURRENCY_EXCEPTION(21008),
+    WRONG_REQUEST_EXCEPTION(21009),
+    UNKNOWN_BUDGETGROUP_EXCEPTION(21010),
     // 25000 - 29999: analysis
     NO_INSTRUMENT_FOUND_EXCEPTION(25001),
     MD_UNSPECIFIED(30000);
@@ -45,7 +51,7 @@ public enum MDMsgKey implements MsgKey {
 
     private final int id;
 
-    MDMsgKey(int id) {
+    MFMsgKey(int id) {
         this.id = id;
     }
 

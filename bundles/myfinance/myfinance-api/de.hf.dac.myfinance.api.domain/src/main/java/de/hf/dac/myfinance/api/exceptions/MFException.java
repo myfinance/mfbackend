@@ -6,7 +6,7 @@
  *
  *  Project     : dac
  *
- *  File        : MDException.java
+ *  File        : MFException.java
  *
  *  Author(s)   : hf
  *
@@ -22,7 +22,7 @@ import de.hf.dac.api.base.exceptions.MsgKeyException;
 import java.io.FileNotFoundException;
 
 /** Main exception for MD, it is a runtime exception to avoid having throw statement in every method. */
-public class MDException extends MsgKeyException {
+public class MFException extends MsgKeyException {
     /**  **/
     private static final long serialVersionUID = 1L;
 
@@ -31,33 +31,33 @@ public class MDException extends MsgKeyException {
      * @param e the Throwable
      * @return instance of CCRException
      */
-    public static MDException getFromThrowable(Throwable e) {
-        if (e instanceof MDException) {
-            return (MDException) e;
+    public static MFException getFromThrowable(Throwable e) {
+        if (e instanceof MFException) {
+            return (MFException) e;
         }
 
-        MDException r;
+        MFException r;
 
         // perform mappings for classification as needed...
         if (e instanceof NullPointerException) {
-            r = new MDException(MDMsgKey.NULL_POINTER, "Access to undefined reference occurred (NullPointerException)", e);
+            r = new MFException(MFMsgKey.NULL_POINTER, "Access to undefined reference occurred (NullPointerException)", e);
         } else if (e instanceof IllegalArgumentException) {
-            r = new MDException(MDMsgKey.ILLEGAL_ARGUMENTS, "Illegal arguments - " + e.getMessage(), e);
+            r = new MFException(MFMsgKey.ILLEGAL_ARGUMENTS, "Illegal arguments - " + e.getMessage(), e);
         } else if (e instanceof FileNotFoundException) {
-            r = new MDException(MDMsgKey.FILE_NOT_FOUND, "File not found - " + e.getMessage(), e);
+            r = new MFException(MFMsgKey.FILE_NOT_FOUND, "File not found - " + e.getMessage(), e);
         } else {
-            r = new MDException
+            r = new MFException
                 (e);
         }
 
         return r;
     }
 
-    public MDException(MDMsgKey msgKey, String message, Throwable e) {
+    public MFException(MFMsgKey msgKey, String message, Throwable e) {
         super(msgKey, message, e);
     }
 
-    public MDException(MDMsgKey msgKey, String message) {
+    public MFException(MFMsgKey msgKey, String message) {
         super(msgKey, message);
     }
 
@@ -67,15 +67,15 @@ public class MDException extends MsgKeyException {
      * @param message
      *        The exception message
      */
-    public MDException(String message) {
-        super(MDMsgKey.MD_UNSPECIFIED, message);
+    public MFException(String message) {
+        super(MFMsgKey.MD_UNSPECIFIED, message);
     }
 
-    public MDException(Throwable e) {
-        super(MDMsgKey.SYSTEM, e);
+    public MFException(Throwable e) {
+        super(MFMsgKey.SYSTEM, e);
 
-        if (e instanceof MDException) {
-            msgKey = ((MDException) e).getMsgKey();
+        if (e instanceof MFException) {
+            msgKey = ((MFException) e).getMsgKey();
         }
     }
 
@@ -87,11 +87,11 @@ public class MDException extends MsgKeyException {
      * @param e
      *        The exception
      */
-    public MDException(String message, Throwable e) {
-        super(MDMsgKey.SYSTEM, message, e);
+    public MFException(String message, Throwable e) {
+        super(MFMsgKey.SYSTEM, message, e);
 
-        if (e instanceof MDException) {
-            msgKey = ((MDException) e).getMsgKey();
+        if (e instanceof MFException) {
+            msgKey = ((MFException) e).getMsgKey();
         }
     }
 

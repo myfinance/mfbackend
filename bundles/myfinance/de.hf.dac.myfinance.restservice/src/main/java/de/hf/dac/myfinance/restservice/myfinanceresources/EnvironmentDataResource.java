@@ -25,8 +25,8 @@ import de.hf.dac.myfinance.api.application.OpLevel;
 import de.hf.dac.myfinance.api.application.OpType;
 import de.hf.dac.myfinance.api.application.servicecontext.MDEnvironmentContext;
 import de.hf.dac.myfinance.api.domain.Equity;
-import de.hf.dac.myfinance.api.exceptions.MDException;
-import de.hf.dac.myfinance.api.exceptions.MDMsgKey;
+import de.hf.dac.myfinance.api.exceptions.MFException;
+import de.hf.dac.myfinance.api.exceptions.MFMsgKey;
 import de.hf.dac.myfinance.api.restservice.InstrumentListModel;
 import de.hf.dac.myfinance.api.restservice.InstrumentModel;
 import de.hf.dac.myfinance.api.restservice.TransactionListModel;
@@ -119,7 +119,7 @@ public class EnvironmentDataResource extends BaseSecuredResource<OpType,OpLevel>
         Optional<Equity> equity = marketDataEnvironment.getInstrumentService().getEquity(isin);
         if(equity.isPresent()) return new InstrumentResource(new InstrumentModel(equity.get()));
         else
-            throw new MDException(MDMsgKey.NO_INSTRUMENT_FOUND_EXCEPTION, "no Instrument found with ISIN "+isin);
+            throw new MFException(MFMsgKey.NO_INSTRUMENT_FOUND_EXCEPTION, "no Instrument found with ISIN "+isin);
 
     }
 

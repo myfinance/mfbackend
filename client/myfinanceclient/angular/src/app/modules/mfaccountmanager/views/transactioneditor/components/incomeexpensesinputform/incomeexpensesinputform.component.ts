@@ -39,6 +39,7 @@ export class IncomeexpensesinputformComponent implements OnInit {
 
   onSubmit(){
     console.log(this.form)
-
+    this.transactionservice.saveIncomeExpenses("bla", 9, 10, 5, new Date())
+    this.form.reset();
   }
 }

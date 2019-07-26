@@ -8,6 +8,7 @@ import {InstrumentListModel, TransactionListModel} from "../../modules/myfinance
 import {MyFinanceWrapperService} from "./my-finance-wrapper.service";
 import {Subject} from "rxjs";
 import {DatePipe} from "@angular/common";
+import * as moment from 'moment';
 
 @Injectable()
 export class MyFinanceDataService {
@@ -66,6 +67,24 @@ export class MyFinanceDataService {
   private getDateString(date:Date):string{
 
     return new DatePipe("de-De").transform(date, 'yyyy-MM-dd');
+  }
+
+  saveIncomeExpenses(desc: string, srcInstrumentId: number, trgInstrumentId: number, value: number, transactionDate: Date) {
+
+    this.myfinanceService.addIncomeExpense_envID_description_accId_budgetId_value_transactiondate(
+      this.currentEnv,
+      desc,
+      srcInstrumentId,
+      trgInstrumentId,
+      value,
+      moment(transactionDate).format('YYYY-MM-DD')).subscribe(
+      () => {
+        console.info('saved');
+      },
+      (errResp) => {
+        console.error('error', errResp);
+      }
+    );
   }
 
 

@@ -19,8 +19,8 @@ package de.hf.dac.myfinance.ValueHandler;
 
 import de.hf.dac.myfinance.api.domain.Instrument;
 import de.hf.dac.myfinance.api.domain.InstrumentType;
-import de.hf.dac.myfinance.api.exceptions.MDException;
-import de.hf.dac.myfinance.api.exceptions.MDMsgKey;
+import de.hf.dac.myfinance.api.exceptions.MFException;
+import de.hf.dac.myfinance.api.exceptions.MFMsgKey;
 import de.hf.dac.myfinance.api.persistence.dao.EndOfDayPriceDao;
 import de.hf.dac.myfinance.api.persistence.dao.InstrumentDao;
 
@@ -48,7 +48,7 @@ public class ValueCurveService {
                 valueCurve = getValueHandler(instrument.get().getInstrumentType()).calcValueCurve(instrument.get());
                 cache.addValueCurve(instrumentId, valueCurve);
             } else {
-                throw new MDException(MDMsgKey.NO_INSTRUMENT_FOUND_EXCEPTION, "Instrument with id:"+instrumentId+" not found");
+                throw new MFException(MFMsgKey.NO_INSTRUMENT_FOUND_EXCEPTION, "Instrument with id:"+instrumentId+" not found");
             }
 
         }
@@ -65,7 +65,7 @@ public class ValueCurveService {
                 valueHandler = new CashAccValueHandler(instrumentDao);
                 break;
             case UNKNOWN:
-                throw new MDException(MDMsgKey.UNKNOWN_INSTRUMENTTYPE_EXCEPTION, "Type:"+instrumentType);
+                throw new MFException(MFMsgKey.UNKNOWN_INSTRUMENTTYPE_EXCEPTION, "Type:"+instrumentType);
         }
         return valueHandler;
     }
