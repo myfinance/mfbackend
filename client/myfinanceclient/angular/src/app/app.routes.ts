@@ -11,6 +11,7 @@ import {BarchartexpComponent} from "./views/examples/barchartexp/barchartexp.com
 import {LinechartexpComponent} from "./views/examples/linechartexp/linechartexp.component";
 import {GridexpComponent} from "./views/examples/gridexp/gridexp.component";
 import {TransactioneditorComponent} from "./modules/mfaccountmanager/views/transactioneditor/transactioneditor.component";
+import {InstrumenteditorComponent} from "./modules/mfaccountmanager/views/instrumenteditor/instrumenteditor.component";
 
 const APP_ROUTES: Routes = [
   {
@@ -35,6 +36,10 @@ const APP_ROUTES: Routes = [
       {
         path: 'transactions',
         component: TransactioneditorComponent
+      },
+      {
+        path: 'instruments',
+        component: InstrumenteditorComponent
       },
       {
         path: 'instrument-search',

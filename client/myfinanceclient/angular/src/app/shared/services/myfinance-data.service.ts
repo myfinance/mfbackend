@@ -16,7 +16,7 @@ export class MyFinanceDataService {
   private isMock:boolean = true
   private currentEnv:string
   private isInit:boolean = false
-  transactionSubject:Subject<any>= new Subject<any>();
+  configSubject:Subject<any>= new Subject<any>();
 
 
   constructor(
@@ -46,7 +46,7 @@ export class MyFinanceDataService {
     }
     this.myfinanceService.setBasePath(this.configService.get('currentZone').url);
     this.currentEnv = this.configService.getCurrentEnv();
-    this.transactionSubject.next();
+    this.configSubject.next();
   }
 
   getIsInit(): boolean{

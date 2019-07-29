@@ -33,7 +33,7 @@ export class TransactionService {
     if(this.myFinanceService.getIsInit()){
       this.loadData();
     } else {
-      this.myFinanceService.transactionSubject.subscribe(
+      this.myFinanceService.configSubject.subscribe(
         () => {
           this.loadData()
         }
@@ -114,7 +114,7 @@ export class TransactionService {
       this.loadDataCall();
     }
 
-    //this.transactionSubject.next();
+    //this.configSubject.next();
   }
 
   getDaterange(): Array<Date>{

@@ -35,6 +35,7 @@ import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
 import {TransactionService} from "./modules/mfaccountmanager/views/transactioneditor/services/transaction.service";
 import {registerLocaleData} from "@angular/common";
 import localeDe from '@angular/common/locales/de';
+import {InstrumentService} from "./modules/mfaccountmanager/views/instrumenteditor/services/instrument.service";
 
 LicenseManager.setLicenseKey('Comparex_AG_on_behalf_of_DZ_Bank_PoET_3Devs21_March_2019__MTU1MzEyNjQwMDAwMA==fa9bf4344688f8dea02f51fe8a82aba0');
 registerLocaleData(localeDe);
@@ -101,8 +102,7 @@ export function initConfiguration(configService: ConfigService): Function {
     MyFinanceWrapperService,
     ConfigService,
     MyFinanceDataService,
-    DashboardService,
-    TransactionService
+    DashboardService
   ],
   bootstrap: [AppComponent]
 
