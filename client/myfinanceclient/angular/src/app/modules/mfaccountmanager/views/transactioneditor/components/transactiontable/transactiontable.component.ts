@@ -1,9 +1,6 @@
 import {Component, Input, OnInit} from '@angular/core';
 import { GridOptions } from 'ag-grid-community';
 
-import {TransactionListModel} from "../../../../../myfinance-tsclient-generated";
-import {MyFinanceDataService} from "../../../../../../shared/services/myfinance-data.service";
-import {DashboardService} from "../../../../../dashboard/services/dashboard.service";
 import {TransactionService} from "../../services/transaction.service";
 
 @Component({
