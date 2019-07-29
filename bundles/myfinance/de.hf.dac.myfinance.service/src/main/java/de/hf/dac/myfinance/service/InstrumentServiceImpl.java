@@ -37,6 +37,7 @@ import javax.inject.Inject;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Data
 public class InstrumentServiceImpl implements InstrumentService {
@@ -79,6 +80,11 @@ public class InstrumentServiceImpl implements InstrumentService {
     @Override
     public List<Instrument> getSecurities(){
         return instrumentDao.getSecurities();
+    }
+
+    @Override
+    public List<Instrument> listTenants(){
+        return instrumentDao.listInstruments().stream().filter(i->i.getInstrumentType().equals(InstrumentType.Tenant)).collect(Collectors.toList());
     }
 
     @Override

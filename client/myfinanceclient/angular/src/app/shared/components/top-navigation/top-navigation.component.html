@@ -63,6 +63,11 @@
             <li *ngFor="let env of configService.environments">
               <div (click)="handleEnvSelect(env)" class="dropdown-item">{{ env }}<span class="text-success" *ngIf="env == configService.getCurrentEnv()"><i class="icon-checkmark" aria-hidden="true"></i></span></div>
             </li>
+            <li class="divider dropdown-divider"></li>
+            <h6 class="dropdown-header">Mandant</h6>
+            <li *ngFor="let tenant of configService.tenants">
+              <div (click)="handleTenantSelect(tenant)" class="dropdown-item">{{ tenant.description }}<span class="text-success" *ngIf="tenant == configService.getCurrentTenant()"><i class="icon-checkmark" aria-hidden="true"></i></span></div>
+            </li>
           </ul>
         </li>
       </ul>

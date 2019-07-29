@@ -30,6 +30,7 @@ public interface InstrumentService {
     Optional<Instrument> getCurrency(String currencyCode);
     Optional<Equity> getEquity(String isin);
     List<Instrument> getSecurities();
+    List<Instrument> listTenants();
     Optional<EndOfDayPrice> getEndOfDayPrice(String isin, LocalDate date);
     List<EndOfDayPrice> listEodPrices(int instrumentId);
     Optional<EndOfDayPrice> getEndOfDayPrice(int instrumentId, LocalDate date);

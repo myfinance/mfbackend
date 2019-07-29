@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import {ConfigService} from "../../services/config.service";
+import {Instrument} from "../../../modules/myfinance-tsclient-generated";
 
 @Component({
   selector: 'app-top-navigation',
@@ -25,6 +26,11 @@ export class TopNavigationComponent implements OnInit {
   handleEnvSelect(env: string): void {
     this.configService.setCurrentEnv(env)
   }
+
+  handleTenantSelect(tenant: Instrument): void {
+    this.configService.setCurrentTenant(tenant)
+  }
+
 
   private _updateCurrentZone(): void {
     try {

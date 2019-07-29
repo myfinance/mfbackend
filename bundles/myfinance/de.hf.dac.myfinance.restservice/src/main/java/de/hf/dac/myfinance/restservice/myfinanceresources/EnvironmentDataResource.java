@@ -30,10 +30,7 @@ import de.hf.dac.myfinance.api.exceptions.MFMsgKey;
 import de.hf.dac.myfinance.api.restservice.InstrumentListModel;
 import de.hf.dac.myfinance.api.restservice.InstrumentModel;
 import de.hf.dac.myfinance.api.restservice.TransactionListModel;
-import de.hf.dac.myfinance.restservice.myfinanceresources.leafresources.InstrumentListResource;
-import de.hf.dac.myfinance.restservice.myfinanceresources.leafresources.InstrumentResource;
-import de.hf.dac.myfinance.restservice.myfinanceresources.leafresources.TransactionListResource;
-import de.hf.dac.myfinance.restservice.myfinanceresources.leafresources.ValueMapResource;
+import de.hf.dac.myfinance.restservice.myfinanceresources.leafresources.*;
 import de.hf.dac.services.resources.BaseSecuredResource;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
@@ -121,6 +118,14 @@ public class EnvironmentDataResource extends BaseSecuredResource<OpType,OpLevel>
         else
             throw new MFException(MFMsgKey.NO_INSTRUMENT_FOUND_EXCEPTION, "no Instrument found with ISIN "+isin);
 
+    }
+
+    @Path("/listTenants")
+    @Produces(MediaType.APPLICATION_JSON)
+    @ApiOperation(value = "list Tenants", response = InstrumentResource.class)
+    public TenantListResource getTenants() {
+        checkOperationAllowed(OpType.READ);
+        return new TenantListResource(new InstrumentListModel(marketDataEnvironment.getInstrumentService().listTenants()));
     }
 
     @POST
