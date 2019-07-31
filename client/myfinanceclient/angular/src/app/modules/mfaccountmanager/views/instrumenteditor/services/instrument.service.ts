@@ -3,6 +3,7 @@ import {DashboardService} from "../../../../dashboard/services/dashboard.service
 import {MyFinanceDataService} from "../../../../../shared/services/myfinance-data.service";
 import {Instrument, InstrumentListModel} from "../../../../myfinance-tsclient-generated";
 import {Subject} from "rxjs";
+import InstrumentTypeEnum = Instrument.InstrumentTypeEnum;
 
 @Injectable()
 export class InstrumentService {
@@ -63,5 +64,25 @@ export class InstrumentService {
 
   getInstruments(): Array<Instrument>{
     return this.instruments;
+  }
+
+  saveTenant(desc: string){
+    this.myFinanceService.saveTenant(desc)
+  }
+
+  saveGiro(desc: string){
+    this.myFinanceService.saveGiro(desc)
+  }
+
+  saveBudget(desc: string, budgetGroupId: number){
+    this.myFinanceService.saveBudget(desc, budgetGroupId)
+  }
+
+  saveInstrument(instrument: Instrument){
+    if(instrument.instrumentType==InstrumentTypeEnum.Tenant){
+      this.myFinanceService.saveTenant(instrument.description)
+    } else if(instrument.instrumentType==InstrumentTypeEnum.Giro){
+      this.myFinanceService.saveGiro(instrument.description)
+    }
   }
 }

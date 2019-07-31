@@ -4,11 +4,12 @@ import {Position} from "../models/position";
 import {Observable} from "rxjs/Rx";
 import {ConfigService} from "./config.service";
 import {MockDataProviderService} from "./mock-data-provider.service";
-import {InstrumentListModel, TransactionListModel} from "../../modules/myfinance-tsclient-generated";
+import {Instrument, InstrumentListModel, TransactionListModel} from "../../modules/myfinance-tsclient-generated";
 import {MyFinanceWrapperService} from "./my-finance-wrapper.service";
 import {Subject} from "rxjs";
 import {DatePipe} from "@angular/common";
 import * as moment from 'moment';
+import InstrumentTypeEnum = Instrument.InstrumentTypeEnum;
 
 @Injectable()
 export class MyFinanceDataService {
@@ -87,6 +88,17 @@ export class MyFinanceDataService {
     );
   }
 
+  saveTenant(desc: string){
+    this.myfinanceService.addTenant_envID_description(this.currentEnv, desc)
+  }
+
+  saveGiro(desc: string){
+    this.myfinanceService.addGiro_envID_description_tenantId(this.currentEnv, desc, this.configService.getCurrentTenant().instrumentid)
+  }
+
+  saveBudget(desc: string, budgetGroupId: number){
+    this.myfinanceService.addBudget_envID_description_budgetGroupId(this.currentEnv, desc, budgetGroupId)
+  }
 
   getInstruments(): Observable<InstrumentListModel> {
 
