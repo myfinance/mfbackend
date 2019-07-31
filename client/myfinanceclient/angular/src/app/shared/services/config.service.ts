@@ -81,6 +81,7 @@ export class ConfigService {
   setCurrentTenant(tenant: Instrument): void {
     this.currentTenant = tenant;
     // Additionally save the zone in the local storage.
+    localStorage.setItem('tenant', tenant.instrumentid.toString());
   }
 
   setCurrentZone(identifier: string): void {
@@ -178,6 +179,17 @@ export class ConfigService {
     this.getTenantProvider().subscribe(
       (tenents: InstrumentListModel) => {
         this.tenants = tenents.values;
+
+        let tenant = localStorage.getItem('tenant');
+        if(tenant) {
+          let savedTenant = this.tenants.filter(i=>i.instrumentid.toString() == tenant)
+          if(savedTenant && savedTenant.length >0)
+          this.setCurrentTenant(savedTenant[0]);
+        } else {
+          this.setCurrentTenant(this.tenants[0])
+        }
+
+
         this.setCurrentTenant(this.tenants[0])
       },
       (errResp) => {
