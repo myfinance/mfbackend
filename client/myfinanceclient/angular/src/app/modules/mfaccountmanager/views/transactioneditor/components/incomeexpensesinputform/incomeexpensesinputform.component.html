@@ -1,7 +1,7 @@
-<form class="mytext" (ngSubmit)="onSubmit()" #f="ngForm">
+<form [formGroup]="incomeExpensesForm" (ngSubmit)="onSubmit()">
   <div class="form-group">
     <p>Konto:</p>
-    <select class="btn btn-primary dropdown-toggle" ngModel name="giro" required [(ngModel)]="giroDefault">
+    <select class="btn btn-primary dropdown-toggle" formControlName="giro">
       <option class="mydropdown-item" [ngValue]="giro" *ngFor="let giro of giros" >
         {{giro.description}}
       </option>
@@ -9,7 +9,7 @@
   </div>
   <div class="form-group">
     <p>Budget:</p>
-    <select class="btn btn-primary dropdown-toggle" ngModel name="budget" required [(ngModel)]="budgetDefault">
+    <select class="btn btn-primary dropdown-toggle" formControlName="budget">
       <option class="mydropdown-item" [ngValue]="budget" *ngFor="let budget of budgets" >
         {{budget.description}}
       </option>
@@ -17,7 +17,7 @@
   </div>
   <div class="form-group">
     <label>Betrag:</label>
-    <input type="number" class="form-control" ngModel name="value" required/>
+    <input type="number" class="form-control" formControlName="value"/>
   </div>
   <button class="btn btn-primary" type="submit">Speichern</button>
 </form>

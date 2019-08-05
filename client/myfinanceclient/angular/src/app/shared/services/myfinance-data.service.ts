@@ -88,8 +88,8 @@ export class MyFinanceDataService {
     );
   }
 
-  saveTenant(desc: string){
-    this.myfinanceService.addTenant_envID_description(this.currentEnv, desc)
+  saveTenant(desc: string): Observable<any>{
+    return this.myfinanceService.addTenant_envID_description(this.currentEnv, desc);
   }
 
   saveGiro(desc: string){

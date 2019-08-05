@@ -45,8 +45,9 @@ public abstract class BaseDao<T> {
         marketDataEm = this.marketDataEmf.createEntityManager();
     }
 
-    protected void save(T object) {
+    protected void save(Object object) {
         try{
+            marketDataEm = this.marketDataEmf.createEntityManager();
             marketDataEm.getTransaction().begin();
             marketDataEm.persist(object);
             marketDataEm.getTransaction().commit();

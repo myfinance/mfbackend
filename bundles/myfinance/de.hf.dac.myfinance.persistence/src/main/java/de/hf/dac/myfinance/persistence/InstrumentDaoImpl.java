@@ -165,13 +165,7 @@ public class InstrumentDaoImpl extends BaseDao<Instrument> implements Instrument
 
     @Override
     public void saveSymbol(SecuritySymbols symbol) {
-        try{
-            marketDataEm.getTransaction().begin();
-            marketDataEm.persist(symbol);
-            marketDataEm.getTransaction().commit();
-        } finally {
-            marketDataEm.close();
-        }
+        save(symbol);
     }
 
     @Override
@@ -240,13 +234,7 @@ public class InstrumentDaoImpl extends BaseDao<Instrument> implements Instrument
 
     @Override
     public void saveGraphEntry(InstrumentGraphEntry instrumentGraphEntry) {
-        try{
-            marketDataEm.getTransaction().begin();
-            marketDataEm.persist(instrumentGraphEntry);
-            marketDataEm.getTransaction().commit();
-        } finally {
-            marketDataEm.close();
-        }
+        save(instrumentGraphEntry);
     }
 
     private Optional<Equity> getFirstEquityQueryResult(Query query) {

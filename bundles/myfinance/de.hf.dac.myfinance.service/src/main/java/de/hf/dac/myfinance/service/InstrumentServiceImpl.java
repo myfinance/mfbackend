@@ -290,8 +290,8 @@ public class InstrumentServiceImpl implements InstrumentService {
     @Override
     public void newTenant(String description, LocalDateTime ts) {
         Tenant tenant = new Tenant(description, true, ts);
-        auditService.saveMessage("Tenant inserted:" + description, Severity.INFO, AUDIT_MSG_TYPE);
         instrumentDao.saveInstrument(tenant);
+        auditService.saveMessage("Tenant inserted:" + description, Severity.INFO, AUDIT_MSG_TYPE);
         addInstrumentToGraph(tenant.getInstrumentid(),tenant.getInstrumentid(),EdgeType.TENANTGRAPH);
         int budgetGroupId = newBudgetGroup("budgetGroup_"+description, ts);
         addInstrumentToGraph(budgetGroupId, tenant.getInstrumentid(), EdgeType.TENANTGRAPH);

@@ -1,7 +1,7 @@
 import {Component, OnInit, ViewChild} from '@angular/core';
 import {Instrument} from "../../../../../myfinance-tsclient-generated";
 import {TransactionService} from "../../services/transaction.service";
-import {NgForm} from "@angular/forms";
+import {FormControl, FormGroup, NgForm, Validators} from "@angular/forms";
 
 @Component({
   selector: 'app-incomeexpensesinputform',
@@ -12,14 +12,18 @@ export class IncomeexpensesinputformComponent implements OnInit {
 
   giros: Instrument[];
   budgets: Instrument[];
-  @ViewChild('f')
-  form:NgForm;
   giroDefault:Instrument;
   budgetDefault:Instrument;
+  incomeExpensesForm: FormGroup;
 
   constructor(private transactionservice: TransactionService) { }
 
   ngOnInit() {
+    this.incomeExpensesForm = new FormGroup({
+      'giro': new FormControl(null, Validators.required),
+      'budget': new FormControl(null),
+      'value': new FormControl(null, [Validators.required]),
+    });
     if(this.transactionservice.getIsInit()){
       this.loadData();
     } else {
@@ -38,8 +42,8 @@ export class IncomeexpensesinputformComponent implements OnInit {
   }
 
   onSubmit(){
-    console.log(this.form)
+    console.log(this.incomeExpensesForm)
     this.transactionservice.saveIncomeExpenses("bla", 9, 10, 5, new Date())
-    this.form.reset();
+    this.incomeExpensesForm.reset();
   }
 }

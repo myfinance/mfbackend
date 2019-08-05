@@ -1,7 +1,7 @@
-<form class="mytext" (ngSubmit)="onSubmit()" #f="ngForm">
+<form [formGroup]="instrumentForm" (ngSubmit)="onSubmit()">
   <div class="form-group">
     <p>InstrumentType:</p>
-    <select class="btn btn-primary dropdown-toggle" ngModel name="instrumentType" required [(ngModel)]="instrumentType">
+    <select class="btn btn-primary dropdown-toggle" formControlName="instrumentType">
       <option class="mydropdown-item" [ngValue]="instrumentType" *ngFor="let instrumentType of instrumentTypes" >
         {{instrumentType}}
       </option>
@@ -9,7 +9,10 @@
   </div>
   <div class="form-group">
     <label>Beschreibung:</label>
-    <input class="form-control" ngModel name="desc" required/>
+    <input class="form-control" formControlName="description"/>
+    <span *ngIf="!instrumentForm.get('description').valid && instrumentForm.get('description').touched">
+      Bitte geben Sie eine Beschriebung für das Instrument ein!
+    </span>
   </div>
   <button class="btn btn-primary" type="submit">Speichern</button>
 </form>

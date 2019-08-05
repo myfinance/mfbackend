@@ -1,9 +1,8 @@
-import {Component, OnInit, ViewChild} from '@angular/core';
-import {Instrument} from "../../../../../myfinance-tsclient-generated";
-import {NgForm} from "@angular/forms";
-import {TransactionService} from "../../../transactioneditor/services/transaction.service";
+import {Component, OnInit} from '@angular/core';
+import {FormControl, FormGroup, Validators} from "@angular/forms";
 import InstrumentTypeEnum = Instrument.InstrumentTypeEnum;
 import {InstrumentService} from "../../services/instrument.service";
+import {Instrument} from "../../../../../myfinance-tsclient-generated";
 
 @Component({
   selector: 'app-instrumentinputform',
@@ -12,24 +11,23 @@ import {InstrumentService} from "../../services/instrument.service";
 })
 export class InstrumentinputformComponent implements OnInit {
   instrumentTypes: InstrumentTypeEnum[] = [InstrumentTypeEnum.Tenant, InstrumentTypeEnum.Giro, InstrumentTypeEnum.Budget];
-  instrumentType: InstrumentTypeEnum
-  @ViewChild('f')
-  form:NgForm;
-  desc:string;
-
+  instrumentForm: FormGroup;
 
   constructor(private instrumentservice: InstrumentService) { }
 
   ngOnInit() {
-    InstrumentTypeEnum[Symbol.iterator]
+    this.instrumentForm = new FormGroup({
+      'description': new FormControl(null, Validators.required),
+      'instrumentType': new FormControl(InstrumentTypeEnum.Giro)
+    });
+
   }
 
 
   onSubmit(){
-    console.log(this.form)
-    if(this.instrumentType == InstrumentTypeEnum.Tenant){
-      this.instrumentservice.saveTenant(this.desc)
+    console.log(this.instrumentForm)
+    if(this.instrumentForm.value.instrumentType == InstrumentTypeEnum.Tenant){
+      this.instrumentservice.saveTenant(this.instrumentForm.value.description)
     }
-    this.form.reset();
   }
 }

@@ -1,8 +1,8 @@
 import {Injectable} from "@angular/core";
 import {DashboardService} from "../../../../dashboard/services/dashboard.service";
 import {MyFinanceDataService} from "../../../../../shared/services/myfinance-data.service";
-import {Instrument, InstrumentListModel} from "../../../../myfinance-tsclient-generated";
-import {Subject} from "rxjs";
+import {Instrument, InstrumentListModel, TransactionListModel} from "../../../../myfinance-tsclient-generated";
+import {Observable, Subject} from "rxjs";
 import InstrumentTypeEnum = Instrument.InstrumentTypeEnum;
 
 @Injectable()
@@ -67,7 +67,13 @@ export class InstrumentService {
   }
 
   saveTenant(desc: string){
-    this.myFinanceService.saveTenant(desc)
+    this.myFinanceService.saveTenant(desc).subscribe(
+      ()=>{console.info('success');},
+      (errResp) => {
+        console.error('error', errResp);
+        this.dashboardService.handleDataNotLoaded(errResp);
+
+      })
   }
 
   saveGiro(desc: string){

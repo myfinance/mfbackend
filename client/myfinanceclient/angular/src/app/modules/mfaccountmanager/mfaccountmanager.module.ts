@@ -14,7 +14,7 @@ import { CashflowtableComponent } from './views/transactioneditor/components/cas
 import { ValuegraphComponent } from './views/transactioneditor/components/valuegraph/valuegraph.component';
 import {TransactionService} from "./views/transactioneditor/services/transaction.service";
 import {BsDatepickerModule } from 'ngx-bootstrap/datepicker';
-import {FormsModule} from "@angular/forms";
+import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {BsDropdownModule, ButtonsModule, TabsModule } from "ngx-bootstrap";
 import { InputformselectionComponent } from './views/transactioneditor/components/inputformselection/inputformselection.component';
 import { InstrumenteditorComponent } from './views/instrumenteditor/instrumenteditor.component';
@@ -32,6 +32,7 @@ import {MyFinanceDataService} from "../../shared/services/myfinance-data.service
     GridsterModule,
     CommonModule,
     FormsModule,
+    ReactiveFormsModule,
     BsDatepickerModule.forRoot(),
     ButtonsModule.forRoot(),
     TabsModule.forRoot(),
