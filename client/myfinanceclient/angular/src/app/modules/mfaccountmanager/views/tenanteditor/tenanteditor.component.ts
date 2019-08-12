@@ -20,17 +20,7 @@ export class TenanteditorComponent  extends AbstractDashboard implements OnInit,
       x: 0,
       y: 0,
       rows: 1,
-      cols: 1,
-      draggable: true,
-      resizable: true
-    },
-    {
-      uuid: 'aa7c6c1f-2da6-4b92-89b5-1e03b21121ff',
-      title: 'Editor',
-      x: 1,
-      y: 0,
-      rows: 1,
-      cols: 1,
+      cols: 2,
       draggable: true,
       resizable: true
     },
