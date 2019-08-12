@@ -1,0 +1,8 @@
+<button (click)="new()" class="btn btn-primary">Neuen Mandant erstellen</button>
+<br>
+<br>
+<button (click)="update()" [disabled]="noTenantSelected" class="btn btn-primary">Mandant {{getSelectedTenantId()}} ändern</button>
+<br>
+<br>
+<button (click)="delete()" [disabled]="noTenantSelected" class="btn btn-primary">Mandant {{getSelectedTenantId()}} löschen</button>
+

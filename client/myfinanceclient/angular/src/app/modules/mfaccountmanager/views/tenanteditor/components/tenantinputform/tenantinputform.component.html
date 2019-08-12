@@ -1,0 +1,10 @@
+<form [formGroup]="instrumentForm" (ngSubmit)="onSubmit()">
+  <div class="form-group">
+    <label>Beschreibung:</label>
+    <input class="form-control" formControlName="description"/>
+    <span *ngIf="!instrumentForm.get('description').valid && instrumentForm.get('description').touched">
+      Bitte geben Sie eine Beschriebung für den Mandanten ein!
+    </span>
+  </div>
+  <button class="btn btn-primary" type="submit">Speichern</button>
+</form>

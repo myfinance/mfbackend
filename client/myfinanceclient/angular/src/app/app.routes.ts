@@ -12,6 +12,7 @@ import {LinechartexpComponent} from "./views/examples/linechartexp/linechartexp.
 import {GridexpComponent} from "./views/examples/gridexp/gridexp.component";
 import {TransactioneditorComponent} from "./modules/mfaccountmanager/views/transactioneditor/transactioneditor.component";
 import {InstrumenteditorComponent} from "./modules/mfaccountmanager/views/instrumenteditor/instrumenteditor.component";
+import {TenanteditorComponent} from "./modules/mfaccountmanager/views/tenanteditor/tenanteditor.component";
 
 const APP_ROUTES: Routes = [
   {
@@ -40,6 +41,10 @@ const APP_ROUTES: Routes = [
       {
         path: 'instruments',
         component: InstrumenteditorComponent
+      },
+      {
+        path: 'tenants',
+        component: TenanteditorComponent
       },
       {
         path: 'instrument-search',

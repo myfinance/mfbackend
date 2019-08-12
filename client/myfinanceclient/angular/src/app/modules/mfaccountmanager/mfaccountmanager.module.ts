@@ -23,6 +23,11 @@ import { InstrumenttableComponent } from './views/instrumenteditor/components/in
 import { InstrumentcontrollerComponent } from './views/instrumenteditor/components/instrumentcontroller/instrumentcontroller.component';
 import {InstrumentService} from "./views/instrumenteditor/services/instrument.service";
 import {MyFinanceDataService} from "../../shared/services/myfinance-data.service";
+import { TenanteditorComponent } from './views/tenanteditor/tenanteditor.component';
+import { TenantcontrollerComponent } from './views/tenanteditor/components/tenantcontroller/tenantcontroller.component';
+import { TenantinputformComponent } from './views/tenanteditor/components/tenantinputform/tenantinputform.component';
+import { TenanttableComponent } from './views/tenanteditor/components/tenanttable/tenanttable.component';
+import {TenantService} from "./views/tenanteditor/services/tenant.service";
 
 @NgModule({
   imports: [
@@ -48,13 +53,17 @@ import {MyFinanceDataService} from "../../shared/services/myfinance-data.service
     InstrumenteditorComponent,
     InstrumentinputformComponent,
     InstrumenttableComponent,
-    InstrumentcontrollerComponent],
+    InstrumentcontrollerComponent,
+    TenanteditorComponent,
+    TenantcontrollerComponent,
+    TenantinputformComponent,
+    TenanttableComponent],
   exports: [
     InstrumenteditorComponent,
     TransactioneditorComponent
   ],
   providers: [
-    MyFinanceService, ConfigService, MyFinanceDataService, TransactionService, InstrumentService
+    MyFinanceService, ConfigService, MyFinanceDataService, TransactionService, InstrumentService, TenantService
   ]
 })
 export class MfAccountManagerModule { }
