@@ -73,10 +73,19 @@ export class TenantService {
       ()=>{console.info('success');},
       (errResp) => {
         console.error('error', errResp);
-        this.dashboardService.handleDataNotLoaded(errResp);
 
       })
   }
+
+  updateTenant(instrumentId:number, desc: string, isActive: boolean){
+    this.myFinanceService.updateTenant(instrumentId, desc, isActive).subscribe(
+      ()=>{console.info('success');},
+      (errResp) => {
+        console.error('error', errResp);
+
+      })
+  }
+
 
   setSelectedTenant(tenant: Instrument){
     console.log(tenant.instrumentid)

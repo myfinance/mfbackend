@@ -46,8 +46,7 @@ public interface InstrumentService {
 
 
     void newTenant(String description, LocalDateTime ts);
-    void updateInstrumentDesc(int instrumentId, String description);
-    void deactivateInstrument(int instrumentId);
+    void updateInstrument(int instrumentId, String description, boolean isActive);
     void newBudget(String description, int budgetGroupId, LocalDateTime ts);
     void newGiroAccount(String description, int tenantId, LocalDateTime ts);
 

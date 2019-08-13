@@ -359,12 +359,18 @@ public class InstrumentServiceImpl implements InstrumentService {
     }
 
     @Override
-    public void updateInstrumentDesc(int instrumentId, String description) {
-    }
-
-    @Override
-    public void deactivateInstrument(int instrumentId) {
-
+    public void updateInstrument(int instrumentId, String description, boolean isActive) {
+        Optional<Instrument> instrument = instrumentDao.getInstrument(instrumentId);
+        if(!instrument.isPresent()){
+            throw new MFException(MFMsgKey.UNKNOWN_INSTRUMENT_EXCEPTION, "Instrument not updated: instrument for id:"+instrumentId + " not found");
+        }
+        Instrument newInstrument = instrument.get();
+        if(!isActive && newInstrument.isIsactive() && instrument.get().getInstrumentType()!=InstrumentType.Tenant){
+            throw new MFException(MFMsgKey.WRONG_INSTRUMENTTYPE_EXCEPTION, "instrument with id:"+instrumentId + " not deactivated. It is not allowed for type " + instrument.get().getInstrumentType());
+        }
+        newInstrument.setDescription(description);
+        newInstrument.setIsactive(isActive);
+        instrumentDao.saveInstrument(newInstrument);
     }
 
     @Override

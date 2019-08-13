@@ -92,6 +92,10 @@ export class MyFinanceDataService {
     return this.myfinanceService.addTenant_envID_description(this.currentEnv, desc);
   }
 
+  updateTenant(id: number, desc: string, isActive: boolean): Observable<any>{
+    return this.myfinanceService.updateInstrument_envID_id_description_isactive(this.currentEnv, id, desc, isActive);
+  }
+
   saveGiro(desc: string){
     this.myfinanceService.addGiro_envID_description_tenantId(this.currentEnv, desc, this.configService.getCurrentTenant().instrumentid)
   }

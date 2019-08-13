@@ -18,7 +18,8 @@ export class TenantupdateformComponent  implements OnInit {
 
   ngOnInit() {
     this.tenantForm = new FormGroup({
-      'description': new FormControl(null, Validators.required)
+      'description': new FormControl(null, Validators.required),
+      'active': new FormControl(null, Validators.required)
     });
     this.tenantservice.selectedinstrumentSubject.subscribe(
       () => {
@@ -29,7 +30,12 @@ export class TenantupdateformComponent  implements OnInit {
 
   updateSelectedTenant() {
     this.selectedTenant = this.tenantservice.getSelectedTenant()
-    if (this.selectedTenant) this.noTenantSelected = false;
+    if (this.selectedTenant) {
+      this.noTenantSelected = false;
+      this.tenantForm.get("description").setValue(this.selectedTenant.description);
+      this.tenantForm.get("active").setValue(this.selectedTenant.isactive);
+    }
+
   }
 
   getSelectedTenantId() : number {
@@ -38,8 +44,13 @@ export class TenantupdateformComponent  implements OnInit {
   }
 
   onSubmit(){
-    console.log(this.tenantForm)
-    //this.instrumentservice.saveTenant(this.instrumentForm.value.description)
+    console.log(this.tenantForm);
+    if(this.tenantForm.touched) {
+      console.log("touched");
+      this.tenantservice.updateTenant(this.getSelectedTenantId(), this.tenantForm.value.description, this.tenantForm.value.active);
+    } else {
+      console.log("untouched");
+    }
   }
 
 }

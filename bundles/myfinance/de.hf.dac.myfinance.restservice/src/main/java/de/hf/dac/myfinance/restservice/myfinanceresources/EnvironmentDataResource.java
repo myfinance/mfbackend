@@ -229,6 +229,21 @@ public class EnvironmentDataResource extends BaseSecuredResource<OpType,OpLevel>
     }
 
     @POST
+    @Path("/updateInstrument")
+    @Produces(MediaType.APPLICATION_JSON)
+    @ApiOperation(value = "update Instrument")
+    @ApiResponses(value = {
+            @ApiResponse(code = HttpStatus.SC_NO_CONTENT, message = "updated"),
+            @ApiResponse(code = HttpStatus.SC_INTERNAL_SERVER_ERROR, message = "Something wrong in Server")})
+    public Response updateInstrument(@QueryParam("id") @ApiParam(value="id") int id,
+                                     @QueryParam("description") @ApiParam(value="description") String description,
+                                     @QueryParam("isactive") @ApiParam(value="isactive") boolean isactive) {
+        checkOperationAllowed(OpType.WRITE);
+        marketDataEnvironment.getInstrumentService().updateInstrument(id, description, isactive);
+        return Response.ok().build();
+    }
+
+    @POST
     @Path("/addGiro")
     @Produces(MediaType.APPLICATION_JSON)
     @ApiOperation(value = "save Giro")
