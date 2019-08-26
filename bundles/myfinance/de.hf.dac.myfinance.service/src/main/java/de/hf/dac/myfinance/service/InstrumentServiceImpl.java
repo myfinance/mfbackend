@@ -49,6 +49,9 @@ public class InstrumentServiceImpl implements InstrumentService {
     private WebRequestService webRequestService;
     private AuditService auditService;
     private static final String AUDIT_MSG_TYPE="InstrumentService_User_Event";
+    private final static String DEFAULT_BUDGETGROUP_PREFIX = "budgetGroup_";
+    private final static String DEFAULT_INCOMEBUDGET_PREFIX = "incomeBudget_";
+    private final static String DEFAULT_ACCPF_PREFIX = "accountPf_";
 
     @Inject
     public InstrumentServiceImpl(InstrumentDao instrumentDao, EndOfDayPriceDao endOfDayPriceDao, TransactionDao transactionDao, WebRequestService webRequestService, AuditService auditService){
@@ -293,11 +296,11 @@ public class InstrumentServiceImpl implements InstrumentService {
         instrumentDao.saveInstrument(tenant);
         auditService.saveMessage("Tenant inserted:" + description, Severity.INFO, AUDIT_MSG_TYPE);
         addInstrumentToGraph(tenant.getInstrumentid(),tenant.getInstrumentid(),EdgeType.TENANTGRAPH);
-        int budgetGroupId = newBudgetGroup("budgetGroup_"+description, ts);
+        int budgetGroupId = newBudgetGroup(DEFAULT_BUDGETGROUP_PREFIX+description, ts);
         addInstrumentToGraph(budgetGroupId, tenant.getInstrumentid(), EdgeType.TENANTGRAPH);
-        int incomeBudgetId = createBudget("incomeBudget_"+description, budgetGroupId, ts);
+        int incomeBudgetId = createBudget(DEFAULT_INCOMEBUDGET_PREFIX+description, budgetGroupId, ts);
         addInstrumentToGraph(incomeBudgetId, tenant.getInstrumentid(), EdgeType.INCOMEBUDGET);
-        int accPfId = newAccountPortfolio("accountPf_"+description, ts);
+        int accPfId = newAccountPortfolio(DEFAULT_ACCPF_PREFIX+description, ts);
         addInstrumentToGraph(accPfId, tenant.getInstrumentid(), EdgeType.TENANTGRAPH);
     }
 
@@ -368,9 +371,26 @@ public class InstrumentServiceImpl implements InstrumentService {
         if(!isActive && newInstrument.isIsactive() && instrument.get().getInstrumentType()!=InstrumentType.Tenant){
             throw new MFException(MFMsgKey.WRONG_INSTRUMENTTYPE_EXCEPTION, "instrument with id:"+instrumentId + " not deactivated. It is not allowed for type " + instrument.get().getInstrumentType());
         }
-        newInstrument.setDescription(description);
-        newInstrument.setIsactive(isActive);
-        instrumentDao.saveInstrument(newInstrument);
+        String oldDesc = newInstrument.getDescription();
+
+        instrumentDao.updateInstrument(instrumentId, description, isActive);
+        List<Instrument> instruments = instrumentDao.listInstruments();
+        renameDefaultTenantChild(instrumentId, description, oldDesc, DEFAULT_BUDGETGROUP_PREFIX, instruments);
+        renameDefaultTenantChild(instrumentId, description, oldDesc, DEFAULT_ACCPF_PREFIX, instruments);
+        renameDefaultTenantChild(instrumentId, description, oldDesc, DEFAULT_INCOMEBUDGET_PREFIX, instruments);
+
+
+    }
+
+    private void renameDefaultTenantChild(int instrumentId, String newDesc, String oldDesc, String defaultDescPrefix, List<Instrument> instruments) {
+        //look by description for default instruments of the tenant to rename
+        instruments.stream().filter(i->i.getDescription().equals(defaultDescPrefix+oldDesc)).forEach(i->{
+            //doublecheck if the instrument is part of the tenant
+            if(instrumentDao.getAncestorGraphEntries(i.getInstrumentid(), EdgeType.TENANTGRAPH).stream().anyMatch(j->j.getId().getAncestor()==instrumentId)){
+                i.setDescription(defaultDescPrefix+newDesc);
+                instrumentDao.updateInstrument(i.getInstrumentid(), defaultDescPrefix+newDesc, i.isIsactive());
+            }
+        });
     }
 
     @Override

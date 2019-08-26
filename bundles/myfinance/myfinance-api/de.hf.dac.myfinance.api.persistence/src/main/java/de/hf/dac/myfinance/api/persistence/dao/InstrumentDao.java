@@ -35,6 +35,7 @@ public interface InstrumentDao {
     List<Source> getActiveSources();
     List<Cashflow> listInstrumentCashflows(int instrumentId);
     void saveInstrument(Instrument instrument);
+    void updateInstrument(int instrumentId, String description, boolean isActive);
     void saveSymbol(SecuritySymbols symbol);
     List<InstrumentGraphEntry> getAncestorGraphEntries(int instrumentId, EdgeType edgeType);
     Optional<Integer> getRootInstrument(int instrumentId, EdgeType edgeType);

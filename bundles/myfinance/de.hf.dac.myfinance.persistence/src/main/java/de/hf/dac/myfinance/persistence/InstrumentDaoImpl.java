@@ -19,6 +19,8 @@ package de.hf.dac.myfinance.persistence;
 
 import de.hf.dac.myfinance.api.application.EnvTarget;
 import de.hf.dac.myfinance.api.domain.*;
+import de.hf.dac.myfinance.api.exceptions.MFException;
+import de.hf.dac.myfinance.api.exceptions.MFMsgKey;
 import de.hf.dac.myfinance.api.persistence.dao.InstrumentDao;
 
 import javax.inject.Inject;
@@ -161,6 +163,24 @@ public class InstrumentDaoImpl extends BaseDao<Instrument> implements Instrument
     @Override
     public void saveInstrument(Instrument instrument) {
         save(instrument);
+    }
+
+    @Override
+    public void updateInstrument(int instrumentId, String description, boolean isActive){
+        try{
+            marketDataEm = this.marketDataEmf.createEntityManager();
+            Query query = marketDataEm.createQuery("select a FROM Instrument a WHERE instrumentid = :instrumentid");
+            query.setParameter("instrumentid", instrumentId);
+            Optional<Instrument> instrument = getFirstQueryResult(query);
+            Instrument newInstrument = instrument.get();
+            newInstrument.setDescription(description);
+            newInstrument.setIsactive(isActive);
+            marketDataEm.getTransaction().begin();
+            marketDataEm.persist(newInstrument);
+            marketDataEm.getTransaction().commit();
+        } finally {
+            marketDataEm.close();
+        }
     }
 
     @Override
