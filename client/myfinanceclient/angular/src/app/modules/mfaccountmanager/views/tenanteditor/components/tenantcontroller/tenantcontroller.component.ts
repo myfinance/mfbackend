@@ -36,10 +36,6 @@ export class TenantcontrollerComponent implements OnInit {
     console.log("update")
   }
 
-  delete(){
-    console.log("delete")
-  }
-
   getSelectedTenantId() : number {
       if(!this.selectedTenant) return 0;
       else return this.selectedTenant.instrumentid;

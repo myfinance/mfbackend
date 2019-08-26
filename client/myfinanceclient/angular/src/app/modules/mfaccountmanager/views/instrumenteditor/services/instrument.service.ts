@@ -28,6 +28,12 @@ export class InstrumentService {
         }
       )
     }
+    //subscribe to all instrument updates
+    this.myFinanceService.instrumentSubject.subscribe(
+      () => {
+        this.loadData()
+      }
+    )
   }
 
   private loadData(): void {

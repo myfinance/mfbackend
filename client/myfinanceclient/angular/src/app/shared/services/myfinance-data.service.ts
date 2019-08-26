@@ -18,6 +18,7 @@ export class MyFinanceDataService {
   private currentEnv:string
   private isInit:boolean = false
   configSubject:Subject<any>= new Subject<any>();
+  instrumentSubject:Subject<any>= new Subject<any>();
 
 
   constructor(
@@ -68,6 +69,10 @@ export class MyFinanceDataService {
   private getDateString(date:Date):string{
 
     return new DatePipe("de-De").transform(date, 'yyyy-MM-dd');
+  }
+
+  refreshInstruments(){
+    this.instrumentSubject.next();
   }
 
   saveIncomeExpenses(desc: string, srcInstrumentId: number, trgInstrumentId: number, value: number, transactionDate: Date) {

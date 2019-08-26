@@ -30,6 +30,12 @@ export class TenantService {
         }
       )
     }
+    //subscribe to all instrument updates
+    this.myFinanceService.instrumentSubject.subscribe(
+      () => {
+        this.loadData()
+      }
+    )
   }
 
   private loadData(): void {
@@ -79,7 +85,10 @@ export class TenantService {
 
   updateTenant(instrumentId:number, desc: string, isActive: boolean){
     this.myFinanceService.updateTenant(instrumentId, desc, isActive).subscribe(
-      ()=>{console.info('success');},
+      ()=>{
+        console.info('success');
+        this.myFinanceService.refreshInstruments()
+        },
       (errResp) => {
         console.error('error', errResp);
 

@@ -29,7 +29,6 @@ import { TenantinputformComponent } from './views/tenanteditor/components/tenant
 import { TenanttableComponent } from './views/tenanteditor/components/tenanttable/tenanttable.component';
 import {TenantService} from "./views/tenanteditor/services/tenant.service";
 import { TenantupdateformComponent } from './views/tenanteditor/components/tenantupdateform/tenantupdateform.component';
-import { TenantdeactivateformComponent } from './views/tenanteditor/components/tenantdeactivateform/tenantdeactivateform.component';
 
 @NgModule({
   imports: [
@@ -60,8 +59,7 @@ import { TenantdeactivateformComponent } from './views/tenanteditor/components/t
     TenantcontrollerComponent,
     TenantinputformComponent,
     TenanttableComponent,
-    TenantupdateformComponent,
-    TenantdeactivateformComponent],
+    TenantupdateformComponent],
   exports: [
     InstrumenteditorComponent,
     TransactioneditorComponent
