@@ -4,6 +4,7 @@ import {MyFinanceDataService} from "../../../../../shared/services/myfinance-dat
 import {Instrument, InstrumentListModel} from "../../../../myfinance-tsclient-generated";
 import {Subject} from "rxjs";
 import InstrumentTypeEnum = Instrument.InstrumentTypeEnum;
+import {ToastrService} from "ngx-toastr";
 
 @Injectable()
 export class TenantService {
@@ -15,7 +16,7 @@ export class TenantService {
   private isInstrumentLoaded:boolean = false;
   selectedTenant: Instrument
 
-  constructor(private myFinanceService: MyFinanceDataService, public dashboardService: DashboardService) {
+  constructor(private toastr: ToastrService, private myFinanceService: MyFinanceDataService, public dashboardService: DashboardService) {
     this.dashboardService.handleLoading();
     this.loadDataCall();
   }
@@ -52,10 +53,12 @@ export class TenantService {
         },
         (errResp) => {
           console.error('error', errResp);
+          this.toastr.warning('Error', 'Error:'+errResp, {timeOut: 5000 });
           this.dashboardService.handleDataNotLoaded(errResp);
 
         }), (errResp) => {
       console.error('error', errResp);
+      this.toastr.warning('Error', 'Error:'+errResp, {timeOut: 5000 });
       this.dashboardService.handleDataNotLoaded(errResp);
     }
   }
@@ -79,7 +82,7 @@ export class TenantService {
       ()=>{console.info('success');},
       (errResp) => {
         console.error('error', errResp);
-
+        this.toastr.warning('Error', 'Error:'+errResp, {timeOut: 5000 });
       })
   }
 
@@ -87,11 +90,12 @@ export class TenantService {
     this.myFinanceService.updateTenant(instrumentId, desc, isActive).subscribe(
       ()=>{
         console.info('success');
-        this.myFinanceService.refreshInstruments()
+        this.myFinanceService.refreshInstruments();
+        this.toastr.success('Success', 'Mandant gespeichert', {timeOut: 2000});
         },
       (errResp) => {
         console.error('error', errResp);
-
+        this.toastr.warning('Error', 'Error:'+errResp, {timeOut: 5000 });
       })
   }
 

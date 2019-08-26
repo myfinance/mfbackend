@@ -12,7 +12,7 @@
   },
   "private": true,
   "dependencies": {
-    "@angular/animations": "^6.0.0",
+    "@angular/animations": "^6.1.10",
     "@angular/cdk": "^6.2.1",
     "@angular/common": "^6.0.0",
     "@angular/compiler": "^6.0.0",
@@ -47,7 +47,7 @@
     "ngx-contextmenu": "^5.0.1",
     "ngx-mydatepicker": "^2.4.5",
     "ngx-papaparse": "^2.1.0",
-    "ngx-toastr": "^8.2.1",
+    "ngx-toastr": "^10.1.0",
     "node-sass": "^4.12.0",
     "npm-login-cmd": "^1.0.4",
     "reductio": "^0.6.3",

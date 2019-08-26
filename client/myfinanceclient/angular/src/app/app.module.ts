@@ -29,13 +29,10 @@ import {AppComponent} from "./app.component";
 import {FormsModule} from "@angular/forms";
 import {HTTP_INTERCEPTORS, HttpClientModule} from "@angular/common/http";
 import { LicenseManager } from 'ag-grid-enterprise';
-import {ToastrModule} from "ngx-toastr";
 import {DashboardService} from "./modules/dashboard/services/dashboard.service";
 import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
-import {TransactionService} from "./modules/mfaccountmanager/views/transactioneditor/services/transaction.service";
 import {registerLocaleData} from "@angular/common";
 import localeDe from '@angular/common/locales/de';
-import {InstrumentService} from "./modules/mfaccountmanager/views/instrumenteditor/services/instrument.service";
 
 LicenseManager.setLicenseKey('Comparex_AG_on_behalf_of_DZ_Bank_PoET_3Devs21_March_2019__MTU1MzEyNjQwMDAwMA==fa9bf4344688f8dea02f51fe8a82aba0');
 registerLocaleData(localeDe);
@@ -76,16 +73,7 @@ export function initConfiguration(configService: ConfigService): Function {
     ApiModule,
     CollapseModule.forRoot(),
     BsDropdownModule.forRoot(),
-    BrowserAnimationsModule,
-    ToastrModule.forRoot({
-      preventDuplicates: true,
-      iconClasses: {
-        error: 'toast-error-wo-icon',
-        info: 'toast-info',
-        success: 'toast-success',
-        warning: 'toast-warning'
-      }
-    })
+    BrowserAnimationsModule
   ],
   providers: [
     {

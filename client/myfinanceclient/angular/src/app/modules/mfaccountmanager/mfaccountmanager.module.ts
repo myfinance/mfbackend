@@ -29,6 +29,7 @@ import { TenantinputformComponent } from './views/tenanteditor/components/tenant
 import { TenanttableComponent } from './views/tenanteditor/components/tenanttable/tenanttable.component';
 import {TenantService} from "./views/tenanteditor/services/tenant.service";
 import { TenantupdateformComponent } from './views/tenanteditor/components/tenantupdateform/tenantupdateform.component';
+import {ToastrModule} from "ngx-toastr";
 
 @NgModule({
   imports: [
@@ -42,7 +43,16 @@ import { TenantupdateformComponent } from './views/tenanteditor/components/tenan
     BsDatepickerModule.forRoot(),
     ButtonsModule.forRoot(),
     TabsModule.forRoot(),
-    BsDropdownModule.forRoot()
+    BsDropdownModule.forRoot(),
+    ToastrModule.forRoot({
+      preventDuplicates: true,
+      iconClasses: {
+        error: 'toast-error-wo-icon',
+        info: 'toast-info',
+        success: 'toast-success',
+        warning: 'toast-warning'
+      }
+    })
   ],
   declarations: [TransactioneditorComponent,
     TransactiontableComponent,
