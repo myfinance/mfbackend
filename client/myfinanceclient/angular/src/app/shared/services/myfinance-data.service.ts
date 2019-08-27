@@ -10,6 +10,8 @@ import {Subject} from "rxjs";
 import {DatePipe} from "@angular/common";
 import * as moment from 'moment';
 import InstrumentTypeEnum = Instrument.InstrumentTypeEnum;
+import {ToastrService} from "ngx-toastr";
+import {HttpErrorResponse} from "@angular/common/http";
 
 @Injectable()
 export class MyFinanceDataService {
@@ -22,6 +24,7 @@ export class MyFinanceDataService {
 
 
   constructor(
+    private toastr: ToastrService,
     private myfinanceService: MyFinanceWrapperService,
     private configService: ConfigService
   ) {
@@ -120,6 +123,14 @@ export class MyFinanceDataService {
 
   }
 
+  printError(errResp: HttpErrorResponse) {
+    console.error('error', errResp);
+    let errrormsg: string = errResp.error.toString();
+    if(errrormsg.length> 100){
+      errrormsg= errrormsg.substring(0,100)
+    }
+    this.toastr.warning(errrormsg, 'Error', {timeOut: 15000 });
+  }
 
 
   getPositions(): Observable<Position[]> {
@@ -166,5 +177,7 @@ export class MyFinanceDataService {
     return Observable.of(positions);
 
   }
+
+
 
 }

@@ -5,6 +5,7 @@ import {Instrument, InstrumentListModel} from "../../../../myfinance-tsclient-ge
 import {Subject} from "rxjs";
 import InstrumentTypeEnum = Instrument.InstrumentTypeEnum;
 import {ToastrService} from "ngx-toastr";
+import {HttpErrorResponse} from "@angular/common/http";
 
 @Injectable()
 export class TenantService {
@@ -57,8 +58,7 @@ export class TenantService {
           this.dashboardService.handleDataNotLoaded(errResp);
 
         }), (errResp) => {
-      console.error('error', errResp);
-      this.toastr.warning('Error', 'Error:'+errResp, {timeOut: 5000 });
+      this.myFinanceService.printError(errResp);
       this.dashboardService.handleDataNotLoaded(errResp);
     }
   }
@@ -81,8 +81,7 @@ export class TenantService {
     this.myFinanceService.saveTenant(desc).subscribe(
       ()=>{console.info('success');},
       (errResp) => {
-        console.error('error', errResp);
-        this.toastr.warning('Error', 'Error:'+errResp, {timeOut: 5000 });
+        this.myFinanceService.printError(errResp);
       })
   }
 
@@ -93,9 +92,8 @@ export class TenantService {
         this.myFinanceService.refreshInstruments();
         this.toastr.success('Success', 'Mandant gespeichert', {timeOut: 2000});
         },
-      (errResp) => {
-        console.error('error', errResp);
-        this.toastr.warning('Error', 'Error:'+errResp, {timeOut: 5000 });
+      (errResp: HttpErrorResponse) => {
+        this.myFinanceService.printError(errResp);
       })
   }
 

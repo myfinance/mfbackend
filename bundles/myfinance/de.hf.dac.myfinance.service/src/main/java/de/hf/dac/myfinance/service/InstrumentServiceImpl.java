@@ -372,14 +372,13 @@ public class InstrumentServiceImpl implements InstrumentService {
             throw new MFException(MFMsgKey.WRONG_INSTRUMENTTYPE_EXCEPTION, "instrument with id:"+instrumentId + " not deactivated. It is not allowed for type " + instrument.get().getInstrumentType());
         }
         String oldDesc = newInstrument.getDescription();
-
         instrumentDao.updateInstrument(instrumentId, description, isActive);
-        List<Instrument> instruments = instrumentDao.listInstruments();
-        renameDefaultTenantChild(instrumentId, description, oldDesc, DEFAULT_BUDGETGROUP_PREFIX, instruments);
-        renameDefaultTenantChild(instrumentId, description, oldDesc, DEFAULT_ACCPF_PREFIX, instruments);
-        renameDefaultTenantChild(instrumentId, description, oldDesc, DEFAULT_INCOMEBUDGET_PREFIX, instruments);
-
-
+        if(newInstrument.getInstrumentType()==InstrumentType.Tenant) {
+            List<Instrument> instruments = instrumentDao.listInstruments();
+            renameDefaultTenantChild(instrumentId, description, oldDesc, DEFAULT_BUDGETGROUP_PREFIX, instruments);
+            renameDefaultTenantChild(instrumentId, description, oldDesc, DEFAULT_ACCPF_PREFIX, instruments);
+            renameDefaultTenantChild(instrumentId, description, oldDesc, DEFAULT_INCOMEBUDGET_PREFIX, instruments);
+        }
     }
 
     private void renameDefaultTenantChild(int instrumentId, String newDesc, String oldDesc, String defaultDescPrefix, List<Instrument> instruments) {
