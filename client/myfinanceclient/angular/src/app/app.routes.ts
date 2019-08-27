@@ -63,7 +63,7 @@ const APP_ROUTES: Routes = [
         component: GridexpComponent
       },
       {
-        path: 'dashboards', loadChildren: './modules/dashboard/dashboard.module#DashboardModule'
+        path: 'dashboards', loadChildren: () => import('./modules/dashboard/dashboard.module').then(m => m.DashboardModule)
       }
     ]
   },

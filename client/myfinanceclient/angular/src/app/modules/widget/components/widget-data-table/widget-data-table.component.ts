@@ -7,6 +7,7 @@ import dc from 'dc';
 
 import { DcService } from '../../services/dc.service';
 import { FinancialNumberPipe } from '../../pipes/financial-number.pipe';
+import {DashboardGridComponent} from "../../../dashboard/components/dashboard-grid/dashboard-grid.component";
 
 @Component({
   selector: 'app-widget-data-table',
@@ -27,7 +28,7 @@ export class WidgetDataTableComponent implements OnInit, OnDestroy, AfterViewIni
   @Input()
   resized: Subject<any>;
 
-  @ViewChild('table') table: ElementRef;
+  @ViewChild('table', {static: false}) table: ElementRef;
 
   constructor(private _dcService: DcService) { }
 

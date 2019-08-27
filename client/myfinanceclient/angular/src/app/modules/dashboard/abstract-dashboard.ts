@@ -13,7 +13,7 @@ export abstract class AbstractDashboard {
   /**
    * The grid of the dashboard.
    */
-  @ViewChild(DashboardGridComponent)
+  @ViewChild(DashboardGridComponent, {static: false})
   grid: DashboardGridInterface;
 
   constructor(

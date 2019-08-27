@@ -2,7 +2,6 @@ import { Component, OnInit, OnDestroy, AfterViewInit, Input, ViewChild, ElementR
 import { DatePipe } from '@angular/common';
 import { Subject } from 'rxjs/Subject'
 import * as dc from 'dc';
-import * as d3 from 'dc/node_modules/d3';
 import { timeFormat } from 'd3-time-format';
 
 import { DcService } from '../../services/dc.service';
@@ -26,7 +25,7 @@ export class WidgetCompositeLineChartComponent implements OnInit, OnDestroy, Aft
   @Input()
   resized: Subject<any>;
 
-  @ViewChild('chart') chart: ElementRef;
+  @ViewChild('chart', {static: false}) chart: ElementRef;
 
   constructor(private _dcService: DcService) { }
 
@@ -75,8 +74,6 @@ export class WidgetCompositeLineChartComponent implements OnInit, OnDestroy, Aft
       }
       case 'date': {
         this._chart
-          .x(d3.time.scale())
-          .xUnits(d3.time.days)
         let pipe = new DatePipe('de-DE');
         this._chart.xAxis().ticks(15).tickFormat(timeFormat('%d.%m.%Y'));
         break;

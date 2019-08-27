@@ -4,6 +4,7 @@ import * as dc from 'dc';
 
 import { DcService } from '../../services/dc.service';
 import { FinancialNumberPipe } from '../../pipes/financial-number.pipe';
+import {DashboardGridComponent} from "../../../dashboard/components/dashboard-grid/dashboard-grid.component";
 
 @Component({
   selector: 'app-widget-horizontal-bar-chart',
@@ -25,7 +26,7 @@ export class WidgetHorizontalBarChartComponent implements OnInit, OnDestroy, Aft
   @Input()
   resized: Subject<any>;
 
-  @ViewChild('chart') chart: ElementRef;
+  @ViewChild('chart', {static: false}) chart: ElementRef;
 
   constructor(private _dcService: DcService) { }
 

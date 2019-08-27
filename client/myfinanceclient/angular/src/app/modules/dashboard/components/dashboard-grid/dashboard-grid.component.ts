@@ -2,7 +2,6 @@ import { Component, OnInit, Input, ChangeDetectorRef, ContentChildren, TemplateR
 import { Subject } from 'rxjs/Subject';
 
 import { GridsterConfig } from 'angular-gridster2';
-import { gridTypes } from 'angular-gridster2/dist/gridsterConfig.interface';
 
 import { DefaultOptions } from './default-options';
 import { DashboardLayoutModel } from '../../models/dashboard-layout.model';
@@ -10,6 +9,7 @@ import { DashboardModel } from '../../models/dashboard.model';
 import { DashboardItemModel } from '../../models/dashboard-item.model';
 import { DashboardGridInterface } from '../../dashboard-grid.interface';
 import { DashboardWidgetDirective } from '../../directives/dashboard-widget.directive';
+import {gridTypes} from "angular-gridster2/lib/gridsterConfig.interface";
 
 @Component({
   selector: 'app-dashboard-grid',
