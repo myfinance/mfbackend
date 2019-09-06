@@ -1,10 +1,9 @@
 import { Injectable } from '@angular/core';
-import {ConfigModel} from "../models/config.model";
-import {HttpClient} from "@angular/common/http";
-import {Instrument, InstrumentListModel, StringListModel} from "../../modules/myfinance-tsclient-generated";
-import {MyFinanceWrapperService} from "./my-finance-wrapper.service";
-import {Observable, Subject} from "../../../../node_modules/rxjs";
-import {Moment} from "moment";
+import {ConfigModel} from '../models/config.model';
+import {HttpClient} from '@angular/common/http';
+import {Instrument, InstrumentListModel, StringListModel} from '../../modules/myfinance-tsclient-generated';
+import {MyFinanceWrapperService} from './my-finance-wrapper.service';
+import {Observable, Subject} from '../../../../node_modules/rxjs';
 
 @Injectable()
 export class ConfigService {
@@ -13,7 +12,7 @@ export class ConfigService {
   environments: string[]
   private currentEnv: string
   configLoaded: Subject<any> = new Subject<any>()
-  private isInit:boolean = false
+  private isInit = false
   tenants: Instrument[]
   currentTenant: Instrument
 
@@ -34,8 +33,8 @@ export class ConfigService {
         // Check if zone is saved in local storage.
         // Set the current zone to the saved zone or else
         // set it to the default zone in the configuration.
-        let zone = localStorage.getItem('mfzone');
-        if(zone) {
+        const zone = localStorage.getItem('mfzone');
+        if (zone) {
           this.setCurrentZone(zone);
         } else {
           this.setCurrentZone(data.defaultZone);
@@ -43,18 +42,18 @@ export class ConfigService {
         // Check if environment is saved in local storage.
         // Set the current environment to the saved env or else
         // set it to the default environment in the configuration.
-        let env = localStorage.getItem('env');
-        if(env) {
+        const env = localStorage.getItem('env');
+        if (env) {
           this.setCurrentEnv(env);
         } else {
           this.setCurrentEnv(this.getDefaultEnv());
         }
-        this.isInit=true;
+        this.isInit = true;
         this.configLoaded.next(true);
       });
   }
 
-  getIsInit(): boolean{
+  getIsInit(): boolean {
     return this.isInit;
   }
 
@@ -64,17 +63,17 @@ export class ConfigService {
    */
   get(property: string): any {
     let value = this._config;
-    for(let p of property.split('.')) {
+    for (const p of property.split('.')) {
       value = value[p];
     }
     return value;
   }
 
-  getCurrentEnv(){
+  getCurrentEnv() {
     return this.currentEnv
   }
 
-  getCurrentTenant(){
+  getCurrentTenant() {
     return this.currentTenant
   }
 
@@ -85,8 +84,8 @@ export class ConfigService {
   }
 
   setCurrentZone(identifier: string): void {
-    for(let zone of this._config.zones) {
-      if(zone.identifier == identifier) {
+    for (const zone of this._config.zones) {
+      if (zone.identifier === identifier) {
         this._config.currentZone = zone;
         // Additionally save the zone in the local storage.
         localStorage.setItem('mfzone', identifier);
@@ -103,17 +102,17 @@ export class ConfigService {
   }
 
   getDefaultEnv(): string {
-    let currentZone = localStorage.getItem('mfzone');
-    for(let zone of this._config.zones) {
-      if(zone.identifier == currentZone) {
+    const currentZone = localStorage.getItem('mfzone');
+    for (const zone of this._config.zones) {
+      if (zone.identifier === currentZone) {
         return zone.defaultEnvironment;
       }
     }
   }
 
   private getMockEnvironments(): Observable<StringListModel> {
-    let envs: string[]=["enva", "envb"];
-    let envList : StringListModel = {values: envs, url:"mock", id:"mockid"};
+    const envs: string[] = ['enva', 'envb'];
+    const envList: StringListModel = {values: envs, url: 'mock', id: 'mockid'};
     return Observable.of(envList);
   }
 
@@ -123,7 +122,7 @@ export class ConfigService {
    */
   private getEnvironmentProvider(): Observable<StringListModel> {
 
-    if(this.get('currentZone').identifier.match("mock")){
+    if (this.get('currentZone').identifier.match('mock')) {
       return this.getMockEnvironments()
     }
     this.myfinanceService.setBasePath(this.get('currentZone').url)
@@ -132,10 +131,20 @@ export class ConfigService {
   }
 
   private getMockTenants(): Observable<InstrumentListModel> {
-    let instrument: Instrument = { instrumentid: 1, description:"tenant1", isactive: true, instrumentType: Instrument.InstrumentTypeEnum.Tenant, treelastchanged: new Date() };
-    let instrument2: Instrument = { instrumentid: 2, description:"tenant2", isactive: true, instrumentType: Instrument.InstrumentTypeEnum.Tenant, treelastchanged: new Date() };
-    let tenants: Instrument[]=[instrument, instrument2];
-    let envList : InstrumentListModel = {values: tenants, url:"mock", id:"mockid"};
+    const instrument: Instrument = {
+      instrumentid: 1,
+      description: 'tenant1',
+      isactive: true,
+      instrumentType: Instrument.InstrumentTypeEnum.Tenant,
+      treelastchanged: new Date() };
+    const instrument2: Instrument = {
+      instrumentid: 2,
+      description: 'tenant2',
+      isactive: true,
+      instrumentType: Instrument.InstrumentTypeEnum.Tenant,
+      treelastchanged: new Date() };
+    const tenants: Instrument[] = [instrument, instrument2];
+    const envList: InstrumentListModel = {values: tenants, url: 'mock', id: 'mockid'};
     return Observable.of(envList);
   }
 
@@ -145,7 +154,7 @@ export class ConfigService {
    */
   private getTenantProvider(): Observable<InstrumentListModel> {
 
-    if(this.get('currentZone').identifier.match("mock")){
+    if (this.get('currentZone').identifier.match('mock')) {
       return this.getMockTenants()
     }
     this.myfinanceService.setBasePath(this.get('currentZone').url)
@@ -153,17 +162,17 @@ export class ConfigService {
 
   }
 
-  private loadEnvironments(){
+  private loadEnvironments() {
     this.getEnvironmentProvider().subscribe(
       (environments: StringListModel) => {
         this.environments = environments.values;
         // Check if environment is saved in local storage.
         // Set the current environment to the saved env or else
         // set it to the default environment in the configuration.
-        let env = localStorage.getItem('env');
-        if(env && this.environments.includes(env)) {
+        const env = localStorage.getItem('env');
+        if (env && this.environments.includes(env)) {
           this.setCurrentEnv(env);
-        } else if(this.environments.includes(this.getDefaultEnv())){
+        } else if (this.environments.includes(this.getDefaultEnv())) {
           this.setCurrentEnv(this.getDefaultEnv());
         } else {
           this.setCurrentEnv(this.environments[0])
@@ -175,16 +184,17 @@ export class ConfigService {
     );
   }
 
-  private loadTenants(){
+  loadTenants() {
     this.getTenantProvider().subscribe(
-      (tenents: InstrumentListModel) => {
-        this.tenants = tenents.values;
+      (tenants: InstrumentListModel) => {
+        this.tenants = tenants.values.filter(i => i.isactive);
 
-        let tenant = localStorage.getItem('tenant');
-        if(tenant) {
-          let savedTenant = this.tenants.filter(i=>i.instrumentid.toString() == tenant)
-          if(savedTenant && savedTenant.length >0)
+        const tenant = localStorage.getItem('tenant');
+        if (tenant) {
+          const savedTenant = this.tenants.filter(i => i.instrumentid.toString() === tenant)
+          if (savedTenant && savedTenant.length > 0) {
           this.setCurrentTenant(savedTenant[0]);
+          }
         } else {
           this.setCurrentTenant(this.tenants[0])
         }

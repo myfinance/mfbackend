@@ -72,7 +72,7 @@ public abstract class LeafResource {
         byte[] utf8JsonString;
         try {
             utf8JsonString = jsonString.getBytes("UTF8");
-            ret = new String(utf8JsonString);
+            ret = new String(utf8JsonString,"UTF8");
         } catch (UnsupportedEncodingException e) {
             throw new RuntimeException(e);
         }

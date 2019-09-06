@@ -1,20 +1,20 @@
-import {Injectable} from "@angular/core";
-import {DashboardService} from "../../../../dashboard/services/dashboard.service";
-import {MyFinanceDataService} from "../../../../../shared/services/myfinance-data.service";
-import {Instrument, InstrumentListModel} from "../../../../myfinance-tsclient-generated";
-import {Subject} from "rxjs";
+import {Injectable} from '@angular/core';
+import {DashboardService} from '../../../../dashboard/services/dashboard.service';
+import {MyFinanceDataService} from '../../../../../shared/services/myfinance-data.service';
+import {Instrument, InstrumentListModel} from '../../../../myfinance-tsclient-generated';
 import InstrumentTypeEnum = Instrument.InstrumentTypeEnum;
-import {ToastrService} from "ngx-toastr";
-import {HttpErrorResponse} from "@angular/common/http";
+import {ToastrService} from 'ngx-toastr';
+import {HttpErrorResponse} from '@angular/common/http';
+import {Subject} from 'rxjs/Rx';
 
 @Injectable()
 export class TenantService {
 
   instruments: Array<Instrument> = new Array<Instrument>();
-  instrumentSubject:Subject<any>= new Subject<any>();
-  selectedinstrumentSubject:Subject<any>= new Subject<any>();
-  private isInit:boolean = false;
-  private isInstrumentLoaded:boolean = false;
+  instrumentSubject: Subject<any> = new Subject<any>();
+  selectedinstrumentSubject: Subject<any> = new Subject<any>();
+  private isInit = false;
+  private isInstrumentLoaded = false;
   selectedTenant: Instrument
 
   constructor(private toastr: ToastrService, private myFinanceService: MyFinanceDataService, public dashboardService: DashboardService) {
@@ -22,8 +22,8 @@ export class TenantService {
     this.loadDataCall();
   }
 
-  private loadDataCall(){
-    if(this.myFinanceService.getIsInit()){
+  private loadDataCall() {
+    if (this.myFinanceService.getIsInit()) {
       this.loadData();
     } else {
       this.myFinanceService.configSubject.subscribe(
@@ -32,7 +32,7 @@ export class TenantService {
         }
       )
     }
-    //subscribe to all instrument updates
+    // subscribe to all instrument updates
     this.myFinanceService.instrumentSubject.subscribe(
       () => {
         this.loadData()
@@ -53,43 +53,43 @@ export class TenantService {
           this.checkDataLoadStatus();
         },
         (errResp) => {
-          console.error('error', errResp);
-          this.toastr.warning('Error', 'Error:'+errResp, {timeOut: 5000 });
+          this.myFinanceService.printError(errResp);
           this.dashboardService.handleDataNotLoaded(errResp);
 
-        }), (errResp) => {
-      this.myFinanceService.printError(errResp);
-      this.dashboardService.handleDataNotLoaded(errResp);
-    }
+        })
   }
 
-  private checkDataLoadStatus(){
-    if(this.isInstrumentLoaded){
+  private checkDataLoadStatus() {
+    if (this.isInstrumentLoaded) {
       this.dashboardService.handleDataLoaded();
     }
   }
 
-  getIsInit(): boolean{
+  getIsInit(): boolean {
     return this.isInit;
   }
 
-  getTenants(): Array<Instrument>{
-    return this.instruments.filter(i=>i.instrumentType==InstrumentTypeEnum.Tenant);
+  getTenants(): Array<Instrument> {
+    return this.instruments.filter(i => i.instrumentType === InstrumentTypeEnum.Tenant);
   }
 
-  saveTenant(desc: string){
+  saveTenant(desc: string) {
     this.myFinanceService.saveTenant(desc).subscribe(
-      ()=>{console.info('success');},
+      () => {
+        this.myFinanceService.refreshInstruments();
+        this.myFinanceService.refreshTenants();
+        this.myFinanceService.printSuccess('Mandant gespeichert');
+        },
       (errResp) => {
         this.myFinanceService.printError(errResp);
       })
   }
 
-  updateTenant(instrumentId:number, desc: string, isActive: boolean){
+  updateTenant(instrumentId: number, desc: string, isActive: boolean) {
     this.myFinanceService.updateTenant(instrumentId, desc, isActive).subscribe(
-      ()=>{
-        console.info('success');
+      () => {
         this.myFinanceService.refreshInstruments();
+        this.myFinanceService.refreshTenants();
         this.toastr.success('Success', 'Mandant gespeichert', {timeOut: 2000});
         },
       (errResp: HttpErrorResponse) => {
@@ -98,7 +98,7 @@ export class TenantService {
   }
 
 
-  setSelectedTenant(tenant: Instrument){
+  setSelectedTenant(tenant: Instrument) {
     console.log(tenant.instrumentid)
     this.selectedTenant = tenant;
     this.selectedinstrumentSubject.next()

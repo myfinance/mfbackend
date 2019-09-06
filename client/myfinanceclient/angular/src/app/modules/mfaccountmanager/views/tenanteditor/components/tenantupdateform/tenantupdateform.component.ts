@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import {Instrument} from "../../../../../myfinance-tsclient-generated";
-import {TenantService} from "../../services/tenant.service";
-import {FormControl, FormGroup, Validators} from "@angular/forms";
+import {Instrument} from '../../../../../myfinance-tsclient-generated';
+import {TenantService} from '../../services/tenant.service';
+import {FormControl, FormGroup, Validators} from '@angular/forms';
 
 @Component({
   selector: 'app-tenantupdateform',
@@ -10,7 +10,7 @@ import {FormControl, FormGroup, Validators} from "@angular/forms";
 })
 export class TenantupdateformComponent  implements OnInit {
 
-  noTenantSelected:boolean = true;
+  noTenantSelected = true;
   selectedTenant: Instrument;
   tenantForm: FormGroup;
 
@@ -32,24 +32,23 @@ export class TenantupdateformComponent  implements OnInit {
     this.selectedTenant = this.tenantservice.getSelectedTenant()
     if (this.selectedTenant) {
       this.noTenantSelected = false;
-      this.tenantForm.get("description").setValue(this.selectedTenant.description);
-      this.tenantForm.get("active").setValue(this.selectedTenant.isactive);
+      this.tenantForm.get('description').setValue(this.selectedTenant.description);
+      this.tenantForm.get('active').setValue(this.selectedTenant.isactive);
     }
 
   }
 
-  getSelectedTenantId() : number {
-    if(!this.selectedTenant) return 0;
-    else return this.selectedTenant.instrumentid;
+  getSelectedTenantId(): number {
+    if (!this.selectedTenant) { return 0; } else { return this.selectedTenant.instrumentid; }
   }
 
-  onSubmit(){
+  onSubmit() {
     console.log(this.tenantForm);
     if(this.tenantForm.touched) {
-      console.log("touched");
+      console.log('touched');
       this.tenantservice.updateTenant(this.getSelectedTenantId(), this.tenantForm.value.description, this.tenantForm.value.active);
     } else {
-      console.log("untouched");
+      console.log('untouched');
     }
   }
 

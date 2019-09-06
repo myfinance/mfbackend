@@ -1,7 +1,7 @@
 import {ChangeDetectorRef, Component, OnDestroy, OnInit} from '@angular/core';
-import {AbstractDashboard} from "../../../dashboard/abstract-dashboard";
-import {DashboardService} from "../../../dashboard/services/dashboard.service";
-import {InstrumentService} from "../instrumenteditor/services/instrument.service";
+import {AbstractDashboard} from '../../../dashboard/abstract-dashboard';
+import {DashboardService} from '../../../dashboard/services/dashboard.service';
+import {InstrumentService} from '../instrumenteditor/services/instrument.service';
 
 @Component({
   selector: 'app-tenenteditor',
@@ -36,7 +36,7 @@ export class TenanteditorComponent  extends AbstractDashboard implements OnInit,
     }
   ];
 
-  //dashboardService and instrumentservice are not used directly here but it is necessary to put them in the constructor to initialize them
+  // dashboardService and instrumentservice are not used directly here but it is necessary to put them in the constructor to initialize them
   constructor( public dashboardService: DashboardService, instrumentservice: InstrumentService, changeDetectorRef: ChangeDetectorRef ) {
     super(changeDetectorRef);
   }
