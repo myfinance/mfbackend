@@ -208,7 +208,7 @@ public class InstrumentDaoImpl extends BaseDao<Instrument> implements Instrument
         List<Instrument> result;
         try{
             marketDataEm = this.marketDataEmf.createEntityManager();
-            Query query = marketDataEm.createQuery("select i FROM InstrumentGraphEntry a JOIN Instrument i ON i.instrumentid=a.instrumentid WHERE a.id.ancestor= :instrumentid and a.id.edgetype= :edgetype and a.pathlength=1");
+            Query query = marketDataEm.createQuery("select i FROM Instrument i JOIN InstrumentGraphEntry a ON i.instrumentid=a.id.descendant WHERE a.id.ancestor= :instrumentid and a.id.edgetype= :edgetype and a.pathlength>0");
             query.setParameter("instrumentid", instrumentId);
             query.setParameter("edgetype", edgeType);
             result = (List<Instrument>) query.getResultList();

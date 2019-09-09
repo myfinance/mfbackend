@@ -1,8 +1,8 @@
 import {Injectable} from "@angular/core";
 import {DashboardService} from "../../../../dashboard/services/dashboard.service";
 import {MyFinanceDataService} from "../../../../../shared/services/myfinance-data.service";
-import {Instrument, InstrumentListModel, TransactionListModel} from "../../../../myfinance-tsclient-generated";
-import {Observable, Subject} from "rxjs";
+import {Instrument, InstrumentListModel} from "../../../../myfinance-tsclient-generated";
+import {Subject} from "rxjs";
 import InstrumentTypeEnum = Instrument.InstrumentTypeEnum;
 
 @Injectable()
@@ -10,8 +10,10 @@ export class InstrumentService {
 
   instruments: Array<Instrument> = new Array<Instrument>();
   instrumentSubject:Subject<any>= new Subject<any>();
+  selectedinstrumentSubject: Subject<any> = new Subject<any>();
   private isInit:boolean = false;
   private isInstrumentLoaded:boolean = false;
+  selectedInstrument: Instrument
 
   constructor(private myFinanceService: MyFinanceDataService, public dashboardService: DashboardService) {
     this.dashboardService.handleLoading();
@@ -39,7 +41,7 @@ export class InstrumentService {
   private loadData(): void {
     this.dashboardService.handleDataPreparing();
 
-    this.myFinanceService.getInstruments()
+    this.myFinanceService.getInstrumentsForTenant()
       .subscribe(
         (instruments: InstrumentListModel) => {
           this.instruments = instruments.values;
@@ -49,13 +51,10 @@ export class InstrumentService {
           this.checkDataLoadStatus();
         },
         (errResp) => {
-          console.error('error', errResp);
+          this.myFinanceService.printError(errResp);
           this.dashboardService.handleDataNotLoaded(errResp);
 
-        }), (errResp) => {
-      console.error('error', errResp);
-      this.dashboardService.handleDataNotLoaded(errResp);
-    }
+        })
   }
 
   private checkDataLoadStatus(){
@@ -72,29 +71,29 @@ export class InstrumentService {
     return this.instruments;
   }
 
-  saveTenant(desc: string){
-    this.myFinanceService.saveTenant(desc).subscribe(
-      ()=>{console.info('success');},
-      (errResp) => {
-        console.error('error', errResp);
-        this.dashboardService.handleDataNotLoaded(errResp);
-
-      })
-  }
-
-  saveGiro(desc: string){
+  private saveGiro(desc: string){
     this.myFinanceService.saveGiro(desc)
   }
 
-  saveBudget(desc: string, budgetGroupId: number){
+  private saveBudget(desc: string, budgetGroupId: number){
     this.myFinanceService.saveBudget(desc, budgetGroupId)
   }
 
   saveInstrument(instrument: Instrument){
-    if(instrument.instrumentType==InstrumentTypeEnum.Tenant){
-      this.myFinanceService.saveTenant(instrument.description)
-    } else if(instrument.instrumentType==InstrumentTypeEnum.Giro){
+    if(instrument.instrumentType==InstrumentTypeEnum.Giro){
       this.myFinanceService.saveGiro(instrument.description)
+    } else if(instrument.instrumentType==InstrumentTypeEnum.Budget){
+      // this.myFinanceService.saveBudget(instrument.description)
     }
+  }
+
+  setSelectedInstrument(instrument: Instrument) {
+    console.log(instrument.instrumentid)
+    this.selectedInstrument = instrument;
+    this.selectedinstrumentSubject.next()
+  }
+
+  getSelectedInstrument(): Instrument {
+    return this.selectedInstrument
   }
 }

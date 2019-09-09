@@ -30,6 +30,7 @@ import { TenanttableComponent } from './views/tenanteditor/components/tenanttabl
 import {TenantService} from "./views/tenanteditor/services/tenant.service";
 import { TenantupdateformComponent } from './views/tenanteditor/components/tenantupdateform/tenantupdateform.component';
 import {ToastrModule} from "ngx-toastr";
+import { InstrumentupdateformComponent } from './views/instrumenteditor/components/instrumentupdateform/instrumentupdateform.component';
 
 @NgModule({
   imports: [
@@ -69,7 +70,8 @@ import {ToastrModule} from "ngx-toastr";
     TenantcontrollerComponent,
     TenantinputformComponent,
     TenanttableComponent,
-    TenantupdateformComponent],
+    TenantupdateformComponent,
+    InstrumentupdateformComponent],
   exports: [
     InstrumenteditorComponent,
     TransactioneditorComponent

@@ -49,7 +49,6 @@ export class ConfigService {
           this.setCurrentEnv(this.getDefaultEnv());
         }
         this.isInit = true;
-        this.configLoaded.next(true);
       });
   }
 
@@ -81,6 +80,7 @@ export class ConfigService {
     this.currentTenant = tenant;
     // Additionally save the zone in the local storage.
     localStorage.setItem('tenant', tenant.instrumentid.toString());
+    this.configLoaded.next(true);
   }
 
   setCurrentZone(identifier: string): void {
@@ -198,8 +198,6 @@ export class ConfigService {
         } else {
           this.setCurrentTenant(this.tenants[0])
         }
-
-
         this.setCurrentTenant(this.tenants[0])
       },
       (errResp) => {

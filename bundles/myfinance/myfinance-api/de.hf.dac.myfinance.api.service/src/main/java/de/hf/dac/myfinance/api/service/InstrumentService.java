@@ -27,6 +27,7 @@ import java.util.Optional;
 
 public interface InstrumentService {
     List<Instrument> listInstruments();
+    List<Instrument> listInstruments(int tenantId);
     Optional<Instrument> getCurrency(String currencyCode);
     Optional<Equity> getEquity(String isin);
     List<Instrument> getSecurities();

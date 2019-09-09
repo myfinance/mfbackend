@@ -65,8 +65,13 @@ public class InstrumentServiceImpl implements InstrumentService {
 
     @Override
     public List<Instrument> listInstruments() {
-
         List<Instrument> instruments = instrumentDao.listInstruments();
+        return instruments;
+    }
+
+    @Override
+    public List<Instrument> listInstruments(int tenantId) {
+        List<Instrument> instruments = instrumentDao.getInstrumentChilds(tenantId, EdgeType.TENANTGRAPH);
         return instruments;
     }
 

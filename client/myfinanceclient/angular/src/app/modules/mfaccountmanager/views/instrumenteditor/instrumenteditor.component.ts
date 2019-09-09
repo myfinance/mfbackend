@@ -25,22 +25,12 @@ export class InstrumenteditorComponent  extends AbstractDashboard implements OnI
       resizable: true
     },
     {
-      uuid: '426a9c29-1f77-426d-b9e0-3cbc1bbd187c',
-      title: 'Editor',
-      x: 1,
-      y: 0,
-      rows: 1,
-      cols: 1,
-      draggable: true,
-      resizable: true
-    },
-    {
       uuid: '5c227628-80d4-4b47-b4a3-d7fb824a56f2',
       title: 'Alle Instrumente',
       x: 0,
       y: 1,
       rows: 1,
-      cols: 2,
+      cols: 1,
       draggable: true,
       resizable: true
     }

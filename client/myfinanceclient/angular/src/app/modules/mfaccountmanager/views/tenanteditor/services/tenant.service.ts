@@ -3,7 +3,6 @@ import {DashboardService} from '../../../../dashboard/services/dashboard.service
 import {MyFinanceDataService} from '../../../../../shared/services/myfinance-data.service';
 import {Instrument, InstrumentListModel} from '../../../../myfinance-tsclient-generated';
 import InstrumentTypeEnum = Instrument.InstrumentTypeEnum;
-import {ToastrService} from 'ngx-toastr';
 import {HttpErrorResponse} from '@angular/common/http';
 import {Subject} from 'rxjs/Rx';
 
@@ -17,7 +16,7 @@ export class TenantService {
   private isInstrumentLoaded = false;
   selectedTenant: Instrument
 
-  constructor(private toastr: ToastrService, private myFinanceService: MyFinanceDataService, public dashboardService: DashboardService) {
+  constructor(private myFinanceService: MyFinanceDataService, public dashboardService: DashboardService) {
     this.dashboardService.handleLoading();
     this.loadDataCall();
   }
@@ -55,7 +54,6 @@ export class TenantService {
         (errResp) => {
           this.myFinanceService.printError(errResp);
           this.dashboardService.handleDataNotLoaded(errResp);
-
         })
   }
 
@@ -90,7 +88,7 @@ export class TenantService {
       () => {
         this.myFinanceService.refreshInstruments();
         this.myFinanceService.refreshTenants();
-        this.toastr.success('Success', 'Mandant gespeichert', {timeOut: 2000});
+        this.myFinanceService.printSuccess('Mandant gespeichert');
         },
       (errResp: HttpErrorResponse) => {
         this.myFinanceService.printError(errResp);

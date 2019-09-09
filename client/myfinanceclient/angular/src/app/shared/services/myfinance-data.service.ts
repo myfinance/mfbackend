@@ -126,6 +126,17 @@ export class MyFinanceDataService {
 
   }
 
+  getInstrumentsForTenant(): Observable<InstrumentListModel> {
+
+    if (this.configService.get('currentZone').identifier.match('mock')) {
+      return this.mock.getInstruments()
+    }
+    this.myfinanceService.setBasePath(this.configService.get('currentZone').url);
+
+    return this.myfinanceService.getInstrumentForTenantList_envID_tenant(this.configService.getCurrentEnv(), this.configService.getCurrentTenant().instrumentid);
+
+  }
+
   printError(errResp: HttpErrorResponse) {
     console.error('error', errResp);
     let errrormsg: string = errResp.error.toString();

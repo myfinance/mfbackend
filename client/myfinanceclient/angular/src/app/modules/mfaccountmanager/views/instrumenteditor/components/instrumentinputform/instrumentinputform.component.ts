@@ -27,7 +27,7 @@ export class InstrumentinputformComponent implements OnInit {
   onSubmit(){
     console.log(this.instrumentForm)
     if(this.instrumentForm.value.instrumentType == InstrumentTypeEnum.Tenant){
-      this.instrumentservice.saveTenant(this.instrumentForm.value.description)
+      this.instrumentservice.saveInstrument(this.instrumentForm.value.description)
     }
   }
 }
