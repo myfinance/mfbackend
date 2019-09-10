@@ -127,14 +127,23 @@ export class MyFinanceDataService {
   }
 
   getInstrumentsForTenant(): Observable<InstrumentListModel> {
-
     if (this.configService.get('currentZone').identifier.match('mock')) {
       return this.mock.getInstruments()
     }
     this.myfinanceService.setBasePath(this.configService.get('currentZone').url);
 
-    return this.myfinanceService.getInstrumentForTenantList_envID_tenant(this.configService.getCurrentEnv(), this.configService.getCurrentTenant().instrumentid);
+    return this.myfinanceService.getInstrumentForTenantList_envID_tenant(this.configService.getCurrentEnv(),
+      this.configService.getCurrentTenant().instrumentid);
+  }
 
+  getInstrumentsPerType(instrumentType: InstrumentTypeEnum): Observable<InstrumentListModel> {
+    if (this.configService.get('currentZone').identifier.match('mock')) {
+      return this.mock.getInstruments()
+    }
+    this.myfinanceService.setBasePath(this.configService.get('currentZone').url);
+
+    return this.myfinanceService.getInstrumentPerTypeList_envID_tenant_instrumenttype(this.configService.getCurrentEnv(),
+      this.configService.getCurrentTenant().instrumentid, instrumentType);
   }
 
   printError(errResp: HttpErrorResponse) {

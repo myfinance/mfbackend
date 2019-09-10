@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import {FormControl, FormGroup, Validators} from "@angular/forms";
-import {TenantService} from "../../services/tenant.service";
+import {FormControl, FormGroup, Validators} from '@angular/forms';
+import {TenantService} from '../../services/tenant.service';
 
 @Component({
   selector: 'app-tenantinputform',
@@ -20,7 +20,7 @@ export class TenantinputformComponent implements OnInit {
   }
 
 
-  onSubmit(){
+  onSubmit() {
     console.log(this.instrumentForm)
       this.tenantservice.saveTenant(this.instrumentForm.value.description)
   }

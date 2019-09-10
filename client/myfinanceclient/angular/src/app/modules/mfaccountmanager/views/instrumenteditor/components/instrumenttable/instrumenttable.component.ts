@@ -42,7 +42,7 @@ export class InstrumenttableComponent implements OnInit {
   }
 
   onSelectionChanged(): void {
-    //this.applicationLogService.selectedLogEntry = this.options.api.getSelectedRows()[0];
+    // this.applicationLogService.selectedLogEntry = this.options.api.getSelectedRows()[0];
   }
 
   onGridReady(): void {

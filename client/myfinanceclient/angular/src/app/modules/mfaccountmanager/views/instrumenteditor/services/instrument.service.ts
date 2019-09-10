@@ -54,7 +54,7 @@ export class InstrumentService {
           this.myFinanceService.printError(errResp);
           this.dashboardService.handleDataNotLoaded(errResp);
 
-        })
+        });
   }
 
   private checkDataLoadStatus() {
@@ -69,6 +69,10 @@ export class InstrumentService {
 
   getInstruments(): Array<Instrument> {
     return this.instruments;
+  }
+
+  getBudgetGroups(): Array<Instrument> {
+    return this.instruments.filter(i => i.instrumentType === InstrumentTypeEnum.BudgetGroup);
   }
 
   private saveGiro(desc: string) {

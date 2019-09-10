@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import {TenantService} from "../../services/tenant.service";
-import {Instrument} from "../../../../../myfinance-tsclient-generated";
+import {TenantService} from '../../services/tenant.service';
+import {Instrument} from '../../../../../myfinance-tsclient-generated';
 
 @Component({
   selector: 'app-tenantcontroller',
@@ -9,7 +9,7 @@ import {Instrument} from "../../../../../myfinance-tsclient-generated";
 })
 export class TenantcontrollerComponent implements OnInit {
 
-  noTenantSelected:boolean = true;
+  noTenantSelected = true;
   selectedTenant: Instrument
 
   constructor(private tenantservice: TenantService) { }
@@ -23,22 +23,21 @@ export class TenantcontrollerComponent implements OnInit {
   }
 
   updateSelectedTenant() {
-    console.log("updateSelectedTenant")
+    console.log('updateSelectedTenant')
     this.selectedTenant = this.tenantservice.getSelectedTenant()
-    if (this.selectedTenant) this.noTenantSelected = false;
+    if (this.selectedTenant) { this.noTenantSelected = false; }
   }
 
-  new(){
-    console.log("new")
+  new() {
+    console.log('new')
   }
 
-  update(){
-    console.log("update")
+  update() {
+    console.log('update')
   }
 
-  getSelectedTenantId() : number {
-      if(!this.selectedTenant) return 0;
-      else return this.selectedTenant.instrumentid;
+  getSelectedTenantId(): number {
+      if (!this.selectedTenant) { return 0; } else { return this.selectedTenant.instrumentid; }
   }
 
 }
