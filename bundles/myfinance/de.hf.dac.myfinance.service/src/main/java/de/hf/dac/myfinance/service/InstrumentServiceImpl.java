@@ -76,6 +76,12 @@ public class InstrumentServiceImpl implements InstrumentService {
     }
 
     @Override
+    public List<Instrument> listInstruments(int tenantId, InstrumentType instrumentType) {
+        List<Instrument> instruments = listInstruments(tenantId).stream().filter(i->i.getInstrumentType().equals(instrumentType)).collect(Collectors.toList());
+        return instruments;
+    }
+
+    @Override
     public Optional<Instrument> getCurrency(String currencyCode){
         return instrumentDao.getCurrency(currencyCode);
     }

@@ -63,10 +63,10 @@ Der LiquidityType soll dazu benutzt werden eine Liquiditätsablaufbilanz(LAB) zu
 == Konten und Budgets
 
 Auch wenn Konten und Budget beide als Instrument abgebildet sind, gibt es einen wesentlichen fachlichen Unterschied:
-Die Konten stellen in der Summer die reale Vermögensverteilung dar, während Budgets virtuell sind und der Ausgabenplanung dienen.
+Die Konten stellen in der Summe die reale Vermögensverteilung dar, während Budgets virtuell sind und der Ausgabenplanung dienen.
 Die Summe aller Konten muss muss gleich der Summe alle Budgets sein. Für Budgets gibt es einen extra Instrumenttyp.
 Accounts können mehrere Instrumenttypen haben. Im wesentlich sind dies alle Typen bis auf Budgets, BudgetGroups, Securities und Portfolien.
-Bei den Portfolien gibt es zwei Ausnahmen. Zu einen das Depot, da Position imme aus den Trades berechnet werden und nicht in der DB abgelegt werden, hänge alle Realen Werte von Positionen am Depot.
+Bei den Portfolien gibt es zwei Ausnahmen. Zu einen das Depot, da Position immer aus den Trades berechnet werden und nicht in der DB abgelegt werden, hänge alle Realen Werte von Positionen am Depot.
 Eine weitere Ausnahme ist der Bausparvertrag. Dieser ist zwar kein Account im eigentlichen Sinn da er aber aus zwei accounts besteht und im <<Tenant>> unter Accounts geführt werden soll wird als Account behandelt
 Was als Account behandelt wird, d.h. im instrumenttree des Tenant unter Accounts geführt wird, ist nicht in der DB festgehalten DIe Logik liegt im Code
 

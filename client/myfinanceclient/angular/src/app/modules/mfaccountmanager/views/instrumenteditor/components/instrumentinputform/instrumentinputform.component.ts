@@ -10,7 +10,7 @@ import {Instrument} from "../../../../../myfinance-tsclient-generated";
   styleUrls: ['./instrumentinputform.component.scss']
 })
 export class InstrumentinputformComponent implements OnInit {
-  instrumentTypes: InstrumentTypeEnum[] = [InstrumentTypeEnum.Tenant, InstrumentTypeEnum.Giro, InstrumentTypeEnum.Budget];
+  instrumentTypes: InstrumentTypeEnum[] = [InstrumentTypeEnum.Giro, InstrumentTypeEnum.Budget];
   instrumentForm: FormGroup;
 
   constructor(private instrumentservice: InstrumentService) { }
@@ -18,15 +18,16 @@ export class InstrumentinputformComponent implements OnInit {
   ngOnInit() {
     this.instrumentForm = new FormGroup({
       'description': new FormControl(null, Validators.required),
-      'instrumentType': new FormControl(InstrumentTypeEnum.Giro)
+      'instrumentType': new FormControl(InstrumentTypeEnum.Giro),
+      'budgetGroup': new FormControl()
     });
 
   }
 
 
-  onSubmit(){
+  onSubmit() {
     console.log(this.instrumentForm)
-    if(this.instrumentForm.value.instrumentType == InstrumentTypeEnum.Tenant){
+    if(this.instrumentForm.value.instrumentType === InstrumentTypeEnum.Tenant) {
       this.instrumentservice.saveInstrument(this.instrumentForm.value.description)
     }
   }

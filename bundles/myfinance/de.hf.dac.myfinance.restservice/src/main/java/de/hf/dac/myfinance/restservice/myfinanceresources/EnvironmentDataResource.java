@@ -25,6 +25,7 @@ import de.hf.dac.myfinance.api.application.OpLevel;
 import de.hf.dac.myfinance.api.application.OpType;
 import de.hf.dac.myfinance.api.application.servicecontext.MDEnvironmentContext;
 import de.hf.dac.myfinance.api.domain.Equity;
+import de.hf.dac.myfinance.api.domain.InstrumentType;
 import de.hf.dac.myfinance.api.exceptions.MFException;
 import de.hf.dac.myfinance.api.exceptions.MFMsgKey;
 import de.hf.dac.myfinance.api.restservice.InstrumentListModel;
@@ -77,6 +78,17 @@ public class EnvironmentDataResource extends BaseSecuredResource<OpType,OpLevel>
     public InstrumentForTenantListResource getInstrumentsForTenant(@QueryParam("tenant") @ApiParam(value="tenant id") int tenantId) {
         checkOperationAllowed(OpType.READ);
         return new InstrumentForTenantListResource(new InstrumentListModel(marketDataEnvironment.getInstrumentService().listInstruments(tenantId)));
+    }
+
+    @Path("/instrumentspertype")
+    @Produces(MediaType.APPLICATION_JSON)
+    @ApiOperation(value = "get Instruments per type",
+        response = InstrumentListResource.class)
+    public InstrumentPerTypeListResource getInstrumentsPerType(@QueryParam("tenant") @ApiParam(value="tenant id") int tenantId,
+        @QueryParam("instrumenttype") @ApiParam(value="instrumenttype")
+            InstrumentType instrumentType) {
+        checkOperationAllowed(OpType.READ);
+        return new InstrumentPerTypeListResource(new InstrumentListModel(marketDataEnvironment.getInstrumentService().listInstruments(tenantId, instrumentType)));
     }
 
     @Path("/listTransactions")

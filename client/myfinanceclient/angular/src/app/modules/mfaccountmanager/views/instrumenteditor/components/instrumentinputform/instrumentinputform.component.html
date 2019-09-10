@@ -14,5 +14,9 @@
       Bitte geben Sie eine Beschriebung für das Instrument ein!
     </span>
   </div>
+  <div class="form-group" *ngIf="instrumentForm.get('instrumentType').value === 'Budget'">
+    <label>Budget Group:</label>
+    <input class="form-control" formControlName="budgetGroup"/>
+  </div>
   <button class="btn btn-primary" type="submit">Speichern</button>
 </form>
