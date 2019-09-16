@@ -22,7 +22,7 @@ export class InstrumentinputformComponent implements OnInit {
     this.instrumentForm = new FormGroup({
       'description': new FormControl(null, Validators.required),
       'instrumentType': new FormControl(InstrumentTypeEnum.Giro),
-      'budgetGroup': new FormControl()
+      'budgetGroup': new FormControl(null, [Validators.required, this.isBudgetGroupNecessary.bind(this)])
     });
     this.instrumentservice.instrumentSubject.subscribe(
       () => {
@@ -34,10 +34,19 @@ export class InstrumentinputformComponent implements OnInit {
     this.budgetGroups = this.instrumentservice.getBudgetGroups();
   }
 
+  isBudgetGroupNecessary(control: FormControl): {[s: string]: boolean} {
+    if (this.instrumentForm == null) { return null; }
+    if (this.instrumentForm.value == null) { return null; }
+    if (this.instrumentForm.value.instrumentType === InstrumentTypeEnum.Budget && this.budgetGroup == null) {
+      return {'BudgetGroup is necessary': true};
+    } else { return null; }
+  }
+
   onSubmit() {
     console.log(this.instrumentForm)
-    if(this.instrumentForm.value.instrumentType === InstrumentTypeEnum.Tenant) {
-      this.instrumentservice.saveInstrument(this.instrumentForm.value.description)
+    //const newInstrument = new Instrument();
+    if (this.instrumentForm.value.instrumentType === InstrumentTypeEnum.Giro) {
+      //this.instrumentservice.saveInstrument(this.instrumentForm.value.description)
     }
   }
 }
