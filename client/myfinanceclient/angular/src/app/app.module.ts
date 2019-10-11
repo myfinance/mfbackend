@@ -34,7 +34,7 @@ import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
 import {registerLocaleData} from "@angular/common";
 import localeDe from '@angular/common/locales/de';
 
-LicenseManager.setLicenseKey('Comparex_AG_on_behalf_of_DZ_Bank_PoET_3Devs21_March_2019__MTU1MzEyNjQwMDAwMA==fa9bf4344688f8dea02f51fe8a82aba0');
+LicenseManager.setLicenseKey('Comparex_AG_on_behalf_of_DZ_BANK_AG_MultiApp_5Devs3_October_2020__MTYwMTY3OTYwMDAwMA==c1b2f2c21c08f4ac19ee3cf66789c865');
 registerLocaleData(localeDe);
 /**
  * Loads the configuration of the given configuration service.
