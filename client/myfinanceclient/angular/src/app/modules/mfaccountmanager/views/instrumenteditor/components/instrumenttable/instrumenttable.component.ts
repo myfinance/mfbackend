@@ -1,5 +1,5 @@
 import {Component, Input, OnInit} from '@angular/core';
-import {InstrumentService} from "../../services/instrument.service";
+import {InstrumentService} from '../../services/instrument.service';
 import { GridOptions } from 'ag-grid-community';
 
 @Component({
@@ -24,8 +24,8 @@ export class InstrumenttableComponent implements OnInit {
       onSelectionChanged: () => this.onSelectionChanged(),
       onGridReady: () => this.onGridReady(),
       floatingFilter: true,
-      enableColResize: true,
-      enableSorting: true,
+      resizeable: true,
+      sortable: true,
       sideBar: 'filters',
       suppressPropertyNamesCheck: true,
       columnDefs: [
@@ -46,7 +46,7 @@ export class InstrumenttableComponent implements OnInit {
   }
 
   onGridReady(): void {
-    if(this.instrumentservice.getIsInit()){
+    if (this.instrumentservice.getIsInit()) {
       this.loadData();
     } else {
       this.instrumentservice.instrumentSubject.subscribe(

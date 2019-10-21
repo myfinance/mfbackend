@@ -1,14 +1,14 @@
 import {Component, Input, OnInit} from '@angular/core';
 import { GridOptions } from 'ag-grid-community';
 
-import {TransactionService} from "../../services/transaction.service";
+import {TransactionService} from '../../services/transaction.service';
 
 @Component({
   selector: 'app-transactiontable',
   templateUrl: './transactiontable.component.html',
   styleUrls: ['./transactiontable.component.scss']
 })
-export class TransactiontableComponent implements OnInit{
+export class TransactiontableComponent implements OnInit {
 
   @Input() data: any;
 
@@ -24,8 +24,8 @@ export class TransactiontableComponent implements OnInit{
       onSelectionChanged: () => this.onSelectionChanged(),
       onGridReady: () => this.onGridReady(),
       floatingFilter: true,
-      enableColResize: true,
-      enableSorting: true,
+      resizeable: true,
+      sortable: true,
       sideBar: 'filters',
       suppressPropertyNamesCheck: true,
       columnDefs: [
@@ -43,11 +43,11 @@ export class TransactiontableComponent implements OnInit{
   }
 
   onSelectionChanged(): void {
-    //this.applicationLogService.selectedLogEntry = this.options.api.getSelectedRows()[0];
+    // this.applicationLogService.selectedLogEntry = this.options.api.getSelectedRows()[0];
   }
 
   onGridReady(): void {
-    if(this.transactionservice.getIsInit()){
+    if (this.transactionservice.getIsInit()) {
       this.loadData();
     } else {
       this.transactionservice.transactionSubject.subscribe(

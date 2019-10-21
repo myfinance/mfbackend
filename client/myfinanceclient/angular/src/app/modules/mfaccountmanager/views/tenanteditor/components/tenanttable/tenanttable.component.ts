@@ -1,6 +1,6 @@
 import {Component, Input, OnInit} from '@angular/core';
 import { GridOptions } from 'ag-grid-community';
-import {TenantService} from "../../services/tenant.service";
+import {TenantService} from '../../services/tenant.service';
 
 @Component({
   selector: 'app-tenanttable',
@@ -25,8 +25,8 @@ export class TenanttableComponent implements OnInit {
       onSelectionChanged: () => this.onSelectionChanged(),
       onGridReady: () => this.onGridReady(),
       floatingFilter: true,
-      enableColResize: true,
-      enableSorting: true,
+      resizeable: true,
+      sortable: true,
       sideBar: 'filters',
       suppressPropertyNamesCheck: true,
       columnDefs: [
@@ -48,7 +48,7 @@ export class TenanttableComponent implements OnInit {
   }
 
   onGridReady(): void {
-    if(this.tenantservice.getIsInit()){
+    if (this.tenantservice.getIsInit()) {
       this.loadData();
     } else {
       this.tenantservice.instrumentSubject.subscribe(
