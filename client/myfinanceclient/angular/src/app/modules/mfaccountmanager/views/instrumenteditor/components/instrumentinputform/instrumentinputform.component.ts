@@ -1,8 +1,8 @@
 import {Component, OnInit} from '@angular/core';
-import {FormControl, FormGroup, Validators} from "@angular/forms";
+import {FormControl, FormGroup, Validators} from '@angular/forms';
 import InstrumentTypeEnum = Instrument.InstrumentTypeEnum;
-import {InstrumentService} from "../../services/instrument.service";
-import {Instrument} from "../../../../../myfinance-tsclient-generated";
+import {InstrumentService} from '../../services/instrument.service';
+import {Instrument} from '../../../../../myfinance-tsclient-generated';
 
 @Component({
   selector: 'app-instrumentinputform',
@@ -44,9 +44,10 @@ export class InstrumentinputformComponent implements OnInit {
 
   onSubmit() {
     console.log(this.instrumentForm)
-    //const newInstrument = new Instrument();
     if (this.instrumentForm.value.instrumentType === InstrumentTypeEnum.Giro) {
-      //this.instrumentservice.saveInstrument(this.instrumentForm.value.description)
+       this.instrumentservice.saveGiro(this.instrumentForm.value.description)
+    } else if (this.instrumentForm.value.instrumentType === InstrumentTypeEnum.Budget) {
+      this.instrumentservice.saveBudget(this.instrumentForm.value.description, this.budgetGroup.instrumentid)
     }
   }
 }

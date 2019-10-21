@@ -9,7 +9,7 @@ import { DashboardModel } from '../../models/dashboard.model';
 import { DashboardItemModel } from '../../models/dashboard-item.model';
 import { DashboardGridInterface } from '../../dashboard-grid.interface';
 import { DashboardWidgetDirective } from '../../directives/dashboard-widget.directive';
-import {gridTypes} from "angular-gridster2/lib/gridsterConfig.interface";
+import {gridTypes} from 'angular-gridster2/lib/gridsterConfig.interface';
 
 @Component({
   selector: 'app-dashboard-grid',
@@ -44,7 +44,7 @@ export class DashboardGridComponent implements DashboardGridInterface, OnInit, A
     public changeDetectorRef: ChangeDetectorRef) { }
 
   eventStop(item, itemComponent, event): void {
-    if (item) this.resizedSubject.next({ uuid: item.widget.uuid, component: itemComponent });
+    if (item) { this.resizedSubject.next({ uuid: item.widget.uuid, component: itemComponent }); }
   }
 
   itemChange(item, itemComponent): void {
@@ -132,7 +132,7 @@ export class DashboardGridComponent implements DashboardGridInterface, OnInit, A
   }
 
   resize(): void {
-    if (this.options && this.options.api) this.options.api.resize();
+    if (this.options && this.options.api) { this.options.api.resize(); }
   }
 
   private _buildDashboard(): void {
@@ -141,7 +141,7 @@ export class DashboardGridComponent implements DashboardGridInterface, OnInit, A
 
     if (savedDashboard && savedDashboard.options) {
       Object.assign(this.options, savedDashboard.options);
-      if (this.options.api) this.options.api.optionsChanged();
+      if (this.options.api) { this.options.api.optionsChanged(); }
     }
 
     for (const widget of this.widgets) {
@@ -193,7 +193,7 @@ export class DashboardGridComponent implements DashboardGridInterface, OnInit, A
   }
 
   getTemplateByUuid(uuid: string): TemplateRef<any> {
-    if(this.templates==null) return null;
+    if (this.templates == null) { return null; }
     return this.templates.toArray().find(t => t.uuid === uuid).template;
   }
 
