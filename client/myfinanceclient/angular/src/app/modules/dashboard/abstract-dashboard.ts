@@ -16,8 +16,7 @@ export abstract class AbstractDashboard {
   @ViewChild(DashboardGridComponent, {static: false})
   grid: DashboardGridInterface;
 
-  constructor(
-    public changeDetectorRef: ChangeDetectorRef) { }
+  protected constructor(public changeDetectorRef: ChangeDetectorRef) { }
 
 
   /**
@@ -26,7 +25,7 @@ export abstract class AbstractDashboard {
    * @param event The event.
    */
   handleDashboardRefresh(event: any): void {
-    if (this.grid) this.grid.refresh();
+    if (this.grid) { this.grid.refresh(); }
   }
 
   /**
@@ -35,7 +34,7 @@ export abstract class AbstractDashboard {
    * @param event The event.
    */
   handleDashboardResize(event: any): void {
-    if (this.grid) this.grid.resize();
+    if (this.grid) { this.grid.resize(); }
   }
 
   /**
@@ -44,7 +43,7 @@ export abstract class AbstractDashboard {
    * @param mode The mode the grid should be set to.
    */
   handleDashboardMode(mode: any): void {
-    if (this.grid) this.grid.changeOption('gridType', mode);
+    if (this.grid) { this.grid.changeOption('gridType', mode); }
   }
 
   /**
@@ -53,7 +52,7 @@ export abstract class AbstractDashboard {
    * @param event The event.
    */
   handleDashboardReset(event: any): void {
-    if (this.grid) this.grid.resetDashboard();
+    if (this.grid) { this.grid.resetDashboard(); }
   }
 
 

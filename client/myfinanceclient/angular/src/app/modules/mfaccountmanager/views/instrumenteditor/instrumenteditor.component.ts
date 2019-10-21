@@ -1,7 +1,8 @@
 import {ChangeDetectorRef, Component, OnDestroy, OnInit} from '@angular/core';
-import {AbstractDashboard} from "../../../dashboard/abstract-dashboard";
-import {DashboardService} from "../../../dashboard/services/dashboard.service";
-import {InstrumentService} from "./services/instrument.service";
+import {AbstractDashboard} from '../../../dashboard/abstract-dashboard';
+import {DashboardService} from '../../../dashboard/services/dashboard.service';
+import {InstrumentService} from './services/instrument.service';
+import {DashboardDataLoadedEventModel} from '../../../dashboard/models/dashboard-data-loaded-event.model';
 
 @Component({
   selector: 'app-instrumenteditor',
@@ -36,13 +37,18 @@ export class InstrumenteditorComponent  extends AbstractDashboard implements OnI
     }
   ];
 
-  //dashboardService and instrumentservice are not used directly here but it is necessary to put them in the constructor to initialize them
-  constructor( public dashboardService: DashboardService, instrumentservice: InstrumentService, changeDetectorRef: ChangeDetectorRef ) {
+  // dashboardService and instrumentservice are not used directly here but it is necessary to put them in the constructor to initialize them
+  constructor( public dashboardService: DashboardService,
+               public instrumentservice: InstrumentService,
+               changeDetectorRef: ChangeDetectorRef ) {
     super(changeDetectorRef);
   }
 
   ngOnInit() {
-
+    this.dashboardService.dataLoadedSubject.subscribe(
+      () => {
+        if (this.grid) { this.grid.refresh(); }
+      })
   }
 
   ngOnDestroy() {

@@ -75,24 +75,15 @@ export class InstrumentService {
     return this.instruments.filter(i => i.instrumentType === InstrumentTypeEnum.BudgetGroup);
   }
 
-  private saveGiro(desc: string) {
+  saveGiro(desc: string) {
     this.myFinanceService.saveGiro(desc)
   }
 
-  private saveBudget(desc: string, budgetGroupId: number) {
+  saveBudget(desc: string, budgetGroupId: number) {
     this.myFinanceService.saveBudget(desc, budgetGroupId)
   }
 
-  saveInstrument(instrument: Instrument) {
-    if (instrument.instrumentType === InstrumentTypeEnum.Giro) {
-      this.myFinanceService.saveGiro(instrument.description)
-    } else if (instrument.instrumentType === InstrumentTypeEnum.Budget) {
-      // this.myFinanceService.saveBudget(instrument.description)
-    }
-  }
-
   setSelectedInstrument(instrument: Instrument) {
-    console.log(instrument.instrumentid)
     this.selectedInstrument = instrument;
     this.selectedinstrumentSubject.next()
   }

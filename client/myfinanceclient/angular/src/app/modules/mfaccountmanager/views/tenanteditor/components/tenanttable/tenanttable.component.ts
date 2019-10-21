@@ -40,7 +40,9 @@ export class TenanttableComponent implements OnInit {
   }
 
   private loadData(): void {
-    this.options.api.setRowData(this.tenantservice.getTenants());
+    if (this.options.api) {
+      this.options.api.setRowData(this.tenantservice.getTenants());
+    }
   }
 
   onSelectionChanged(): void {

@@ -38,7 +38,9 @@ export class InstrumenttableComponent implements OnInit {
   }
 
   private loadData(): void {
-    this.options.api.setRowData(this.instrumentservice.getInstruments());
+    if(this.options.api != null) {
+      this.options.api.setRowData(this.instrumentservice.getInstruments());
+    }
   }
 
   onSelectionChanged(): void {
@@ -51,7 +53,8 @@ export class InstrumenttableComponent implements OnInit {
     } else {
       this.instrumentservice.instrumentSubject.subscribe(
         () => {
-          this.loadData()}
+            this.loadData()
+          }
       )
     }
   }

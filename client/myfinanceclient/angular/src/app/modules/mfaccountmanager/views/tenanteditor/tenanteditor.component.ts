@@ -42,7 +42,10 @@ export class TenanteditorComponent  extends AbstractDashboard implements OnInit,
   }
 
   ngOnInit() {
-
+    this.dashboardService.dataLoadedSubject.subscribe(
+      () => {
+        if (this.grid) { this.grid.refresh(); }
+      })
   }
 
   ngOnDestroy() {

@@ -1,11 +1,12 @@
-import {Injectable, OnDestroy} from "@angular/core";
-import {ToastrService} from "ngx-toastr";
+import {Injectable, OnDestroy} from '@angular/core';
+import {ToastrService} from 'ngx-toastr';
+import {Subject} from 'rxjs/Rx';
 
 
 @Injectable()
 export class DashboardService implements OnDestroy {
 
-
+  dataLoadedSubject: Subject<any>;
   /**
    * True if the dashboard is loading, else false.
    */
@@ -22,7 +23,9 @@ export class DashboardService implements OnDestroy {
   preparing = false;
 
 
-  constructor(public toastr: ToastrService) { }
+  constructor(public toastr: ToastrService) {
+    this.dataLoadedSubject = new Subject<any>();
+  }
 
   /**
    * Default handler if data could not be loaded.
@@ -49,6 +52,7 @@ export class DashboardService implements OnDestroy {
     this.loading = false;
     this.dataLoaded = true;
     this.preparing = false;
+    this.dataLoadedSubject.next();
   }
 
   /**
