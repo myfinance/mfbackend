@@ -29,13 +29,12 @@ export class TransactionService extends AbstractDashboardDataService {
   protected loadDataCall() {
     if (this.myFinanceService.getIsInit()) {
       this.loadData();
-    } else {
-      this.myFinanceService.configSubject.subscribe(
-        () => {
-          this.loadData()
-        }
-      )
     }
+    this.myFinanceService.configSubject.subscribe(
+      () => {
+        this.loadData()
+      }
+    )
     // subscribe to all instrument updates
     this.myFinanceService.instrumentSubject.subscribe(
       () => {
