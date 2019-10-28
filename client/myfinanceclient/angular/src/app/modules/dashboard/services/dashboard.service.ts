@@ -6,7 +6,6 @@ import {Subject} from 'rxjs/Rx';
 @Injectable()
 export class DashboardService implements OnDestroy {
 
-  dataLoadedSubject: Subject<any>;
   /**
    * True if the dashboard is loading, else false.
    */
@@ -24,7 +23,6 @@ export class DashboardService implements OnDestroy {
 
 
   constructor(public toastr: ToastrService) {
-    this.dataLoadedSubject = new Subject<any>();
   }
 
   /**
@@ -52,7 +50,6 @@ export class DashboardService implements OnDestroy {
     this.loading = false;
     this.dataLoaded = true;
     this.preparing = false;
-    this.dataLoadedSubject.next();
   }
 
   /**

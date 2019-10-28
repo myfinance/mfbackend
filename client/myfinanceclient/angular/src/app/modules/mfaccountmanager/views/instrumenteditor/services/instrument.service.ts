@@ -4,23 +4,21 @@ import {MyFinanceDataService} from '../../../../../shared/services/myfinance-dat
 import {Instrument, InstrumentListModel} from '../../../../myfinance-tsclient-generated';
 import InstrumentTypeEnum = Instrument.InstrumentTypeEnum;
 import {Subject} from 'rxjs/Rx';
+import {AbstractDashboardDataService} from "../../../../../shared/services/abstract-dashboard-data.service";
 
 @Injectable()
-export class InstrumentService {
+export class InstrumentService extends AbstractDashboardDataService {
 
   instruments: Array<Instrument> = new Array<Instrument>();
   instrumentSubject: Subject<any> = new Subject<any>();
   selectedinstrumentSubject: Subject<any> = new Subject<any>();
-  private isInit = false;
-  private isInstrumentLoaded = false;
   selectedInstrument: Instrument;
 
-  constructor(private myFinanceService: MyFinanceDataService, public dashboardService: DashboardService) {
-    this.dashboardService.handleLoading();
-    this.loadDataCall();
+  constructor(protected myFinanceService: MyFinanceDataService, public dashboardService: DashboardService) {
+    super(myFinanceService, dashboardService);
   }
 
-  private loadDataCall() {
+  protected loadDataCall() {
     if (this.myFinanceService.getIsInit()) {
       this.loadData();
     } else {
@@ -38,7 +36,7 @@ export class InstrumentService {
     )
   }
 
-  private loadData(): void {
+  protected loadData(): void {
     this.dashboardService.handleDataPreparing();
 
     this.myFinanceService.getInstrumentsForTenant()
@@ -57,14 +55,12 @@ export class InstrumentService {
         });
   }
 
-  private checkDataLoadStatus() {
+  protected isDataLoadComplete(): boolean{
     if (this.isInstrumentLoaded) {
-      this.dashboardService.handleDataLoaded();
+      return true;
+    } else {
+      return false;
     }
-  }
-
-  getIsInit(): boolean {
-    return this.isInit;
   }
 
   getInstruments(): Array<Instrument> {

@@ -1,7 +1,7 @@
 import {ChangeDetectorRef, Component, OnDestroy, OnInit} from '@angular/core';
 import {AbstractDashboard} from '../../../dashboard/abstract-dashboard';
 import {DashboardService} from '../../../dashboard/services/dashboard.service';
-import {InstrumentService} from '../instrumenteditor/services/instrument.service';
+import {TenantService} from "./services/tenant.service";
 
 @Component({
   selector: 'app-tenenteditor',
@@ -37,12 +37,12 @@ export class TenanteditorComponent  extends AbstractDashboard implements OnInit,
   ];
 
   // dashboardService and instrumentservice are not used directly here but it is necessary to put them in the constructor to initialize them
-  constructor( public dashboardService: DashboardService, instrumentservice: InstrumentService, changeDetectorRef: ChangeDetectorRef ) {
+  constructor( public dashboardService: DashboardService, public tenantService: TenantService, changeDetectorRef: ChangeDetectorRef ) {
     super(changeDetectorRef);
   }
 
   ngOnInit() {
-    this.dashboardService.dataLoadedSubject.subscribe(
+    this.tenantService.dataLoadedSubject.subscribe(
       () => {
         if (this.grid) { this.grid.refresh(); }
       })

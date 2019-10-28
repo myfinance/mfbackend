@@ -2,7 +2,6 @@ import {ChangeDetectorRef, Component, OnDestroy, OnInit} from '@angular/core';
 import {AbstractDashboard} from '../../../dashboard/abstract-dashboard';
 import {DashboardService} from '../../../dashboard/services/dashboard.service';
 import {InstrumentService} from './services/instrument.service';
-import {DashboardDataLoadedEventModel} from '../../../dashboard/models/dashboard-data-loaded-event.model';
 
 @Component({
   selector: 'app-instrumenteditor',
@@ -45,7 +44,7 @@ export class InstrumenteditorComponent  extends AbstractDashboard implements OnI
   }
 
   ngOnInit() {
-    this.dashboardService.dataLoadedSubject.subscribe(
+    this.instrumentservice.dataLoadedSubject.subscribe(
       () => {
         if (this.grid) { this.grid.refresh(); }
       })

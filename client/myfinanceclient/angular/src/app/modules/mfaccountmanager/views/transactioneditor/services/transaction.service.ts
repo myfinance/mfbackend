@@ -5,32 +5,29 @@ import {Instrument, InstrumentListModel, Transaction, TransactionListModel} from
 import {Subject} from "rxjs";
 import * as moment from 'moment';
 import InstrumentTypeEnum = Instrument.InstrumentTypeEnum;
+import {AbstractDashboardDataService} from "../../../../../shared/services/abstract-dashboard-data.service";
 
 @Injectable()
-export class TransactionService {
+export class TransactionService extends AbstractDashboardDataService {
 
   transactions: Array<Transaction> = new Array<Transaction>();
   instruments: Array<Instrument> = new Array<Instrument>();
   transactionSubject:Subject<any>= new Subject<any>();
   instrumentSubject:Subject<any>= new Subject<any>();
-  private isInit:boolean = false;
-  private isInstrumentLoaded:boolean = false;
   private isTransactionLoaded:boolean = false;
   start = new Date(new Date().getFullYear(), new Date().getMonth()-6, new Date().getDate());
   end = new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate());
   daterange:  Array<Date> = new Array<Date>();
 
 
-
-  constructor(private myFinanceService: MyFinanceDataService, public dashboardService: DashboardService) {
+  constructor(protected myFinanceService: MyFinanceDataService, public dashboardService: DashboardService) {
+    super(myFinanceService, dashboardService);
     this.daterange[0] =this.start;
     this.daterange[1] =this.end;
-    this.dashboardService.handleLoading();
-    this.loadDataCall();
   }
 
-  private loadDataCall(){
-    if(this.myFinanceService.getIsInit()){
+  protected loadDataCall() {
+    if (this.myFinanceService.getIsInit()) {
       this.loadData();
     } else {
       this.myFinanceService.configSubject.subscribe(
@@ -39,9 +36,16 @@ export class TransactionService {
         }
       )
     }
+    // subscribe to all instrument updates
+    this.myFinanceService.instrumentSubject.subscribe(
+      () => {
+        this.loadData()
+      }
+    )
   }
 
-  private loadData(): void {
+
+  protected loadData(): void {
     this.dashboardService.handleDataPreparing();
 
     this.myFinanceService.getTransactions(this.daterange[0], this.daterange[1])
@@ -81,14 +85,12 @@ export class TransactionService {
     }
   }
 
-  private checkDataLoadStatus(){
-    if(this.isInstrumentLoaded && this.isTransactionLoaded){
-      this.dashboardService.handleDataLoaded();
+  protected isDataLoadComplete(): boolean{
+    if (this.isInstrumentLoaded && this.isTransactionLoaded) {
+      return true;
+    } else {
+      return false;
     }
-  }
-
-  getIsInit(): boolean{
-    return this.isInit;
   }
 
   getTransactions(): Array<Transaction>{

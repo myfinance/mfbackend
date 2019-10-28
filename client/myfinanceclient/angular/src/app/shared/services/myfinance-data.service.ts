@@ -29,16 +29,15 @@ export class MyFinanceDataService {
   ) {
     if (this.configService.getIsInit()) {
       this.loadConfig();
-    } else {
-      this.configService.configLoaded.subscribe(
-        () => {
-          this.loadConfig();
-        },
-        (errResp) => {
-          console.error('error', errResp);
-        }
-      );
     }
+    this.configService.configLoaded.subscribe(
+      () => {
+        this.loadConfig();
+      },
+      (errResp) => {
+        console.error('error', errResp);
+      }
+    );
   }
 
   private loadConfig() {
