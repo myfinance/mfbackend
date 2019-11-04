@@ -1,4 +1,4 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, Input, OnDestroy, OnInit} from '@angular/core';
 import {InstrumentService} from '../../services/instrument.service';
 import { GridOptions } from 'ag-grid-community';
 
@@ -7,7 +7,7 @@ import { GridOptions } from 'ag-grid-community';
   templateUrl: './instrumenttable.component.html',
   styleUrls: ['./instrumenttable.component.scss']
 })
-export class InstrumenttableComponent implements OnInit {
+export class InstrumenttableComponent implements OnInit, OnDestroy {
 
 
   @Input() data: any;
@@ -57,5 +57,7 @@ export class InstrumenttableComponent implements OnInit {
           }
       )
     }
+  }
+  ngOnDestroy(): void {
   }
 }

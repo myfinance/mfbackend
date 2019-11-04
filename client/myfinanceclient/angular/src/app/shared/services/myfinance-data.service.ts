@@ -1,4 +1,3 @@
-
 import {Injectable, OnInit} from '@angular/core';
 import {Position} from '../models/position';
 import {Observable, Subject} from 'rxjs/Rx';
@@ -72,14 +71,6 @@ export class MyFinanceDataService {
     return new DatePipe('de-De').transform(date, 'yyyy-MM-dd');
   }
 
-  refreshInstruments() {
-    this.instrumentSubject.next();
-  }
-
-  refreshTenants() {
-    this.configService.loadTenants();
-  }
-
   saveIncomeExpenses(desc: string, srcInstrumentId: number, trgInstrumentId: number, value: number, transactionDate: Date) {
 
     this.myfinanceService.addIncomeExpense_envID_description_accId_budgetId_value_transactiondate(
@@ -98,20 +89,44 @@ export class MyFinanceDataService {
     );
   }
 
-  saveTenant(desc: string): Observable<any> {
-    return this.myfinanceService.addTenant_envID_description(this.currentEnv, desc);
+  saveTenant(desc: string) {
+    this.myfinanceService.addTenant_envID_description(this.currentEnv, desc).subscribe(
+      () => {
+        this.instrumentSubject.next();
+        this.configService.loadTenants();
+        this.printSuccess('Mandant gespeichert');
+      },
+      (errResp) => {
+        this.printError(errResp);
+      });
   }
 
-  updateTenant(id: number, desc: string, isActive: boolean): Observable<any> {
-    return this.myfinanceService.updateInstrument_envID_id_description_isactive(this.currentEnv, id, desc, isActive);
+  updateTenant(id: number, desc: string, isActive: boolean) {
+    this.myfinanceService.updateInstrument_envID_id_description_isactive(this.currentEnv, id, desc, isActive).subscribe(
+      () => {
+        this.instrumentSubject.next();
+        this.configService.loadTenants();
+        this.printSuccess('Mandant gespeichert');
+      },
+      (errResp: HttpErrorResponse) => {
+        this.printError(errResp);
+      });
   }
 
   saveGiro(desc: string) {
-    this.myfinanceService.addGiro_envID_description_tenantId(this.currentEnv, desc, this.configService.getCurrentTenant().instrumentid)
+    this.myfinanceService.addGiro_envID_description_tenantId(
+      this.currentEnv, desc, this.configService.getCurrentTenant().instrumentid).subscribe(
+      () => {
+        this.instrumentSubject.next();
+        this.printSuccess('Girokonto gespeichert');
+      },
+      (errResp) => {
+        this.printError(errResp);
+      })
   }
 
-  saveBudget(desc: string, budgetGroupId: number) {
-    this.myfinanceService.addBudget_envID_description_budgetGroupId(this.currentEnv, desc, budgetGroupId)
+  saveBudget(desc: string, budgetGroupId: number): Observable<any> {
+    return this.myfinanceService.addBudget_envID_description_budgetGroupId(this.currentEnv, desc, budgetGroupId)
   }
 
   getInstruments(): Observable<InstrumentListModel> {

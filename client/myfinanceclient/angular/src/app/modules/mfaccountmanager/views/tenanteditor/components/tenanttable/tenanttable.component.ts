@@ -1,4 +1,4 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, Input, OnDestroy, OnInit} from '@angular/core';
 import { GridOptions } from 'ag-grid-community';
 import {TenantService} from '../../services/tenant.service';
 
@@ -7,7 +7,7 @@ import {TenantService} from '../../services/tenant.service';
   templateUrl: './tenanttable.component.html',
   styleUrls: ['./tenanttable.component.scss']
 })
-export class TenanttableComponent implements OnInit {
+export class TenanttableComponent implements OnInit, OnDestroy {
 
 
   @Input() data: any;
@@ -58,5 +58,8 @@ export class TenanttableComponent implements OnInit {
           this.loadData()}
       )
     }
+  }
+
+  ngOnDestroy(): void {
   }
 }

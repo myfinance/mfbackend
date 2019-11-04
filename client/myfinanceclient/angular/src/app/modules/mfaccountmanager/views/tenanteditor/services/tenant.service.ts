@@ -5,10 +5,10 @@ import {Instrument, InstrumentListModel} from '../../../../myfinance-tsclient-ge
 import InstrumentTypeEnum = Instrument.InstrumentTypeEnum;
 import {HttpErrorResponse} from '@angular/common/http';
 import {Subject} from 'rxjs/Rx';
-import {AbstractDashboardDataService} from "../../../../../shared/services/abstract-dashboard-data.service";
+import {AbstractDashboardDataService} from '../../../../../shared/services/abstract-dashboard-data.service';
 
 @Injectable()
-export class TenantService extends AbstractDashboardDataService{
+export class TenantService extends AbstractDashboardDataService {
 
   instruments: Array<Instrument> = new Array<Instrument>();
   instrumentSubject: Subject<any> = new Subject<any>();
@@ -54,7 +54,7 @@ export class TenantService extends AbstractDashboardDataService{
         })
   }
 
-  protected isDataLoadComplete(): boolean{
+  protected isDataLoadComplete(): boolean {
     if (this.isInstrumentLoaded) {
       return true;
     } else {
@@ -67,27 +67,11 @@ export class TenantService extends AbstractDashboardDataService{
   }
 
   saveTenant(desc: string) {
-    this.myFinanceService.saveTenant(desc).subscribe(
-      () => {
-        this.myFinanceService.refreshInstruments();
-        this.myFinanceService.refreshTenants();
-        this.myFinanceService.printSuccess('Mandant gespeichert');
-        },
-      (errResp) => {
-        this.myFinanceService.printError(errResp);
-      })
+    this.myFinanceService.saveTenant(desc)
   }
 
   updateTenant(instrumentId: number, desc: string, isActive: boolean) {
-    this.myFinanceService.updateTenant(instrumentId, desc, isActive).subscribe(
-      () => {
-        this.myFinanceService.refreshInstruments();
-        this.myFinanceService.refreshTenants();
-        this.myFinanceService.printSuccess('Mandant gespeichert');
-        },
-      (errResp: HttpErrorResponse) => {
-        this.myFinanceService.printError(errResp);
-      })
+    this.myFinanceService.updateTenant(instrumentId, desc, isActive)
   }
 
 

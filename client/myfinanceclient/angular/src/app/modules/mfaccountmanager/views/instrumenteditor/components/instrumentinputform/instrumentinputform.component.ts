@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnDestroy, OnInit} from '@angular/core';
 import {FormControl, FormGroup, Validators} from '@angular/forms';
 import InstrumentTypeEnum = Instrument.InstrumentTypeEnum;
 import {InstrumentService} from '../../services/instrument.service';
@@ -9,16 +9,15 @@ import {Instrument} from '../../../../../myfinance-tsclient-generated';
   templateUrl: './instrumentinputform.component.html',
   styleUrls: ['./instrumentinputform.component.scss']
 })
-export class InstrumentinputformComponent implements OnInit {
+export class InstrumentinputformComponent implements OnInit, OnDestroy {
   instrumentTypes: InstrumentTypeEnum[] = [InstrumentTypeEnum.Giro, InstrumentTypeEnum.Budget];
-  budgetGroups: Instrument[];
+  budgetGroups: Instrument[]; // = [{description: 'test', treelastchanged: new Date(), isactive: true, instrumentType: InstrumentTypeEnum.BudgetGroup, instrumentid: 1}];
   instrumentForm: FormGroup;
   budgetGroup: Instrument;
 
   constructor(private instrumentservice: InstrumentService) { }
 
   ngOnInit() {
-
     this.instrumentForm = new FormGroup({
       'description': new FormControl(null, Validators.required),
       'instrumentType': new FormControl(InstrumentTypeEnum.Giro),
@@ -31,7 +30,10 @@ export class InstrumentinputformComponent implements OnInit {
   }
 
   private loadData(): void {
-    this.budgetGroups = this.instrumentservice.getBudgetGroups();
+     this.budgetGroups = this.instrumentservice.getBudgetGroups();
+    // this.budgetGroups =  [{description: 'bla', treelastchanged: new Date(), isactive: true, instrumentType: InstrumentTypeEnum.BudgetGroup, instrumentid: 1}];
+    // this.instrumentForm.patchValue({'budgetGroup': this.budgetGroups})
+     // this.instrumentForm.controls['budgetGroup']..setValue(this.budgetGroups);
   }
 
   isBudgetGroupNecessary(control: FormControl): {[s: string]: boolean} {
@@ -49,5 +51,8 @@ export class InstrumentinputformComponent implements OnInit {
     } else if (this.instrumentForm.value.instrumentType === InstrumentTypeEnum.Budget) {
       this.instrumentservice.saveBudget(this.instrumentForm.value.description, this.budgetGroup.instrumentid)
     }
+  }
+
+  ngOnDestroy(): void {
   }
 }

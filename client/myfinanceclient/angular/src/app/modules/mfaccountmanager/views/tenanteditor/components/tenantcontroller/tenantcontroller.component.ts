@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnDestroy, OnInit} from '@angular/core';
 import {TenantService} from '../../services/tenant.service';
 import {Instrument} from '../../../../../myfinance-tsclient-generated';
 
@@ -7,7 +7,7 @@ import {Instrument} from '../../../../../myfinance-tsclient-generated';
   templateUrl: './tenantcontroller.component.html',
   styleUrls: ['./tenantcontroller.component.scss']
 })
-export class TenantcontrollerComponent implements OnInit {
+export class TenantcontrollerComponent implements OnInit, OnDestroy {
 
   noTenantSelected = true;
   selectedTenant: Instrument
@@ -40,4 +40,6 @@ export class TenantcontrollerComponent implements OnInit {
       if (!this.selectedTenant) { return 0; } else { return this.selectedTenant.instrumentid; }
   }
 
+  ngOnDestroy(): void {
+  }
 }

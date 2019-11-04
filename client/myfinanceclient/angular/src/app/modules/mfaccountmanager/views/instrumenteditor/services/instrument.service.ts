@@ -4,7 +4,8 @@ import {MyFinanceDataService} from '../../../../../shared/services/myfinance-dat
 import {Instrument, InstrumentListModel} from '../../../../myfinance-tsclient-generated';
 import InstrumentTypeEnum = Instrument.InstrumentTypeEnum;
 import {Subject} from 'rxjs/Rx';
-import {AbstractDashboardDataService} from "../../../../../shared/services/abstract-dashboard-data.service";
+import {AbstractDashboardDataService} from '../../../../../shared/services/abstract-dashboard-data.service';
+import {HttpErrorResponse} from '@angular/common/http';
 
 @Injectable()
 export class InstrumentService extends AbstractDashboardDataService {
@@ -54,7 +55,7 @@ export class InstrumentService extends AbstractDashboardDataService {
         });
   }
 
-  protected isDataLoadComplete(): boolean{
+  protected isDataLoadComplete(): boolean {
     if (this.isInstrumentLoaded) {
       return true;
     } else {
@@ -70,9 +71,15 @@ export class InstrumentService extends AbstractDashboardDataService {
     return this.instruments.filter(i => i.instrumentType === InstrumentTypeEnum.BudgetGroup);
   }
 
+
   saveGiro(desc: string) {
-    this.myFinanceService.saveGiro(desc)
+    this.myFinanceService.saveGiro(desc);
   }
+
+  updateGiro(instrumentId: number, desc: string, isActive: boolean) {
+    this.myFinanceService.updateTenant(instrumentId, desc, isActive);
+  }
+
 
   saveBudget(desc: string, budgetGroupId: number) {
     this.myFinanceService.saveBudget(desc, budgetGroupId)
