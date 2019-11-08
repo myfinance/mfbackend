@@ -11,7 +11,7 @@ import {Instrument} from '../../../../../myfinance-tsclient-generated';
 })
 export class InstrumentinputformComponent implements OnInit, OnDestroy {
   instrumentTypes: InstrumentTypeEnum[] = [InstrumentTypeEnum.Giro, InstrumentTypeEnum.Budget];
-  budgetGroups: Instrument[]; // = [{description: 'test', treelastchanged: new Date(), isactive: true, instrumentType: InstrumentTypeEnum.BudgetGroup, instrumentid: 1}];
+  budgetGroups: Instrument[];
   instrumentForm: FormGroup;
   budgetGroup: Instrument;
 
@@ -25,13 +25,20 @@ export class InstrumentinputformComponent implements OnInit, OnDestroy {
     });
     this.instrumentservice.instrumentSubject.subscribe(
       () => {
-        this.loadData()}
+        this.loadData();
+      }
     )
   }
 
   private loadData(): void {
-     this.budgetGroups = this.instrumentservice.getBudgetGroups();
-    // this.budgetGroups =  [{description: 'bla', treelastchanged: new Date(), isactive: true, instrumentType: InstrumentTypeEnum.BudgetGroup, instrumentid: 1}];
+     // this.budgetGroups = this.instrumentservice.getBudgetGroups();
+     this.budgetGroups =  [{description: 'bla', treelastchanged: new Date(), isactive: true, instrumentType: InstrumentTypeEnum.BudgetGroup, instrumentid: 1}];
+     console.info('budgetgroup:'+ this.budgetGroups.length);
+    this.instrumentForm = new FormGroup({
+      'description': new FormControl(null, Validators.required),
+      'instrumentType': new FormControl(InstrumentTypeEnum.Giro),
+      'budgetGroup': new FormControl(this.budgetGroups[0], [Validators.required, this.isBudgetGroupNecessary.bind(this)])
+    });
     // this.instrumentForm.patchValue({'budgetGroup': this.budgetGroups})
      // this.instrumentForm.controls['budgetGroup']..setValue(this.budgetGroups);
   }
