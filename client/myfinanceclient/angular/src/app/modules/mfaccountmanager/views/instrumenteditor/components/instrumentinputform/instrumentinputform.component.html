@@ -16,14 +16,15 @@
   </div>
   <div class="form-group" *ngIf="instrumentForm.get('instrumentType').value === 'Budget'">
     <p>Budget Group:</p>
-    <div formArrayName="budgetGroups">
-      <div *ngFor="let budgetGroup of instrumentForm.get('budgetGroups').controls; let i=index">
+    <select class="btn btn-primary dropdown-toggle" formControlName="budgetGroup">
+      <option class="mydropdown-item" *ngFor="let budgetGroup of budgetGroups" >
+        {{budgetGroup.description}}
+      </option>
+    </select>
+    <span *ngIf="!instrumentForm.get('budgetGroup').valid && instrumentForm.get('budgetGroup').touched">
+      Bitte geben Sie eine Budgetgruppe für das Instrument ein!
+    </span>
 
-        <select class="form-control" [formControlName]="i">
-          <option *ngFor="let budgetgroup of budgetGroups" [ngValue]="budgetGroup">{{budgetgroup.description}}</option>
-        </select>
-      </div>
-    </div>
   </div>
 
   <button class="btn btn-primary" type="submit">Speichern</button>

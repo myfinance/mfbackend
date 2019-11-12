@@ -125,8 +125,16 @@ export class MyFinanceDataService {
       })
   }
 
-  saveBudget(desc: string, budgetGroupId: number): Observable<any> {
-    return this.myfinanceService.addBudget_envID_description_budgetGroupId(this.currentEnv, desc, budgetGroupId)
+  saveBudget(desc: string, budgetGroupId: number){
+    this.myfinanceService.addBudget_envID_description_budgetGroupId(
+      this.currentEnv, desc, budgetGroupId).subscribe(
+      () => {
+        this.instrumentSubject.next();
+        this.printSuccess('Budget gespeichert');
+      },
+      (errResp) => {
+        this.printError(errResp);
+      })
   }
 
   getInstruments(): Observable<InstrumentListModel> {
