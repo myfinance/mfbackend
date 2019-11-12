@@ -39,15 +39,6 @@ export class ConfigService {
         } else {
           this.setCurrentZone(data.defaultZone);
         }
-        // Check if environment is saved in local storage.
-        // Set the current environment to the saved env or else
-        // set it to the default environment in the configuration.
-        const env = localStorage.getItem('env');
-        if (env) {
-          this.setCurrentEnv(env);
-        } else {
-          this.setCurrentEnv(this.getDefaultEnv());
-        }
         this.isInit = true;
       });
   }
@@ -80,6 +71,7 @@ export class ConfigService {
     this.currentTenant = tenant;
     // Additionally save the zone in the local storage.
     localStorage.setItem('tenant', tenant.instrumentid.toString());
+    console.info('set tenant');
     this.configLoaded.next(true);
   }
 
@@ -198,7 +190,6 @@ export class ConfigService {
         } else {
           this.setCurrentTenant(this.tenants[0])
         }
-        this.setCurrentTenant(this.tenants[0])
       },
       (errResp) => {
         console.error('error', errResp);
