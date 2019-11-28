@@ -5,7 +5,6 @@ import {Instrument, InstrumentListModel} from '../../../../myfinance-tsclient-ge
 import InstrumentTypeEnum = Instrument.InstrumentTypeEnum;
 import {Subject} from 'rxjs/Rx';
 import {AbstractDashboardDataService} from '../../../../../shared/services/abstract-dashboard-data.service';
-import {HttpErrorResponse} from '@angular/common/http';
 
 @Injectable()
 export class InstrumentService extends AbstractDashboardDataService {

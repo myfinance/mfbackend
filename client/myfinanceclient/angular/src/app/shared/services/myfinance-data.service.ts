@@ -63,7 +63,6 @@ export class MyFinanceDataService {
     }
     return this.myfinanceService.getTransactionList_envID_startdate_enddate(
       this.currentEnv, this.getDateString(start), this.getDateString(end));
-
   }
 
   private getDateString(date: Date): string {

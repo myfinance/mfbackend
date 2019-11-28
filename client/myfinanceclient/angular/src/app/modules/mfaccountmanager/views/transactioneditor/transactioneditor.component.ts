@@ -1,10 +1,10 @@
 import {ChangeDetectorRef, Component, OnDestroy, OnInit} from '@angular/core';
-import {AbstractDashboard} from "../../../dashboard/abstract-dashboard";
-import {DashboardService} from "../../../dashboard/services/dashboard.service";
-import {TransactionService} from "./services/transaction.service";
+import {AbstractDashboard} from '../../../dashboard/abstract-dashboard';
+import {DashboardService} from '../../../dashboard/services/dashboard.service';
+import {TransactionService} from './services/transaction.service';
 
 @Component({
-  selector: 'transactioneditor',
+  selector: 'app-transactioneditor',
   templateUrl: './transactioneditor.component.html',
   styleUrls: ['./transactioneditor.component.scss']
 })
@@ -66,13 +66,16 @@ export class TransactioneditorComponent extends AbstractDashboard implements OnI
     }
   ];
 
-  //dashboardService and instrumentservice are not used directly here but it is necessary to put them in the constructor to initialize them
-  constructor( public dashboardService: DashboardService, transactionService: TransactionService, changeDetectorRef: ChangeDetectorRef ) {
+  // dashboardService and instrumentservice are not used directly here but it is necessary to put them in the constructor to initialize them
+  constructor( public dashboardService: DashboardService, public transactionService: TransactionService, changeDetectorRef: ChangeDetectorRef ) {
     super(changeDetectorRef);
   }
 
   ngOnInit() {
-
+    this.transactionService.dataLoadedSubject.subscribe(
+      () => {
+        if (this.grid) { this.grid.refresh(); }
+      })
   }
 
   ngOnDestroy() {

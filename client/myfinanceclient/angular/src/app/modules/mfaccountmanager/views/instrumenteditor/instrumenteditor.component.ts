@@ -10,7 +10,7 @@ import {InstrumentService} from './services/instrument.service';
 })
 export class InstrumenteditorComponent  extends AbstractDashboard implements OnInit, OnDestroy {
 
-  title = 'Transactions';
+  title = 'Instruments';
   view = 'fit';
 
   widgets = [

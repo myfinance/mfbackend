@@ -24,7 +24,7 @@ export class InstrumentinputformComponent implements OnInit, OnDestroy {
         budgetGroup: [null, [Validators.required, this.isBudgetGroupNecessary.bind(this)]]
       });
 
-    if(this.instrumentservice.getIsInit()){
+    if (this.instrumentservice.getIsInit()) {
       this.loadData();
     }
     this.instrumentservice.instrumentSubject.subscribe(
@@ -37,8 +37,7 @@ export class InstrumentinputformComponent implements OnInit, OnDestroy {
   loadData(): void {
     this.budgetGroups = this.instrumentservice.getBudgetGroups();
 
-    if(this.budgetGroups.length>0) {
-      //this.budgetGroup = this.budgetGroups[0]
+    if (this.budgetGroups.length > 0) {
       this.instrumentForm.controls['budgetGroup'].setValue(this.budgetGroups[0], {onlySelf: true});
     }
   }
