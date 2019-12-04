@@ -1,7 +1,7 @@
 Role Name
 =========
 
-installs all tools necessary for building myfinance and setup the user "builder"
+installs all tools necessary for building myfinance and setup the user "holger"
 
 Requirements
 ------------
