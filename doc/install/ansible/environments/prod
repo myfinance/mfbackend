@@ -4,10 +4,14 @@ CentOSServer ansible_host=192.168.100.71 ansible_ssh_user=root
 [myfinance]
 MyFinanceServer ansible_host=192.168.100.71 ansible_ssh_user=root
 
+[kubernetes]
+kubernetes ansible_host=192.168.100.73 ansible_ssh_user=root
+
 [devenv]
 DevEnv ansible_host=192.168.100.131 ansible_ssh_user=root
 
 [myservers:children]
 buildserver
 myfinance
+kubernetes
 devenv
