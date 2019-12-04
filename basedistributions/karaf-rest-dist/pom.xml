@@ -72,8 +72,10 @@
                         <feature>webconsole</feature>
                         <feature>wrap</feature>
 
+
                         <!-- the application -->
                         <feature>myfinance-restservice-feature</feature>
+
 
                     </bootFeatures>
 

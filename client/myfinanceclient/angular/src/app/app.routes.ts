@@ -10,6 +10,9 @@ import {BasicLayoutComponent} from "./shared/components/basic-layout/basic-layou
 import {BarchartexpComponent} from "./views/examples/barchartexp/barchartexp.component";
 import {LinechartexpComponent} from "./views/examples/linechartexp/linechartexp.component";
 import {GridexpComponent} from "./views/examples/gridexp/gridexp.component";
+import {TransactioneditorComponent} from "./modules/mfaccountmanager/views/transactioneditor/transactioneditor.component";
+import {InstrumenteditorComponent} from "./modules/mfaccountmanager/views/instrumenteditor/instrumenteditor.component";
+import {TenanteditorComponent} from "./modules/mfaccountmanager/views/tenanteditor/tenanteditor.component";
 
 const APP_ROUTES: Routes = [
   {
@@ -32,6 +35,18 @@ const APP_ROUTES: Routes = [
         component: HomeComponent
       },
       {
+        path: 'transactions',
+        component: TransactioneditorComponent
+      },
+      {
+        path: 'instruments',
+        component: InstrumenteditorComponent
+      },
+      {
+        path: 'tenants',
+        component: TenanteditorComponent
+      },
+      {
         path: 'instrument-search',
         component: InstrumentSearchComponent
       },
@@ -48,7 +63,7 @@ const APP_ROUTES: Routes = [
         component: GridexpComponent
       },
       {
-        path: 'dashboards', loadChildren: './modules/dashboard/dashboard.module#DashboardModule'
+        path: 'dashboards', loadChildren: () => import('./modules/dashboard/dashboard.module').then(m => m.DashboardModule)
       }
     ]
   },

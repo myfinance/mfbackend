@@ -1,0 +1,21 @@
+<div class="transaction-view-wrapper">
+  <div class="grid">
+    <app-dashboard-grid [title]="title" [view]="view" [widgets]="widgets">
+      <ng-template appDashboardWidget [uuid]="'21544ed9-5c0c-4d28-81e1-f586f6bc6621'">
+        <app-controller></app-controller>
+      </ng-template>
+      <ng-template appDashboardWidget [uuid]="'83d199d1-3bf4-43c1-a037-a465e7b6a87b'">
+        <app-valuegraph></app-valuegraph>
+      </ng-template>
+      <ng-template appDashboardWidget [uuid]="'5cbceb3d-a766-4ed0-8b83-467490bd3c9b'">
+        <app-transactiontable></app-transactiontable>
+      </ng-template>
+      <ng-template appDashboardWidget [uuid]="'763454ef-ca61-4a46-9df3-412f76ea3efb'">
+        <app-cashflowtable></app-cashflowtable>
+      </ng-template>
+      <ng-template appDashboardWidget [uuid]="'3870110e-6bfb-4cdc-9c3e-14d4c1924c72'">
+        <app-inputformselection></app-inputformselection>
+      </ng-template>
+    </app-dashboard-grid>
+  </div>
+</div>

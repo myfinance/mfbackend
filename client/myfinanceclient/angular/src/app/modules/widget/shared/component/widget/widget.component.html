@@ -1,0 +1,7 @@
+<div class="widget-wrapper">
+  <app-widget-content [hideHeader]="hideHeader" [title]="title">
+    <ng-content headerButtons select="[headerButtons]"></ng-content>
+    <ng-content body select="[body]"></ng-content>
+    <ng-content footer select="[footer]"></ng-content>
+  </app-widget-content>
+</div>

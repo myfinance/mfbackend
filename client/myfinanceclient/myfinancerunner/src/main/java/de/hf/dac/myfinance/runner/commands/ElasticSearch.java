@@ -19,8 +19,8 @@ import java.util.Map;
 import de.hf.dac.io.baserunner.BaseRunner;
 import de.hf.dac.io.config.resfile.Configuration;
 import de.hf.dac.io.web.WebRequest;
-import de.hf.dac.myfinance.api.exceptions.MDException;
-import de.hf.dac.myfinance.api.exceptions.MDMsgKey;
+import de.hf.dac.myfinance.api.exceptions.MFException;
+import de.hf.dac.myfinance.api.exceptions.MFMsgKey;
 import picocli.CommandLine;
 
 @CommandLine.Command(description = "Executes Elastic Search commands",
@@ -48,7 +48,7 @@ public class ElasticSearch  extends BaseRunner {
 
 
         } catch (IOException e) {
-            throw new MDException(MDMsgKey.NO_RESPONSE_FROM_URL_EXCEPTION, "no response form "+url, e);
+            throw new MFException(MFMsgKey.NO_RESPONSE_FROM_URL_EXCEPTION, "no response form "+url, e);
         }
 
     }

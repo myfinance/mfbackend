@@ -1,0 +1,12 @@
+<div class="grid-view-wrapper">
+  <div  class="grid">
+    <app-dashboard-grid [title]="title" [view]="view" [widgets]="widgets">
+      <ng-template appDashboardWidget [uuid]="'5c147b24-d1a8-4eaf-b7e9-c5c98f96ca12'">
+        <app-instrumentcontroller></app-instrumentcontroller>
+      </ng-template>
+      <ng-template appDashboardWidget [uuid]="'5c227628-80d4-4b47-b4a3-d7fb824a56f2'">
+        <app-instrumenttable></app-instrumenttable>
+      </ng-template>
+    </app-dashboard-grid>
+  </div>
+</div>

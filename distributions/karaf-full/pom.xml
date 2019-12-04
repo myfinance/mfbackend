@@ -93,6 +93,8 @@
                         <!-- the application -->
                         <feature>myfinance-features</feature>
 
+                        <feature>dac-decanter-features</feature>
+
                     </bootFeatures>
 
                     <libraries>

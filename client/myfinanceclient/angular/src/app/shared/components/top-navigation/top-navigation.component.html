@@ -20,6 +20,21 @@
         </li>
 
         <li class="nav-item dropdown" dropdown>
+          <a class="nav-link dropdown-toggle" href dropdownToggle (click)="false">Kontopflege</a>
+          <ul *dropdownMenu class="dropdown-menu">
+            <li>
+              <a class="dropdown-item" routerLink="/transactions">Transaktionen</a>
+            </li>
+            <li>
+              <a class="dropdown-item" routerLink="/instruments">Instrumente</a>
+            </li>
+            <li>
+              <a class="dropdown-item" routerLink="/tenants">Mandanten</a>
+            </li>
+          </ul>
+        </li>
+
+        <li class="nav-item dropdown" dropdown>
           <a class="nav-link dropdown-toggle" href dropdownToggle (click)="false">Beispiele</a>
           <ul *dropdownMenu class="dropdown-menu">
             <li>
@@ -50,6 +65,11 @@
             <h6 class="dropdown-header">Environment</h6>
             <li *ngFor="let env of configService.environments">
               <div (click)="handleEnvSelect(env)" class="dropdown-item">{{ env }}<span class="text-success" *ngIf="env == configService.getCurrentEnv()"><i class="icon-checkmark" aria-hidden="true"></i></span></div>
+            </li>
+            <li class="divider dropdown-divider"></li>
+            <h6 class="dropdown-header">Mandant</h6>
+            <li *ngFor="let tenant of configService.tenants">
+              <div (click)="handleTenantSelect(tenant)" class="dropdown-item">{{ tenant.description }}<span class="text-success" *ngIf="tenant == configService.getCurrentTenant()"><i class="icon-checkmark" aria-hidden="true"></i></span></div>
             </li>
           </ul>
         </li>

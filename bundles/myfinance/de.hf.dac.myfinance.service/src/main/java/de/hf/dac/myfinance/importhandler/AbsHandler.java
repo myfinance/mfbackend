@@ -24,8 +24,8 @@ import de.hf.dac.api.io.web.WebRequestService;
 import de.hf.dac.myfinance.api.domain.EndOfDayPrice;
 import de.hf.dac.myfinance.api.domain.Instrument;
 import de.hf.dac.myfinance.api.domain.Source;
-import de.hf.dac.myfinance.api.exceptions.MDException;
-import de.hf.dac.myfinance.api.exceptions.MDMsgKey;
+import de.hf.dac.myfinance.api.exceptions.MFException;
+import de.hf.dac.myfinance.api.exceptions.MFMsgKey;
 
 import java.io.IOException;
 import java.time.LocalDate;
@@ -61,10 +61,10 @@ public abstract class AbsHandler {
         try {
             returnvalue=downloadHandler.getRequest(url);
         } catch (IOException e) {
-            throw new MDException(MDMsgKey.NO_RESPONSE_FROM_URL_EXCEPTION, "no or empty response form "+url, e);
+            throw new MFException(MFMsgKey.NO_RESPONSE_FROM_URL_EXCEPTION, "no or empty response form "+url, e);
         }
         if(returnvalue== null || returnvalue.isEmpty()){
-            throw new MDException(MDMsgKey.NO_RESPONSE_FROM_URL_EXCEPTION, "empty response form "+url);
+            throw new MFException(MFMsgKey.NO_RESPONSE_FROM_URL_EXCEPTION, "empty response form "+url);
         }
         Gson gson = new Gson();
 

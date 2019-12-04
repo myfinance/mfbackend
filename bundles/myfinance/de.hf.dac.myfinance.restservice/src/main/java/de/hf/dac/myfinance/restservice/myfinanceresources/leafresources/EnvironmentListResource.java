@@ -33,7 +33,7 @@ public class EnvironmentListResource extends ListResource<String> {
     @ApiOperation(value = "List Environments" , response = StringListModel.class )
     public Response getEnvironmentList(@Context
         UriInfo uriInfo) {
-        return super.getList(uriInfo);
+        return super.getData(uriInfo);
 
     }
 

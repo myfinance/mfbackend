@@ -1,0 +1,79 @@
+$icons-path: "~ag-grid-community/src/styles/icons/";
+
+$font-family: $mf-font-family-sans-serif;
+$secondary-font-weight: bold;
+
+//$cell-horizontal-border: 1px dotted $gray-200;
+$border-color: $gray-400;
+$card-background-color: $gray-100;
+$panel-background-color: $gray-200;
+$tool-panel-background-color: $gray-200;
+$odd-row-background-color: $gray-100;
+
+.ag-theme-bootstrap input[type="date"],
+.ag-theme-bootstrap input[type="time"],
+.ag-theme-bootstrap input[type="datetime-local"],
+.ag-theme-bootstrap input[type="month"] {
+  -webkit-appearance: textfield;
+}
+
+.ag-theme-bootstrap input[type=date]::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  display: none;
+}
+
+.ag-theme-bootstrap .ag-floating-filter-body input {
+  line-height: 17px;
+}
+
+// hint to user, that cell can be sorted by clicking the label
+.ag-theme-bootstrap .ag-header-cell-label {
+  cursor: pointer;
+}
+
+@import '~ag-grid-community/src/styles/ag-grid.scss';
+//@import '~ag-grid-community/src/styles/ag-theme-bootstrap.scss';
+
+.ag-theme-bootstrap {
+  color: $gray-700;
+
+  .ag-root {
+    border: none;
+  }
+
+  .ag-header {
+    color: $gray-700;
+  }
+
+  .ag-body {
+    background-color: $white;
+  }
+
+  .ag-side-bar {
+    border: none;
+    background-color: transparent;
+
+    .ag-side-buttons {
+      border-left: 1px solid $gray-700;
+      border-right: 0;
+      border-top: 0;
+      border-bottom: 0;
+    }
+  }
+
+  .ag-status-bar {
+    border-top: 1px solid $gray-700;
+    border-left: 0;
+    border-right: 0;
+    border-bottom: 0;
+  }
+
+  .ag-row-selected {
+    background-color: $mf-blue-300;
+    color: $white;
+
+    .text-success {
+      color: $white !important;
+    }
+  }
+}

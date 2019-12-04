@@ -58,6 +58,9 @@ public class InstrumentGraphEntry implements java.io.Serializable {
     public InstrumentGraphId getId() {
         return this.id;
     }
+    public void setId(InstrumentGraphId id) {
+        this.id = id;
+    }
     
 
     @Column(name="pathlength", nullable=false)

@@ -17,6 +17,7 @@
         <module>de.hf.dac.io.configuration</module>
         <module>de.hf.dac.io.routes</module>
         <module>de.hf.dac.io.web</module>
+        <module>de.hf.dac.io.audit</module>
     </modules>
 
 

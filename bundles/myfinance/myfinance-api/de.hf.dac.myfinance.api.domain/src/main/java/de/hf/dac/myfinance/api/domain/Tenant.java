@@ -27,8 +27,6 @@ import io.swagger.annotations.ApiModel;
 @DiscriminatorValue(InstrumentType.TENANT_IDSTRING)
 public class Tenant extends Instrument {
 
-    List<InstrumentGraph> instrumentGraph;
-
     public Tenant(){
         super();
     }

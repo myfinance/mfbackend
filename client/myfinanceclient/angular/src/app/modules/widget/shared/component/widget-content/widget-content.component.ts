@@ -1,4 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
+import {DashboardService} from "../../../../dashboard/services/dashboard.service";
 
 @Component({
   selector: 'app-widget-content',

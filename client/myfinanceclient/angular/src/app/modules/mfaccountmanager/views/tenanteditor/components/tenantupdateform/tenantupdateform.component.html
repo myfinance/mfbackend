@@ -1,0 +1,18 @@
+<p>Mandant {{getSelectedTenantId()}} ändern</p>
+<form [formGroup]="tenantForm" (ngSubmit)="onSubmit()">
+  <div class="form-group">
+    <label>Beschreibung:</label>
+    <input class="form-control" formControlName="description"/>
+    <span *ngIf="!tenantForm.get('description').valid && tenantForm.get('description').touched">
+      Bitte geben Sie eine Beschriebung für den Mandanten ein!
+    </span>
+  </div>
+  <div class="form-group">
+    <p>Aktiv:</p>
+    <select class="btn btn-primary dropdown-toggle" formControlName="active">
+      <option [value]="true" [selected]="this.tenantForm.get('active')==true">Aktiv</option>
+      <option [value]="false" [selected]="this.tenantForm.get('active')==false">Inaktiv</option>
+    </select>
+  </div>
+  <button class="btn btn-primary" type="submit">Speichern</button>
+</form>

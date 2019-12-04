@@ -19,8 +19,9 @@ package de.hf.dac.myfinance.ValueHandler;
 
 import de.hf.dac.myfinance.api.domain.Instrument;
 import de.hf.dac.myfinance.api.domain.InstrumentType;
-import de.hf.dac.myfinance.api.exceptions.MDException;
-import de.hf.dac.myfinance.api.exceptions.MDMsgKey;
+import de.hf.dac.myfinance.api.exceptions.MFException;
+import de.hf.dac.myfinance.api.exceptions.MFMsgKey;
+import de.hf.dac.myfinance.api.persistence.dao.EndOfDayPriceDao;
 import de.hf.dac.myfinance.api.persistence.dao.InstrumentDao;
 
 import java.time.LocalDate;
@@ -30,9 +31,11 @@ import java.util.TreeMap;
 public class ValueCurveService {
 
     private InstrumentDao instrumentDao;
+    private EndOfDayPriceDao endOfDayPriceDao;
 
-    public ValueCurveService(InstrumentDao instrumentDao){
+    public ValueCurveService(InstrumentDao instrumentDao, EndOfDayPriceDao endOfDayPriceDao){
         this.instrumentDao = instrumentDao;
+        this.endOfDayPriceDao = endOfDayPriceDao;
     }
 
     ValueCurveCache cache = new SimpleCurveCache();
@@ -45,7 +48,7 @@ public class ValueCurveService {
                 valueCurve = getValueHandler(instrument.get().getInstrumentType()).calcValueCurve(instrument.get());
                 cache.addValueCurve(instrumentId, valueCurve);
             } else {
-                throw new MDException(MDMsgKey.NO_INSTRUMENT_FOUND_EXCEPTION, "Instrument with id:"+instrumentId+" not found");
+                throw new MFException(MFMsgKey.NO_INSTRUMENT_FOUND_EXCEPTION, "Instrument with id:"+instrumentId+" not found");
             }
 
         }
@@ -54,13 +57,16 @@ public class ValueCurveService {
 
     public ValueHandler getValueHandler(InstrumentType instrumentType){
         ValueHandler valueHandler = null;
-        /*switch(instrumentType){
+        switch(instrumentType.getTypeGroup()){
             case SECURITY:
-                valueHandler = new SecurityValueHandler(instrumentDao);
+                valueHandler = new SecurityValueHandler(instrumentDao, endOfDayPriceDao);
+                break;
+            case CASHACCOUNT:
+                valueHandler = new CashAccValueHandler(instrumentDao);
                 break;
             case UNKNOWN:
-                throw new MDException(MDMsgKey.UNKNOWN_INSTRUMENTTYPE_EXCEPTION, "Type:"+instrumentType);
-        }*/
+                throw new MFException(MFMsgKey.UNKNOWN_INSTRUMENTTYPE_EXCEPTION, "Type:"+instrumentType);
+        }
         return valueHandler;
     }
 

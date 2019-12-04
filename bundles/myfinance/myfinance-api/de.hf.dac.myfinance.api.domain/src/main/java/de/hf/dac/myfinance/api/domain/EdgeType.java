@@ -14,6 +14,6 @@ package de.hf.dac.myfinance.api.domain;
 public enum EdgeType {
     TENANTGRAPH,
     VALUEBUDGET,
-    DEFAULTBUDGET,
+    INCOMEBUDGET,
     CUSTOM
 }

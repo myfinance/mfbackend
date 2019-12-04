@@ -4,7 +4,15 @@
 @import '../node_modules/bootstrap/scss/bootstrap.scss';
 
 @import '../node_modules/font-awesome/scss/font-awesome';
+@import '../node_modules/ngx-bootstrap/datepicker/bs-datepicker.css';
+@import '../node_modules/ngx-toastr/toastr.css';
 
 @import '~styles/general';
 
 @import '~styles/icons';
+
+@import '~styles/ag-grid';
+
+@import "~ag-grid-community/dist/styles/ag-grid.css";
+@import "~ag-grid-community/dist/styles/ag-theme-balham.css";
+

@@ -38,7 +38,6 @@ public class InstrumentListResource extends ListResource<Instrument> {
     public Response getInstrumentList(
         @Context
             UriInfo uriInfo) {
-        return super.getList(uriInfo);
-
+        return super.getData(uriInfo);
     }
 }

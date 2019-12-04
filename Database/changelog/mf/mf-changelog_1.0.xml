@@ -189,6 +189,9 @@
             <column name="lastchanged" type="date">
                 <constraints nullable="false"/>
             </column>
+            <column name="transactiontypeid" type="INT">
+                <constraints nullable="false"/>
+            </column>
         </createTable>
     </changeSet>
     <changeSet author="hf" id="mf.1.0.11">

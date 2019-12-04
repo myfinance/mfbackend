@@ -63,10 +63,10 @@ Der LiquidityType soll dazu benutzt werden eine Liquiditätsablaufbilanz(LAB) zu
 == Konten und Budgets
 
 Auch wenn Konten und Budget beide als Instrument abgebildet sind, gibt es einen wesentlichen fachlichen Unterschied:
-Die Konten stellen in der Summer die reale Vermögensverteilung dar, während Budgets virtuell sind und der Ausgabenplanung dienen.
+Die Konten stellen in der Summe die reale Vermögensverteilung dar, während Budgets virtuell sind und der Ausgabenplanung dienen.
 Die Summe aller Konten muss muss gleich der Summe alle Budgets sein. Für Budgets gibt es einen extra Instrumenttyp.
 Accounts können mehrere Instrumenttypen haben. Im wesentlich sind dies alle Typen bis auf Budgets, BudgetGroups, Securities und Portfolien.
-Bei den Portfolien gibt es zwei Ausnahmen. Zu einen das Depot, da Position imme aus den Trades berechnet werden und nicht in der DB abgelegt werden, hänge alle Realen Werte von Positionen am Depot.
+Bei den Portfolien gibt es zwei Ausnahmen. Zu einen das Depot, da Position immer aus den Trades berechnet werden und nicht in der DB abgelegt werden, hänge alle Realen Werte von Positionen am Depot.
 Eine weitere Ausnahme ist der Bausparvertrag. Dieser ist zwar kein Account im eigentlichen Sinn da er aber aus zwei accounts besteht und im <<Tenant>> unter Accounts geführt werden soll wird als Account behandelt
 Was als Account behandelt wird, d.h. im instrumenttree des Tenant unter Accounts geführt wird, ist nicht in der DB festgehalten DIe Logik liegt im Code
 
@@ -76,11 +76,10 @@ Beziehungen zwischen Tabellen werden in der closure Table instrumentGraph als ge
 Es gibt verschiedene Arten von Beziehungen die über den Edgetype abgebildet werden:
 
  * Value-Budgets: Einem Budget werden ein oder mehrer Konten zugewiesen <<verlinkte Budget>>. Jeder Account darf nur einmal mit diesem Edgetype vorkommen
- * defaultBudget: Einem Account(ancestor) kann genau ein DefaultBudget zugewiesen werden. Jedes Budget darf mehrfach mit diesem Edgetype vorkommen (als descendant)
- wird verwendet als StandardBudget zur Verbuchung von regelmäßigen Einnahmen/Ausgaben z.B. <<Loan>>
  * Custom: hier sollen die beziehungen von artificial Portfolien und deviersen Accounts und Positionen abegildet werden (Soll noch nicht umgesetzt werden)
  * Tenant-Graph: Abbildung des realen und virtuellen Vermögens eines Mandanten <<Tenant>>
  * RealEstateBudgetGroup: An jede Immobilie wird eine BudgetGroup gehängt über die die budgetierung erfolgt
+ * incomeBudget: Einem Account(ancestor) kann genau ein incomeBudget zugewiesen werden. Jedes Budget darf mehrfach mit diesem Edgetype vorkommen (als descendant) wird verwendet als StandardBudget zur Verbuchung von regelmäßigen Einnahmen z.B. Loan
 
 [plantuml]
 ....
@@ -144,6 +143,10 @@ Bei einer Dividende gibt es drei cashflows: einen Eingang auf einem Giro, ein Ca
 Bei dem Wertpapieren ändert das aber nichts am Wert da im Gegensatz zum Giro der Wert sich nicht aus der Summe der Cashflows ergibt, sondern gleich dem markwert bzw einem berechneten Wert (bei Bonds) ist(hier kann der cashflow natürlich eingehen).
 bei Zinsen bzw Gebühren kann das ähnlich sein: bei einem Depot gibt es auch 3 Cashflows: auf dem Giro wo der Betrag abgezogen wird, auf einem Budget und im Depot wo er nicht in den wert eingeht (wert = wert der securities) aber für analyse herangezogen werden kann(Depotertrag abzüglich gebühren)
 
+=== Trades
+
+Trades werden abgebildet wie Einnahmen bzw Ausgaben allerdings werden zusätzliche Informationen in einer extra Tabelle Trade gespeichert:
+Ammount, security und depot
 
 === Abbildung von Cashflows
 
@@ -167,6 +170,7 @@ Transaction "1" *--  "many" Cashflow
 Transaction : Int TransactionId
 Transaction : String Description
 Transaction : Date TransactionDate
+Transaction : Int TransactionTypeId
 
 Cashflow : Int CashflowId
 Cashflow : Int TransactionId
@@ -302,7 +306,17 @@ Der LiquidityType ist im Default Liquide, aber es kann Budgets geben die für z.
 Hier muss der LiquidityType extra angegeben werden. Dazu ist in den InstrumentProperties LiquidityType zu hinterlegen
 Es ist auch möglich, dass ein Budget mit einem anderen Instrument verknüft ist (z.B. DeprecationObject) dann wird der LiquidityType davon abgeleitet
 
-BusinessKey= a short description without spaces, all lower case
+===== besondere Budgets
+
+ * Income: wird für jeden Tenant automatisch angelegt. Hier gehen alle regelmäßigen Einnahmen ein.
+Wie hoch das Regeleinkommen eines Tenant pro Monat ist kann auch ohne Income-budget ermittelt werden, indem die wiederkehrenden Einnahmen aller budgets des Tenant addiert werden.
+Diese Ermittlung ist aber etwas aufwändiger
+ * OneTimeIncome: Ein Budget um Einmal-Einnahmen zu verbuchen. Dieses Budget wir nicht automatisch angelegt und es hat sich auch nicht als praktikabel erwiesen es zu verwenden,
+ da die meisten Einnahmen etweder sowieso zweckgebunden sind(von der Oma für die Enkel...) oder sonstige Einnahmen wie Bonus oder Mehrarbeit sowieso auf die Reserve oder für Einmalanschaffungen verbucht werden.
+ Somit ist der Zwang Einnahmen auf ein bestimmtes Budget zu buchen nur mit mehraufwand verbunden ohne Vorteile
+ will man die Gesamteinahmen wissen (auch wenn dies durch sondereffekte sellten interessant ist)kann man auch alle Einnahmen über alle Budgets des Tenants betrachten
+
+Die Verbuchung von Einnahmen auf ein bestimmtes Budget(Income) wird nur bei Regeleinnahmen erzwungen, da diese anschliessend vollständig auf die übrigen Budgets verteilt werden sollen
 
 ===== verlinkte Budget
 

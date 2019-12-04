@@ -92,6 +92,10 @@ or at the buildserver(see ansible): mvn -Pjacoco sonar:sonar -Dsonar.jacoco.repo
 
 !attention! if you run integrationtests or clientgeneration under linux, you have to deploy the docker images first. so run mvn clean deploy instead of install
 
+### DdevEnv ###
+
+In der Dev-Umgebung muss export DAC_LOGIN_INFO=$HOME/dac.res gesetzt sein und eine postgres instanz entsprechend eingerichtet sein
+
 ### get started ###
 
 install ansible on centos:
@@ -111,7 +115,7 @@ to install a test verison on the buildserver (port conflicts if prod version of 
 copy a valid certificate to /var/lib/docker/volumes/myfinance_myfinanceconfig/_data
 to start MYFinancein Docker: docker stack deploy -c distributions/myfinance-full-packaging/target/docker-compose.yml myfinance
 
-if Database is fresh: add via gui or api-Docs: currency eur and usd
+if Database is fresh: add via gui or api-Docs: currency EUR and USD
 then add equities for example DE0005140008 deutsche Bank
                               US5949181045 Microsoft
                               add symbols MSFT, DBK

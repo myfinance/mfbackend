@@ -78,7 +78,7 @@ public class EndOfDayPrice  implements java.io.Serializable {
         this.endofdaypriceid = endofdaypriceid;
     }
 
-    @ManyToOne(fetch=FetchType.LAZY)
+    @ManyToOne(fetch=FetchType.EAGER)
     @JoinColumn(name="currencyid")
     @ApiModelProperty(required = true)
     public Instrument getCurrency() {
