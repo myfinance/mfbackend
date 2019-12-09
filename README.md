@@ -105,6 +105,7 @@ update the inventory-file with your IPs to the myfinance-Server (CentOS) doc/ins
 login via ssh from ansible-host to myfinance-server to create private key
 copy playbook from doc/install/ansible to ansible host or mount an nfs-share with the playbooks (add a row in the file /etc/fstab <code><ip>://<path> /mnt/data nfs rw 0 0</code>) Achtung dazu muss auch nfs-utils installiert sein mit sudo yum install nfs-utils
 prepare passwordless communication from ansible host to myfinanceserver "ssh-keygen -t rsa" ssh-copy-id "user@<your_ip>"
+at least python has to be installed at the ansiblee client 
 install build-environment on myfinanceserver: ansible-playbook site.yml --vault-id prod@~/.vault_prod
 login on myfinance-server with user build
 (to use sonarqube you must manually install the plugins java and git)
