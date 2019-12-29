@@ -1,6 +1,6 @@
 ---
 # vars file for copy and buildserver
- username: "holger"
+ username: "builder"
 # vars file for baseServer
  nas_ip: "192.168.100.6"
  nas_nfs_url: "{{nas_ip}}://volume1/nfsshare"
@@ -53,3 +53,4 @@
   db_version: "10.5-alpine"
   user: "sonar"
   password: "sonar"
+

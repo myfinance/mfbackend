@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: mfdb-pod
+spec:
+  containers:
+  - name: mfdb
+    image: holgerfischer/myfinance:0.13.0-SNAPSHOT-mfdb
+    env:
+    - name: POSTGRES_PASSWORD
+      value: "vulkan"

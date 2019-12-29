@@ -60,4 +60,8 @@
     notify: restart docker daemon
     tags:
      - docker      
+  - name: login in dockerhub
+    shell: docker login -u {{docker.user}} -p {{docker.password}}
+    tags:
+     - docker      
 
