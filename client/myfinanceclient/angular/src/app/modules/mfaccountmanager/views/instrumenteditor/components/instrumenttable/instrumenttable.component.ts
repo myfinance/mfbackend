@@ -14,7 +14,7 @@ export class InstrumenttableComponent implements OnInit, OnDestroy {
 
   options: GridOptions;
 
-  title = 'Transactions';
+  title = 'Instruments';
 
   constructor(private instrumentservice: InstrumentService) { }
 
@@ -38,7 +38,7 @@ export class InstrumenttableComponent implements OnInit, OnDestroy {
   }
 
   private loadData(): void {
-    if(this.options.api != null) {
+    if (this.options.api != null) {
       this.options.api.setRowData(this.instrumentservice.getInstruments());
     }
   }

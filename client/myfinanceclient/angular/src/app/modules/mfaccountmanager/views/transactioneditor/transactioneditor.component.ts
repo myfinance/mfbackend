@@ -67,7 +67,9 @@ export class TransactioneditorComponent extends AbstractDashboard implements OnI
   ];
 
   // dashboardService and instrumentservice are not used directly here but it is necessary to put them in the constructor to initialize them
-  constructor( public dashboardService: DashboardService, public transactionService: TransactionService, changeDetectorRef: ChangeDetectorRef ) {
+  constructor( public dashboardService: DashboardService,
+               public transactionService: TransactionService,
+               changeDetectorRef: ChangeDetectorRef ) {
     super(changeDetectorRef);
   }
 
