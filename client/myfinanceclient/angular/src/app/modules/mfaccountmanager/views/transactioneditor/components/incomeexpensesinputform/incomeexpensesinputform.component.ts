@@ -1,7 +1,8 @@
 import {Component, OnInit, ViewChild} from '@angular/core';
-import {Instrument} from "../../../../../myfinance-tsclient-generated";
-import {TransactionService} from "../../services/transaction.service";
-import {FormControl, FormGroup, NgForm, Validators} from "@angular/forms";
+import {Instrument} from '../../../../../myfinance-tsclient-generated';
+import {TransactionService} from '../../services/transaction.service';
+import {FormBuilder, FormGroup, Validators} from '@angular/forms';
+import {BsDatepickerConfig} from 'ngx-bootstrap';
 
 @Component({
   selector: 'app-incomeexpensesinputform',
@@ -12,17 +13,21 @@ export class IncomeexpensesinputformComponent implements OnInit {
 
   giros: Instrument[];
   budgets: Instrument[];
-  giroDefault:Instrument;
-  budgetDefault:Instrument;
+  giroDefault: Instrument;
+  budgetDefault: Instrument;
   incomeExpensesForm: FormGroup;
+  bsConfig: Partial<BsDatepickerConfig>;
 
-  constructor(private transactionservice: TransactionService) { }
+  constructor(private formBuilder: FormBuilder, private transactionservice: TransactionService) { }
 
   ngOnInit() {
-    this.incomeExpensesForm = new FormGroup({
-      'giro': new FormControl(null, Validators.required),
-      'budget': new FormControl(null),
-      'value': new FormControl(null, [Validators.required]),
+    this.bsConfig = Object.assign({}, { containerClass: 'theme-default', dateInputFormat: 'YYYY-MM-DD'});
+    this.incomeExpensesForm = this.formBuilder.group({
+      description: ['', Validators.required],
+      giro: ['', Validators.required],
+      budget: ['', Validators.required],
+      value: [0, Validators.required],
+      transactionDate: [new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate()), Validators.required],
     });
     if(this.transactionservice.getIsInit()){
       this.loadData();
@@ -43,7 +48,11 @@ export class IncomeexpensesinputformComponent implements OnInit {
 
   onSubmit(){
     console.log(this.incomeExpensesForm)
-    this.transactionservice.saveIncomeExpenses("bla", 9, 10, 5, new Date())
+    this.transactionservice.saveIncomeExpenses(this.incomeExpensesForm.value.description,
+      this.incomeExpensesForm.value.giro.instrumentid,
+      this.incomeExpensesForm.value.budget.instrumentid,
+      this.incomeExpensesForm.value.value,
+      new Date());
     this.incomeExpensesForm.reset();
   }
 }
