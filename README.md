@@ -132,11 +132,15 @@ if default ip http://192.168.100.71:8182/dac/rest is wrong then change dac.res i
 
 ### psql ###
 
+
+
 postgres-client to connect to the database. for admin-use in the intranet only.
 docker run -it --rm holgerfischer/myfinance:0.12.0-SNAPSHOT-psql postgresql://postgres:****@192.168.100.71:5432/marketdata
 
 e.G. select * from mf_instrument;
 to quit: \q
+
+alternativ bei kubernetes mit: "kubectl -it exec <podname> sh" auf den Dockercontainer gehen und dort psql postgresql://postgres:postgres@localhost:5432/marketdata
 
 ### dump and restore ###
 
