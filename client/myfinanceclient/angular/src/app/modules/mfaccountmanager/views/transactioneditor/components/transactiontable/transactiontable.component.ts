@@ -1,4 +1,4 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, Input, OnDestroy, OnInit} from '@angular/core';
 import { GridOptions } from 'ag-grid-community';
 
 import {TransactionService} from '../../services/transaction.service';
@@ -8,7 +8,7 @@ import {TransactionService} from '../../services/transaction.service';
   templateUrl: './transactiontable.component.html',
   styleUrls: ['./transactiontable.component.scss']
 })
-export class TransactiontableComponent implements OnInit {
+export class TransactiontableComponent implements OnInit, OnDestroy  {
 
   @Input() data: any;
 
@@ -39,7 +39,9 @@ export class TransactiontableComponent implements OnInit {
   }
 
   private loadData(): void {
-    this.options.api.setRowData(this.transactionservice.getTransactions());
+    if (this.options.api != null) {
+      this.options.api.setRowData(this.transactionservice.getTransactions());
+    }
   }
 
   onSelectionChanged(): void {
@@ -55,6 +57,9 @@ export class TransactiontableComponent implements OnInit {
           this.loadData()}
       )
     }
+  }
+
+  ngOnDestroy(): void {
   }
 
 }

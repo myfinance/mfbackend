@@ -1,10 +1,9 @@
-<div class="col-xs-12 col-12 col-md-5 col-lg-5 form-group" >
-  <div class="form-group">
-    <b>Betrachtungszeit:</b>
-    <input type="text"
+<div>
+  <div>
+    <b>Betrachtungszeit:  <input type="text" align="right"
          placeholder="Daterangepicker"
-         class="form-control"
-         bsDaterangepicker [(ngModel)]="daterange" (bsValueChange)="onValueChange($event)" [bsConfig]="bsConfig" placement="right bottom" style="width: 210px;"/>
+                               class="myformcontrol"
+                               bsDaterangepicker [(ngModel)]="daterange" (bsValueChange)="onValueChange($event)" [bsConfig]="bsConfig" placement="right bottom" style="width: 210px;"/></b>
   </div>
   <div class="btn-group" dropdown>
     <button id="button-basic" dropdownToggle type="button" class="btn btn-primary dropdown-toggle"

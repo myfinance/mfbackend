@@ -43,7 +43,6 @@ export class InstrumentService extends AbstractDashboardDataService {
         (instruments: InstrumentListModel) => {
           this.instruments = instruments.values;
           this.instrumentSubject.next();
-          this.isInit = true;
           this.isInstrumentLoaded = true;
           this.checkDataLoadStatus();
         },

@@ -7,7 +7,6 @@ export abstract class AbstractDashboardDataService {
 
   instruments: Array<Instrument> = new Array<Instrument>();
   instrumentSubject: Subject<any> = new Subject<any>();
-  protected isInit = false;
   protected isInstrumentLoaded = false;
   dataLoadedSubject: Subject<any>;
 
@@ -31,6 +30,6 @@ export abstract class AbstractDashboardDataService {
   protected abstract isDataLoadComplete(): boolean;
 
   getIsInit(): boolean {
-    return this.isInit;
+    return this.isDataLoadComplete();
   }
 }

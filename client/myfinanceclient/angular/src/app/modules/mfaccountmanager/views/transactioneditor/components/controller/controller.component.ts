@@ -22,7 +22,7 @@ export class ControllerComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.bsConfig = Object.assign({}, { containerClass: 'theme-default', rangeInputFormat: 'YYYY-MM-DD', });
+    this.bsConfig = Object.assign({}, { containerClass: 'theme-default', rangeInputFormat: 'YYYY-MM-DD'});
   }
 
   onValueChange(value: Date[]): void {
