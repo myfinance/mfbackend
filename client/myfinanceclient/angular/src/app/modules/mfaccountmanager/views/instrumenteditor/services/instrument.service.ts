@@ -74,10 +74,9 @@ export class InstrumentService extends AbstractDashboardDataService {
     this.myFinanceService.saveGiro(desc);
   }
 
-  updateGiro(instrumentId: number, desc: string, isActive: boolean) {
-    this.myFinanceService.updateTenant(instrumentId, desc, isActive);
+  updateInstrument(instrumentId: number, desc: string, isActive: boolean) {
+    this.myFinanceService.updateInstrument(instrumentId, desc, isActive, 'Instrument aktualisiert')
   }
-
 
   saveBudget(desc: string, budgetGroupId: number) {
     this.myFinanceService.saveBudget(desc, budgetGroupId)

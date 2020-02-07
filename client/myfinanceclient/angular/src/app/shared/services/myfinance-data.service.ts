@@ -100,12 +100,12 @@ export class MyFinanceDataService {
       });
   }
 
-  updateTenant(id: number, desc: string, isActive: boolean) {
+  updateInstrument(id: number, desc: string, isActive: boolean, msg: string) {
     this.myfinanceService.updateInstrument_envID_id_description_isactive(this.currentEnv, id, desc, isActive).subscribe(
       () => {
         this.instrumentSubject.next();
         this.configService.loadTenants();
-        this.printSuccess('Mandant gespeichert');
+        this.printSuccess(msg);
       },
       (errResp: HttpErrorResponse) => {
         this.printError(errResp);

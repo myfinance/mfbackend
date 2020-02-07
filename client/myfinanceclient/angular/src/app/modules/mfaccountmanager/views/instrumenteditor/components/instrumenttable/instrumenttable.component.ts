@@ -44,7 +44,7 @@ export class InstrumenttableComponent implements OnInit, OnDestroy {
   }
 
   onSelectionChanged(): void {
-    // this.applicationLogService.selectedLogEntry = this.options.api.getSelectedRows()[0];
+    this.instrumentservice.setSelectedInstrument(this.options.api.getSelectedRows()[0])
   }
 
   onGridReady(): void {

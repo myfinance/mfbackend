@@ -379,10 +379,18 @@ public class InstrumentServiceImpl implements InstrumentService {
             throw new MFException(MFMsgKey.UNKNOWN_INSTRUMENT_EXCEPTION, "Instrument not updated: instrument for id:"+instrumentId + " not found");
         }
         Instrument newInstrument = instrument.get();
-        if(!isActive && newInstrument.isIsactive() && instrument.get().getInstrumentType()!=InstrumentType.Tenant){
+        if(!isActive && newInstrument.isIsactive() &&
+            (instrument.get().getInstrumentType()!=InstrumentType.Tenant
+            || instrument.get().getInstrumentType()!=InstrumentType.Giro
+            || instrument.get().getInstrumentType()!=InstrumentType.Budget)){
             throw new MFException(MFMsgKey.WRONG_INSTRUMENTTYPE_EXCEPTION, "instrument with id:"+instrumentId + " not deactivated. It is not allowed for type " + instrument.get().getInstrumentType());
         }
         String oldDesc = newInstrument.getDescription();
+        if( (newInstrument.getInstrumentType()==InstrumentType.Giro || newInstrument.getInstrumentType()==InstrumentType.Budget)
+            && service.getValue(instrumentId, LocalDate.MAX)==0.0){
+
+            throw new MFException(MFMsgKey.NO_VALID_INSTRUMENT_FOR_DEACTIVATION, "instrument with id:"+instrumentId + " not deactivated. The current value is not 0");
+        }
         instrumentDao.updateInstrument(instrumentId, description, isActive);
         if(newInstrument.getInstrumentType()==InstrumentType.Tenant) {
             List<Instrument> instruments = instrumentDao.listInstruments();

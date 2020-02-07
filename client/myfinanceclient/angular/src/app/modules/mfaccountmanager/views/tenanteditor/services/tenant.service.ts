@@ -70,9 +70,8 @@ export class TenantService extends AbstractDashboardDataService {
   }
 
   updateTenant(instrumentId: number, desc: string, isActive: boolean) {
-    this.myFinanceService.updateTenant(instrumentId, desc, isActive)
+    this.myFinanceService.updateInstrument(instrumentId, desc, isActive, 'Mandant aktualisiert')
   }
-
 
   setSelectedTenant(tenant: Instrument) {
     console.log(tenant.instrumentid)
