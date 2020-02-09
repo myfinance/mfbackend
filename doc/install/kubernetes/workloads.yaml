@@ -24,8 +24,8 @@ spec:
       volumes:
         - name: myfinancedata
           hostPath:
-            path: /mnt/data/mf/prod_db/
-            type: Directory                
+            path: /opt/mf/prod_db/
+            type: DirectoryOrCreate              
 
 ---
 
