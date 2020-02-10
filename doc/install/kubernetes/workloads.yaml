@@ -23,9 +23,8 @@ spec:
             value: vulkan
       volumes:
         - name: myfinancedata
-          hostPath:
-            path: /opt/mf/prod_db/
-            type: DirectoryOrCreate              
+          persistentVolumeClaim:
+              claimName: mfdbpvc            
 
 ---
 
@@ -90,9 +89,8 @@ spec:
              mountPath: /MyFinance/envconfig           
       volumes:
         - name: myfinanceconfig
-          hostPath:
-            path: /mnt/data/mf/prod_config/
-            type: Directory            
+          persistentVolumeClaim:
+              claimName: mfconfigpvc                 
             
             
       

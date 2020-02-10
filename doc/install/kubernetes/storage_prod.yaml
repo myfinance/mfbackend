@@ -1,0 +1,57 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: mfconfigpvc
+spec:
+  storageClassName: mfconfigstorage
+  accessModes:
+    - ReadOnlyMany
+  resources:
+    requests:
+      storage: 1Mi
+
+---
+
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: nfsstorage
+spec:
+  storageClassName: mfconfigstorage
+  accessModes:
+    - ReadOnlyMany
+  capacity:
+    storage: 1Mi
+  hostPath:
+    path: /mnt/data/mf/prod_config/
+    type: DirectoryOrCreate 
+
+---
+
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: mfdbpvc
+spec:
+  storageClassName: mfdbstorage
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 5Gi
+
+---
+
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: localstorage
+spec:
+  storageClassName: mfdbstorage
+  accessModes:
+    - ReadWriteOnce
+  capacity:
+    storage: 5Gi    
+  hostPath:
+    path: /opt/mf/prod_db/
+    type: Directory  
