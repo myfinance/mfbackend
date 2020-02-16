@@ -429,7 +429,7 @@ data:
       type_name _doc
       include_tag_key true
       host elasticsearch-logging
-      port 30030
+      port 9200
       logstash_format true
       <buffer>
         @type file

@@ -28,7 +28,7 @@ spec:
         image: docker.elastic.co/kibana/kibana-oss:7.2.0
         env:
           - name: ELASTICSEARCH_HOSTS
-            value: http://192.168.100.73:30030
+            value: http://elasticsearch-logging:9200
         ports:
         - containerPort: 5601
           name: ui
@@ -47,7 +47,7 @@ metadata:
 spec:
   ports:
   - port: 5601
-    nodePort: 30040
+    nodePort: 30030
   selector:
     k8s-app: kibana-logging
   type: NodePort 

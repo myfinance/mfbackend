@@ -117,8 +117,7 @@ metadata:
 spec:
   ports:
   - port: 9200
-    nodePort: 30030
-  type: NodePort 
+  type: ClusterIP 
   selector:
     k8s-app: elasticsearch-logging
 
