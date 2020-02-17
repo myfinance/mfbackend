@@ -8,3 +8,7 @@ client/myfinanceclient/restclient/generated-projects/myfinance-client-generated-
 client/myfinanceclient/restclient/generated-projects/myfinance-client-generated-java/bnd.bnd
 client/myfinanceclient/restclient/generated-projects/myfinance-client-generated-java/docs/*
 client/myfinanceclient/restclient/generated-projects/myfinance-client-generated-java/src/*
+client/myfinanceclient/angular/browserslist
+distributions/mf-docker-images/m2repo/*
+m2repo/*
+vscode.code-workspace
