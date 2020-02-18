@@ -23,5 +23,29 @@
 - name: start minikube
   shell: minikube start --vm-driver="none"
   tags:
-   - kubernetes      
+   - kubernetes   
+# add helm   
+- name: Retrieve helm binary archive.
+  unarchive:
+    src: https://get.helm.sh/helm-v3.1.0-linux-amd64.tar.gz
+    dest: /tmp
+    creates: /usr/local/bin/helm
+    remote_src: yes  
+- name: Move helm binary into place.
+  command: >
+        cp /tmp/linux-amd64/helm /usr/local/bin/helm
+        creates=/usr/local/bin/helm   
+- name: add default helm repo
+  shell: helm repo add stable https://kubernetes-charts.storage.googleapis.com/ 
+  tags:
+   - kubernetes    
+
+# monitoring  prometheus-operator a combination of prometheus grafana and alerting       
+- name: Install prometheus-operator
+  shell: helm install monitoring stable/prometheus-operator --namespace default
+  tags:
+   - kubernetes     
+
+
+
     
