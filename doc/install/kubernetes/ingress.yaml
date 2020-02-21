@@ -1,0 +1,16 @@
+apiVersion: networking.k8s.io/v1beta1
+kind: Ingress
+metadata:
+  name: ingress-myfinance
+  annotations:
+    # use the shared ingress-nginx
+    kubernetes.io/ingress.class: "nginx"
+spec:
+  rules:
+  - host: myfinance.mylocaldomain #for local use add these domain to your dns server for example sophos-network-dns-DNS Host Entry. 
+    http:
+      paths:
+      - path: /
+        backend:
+          serviceName: myfinance
+          servicePort: 8181

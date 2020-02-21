@@ -39,12 +39,17 @@
   shell: helm repo add stable https://kubernetes-charts.storage.googleapis.com/ 
   tags:
    - kubernetes    
-
-# monitoring  prometheus-operator a combination of prometheus grafana and alerting       
-- name: Install prometheus-operator
-  shell: helm install monitoring stable/prometheus-operator --namespace default
+- name: enable ingress plugin
+  shell: minikube addons enable ingress
   tags:
-   - kubernetes     
+   - kubernetes 
+# monitoring  prometheus-operator a combination of prometheus grafana and alerting    (can execute just one time - better user helm module or terraform)   
+#- name: Install prometheus-operator
+#  shell: helm install monitoring stable/prometheus-operator --namespace default
+#  tags:
+#   - kubernetes   
+
+#add 192.168.100.73 myfinance.de to /etc/hosts for ingress
 
 
 
