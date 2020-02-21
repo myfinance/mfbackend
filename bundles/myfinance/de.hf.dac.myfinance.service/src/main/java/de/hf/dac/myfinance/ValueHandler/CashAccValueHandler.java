@@ -29,8 +29,7 @@ public class CashAccValueHandler implements ValueHandler{
 
     public TreeMap<LocalDate, Double> calcValueCurve(Instrument instrument) {
         TreeMap<LocalDate, Double> valueCurve = new TreeMap<>();
-        Map<LocalDate, Cashflow> cashflows = instrumentDao.listInstrumentCashflows(instrument.getInstrumentid()).stream().collect(
-            Collectors.toMap(x->x.getTransaction().getTransactiondate(), x->x));
+        Map<LocalDate, Cashflow> cashflows = instrumentDao.getInstrumentCashflowMap(instrument.getInstrumentid());
 
         SortedSet<LocalDate> sortedDates = new TreeSet<>(cashflows.keySet());
 

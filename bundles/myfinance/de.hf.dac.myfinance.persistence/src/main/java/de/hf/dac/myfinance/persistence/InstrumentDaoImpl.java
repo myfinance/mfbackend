@@ -27,8 +27,12 @@ import javax.inject.Inject;
 import javax.inject.Named;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Query;
+
+import java.time.LocalDate;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 public class InstrumentDaoImpl extends BaseDao<Instrument> implements InstrumentDao {
 
@@ -58,17 +62,36 @@ public class InstrumentDaoImpl extends BaseDao<Instrument> implements Instrument
     }
 
     @Override
-    public List<Cashflow> listInstrumentCashflows(int instrumentId){
-        List<Cashflow> result;
+    public  List<Cashflow> listInstrumentCashflows(int instrumentId){
+        List<Cashflow> returnValue;
         try{
             marketDataEm = this.marketDataEmf.createEntityManager();
-            Query query = marketDataEm.createQuery("select a FROM Cashflow a WHERE instrumentid = :instrumentid");
-            query.setParameter("instrumentid", instrumentId);
-            result=(List<Cashflow>) query.getResultList();
+            returnValue = getCashflows(instrumentId);
         } finally {
             marketDataEm.close();
         }
-        return result;
+        return returnValue;
+    }
+
+    private List<Cashflow> getCashflows(int instrumentId) {
+        List<Cashflow> returnValue;
+        Query query = marketDataEm.createQuery("select a FROM Cashflow a WHERE a.instrument.instrumentid = :instrumentid");
+        query.setParameter("instrumentid", instrumentId);
+        returnValue=(List<Cashflow>) query.getResultList();
+        return returnValue;
+    }
+
+    @Override
+    public  Map<LocalDate, Cashflow> getInstrumentCashflowMap(int instrumentId){
+        Map<LocalDate, Cashflow> returnValue;
+        try{
+            marketDataEm = this.marketDataEmf.createEntityManager();
+            returnValue = getCashflows(instrumentId).stream().collect(
+                Collectors.toMap(x->x.getTransaction().getTransactiondate(), x->x));
+        } finally {
+            marketDataEm.close();
+        }
+        return returnValue;
     }
 
     @Override

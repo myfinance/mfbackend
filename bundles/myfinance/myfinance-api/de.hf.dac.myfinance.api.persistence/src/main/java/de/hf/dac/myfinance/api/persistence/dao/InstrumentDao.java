@@ -22,6 +22,7 @@ import de.hf.dac.myfinance.api.domain.*;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 public interface InstrumentDao {
@@ -33,6 +34,7 @@ public interface InstrumentDao {
     Optional<Instrument> getInstrument(int instrumentId);
     Optional<Source> getSource(int sourceId);
     List<Source> getActiveSources();
+    Map<LocalDate, Cashflow> getInstrumentCashflowMap(int instrumentId);
     List<Cashflow> listInstrumentCashflows(int instrumentId);
     void saveInstrument(Instrument instrument);
     void updateInstrument(int instrumentId, String description, boolean isActive);
