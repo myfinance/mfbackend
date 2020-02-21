@@ -1,6 +1,5 @@
 import {Component, Input, OnInit} from '@angular/core';
-import {Cashflow} from '../../../../../myfinance-tsclient-generated';
-import { GridOptions } from 'ag-grid-community';
+import {GridApi, GridOptions} from 'ag-grid-community';
 import {TransactionService} from '../../services/transaction.service';
 
 interface MyCashflow {
@@ -29,30 +28,35 @@ export class CashflowtableComponent  implements OnInit {
 
   ngOnInit() {
     this.options = <GridOptions>{
+      context: {parentComponent: this},
       rowSelection: 'single',
       floatingFilter: true,
       resizeable: true,
       sortable: true,
-      sideBar: 'filters',
       onGridReady: () => this.onGridReady(),
       suppressPropertyNamesCheck: true,
       columnDefs: [
-        {headerName: 'Id', field: 'cashflowId' },
-        {headerName: 'value', field: 'value'},
-        {headerName: 'Instrument', field: 'instrument'},
-        {headerName: 'TransactionId', field: 'transactionId'}
+        {headerName: 'Id', field: 'cashflowId', filter: true },
+        {headerName: 'value', field: 'value', filter: true},
+        {headerName: 'Instrument', field: 'instrument', filter: true},
+        {headerName: 'TransactionId', field: 'transactionId', filter: true }
       ]
     };
   }
 
   private loadData(): void {
     this.cashflows = new Array<MyCashflow>();
-    this.transactionservice.getTransactions().forEach(x => x.cashflows.forEach(c => this.cashflows.push({
+    let filteredTransactions = this.transactionservice.getTransactions();
+    if (this.transactionservice.getTransactionfilter() !== -1) {
+      filteredTransactions = filteredTransactions.filter(i => i.transactionid === this.transactionservice.getTransactionfilter());
+    }
+    filteredTransactions.forEach(x => x.cashflows.forEach(c => this.cashflows.push({
       transactionId: x.transactionid,
       value: c.value,
       cashflowId: c.cashflowid,
       instrument: c.instrument.description })))
     if (this.options.api) {
+      console.info('cashflows filtered' + this.cashflows.length);
       this.options.api.setRowData(this.cashflows);
     }
   }
@@ -62,6 +66,10 @@ export class CashflowtableComponent  implements OnInit {
       this.loadData();
     } else {
       this.transactionservice.transactionSubject.subscribe(
+        () => {
+          this.loadData()}
+      );
+      this.transactionservice.transactionFilterSubject.subscribe(
         () => {
           this.loadData()}
       )

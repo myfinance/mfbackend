@@ -13,9 +13,11 @@ export class TransactionService extends AbstractDashboardDataService {
   transactions: Array<Transaction> = new Array<Transaction>();
   instruments: Array<Instrument> = new Array<Instrument>();
   transactionSubject: Subject<any> = new Subject<any>();
+  transactionFilterSubject: Subject<any> = new Subject<any>();
   instrumentSubject: Subject<any> = new Subject<any>();
   private isTransactionLoaded = false;
   daterange:  Array<Date>;
+  private transactionfilter = -1;
 
 
   constructor(protected myFinanceService: MyFinanceDataService, public dashboardService: DashboardService) {
@@ -116,6 +118,14 @@ export class TransactionService extends AbstractDashboardDataService {
 
   getDaterange(): Array<Date> {
     return this.daterange;
+  }
+
+  getTransactionfilter(): number {
+    return this.transactionfilter;
+  }
+  setTransactionfilter(transactionfilter: number) {
+    this.transactionfilter = transactionfilter;
+    this.transactionFilterSubject.next();
   }
 
   saveIncomeExpenses(desc: string, srcInstrumentId: number, trgInstrumentId: number, value: number, transactionDate: Date) {

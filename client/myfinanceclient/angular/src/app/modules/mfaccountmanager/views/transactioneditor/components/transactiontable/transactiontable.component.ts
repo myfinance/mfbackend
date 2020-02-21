@@ -2,6 +2,7 @@ import {Component, Input, OnDestroy, OnInit} from '@angular/core';
 import { GridOptions } from 'ag-grid-community';
 
 import {TransactionService} from '../../services/transaction.service';
+import {Transaction} from '../../../../../myfinance-tsclient-generated';
 
 @Component({
   selector: 'app-transactiontable',
@@ -45,7 +46,8 @@ export class TransactiontableComponent implements OnInit, OnDestroy  {
   }
 
   onSelectionChanged(): void {
-    // this.applicationLogService.selectedLogEntry = this.options.api.getSelectedRows()[0];
+    const selectedTransaction: Transaction = this.options.api.getSelectedRows()[0];
+    this.transactionservice.setTransactionfilter(selectedTransaction.transactionid);
   }
 
   onGridReady(): void {
