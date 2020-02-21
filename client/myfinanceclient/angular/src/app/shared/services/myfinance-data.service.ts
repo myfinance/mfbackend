@@ -19,6 +19,7 @@ export class MyFinanceDataService {
   private isInit = false
   configSubject: Subject<any> = new Subject<any>();
   instrumentSubject: Subject<any> = new Subject<any>();
+  transactionSubject: Subject<any> = new Subject<any>();
 
 
   constructor(
@@ -80,7 +81,8 @@ export class MyFinanceDataService {
       value,
       moment(transactionDate).format('YYYY-MM-DD')).subscribe(
       () => {
-        this.printSuccess('Transaktion gespeichert')
+        this.transactionSubject.next();
+        this.printSuccess('Transaktion gespeichert');
       },
       (errResp) => {
         this.printError(errResp);
