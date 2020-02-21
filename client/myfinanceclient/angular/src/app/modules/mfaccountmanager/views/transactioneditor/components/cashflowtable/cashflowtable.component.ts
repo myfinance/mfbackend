@@ -3,6 +3,13 @@ import {Cashflow} from '../../../../../myfinance-tsclient-generated';
 import { GridOptions } from 'ag-grid-community';
 import {TransactionService} from '../../services/transaction.service';
 
+interface MyCashflow {
+  transactionId: number;
+  cashflowId: number;
+  value: number;
+  instrument: string;
+}
+
 @Component({
   selector: 'app-cashflowtable',
   templateUrl: './cashflowtable.component.html',
@@ -15,7 +22,8 @@ export class CashflowtableComponent  implements OnInit {
   options: GridOptions;
 
   title = 'cashflows';
-  cashflows: Array<Cashflow>;
+
+  cashflows: Array<MyCashflow>;
 
   constructor( private transactionservice: TransactionService) { }
 
@@ -29,16 +37,21 @@ export class CashflowtableComponent  implements OnInit {
       onGridReady: () => this.onGridReady(),
       suppressPropertyNamesCheck: true,
       columnDefs: [
-        {headerName: 'Id', field: 'cashflowid' },
+        {headerName: 'Id', field: 'cashflowId' },
         {headerName: 'value', field: 'value'},
-        {headerName: 'Instrument', field: 'instrument.description'}
+        {headerName: 'Instrument', field: 'instrument'},
+        {headerName: 'TransactionId', field: 'transactionId'}
       ]
     };
   }
 
   private loadData(): void {
-    this.cashflows = new Array<Cashflow>();
-    this.transactionservice.getTransactions().forEach(x => this.cashflows = this.cashflows.concat(x.cashflows))
+    this.cashflows = new Array<MyCashflow>();
+    this.transactionservice.getTransactions().forEach(x => x.cashflows.forEach(c => this.cashflows.push({
+      transactionId: x.transactionid,
+      value: c.value,
+      cashflowId: c.cashflowid,
+      instrument: c.instrument.description })))
     if (this.options.api) {
       this.options.api.setRowData(this.cashflows);
     }
