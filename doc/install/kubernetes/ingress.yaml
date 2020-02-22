@@ -14,3 +14,23 @@ spec:
         backend:
           serviceName: myfinance
           servicePort: 8181
+  - host: admin.myfinance.mylocaldomain #for local use add these domain to your dns server for example sophos-network-dns-DNS Host Entry. 
+    http:
+      paths:
+      - path: /db
+        backend:
+          serviceName: adminer
+          servicePort: 8080     
+      - path: /elastic
+        backend:
+          serviceName: elasticsearch-logging
+          servicePort: 9200  
+  #kibana is only working in rootpath of a domain
+  - host: kibana.myfinance.mylocaldomain #for local use add these domain to your dns server for example sophos-network-dns-DNS Host Entry. 
+    http:
+      paths: 
+      - path: /
+        backend:
+          serviceName: kibana-logging
+          servicePort: 5601    
+                                 
