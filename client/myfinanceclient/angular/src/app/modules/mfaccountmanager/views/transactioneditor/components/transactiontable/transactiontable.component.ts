@@ -14,16 +14,22 @@ export class TransactiontableComponent implements OnInit, OnDestroy  {
   @Input() data: any;
 
   options: GridOptions;
+  private gridApi;
 
   title = 'Transactions';
 
-  constructor(private transactionservice: TransactionService) { }
+  constructor(private transactionservice: TransactionService) {
+    this.transactionservice.transactionSubject.subscribe(
+      () => {
+        this.loadData()}
+    )
+  }
 
   ngOnInit() {
     this.options = <GridOptions>{
       rowSelection: 'single',
       onSelectionChanged: () => this.onSelectionChanged(),
-      onGridReady: () => this.onGridReady(),
+      onGridReady: (params) => this.onGridReady(params),
       floatingFilter: true,
       resizeable: true,
       sortable: true,
@@ -50,14 +56,10 @@ export class TransactiontableComponent implements OnInit, OnDestroy  {
     this.transactionservice.setTransactionfilter(selectedTransaction.transactionid);
   }
 
-  onGridReady(): void {
+  onGridReady(params): void {
+    this.gridApi = params.api;
     if (this.transactionservice.getIsInit()) {
       this.loadData();
-    } else {
-      this.transactionservice.transactionSubject.subscribe(
-        () => {
-          this.loadData()}
-      )
     }
   }
 
