@@ -56,7 +56,6 @@ export class CashflowtableComponent  implements OnInit {
       cashflowId: c.cashflowid,
       instrument: c.instrument.description })))
     if (this.options.api) {
-      console.info('cashflows filtered' + this.cashflows.length);
       this.options.api.setRowData(this.cashflows);
     }
   }
@@ -69,10 +68,6 @@ export class CashflowtableComponent  implements OnInit {
         () => {
           this.loadData()}
       );
-      this.transactionservice.transactionFilterSubject.subscribe(
-        () => {
-          this.loadData()}
-      )
     }
   }
 }
