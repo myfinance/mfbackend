@@ -1,7 +1,8 @@
-import {Instrument, InstrumentListModel} from "../../modules/myfinance-tsclient-generated";
-import {Subject} from "rxjs";
-import {MyFinanceDataService} from "./myfinance-data.service";
-import {DashboardService} from "../../modules/dashboard/services/dashboard.service";
+import {Instrument} from '../../modules/myfinance-tsclient-generated';
+
+import {MyFinanceDataService} from './myfinance-data.service';
+import {DashboardService} from '../../modules/dashboard/services/dashboard.service';
+import {Subject} from 'rxjs/Rx';
 
 export abstract class AbstractDashboardDataService {
 

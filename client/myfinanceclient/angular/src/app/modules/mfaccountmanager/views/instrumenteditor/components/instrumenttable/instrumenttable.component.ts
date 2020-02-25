@@ -13,16 +13,23 @@ export class InstrumenttableComponent implements OnInit, OnDestroy {
   @Input() data: any;
 
   options: GridOptions;
+  private gridApi;
 
   title = 'Instruments';
 
-  constructor(private instrumentservice: InstrumentService) { }
+  constructor(private instrumentservice: InstrumentService) {
+    this.instrumentservice.instrumentSubject.subscribe(
+      () => {
+        this.loadData()
+      }
+    )
+  }
 
   ngOnInit() {
     this.options = <GridOptions>{
       rowSelection: 'single',
       onSelectionChanged: () => this.onSelectionChanged(),
-      onGridReady: () => this.onGridReady(),
+      onGridReady: (params) => this.onGridReady(params),
       floatingFilter: true,
       resizeable: true,
       sortable: true,
@@ -47,15 +54,10 @@ export class InstrumenttableComponent implements OnInit, OnDestroy {
     this.instrumentservice.setSelectedInstrument(this.options.api.getSelectedRows()[0])
   }
 
-  onGridReady(): void {
+  onGridReady(params): void {
+    this.gridApi = params.api;
     if (this.instrumentservice.getIsInit()) {
       this.loadData();
-    } else {
-      this.instrumentservice.instrumentSubject.subscribe(
-        () => {
-            this.loadData()
-          }
-      )
     }
   }
   ngOnDestroy(): void {

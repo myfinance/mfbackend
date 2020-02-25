@@ -13,17 +13,23 @@ export class TenanttableComponent implements OnInit, OnDestroy {
   @Input() data: any;
 
   options: GridOptions;
+  private gridApi;
 
   title = 'Transactions';
 
 
-  constructor(private tenantservice: TenantService) { }
+  constructor(private tenantservice: TenantService) {
+    this.tenantservice.instrumentSubject.subscribe(
+      () => {
+        this.loadData()}
+    )
+  }
 
   ngOnInit() {
     this.options = <GridOptions>{
       rowSelection: 'single',
       onSelectionChanged: () => this.onSelectionChanged(),
-      onGridReady: () => this.onGridReady(),
+      onGridReady: (params) => this.onGridReady(params),
       floatingFilter: true,
       resizeable: true,
       sortable: true,
@@ -49,14 +55,10 @@ export class TenanttableComponent implements OnInit, OnDestroy {
     this.tenantservice.setSelectedTenant(this.options.api.getSelectedRows()[0])
   }
 
-  onGridReady(): void {
+  onGridReady(params): void {
+    this.gridApi = params.api;
     if (this.tenantservice.getIsInit()) {
       this.loadData();
-    } else {
-      this.tenantservice.instrumentSubject.subscribe(
-        () => {
-          this.loadData()}
-      )
     }
   }
 
