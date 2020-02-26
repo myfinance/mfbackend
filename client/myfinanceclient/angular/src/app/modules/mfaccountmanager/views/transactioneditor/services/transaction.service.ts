@@ -16,7 +16,8 @@ export class TransactionService extends AbstractDashboardDataService {
   transactionFilterSubject: Subject<any> = new Subject<any>();
   instrumentSubject: Subject<any> = new Subject<any>();
   private isTransactionLoaded = false;
-  daterange:  Array<Date>;
+  daterange = [new Date(new Date().getFullYear(), new Date().getMonth() - 6, new Date().getDate()),
+    new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate())];
   private transactionfilter = -1;
 
 
@@ -49,10 +50,12 @@ export class TransactionService extends AbstractDashboardDataService {
 
   protected loadData(): void {
     this.dashboardService.handleDataPreparing();
+    this.loadTransactions();
+    this.loadInstruments();
+  }
 
-    this.daterange = new Array<Date>();
-    this.daterange[0] = new Date(new Date().getFullYear(), new Date().getMonth() - 6, new Date().getDate());
-    this.daterange[1] = new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate());
+  private loadTransactions() {
+    this.isTransactionLoaded = false;
     this.myFinanceService.getTransactions(this.daterange[0], this.daterange[1])
       .subscribe(
         (transactions: TransactionListModel) => {
@@ -66,7 +69,10 @@ export class TransactionService extends AbstractDashboardDataService {
           this.dashboardService.handleDataNotLoaded(errResp);
 
         })
+  }
 
+  protected loadInstruments(): void {
+    this.isInstrumentLoaded = false;
     this.myFinanceService.getInstruments()
       .subscribe(
         (instruments: InstrumentListModel) => {
@@ -78,7 +84,6 @@ export class TransactionService extends AbstractDashboardDataService {
         (errResp) => {
           console.error('error', errResp);
           this.dashboardService.handleDataNotLoaded(errResp);
-
         })
   }
 
@@ -108,12 +113,11 @@ export class TransactionService extends AbstractDashboardDataService {
   }
 
   setDaterange(daterange: Array<Date>) {
-    if (daterange != null) {
+    if (daterange != null && (this.daterange == null || daterange[0] !== this.daterange[0] || daterange[1] !== this.daterange[1])) {
       this.daterange = daterange;
-      // this.loadDataCall();
+      this.dashboardService.handleDataPreparing();
+      this.loadTransactions();
     }
-
-    // this.configSubject.next();
   }
 
   getDaterange(): Array<Date> {
