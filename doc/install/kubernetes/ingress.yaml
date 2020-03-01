@@ -24,7 +24,7 @@ spec:
       - path: /elastic
         backend:
           serviceName: elasticsearch-logging
-          servicePort: 9200  
+          servicePort: 9200           
   #kibana is only working in rootpath of a domain
   - host: kibana.myfinance.mylocaldomain #for local use add these domain to your dns server for example sophos-network-dns-DNS Host Entry. 
     http:
@@ -32,5 +32,15 @@ spec:
       - path: /
         backend:
           serviceName: kibana-logging
-          servicePort: 5601    
+          servicePort: 5601   
+  #grafana is only working in rootpath of a domain
+  - host: grafana.myfinance.mylocaldomain #for local use add these domain to your dns server for example sophos-network-dns-DNS Host Entry. 
+    http:
+      paths: 
+      - path: /
+        backend:
+          serviceName: monitoring-grafana
+          servicePort: 80   
+
+           
                                  
