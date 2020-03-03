@@ -82,6 +82,22 @@
                 <include>**/*</include>
             </includes>
         </fileSet>
+        <!--mfdump files-->
+        <fileSet>
+            <outputDirectory>mfdump</outputDirectory>
+            <directory>${project.build.directory}/../docker/mfdump</directory>
+            <includes>
+                <include>**/*</include>
+            </includes>
+        </fileSet>
+        <!--mfdumprestore -->
+        <fileSet>
+            <outputDirectory>mfdumprestore</outputDirectory>
+            <directory>${project.build.directory}/../docker/mfdumprestore</directory>
+            <includes>
+                <include>**/*</include>
+            </includes>
+        </fileSet>
 
     </fileSets>
 

@@ -153,7 +153,9 @@ docker stack rm myfinance
 docker stack deploy -c distributions/myfinance-full-packaging/target/docker-compose.yml myfinance
 
 to restore a dump:
-docker run -v "/mnt/data/dumps:/var/dumps" -e "PASSWORD=*****" -e "FILENAME=2018-09-25-16-46.psql.gz" holgerfischer/myfinance:0.12.0-SNAPSHOT-mfdumprestore
-  //replace the version with the latest
+// jobs are imutable, so you have to delete the old job if it exists:
+kubectl delete job.batch/mfrestore
+//edit the dump-filename in  doc/install/kubernetes/tools/dumprestore.yaml
+kubectl apply -f dumprestore.yaml
 
  

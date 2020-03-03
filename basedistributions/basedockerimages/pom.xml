@@ -112,6 +112,20 @@
                                         <filter>@</filter>
                                     </build>
                                 </image>
+                                <image>
+                                    <name>holgerfischer/myfinance:${project.version}-mfdump</name>
+                                    <build>
+                                        <dockerFileDir>${project.build.directory}/docker-prep/mfdump</dockerFileDir>
+                                        <filter>@</filter>
+                                    </build>
+                                </image>
+                                <image>
+                                    <name>holgerfischer/myfinance:${project.version}-mfdumprestore</name>
+                                    <build>
+                                        <dockerFileDir>${project.build.directory}/docker-prep/mfdumprestore</dockerFileDir>
+                                        <filter>@</filter>
+                                    </build>
+                                </image>
                             </images>
                         </configuration>
                         <executions>

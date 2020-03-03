@@ -78,13 +78,6 @@
                                     </build>
                                 </image>
                                 <image>
-                                    <name>holgerfischer/myfinance:${project.version}-mfdumprestore</name>
-                                    <build>
-                                        <dockerFileDir>${project.build.directory}/docker-prep/mfdumprestore</dockerFileDir>
-                                        <filter>@</filter>
-                                    </build>
-                                </image>
-                                <image>
                                     <name>holgerfischer/myfinance:${project.version}-psql</name>
                                     <build>
                                         <dockerFileDir>${project.build.directory}/docker-prep/psql</dockerFileDir>
