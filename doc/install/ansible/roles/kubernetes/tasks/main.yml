@@ -45,7 +45,7 @@
    - kubernetes 
 # monitoring  prometheus-operator a combination of prometheus grafana and alerting    (can execute just one time - better user helm module or terraform)   
 #- name: Install prometheus-operator
-#  shell: helm install monitoring stable/prometheus-operator --namespace default
+#  shell: helm install monitoring stable/prometheus-operator --namespace default --set grafana.adminPassword=vulkan
 #  tags:
 #   - kubernetes   
 

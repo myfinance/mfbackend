@@ -56,3 +56,62 @@ spec:
     path: /opt/mf/prod_db/
     type: Directory  
 
+---
+
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: mfdumppvc
+spec:
+  storageClassName: mfdumpstorage
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 5Gi
+
+---
+
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: nfsdumpstorage
+spec:
+  storageClassName: mfdumpstorage
+  accessModes:
+    - ReadWriteOnce
+  capacity:
+    storage: 5Gi
+  hostPath:
+    path: /mnt/data/mf/prod_dumps/
+    type: DirectoryOrCreate 
+
+---
+
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: mfrestorepvc
+spec:
+  storageClassName: mfrestorestorage
+  accessModes:
+    - ReadOnlyMany
+  resources:
+    requests:
+      storage: 5Gi
+
+---
+
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: nfsrestorestorage
+spec:
+  storageClassName: mfrestorestorage
+  accessModes:
+    - ReadOnlyMany
+  capacity:
+    storage: 5Gi
+  hostPath:
+    path: /mnt/data/mf/prod_dumps/
+    type: DirectoryOrCreate     

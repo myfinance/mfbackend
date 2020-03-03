@@ -48,22 +48,63 @@ spec:
           
 ---
 
-apiVersion: v1
-kind: Pod
+apiVersion: batch/v1
+kind: Job
 metadata:
   name: mfupgrade
 spec:
-  containers:
-  - name: mfupgrade
-    image: holgerfischer/myfinance:0.13.0-SNAPSHOT-mfdbupgrade                    
-    env:
-    - name: DB_PW
-      value: "vulkan"   
-    - name: DB_IMAGE
-      value: mfdb  
-    - name: DB_USER
-      value: postgres       
-      
+  template:
+    spec:
+      containers: 
+      - name: mfupgrade
+        image: holgerfischer/myfinance:0.13.0-SNAPSHOT-mfdbupgrade                
+        env:
+        - name: DB_PW
+          value: "vulkan"   
+        - name: DB_IMAGE
+          value: mfdb  
+        - name: DB_USER
+          value: postgres  
+      restartPolicy: OnFailure     
+  backoffLimit: 4
+
+---
+
+apiVersion: batch/v1beta1
+kind: CronJob
+metadata:
+  name: mycron
+spec:
+# ┌───────────── minute (0 - 59)
+# │ ┌───────────── hour (0 - 23)
+# │ │ ┌───────────── day of month (1 - 31)
+# │ │ │ ┌───────────── month (1 - 12)
+# │ │ │ │ ┌───────────── day of week (0 - 6) (Sunday to Saturday;
+# │ │ │ │ │                                       7 is also Sunday on some systems)
+# │ │ │ │ │
+# │ │ │ │ │
+# * * * * *  command to execute
+  schedule: "1 22 * * 0"
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers: 
+          - name: dump
+            image: holgerfischer/myfinance:0.13.0-SNAPSHOT-mfdump                
+            env:
+            - name: PGPASSWORD
+              value: "vulkan"     
+            volumeMounts:
+            - name: myfinancedumps
+              mountPath: /var/dumps
+          volumes:
+          - name: myfinancedumps
+            persistentVolumeClaim:
+              claimName: mfdumppvc 
+          restartPolicy: OnFailure     
+      backoffLimit: 4        
+  
 ---
 
 apiVersion: apps/v1
@@ -93,5 +134,5 @@ spec:
               claimName: mfconfigpvc                 
             
             
-      
+   
           

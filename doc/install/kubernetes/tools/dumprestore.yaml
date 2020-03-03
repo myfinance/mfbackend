@@ -1,0 +1,26 @@
+---
+
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: mfrestore
+spec:
+  template:
+    spec:
+      containers: 
+      - name: mfrestore
+        image: holgerfischer/myfinance:0.13.0-SNAPSHOT-mfdumprestore 
+        volumeMounts:
+         - name: myfinancerestore
+           mountPath: /var/dumps           
+        env:
+        - name: FILENAME
+          value: "backupOn2020-03-02-14-16.psql.gz"   
+        - name: PASSWORD
+          value: vulkan   
+      restartPolicy: OnFailure  
+      volumes:
+      - name: myfinancerestore
+        persistentVolumeClaim:
+          claimName: mfrestorepvc     
+  backoffLimit: 2   
