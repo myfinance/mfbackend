@@ -13,3 +13,7 @@ distributions/mf-docker-images/m2repo/*
 m2repo/*
 basedistributions/m2repo/*
 vscode.code-workspace
+**/.project
+**/.settings
+**/.classpath
+**/.factorypath

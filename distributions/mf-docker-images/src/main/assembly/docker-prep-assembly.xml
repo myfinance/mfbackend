@@ -78,48 +78,7 @@
                 <include>**/*</include>
             </includes>
         </fileSet>
-       
-        <!--scheduler -->
-        <fileSet>
-            <outputDirectory>scheduler</outputDirectory>
-            <directory>${project.build.directory}/../docker/scheduler</directory>
-            <includes>
-                <include>**/*</include>
-            </includes>
-        </fileSet>
-        <fileSet>
-	    <outputDirectory>scheduler/mfshell/lib</outputDirectory>
-            <directory>${project.build.directory}/../../run-job/target/lib</directory>
-            <includes>
-                <include>**/*</include>
-            </includes>
-        </fileSet>
-        <fileSet>
-            <outputDirectory>scheduler/mfshell</outputDirectory>
-            <directory>${project.build.directory}/../../run-job/target</directory>
-            <includes>
-               <include>run-job-mfshell.jar</include>
-            </includes>
-        </fileSet>
-        <fileSet>
-            <outputDirectory>scheduler</outputDirectory>
-            <directory>${project.build.directory}/../../../basedistributions/basedockerimages/docker/myfinance</directory>
-            <includes>
-                <include>dac.res</include>
-            </includes>
-        </fileSet>
-
-
-
-        <!--psql -->
-        <fileSet>
-            <outputDirectory>psql</outputDirectory>
-            <directory>${project.build.directory}/../docker/psql</directory>
-            <includes>
-                <include>**/*</include>
-            </includes>
-        </fileSet>
-
+    
     </fileSets>
 
 
