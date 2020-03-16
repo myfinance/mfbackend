@@ -73,7 +73,7 @@ spec:
 apiVersion: batch/v1beta1
 kind: CronJob
 metadata:
-  name: mycron
+  name: mfweeklydump
 spec:
 # ┌───────────── minute (0 - 59)
 # │ ┌───────────── hour (0 - 23)
@@ -105,6 +105,41 @@ spec:
           restartPolicy: OnFailure     
       backoffLimit: 4        
   
+---
+
+apiVersion: batch/v1beta1
+kind: CronJob
+metadata:
+  name: mfpriceimport
+spec:
+# ┌───────────── minute (0 - 59)
+# │ ┌───────────── hour (0 - 23)
+# │ │ ┌───────────── day of month (1 - 31)
+# │ │ │ ┌───────────── month (1 - 12)
+# │ │ │ │ ┌───────────── day of week (0 - 6) (Sunday to Saturday;
+# │ │ │ │ │                                       7 is also Sunday on some systems)
+# │ │ │ │ │
+# │ │ │ │ │
+# * * * * *  command to execute
+  schedule: "1 15 * * *"
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers: 
+          - name: mfshell
+            image: holgerfischer/myfinance:0.13.0-SNAPSHOT-mfshell 
+            args: ["i"]       
+            volumeMounts:
+            - name: myfinanceconfig
+              mountPath: /mfshell/envconfig
+          volumes:
+          - name: myfinanceconfig
+            persistentVolumeClaim:
+              claimName: mfconfigpvc 
+          restartPolicy: OnFailure     
+      backoffLimit: 4  
+
 ---
 
 apiVersion: apps/v1
