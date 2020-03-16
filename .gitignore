@@ -11,4 +11,5 @@ client/myfinanceclient/restclient/generated-projects/myfinance-client-generated-
 client/myfinanceclient/angular/browserslist
 distributions/mf-docker-images/m2repo/*
 m2repo/*
+basedistributions/m2repo/*
 vscode.code-workspace
