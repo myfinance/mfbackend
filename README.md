@@ -101,20 +101,19 @@ In der Dev-Umgebung muss export DAC_LOGIN_INFO=$HOME/dac.res gesetzt sein und ei
 install ansible on centos:
 yum install ansible
 create .vault_prod in homedir with the vault-passwort - to use the encrypted passwords which are checked-in the repository you nee the password from my keepass-file ;) if you can not get it recreate all secrets with your vaul-password  ansible-vault encrypt_string --vault-id prod@~/.vault_prod 'thepasswaord' --name 'variable-name'
-update the inventory-file with your IPs to the myfinance-Server (CentOS) doc/install/ansible/environments/prod
+update the inventory-file with your IPs to a kubernetes(kuberneteshost) and a development server(devenv) (both minimal CentOS setups) doc/install/ansible/environments/prod
 login via ssh from ansible-host to myfinance-server to create private key
 copy playbook from doc/install/ansible to ansible host or mount an nfs-share with the playbooks (add a row in the file /etc/fstab <code><ip>://<path> /mnt/data nfs rw 0 0</code>) Achtung dazu muss auch nfs-utils installiert sein mit sudo yum install nfs-utils
 prepare passwordless communication from ansible host to myfinanceserver "ssh-keygen -t rsa" ssh-copy-id "user@<your_ip>"
-at least python has to be installed at the ansiblee client 
-install build-environment on myfinanceserver: ansible-playbook site.yml --vault-id prod@~/.vault_prod
-login on myfinance-server with user build
-(to use sonarqube you must manually install the plugins java and git)
-and generate a login-token if it is a frsh installation 
-to run a full build with sonar: repo/dac: ./build.sh
+at least python has to be installed at the ansible client 
 
-to install a test verison on the buildserver (port conflicts if prod version of myfinace is installed on the same server!):
-copy a valid certificate to /var/lib/docker/volumes/myfinance_myfinanceconfig/_data
-to start MYFinancein Docker: docker stack deploy -c distributions/myfinance-full-packaging/target/docker-compose.yml myfinance
+configure kubernetes and devenv-server: ansible-playbook site.yml --vault-id prod@~/.vault_prod
+
+/mnt/data is mounted ob both server (kubernetes and devenv). clone the repo to /mnt/data/repo (from devenv. kubernetes has no git installed)
+
+run the following command in folder /mnt/data/repo/dac/doc/install/kubernetes
+kubectl apply -f .
+
 
 if Database is fresh: add via gui or api-Docs: currency EUR and USD
 then add equities for example DE0005140008 deutsche Bank
