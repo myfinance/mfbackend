@@ -1,8 +1,0 @@
----
-# vars file for openshift
-  oc_version: "3.9.0"
-  oc_version_prefix: "191fece"
-  oc_filename: "openshift-origin-client-tools-v{{oc_version}}-{{oc_version_prefix}}-linux-64bit"
-  oc_url: "https://github.com/openshift/origin/releases/download/v{{oc_version}}/{{oc_filename}}.tar.gz"
-  clientip: "192.168.100.71"
-  username: "builder"
