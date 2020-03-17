@@ -8,9 +8,9 @@ RUN /usr/local/bin/install-plugins.sh workflow-aggregator && \
     /usr/local/bin/install-plugins.sh simple-theme-plugin && \
     /usr/local/bin/install-plugins.sh kubernetes && \
     /usr/local/bin/install-plugins.sh docker-workflow && \
-    /usr/local/bin/install-plugins.sh kubernetes-cli && \
+    /usr/local/bin/install-plugins.sh kubernetes-cli 
 
-# install Maven, Java, Docker, AWS
+# install Maven, Java, Docker
 RUN apk add --no-cache maven \
     openjdk8 \
     docker 

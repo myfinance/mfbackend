@@ -109,9 +109,12 @@ at least python has to be installed at the ansible client
 
 configure kubernetes and devenv-server: ansible-playbook site.yml --vault-id prod@~/.vault_prod
 
-/mnt/data is mounted ob both server (kubernetes and devenv). clone the repo to /mnt/data/repo (from devenv. kubernetes has no git installed): git clone https://holgerfischer@bitbucket.org/holgerfischer/dac.git
+/mnt/data is mounted on both server (kubernetes and devenv). clone the repo to /mnt/data/repo (from devenv. kubernetes has no git installed): git clone https://holgerfischer@bitbucket.org/holgerfischer/dac.git
 
-run the following command in folder /mnt/data/repo/dac/doc/install/kubernetes
+to install jenkins run the following command in folder /mnt/data/repo/dac/buildserver
+./installJenkins.sh
+
+to install the application manually run the following command in folder /mnt/data/repo/dac/doc/install/kubernetes (optional. should be done via buildserver)
 kubectl apply -f .
 
 
