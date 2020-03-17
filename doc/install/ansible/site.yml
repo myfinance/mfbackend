@@ -1,14 +1,6 @@
 ---
   # This is a sitewide playbook
   # filename: site.yml
-  - import_playbook: mfBuildServer.yml
-  - import_playbook: myFinanceServer.yml
+  - import_playbook: kubernetes.yml
   - import_playbook: devenv.yml
-  #- name: save playbooks
-  #  hosts: buildserver
-  #  remote_user: holger
-  #  become: true
-  #  become_method: sudo
-  #  roles:
-  #   #- openshift
-  #   - ansibleStore
+
