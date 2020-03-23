@@ -12,7 +12,7 @@
     <packaging>pom</packaging>
     <modules>
         <module>baserunner</module>
-        <module>baserunner</module>
+        <module>myfinance-java-rest-client</module>
         <module>myfinancerunner</module>
     </modules>
 
