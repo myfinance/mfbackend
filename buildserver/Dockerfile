@@ -8,6 +8,8 @@ RUN /usr/local/bin/install-plugins.sh workflow-aggregator && \
     /usr/local/bin/install-plugins.sh simple-theme-plugin && \
     /usr/local/bin/install-plugins.sh kubernetes && \
     /usr/local/bin/install-plugins.sh docker-workflow && \
+    /usr/local/bin/install-plugins.sh bitbucket && \
+    /usr/local/bin/install-plugins.sh cloudbees-bitbucket-branch-source && \
     /usr/local/bin/install-plugins.sh kubernetes-cli 
 
 # install Maven, Java, Docker
