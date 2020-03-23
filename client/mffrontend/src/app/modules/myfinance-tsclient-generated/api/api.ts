@@ -1,0 +1,11 @@
+export * from './hello.service';
+import { HelloService } from './hello.service';
+export * from './jobs.service';
+import { JobsService } from './jobs.service';
+export * from './myFinance.service';
+import { MyFinanceService } from './myFinance.service';
+export * from './myFinanceRunner.service';
+import { MyFinanceRunnerService } from './myFinanceRunner.service';
+export * from './utilityResources.service';
+import { UtilityResourcesService } from './utilityResources.service';
+export const APIS = [HelloService, JobsService, MyFinanceService, MyFinanceRunnerService, UtilityResourcesService];

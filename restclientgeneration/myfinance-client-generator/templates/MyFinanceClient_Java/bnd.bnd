@@ -1,0 +1,15 @@
+-sources: true
+-dsannotations: *
+-metatype: *
+Export-Package: \
+	de.hf.dac.myfinance.client.api, \
+	de.hf.dac.myfinance.client.model, \
+	io.swagger.client, \
+	io.swagger.client.auth
+
+Include-Resource: @target/deps/migbase64.jar
+
+Import-Package: \
+ *
+
+Bundle-ClassPath: .

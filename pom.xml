@@ -120,7 +120,7 @@
         <module>bundles</module>
         <module>features</module>
         <module>basedistributions</module>
-        <module>tools</module>
+        <!--<module>tools</module>-->
         <module>client</module>
         <module>distributions</module>
 
