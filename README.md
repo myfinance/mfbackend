@@ -1,8 +1,8 @@
-DAC - Distributed Application Container
 
 ## Goals - What does this do ##
 
-A scalable, extendable Web-Application using via OSGi.
+This project is an example-project to evaluate new technologies. In this repository I've tried to use a karafcontainer for the backend. 
+
 Using the following technologies:
 
 
@@ -16,7 +16,7 @@ This setup also illustrates how to deploy the same functionality in an Spring-Bo
 OSGi-wise I use
 
 - The newest and bestest OSGi-spec
-- Blueprint using blueprint-maven-plugin
+- dedclarativ Service
 - bnd via the bnd-maven-plugin
 
 Bonus Features: 
