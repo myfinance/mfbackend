@@ -109,19 +109,12 @@
 
     </properties>
 
-    <scm>
-        <!--<developerConnection>scm:git:ssh://192.168.178.20:122/volume1/Data/workspace/repos/MarketDataProvider</developerConnection>-->
-        <developerConnection>scm:git:https://holgerfischer@bitbucket.org/holgerfischer/dac.git</developerConnection>
-        <tag>dac-0.3.1</tag>
-    </scm>
-
     <modules>
         <module>Database</module>
         <module>bundles</module>
         <module>features</module>
         <module>basedistributions</module>
         <!--<module>tools</module>-->
-        <module>client</module>
         <module>distributions</module>
 
     </modules>
