@@ -23,7 +23,7 @@ pipeline {
    }
    stage('build and push Image'){
      steps {
-       sh 'docker image build -t ${REPOSITORY_TAG} ./distributions/mf-docker-images/target/myfinance'
+       sh 'docker image build -t ${REPOSITORY_TAG} ${workspace}/distributions/mf-docker-images/target/myfinance'
      }
    }
 
