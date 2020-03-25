@@ -18,7 +18,7 @@ pipeline {
    }
    stage('build'){
      steps {
-       sh '''mvn clean deploy -Dnointtest'''
+       sh '''mvn clean install -Dnointtest'''
      }
    }
    //stage('build and push Image'){
