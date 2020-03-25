@@ -12,6 +12,6 @@
     <packaging>pom</packaging>
     <modules>
         <module>karaf-full</module>
-        <!--<module>mf-docker-images</module>-->
+        <module>mf-docker-images</module>
     </modules>
 </project>
