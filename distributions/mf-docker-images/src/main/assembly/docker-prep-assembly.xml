@@ -39,45 +39,6 @@
                 <include>devkeystore.jks</include>
             </includes>
     	</fileSet>
-
-        <fileSet>
-            <outputDirectory>myfinance/mfshell/lib</outputDirectory>
-            <directory>${project.build.directory}/../../run-job/target/lib</directory>
-            <includes>
-	            <include>**/*</include>
-	    </includes>
-	</fileSet>
-
-
-        <!--mfshell -->
-        <fileSet>
-	    <outputDirectory>mfshell/mfshell/lib</outputDirectory>
-            <directory>${project.build.directory}/../../run-job/target/lib</directory>
-            <includes>
-                <include>**/*</include>
-            </includes>
-        </fileSet>
-        <fileSet>
-		<outputDirectory>mfshell/mfshell</outputDirectory>
-            <directory>${project.build.directory}/../../run-job/target</directory>
-            <includes>
-                <include>run-job-mfshell.jar</include>
-            </includes>
-        </fileSet>
-        <fileSet>
-            <outputDirectory>mfshell</outputDirectory>
-            <directory>${project.build.directory}/../../../basedistributions/basedockerimages/docker/myfinance</directory>
-            <includes>
-                <include>dac.res</include>
-            </includes>
-        </fileSet>
-        <fileSet>
-            <outputDirectory>mfshell</outputDirectory>
-            <directory>${project.build.directory}/../docker/mfshell</directory>
-            <includes>
-                <include>**/*</include>
-            </includes>
-        </fileSet>
     
     </fileSets>
 

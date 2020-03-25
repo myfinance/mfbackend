@@ -1,0 +1,27 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: myfinance
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: myfinance  
+  template:
+    metadata:
+      labels:
+        app: myfinance
+    spec:
+      containers:
+        - name: myfinance  
+          image: ${REPOSITORY_TAG}    
+          #never pull the image from dockerhub. Jenkins provides the image localy 
+          imagePullPolicy: Never      
+          tty: true     
+          volumeMounts:
+           - name: myfinanceconfig
+             mountPath: /MyFinance/envconfig           
+      volumes:
+        - name: myfinanceconfig
+          persistentVolumeClaim:
+              claimName: mfconfigpvc  
