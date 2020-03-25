@@ -25,6 +25,6 @@ pipeline {
    //  steps {
    //    sh 'docker image build -t ${REPOSITORY_TAG} ./distributions/mf-docker-images/target/myfinance'
    //  }
-   }
+   //}
  }
 }
