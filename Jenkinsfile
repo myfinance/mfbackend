@@ -4,7 +4,7 @@ pipeline {
  stages{
    stage('preperation'){
      steps {
-       git credentialsId: 'bitbucket', url: "https://holgerfischer@bitbucket.org/holgerfischer/dac.git"
+       git credentialsId: 'github', url: "https://github.com/myfinance/mfbackend.git"
      }
    }
    stage('build'){
