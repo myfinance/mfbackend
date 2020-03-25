@@ -49,40 +49,7 @@
                             </execution>
                         </executions>
                     </plugin>
-                    <plugin>
-                        <groupId>io.fabric8</groupId>
-                        <artifactId>docker-maven-plugin</artifactId>
-                        <version>${docker-maven-plugin.version}</version>
-                        <configuration>
-                            <images>
-                                <image>
-                                    <name>holgerfischer/myfinance:${project.version}-myfinance-full</name>
-                                    <build>
-                                        <dockerFileDir>${project.build.directory}/docker-prep/myfinance</dockerFileDir>
-                                        <filter>@</filter>
-                                    </build>
-                                </image>
-                            </images>
-                        </configuration>
-                        <executions>
-                            <execution>
-                                <id>build-docker</id>
-                                <phase>pre-integration-test</phase>
-                                <goals>
-                                    <!-- "build" should be used to create the images with the
-                                         artifact -->
-                                    <goal>build</goal>
-                                </goals>
-                            </execution>
-                            <execution>
-                                <id>push-docker</id>
-                                <phase>deploy</phase>
-                                <goals>
-                                    <goal>push</goal>
-                                </goals>
-                            </execution>
-                        </executions>
-                    </plugin>
+                
                 </plugins>
             </build>
         </profile>

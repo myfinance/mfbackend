@@ -21,11 +21,11 @@ pipeline {
        sh '''mvn clean install -Dnointtest'''
      }
    }
-   //stage('build and push Image'){
-   //  steps {
-   //    sh 'docker image build -t ${REPOSITORY_TAG} ./distributions/mf-docker-images/target/myfinance'
-   //  }
-   //}
+   stage('build and push Image'){
+     steps {
+       sh 'docker image build -t ${REPOSITORY_TAG} ./distributions/mf-docker-images/target/myfinance'
+     }
+   }
 
    //stage('deploy to cluster'){
    //  steps {
