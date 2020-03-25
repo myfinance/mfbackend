@@ -54,7 +54,6 @@
                         <artifactId>docker-maven-plugin</artifactId>
                         <version>${docker-maven-plugin.version}</version>
                         <configuration>
-                            <dockerHost>tcp://localhost:2375</dockerHost>
                             <images>
                                 <image>
                                     <name>holgerfischer/myfinance:${project.version}-myfinance-full</name>
@@ -63,13 +62,13 @@
                                         <filter>@</filter>
                                     </build>
                                 </image>
-                                <image>
+                                <!--<image>
                                     <name>holgerfischer/myfinance:${project.version}-mfshell</name>
                                     <build>
                                         <dockerFileDir>${project.build.directory}/docker-prep/mfshell</dockerFileDir>
                                         <filter>@</filter>
                                     </build>
-                                </image>
+                                </image>-->
                             </images>
                         </configuration>
                         <executions>

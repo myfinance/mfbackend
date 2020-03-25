@@ -18,12 +18,18 @@ pipeline {
    }
    stage('build'){
      steps {
-       sh '''mvn clean install -Dnointtest'''
+       sh '''mvn clean deploy -Dnointtest'''
      }
    }
    //stage('build and push Image'){
    //  steps {
    //    sh 'docker image build -t ${REPOSITORY_TAG} ./distributions/mf-docker-images/target/myfinance'
+   //  }
+   //}
+
+   //stage('deploy to cluster'){
+   //  steps {
+   //    sh 'envsubst < ${workspace}/deploy.yaml | kubectl apply -f -
    //  }
    //}
  }
