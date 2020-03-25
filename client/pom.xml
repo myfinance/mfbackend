@@ -15,18 +15,4 @@
         <module>myfinance-java-rest-client</module>
         <module>myfinancerunner</module>
     </modules>
-
-    <profiles>
-        <profile>
-            <id>angularbuild</id>
-            <activation>
-                <property>
-                    <name>!noangular</name>
-                </property>
-            </activation>
-            <modules>
-                <module>mffrontend</module>
-            </modules>
-        </profile>
-    </profiles>
 </project>
