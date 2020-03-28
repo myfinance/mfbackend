@@ -33,12 +33,72 @@
         <!-- dac.res and keystore-->
         <fileSet>
             <outputDirectory>myfinance</outputDirectory>
-	    <directory>${project.build.directory}/../../../basedistributions/basedockerimages/docker/myfinance</directory>
+	    <directory>${project.build.directory}/../docker/myfinance</directory>
             <includes>
                 <include>dac.res</include>
                 <include>devkeystore.jks</include>
             </includes>
     	</fileSet>
+
+       <!--Database-Scripts-->
+        <fileSet>
+            <outputDirectory>mfdb/database/changelog</outputDirectory>
+            <directory>${project.build.directory}/../../../Database/changelog</directory>
+            <includes>
+                <include>**/*</include>
+            </includes>
+            <fileMode>0755</fileMode>
+            <lineEnding>unix</lineEnding>
+        </fileSet>
+
+        <!--Database-Jars-->
+        <fileSet>
+            <outputDirectory>mfdb/database</outputDirectory>
+            <directory>${project.build.outputDirectory}</directory>
+            <includes>
+                <include>postgres*.jar</include>
+                <include>liquibase*.jar</include>
+            </includes>
+        </fileSet>
+
+        <!--Liquibase-scripts-->
+        <fileSet>
+            <outputDirectory>mfdb/database</outputDirectory>
+            <directory>${project.build.directory}/../../../Database/scripts</directory>
+            <includes>
+                <include>liquibase</include>
+                <include>dac_liquibase</include>
+                <include>wrapliquibase</include>
+            </includes>
+            <fileMode>0755</fileMode>
+            <lineEnding>unix</lineEnding>
+        </fileSet>
+
+        <!--Database Dockerfile-->
+        <fileSet>
+            <outputDirectory>mfdb</outputDirectory>
+            <directory>${project.build.directory}/../docker/mfdb</directory>
+            <includes>
+                <include>**/*</include>
+            </includes>
+        </fileSet>
+
+        <!--Postgres files-->
+        <fileSet>
+            <outputDirectory>mfpostgres</outputDirectory>
+            <directory>${project.build.directory}/../docker/mfpostgres</directory>
+            <includes>
+                <include>**/*</include>
+            </includes>
+        </fileSet>
+        <!--mfdump files-->
+        <fileSet>
+            <outputDirectory>mfdump</outputDirectory>
+            <directory>${project.build.directory}/../docker/mfdump</directory>
+            <includes>
+                <include>**/*</include>
+            </includes>
+        </fileSet>        
     
     </fileSets>
 

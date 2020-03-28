@@ -1,8 +1,0 @@
----
-  - name: MyFinance DevEv
-    hosts: devenv
-    remote_user: holger
-    become: true
-    become_method: sudo
-    roles:
-     - buildServer

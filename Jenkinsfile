@@ -21,8 +21,11 @@ pipeline {
        sh '''mvn clean install -Dnointtest'''
      }
    }
-   stage('build and push Image'){
+   stage('build and push Images'){
      steps {
+       sh 'docker image build -t ${REPOSITORY_TAG} ./distributions/mf-docker-images/target/docker-prep/mfpostgres/'
+       sh 'docker image build -t ${REPOSITORY_TAG} ./distributions/mf-docker-images/target/docker-prep/mfdb/'
+       sh 'docker image build -t ${REPOSITORY_TAG} ./distributions/mf-docker-images/target/docker-prep/mfdump/'
        sh 'docker image build -t ${REPOSITORY_TAG} ./distributions/mf-docker-images/target/docker-prep/myfinance/'
      }
    }

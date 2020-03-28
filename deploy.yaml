@@ -1,6 +1,62 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
+  name: mfdb
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: mfdb  
+  template:
+    metadata:
+      labels:
+        app: mfdb
+    spec:
+      containers:
+        - name: mfdb
+          image: holgerfischer/myfinance:0.13.0-SNAPSHOT-mfdb
+          #never pull the image from dockerhub. Jenkins provides the image localy 
+          imagePullPolicy: Never 
+          volumeMounts:
+           - name: myfinancedata
+             mountPath: /var/lib/postgresql/data
+          env:
+          - name: POSTGRES_PASSWORD
+            value: vulkan
+      volumes:
+        - name: myfinancedata
+          persistentVolumeClaim:
+              claimName: mfdbpvc            
+
+---
+
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: mfupgrade
+spec:
+  template:
+    spec:
+      containers: 
+      - name: mfupgrade
+        image: holgerfischer/myfinance:0.13.0-SNAPSHOT-mfdbupgrade   
+        #never pull the image from dockerhub. Jenkins provides the image localy 
+        imagePullPolicy: Never                      
+        env:
+        - name: DB_PW
+          value: "vulkan"   
+        - name: DB_IMAGE
+          value: mfdb  
+        - name: DB_USER
+          value: postgres  
+      restartPolicy: OnFailure     
+  backoffLimit: 4  
+
+---
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
   name: myfinance
 spec:
   replicas: 1
@@ -25,3 +81,37 @@ spec:
         - name: myfinanceconfig
           persistentVolumeClaim:
               claimName: mfconfigpvc  
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+ name: mfdb
+spec:
+ #this defines which pod is going to be presented by this service
+ selector:
+  app: mfdb
+ ports:
+  - name: mfdb
+    port: 5432
+ type: ClusterIP  
+ 
+ 
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+ name: myfinance
+spec:
+ #this defines which pod is going to be presented by this service
+ selector:
+  app: myfinance
+ ports:
+  - name: http
+    port: 8181
+    nodePort: 30020
+  - name: https
+    port: 8443
+    nodePort: 30021                   
+ type: NodePort 

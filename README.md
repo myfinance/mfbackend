@@ -98,18 +98,7 @@ In der Dev-Umgebung muss export DAC_LOGIN_INFO=$HOME/dac.res gesetzt sein und ei
 
 ### get started ###
 
-install ansible on centos:
-yum install ansible
-create .vault_prod in homedir with the vault-passwort - to use the encrypted passwords which are checked-in the repository you nee the password from my keepass-file ;) if you can not get it recreate all secrets with your vaul-password  ansible-vault encrypt_string --vault-id prod@~/.vault_prod 'thepasswaord' --name 'variable-name'
-update the inventory-file with your IPs to a kubernetes(kuberneteshost) and a development server(devenv) (both minimal CentOS setups) doc/install/ansible/environments/prod
-login via ssh from ansible-host to myfinance-server to create private key
-copy playbook from doc/install/ansible to ansible host or mount an nfs-share with the playbooks (add a row in the file /etc/fstab <code><ip>://<path> /mnt/data nfs rw 0 0</code>) Achtung dazu muss auch nfs-utils installiert sein mit sudo yum install nfs-utils
-prepare passwordless communication from ansible host to myfinanceserver "ssh-keygen -t rsa" ssh-copy-id "user@<your_ip>"
-at least python has to be installed at the ansible client 
-
-configure kubernetes and devenv-server: ansible-playbook site.yml --vault-id prod@~/.vault_prod
-
-/mnt/data is mounted on both server (kubernetes and devenv). clone the repo to /mnt/data/repo (from devenv. kubernetes has no git installed): git clone https://holgerfischer@bitbucket.org/holgerfischer/dac.git
+start with repo mfinfra first
 
 to install jenkins run the following command in folder /mnt/data/repo/dac/buildserver
 ./installJenkins.sh
