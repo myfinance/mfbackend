@@ -31,10 +31,10 @@ pipeline {
      }
    }
 
-   //stage('deploy to cluster'){
-   //  steps {
-   //    sh 'envsubst < ${workspace}/deploy.yaml | kubectl apply -f deploy.yaml
-   //  }
-   //}
+   stage('deploy to cluster'){
+     steps {
+       sh 'envsubst < ${workspace}/deploy.yaml | kubectl apply -f deploy.yaml'
+     }
+   }
  }
 }
