@@ -14,7 +14,8 @@ spec:
     spec:
       containers:
         - name: mfdb
-          image: ${DB_REPOSITORY_TAG}
+          #image: ${DB_REPOSITORY_TAG}
+          image: holgerfischer/myfinance-mfpostgres:0.13.24
           #never pull the image from dockerhub. Jenkins provides the image localy 
           imagePullPolicy: Never 
           volumeMounts:
@@ -39,7 +40,8 @@ spec:
     spec:
       containers: 
       - name: mfupgrade
-        image: ${MFUPDATE_REPOSITORY_TAG}  
+        #image: ${MFUPDATE_REPOSITORY_TAG} 
+        image: holgerfischer/myfinance-mfdbupdate:0.13.24
         #never pull the image from dockerhub. Jenkins provides the image localy 
         imagePullPolicy: Never                      
         env:
@@ -70,7 +72,8 @@ spec:
     spec:
       containers:
         - name: myfinance  
-          image: ${REPOSITORY_TAG}    
+          #image: ${REPOSITORY_TAG}   
+          image: holgerfischer/myfinance-mfbackend:0.13.22 
           #never pull the image from dockerhub. Jenkins provides the image localy 
           imagePullPolicy: Never      
           tty: true     
