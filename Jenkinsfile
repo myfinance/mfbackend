@@ -58,7 +58,7 @@ pipeline {
     //}        
      steps {
        //sh 'envsubst < ${workspace}/deploy.yaml | kubectl apply -f deploy.yaml'
-       sh kubectl apply -f deploy.yaml'
+       sh 'kubectl apply -f deploy.yaml'
      }
    }
  }
