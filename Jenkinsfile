@@ -53,7 +53,7 @@ pipeline {
     agent {
         docker {
             image 'mykubectl' 
-            args '-p 3000:3000 -v ~/.kube/config:/.kube/config' 
+            args '-p 3000:3000 -v /root/.kube/config:/.kube/config' 
         }
     }        
      steps {
