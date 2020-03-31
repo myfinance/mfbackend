@@ -53,11 +53,12 @@ pipeline {
     agent {
         docker {
             image 'mykubectl' 
-            args '-p 3000:3000' 
+            args '-p 3000:3000 -v ~/.kube/config:/.kube/config' 
         }
     }        
      steps {
        //sh 'envsubst < ${workspace}/deploy.yaml | kubectl apply -f deploy.yaml'
+       sh 'kubectl config view'
        sh 'kubectl apply -f deploy.yaml'
      }
    }
