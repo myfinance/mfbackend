@@ -16,7 +16,6 @@ pipeline {
     agent {
         docker {
             image 'maven:3.6.3-jdk-8' 
-            //args '-p 3000:3000' 
         }
     }      
      steps {
@@ -28,7 +27,6 @@ pipeline {
     agent {
         docker {
             image 'maven:3.6.3-jdk-8' 
-            args '-p 3000:3000' 
         }
     }      
      steps {
@@ -39,7 +37,6 @@ pipeline {
     agent {
         docker {
             image 'docker' 
-            args '-p 3000:3000' 
         }
     }        
      steps {
@@ -52,9 +49,7 @@ pipeline {
    stage('deploy to cluster'){
      agent any
      steps {
-       //sh 'envsubst < ${workspace}/deploy.yaml | kubectl apply -f deploy.yaml'
-       sh 'kubectl config view'
-       sh 'kubectl apply -f deploy.yaml'
+       sh 'envsubst < ${workspace}/deploy.yaml | kubectl apply -f deploy.yaml'
      }
    }
  }
