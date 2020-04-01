@@ -49,6 +49,7 @@ pipeline {
    stage('deploy to cluster'){
      agent any
      steps {
+       sh 'kubectl delete job.batch/mfupgrade'
        sh 'envsubst < deploy.yaml | kubectl apply -f deploy.yaml'
      }
    }
