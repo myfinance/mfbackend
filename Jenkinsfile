@@ -50,12 +50,7 @@ pipeline {
    }
 
    stage('deploy to cluster'){
-    agent {
-        docker {
-            image 'bitnami/kubectl:latest' 
-            args '-v /root/.kube/config:/.kube/config' 
-        }
-    }        
+     
      steps {
        //sh 'envsubst < ${workspace}/deploy.yaml | kubectl apply -f deploy.yaml'
        sh 'kubectl config view'
