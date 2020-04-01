@@ -25,7 +25,7 @@
         <bundle>mvn:org.apache.servicemix.bundles/org.apache.servicemix.bundles.spring-tx/${spring-servicemix.version}</bundle>
     </feature>
 
-    <feature name="dac-springdata-feature" version="1.9.4.RELEASE">
+    <feature name="dac-springdata-feature" version="${spring-data.version}">
         <feature>dac-spring-feature</feature>
         <bundle>mvn:org.springframework.data/spring-data-commons/${spring-data-commons.version}</bundle>
         <bundle>mvn:org.springframework.data/spring-data-jpa/${spring-data.version}</bundle>

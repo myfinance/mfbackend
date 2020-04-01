@@ -55,7 +55,7 @@
         <spring-servicemix.version>4.2.6.RELEASE_1</spring-servicemix.version>
         <aopalliance.version>1.0_6</aopalliance.version><!--von spring und guice benötigt-->
         <spring-data-commons.version>1.11.4.RELEASE</spring-data-commons.version>
-        <spring-data.version>1.11.23.RELEASE</spring-data.version>
+        <spring-data.version>1.9.4.RELEASE</spring-data.version>
 
         <apache-commons-lang3.version>3.7
         </apache-commons-lang3.version><!--Equalsbuilder wirklich benötigt? Was kann das Paket noch: auch von swagger benötigt-->
@@ -524,17 +524,6 @@
 
 
     <profiles>
-        <profile>
-            <id>inttest</id>
-            <activation>
-                <property>
-                    <name>!nointtest</name>
-                </property>
-            </activation>
-            <modules>
-                <module>test</module>
-            </modules>
-        </profile>
 
         <profile>
             <id>javadoc</id>
