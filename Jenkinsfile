@@ -16,7 +16,7 @@ pipeline {
     agent {
         docker {
             image 'maven:3.6.3-jdk-8' 
-            args '-p 3000:3000' 
+            //args '-p 3000:3000' 
         }
     }      
      steps {
