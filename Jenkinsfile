@@ -49,7 +49,7 @@ pipeline {
    stage('deploy to cluster'){
      agent any
      steps {
-       sh 'envsubst < ${workspace}/deploy.yaml | kubectl apply -f deploy.yaml'
+       sh 'envsubst < deploy.yaml | kubectl apply -f deploy.yaml'
      }
    }
  }
