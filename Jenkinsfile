@@ -9,6 +9,7 @@ pipeline {
    REPOSITORY_TAG = "${DOCKERHUB_USER}/${ORGANIZATION_NAME}-${SERVICE_NAME}:${VERSION}"
    DB_REPOSITORY_TAG = "${DOCKERHUB_USER}/${ORGANIZATION_NAME}-mfpostgres:${VERSION}"
    MFUPDATE_REPOSITORY_TAG = "${DOCKERHUB_USER}/${ORGANIZATION_NAME}-mfdbupdate:${VERSION}"
+   MVN_REPO = "http://192.168.100.73:31001/repository/maven-snapshots/"
  }
 
  stages{
@@ -30,7 +31,7 @@ pipeline {
         }
     }      
      steps {
-       sh '''mvn clean deploy -DtargetRepository=http://192.168.100.73:31001/repository/maven-snapshots/ -Dnointtest'''
+       sh '''mvn clean deploy -DtargetRepository=${MVN_REPO} -Dnointtest'''
      }
    }
    stage('build and push Images'){
