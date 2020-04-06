@@ -30,7 +30,7 @@ pipeline {
         }
     }      
      steps {
-       sh '''mvn clean deploy -Durl=http://192.168.100.73:31001/repository/maven-snapshots/ -Dnointtest'''
+       sh '''mvn clean deploy -DtargetRepository=http://192.168.100.73:31001/repository/maven-snapshots/ -Dnointtest'''
      }
    }
    stage('build and push Images'){
