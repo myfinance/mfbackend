@@ -128,18 +128,6 @@ bei kubernetes mit: "kubectl -it exec <podname> sh" auf den Dockercontainer gehe
 
 ### dump and restore ###
 
-you can stop the docker services and copy the myfinancedata-volume to the new location or an nfs share.
-to restore this volume create an empty volume myfinancedata and copy the saved volume-data to it
-
-just in case, if this process is not working due to an hardwarecrash e.G., a job is scheduled that dumps the database every day and on startup
-If you want to create a fresh dump: just restart the scheduling-service or the complete stack:
-docker stack rm myfinance
-docker stack deploy -c distributions/myfinance-full-packaging/target/docker-compose.yml myfinance
-
-to restore a dump:
-// jobs are imutable, so you have to delete the old job if it exists:
-kubectl delete job.batch/mfrestore
-//edit the dump-filename in  doc/install/kubernetes/tools/dumprestore.yaml
-kubectl apply -f dumprestore.yaml
+see repository mfdump and mf dumprestore
 
  
