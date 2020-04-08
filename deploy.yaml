@@ -35,6 +35,7 @@ kind: Job
 metadata:
   name: mfupgrade
 spec:
+  ttlSecondsAfterFinished: 180
   template:
     spec:
       containers: 
