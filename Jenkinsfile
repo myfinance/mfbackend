@@ -50,7 +50,7 @@ pipeline {
        sh 'docker tag ${REPOSITORY_TAG} ${DOCKER_REPO}${REPOSITORY_TAG}'
        sh 'docker tag ${MFUPDATE_REPOSITORY_TAG} ${DOCKER_REPO}${MFUPDATE_REPOSITORY_TAG}'
        sh 'docker tag ${DB_REPOSITORY_TAG} ${DOCKER_REPO}${DB_REPOSITORY_TAG}'
-       
+
        sh 'docker push ${DOCKER_REPO}${REPOSITORY_TAG}'
        sh 'docker push ${DOCKER_REPO}${MFUPDATE_REPOSITORY_TAG}'
        sh 'docker push ${DOCKER_REPO}${DB_REPOSITORY_TAG}'
@@ -60,6 +60,7 @@ pipeline {
    stage('deploy to cluster'){
      agent any
      steps {
+       sh 'kubectl delete job.batch/mfupgrade'
        sh 'envsubst < deploy.yaml | kubectl apply -f -'
      }
    }
