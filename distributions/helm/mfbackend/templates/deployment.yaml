@@ -1,0 +1,82 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mfdb
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      app: mfdb  
+  template:
+    metadata:
+      labels:
+        app: mfdb
+    spec:
+      containers:
+        - name: mfdb
+          image: "{{ .Values.image.repository }}mfpostgres:{{ .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}   
+          volumeMounts:
+           - name: myfinancedata
+             mountPath: /var/lib/postgresql/data
+          env:
+          - name: POSTGRES_PASSWORD
+            value: vulkan
+      volumes:
+        - name: myfinancedata
+          persistentVolumeClaim:
+              claimName: mfdbpvc   
+
+---
+
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: mfupgrade
+spec:
+  #autocleanup after seconds
+  ttlSecondsAfterFinished: 180
+  template:
+    spec:
+      containers: 
+      - name: mfupgrade
+        image: "{{ .Values.image.repository }}mfdbupdate:{{ .Chart.AppVersion }}"
+        imagePullPolicy: {{ .Values.image.pullPolicy }}                     
+        env:
+        - name: DB_PW
+          value: "vulkan"   
+        - name: DB_IMAGE
+          value: mfdb  
+        - name: DB_USER
+          value: postgres  
+      restartPolicy: OnFailure     
+  backoffLimit: 4  
+
+---
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: myfinance
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: myfinance  
+  template:
+    metadata:
+      labels:
+        app: myfinance
+    spec:
+      containers:
+        - name: myfinance  
+          image: "{{ .Values.image.repository }}mfbackend:{{ .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}      
+          tty: true     
+          volumeMounts:
+           - name: myfinanceconfig
+             mountPath: /MyFinance/envconfig           
+      volumes:
+        - name: myfinanceconfig
+          persistentVolumeClaim:
+              claimName: mfconfigpvc                     

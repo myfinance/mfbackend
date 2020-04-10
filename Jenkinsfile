@@ -62,6 +62,8 @@ pipeline {
      steps {
        sh 'kubectl delete job.batch/mfupgrade'
        sh 'envsubst < deploy.yaml | kubectl apply -f -'
+       //helm dependency update
+       //helm upgrade mfbackend .
      }
    }
  }
