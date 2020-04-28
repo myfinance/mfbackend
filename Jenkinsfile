@@ -5,7 +5,12 @@ pipeline {
    SERVICE_NAME = "mfbackend"
    ORGANIZATION_NAME = "myfinance"
    DOCKERHUB_USER = "holgerfischer"
-   VERSION = "0.13.${BUILD_ID}"
+
+   //Snapshot Version
+   VERSION = "0.13.0.${BUILD_ID}-RC"
+   //Release Version
+   //VERSION = "0.13.1.${BUILD_ID}"
+
    K8N_IP = "192.168.100.73"
    REPOSITORY_TAG = "${DOCKERHUB_USER}/${ORGANIZATION_NAME}-${SERVICE_NAME}:${VERSION}"
    DB_REPOSITORY_TAG = "${DOCKERHUB_USER}/${ORGANIZATION_NAME}-mfpostgres:${VERSION}"
@@ -13,7 +18,7 @@ pipeline {
    MVN_REPO = "http://${K8N_IP}:31001/repository/maven-snapshots/"
    DOCKER_REPO = "${K8N_IP}:31003/repository/mydockerrepo/"
  }
-
+ 
  stages{
    stage('preperation'){
     agent {
@@ -60,10 +65,10 @@ pipeline {
    stage('deploy to cluster'){
      agent any
      steps {
-       sh 'kubectl delete job.batch/mfupgrade'
-       sh 'envsubst < deploy.yaml | kubectl apply -f -'
-       //helm dependency update
-       //helm upgrade mfbackend .
+       //sh 'kubectl delete job.batch/mfupgrade'
+       //sh 'envsubst < deploy.yaml | kubectl apply -f -'
+       sh 'envsubst < ./distributions/helm/mfbackend/Chart_template.yaml > ./distributions/helm/mfbackend/Chart.yaml'
+       sh 'helm upgrade -i --cleanup-on-fail mfbackend ./distributions/helm/mfbackend/ --set repository=${DOCKER_REPO}/${DOCKERHUB_USER}/${ORGANIZATION_NAME}-'
      }
    }
  }

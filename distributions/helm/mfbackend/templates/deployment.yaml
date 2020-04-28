@@ -1,19 +1,19 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: mfdb
+  name: {{ .Values.mfbackend.db_name }} 
 spec:
   replicas: {{ .Values.replicaCount }}
   selector:
     matchLabels:
-      app: mfdb  
+      app: {{ .Values.mfbackend.db_name }}  
   template:
     metadata:
       labels:
-        app: mfdb
+        app: {{ .Values.mfbackend.db_name }}
     spec:
       containers:
-        - name: mfdb
+        - name: {{ .Values.mfbackend.db_name }}
           image: "{{ .Values.image.repository }}mfpostgres:{{ .Chart.AppVersion }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}   
           volumeMounts:
@@ -21,11 +21,11 @@ spec:
              mountPath: /var/lib/postgresql/data
           env:
           - name: POSTGRES_PASSWORD
-            value: vulkan
+            value: {{ .Values.mfbackend.db_pw }}   
       volumes:
         - name: myfinancedata
           persistentVolumeClaim:
-              claimName: mfdbpvc   
+              claimName: {{ .Values.pv.mfdbpvc }}    
 
 ---
 
@@ -44,9 +44,9 @@ spec:
         imagePullPolicy: {{ .Values.image.pullPolicy }}                     
         env:
         - name: DB_PW
-          value: "vulkan"   
+          value: "{{ .Values.mfbackend.db_pw }}"   
         - name: DB_IMAGE
-          value: mfdb  
+          value: {{ .Values.mfbackend.db_name }}  
         - name: DB_USER
           value: postgres  
       restartPolicy: OnFailure     
@@ -59,17 +59,17 @@ kind: Deployment
 metadata:
   name: myfinance
 spec:
-  replicas: 1
+  replicas: {{ .Values.replicaCount }}
   selector:
     matchLabels:
-      app: myfinance  
+      app: {{ .Values.mfbackend.mf_name }}    
   template:
     metadata:
       labels:
-        app: myfinance
+        app: {{ .Values.mfbackend.mf_name }}    
     spec:
       containers:
-        - name: myfinance  
+        - name: {{ .Values.mfbackend.mf_name }}      
           image: "{{ .Values.image.repository }}mfbackend:{{ .Chart.AppVersion }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}      
           tty: true     
@@ -79,4 +79,4 @@ spec:
       volumes:
         - name: myfinanceconfig
           persistentVolumeClaim:
-              claimName: mfconfigpvc                     
+              claimName: {{ .Values.pv.configpvc }}                         

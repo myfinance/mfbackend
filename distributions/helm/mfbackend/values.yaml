@@ -8,47 +8,25 @@ image:
   repository: 192.168.100.73:31003/repository/mydockerrepo/holgerfischer/myfinance-
   pullPolicy: IfNotPresent
 
-imagePullSecrets: []
-nameOverride: ""
-fullnameOverride: ""
 
-serviceAccount:
-  # Specifies whether a service account should be created
-  create: false
-  # Annotations to add to the service account
-  annotations: {}
-  # The name of the service account to use.
-  # If not set and create is true, a name is generated using the fullname template
-  name:
+pv:
+  configpvc: mfconfigpvc
+  configstorage: /mnt/data/mf/prod_config/
+  configstoragesize: 1Mi
+  mfdbstorage: /opt/mf/prod_db/
+  mfdbpvc: mfdbpvc
+  mfdbstoragesize: 5Gi
 
-service:
-  type: ClusterIP
-  port: 80
+mfbackend:
+  db_pw: vulkan
+  db_name: mfdb
+  mf_http_port_ext: 30020
+  mf_http_port: 8181
+  mf_https_port_ext: 30021
+  mf_http_port: 8443
+  mf_name: myfinance
 
 ingress:
-  enabled: false
-  annotations: {}
-    # kubernetes.io/ingress.class: nginx
-    # kubernetes.io/tls-acme: "true"
-  hosts:
-    - host: chart-example.local
-      paths: []
-  tls: []
-  #  - secretName: chart-example-tls
-  #    hosts:
-  #      - chart-example.local
-
-resources: {}
-  # We usually recommend not to specify default resources and to leave this as a conscious
-  # choice for the user. This also increases chances charts run on environments with little
-  # resources, such as Minikube. If you do want to specify resources, uncomment the following
-  # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
-  # limits:
-  #   cpu: 100m
-  #   memory: 128Mi
-  # requests:
-  #   cpu: 100m
-  #   memory: 128Mi
-
-stable/prometheus-operator:
-  grafana.adminPassword: vulkan
+  enabled: true
+  name: mfbackend
+  myfinance_host: myfinance.mylocaldomain   

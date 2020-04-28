@@ -130,4 +130,13 @@ bei kubernetes mit: "kubectl -it exec <podname> sh" auf den Dockercontainer gehe
 
 see repository mfdump and mf dumprestore
 
+### release ###
+
+local build with default version 0.0.0-SNAPSHOT
+via CI: Major and Minor-version defined in Jenkinsfile. Micro-version is 0. Nano-Version is Replaced with Jenkins-Buildnumber and RC
+EACH CI build replaced the maven version number with help of the version plugin. Snapshot will be added in Maven 
+major.minor.0.Buildnumber-rc
+Release build has the same process but without rc and a higher microversion.
+e.g. major.minor.1.Buildnumber
+
  
