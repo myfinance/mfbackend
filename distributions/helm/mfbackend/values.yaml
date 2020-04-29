@@ -23,7 +23,7 @@ mfbackend:
   mf_http_port_ext: 30020
   mf_http_port: 8181
   mf_https_port_ext: 30021
-  mf_http_port: 8443
+  mf_https_port: 8443
   mf_name: myfinance
 
 ingress:
