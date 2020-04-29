@@ -7,7 +7,7 @@ pipeline {
    DOCKERHUB_USER = "holgerfischer"
 
    //Snapshot Version
-   VERSION = "0.13.0.${BUILD_ID}-RC"
+   VERSION = "0.13.0.${BUILD_ID}-SNAPSHOT"
    //Release Version
    //VERSION = "0.13.1.${BUILD_ID}"
 
@@ -38,6 +38,7 @@ pipeline {
         }
     }      
      steps {
+       sh '''mvn versions:set -DnewVersion==${VERSION}'''
        sh '''mvn clean deploy -DtargetRepository=${MVN_REPO} -Dnointtest'''
      }
    }
@@ -65,7 +66,7 @@ pipeline {
    stage('deploy to cluster'){
      agent any
      steps {
-       //sh 'kubectl delete job.batch/mfupgrade'
+       sh 'kubectl delete job.batch/mfupgrade'
        //sh 'envsubst < deploy.yaml | kubectl apply -f -'
        sh 'envsubst < ./distributions/helm/mfbackend/Chart_template.yaml > ./distributions/helm/mfbackend/Chart.yaml'
        sh 'helm upgrade -i --cleanup-on-fail mfbackend ./distributions/helm/mfbackend/ --set repository=${DOCKER_REPO}/${DOCKERHUB_USER}/${ORGANIZATION_NAME}-'
