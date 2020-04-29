@@ -38,7 +38,7 @@ pipeline {
         }
     }      
      steps {
-       sh '''mvn versions:set -DnewVersion==${VERSION}'''
+       sh '''mvn versions:set -DnewVersion=${VERSION}'''
        sh '''mvn clean deploy -DtargetRepository=${MVN_REPO} -Dnointtest'''
      }
    }
@@ -66,7 +66,7 @@ pipeline {
    stage('deploy to cluster'){
      agent any
      steps {
-       sh 'kubectl delete job.batch/mfupgrade'
+       //sh 'kubectl delete job.batch/mfupgrade'
        //sh 'envsubst < deploy.yaml | kubectl apply -f -'
        sh 'envsubst < ./distributions/helm/mfbackend/Chart_template.yaml > ./distributions/helm/mfbackend/Chart.yaml'
        sh 'helm upgrade -i --cleanup-on-fail mfbackend ./distributions/helm/mfbackend/ --set repository=${DOCKER_REPO}/${DOCKERHUB_USER}/${ORGANIZATION_NAME}-'
