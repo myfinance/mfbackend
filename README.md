@@ -132,11 +132,21 @@ see repository mfdump and mf dumprestore
 
 ### release ###
 
-local build with default version 0.0.0-SNAPSHOT
-via CI: Major and Minor-version defined in Jenkinsfile. Micro-version is 0. Nano-Version is Replaced with Jenkins-Buildnumber and RC
-EACH CI build replaced the maven version number with help of the version plugin. Snapshot will be added in Maven 
-major.minor.0.Buildnumber-rc
-Release build has the same process but without rc and a higher microversion.
-e.g. major.minor.1.Buildnumber
+
+
+#### SNAPSHOTS ####
+
+We only use maven snapshot-versions for the local build not for the CI-Build, because each build generates a docker image and a helm chart. Both do not support Snapshots but have to distinguish the builds. So each CI-build needs a different number. We use the jenkins-build-number for that. But we loose the main advantage of Snapshots with that: not changing dependency-versions during development. For that the local SNAPSHOT build helps if one develeper changes two dependent components. If the dependency is developed by another developer, you will most of the time better develop with a stabel version an not a moving target.   
+
+#### format ####
+
+the project uses semantic versioning: https://semver.org/
+
+local build with default version 0.0.0-0-SNAPSHOT
+via CI: Major, Minor-version and Patch-Version is defined in Jenkinsfile. The pre-release info seperated with"-" and contains the Jenkins-Buildnumber
+EACH CI build replaced the maven version number with help of the version plugin. 
+major.minor.patch-alpha.Buildnumber. 
+Release build has the same process but without pre-release version.
+e.g. major.minor.patch
 
  
