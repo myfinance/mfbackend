@@ -70,6 +70,8 @@ pipeline {
        //sh 'envsubst < deploy.yaml | kubectl apply -f -'
        sh 'envsubst < ./distributions/helm/mfbackend/Chart_template.yaml > ./distributions/helm/mfbackend/Chart.yaml'
        sh 'helm upgrade -i --cleanup-on-fail mfbackend ./distributions/helm/mfbackend/ --set repository=${DOCKER_REPO}/${DOCKERHUB_USER}/${ORGANIZATION_NAME}-'
+       sh 'helm package distributions/helm/mfbackend -u -d helmcharts/'
+       sh 'curl --upload-file helmcharts/mfbackend-${VERSION}.tgz -v'
      }
    }
  }
