@@ -17,7 +17,7 @@ pipeline {
    MFUPDATE_REPOSITORY_TAG = "${DOCKERHUB_USER}/${ORGANIZATION_NAME}-mfdbupdate:${VERSION}"
    NEXUS_URL = "${K8N_IP}:31001"
    MVN_REPO = "http://${NEXUS_URL}/repository/maven-releases/"
-   DOCKER_REPO = "${K8N_IP}:31003/repository/mydockerrepo/"
+   DOCKER_REPO = "${K8N_IP}:31003/repository/mydockerrepo"
    TARGET_HELM_REPO = "http://${NEXUS_URL}/repository/myhelmrepo/"
  }
  
