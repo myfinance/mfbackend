@@ -17,7 +17,7 @@ pipeline {
    MFUPDATE_REPOSITORY_TAG = "${DOCKERHUB_USER}/${ORGANIZATION_NAME}-mfdbupdate:${VERSION}"
    NEXUS_URL = "${K8N_IP}:31001"
    MVN_REPO = "http://${NEXUS_URL}/repository/maven-releases/"
-   DOCKER_REPO = "${K8N_IP}:31003/repository/mydockerrepo"
+   DOCKER_REPO = "${K8N_IP}:31003/repository/mydockerrepo/"
    TARGET_HELM_REPO = "http://${NEXUS_URL}/repository/myhelmrepo/"
  }
  
@@ -71,7 +71,7 @@ pipeline {
        //sh 'kubectl delete job.batch/mfupgrade'
        //sh 'envsubst < deploy.yaml | kubectl apply -f -'
        sh 'envsubst < ./distributions/helm/mfbackend/Chart_template.yaml > ./distributions/helm/mfbackend/Chart.yaml'
-       sh 'helm upgrade -i --cleanup-on-fail mfbackend ./distributions/helm/mfbackend/ --set repository=${DOCKER_REPO}/${DOCKERHUB_USER}/${ORGANIZATION_NAME}-'
+       sh 'helm upgrade -i --cleanup-on-fail mfbackend ./distributions/helm/mfbackend/ --set repository=${DOCKER_REPO}${DOCKERHUB_USER}/${ORGANIZATION_NAME}-'
        sh 'helm package distributions/helm/mfbackend -u -d helmcharts/'
        sh 'curl ${TARGET_HELM_REPO} --upload-file helmcharts/mfbackend-${VERSION}.tgz -v'
      }
