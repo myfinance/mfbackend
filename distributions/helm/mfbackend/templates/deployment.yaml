@@ -25,18 +25,15 @@ spec:
       volumes:
         - name: myfinancedata
           persistentVolumeClaim:
-              claimName: {{ .Values.pv.mfdbpvc }}    
+              claimName: {{ .Values.pv.mfdbpvc }}  
 
 ---
 
 apiVersion: batch/v1
 kind: Job
 metadata:
-  name: mfupgrade
-  annotations:
-    "helm.sh/hook": pre-install,pre-upgrade
-    "helm.sh/hook-delete-policy": before-hook-creation
-    "helm.sh/hook-weight": "3"  
+  #add timestamp to always have a new jobname
+  name: mfupgrade{{ date "20060102150405" .Release.Time }}
 spec:
   #autocleanup after seconds
   ttlSecondsAfterFinished: 180
@@ -54,7 +51,7 @@ spec:
         - name: DB_USER
           value: postgres  
       restartPolicy: OnFailure     
-  backoffLimit: 4  
+  backoffLimit: 4 
 
 ---
 
@@ -83,4 +80,4 @@ spec:
       volumes:
         - name: myfinanceconfig
           persistentVolumeClaim:
-              claimName: {{ .Values.pv.configpvc }}                         
+              claimName: {{ .Values.pv.configpvc }}                                            
