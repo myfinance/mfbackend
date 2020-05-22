@@ -103,8 +103,12 @@ start with repo mfinfra first
 to install jenkins run the following command in folder /mnt/data/repo/dac/buildserver
 ./installJenkins.sh
 
-to install the application manually run the following command in folder /mnt/data/repo/dac/doc/install/kubernetes (optional. should be done via buildserver)
-kubectl apply -f .
+to install the application manually with helm: 
+mkdir /opt/mf/prod_db/  (or mount die other directory)
+helm repo update
+helm upgrade -i --cleanup-on-fail mfbackend local/mfbackend --set stage=prod --devel
+
+or install the complete bundle see repo mfbundle
 
 
 if Database is fresh: add via gui or api-Docs: currency EUR and USD
