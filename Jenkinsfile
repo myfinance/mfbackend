@@ -9,7 +9,7 @@ pipeline {
    //Snapshot Version
    //VERSION = "0.13.0-alpha.${BUILD_ID}"
    //Release Version
-   VERSION = "0.13.0"
+   VERSION = "0.13.1"
 
    K8N_IP = "192.168.100.73"
    REPOSITORY_TAG = "${DOCKERHUB_USER}/${ORGANIZATION_NAME}-${SERVICE_NAME}:${VERSION}"

@@ -42,7 +42,7 @@ public @interface RESTApplicationConfiguration {
     String corsAllowedHeaders() default "";
 
     // If empty allow any origin - if filled with comma separated origins allow only those
-    String corsAllowedOrigins() default "http://localhost:4300,http://localhost:4200,http://localhost:8080,http://fe.myfinance.mylocaldomain,https://babcom.myds.me,*";
+    String corsAllowedOrigins() default "http://localhost:4300,http://localhost:4200,http://localhost:8080,http://prod.mffe.mylocaldomain,http://dev.mffe.mylocaldomain,https://babcom.myds.me,*";
 
     // If empty allow any methods - if filled with comma separated methods allow only those
     String corsAllowedMethods() default "GET,POST,DELETE,PUT,OPTIONS";
