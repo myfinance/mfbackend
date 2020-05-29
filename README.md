@@ -155,7 +155,7 @@ e.g. major.minor.patch
 
 #### Branch strategy ####
 
-We allways work on feature branches and merge them to the development-branch at the end, so that you can find at the dev-branch only completed features. If you want to make a release you have to branch a Release-branch from the dev-branch. As soon as the Release is tested and the rollout on prod is sucessful, the release-branch can be merged to the master. So you can allways see which feature was developed in which release, what is in dev, what in test and what in prod. 
+We allways work on feature branches and merge them to the development-branch at the end, so that you can find at the dev-branch only completed features. If you want to make a release you have to merge dev to master. So you can allways see which feature was developed in which release, what is in dev and what in test. As soon as the prod rollout was sucessfull a tag should be created in Master.
 
 create dev branch: 
 git checkout -b dev
@@ -168,23 +168,21 @@ git commit -am "a description"
 git push origin featurebranchname
 
 merge to dev:
-git pull origin dev (just to be sure no changes were made)
-git checkout dev
-git merge featurebranchname
-git push origin dev
+do that via github frontend and create and merge a pullrequest 
 
-or do that via github frontend and create a pullrequest 
 
 make a release:
 git checkout dev
 //change and commit the version in the jenkins-file to major_minor_micro - do it in the dev branch to avoid mergeconflicts
 git push origin dev
-git checkout -b release_major_minor_micro
-//after sucessful rollout
 git checkout master
-git merge release_major_minor_micro
+git merge dev
+git tag -a latest_commit -m "this is the latest commit"
 git push origin master
+//after sucessful rollout
 
 - on feature branches and on the master will be no ci-builds
 
+
+This is basicly  the git flow workflow but without release branch. This is because I will never fix the production only. If I need a fix I will allways rollout the dev-branch with all completed features. This is ok because I'm the only tester and if I test anything I'll do it allready in the featurebranch before I'll merge it to dev. 
  
