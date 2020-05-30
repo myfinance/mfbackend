@@ -153,4 +153,38 @@ major.minor.patch-alpha.Buildnumber.
 Release build has the same process but without pre-release version.
 e.g. major.minor.patch
 
+#### Branch strategy ####
+
+We allways work on feature branches and merge them to the development-branch at the end, so that you can find at the dev-branch only completed features. If you want to make a release you have to branch a Release-branch from the dev-branch. As soon as the Release is tested and the rollout on prod is sucessful, the release-branch can be merged to the master. So you can allways see which feature was developed in which release, what is in dev, what in test and what in prod. 
+
+create dev branch: 
+git checkout -b dev
+
+create feature branch
+git checkout -b a_feature (to switch back: git checkout master)
+you are on branch a_feature yet, see git branch
+use MYF_[tasknumber]_description for the featurename
+git commit -am "a description"
+git push origin featurebranchname
+
+merge to dev:
+git pull origin dev (just to be sure no changes were made)
+git checkout dev
+git merge featurebranchname
+git push origin dev
+
+or do that via github frontend and create a pullrequest 
+
+make a release:
+git checkout dev
+//change and commit the version in the jenkins-file to major_minor_micro - do it in the dev branch to avoid mergeconflicts
+git push origin dev
+git checkout -b release_major_minor_micro
+//after sucessful rollout
+git checkout master
+git merge release_major_minor_micro
+git push origin master
+
+- on feature branches and on the master will be no ci-builds
+
  
