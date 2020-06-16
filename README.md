@@ -169,6 +169,7 @@ git push origin featurebranchname
 
 merge to dev:
 do that via github frontend and create and merge a pullrequest 
+delete featurebranch: git branch -d  featurename
 
 
 make a release:
