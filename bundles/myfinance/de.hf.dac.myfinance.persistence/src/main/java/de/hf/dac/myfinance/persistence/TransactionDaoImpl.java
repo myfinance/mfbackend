@@ -12,10 +12,12 @@
 package de.hf.dac.myfinance.persistence;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
 import de.hf.dac.myfinance.api.application.EnvTarget;
+import de.hf.dac.myfinance.api.domain.Cashflow;
 import de.hf.dac.myfinance.api.domain.Transaction;
 import de.hf.dac.myfinance.api.persistence.dao.TransactionDao;
 import javax.inject.Inject;
@@ -61,13 +63,45 @@ public class TransactionDaoImpl  extends BaseDao<Transaction> implements Transac
         return result;
     }
 
-    @Override
-    public void deleteTransaction(Transaction transaction) {
-        deleteObject(transaction);
+    public String deleteTransaction(int transactionId) {
+        String result = " transaction with id "+transactionId;
+        try {
+
+            marketDataEm = this.marketDataEmf.createEntityManager();
+            marketDataEm.getTransaction().begin();
+            Transaction transaction = marketDataEm.find(Transaction.class, transactionId);
+            result+=" ,desc: '"+transaction.getDescription()+
+                        "' ,Transactiondate:" + transaction.getTransactiondate() + " deleted";
+            marketDataEm.remove(transaction);
+
+            marketDataEm.getTransaction().commit();
+        } finally {
+            marketDataEm.close();
+        }
+        return result;
     }
 
     @Override
     public void saveTransaction(Transaction transaction) {
         save(transaction);
+    }
+
+    @Override
+    public void updateTransaction(int transactionid, String description, LocalDate transactionDate, LocalDateTime ts){
+        try{
+            marketDataEm = this.marketDataEmf.createEntityManager();
+            Query query = marketDataEm.createQuery("select a FROM Transaction a WHERE transactionid= :transactionid");
+            query.setParameter("transactionid", transactionid);
+            Optional<Transaction> transaction = getFirstQueryResult(query);
+            Transaction newTransaction = transaction.get();
+            newTransaction.setDescription(description);
+            newTransaction.setTransactiondate(transactionDate);
+            newTransaction.setLastchanged(ts);
+            marketDataEm.getTransaction().begin();
+            marketDataEm.persist(newTransaction);
+            marketDataEm.getTransaction().commit();
+        } finally {
+            marketDataEm.close();
+        }
     }
 }
