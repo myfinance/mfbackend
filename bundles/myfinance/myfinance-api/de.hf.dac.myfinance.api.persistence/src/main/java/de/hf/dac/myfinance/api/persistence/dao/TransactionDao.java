@@ -21,4 +21,5 @@ public interface TransactionDao  {
     Optional<Transaction> getTransaction(int transactionid);
     void deleteTransaction(Transaction transaction);
     void saveTransaction(Transaction transaction);
+    void updateTransaction(int transactionid, String description, LocalDate transactionDate);
 }

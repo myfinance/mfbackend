@@ -16,6 +16,7 @@ import java.util.List;
 import java.util.Optional;
 
 import de.hf.dac.myfinance.api.application.EnvTarget;
+import de.hf.dac.myfinance.api.domain.Cashflow;
 import de.hf.dac.myfinance.api.domain.Transaction;
 import de.hf.dac.myfinance.api.persistence.dao.TransactionDao;
 import javax.inject.Inject;
@@ -69,5 +70,23 @@ public class TransactionDaoImpl  extends BaseDao<Transaction> implements Transac
     @Override
     public void saveTransaction(Transaction transaction) {
         save(transaction);
+    }
+
+    @Override
+    public void updateTransaction(int transactionid, String description, LocalDate transactionDate){
+        try{
+            marketDataEm = this.marketDataEmf.createEntityManager();
+            Query query = marketDataEm.createQuery("select a FROM Transaction a WHERE transactionid= :transactionid");
+            query.setParameter("transactionid", transactionid);
+            Optional<Transaction> transaction = getFirstQueryResult(query);
+            Transaction newTransaction = transaction.get();
+            newTransaction.setDescription(description);
+            newTransaction.setTransactiondate(transactionDate);
+            marketDataEm.getTransaction().begin();
+            marketDataEm.persist(newTransaction);
+            marketDataEm.getTransaction().commit();
+        } finally {
+            marketDataEm.close();
+        }
     }
 }

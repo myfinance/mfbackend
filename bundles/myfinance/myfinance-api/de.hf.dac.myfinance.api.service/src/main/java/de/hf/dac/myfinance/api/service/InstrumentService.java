@@ -54,6 +54,8 @@ public interface InstrumentService {
     void newBudget(String description, int budgetGroupId, LocalDateTime ts);
     void newGiroAccount(String description, int tenantId, LocalDateTime ts);
 
+    void updateTransaction(int transactionId, String description, double value, LocalDate transactionDate, LocalDateTime ts);
+
     void newIncomeExpense(String description, int accId, int budgetId, double value, LocalDate transactionDate, LocalDateTime ts);
     void newTransfer(String description, int srcInstrumentId, int trgInstrumentId, double value, LocalDate transactionDate, LocalDateTime ts);
     List<Transaction> listTransactions(LocalDate startDate, LocalDate endDate);
