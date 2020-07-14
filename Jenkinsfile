@@ -7,7 +7,7 @@ pipeline {
    DOCKERHUB_USER = "holgerfischer"
 
    //Snapshot Version
-   VERSION = "0.14.0-alpha.${BUILD_ID}"
+   VERSION = "0.14.1-alpha.${BUILD_ID}"
    //Release Version
    //VERSION = "0.13.1"
 
