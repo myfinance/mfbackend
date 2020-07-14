@@ -503,7 +503,7 @@ public class InstrumentServiceImpl implements InstrumentService {
             throw new MFException(MFMsgKey.UNKNOWN_TRANSACTION_EXCEPTION, "Transaction not updated: Transaction for id:"+transactionId + " not found");
         }
         Transaction oldtransaction = transaction.get();
-        transactionDao.updateTransaction(transactionId, description, transactionDate);
+        transactionDao.updateTransaction(transactionId, description, transactionDate, ts);
         if(oldtransaction.getTransactionType() == TransactionType.INCOMEEXPENSES) {
             oldtransaction.getCashflows().forEach(i-> {if(i.getValue()!=value) { cashflowDao.updateCashflow(i.getCashflowid(), value);}});
         } else if(oldtransaction.getTransactionType() == TransactionType.BUDGETTRANSFER ||
@@ -527,10 +527,8 @@ public class InstrumentServiceImpl implements InstrumentService {
     public void deleteTransaction(int transactionId){
         Optional<Transaction> transaction = transactionDao.getTransaction(transactionId);
         if(transaction.isPresent()){
-            auditService.saveMessage(" transaction with id "+transactionId+" ,desc: '"+transaction.get().getDescription()+
-                    "' and Transactiondate:" + transaction.get().getTransactiondate() + "deleted",
-                Severity.INFO, AUDIT_MSG_TYPE);
-            transactionDao.deleteTransaction(transaction.get());
+            auditService.saveMessage(transactionDao.deleteTransaction(transactionId),
+                    Severity.INFO, AUDIT_MSG_TYPE);
         }
     }
 

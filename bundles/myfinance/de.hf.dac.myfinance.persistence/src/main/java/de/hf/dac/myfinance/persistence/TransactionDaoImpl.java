@@ -12,6 +12,7 @@
 package de.hf.dac.myfinance.persistence;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -62,9 +63,22 @@ public class TransactionDaoImpl  extends BaseDao<Transaction> implements Transac
         return result;
     }
 
-    @Override
-    public void deleteTransaction(Transaction transaction) {
-        deleteObject(transaction);
+    public String deleteTransaction(int transactionId) {
+        String result = " transaction with id "+transactionId;
+        try {
+
+            marketDataEm = this.marketDataEmf.createEntityManager();
+            marketDataEm.getTransaction().begin();
+            Transaction transaction = marketDataEm.find(Transaction.class, transactionId);
+            result+=" ,desc: '"+transaction.getDescription()+
+                        "' ,Transactiondate:" + transaction.getTransactiondate() + " deleted";
+            marketDataEm.remove(transaction);
+
+            marketDataEm.getTransaction().commit();
+        } finally {
+            marketDataEm.close();
+        }
+        return result;
     }
 
     @Override
@@ -73,7 +87,7 @@ public class TransactionDaoImpl  extends BaseDao<Transaction> implements Transac
     }
 
     @Override
-    public void updateTransaction(int transactionid, String description, LocalDate transactionDate){
+    public void updateTransaction(int transactionid, String description, LocalDate transactionDate, LocalDateTime ts){
         try{
             marketDataEm = this.marketDataEmf.createEntityManager();
             Query query = marketDataEm.createQuery("select a FROM Transaction a WHERE transactionid= :transactionid");
@@ -82,6 +96,7 @@ public class TransactionDaoImpl  extends BaseDao<Transaction> implements Transac
             Transaction newTransaction = transaction.get();
             newTransaction.setDescription(description);
             newTransaction.setTransactiondate(transactionDate);
+            newTransaction.setLastchanged(ts);
             marketDataEm.getTransaction().begin();
             marketDataEm.persist(newTransaction);
             marketDataEm.getTransaction().commit();
