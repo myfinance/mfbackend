@@ -314,7 +314,7 @@ public class EnvironmentDataResource extends BaseSecuredResource<OpType,OpLevel>
     @POST
     @Path("/addTransfer")
     @Produces(MediaType.APPLICATION_JSON)
-    @ApiOperation(value = "save Transfer")
+    @ApiOperation(value = "save Transfer or BudgetTransfer")
     @ApiResponses(value = {
         @ApiResponse(code = HttpStatus.SC_NO_CONTENT, message = "added"),
         @ApiResponse(code = HttpStatus.SC_INTERNAL_SERVER_ERROR, message = "Something wrong in Server")})
