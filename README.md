@@ -189,3 +189,9 @@ This is basicly  the git flow workflow but without release branch. This is becau
  
 
 git log –oneline –graph –decorate
+
+
+### test ###
+
+modify test/md-int-test/src/main/test/resources/dac.res to define the backend url for the tests
+run 'mvn clean install -f test/pom.xml'
