@@ -112,7 +112,7 @@
         <module>Database</module>
         <module>bundles</module>
         <module>features</module>
-        <!--<module>tools</module>-->
+        <module>tools</module>
         <module>distributions</module>
 
     </modules>

@@ -41,7 +41,7 @@ pipeline {
     }      
      steps {
        sh '''mvn versions:set -DnewVersion=${VERSION}'''
-       sh '''mvn clean deploy -DtargetRepository=${MVN_REPO} -Dnointtest'''
+       sh '''mvn clean deploy -DtargetRepository=${MVN_REPO}'''
      }
    }
    stage('build and push Images'){
@@ -74,6 +74,18 @@ pipeline {
        sh 'helm upgrade -i --cleanup-on-fail mfbackend ./distributions/helm/mfbackend/ --set repository=${DOCKER_REPO}${DOCKERHUB_USER}/${ORGANIZATION_NAME}-'
        sh 'helm package distributions/helm/mfbackend -u -d helmcharts/'
        sh 'curl ${TARGET_HELM_REPO} --upload-file helmcharts/mfbackend-${VERSION}.tgz -v'
+     }
+   }
+
+   stage('test'){
+    agent {
+        docker {
+            image 'maven:3.6.3-jdk-8'
+        }
+    }
+     steps {
+       sh '''mvn versions:set -DnewVersion=${VERSION}'''
+       sh '''mvn clean install -f test/pom.xml'''
      }
    }
  }
