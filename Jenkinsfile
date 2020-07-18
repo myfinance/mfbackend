@@ -42,8 +42,10 @@ pipeline {
     }      
      steps {
        sh '''mvn versions:set -DnewVersion=${VERSION}'''
-       sh '''mvn clean deploy -DtargetRepository=${MVN_REPO} -Pjacoco -Dsonar.jacoco.reportPaths=./jacoco-ut.exec -Dsonar.jacoco.itReportPath=./jacoco-it.exec'''
-       sh '''mvn -Pjacoco sonar:sonar -Dsonar.jacoco.reportPaths=./jacoco-ut.exec -Dsonar.jacoco.itReportPath=./jacoco-it.exec -Dsonar.host.url=http://${SONAR} -Dsonar.projectKey=mfbackend -Dsonar.login=f16c50eeffa7baa9073734767da6e8f492c6c1ba'''
+       sh '''mvn clean deploy -DtargetRepository=${MVN_REPO}'''
+       //sh '''mvn clean deploy -DtargetRepository=${MVN_REPO} -Pjacoco -Dsonar.jacoco.reportPaths=./jacoco-ut.exec -Dsonar.jacoco.itReportPath=./jacoco-it.exec'''
+       //sh '''mvn -Pjacoco sonar:sonar -Dsonar.jacoco.reportPaths=./jacoco-ut.exec -Dsonar.jacoco.itReportPath=./jacoco-it.exec -Dsonar.host.url=http://${SONAR} -Dsonar.projectKey=mfbackend -Dsonar.login=f16c50eeffa7baa9073734767da6e8f492c6c1ba'''
+       sh '''mvn -Dsonar.host.url=http://${SONAR} -Dsonar.projectKey=mfbackend -Dsonar.login=f16c50eeffa7baa9073734767da6e8f492c6c1ba'''
      }
    }
    stage('build and push Images'){
