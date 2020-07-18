@@ -84,7 +84,6 @@ pipeline {
         }
     }
      steps {
-       sh '''mvn versions:set -DnewVersion=${VERSION} -f test/pom.xml'''
        sh '''mvn clean install -f test/pom.xml -DNEXUS_URL=${NEXUS_URL}'''
      }
    }
