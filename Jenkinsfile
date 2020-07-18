@@ -19,6 +19,7 @@ pipeline {
    MVN_REPO = "http://${NEXUS_URL}/repository/maven-releases/"
    DOCKER_REPO = "${K8N_IP}:31003/repository/mydockerrepo/"
    TARGET_HELM_REPO = "http://${NEXUS_URL}/repository/myhelmrepo/"
+   SONAR = "${K8N_IP}:31004"
  }
  
  stages{
@@ -42,6 +43,7 @@ pipeline {
      steps {
        sh '''mvn versions:set -DnewVersion=${VERSION}'''
        sh '''mvn clean deploy -DtargetRepository=${MVN_REPO}'''
+       sh '''mvn -Pjacoco sonar:sonar -Dsonar.jacoco.reportPaths=~/repos/dac/target/jacoco-ut.exec -Dsonar.jacoco.itReportPath=~/repos/dac/target/jacoco-it.exec -Dsonar.host.url=http://${SONAR} -Dsonar.login=f16c50eeffa7baa9073734767da6e8f492c6c1ba'''
      }
    }
    stage('build and push Images'){
