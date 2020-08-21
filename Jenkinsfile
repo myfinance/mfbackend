@@ -19,7 +19,8 @@ pipeline {
    MVN_REPO = "http://${NEXUS_URL}/repository/maven-releases/"
    DOCKER_REPO = "${K8N_IP}:31003/repository/mydockerrepo/"
    TARGET_HELM_REPO = "http://${NEXUS_URL}/repository/myhelmrepo/"
-   SONAR = "${K8N_IP}:31004"
+   //SONAR = "${K8N_IP}:31004"
+   SONAR = "https://sonarcloud.io"
  }
  
  stages{
@@ -43,9 +44,10 @@ pipeline {
      steps {
        sh '''mvn versions:set -DnewVersion=${VERSION}'''
        //sh '''mvn clean deploy -DtargetRepository=${MVN_REPO}'''
-       sh '''mvn clean deploy -DtargetRepository=${MVN_REPO} -Pjacoco -Dsonar.jacoco.reportPaths=./jacoco-ut.exec -Dsonar.jacoco.itReportPath=./jacoco-it.exec'''
-       sh '''mvn -Dsonar.scm.provider=git -Pjacoco sonar:sonar -Dsonar.jacoco.reportPaths=./jacoco-ut.exec -Dsonar.jacoco.itReportPath=./jacoco-it.exec -Dsonar.host.url=http://${SONAR} -Dsonar.projectKey=mfbackend -Dsonar.login=f16c50eeffa7baa9073734767da6e8f492c6c1ba'''
-       //sh '''mvn sonar:sonar -Dsonar.scm.provider=git -Dsonar.host.url=http://${SONAR} -Dsonar.projectKey=mfbackend -Dsonar.login=f16c50eeffa7baa9073734767da6e8f492c6c1ba'''
+       //sh '''mvn clean deploy -DtargetRepository=${MVN_REPO} -Pjacoco -Dsonar.jacoco.reportPaths=./jacoco-ut.exec -Dsonar.jacoco.itReportPath=./jacoco-it.exec'''
+       //sh '''mvn -Dsonar.scm.provider=git -Pjacoco sonar:sonar -Dsonar.jacoco.reportPaths=./jacoco-ut.exec -Dsonar.jacoco.itReportPath=./jacoco-it.exec -Dsonar.host.url=http://${SONAR} -Dsonar.projectKey=mfbackend -Dsonar.login=f16c50eeffa7baa9073734767da6e8f492c6c1ba'''
+       sh '''mvn clean deploy -DtargetRepository=${MVN_REPO} -Pjacoco -Dsonar.jacoco.reportPaths=./jacoco-ut.exec -Dsonar.jacoco.itReportPath=./jacoco-it.exec org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.projectKey=myfinance_mfbackend -Dsonar.organization=myfinance -Dsonar.host.url=${SONAR} -Dsonar.login=d48202ac4b86df8e851d5429983b0205916352ca'''
+
      }
    }
    stage('build and push Images'){
