@@ -184,6 +184,11 @@ git tag -a latest_commit -m "this is the latest commit"
 git push origin master
 //after sucessful rollout
 
+prepare for next release:
+git checkout dev
+//change and commit the version in the jenkins-file to major_minor_micro-alpha.${BUILD_ID}
+commit and push
+
 - on feature branches and on the master will be no ci-builds
 
 
