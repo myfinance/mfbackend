@@ -12,6 +12,7 @@
 package de.hf.dac.myfinance.api.persistence.dao;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import de.hf.dac.myfinance.api.domain.Transaction;
@@ -19,6 +20,7 @@ import de.hf.dac.myfinance.api.domain.Transaction;
 public interface TransactionDao  {
     List<Transaction> listTransactions(LocalDate startDate, LocalDate endDate);
     Optional<Transaction> getTransaction(int transactionid);
-    void deleteTransaction(Transaction transaction);
+    String deleteTransaction(int transactionid);
     void saveTransaction(Transaction transaction);
+    void updateTransaction(int transactionid, String description, LocalDate transactionDate, LocalDateTime ts);
 }

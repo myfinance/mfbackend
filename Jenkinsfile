@@ -7,9 +7,9 @@ pipeline {
    DOCKERHUB_USER = "holgerfischer"
 
    //Snapshot Version
-   VERSION = "0.14.0-alpha.${BUILD_ID}"
+   //VERSION = "0.14.1-alpha.${BUILD_ID}"
    //Release Version
-   //VERSION = "0.13.1"
+   VERSION = "0.14.1"
 
    K8N_IP = "192.168.100.73"
    REPOSITORY_TAG = "${DOCKERHUB_USER}/${ORGANIZATION_NAME}-${SERVICE_NAME}:${VERSION}"
@@ -19,6 +19,8 @@ pipeline {
    MVN_REPO = "http://${NEXUS_URL}/repository/maven-releases/"
    DOCKER_REPO = "${K8N_IP}:31003/repository/mydockerrepo/"
    TARGET_HELM_REPO = "http://${NEXUS_URL}/repository/myhelmrepo/"
+   //SONAR = "${K8N_IP}:31004"
+   SONAR = "https://sonarcloud.io"
  }
  
  stages{
@@ -41,7 +43,11 @@ pipeline {
     }      
      steps {
        sh '''mvn versions:set -DnewVersion=${VERSION}'''
-       sh '''mvn clean deploy -DtargetRepository=${MVN_REPO} -Dnointtest'''
+       //sh '''mvn clean deploy -DtargetRepository=${MVN_REPO}'''
+       //sh '''mvn clean deploy -DtargetRepository=${MVN_REPO} -Pjacoco -Dsonar.jacoco.reportPaths=./jacoco-ut.exec -Dsonar.jacoco.itReportPath=./jacoco-it.exec'''
+       //sh '''mvn -Dsonar.scm.provider=git -Pjacoco sonar:sonar -Dsonar.jacoco.reportPaths=./jacoco-ut.exec -Dsonar.jacoco.itReportPath=./jacoco-it.exec -Dsonar.host.url=http://${SONAR} -Dsonar.projectKey=mfbackend -Dsonar.login=f16c50eeffa7baa9073734767da6e8f492c6c1ba'''
+       sh '''mvn clean deploy -DtargetRepository=${MVN_REPO} -Pjacoco -Dsonar.jacoco.reportPaths=./jacoco-ut.exec -Dsonar.jacoco.itReportPath=./jacoco-it.exec org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.projectKey=myfinance_mfbackend -Dsonar.organization=myfinance -Dsonar.host.url=${SONAR} -Dsonar.login=d48202ac4b86df8e851d5429983b0205916352ca'''
+
      }
    }
    stage('build and push Images'){
@@ -74,6 +80,17 @@ pipeline {
        sh 'helm upgrade -i --cleanup-on-fail mfbackend ./distributions/helm/mfbackend/ --set repository=${DOCKER_REPO}${DOCKERHUB_USER}/${ORGANIZATION_NAME}-'
        sh 'helm package distributions/helm/mfbackend -u -d helmcharts/'
        sh 'curl ${TARGET_HELM_REPO} --upload-file helmcharts/mfbackend-${VERSION}.tgz -v'
+     }
+   }
+
+   stage('test'){
+    agent {
+        docker {
+            image 'maven:3.6.3-jdk-8'
+        }
+    }
+     steps {
+       sh '''mvn clean install -f test/pom.xml -DNEXUS_URL=${NEXUS_URL}'''
      }
    }
  }

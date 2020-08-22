@@ -112,7 +112,7 @@
         <module>Database</module>
         <module>bundles</module>
         <module>features</module>
-        <!--<module>tools</module>-->
+        <module>tools</module>
         <module>distributions</module>
 
     </modules>
@@ -213,11 +213,6 @@
             <dependency>
                 <groupId>de.hf.dac.api</groupId>
                 <artifactId>de.hf.dac.api.io.routes</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>de.hf.dac</groupId>
-                <artifactId>baserunner</artifactId>
                 <version>${project.version}</version>
             </dependency>
 

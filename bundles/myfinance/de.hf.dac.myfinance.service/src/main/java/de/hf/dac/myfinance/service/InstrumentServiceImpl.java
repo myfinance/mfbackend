@@ -25,6 +25,7 @@ import de.hf.dac.myfinance.api.domain.*;
 import de.hf.dac.myfinance.api.domain.Currency;
 import de.hf.dac.myfinance.api.exceptions.MFException;
 import de.hf.dac.myfinance.api.exceptions.MFMsgKey;
+import de.hf.dac.myfinance.api.persistence.dao.CashflowDao;
 import de.hf.dac.myfinance.api.persistence.dao.EndOfDayPriceDao;
 import de.hf.dac.myfinance.api.persistence.dao.InstrumentDao;
 import de.hf.dac.myfinance.api.persistence.dao.TransactionDao;
@@ -45,6 +46,7 @@ public class InstrumentServiceImpl implements InstrumentService {
     private InstrumentDao instrumentDao;
     private EndOfDayPriceDao endOfDayPriceDao;
     private TransactionDao transactionDao;
+    private CashflowDao cashflowDao;
     private ValueCurveService service;
     private WebRequestService webRequestService;
     private AuditService auditService;
@@ -54,10 +56,11 @@ public class InstrumentServiceImpl implements InstrumentService {
     private final static String DEFAULT_ACCPF_PREFIX = "accountPf_";
 
     @Inject
-    public InstrumentServiceImpl(InstrumentDao instrumentDao, EndOfDayPriceDao endOfDayPriceDao, TransactionDao transactionDao, WebRequestService webRequestService, AuditService auditService){
+    public InstrumentServiceImpl(InstrumentDao instrumentDao, EndOfDayPriceDao endOfDayPriceDao, TransactionDao transactionDao, CashflowDao cashflowDao, WebRequestService webRequestService, AuditService auditService){
         this.instrumentDao = instrumentDao;
         this.endOfDayPriceDao = endOfDayPriceDao;
         this.transactionDao = transactionDao;
+        this.cashflowDao = cashflowDao;
         this.webRequestService = webRequestService;
         service = new ValueCurveService(instrumentDao, endOfDayPriceDao);
         this.auditService = auditService;
@@ -494,13 +497,38 @@ public class InstrumentServiceImpl implements InstrumentService {
     }
 
     @Override
+    public void updateTransaction(int transactionId, String description, double value, LocalDate transactionDate, LocalDateTime ts){
+        Optional<Transaction> transaction = transactionDao.getTransaction(transactionId);
+        if(!transaction.isPresent()){
+            throw new MFException(MFMsgKey.UNKNOWN_TRANSACTION_EXCEPTION, "Transaction not updated: Transaction for id:"+transactionId + " not found");
+        }
+        Transaction oldtransaction = transaction.get();
+        transactionDao.updateTransaction(transactionId, description, transactionDate, ts);
+        if(oldtransaction.getTransactionType() == TransactionType.INCOMEEXPENSES) {
+            oldtransaction.getCashflows().forEach(i-> {if(i.getValue()!=value) { cashflowDao.updateCashflow(i.getCashflowid(), value);}});
+        } else if(oldtransaction.getTransactionType() == TransactionType.BUDGETTRANSFER ||
+                oldtransaction.getTransactionType() == TransactionType.TRANSFER) {
+            oldtransaction.getCashflows().forEach(i-> {
+                if( (i.getValue() < 0 && value < 0) || (i.getValue() > 0 && value > 0)) {
+                    cashflowDao.updateCashflow(i.getCashflowid(), value);
+                } else {
+                    cashflowDao.updateCashflow(i.getCashflowid(), -1 * value);
+                }
+            });
+        }
+        auditService.saveMessage(" transaction with id "+transactionId+" ,desc: '"+oldtransaction.getDescription()+
+                        "' and Transactiondate:" + oldtransaction.getTransactiondate() + "updated to desc="+description + ", date=" + transactionDate +
+                        " and value=" + value,
+                Severity.INFO, AUDIT_MSG_TYPE);
+
+    }
+
+    @Override
     public void deleteTransaction(int transactionId){
         Optional<Transaction> transaction = transactionDao.getTransaction(transactionId);
         if(transaction.isPresent()){
-            auditService.saveMessage(" transaction with id "+transactionId+" ,desc: '"+transaction.get().getDescription()+
-                    "' and Transactiondate:" + transaction.get().getTransactiondate() + "deleted",
-                Severity.INFO, AUDIT_MSG_TYPE);
-            transactionDao.deleteTransaction(transaction.get());
+            auditService.saveMessage(transactionDao.deleteTransaction(transactionId),
+                    Severity.INFO, AUDIT_MSG_TYPE);
         }
     }
 

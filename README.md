@@ -117,6 +117,8 @@ then add equities for example DE0005140008 deutsche Bank
                               add symbols MSFT, DBK
                               start import prices
                               
+you can find the static code analysis after each CI-Build hear: https://sonarcloud.io/organizations/myfinance/projects
+                              
 ### mfshell ###                              
 
 admin shell to start jobs etc on myfinance. works only in intranet 
@@ -189,3 +191,10 @@ This is basicly  the git flow workflow but without release branch. This is becau
  
 
 git log --oneline --graph --decorate
+
+
+### test ###
+
+modify test/md-int-test/src/main/test/resources/dac.res to define the backend url for the tests
+run 'mvn clean install -f test/pom.xml -DNEXUS_URL=192.168.100.73:31001'
+version is the mfbackendversion 

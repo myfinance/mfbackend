@@ -296,9 +296,25 @@ public class EnvironmentDataResource extends BaseSecuredResource<OpType,OpLevel>
     }
 
     @POST
+    @Path("/updateTransaction")
+    @Produces(MediaType.APPLICATION_JSON)
+    @ApiOperation(value = "update Transaction")
+    @ApiResponses(value = {
+            @ApiResponse(code = HttpStatus.SC_NO_CONTENT, message = "updated"),
+            @ApiResponse(code = HttpStatus.SC_INTERNAL_SERVER_ERROR, message = "Something wrong in Server")})
+    public Response updateTransaction(@QueryParam("id") @ApiParam(value="id") int id,
+                                      @QueryParam("description") @ApiParam(value="description") String description,
+                                      @QueryParam("value") @ApiParam(value="the value of the income or expense") double value,
+                                      @QueryParam("transactiondate") @ApiParam(value="the transactiondate(yyyy-mm-dd") String transactiondate) {
+        checkOperationAllowed(OpType.WRITE);
+        marketDataEnvironment.getInstrumentService().updateTransaction(id, description, value, LocalDate.parse(transactiondate), LocalDateTime.now());
+        return Response.ok().build();
+    }
+
+    @POST
     @Path("/addTransfer")
     @Produces(MediaType.APPLICATION_JSON)
-    @ApiOperation(value = "save Transfer")
+    @ApiOperation(value = "save Transfer or BudgetTransfer")
     @ApiResponses(value = {
         @ApiResponse(code = HttpStatus.SC_NO_CONTENT, message = "added"),
         @ApiResponse(code = HttpStatus.SC_INTERNAL_SERVER_ERROR, message = "Something wrong in Server")})

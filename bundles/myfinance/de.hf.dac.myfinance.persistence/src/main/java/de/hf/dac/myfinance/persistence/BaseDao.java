@@ -56,17 +56,6 @@ public abstract class BaseDao<T> {
         }
     }
 
-    public void deleteObject(T object){
-        try{
-            marketDataEm = this.marketDataEmf.createEntityManager();
-            marketDataEm.getTransaction().begin();
-            marketDataEm.remove(object);
-            marketDataEm.getTransaction().commit();
-        } finally {
-            marketDataEm.close();
-        }
-    }
-
     protected List<T> listQueryResult(String queryString) {
         List<T> result;
         try{
