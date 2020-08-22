@@ -117,6 +117,8 @@ then add equities for example DE0005140008 deutsche Bank
                               add symbols MSFT, DBK
                               start import prices
                               
+you can find the static code analysis after each CI-Build hear: https://sonarcloud.io/organizations/myfinance/projects
+                              
 ### mfshell ###                              
 
 admin shell to start jobs etc on myfinance. works only in intranet 
