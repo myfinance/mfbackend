@@ -188,4 +188,4 @@ git push origin master
 This is basicly  the git flow workflow but without release branch. This is because I will never fix the production only. If I need a fix I will allways rollout the dev-branch with all completed features. This is ok because I'm the only tester and if I test anything I'll do it allready in the featurebranch before I'll merge it to dev. 
  
 
-git log –oneline –graph –decorate
+git log --oneline --graph --decorate
