@@ -30,7 +30,6 @@ import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 import java.util.Arrays;
 import java.util.stream.Collectors;
-import javax.annotation.PostConstruct;
 
 /**
  * Taken from https://www.holisticon.de/2012/08/postconstruct-mit-guice/

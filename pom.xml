@@ -7,11 +7,10 @@
     <packaging>pom</packaging>
     <name>MyFinance</name>
     <properties>
-        <java.version>1.8</java.version>
+        <java.version>11</java.version>
         <maven.compiler.source>${java.version}</maven.compiler.source>
         <maven.compiler.target>${java.version}</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <localdeployfolder>c:\Temp</localdeployfolder>
         <targetRepository>file:m2repo/</targetRepository>
         <maven.javadoc.skip>true</maven.javadoc.skip>
 
@@ -33,7 +32,7 @@
 
         <apacheds-server-jndi.version>1.5.5</apacheds-server-jndi.version><!-- connect to ldap -->
         <slf4j.version>1.7.21</slf4j.version><!-- logging slf impl-->
-        <lombok.version>1.16.8</lombok.version><!-- generate constructor, getter, setter via annotation-->
+        <lombok.version>1.18.12</lombok.version><!-- generate constructor, getter, setter via annotation-->
         <inject.version>1</inject.version><!-- inject annotation api for multiple di containers-->
         <transaction-api.version>1.2</transaction-api.version><!-- javax.transaction-->
         <pax-cdi-api.version>0.12.0</pax-cdi-api.version>
@@ -44,7 +43,7 @@
         <karaf.version>4.2.1</karaf.version>
         <decanter.version>2.0.0</decanter.version>
         <pax-jdbc.version>1.1.0</pax-jdbc.version><!--feature to create Datasources -->
-        <apache-cxf.version>3.1.15</apache-cxf.version><!-- rest für osgi -->
+        <apache-cxf.version>3.4.0</apache-cxf.version><!-- rest für osgi -->
         <servicemix-reflections.version>0.9.10_3</servicemix-reflections.version>
         <junit.version>4.12</junit.version>
         <httpcore-osgi.version>4.4.5</httpcore-osgi.version>
@@ -72,15 +71,16 @@
         <jna.version>4.2.2</jna.version>
 
         <!--rest-->
-        <rs-api.version>2.0.1</rs-api.version>
+        <rs-api.version>2.1.1</rs-api.version>
         <rs-api-jersey-client.version>2.1</rs-api-jersey-client.version>
         <swagger.version>1.5.19</swagger.version>
         <swagger-codegen.version>2.3.1</swagger-codegen.version>
-        <jackson.version>2.9.5</jackson.version>
+        <jackson.version>2.11.2</jackson.version>
         <snakeyaml.version>1.18</snakeyaml.version>
         <aries.rsa.version>1.9.0</aries.rsa.version>
         <gson.version>2.7</gson.version>
         <commons-codec.version>1.10</commons-codec.version>
+        <javax.servlet-api.version>4.0.1</javax.servlet-api.version>
 
         <!--testrunner-->
         <groovy.version>2.4.7</groovy.version>
@@ -100,6 +100,8 @@
         <exec-maven-plugin.version>1.6.0</exec-maven-plugin.version>
         <docker-maven-plugin.version>0.33.0</docker-maven-plugin.version>
         <jar-plugin.version>3.0.2</jar-plugin.version>
+
+        <bnd-plugin.version>5.1.2</bnd-plugin.version>
 
         <asciidoc.version>1.5.8.1</asciidoc.version>
         <asciidoc-plugin.version>1.5.7.1</asciidoc-plugin.version>
