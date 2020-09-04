@@ -1,2 +1,6 @@
 #!/bin/bash
-mvn -Pjacoco clean install sonar:sonar -Dsonar.jacoco.reportPaths=~/repos/dac/target/jacoco-ut.exec -Dsonar.jacoco.itReportPath=~/repos/dac/target/jacoco-it.exec -Dsonar.host.url=http://localhost:9000 -Dsonar.login=afd01fc97608394267c0af112064b12ffcbc702a
+# mvn clean install
+docker image build -t holgerfischer/myfinance-mfpostgres:0.0.0-alpha.1 ./distributions/mf-docker-images/docker/mfpostgres/
+docker image build -t holgerfischer/myfinance-mfdbupdate:0.0.0-alpha.1 ./distributions/mf-docker-images/target/docker-prep/mfdb/
+#docker image build -t holgerfischer/myfinance-mfbackend:0.0.0-alpha.1 ./distributions/mf-docker-images/target/docker-prep/myfinance/
+kubectl apply -f deploy.yaml
