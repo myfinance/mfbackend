@@ -1,0 +1,21 @@
+openapi: 3.0.3
+info:
+  version: '1.0'
+  title: MyFinance
+  description: 'Spezification for MyFinance'
+servers:
+  - url: http://dev.myfinance.mylocaldomain/dac/api/
+    description: Testserver
+  - url: http://localhost:8181/dac/api/
+    description: Development
+paths:
+  /v1/myfinance/hello:
+    get:
+      responses:
+        '200':
+          description: say hello to check that the service is up and running
+  /v1/myfinance/environments/list:
+    get:
+      responses:
+        '200':
+          description: List of environments

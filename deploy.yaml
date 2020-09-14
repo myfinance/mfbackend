@@ -116,6 +116,26 @@ spec:
 
 ---
 
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: swaggerui
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: swaggerui
+  template:
+    metadata:
+      labels:
+        app: swaggerui
+    spec:
+      containers:
+        - name: swaggerui
+          image: swaggerapi/swagger-ui
+
+---
+
 #apiVersion: apps/v1
 #kind: Deployment
 #metadata:
@@ -180,3 +200,19 @@ spec:
 #    port: 8443
 #    nodePort: 30021
 # type: NodePort
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: swaggerui
+spec:
+  #this defines which pod is going to be presented by this service
+  selector:
+    app: swaggerui
+  ports:
+    - name: swaggerui
+      port: 80
+      nodePort: 30031
+  type: NodePort

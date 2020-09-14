@@ -92,11 +92,11 @@
 
                     </bootFeatures>
 
-                    <libraries>
+                    <!--<libraries>
                         <library>mvn:org.apache.karaf.specs/org.apache.karaf.specs.activator/4.2.1;type:=boot</library>
                         <library>mvn:org.apache.karaf.specs/org.apache.karaf.specs.java.xml.ws/4.2.1;type:=endorsed</library>
                     </libraries>
-                    <javase>1.8</javase>
+                    <javase>1.8</javase>-->
                 </configuration>
             </plugin>
             <plugin>
@@ -151,13 +151,14 @@
                             </resources>
                         </configuration>
                     </execution>
-                    <execution>
+                    <!--patch jetty.xml location in feature config pax-http-jetty -->
+                    <!--<execution>
                         <id>copy-patch-pax-web-features-4.3.0</id>
                         <phase>prepare-package</phase>
                         <goals>
                             <goal>copy-resources</goal>
                         </goals>
-                        <!--patch jetty.xml location in feature config pax-http-jetty -->
+
                         <configuration>
                             <outputDirectory>${basedir}/target/assembly/system/org/ops4j/pax/web/pax-web-features/4.3.0</outputDirectory>
                             <resources>
@@ -167,7 +168,7 @@
                                 </resource>
                             </resources>
                         </configuration>
-                    </execution>
+                    </execution>-->
                 </executions>
             </plugin>
         </plugins>

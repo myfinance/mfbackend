@@ -33,11 +33,11 @@
         <bundle>mvn:de.hf.dac.myfinance.api/de.hf.dac.myfinance.api.restservice/${project.version}</bundle>
         <bundle>mvn:de.hf.dac.myfinance/de.hf.dac.myfinance.restservice/${project.version}</bundle>
         <bundle>mvn:de.hf.dac.myfinance/de.hf.dac.myfinance.application/${project.version}</bundle>
+        <bundle>mvn:de.hf.dac.myfinance/de.hf.dac.myfinance.restapi/${project.version}</bundle>
     </feature>
 
     <feature name="myfinance-features" version="${pom.version}">
         <feature>myfinance-restservice-feature</feature>
-        <!--<bundle>mvn:de.hf.dac.myfinance.client/mffrontend/${project.version}</bundle>-->
         <bundle>mvn:de.hf.dac.web/de.hf.dac.web.doc/${project.version}</bundle>
     </feature>
 

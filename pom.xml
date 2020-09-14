@@ -40,7 +40,7 @@
         <hibernate.version>5.2.10.Final</hibernate.version>
         <hibernate-tools.version>5.2.5.Final</hibernate-tools.version>
         <hibernate-annotations.version>5.0.0.Final</hibernate-annotations.version>
-        <karaf.version>4.2.1</karaf.version>
+        <karaf.version>4.2.9</karaf.version>
         <decanter.version>2.0.0</decanter.version>
         <pax-jdbc.version>1.1.0</pax-jdbc.version><!--feature to create Datasources -->
         <apache-cxf.version>3.4.0</apache-cxf.version><!-- rest für osgi -->
@@ -54,13 +54,14 @@
         <spring-data-commons.version>1.11.4.RELEASE</spring-data-commons.version>
         <spring-data.version>1.9.4.RELEASE</spring-data.version>
 
-        <apache-commons-lang3.version>3.7
+        <apache-commons-lang3.version>3.11
         </apache-commons-lang3.version><!--Equalsbuilder wirklich benötigt? Was kann das Paket noch: auch von swagger benötigt-->
         <felix-commands.version>0.4.0</felix-commands.version>
         <hawtio.version>2.3.0</hawtio.version>
         <guice.version>4.1.0</guice.version>
+        <guava-failureaccess.version>1.0.1</guava-failureaccess.version>
         <guava.version>19.0</guava.version> <!--von guice benötigt in version > 19-->
-        <guava-swagger.version>20.0</guava-swagger.version>
+        <guava-swagger.version>27.1-jre</guava-swagger.version>
         <osgi-cmpn.version>6.0.0</osgi-cmpn.version>
         <javax-persistence.version>2.1.1</javax-persistence.version>
 
@@ -73,7 +74,8 @@
         <!--rest-->
         <rs-api.version>2.1.1</rs-api.version>
         <rs-api-jersey-client.version>2.1</rs-api-jersey-client.version>
-        <swagger.version>1.5.19</swagger.version>
+        <swagger.version>1.6.2</swagger.version><!-- api model annotation in api.domain, api.io.routes and api.rest.model for client generation -->
+        <!--<swaggerv3.version>2.1.4</swaggerv3.version>-->
         <swagger-codegen.version>2.3.1</swagger-codegen.version>
         <jackson.version>2.11.2</jackson.version>
         <snakeyaml.version>1.18</snakeyaml.version>
@@ -294,13 +296,6 @@
                 <groupId>org.osgi</groupId>
                 <artifactId>org.osgi.core</artifactId>
                 <version>${osgi-cmpn.version}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>io.swagger</groupId>
-                <artifactId>swagger-annotations</artifactId>
-                <version>${swagger.version}</version>
-                <scope>provided</scope>
             </dependency>
 
             <!--security and ldap-->
