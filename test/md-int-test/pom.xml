@@ -11,26 +11,27 @@
 
 
 
-    <!--<properties>
-        <maven.test.failure.ignore>true</maven.test.failure.ignore>
-    </properties>-->
+    <properties>
+        <!--<maven.test.failure.ignore>true</maven.test.failure.ignore>-->
+        <dac.version>0.15.0-alpha.32</dac.version>
+    </properties>
 
 
     <dependencies>
         <dependency>
             <groupId>de.hf.dac</groupId>
             <artifactId>dac-test-runner</artifactId>
-            <version>0.14.1-alpha.8</version>
+            <version>${dac.version}</version>
         </dependency>
         <dependency>
             <groupId>de.hf.dac.io</groupId>
             <artifactId>de.hf.dac.io.configuration</artifactId>
-            <version>0.13.1</version>
+            <version>${dac.version}</version>
         </dependency>
         <dependency>
             <groupId>de.hf.dac</groupId>
             <artifactId>baserunner</artifactId>
-            <version>0.13.0</version>
+            <version>${dac.version}</version>
         </dependency>
     </dependencies>
 
