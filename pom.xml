@@ -31,7 +31,7 @@
         <packageadmin-plugin.version>1.0.4</packageadmin-plugin.version>
 
         <apacheds-server-jndi.version>1.5.5</apacheds-server-jndi.version><!-- connect to ldap -->
-        <slf4j.version>1.7.21</slf4j.version><!-- logging slf impl-->
+        <slf4j.version>1.7.30</slf4j.version><!-- logging slf impl-->
         <lombok.version>1.18.12</lombok.version><!-- generate constructor, getter, setter via annotation-->
         <inject.version>1</inject.version><!-- inject annotation api for multiple di containers-->
         <transaction-api.version>1.2</transaction-api.version><!-- javax.transaction-->
@@ -45,7 +45,7 @@
         <pax-jdbc.version>1.1.0</pax-jdbc.version><!--feature to create Datasources -->
         <apache-cxf.version>3.4.0</apache-cxf.version><!-- rest für osgi -->
         <servicemix-reflections.version>0.9.10_3</servicemix-reflections.version>
-        <junit.version>4.12</junit.version>
+        <junit.version>4.13</junit.version>
         <httpcore-osgi.version>4.4.5</httpcore-osgi.version>
         <narayana.version>5.6.2.Final</narayana.version>
 
@@ -89,6 +89,7 @@
         <spring.version>4.3.9.RELEASE</spring.version>
         <j2html.version>1.1.0</j2html.version><!-- create testreports -->
         <restassured.version>3.0.3</restassured.version><!-- rest requests for test -->
+        <jaxb.version>2.3.3</jaxb.version>
         <camel.version>2.18.1</camel.version>
 
         <assembly-plugin.version>3.1.0</assembly-plugin.version>

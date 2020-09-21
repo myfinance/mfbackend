@@ -13,7 +13,7 @@
 
     <properties>
         <!--<maven.test.failure.ignore>true</maven.test.failure.ignore>-->
-        <dac.version>0.15.0-alpha.32</dac.version>
+        <dac.version>0.15.0-alpha.34</dac.version>
     </properties>
 
 
@@ -31,7 +31,7 @@
         <dependency>
             <groupId>de.hf.dac</groupId>
             <artifactId>baserunner</artifactId>
-            <version>${dac.version}</version>
+            <version>0.14.0</version>
         </dependency>
     </dependencies>
 
