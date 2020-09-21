@@ -92,10 +92,6 @@ or at the buildserver(see ansible): mvn -Pjacoco sonar:sonar -Dsonar.jacoco.repo
 
 !attention! if you run integrationtests or clientgeneration under linux, you have to deploy the docker images first. so run mvn clean deploy instead of install
 
-### DdevEnv ###
-
-In der Dev-Umgebung muss export DAC_LOGIN_INFO=$HOME/dac.res gesetzt sein und eine postgres instanz entsprechend eingerichtet sein
-
 ### get started ###
 
 start with repo mfinfra first

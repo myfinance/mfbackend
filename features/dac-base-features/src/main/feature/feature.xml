@@ -86,7 +86,6 @@
     </feature>
 
     <feature name="dac-io-feature" version="${pom.version}">
-        <!--<feature>dac-base-commands</feature>-->
         <feature>dac-io-jpa-feature</feature>
         <feature>dac-io-routes-feature</feature>
         <feature>dac-io-web-feature</feature>
@@ -117,11 +116,16 @@
         cxf-jackson</feature> for a newer swagger version a higher jackson-version is necessary.
         Unfortunatly upgrading the hole cfx-feature causes some problems, so I use my own jackson feature-->
         <feature version="${apache-cxf.version}">cxf-jaxrs</feature>
+        <bundle>mvn:com.google.guava/failureaccess/${guava-failureaccess.version}</bundle>
         <bundle>mvn:com.google.guava/guava/${guava-swagger.version}</bundle>
         <bundle>mvn:org.apache.commons/commons-lang3/${apache-commons-lang3.version}</bundle>
         <bundle>mvn:javax.validation/validation-api/1.1.0.Final</bundle>
         <bundle>mvn:org.apache.servicemix.bundles/org.apache.servicemix.bundles.reflections/${servicemix-reflections.version}</bundle>
+        <!--<bundle>mvn:org.apache.cxf/cxf-rt-rs-service-description-openapi-v3/${apache-cxf.version}</bundle>-->
         <bundle>mvn:org.apache.cxf/cxf-rt-rs-service-description-swagger/${apache-cxf.version}</bundle>
+        <bundle>mvn:org.apache.cxf/cxf-rt-rs-service-description-common-openapi/${apache-cxf.version}</bundle>
+        <bundle>mvn:org.apache.cxf/cxf-rt-rs-service-description-swagger-ui/${apache-cxf.version}</bundle>
+        <!--<bundle>mvn:io.swagger.core.v3/swagger-annotations/${swaggerv3.version}</bundle>-->
         <bundle>mvn:io.swagger/swagger-annotations/${swagger.version}</bundle>
         <bundle>mvn:io.swagger/swagger-models/${swagger.version}</bundle>
         <bundle>mvn:io.swagger/swagger-core/${swagger.version}</bundle>

@@ -18,5 +18,6 @@
         <module>de.hf.dac.myfinance.service</module>
         <module>de.hf.dac.myfinance.application</module>
         <module>de.hf.dac.myfinance.runner</module>
+        <module>de.hf.dac.myfinance.restapi</module>
     </modules>
 </project>

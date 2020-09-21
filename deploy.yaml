@@ -1,3 +1,63 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: mfconfigpvc
+spec:
+  storageClassName: mfconfigstorage
+  accessModes:
+    - ReadOnlyMany
+  resources:
+    requests:
+      storage: 1Mi
+
+---
+
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: nfsstorage
+spec:
+  storageClassName: mfconfigstorage
+  accessModes:
+    - ReadOnlyMany
+  capacity:
+    storage: 1Mi
+  hostPath:
+    path: /mnt/data/mf/dev_config/
+    type: DirectoryOrCreate
+
+---
+
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: mfdbpvc
+spec:
+  storageClassName: mfdbstorage
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 5Gi
+
+---
+
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: localstorage
+spec:
+  storageClassName: mfdbstorage
+  accessModes:
+    - ReadWriteOnce
+  capacity:
+    storage: 5Gi
+  hostPath:
+    path: /opt/mf/local_db/
+    type: Directory
+
+---
+
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -14,7 +74,7 @@ spec:
     spec:
       containers:
         - name: mfdb
-          image: ${DB_REPOSITORY_TAG}
+          image: holgerfischer/myfinance-mfpostgres:0.0.0-alpha.1
           #never pull the image from dockerhub. Jenkins provides the image localy 
           imagePullPolicy: Never 
           volumeMounts:
@@ -41,7 +101,7 @@ spec:
     spec:
       containers: 
       - name: mfupgrade
-        image: ${MFUPDATE_REPOSITORY_TAG} 
+        image: holgerfischer/myfinance-mfdbupdate:0.0.0-alpha.1
         #never pull the image from dockerhub. Jenkins provides the image localy 
         imagePullPolicy: Never                      
         env:
@@ -59,31 +119,51 @@ spec:
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: myfinance
+  name: swaggerui
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: myfinance  
+      app: swaggerui
   template:
     metadata:
       labels:
-        app: myfinance
+        app: swaggerui
     spec:
       containers:
-        - name: myfinance  
-          image: ${REPOSITORY_TAG}   
-          #never pull the image from dockerhub. Jenkins provides the image localy 
-          imagePullPolicy: Never      
-          tty: true     
-          volumeMounts:
-           - name: myfinanceconfig
-             mountPath: /MyFinance/envconfig           
-      volumes:
-        - name: myfinanceconfig
-          persistentVolumeClaim:
-              claimName: mfconfigpvc  
+        - name: swaggerui
+          image: swaggerapi/swagger-ui
+
 ---
+
+#apiVersion: apps/v1
+#kind: Deployment
+#metadata:
+#  name: myfinance
+#spec:
+#  replicas: 1
+#  selector:
+#    matchLabels:
+#      app: myfinance
+#  template:
+#    metadata:
+#      labels:
+#        app: myfinance
+#    spec:
+#      containers:
+#        - name: myfinance
+#          image: holgerfischer/myfinance-mfbackend:0.0.0-alpha.1
+#          #never pull the image from dockerhub. Jenkins provides the image localy
+#          imagePullPolicy: Never
+#          tty: true
+#          volumeMounts:
+#           - name: myfinanceconfig
+#             mountPath: /MyFinance/envconfig
+#      volumes:
+#        - name: myfinanceconfig
+#          persistentVolumeClaim:
+#              claimName: mfconfigpvc
+#---
 
 apiVersion: v1
 kind: Service
@@ -94,26 +174,45 @@ spec:
  selector:
   app: mfdb
  ports:
-  - name: mfdb
-    port: 5432
- type: ClusterIP  
+    - name: mfdb
+      port: 5432
+      nodePort: 30030
+#  - name: mfdb
+#    port: 5432
+# type: ClusterIP
+ type: NodePort
  
  
+#---
+
+#apiVersion: v1
+#kind: Service
+#metadata:
+# name: myfinance
+#spec:
+# selector:
+#  app: myfinance
+# ports:
+#  - name: http
+#    port: 8181
+#    nodePort: 30020
+#  - name: https
+#    port: 8443
+#    nodePort: 30021
+# type: NodePort
+
 ---
 
 apiVersion: v1
 kind: Service
 metadata:
- name: myfinance
+  name: swaggerui
 spec:
- #this defines which pod is going to be presented by this service
- selector:
-  app: myfinance
- ports:
-  - name: http
-    port: 8181
-    nodePort: 30020
-  - name: https
-    port: 8443
-    nodePort: 30021                   
- type: NodePort 
+  #this defines which pod is going to be presented by this service
+  selector:
+    app: swaggerui
+  ports:
+    - name: swaggerui
+      port: 80
+      nodePort: 30031
+  type: NodePort

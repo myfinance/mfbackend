@@ -1,5 +1,5 @@
 # start from official java container
-FROM anapsix/alpine-java:8u144b01_jdk
+FROM adoptopenjdk/openjdk11:jre-11.0.8_10-alpine
 
 ADD ./MyFinance /MyFinance
 RUN mkdir /MyFinance/envconfig
