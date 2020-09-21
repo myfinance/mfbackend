@@ -17,7 +17,7 @@
         <!-- default Path to jacoco-Report. Should be overridden with command line argument to the absolute path of the parent target directory -->
         <sonar.jacoco.reportPaths>${project.build.directory}/jacoco-ut.exec</sonar.jacoco.reportPaths>
         <sonar.jacoco.itReportPath>${project.build.directory}/jacoco-it.exec</sonar.jacoco.itReportPath>
-        <jacoco.version>0.8.1</jacoco.version>
+        <jacoco.version>0.8.6</jacoco.version>
         <java-doc.version>3.0.0</java-doc.version>
 
         <!-- DB-->
