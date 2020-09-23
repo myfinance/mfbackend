@@ -55,7 +55,7 @@ public class ValueCurveService {
         return valueCurve;
     }
 
-    public ValueHandler getValueHandler(InstrumentType instrumentType){
+    private ValueHandler getValueHandler(InstrumentType instrumentType){
         ValueHandler valueHandler = null;
         switch(instrumentType.getTypeGroup()){
             case SECURITY:
@@ -81,5 +81,9 @@ public class ValueCurveService {
             value = valueCurve.get(valueCurve.lastKey());
         }
         return value;
+    }
+
+    public void updateCache(int instrumentId){
+        cache.removeCurve(instrumentId);
     }
 }

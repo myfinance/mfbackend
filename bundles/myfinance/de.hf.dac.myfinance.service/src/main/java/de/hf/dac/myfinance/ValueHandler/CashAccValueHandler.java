@@ -29,29 +29,29 @@ public class CashAccValueHandler implements ValueHandler{
 
     public TreeMap<LocalDate, Double> calcValueCurve(Instrument instrument) {
         TreeMap<LocalDate, Double> valueCurve = new TreeMap<>();
-        Map<LocalDate, Cashflow> cashflows = instrumentDao.getInstrumentCashflowMap(instrument.getInstrumentid());
-
-        SortedSet<LocalDate> sortedDates = new TreeSet<>(cashflows.keySet());
-
-        LocalDate lastDate = sortedDates.first();
+        Map<LocalDate, List<Cashflow>> cashflows = instrumentDao.getInstrumentCashflowMap(instrument.getInstrumentid());
         double value = 0.0;
-        Iterator<LocalDate> iter = sortedDates.iterator();
-        while(iter.hasNext()) {
+        if(cashflows==null || cashflows.isEmpty()) {
+            valueCurve.put(LocalDate.now(), value);
+        } else {
+            SortedSet<LocalDate> sortedDates = new TreeSet<>(cashflows.keySet());
+            LocalDate lastDate = sortedDates.first();
+            //add initial 0 value before the first cashflow
+            valueCurve.put(lastDate.minusDays(1), value);
+            Iterator<LocalDate> iter = sortedDates.iterator();
+            while(iter.hasNext()) {
 
-            LocalDate nextExistingDate = iter.next();
-            while(lastDate.isBefore(nextExistingDate)){
-                valueCurve.put(lastDate, value);
-                lastDate=lastDate.plusDays(1);
+                LocalDate nextExistingDate = iter.next();
+                while(lastDate.isBefore(nextExistingDate)){
+                    valueCurve.put(lastDate, value);
+                    lastDate=lastDate.plusDays(1);
+                }
+                lastDate=nextExistingDate.plusDays(1);
+                List<Cashflow> cashflow = cashflows.get(nextExistingDate);
+                value += cashflow.stream().mapToDouble(Cashflow::getValue).sum();
+                valueCurve.put(nextExistingDate, value);
             }
-            lastDate=nextExistingDate.plusDays(1);
-            Cashflow cashflow = cashflows.get(nextExistingDate);
-
-            value = value + cashflow.getValue();
-            valueCurve.put(nextExistingDate, value);
-
         }
-
-
         return valueCurve;
     }
 }
