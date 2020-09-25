@@ -34,7 +34,7 @@ public interface InstrumentDao {
     Optional<Instrument> getInstrument(int instrumentId);
     Optional<Source> getSource(int sourceId);
     List<Source> getActiveSources();
-    Map<LocalDate, Cashflow> getInstrumentCashflowMap(int instrumentId);
+    Map<LocalDate, List<Cashflow>>getInstrumentCashflowMap(int instrumentId);
     List<Cashflow> listInstrumentCashflows(int instrumentId);
     void saveInstrument(Instrument instrument);
     void updateInstrument(int instrumentId, String description, boolean isActive);

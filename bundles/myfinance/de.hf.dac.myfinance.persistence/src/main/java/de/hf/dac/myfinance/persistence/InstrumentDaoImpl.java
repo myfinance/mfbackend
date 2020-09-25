@@ -19,8 +19,6 @@ package de.hf.dac.myfinance.persistence;
 
 import de.hf.dac.myfinance.api.application.EnvTarget;
 import de.hf.dac.myfinance.api.domain.*;
-import de.hf.dac.myfinance.api.exceptions.MFException;
-import de.hf.dac.myfinance.api.exceptions.MFMsgKey;
 import de.hf.dac.myfinance.api.persistence.dao.InstrumentDao;
 
 import javax.inject.Inject;
@@ -29,10 +27,7 @@ import javax.persistence.EntityManagerFactory;
 import javax.persistence.Query;
 
 import java.time.LocalDate;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-import java.util.stream.Collectors;
+import java.util.*;
 
 public class InstrumentDaoImpl extends BaseDao<Instrument> implements InstrumentDao {
 
@@ -82,12 +77,19 @@ public class InstrumentDaoImpl extends BaseDao<Instrument> implements Instrument
     }
 
     @Override
-    public  Map<LocalDate, Cashflow> getInstrumentCashflowMap(int instrumentId){
-        Map<LocalDate, Cashflow> returnValue;
+    public  Map<LocalDate, List<Cashflow>> getInstrumentCashflowMap(int instrumentId){
+        Map<LocalDate, List<Cashflow>> returnValue = new HashMap<>();
         try{
             marketDataEm = this.marketDataEmf.createEntityManager();
-            returnValue = getCashflows(instrumentId).stream().collect(
-                Collectors.toMap(x->x.getTransaction().getTransactiondate(), x->x));
+            getCashflows(instrumentId).forEach(x->{
+                List<Cashflow> cashflows = new ArrayList();
+                cashflows.add(x);
+                if(returnValue.containsKey(x.getTransaction().getTransactiondate())) {
+                    cashflows.addAll(returnValue.get(x.getTransaction().getTransactiondate()));
+                    returnValue.remove(x.getTransaction().getTransactiondate());
+                }
+                returnValue.put(x.getTransaction().getTransactiondate(), cashflows);
+            });
         } finally {
             marketDataEm.close();
         }

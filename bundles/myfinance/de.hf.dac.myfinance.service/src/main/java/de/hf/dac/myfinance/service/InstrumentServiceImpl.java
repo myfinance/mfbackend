@@ -152,7 +152,6 @@ public class InstrumentServiceImpl implements InstrumentService {
         return service.getValue(instrumentId, date);
     }
 
-
     @Override
     public void saveEquity(String theisin, String description) {
         String isin = theisin.toUpperCase();
@@ -444,6 +443,9 @@ public class InstrumentServiceImpl implements InstrumentService {
         cashflows.add(accountCashflow);
         cashflows.add(budgetCashflow);
 
+        service.updateCache(accId);
+        service.updateCache(budgetId);
+
         transaction.setCashflows(cashflows);
         auditService.saveMessage("new transaction saved for Account "+accId+" and Budget "+budgetId+". Date:" + transactionDate + ", value:" + value + ", desc:" +description,
             Severity.INFO, AUDIT_MSG_TYPE);
@@ -490,6 +492,9 @@ public class InstrumentServiceImpl implements InstrumentService {
         cashflows.add(srcCashflow);
         cashflows.add(trgCashflow);
 
+        service.updateCache(srcInstrumentId);
+        service.updateCache(trgInstrumentId);
+
         transaction.setCashflows(cashflows);
         auditService.saveMessage("new transaction saved for Instrument "+srcInstrumentId+" and  "+trgInstrumentId+". Date:" + transactionDate + ", value:" + value + ", desc:" +description,
             Severity.INFO, AUDIT_MSG_TYPE);
@@ -505,7 +510,11 @@ public class InstrumentServiceImpl implements InstrumentService {
         Transaction oldtransaction = transaction.get();
         transactionDao.updateTransaction(transactionId, description, transactionDate, ts);
         if(oldtransaction.getTransactionType() == TransactionType.INCOMEEXPENSES) {
-            oldtransaction.getCashflows().forEach(i-> {if(i.getValue()!=value) { cashflowDao.updateCashflow(i.getCashflowid(), value);}});
+            oldtransaction.getCashflows().forEach(i-> {
+                if(i.getValue()!=value) {
+                    cashflowDao.updateCashflow(i.getCashflowid(), value);
+                    service.updateCache(i.getInstrument().getInstrumentid());
+                }});
         } else if(oldtransaction.getTransactionType() == TransactionType.BUDGETTRANSFER ||
                 oldtransaction.getTransactionType() == TransactionType.TRANSFER) {
             oldtransaction.getCashflows().forEach(i-> {
@@ -514,6 +523,7 @@ public class InstrumentServiceImpl implements InstrumentService {
                 } else {
                     cashflowDao.updateCashflow(i.getCashflowid(), -1 * value);
                 }
+                service.updateCache(i.getInstrument().getInstrumentid());
             });
         }
         auditService.saveMessage(" transaction with id "+transactionId+" ,desc: '"+oldtransaction.getDescription()+
@@ -527,6 +537,9 @@ public class InstrumentServiceImpl implements InstrumentService {
     public void deleteTransaction(int transactionId){
         Optional<Transaction> transaction = transactionDao.getTransaction(transactionId);
         if(transaction.isPresent()){
+            transaction.get().getCashflows().forEach(i-> {
+                service.updateCache(i.getInstrument().getInstrumentid());
+            });
             auditService.saveMessage(transactionDao.deleteTransaction(transactionId),
                     Severity.INFO, AUDIT_MSG_TYPE);
         }
