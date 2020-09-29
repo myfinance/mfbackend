@@ -182,7 +182,14 @@ Cashflow : Double Value
 
 === Wiederkehrende Cashflows
 
-Wiederkehrende Cashflowswerden in einer Tabelle Konfiguriert. Die Konfigurationen werden hier ausnahmsweise historisiert, da es von interesse ist, wie sich manche Dauerbuchungen entwickelt haben
+Wiederkehrende Cashflowswerden in einer Tabelle Konfiguriert. Die Konfigurationen werden hier ausnahmsweise historisiert, da es von interesse ist, wie sich manche Dauerbuchungen entwickelt haben.
+Wiederkehrende Einnahmen sollen in der Regel zunächst auf ein zentrales Budget laufen von dem sie dann weiterverteilt werden, das IncomeBudget(siehe Beziehung von Instrumenten).
+Dies wird erzwungen da sonst keine konsistente, vollständige Gegenüberstellung von allen Einnahmen und deren Verteilung auf die einzelbudgets möglich ist.
+Auch sind aktuell keine anderen UseCases bekannt bzw kann dies im Zweifel über einen anderen recurrencytype abgebildet werden.
+Gleiches gilt für BudgetTransfers. Hier soll das Quellbudget immer das IncomeBudget sein.
+Sollten dennoch andere UseCases auftreten, muss man auch andere Budgets zulassen und das incomebudget als default in den Eingabemasken setzen.
+Dabei muss klar sein, dass diese dann nicht in die Gegenüberstellung von Einnahmen und deren BudgetVerteilung eingehen. Evtl. kann dies dann auch als extra recurrencytype abgebildet werden um dies klarer zu machen.
+
 
 [plantuml]
 ....
@@ -207,7 +214,7 @@ recurrenttransaction : Int securityid
 
 
 recurrentfrequence= Monthly, Quaterly, Yearly in der DB aber nur als id abgebildet, so dass die Software ohne DB-Änderungen erweitert werden kann
-recurrencytype= Einnahme/Ausgabe oder Transfer -> wie recurrentfrequence nur als ID abgebildet. Benötigt um zu wissen ob auf den Instrumenten jeweils ein positiver oder negativer cashflow fliesst
+recurrencytype= Einnahme, Ausgabe, BudgetTransfer oder Transfer -> wie recurrentfrequence nur als ID abgebildet. Benötigt um zu wissen ob auf den Instrumenten jeweils ein positiver oder negativer cashflow fliesst bzw. welche Instrumenttypen zugelassen sind.
 Die SecurityId ist optional für den Fall, dass ein Coupon oder andere Zahlungen auf Securities abgebildet werden sollen
 
 
@@ -555,3 +562,12 @@ additional properties:
  * ContractSize: initiale Kredithöhe vor der ersten Tilgung
  * AnnuityFrequenzy: Frequenz der Ratenzahlung(Monatlich, Quartälich, Jährlich)
 
+
+= Analyseübersichten
+
+== Budgetverteilung
+
+Um eine Übersicht darüber zu erlangen welche regelmäßige Einnahmen ich habe und wie diese auf die einzelnen Budget verteilt werden benötigt es eine Gegenüberstellung alle Einnahmen einer Budgetgruppe und aller Budgettransfers von dem IncomeBudget zu anderen Budgets.
+Daher sollen auch alle Dauereinnahmen immer auf das IncomeBudget laufen, da diese Übersicht sonst nicht konsistent bzw unvollständig ist.
+
+Ggf kann dies direkt in der Pflegemaske der Dauertransfers abgebildet werden, da diese übersicht immer ausgelichen sein soll und es daher praktisch ist wenn man direkt die positionen anpassen kann
