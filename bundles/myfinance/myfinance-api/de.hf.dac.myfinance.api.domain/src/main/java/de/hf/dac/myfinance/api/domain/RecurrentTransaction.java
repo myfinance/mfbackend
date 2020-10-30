@@ -50,26 +50,22 @@ public class RecurrentTransaction  implements java.io.Serializable {
      private String description;
      private double value;
      private LocalDate nexttransaction;
-     private LocalDate validfrom;
-     private LocalDate validto;
      private int recurrentfrequence;
 
     public RecurrentTransaction() {
     }
 
 	
-    public RecurrentTransaction(Instrument instrumentByInstrumentid2, Instrument instrumentByInstrumentid1, int recurrencytype, String description, double value, LocalDate nexttransaction, LocalDate validfrom, LocalDate validto, int recurrentfrequence) {
+    public RecurrentTransaction(Instrument instrumentByInstrumentid2, Instrument instrumentByInstrumentid1, int recurrencytype, String description, double value, LocalDate nexttransaction, int recurrentfrequence) {
         this.instrumentByInstrumentid2 = instrumentByInstrumentid2;
         this.instrumentByInstrumentid1 = instrumentByInstrumentid1;
         this.recurrencytype = recurrencytype;
         this.description = description;
         this.value = value;
         this.nexttransaction = nexttransaction;
-        this.validfrom = validfrom;
-        this.validto = validto;
         this.recurrentfrequence = recurrentfrequence;
     }
-    public RecurrentTransaction(Instrument instrumentByInstrumentid2, Instrument instrumentBySecurityid, Instrument instrumentByInstrumentid1, int recurrencytype, String description, double value, LocalDate nexttransaction, LocalDate validfrom, LocalDate validto, int recurrentfrequence) {
+    public RecurrentTransaction(Instrument instrumentByInstrumentid2, Instrument instrumentBySecurityid, Instrument instrumentByInstrumentid1, int recurrencytype, String description, double value, LocalDate nexttransaction, int recurrentfrequence) {
        this.instrumentByInstrumentid2 = instrumentByInstrumentid2;
        this.instrumentBySecurityid = instrumentBySecurityid;
        this.instrumentByInstrumentid1 = instrumentByInstrumentid1;
@@ -77,8 +73,6 @@ public class RecurrentTransaction  implements java.io.Serializable {
        this.description = description;
        this.value = value;
        this.nexttransaction = nexttransaction;
-       this.validfrom = validfrom;
-       this.validto = validto;
        this.recurrentfrequence = recurrentfrequence;
     }
 
@@ -162,27 +156,7 @@ public class RecurrentTransaction  implements java.io.Serializable {
     public void setNexttransaction(LocalDate nexttransaction) {
         this.nexttransaction = nexttransaction;
     }
-    
-    @Column(name="validfrom", nullable=false, length=13)
-    @ApiModelProperty(required = true)
-    public LocalDate getValidfrom() {
-        return this.validfrom;
-    }
-    
-    public void setValidfrom(LocalDate validfrom) {
-        this.validfrom = validfrom;
-    }
-    
-    @Column(name="validto", nullable=false, length=13)
-    @ApiModelProperty(required = true)
-    public LocalDate getValidto() {
-        return this.validto;
-    }
-    
-    public void setValidto(LocalDate validto) {
-        this.validto = validto;
-    }
-    
+
     @Column(name="recurrentfrequence", nullable=false)
     @ApiModelProperty(required = true)
     public int getRecurrentfrequence() {

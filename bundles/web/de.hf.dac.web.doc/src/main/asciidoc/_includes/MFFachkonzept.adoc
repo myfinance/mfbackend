@@ -182,7 +182,8 @@ Cashflow : Double Value
 
 === Wiederkehrende Cashflows
 
-Wiederkehrende Cashflowswerden in einer Tabelle Konfiguriert. Die Konfigurationen werden hier ausnahmsweise historisiert, da es von interesse ist, wie sich manche Dauerbuchungen entwickelt haben.
+Wiederkehrende Cashflowswerden in einer Tabelle Konfiguriert.
+Eine hostorisierung  wird nicht benötigt da nur die tatsächlich stattgefundenen Transfers relevant sind
 Wiederkehrende Einnahmen sollen in der Regel zunächst auf ein zentrales Budget laufen von dem sie dann weiterverteilt werden, das IncomeBudget(siehe Beziehung von Instrumenten).
 Dies wird erzwungen da sonst keine konsistente, vollständige Gegenüberstellung von allen Einnahmen und deren Verteilung auf die einzelbudgets möglich ist.
 Auch sind aktuell keine anderen UseCases bekannt bzw kann dies im Zweifel über einen anderen recurrencytype abgebildet werden.
@@ -202,8 +203,6 @@ recurrenttransaction : Int recurrencytype
 recurrenttransaction : String Description
 recurrenttransaction : Date nexttransaction
 recurrenttransaction : Double value
-recurrenttransaction : Date validfrom
-recurrenttransaction : Date validto
 recurrenttransaction : Int recurrentfrequence
 recurrenttransaction : Int instrumentid1
 recurrenttransaction : Int instrumentid2

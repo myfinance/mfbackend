@@ -25,10 +25,7 @@ import de.hf.dac.myfinance.api.domain.*;
 import de.hf.dac.myfinance.api.domain.Currency;
 import de.hf.dac.myfinance.api.exceptions.MFException;
 import de.hf.dac.myfinance.api.exceptions.MFMsgKey;
-import de.hf.dac.myfinance.api.persistence.dao.CashflowDao;
-import de.hf.dac.myfinance.api.persistence.dao.EndOfDayPriceDao;
-import de.hf.dac.myfinance.api.persistence.dao.InstrumentDao;
-import de.hf.dac.myfinance.api.persistence.dao.TransactionDao;
+import de.hf.dac.myfinance.api.persistence.dao.*;
 import de.hf.dac.myfinance.api.service.InstrumentService;
 import de.hf.dac.myfinance.importhandler.ImportHandler;
 import lombok.Data;
@@ -46,6 +43,7 @@ public class InstrumentServiceImpl implements InstrumentService {
     private InstrumentDao instrumentDao;
     private EndOfDayPriceDao endOfDayPriceDao;
     private TransactionDao transactionDao;
+    private RecurrentTransactionDao recurrentTransactionDao;
     private CashflowDao cashflowDao;
     private ValueCurveService service;
     private WebRequestService webRequestService;
@@ -56,10 +54,11 @@ public class InstrumentServiceImpl implements InstrumentService {
     private final static String DEFAULT_ACCPF_PREFIX = "accountPf_";
 
     @Inject
-    public InstrumentServiceImpl(InstrumentDao instrumentDao, EndOfDayPriceDao endOfDayPriceDao, TransactionDao transactionDao, CashflowDao cashflowDao, WebRequestService webRequestService, AuditService auditService){
+    public InstrumentServiceImpl(InstrumentDao instrumentDao, EndOfDayPriceDao endOfDayPriceDao, TransactionDao transactionDao, RecurrentTransactionDao recurrentTransactionDao, CashflowDao cashflowDao, WebRequestService webRequestService, AuditService auditService){
         this.instrumentDao = instrumentDao;
         this.endOfDayPriceDao = endOfDayPriceDao;
         this.transactionDao = transactionDao;
+        this.recurrentTransactionDao = recurrentTransactionDao;
         this.cashflowDao = cashflowDao;
         this.webRequestService = webRequestService;
         service = new ValueCurveService(instrumentDao, endOfDayPriceDao);
@@ -543,6 +542,71 @@ public class InstrumentServiceImpl implements InstrumentService {
             auditService.saveMessage(transactionDao.deleteTransaction(transactionId),
                     Severity.INFO, AUDIT_MSG_TYPE);
         }
+    }
+
+    @Override
+    public List<RecurrentTransaction> listRecurrentTransactions() {
+        return recurrentTransactionDao.listRecurrentTransactions();
+    }
+
+    @Override
+    public void newRecurrentTransaction(String description, int srcInstrumentId, int trgInstrumentId, RecurrentFrequency recurrentFrequency, double value, LocalDate nextTransactionDate, LocalDateTime ts) {
+        Optional<Instrument> src = instrumentDao.getInstrument(srcInstrumentId);
+        RecurrentTransactionType recurrentTransactionType = RecurrentTransactionType.Transfer;
+        if(!src.isPresent()){
+            throw new MFException(MFMsgKey.UNKNOWN_INSTRUMENT_EXCEPTION, "RecurrentTransfer not saved: unknown instrument:"+srcInstrumentId);
+        }
+        Optional<Instrument> trg = instrumentDao.getInstrument(trgInstrumentId);
+        if(!trg.isPresent()){
+            throw new MFException(MFMsgKey.UNKNOWN_INSTRUMENT_EXCEPTION, "RecurrentTransfer not saved: unknown instrument:"+trgInstrumentId);
+        }
+        if(src.get().getInstrumentType() == InstrumentType.Budget && trg.get().getInstrumentType() == InstrumentType.Budget) {
+            recurrentTransactionType = RecurrentTransactionType.BudgetTransfer;
+        } else if (src.get().getInstrumentType() == InstrumentType.Budget) {
+            if( !isAccountTransferAllowed(trg.get())) {
+                throw new MFException(MFMsgKey.WRONG_INSTRUMENTTYPE_EXCEPTION, "No Transfer allowed for this account:"+trgInstrumentId);
+            }
+            recurrentTransactionType = getRecurrentTransactiontype(value);
+        } else if (trg.get().getInstrumentType() == InstrumentType.Budget) {
+            if( !isAccountTransferAllowed(src.get())) {
+                throw new MFException(MFMsgKey.WRONG_INSTRUMENTTYPE_EXCEPTION, "No Transfer allowed for this account:"+srcInstrumentId);
+            }
+            recurrentTransactionType = getRecurrentTransactiontype(value);
+        } else {
+            if( !isAccountTransferAllowed(trg.get())){
+                throw new MFException(MFMsgKey.WRONG_INSTRUMENTTYPE_EXCEPTION, "No Transfer allowed for this account:"+trgInstrumentId);
+            }
+            if( !isAccountTransferAllowed(src.get())){
+                throw new MFException(MFMsgKey.WRONG_INSTRUMENTTYPE_EXCEPTION, "No Transfer allowed for this account:"+srcInstrumentId);
+            }
+            recurrentTransactionType = RecurrentTransactionType.Transfer;
+        }
+
+        Optional<Integer> tenantSrc = instrumentDao.getRootInstrument(srcInstrumentId, EdgeType.TENANTGRAPH);
+        Optional<Integer> tenantTrg = instrumentDao.getRootInstrument(trgInstrumentId, EdgeType.TENANTGRAPH);
+
+        if(!tenantSrc.isPresent()
+                || !tenantTrg.isPresent()
+                || tenantSrc.get()!=tenantTrg.get()){
+            throw new MFException(MFMsgKey.WRONG_TENENT_EXCEPTION, "RecurrentTransfer not saved: budget and account have not the same tenant");
+        }
+        RecurrentTransaction recurrentTransaction = new RecurrentTransaction(src.get(), trg.get(), recurrentTransactionType.getValue(), description, value, nextTransactionDate, recurrentFrequency.getValue());
+
+        auditService.saveMessage("new recurrenttransaction saved for Instrument "+srcInstrumentId+
+                        " and  "+trgInstrumentId+". nextTransactionDate:" + nextTransactionDate +
+                        ", value:" + value + ", desc:" +description + ", frequency:" +recurrentFrequency,
+                Severity.INFO, AUDIT_MSG_TYPE);
+        recurrentTransactionDao.saveRecurrentTransaction(recurrentTransaction);
+    }
+
+    private RecurrentTransactionType getRecurrentTransactiontype(double value) {
+        RecurrentTransactionType recurrentTransactionType;
+        if(value <0) {
+            recurrentTransactionType = RecurrentTransactionType.Expenses;
+        } else {
+            recurrentTransactionType = RecurrentTransactionType.Income;
+        }
+        return recurrentTransactionType;
     }
 
     protected boolean isAccountTransferAllowed(Instrument instrument){

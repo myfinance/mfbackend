@@ -62,6 +62,9 @@ public interface InstrumentService {
     List<Cashflow> listInstrumentCashflows(int instrumentId);
     void deleteTransaction(int transactionId);
 
+    List<RecurrentTransaction> listRecurrentTransactions();
+    void newRecurrentTransaction(String description, int srcInstrumentId, int trgInstrumentId, RecurrentFrequency recurrentFrequency, double value, LocalDate nextTransactionDate, LocalDateTime ts);
+
     void importPrices(LocalDateTime ts);
     void fillPriceHistory(int sourceId, String isin, LocalDateTime ts);
 
