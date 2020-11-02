@@ -82,47 +82,45 @@ public class RecurrentTransaction  implements java.io.Serializable {
     public Integer getRecurrenttransactionid() {
         return this.recurrenttransactionid;
     }
-    
     public void setRecurrenttransactionid(Integer recurrenttransactionid) {
         this.recurrenttransactionid = recurrenttransactionid;
     }
-    @ManyToOne(fetch=FetchType.LAZY)
+
+    @ManyToOne( fetch = FetchType.EAGER )
+    @JoinColumn(name="instrumentid1", nullable=false)
+    @ApiModelProperty(required = true)
+    public Instrument getInstrumentByInstrumentid1() {
+        return this.instrumentByInstrumentid1;
+    }
+    public void setInstrumentByInstrumentid1(Instrument instrumentByInstrumentid1) {
+        this.instrumentByInstrumentid1 = instrumentByInstrumentid1;
+    }
+
+    @ManyToOne( fetch = FetchType.EAGER )
     @JoinColumn(name="instrumentid2", nullable=false)
     @ApiModelProperty(required = true)
     public Instrument getInstrumentByInstrumentid2() {
         return this.instrumentByInstrumentid2;
     }
-    
     public void setInstrumentByInstrumentid2(Instrument instrumentByInstrumentid2) {
         this.instrumentByInstrumentid2 = instrumentByInstrumentid2;
     }
+
     @ManyToOne(fetch=FetchType.LAZY)
     @JoinColumn(name="securityid")
     @ApiModelProperty(required = true)
     public Instrument getInstrumentBySecurityid() {
         return this.instrumentBySecurityid;
     }
-    
     public void setInstrumentBySecurityid(Instrument instrumentBySecurityid) {
         this.instrumentBySecurityid = instrumentBySecurityid;
     }
-    @ManyToOne(fetch=FetchType.LAZY)
-    @JoinColumn(name="instrumentid1", nullable=false)
-    @ApiModelProperty(required = true)
-    public Instrument getInstrumentByInstrumentid1() {
-        return this.instrumentByInstrumentid1;
-    }
-    
-    public void setInstrumentByInstrumentid1(Instrument instrumentByInstrumentid1) {
-        this.instrumentByInstrumentid1 = instrumentByInstrumentid1;
-    }
-    
+
     @Column(name="recurrencytype", nullable=false)
     @ApiModelProperty(required = true)
     public int getRecurrencytype() {
         return this.recurrencytype;
     }
-    
     public void setRecurrencytype(int recurrencytype) {
         this.recurrencytype = recurrencytype;
     }
@@ -132,7 +130,6 @@ public class RecurrentTransaction  implements java.io.Serializable {
     public String getDescription() {
         return this.description;
     }
-    
     public void setDescription(String description) {
         this.description = description;
     }
@@ -142,7 +139,6 @@ public class RecurrentTransaction  implements java.io.Serializable {
     public double getValue() {
         return this.value;
     }
-    
     public void setValue(double value) {
         this.value = value;
     }
@@ -152,7 +148,6 @@ public class RecurrentTransaction  implements java.io.Serializable {
     public LocalDate getNexttransaction() {
         return this.nexttransaction;
     }
-    
     public void setNexttransaction(LocalDate nexttransaction) {
         this.nexttransaction = nexttransaction;
     }
@@ -162,12 +157,7 @@ public class RecurrentTransaction  implements java.io.Serializable {
     public int getRecurrentfrequence() {
         return this.recurrentfrequence;
     }
-    
     public void setRecurrentfrequence(int recurrentfrequence) {
         this.recurrentfrequence = recurrentfrequence;
     }
-
-
-
-
 }
