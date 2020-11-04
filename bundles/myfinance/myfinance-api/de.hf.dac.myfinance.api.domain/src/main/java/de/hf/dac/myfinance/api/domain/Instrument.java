@@ -45,12 +45,12 @@ public abstract class Instrument  implements java.io.Serializable {
 
     private Integer instrumentid;
     private Integer instrumentTypeId;
+    private InstrumentType instrumentType;
     private String description;
     private boolean isactive;
     private LocalDate maturitydate;
     private LocalDate closingdate;
     private LocalDateTime treelastchanged;
-    private InstrumentType instrumentType;
     private String businesskey;
 
     public Instrument() {
@@ -82,7 +82,6 @@ public abstract class Instrument  implements java.io.Serializable {
         this.instrumentTypeId = instrumentTypeId;
         instrumentType = InstrumentType.getInstrumentTypeById(instrumentTypeId);
     }
-
     @Transient
     @ApiModelProperty(required = true)
     public InstrumentType getInstrumentType(){

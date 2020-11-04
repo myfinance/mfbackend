@@ -590,7 +590,7 @@ public class InstrumentServiceImpl implements InstrumentService {
                 || tenantSrc.get()!=tenantTrg.get()){
             throw new MFException(MFMsgKey.WRONG_TENENT_EXCEPTION, "RecurrentTransfer not saved: budget and account have not the same tenant");
         }
-        RecurrentTransaction recurrentTransaction = new RecurrentTransaction(src.get(), trg.get(), recurrentTransactionType.getValue(), description, value, nextTransactionDate, recurrentFrequency.getValue());
+        RecurrentTransaction recurrentTransaction = new RecurrentTransaction(src.get(), trg.get(), recurrentTransactionType.getValue(), description, value, nextTransactionDate, recurrentFrequency);
 
         auditService.saveMessage("new recurrenttransaction saved for Instrument "+srcInstrumentId+
                         " and  "+trgInstrumentId+". nextTransactionDate:" + nextTransactionDate +
