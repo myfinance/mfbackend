@@ -82,6 +82,15 @@ public class EnvironmentDataResource extends BaseSecuredResource<OpType,OpLevel>
         return new InstrumentForTenantListResource(new InstrumentListModel(marketDataEnvironment.getInstrumentService().listInstruments(tenantId)));
     }
 
+    @Path("/incomebudgetforbudgetgroup")
+    @Produces(MediaType.APPLICATION_JSON)
+    @ApiOperation(value = "get incomebudget for budgetgroup",
+            response = InstrumentListResource.class)
+    public IncomeBudgetResource getIncomeBudgetForBudgetGroup(@QueryParam("budgetGroup") @ApiParam(value="budgetGroup id") int budgetGroupId) {
+        checkOperationAllowed(OpType.READ);
+        return new IncomeBudgetResource(new InstrumentModel(marketDataEnvironment.getInstrumentService().getIncomeBudget(budgetGroupId)));
+    }
+
     @Path("/instrumentspertype")
     @Produces(MediaType.APPLICATION_JSON)
     @ApiOperation(value = "get Instruments per type",

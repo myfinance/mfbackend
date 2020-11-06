@@ -28,7 +28,6 @@ import java.util.Optional;
 public interface InstrumentService {
     List<Instrument> listInstruments();
     List<Instrument> listInstruments(int tenantId);
-
     List<Instrument> listInstruments(int tenantId, InstrumentType instrumentType);
 
     Optional<Instrument> getCurrency(String currencyCode);
@@ -42,6 +41,7 @@ public interface InstrumentService {
     Map<LocalDate, Double> getValueCurve(int instrumentId);
     Map<LocalDate, Double> getValueCurve(int instrumentId, LocalDate startDate, LocalDate endDate);
     double getValue(int instrumentId, LocalDate date);
+    Instrument getIncomeBudget(int tenantId);
 
     void saveEquity(String isin, String description);
     void saveSymbol(String isin, String symbol, String currencyCode);

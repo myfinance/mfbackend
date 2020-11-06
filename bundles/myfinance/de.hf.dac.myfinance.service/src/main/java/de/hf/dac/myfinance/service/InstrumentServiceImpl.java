@@ -152,6 +152,15 @@ public class InstrumentServiceImpl implements InstrumentService {
     }
 
     @Override
+    public Instrument getIncomeBudget(int budgetGroupId) {
+        List<Instrument> incomeBudgets = instrumentDao.getInstrumentChilds(budgetGroupId, EdgeType.INCOMEBUDGET);
+        if(incomeBudgets == null || incomeBudgets.isEmpty()) {
+            throw new MFException(MFMsgKey.NO_INCOMEBUDGET_DEFINED_EXCEPTION, "No IncomeBudget defined for budgetGroupId:"+budgetGroupId);
+        }
+        return incomeBudgets.get(0);
+    }
+
+    @Override
     public void saveEquity(String theisin, String description) {
         String isin = theisin.toUpperCase();
         Optional<Equity> existingSec = getEquity(isin);
@@ -308,16 +317,21 @@ public class InstrumentServiceImpl implements InstrumentService {
         instrumentDao.saveInstrument(tenant);
         auditService.saveMessage("Tenant inserted:" + description, Severity.INFO, AUDIT_MSG_TYPE);
         addInstrumentToGraph(tenant.getInstrumentid(),tenant.getInstrumentid(),EdgeType.TENANTGRAPH);
-        int budgetGroupId = newBudgetGroup(DEFAULT_BUDGETGROUP_PREFIX+description, ts);
-        addInstrumentToGraph(budgetGroupId, tenant.getInstrumentid(), EdgeType.TENANTGRAPH);
+
+        int budgetGroupId = newBudgetGroup(DEFAULT_BUDGETGROUP_PREFIX+description, tenant.getInstrumentid(), ts);
         int incomeBudgetId = createBudget(DEFAULT_INCOMEBUDGET_PREFIX+description, budgetGroupId, ts);
-        addInstrumentToGraph(incomeBudgetId, tenant.getInstrumentid(), EdgeType.INCOMEBUDGET);
+        addInstrumentToGraph(incomeBudgetId, budgetGroupId, EdgeType.INCOMEBUDGET);
         int accPfId = newAccountPortfolio(DEFAULT_ACCPF_PREFIX+description, ts);
         addInstrumentToGraph(accPfId, tenant.getInstrumentid(), EdgeType.TENANTGRAPH);
     }
 
     protected void addInstrumentToGraph(int instrumentId, int ancestorId, EdgeType edgeType){
         List<InstrumentGraphEntry> ancestorGraphEntries = instrumentDao.getAncestorGraphEntries(ancestorId, edgeType);
+        if(instrumentId!=ancestorId && ancestorGraphEntries.isEmpty()){
+            throw new MFException(MFMsgKey.ANCESTOR_DOES_NOT_EXIST_EXCEPTION,
+                    "Can not add instrument "+instrumentId+" to tree. Ancestor: "
+                            + ancestorId + " does not exists for edgetype " + edgeType.name());
+        }
         for (InstrumentGraphEntry entry : ancestorGraphEntries) {
             InstrumentGraphEntry newEntry = new InstrumentGraphEntry(entry.getId().getAncestor(), instrumentId, edgeType);
             newEntry.setPathlength(entry.getPathlength()+1);
@@ -349,10 +363,13 @@ public class InstrumentServiceImpl implements InstrumentService {
         return budgetId;
     }
 
-    protected int newBudgetGroup(String description, LocalDateTime ts) {
+    protected int newBudgetGroup(String description, int tenantId, LocalDateTime ts) {
         BudgetGroup budgetGroup = new BudgetGroup(description, true, ts);
         instrumentDao.saveInstrument(budgetGroup);
-        return budgetGroup.getInstrumentid();
+        int budgetGroupId = budgetGroup.getInstrumentid();
+        addInstrumentToGraph(budgetGroupId, tenantId, EdgeType.TENANTGRAPH);
+        addInstrumentToGraph(budgetGroupId,budgetGroupId,EdgeType.INCOMEBUDGET);
+        return budgetGroupId;
     }
 
     protected int newAccountPortfolio(String description, LocalDateTime ts) {
