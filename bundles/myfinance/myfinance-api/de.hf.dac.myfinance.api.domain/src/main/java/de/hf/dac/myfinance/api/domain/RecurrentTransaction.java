@@ -50,7 +50,7 @@ public class RecurrentTransaction  implements java.io.Serializable {
     }
 
 	
-    public RecurrentTransaction(Instrument instrumentByInstrumentid2, Instrument instrumentByInstrumentid1, int recurrencytype, String description, double value, LocalDate nexttransaction, RecurrentFrequency recurrentfrequence) {
+    public RecurrentTransaction(Instrument instrumentByInstrumentid1, Instrument instrumentByInstrumentid2, int recurrencytype, String description, double value, LocalDate nexttransaction, RecurrentFrequency recurrentfrequence) {
         this.instrumentByInstrumentid2 = instrumentByInstrumentid2;
         this.instrumentByInstrumentid1 = instrumentByInstrumentid1;
         this.recurrencytype = recurrencytype;
@@ -59,7 +59,7 @@ public class RecurrentTransaction  implements java.io.Serializable {
         this.nexttransaction = nexttransaction;
         setRecurrentfrequence(recurrentfrequence);
     }
-    public RecurrentTransaction(Instrument instrumentByInstrumentid2, Instrument instrumentBySecurityid, Instrument instrumentByInstrumentid1, int recurrencytype, String description, double value, LocalDate nexttransaction, RecurrentFrequency recurrentfrequence) {
+    public RecurrentTransaction(Instrument instrumentByInstrumentid1, Instrument instrumentByInstrumentid2, Instrument instrumentBySecurityid, int recurrencytype, String description, double value, LocalDate nexttransaction, RecurrentFrequency recurrentfrequence) {
        this.instrumentByInstrumentid2 = instrumentByInstrumentid2;
        this.instrumentBySecurityid = instrumentBySecurityid;
        this.instrumentByInstrumentid1 = instrumentByInstrumentid1;
