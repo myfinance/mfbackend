@@ -148,7 +148,7 @@ public class RecurrentTransaction  implements java.io.Serializable {
 
     @Column(name="recurrentfrequence", nullable=false)
     @ApiModelProperty(required = true)
-    protected int getRecurrentfrequenceId() {
+    public int getRecurrentfrequenceId() {
         return this.recurrentfrequenceId;
     }
     protected void setRecurrentfrequenceId(int recurrentfrequenceId) {
@@ -159,7 +159,7 @@ public class RecurrentTransaction  implements java.io.Serializable {
     public RecurrentFrequency getRecurrentfrequence(){
         return RecurrentFrequency.getRecurrentFrequencyById(recurrentfrequenceId);
     }
-    protected void setRecurrentfrequence(RecurrentFrequency recurrentfrequence) {
+    public void setRecurrentfrequence(RecurrentFrequency recurrentfrequence) {
         this.recurrentfrequenceId = recurrentfrequence.getValue();
     }
 }
