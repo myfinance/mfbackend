@@ -9,7 +9,6 @@ import javax.inject.Named;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Query;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -66,7 +65,7 @@ public class RecurrentTransactionDaoImpl  extends BaseDao<RecurrentTransaction> 
     }
 
     @Override
-    public void updateRecurrentTransaction(int recurrenttransactionid, String description, LocalDate nexttransactionDate){
+    public void updateRecurrentTransaction(int recurrenttransactionid, String description, double value, LocalDate nexttransactionDate){
         try{
             marketDataEm = this.marketDataEmf.createEntityManager();
             Query query = marketDataEm.createQuery("select a FROM RecurrentTransaction a WHERE recurrenttransactionid= :recurrenttransactionid");
@@ -75,6 +74,7 @@ public class RecurrentTransactionDaoImpl  extends BaseDao<RecurrentTransaction> 
             RecurrentTransaction newTransaction = transaction.get();
             newTransaction.setDescription(description);
             newTransaction.setNexttransaction(nexttransactionDate);
+            newTransaction.setValue(value);
             marketDataEm.getTransaction().begin();
             marketDataEm.persist(newTransaction);
             marketDataEm.getTransaction().commit();

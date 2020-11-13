@@ -616,6 +616,42 @@ public class InstrumentServiceImpl implements InstrumentService {
         recurrentTransactionDao.saveRecurrentTransaction(recurrentTransaction);
     }
 
+    @Override
+    public void deleteRecurrentTransaction(int recurrentTransactionId) {
+        Optional<RecurrentTransaction> transaction = recurrentTransactionDao.getRecurrentTransaction(recurrentTransactionId);
+        if(transaction.isPresent()){
+            auditService.saveMessage(recurrentTransactionDao.deleteRecurrentTransaction(recurrentTransactionId),
+                    Severity.INFO, AUDIT_MSG_TYPE);
+        }
+    }
+
+    @Override
+    public void updateRecurrentTransaction(int id, String description, double value, LocalDate nexttransaction, LocalDateTime ts) {
+        Optional<RecurrentTransaction> transaction = recurrentTransactionDao.getRecurrentTransaction(id);
+        if(!transaction.isPresent()){
+            throw new MFException(MFMsgKey.UNKNOWN_TRANSACTION_EXCEPTION, "RecurrentTransaction not updated: RecurrentTransaction for id:"+id + " not found");
+        }
+        RecurrentTransaction oldtransaction = transaction.get();
+        if(
+                (RecurrentTransactionType.getRecurrentTransactionTypeById(oldtransaction.getRecurrencytype()) != RecurrentTransactionType.Expenses
+                    && value < 0) || (
+            RecurrentTransactionType.getRecurrentTransactionTypeById(oldtransaction.getRecurrencytype()) == RecurrentTransactionType.Expenses
+                    && value > 0) ){
+            throw new MFException(MFMsgKey.WRONG_TRNSACTIONTYPE_EXCEPTION, "RecurrentTransaction not updated: Type:"
+                    +RecurrentTransactionType.getRecurrentTransactionTypeById(oldtransaction.getRecurrencytype()) +
+                    " and value:"+value + " do not match");
+        }
+
+        recurrentTransactionDao.updateRecurrentTransaction(id, description, value, nexttransaction);
+
+        auditService.saveMessage(" recurrenttransaction with id "+id+" ,desc: '"+oldtransaction.getDescription()+
+                        "' ,value:" + oldtransaction.getValue() + "" +
+                        " and next transaction:" + oldtransaction.getNexttransaction()
+                        + "updated to desc="+description + ", date=" + nexttransaction +
+                        " and value=" + value,
+                Severity.INFO, AUDIT_MSG_TYPE);
+    }
+
     private RecurrentTransactionType getRecurrentTransactiontype(double value) {
         RecurrentTransactionType recurrentTransactionType;
         if(value <0) {

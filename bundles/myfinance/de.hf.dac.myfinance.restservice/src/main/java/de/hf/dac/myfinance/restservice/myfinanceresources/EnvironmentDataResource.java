@@ -367,6 +367,22 @@ public class EnvironmentDataResource extends BaseSecuredResource<OpType,OpLevel>
     }
 
     @POST
+    @Path("/updateRecurrentTransaction")
+    @Produces(MediaType.APPLICATION_JSON)
+    @ApiOperation(value = "update recurrent Transaction")
+    @ApiResponses(value = {
+            @ApiResponse(code = HttpStatus.SC_NO_CONTENT, message = "updated"),
+            @ApiResponse(code = HttpStatus.SC_INTERNAL_SERVER_ERROR, message = "Something wrong in Server")})
+    public Response updateRecurrentTransaction(@QueryParam("id") @ApiParam(value="id") int id,
+                                      @QueryParam("description") @ApiParam(value="description") String description,
+                                      @QueryParam("value") @ApiParam(value="the value of the income or expense") double value,
+                                      @QueryParam("nexttransaction") @ApiParam(value="the transactiondate(yyyy-mm-dd") String nexttransaction) {
+        checkOperationAllowed(OpType.WRITE);
+        marketDataEnvironment.getInstrumentService().updateRecurrentTransaction(id, description, value, LocalDate.parse(nexttransaction), LocalDateTime.now());
+        return Response.ok().build();
+    }
+
+    @POST
     @Path("/delTransfer")
     @Produces(MediaType.APPLICATION_JSON)
     @ApiOperation(value = "delete Transfer")
@@ -376,6 +392,19 @@ public class EnvironmentDataResource extends BaseSecuredResource<OpType,OpLevel>
     public Response delTransfer(@QueryParam("transactionId") @ApiParam(value="transactionId") int transactionId) {
         checkOperationAllowed(OpType.WRITE);
         marketDataEnvironment.getInstrumentService().deleteTransaction(transactionId);
+        return Response.ok().build();
+    }
+
+    @POST
+    @Path("/delRecurrentTransfer")
+    @Produces(MediaType.APPLICATION_JSON)
+    @ApiOperation(value = "delete Recurrent Transfer")
+    @ApiResponses(value = {
+            @ApiResponse(code = HttpStatus.SC_NO_CONTENT, message = "deleted"),
+            @ApiResponse(code = HttpStatus.SC_INTERNAL_SERVER_ERROR, message = "Something wrong in Server")})
+    public Response delRecurrentTransfer(@QueryParam("recurrentTransactionId") @ApiParam(value="recurrentTransactionId") int recurrentTransactionId) {
+        checkOperationAllowed(OpType.WRITE);
+        marketDataEnvironment.getInstrumentService().deleteRecurrentTransaction(recurrentTransactionId);
         return Response.ok().build();
     }
 }

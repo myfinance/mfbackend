@@ -12,5 +12,5 @@ public interface RecurrentTransactionDao {
     Optional<RecurrentTransaction> getRecurrentTransaction(int recurrenttransactionid);
     String deleteRecurrentTransaction(int recurrenttransactionid);
     void saveRecurrentTransaction(RecurrentTransaction recurrenttransaction);
-    void updateRecurrentTransaction(int recurrenttransactionid, String description, LocalDate nexttransactionDate);
+    void updateRecurrentTransaction(int recurrenttransactionid, String description, double value, LocalDate nexttransactionDate);
 }
