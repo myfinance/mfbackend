@@ -20,6 +20,7 @@ import javax.persistence.EntityManagerFactory;
 import javax.persistence.Query;
 
 import de.hf.dac.api.io.audit.AuditDao;
+import de.hf.dac.api.io.domain.DacJournal;
 import de.hf.dac.api.io.domain.DacMessages;
 
 public class AuditDaoImpl implements AuditDao {
@@ -36,10 +37,21 @@ public class AuditDaoImpl implements AuditDao {
         Query query = em.createQuery("SELECT c FROM DacMessages c");
         return query.getResultList();
     }
-
     public void saveMessage(DacMessages message) {
         em.getTransaction().begin();
         em.persist(message);
         em.getTransaction().commit();
+    }
+
+    @Override
+    public void saveJournalEntry(DacJournal journal) {
+        em.getTransaction().begin();
+        em.persist(journal);
+        em.getTransaction().commit();
+    }
+    @Override
+    public List<DacJournal> getAllJournalEntries() {
+        Query query = em.createQuery("SELECT c FROM DacJournal c");
+        return query.getResultList();
     }
 }

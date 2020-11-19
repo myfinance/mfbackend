@@ -312,6 +312,50 @@ public class InstrumentServiceImpl implements InstrumentService {
     }
 
     @Override
+    public void bookRecurrentTransactions(LocalDateTime ts){
+        final String Processstep = "bookRecurrentTransactions";
+        List<RecurrentTransaction> recurrentTransactions = recurrentTransactionDao.listRecurrentTransactions();
+        LocalDateTime endTs = LocalDateTime.now();
+        if(recurrentTransactions!=null && !recurrentTransactions.isEmpty()) {
+            recurrentTransactions.forEach(i-> {
+                LocalDate nextTransaction = i.getNexttransaction();
+                while(nextTransaction.isBefore(ts.toLocalDate())) {
+                    if(i.getRecurrencytype() == RecurrentTransactionType.Expenses.getValue() ||
+                            i.getRecurrencytype() == RecurrentTransactionType.Income.getValue()) {
+                        newIncomeExpense(i.getDescription(), i.getInstrumentByInstrumentid1().getInstrumentid(),
+                                i.getInstrumentByInstrumentid2().getInstrumentid(), i.getValue(), nextTransaction, ts);
+                    } else {
+                        newTransfer(i.getDescription(), i.getInstrumentByInstrumentid1().getInstrumentid(),
+                                i.getInstrumentByInstrumentid2().getInstrumentid(), i.getValue(), nextTransaction, ts);
+                    }
+                    nextTransaction = calcNextTransaction(nextTransaction, i.getRecurrentfrequence());
+                }
+                updateRecurrentTransaction(i.getRecurrenttransactionid(), i.getDescription(), i.getValue(),
+                        nextTransaction, ts);
+            });
+            auditService.saveMessage("recurrent transactions booked", Severity.INFO, AUDIT_MSG_TYPE);
+            endTs = LocalDateTime.now();
+        } else {
+            auditService.saveMessage("no recurrent transactions to book", Severity.INFO, AUDIT_MSG_TYPE);
+        }
+        auditService.saveSuccessfulJournalEntry(Processstep, "", "NA", ts, endTs);
+    }
+
+    private LocalDate calcNextTransaction(LocalDate lastTransaction, RecurrentFrequency frequency) {
+        LocalDate nextTransaction;
+        switch(frequency) {
+            case Monthly:
+                return lastTransaction.plusMonths(1);
+            case Quaterly:
+                return lastTransaction.plusMonths(3);
+            case Yearly:
+                return lastTransaction.plusYears(1);
+            default:
+                return lastTransaction.plusMonths(1);
+        }
+    }
+
+    @Override
     public void newTenant(String description, LocalDateTime ts) {
         Tenant tenant = new Tenant(description, true, ts);
         instrumentDao.saveInstrument(tenant);

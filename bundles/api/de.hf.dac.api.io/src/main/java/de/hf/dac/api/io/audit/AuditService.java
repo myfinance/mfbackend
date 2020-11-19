@@ -14,7 +14,11 @@ package de.hf.dac.api.io.audit;
 
 import de.hf.dac.api.io.domain.Severity;
 
+import java.time.LocalDateTime;
+
 public interface AuditService {
     void saveMessage(String message, Severity severity, String messagetype, String user);
     void saveMessage(String message, Severity severity, String messagetype);
+    void saveSuccessfulJournalEntry(String processStep, String arguments, String user, LocalDateTime startts, LocalDateTime endts);
+    void saveFailedJournalEntry(String processStep, String arguments, String user, LocalDateTime startts, LocalDateTime endts);
 }

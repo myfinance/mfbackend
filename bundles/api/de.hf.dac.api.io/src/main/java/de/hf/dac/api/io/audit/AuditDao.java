@@ -13,6 +13,7 @@ package de.hf.dac.api.io.audit;
 
 import java.util.List;
 
+import de.hf.dac.api.io.domain.DacJournal;
 import de.hf.dac.api.io.domain.DacMessages;
 
 public interface AuditDao {
@@ -20,4 +21,7 @@ public interface AuditDao {
 
     void saveMessage(DacMessages message);
     List<DacMessages> getAllMessages();
+
+    void saveJournalEntry(DacJournal journal);
+    List<DacJournal> getAllJournalEntries();
 }

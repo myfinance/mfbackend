@@ -70,4 +70,6 @@ public interface InstrumentService {
     void importPrices(LocalDateTime ts);
     void fillPriceHistory(int sourceId, String isin, LocalDateTime ts);
 
+    void bookRecurrentTransactions(LocalDateTime ts);
+
 }

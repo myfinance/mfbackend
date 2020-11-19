@@ -149,6 +149,19 @@ public class EnvironmentDataResource extends BaseSecuredResource<OpType,OpLevel>
         return Response.ok().build();
     }
 
+    @POST
+    @Path("/bookRecurrentTransactions")
+    @Produces(MediaType.APPLICATION_JSON)
+    @ApiOperation(value = "bookRecurrentTransactions")
+    @ApiResponses(value = {
+            @ApiResponse(code = HttpStatus.SC_NO_CONTENT, message = "book RecurrentTransactions"),
+            @ApiResponse(code = HttpStatus.SC_INTERNAL_SERVER_ERROR, message = "Something wrong in Server")})
+    public Response bookRecurrentTransactions() {
+        checkOperationAllowed(OpType.EXECUTE);
+        marketDataEnvironment.getInstrumentService().bookRecurrentTransactions(LocalDateTime.now());
+        return Response.ok().build();
+    }
+
     @Path("/getequity")
     @Produces(MediaType.APPLICATION_JSON)
     @ApiOperation(value = "get Equity", response = InstrumentResource.class)
