@@ -11,11 +11,15 @@
 
 package de.hf.dac.myfinance.runner;
 
+import de.hf.dac.myfinance.api.service.InstrumentService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import de.hf.dac.myfinance.api.runner.BaseMFRunnerParameter;
 import de.hf.dac.myfinance.api.runner.Runner;
+
+import javax.inject.Inject;
+import java.time.LocalDateTime;
 
 /**
  * for future use
@@ -23,11 +27,13 @@ import de.hf.dac.myfinance.api.runner.Runner;
  */
 public class ProcessTransactionsRunner implements Runner {
     public static final Logger LOG = LoggerFactory.getLogger(ProcessTransactionsRunner.class);
-
+    @Inject
+    InstrumentService service;
 
     @Override
     public void run(BaseMFRunnerParameter params) {
         LOG.info("process transactions... ");
+        service.bookRecurrentTransactions(LocalDateTime.now());
         LOG.info("process transactions sucessful");
     }
 }
