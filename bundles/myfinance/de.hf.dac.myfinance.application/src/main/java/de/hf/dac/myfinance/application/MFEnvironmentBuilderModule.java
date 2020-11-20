@@ -36,15 +36,9 @@ import de.hf.dac.myfinance.api.application.MarketDataEnvironment;
 import de.hf.dac.myfinance.api.domain.Instrument;
 import de.hf.dac.myfinance.api.exceptions.MFException;
 import de.hf.dac.myfinance.api.exceptions.MFMsgKey;
-import de.hf.dac.myfinance.api.persistence.dao.CashflowDao;
-import de.hf.dac.myfinance.api.persistence.dao.EndOfDayPriceDao;
-import de.hf.dac.myfinance.api.persistence.dao.InstrumentDao;
-import de.hf.dac.myfinance.api.persistence.dao.TransactionDao;
-import de.hf.dac.myfinance.persistence.CashflowDaoImpl;
-import de.hf.dac.myfinance.persistence.EndOfDayPriceDaoImpl;
-import de.hf.dac.myfinance.persistence.InstrumentDaoImpl;
+import de.hf.dac.myfinance.api.persistence.dao.*;
+import de.hf.dac.myfinance.persistence.*;
 import de.hf.dac.myfinance.api.service.InstrumentService;
-import de.hf.dac.myfinance.persistence.TransactionDaoImpl;
 import de.hf.dac.myfinance.service.InstrumentServiceImpl;
 
 import javax.persistence.EntityManagerFactory;
@@ -84,6 +78,7 @@ public class MFEnvironmentBuilderModule extends AbstractModule {
         bind(AuditService.class).to(AuditServiceImpl.class);
         bind(InstrumentDao.class).to(InstrumentDaoImpl.class);
         bind(TransactionDao.class).to(TransactionDaoImpl.class);
+        bind(RecurrentTransactionDao.class).to(RecurrentTransactionDaoImpl.class);
         bind(CashflowDao.class).to(CashflowDaoImpl.class);
         bind(EndOfDayPriceDao.class).to(EndOfDayPriceDaoImpl.class);
         bind(InstrumentService.class).to(InstrumentServiceImpl.class);

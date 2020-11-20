@@ -26,10 +26,12 @@ import de.hf.dac.myfinance.api.application.OpType;
 import de.hf.dac.myfinance.api.application.servicecontext.MDEnvironmentContext;
 import de.hf.dac.myfinance.api.domain.Equity;
 import de.hf.dac.myfinance.api.domain.InstrumentType;
+import de.hf.dac.myfinance.api.domain.RecurrentFrequency;
 import de.hf.dac.myfinance.api.exceptions.MFException;
 import de.hf.dac.myfinance.api.exceptions.MFMsgKey;
 import de.hf.dac.myfinance.api.restservice.InstrumentListModel;
 import de.hf.dac.myfinance.api.restservice.InstrumentModel;
+import de.hf.dac.myfinance.api.restservice.RecurrentTransactionListModel;
 import de.hf.dac.myfinance.api.restservice.TransactionListModel;
 import de.hf.dac.myfinance.restservice.myfinanceresources.leafresources.*;
 import de.hf.dac.services.resources.BaseSecuredResource;
@@ -80,6 +82,15 @@ public class EnvironmentDataResource extends BaseSecuredResource<OpType,OpLevel>
         return new InstrumentForTenantListResource(new InstrumentListModel(marketDataEnvironment.getInstrumentService().listInstruments(tenantId)));
     }
 
+    @Path("/incomebudgetforbudgetgroup")
+    @Produces(MediaType.APPLICATION_JSON)
+    @ApiOperation(value = "get incomebudget for budgetgroup",
+            response = InstrumentListResource.class)
+    public IncomeBudgetResource getIncomeBudgetForBudgetGroup(@QueryParam("budgetGroup") @ApiParam(value="budgetGroup id") int budgetGroupId) {
+        checkOperationAllowed(OpType.READ);
+        return new IncomeBudgetResource(new InstrumentModel(marketDataEnvironment.getInstrumentService().getIncomeBudget(budgetGroupId)));
+    }
+
     @Path("/instrumentspertype")
     @Produces(MediaType.APPLICATION_JSON)
     @ApiOperation(value = "get Instruments per type",
@@ -100,6 +111,15 @@ public class EnvironmentDataResource extends BaseSecuredResource<OpType,OpLevel>
         LocalDate start = LocalDate.parse(startdate);
         LocalDate end = LocalDate.parse(enddate);
         return new TransactionListResource(new TransactionListModel(marketDataEnvironment.getInstrumentService().listTransactions(start, end)));
+
+    }
+
+    @Path("/listRecurrentTransactions")
+    @Produces(MediaType.APPLICATION_JSON)
+    @ApiOperation(value = "get RecurrentTransactions", response = RecurrentTransactionListResource.class)
+    public RecurrentTransactionListResource getRecurrentTransaction() {
+        checkOperationAllowed(OpType.READ);
+        return new RecurrentTransactionListResource(new RecurrentTransactionListModel(marketDataEnvironment.getInstrumentService().listRecurrentTransactions()));
 
     }
 
@@ -126,6 +146,19 @@ public class EnvironmentDataResource extends BaseSecuredResource<OpType,OpLevel>
     public Response importPrices() {
         checkOperationAllowed(OpType.EXECUTE);
         marketDataEnvironment.getInstrumentService().importPrices(LocalDateTime.now());
+        return Response.ok().build();
+    }
+
+    @POST
+    @Path("/bookRecurrentTransactions")
+    @Produces(MediaType.APPLICATION_JSON)
+    @ApiOperation(value = "bookRecurrentTransactions")
+    @ApiResponses(value = {
+            @ApiResponse(code = HttpStatus.SC_NO_CONTENT, message = "book RecurrentTransactions"),
+            @ApiResponse(code = HttpStatus.SC_INTERNAL_SERVER_ERROR, message = "Something wrong in Server")})
+    public Response bookRecurrentTransactions() {
+        checkOperationAllowed(OpType.EXECUTE);
+        marketDataEnvironment.getInstrumentService().bookRecurrentTransactions(LocalDateTime.now());
         return Response.ok().build();
     }
 
@@ -329,6 +362,40 @@ public class EnvironmentDataResource extends BaseSecuredResource<OpType,OpLevel>
     }
 
     @POST
+    @Path("/addRecurrentTransfer")
+    @Produces(MediaType.APPLICATION_JSON)
+    @ApiOperation(value = "save RecurrentTransfer")
+    @ApiResponses(value = {
+            @ApiResponse(code = HttpStatus.SC_NO_CONTENT, message = "added"),
+            @ApiResponse(code = HttpStatus.SC_INTERNAL_SERVER_ERROR, message = "Something wrong in Server")})
+    public Response addRecurrentTransfer(@QueryParam("description") @ApiParam(value="description") String description,
+                                @QueryParam("srcId") @ApiParam(value="the instrumentId of the source") int srcId,
+                                @QueryParam("trgId") @ApiParam(value="the instrumentId of the target") int trgId,
+                                @QueryParam("recurrentFrequency") @ApiParam(value="the frequency of the recurrent transaction") RecurrentFrequency recurrentFrequency,
+                                @QueryParam("value") @ApiParam(value="the value of the income or expense") double value,
+                                @QueryParam("transactiondate") @ApiParam(value="the transactiondate(yyyy-mm-dd") String transactiondate) {
+        checkOperationAllowed(OpType.WRITE);
+        marketDataEnvironment.getInstrumentService().newRecurrentTransaction(description, srcId, trgId, recurrentFrequency, value, LocalDate.parse(transactiondate), LocalDateTime.now());
+        return Response.ok().build();
+    }
+
+    @POST
+    @Path("/updateRecurrentTransaction")
+    @Produces(MediaType.APPLICATION_JSON)
+    @ApiOperation(value = "update recurrent Transaction")
+    @ApiResponses(value = {
+            @ApiResponse(code = HttpStatus.SC_NO_CONTENT, message = "updated"),
+            @ApiResponse(code = HttpStatus.SC_INTERNAL_SERVER_ERROR, message = "Something wrong in Server")})
+    public Response updateRecurrentTransaction(@QueryParam("id") @ApiParam(value="id") int id,
+                                      @QueryParam("description") @ApiParam(value="description") String description,
+                                      @QueryParam("value") @ApiParam(value="the value of the income or expense") double value,
+                                      @QueryParam("nexttransaction") @ApiParam(value="the transactiondate(yyyy-mm-dd") String nexttransaction) {
+        checkOperationAllowed(OpType.WRITE);
+        marketDataEnvironment.getInstrumentService().updateRecurrentTransaction(id, description, value, LocalDate.parse(nexttransaction), LocalDateTime.now());
+        return Response.ok().build();
+    }
+
+    @POST
     @Path("/delTransfer")
     @Produces(MediaType.APPLICATION_JSON)
     @ApiOperation(value = "delete Transfer")
@@ -338,6 +405,19 @@ public class EnvironmentDataResource extends BaseSecuredResource<OpType,OpLevel>
     public Response delTransfer(@QueryParam("transactionId") @ApiParam(value="transactionId") int transactionId) {
         checkOperationAllowed(OpType.WRITE);
         marketDataEnvironment.getInstrumentService().deleteTransaction(transactionId);
+        return Response.ok().build();
+    }
+
+    @POST
+    @Path("/delRecurrentTransfer")
+    @Produces(MediaType.APPLICATION_JSON)
+    @ApiOperation(value = "delete Recurrent Transfer")
+    @ApiResponses(value = {
+            @ApiResponse(code = HttpStatus.SC_NO_CONTENT, message = "deleted"),
+            @ApiResponse(code = HttpStatus.SC_INTERNAL_SERVER_ERROR, message = "Something wrong in Server")})
+    public Response delRecurrentTransfer(@QueryParam("recurrentTransactionId") @ApiParam(value="recurrentTransactionId") int recurrentTransactionId) {
+        checkOperationAllowed(OpType.WRITE);
+        marketDataEnvironment.getInstrumentService().deleteRecurrentTransaction(recurrentTransactionId);
         return Response.ok().build();
     }
 }

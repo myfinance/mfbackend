@@ -25,10 +25,7 @@ import de.hf.dac.myfinance.api.domain.*;
 import de.hf.dac.myfinance.api.domain.Currency;
 import de.hf.dac.myfinance.api.exceptions.MFException;
 import de.hf.dac.myfinance.api.exceptions.MFMsgKey;
-import de.hf.dac.myfinance.api.persistence.dao.CashflowDao;
-import de.hf.dac.myfinance.api.persistence.dao.EndOfDayPriceDao;
-import de.hf.dac.myfinance.api.persistence.dao.InstrumentDao;
-import de.hf.dac.myfinance.api.persistence.dao.TransactionDao;
+import de.hf.dac.myfinance.api.persistence.dao.*;
 import de.hf.dac.myfinance.api.service.InstrumentService;
 import de.hf.dac.myfinance.importhandler.ImportHandler;
 import lombok.Data;
@@ -46,6 +43,7 @@ public class InstrumentServiceImpl implements InstrumentService {
     private InstrumentDao instrumentDao;
     private EndOfDayPriceDao endOfDayPriceDao;
     private TransactionDao transactionDao;
+    private RecurrentTransactionDao recurrentTransactionDao;
     private CashflowDao cashflowDao;
     private ValueCurveService service;
     private WebRequestService webRequestService;
@@ -56,10 +54,11 @@ public class InstrumentServiceImpl implements InstrumentService {
     private final static String DEFAULT_ACCPF_PREFIX = "accountPf_";
 
     @Inject
-    public InstrumentServiceImpl(InstrumentDao instrumentDao, EndOfDayPriceDao endOfDayPriceDao, TransactionDao transactionDao, CashflowDao cashflowDao, WebRequestService webRequestService, AuditService auditService){
+    public InstrumentServiceImpl(InstrumentDao instrumentDao, EndOfDayPriceDao endOfDayPriceDao, TransactionDao transactionDao, RecurrentTransactionDao recurrentTransactionDao, CashflowDao cashflowDao, WebRequestService webRequestService, AuditService auditService){
         this.instrumentDao = instrumentDao;
         this.endOfDayPriceDao = endOfDayPriceDao;
         this.transactionDao = transactionDao;
+        this.recurrentTransactionDao = recurrentTransactionDao;
         this.cashflowDao = cashflowDao;
         this.webRequestService = webRequestService;
         service = new ValueCurveService(instrumentDao, endOfDayPriceDao);
@@ -150,6 +149,15 @@ public class InstrumentServiceImpl implements InstrumentService {
     @Override
     public double getValue(int instrumentId, LocalDate date){
         return service.getValue(instrumentId, date);
+    }
+
+    @Override
+    public Instrument getIncomeBudget(int budgetGroupId) {
+        List<Instrument> incomeBudgets = instrumentDao.getInstrumentChilds(budgetGroupId, EdgeType.INCOMEBUDGET);
+        if(incomeBudgets == null || incomeBudgets.isEmpty()) {
+            throw new MFException(MFMsgKey.NO_INCOMEBUDGET_DEFINED_EXCEPTION, "No IncomeBudget defined for budgetGroupId:"+budgetGroupId);
+        }
+        return incomeBudgets.get(0);
     }
 
     @Override
@@ -304,21 +312,70 @@ public class InstrumentServiceImpl implements InstrumentService {
     }
 
     @Override
+    public void bookRecurrentTransactions(LocalDateTime ts){
+        final String Processstep = "bookRecurrentTransactions";
+        List<RecurrentTransaction> recurrentTransactions = recurrentTransactionDao.listRecurrentTransactions();
+        LocalDateTime endTs = LocalDateTime.now();
+        if(recurrentTransactions!=null && !recurrentTransactions.isEmpty()) {
+            recurrentTransactions.forEach(i-> {
+                LocalDate nextTransaction = i.getNexttransaction();
+                while(nextTransaction.isBefore(ts.toLocalDate())) {
+                    if(i.getRecurrencytype() == RecurrentTransactionType.Expenses.getValue() ||
+                            i.getRecurrencytype() == RecurrentTransactionType.Income.getValue()) {
+                        newIncomeExpense(i.getDescription(), i.getInstrumentByInstrumentid1().getInstrumentid(),
+                                i.getInstrumentByInstrumentid2().getInstrumentid(), i.getValue(), nextTransaction, ts);
+                    } else {
+                        newTransfer(i.getDescription(), i.getInstrumentByInstrumentid1().getInstrumentid(),
+                                i.getInstrumentByInstrumentid2().getInstrumentid(), i.getValue(), nextTransaction, ts);
+                    }
+                    nextTransaction = calcNextTransaction(nextTransaction, i.getRecurrentfrequence());
+                }
+                updateRecurrentTransaction(i.getRecurrenttransactionid(), i.getDescription(), i.getValue(),
+                        nextTransaction, ts);
+            });
+            auditService.saveMessage("recurrent transactions booked", Severity.INFO, AUDIT_MSG_TYPE);
+            endTs = LocalDateTime.now();
+        } else {
+            auditService.saveMessage("no recurrent transactions to book", Severity.INFO, AUDIT_MSG_TYPE);
+        }
+        auditService.saveSuccessfulJournalEntry(Processstep, "", "NA", ts, endTs);
+    }
+
+    private LocalDate calcNextTransaction(LocalDate lastTransaction, RecurrentFrequency frequency) {
+        LocalDate nextTransaction;
+        switch(frequency) {
+            case Monthly:
+                return lastTransaction.plusMonths(1);
+            case Quaterly:
+                return lastTransaction.plusMonths(3);
+            case Yearly:
+                return lastTransaction.plusYears(1);
+            default:
+                return lastTransaction.plusMonths(1);
+        }
+    }
+
+    @Override
     public void newTenant(String description, LocalDateTime ts) {
         Tenant tenant = new Tenant(description, true, ts);
         instrumentDao.saveInstrument(tenant);
         auditService.saveMessage("Tenant inserted:" + description, Severity.INFO, AUDIT_MSG_TYPE);
         addInstrumentToGraph(tenant.getInstrumentid(),tenant.getInstrumentid(),EdgeType.TENANTGRAPH);
-        int budgetGroupId = newBudgetGroup(DEFAULT_BUDGETGROUP_PREFIX+description, ts);
-        addInstrumentToGraph(budgetGroupId, tenant.getInstrumentid(), EdgeType.TENANTGRAPH);
+
+        int budgetGroupId = newBudgetGroup(DEFAULT_BUDGETGROUP_PREFIX+description, tenant.getInstrumentid(), ts);
         int incomeBudgetId = createBudget(DEFAULT_INCOMEBUDGET_PREFIX+description, budgetGroupId, ts);
-        addInstrumentToGraph(incomeBudgetId, tenant.getInstrumentid(), EdgeType.INCOMEBUDGET);
+        addInstrumentToGraph(incomeBudgetId, budgetGroupId, EdgeType.INCOMEBUDGET);
         int accPfId = newAccountPortfolio(DEFAULT_ACCPF_PREFIX+description, ts);
         addInstrumentToGraph(accPfId, tenant.getInstrumentid(), EdgeType.TENANTGRAPH);
     }
 
     protected void addInstrumentToGraph(int instrumentId, int ancestorId, EdgeType edgeType){
         List<InstrumentGraphEntry> ancestorGraphEntries = instrumentDao.getAncestorGraphEntries(ancestorId, edgeType);
+        if(instrumentId!=ancestorId && ancestorGraphEntries.isEmpty()){
+            throw new MFException(MFMsgKey.ANCESTOR_DOES_NOT_EXIST_EXCEPTION,
+                    "Can not add instrument "+instrumentId+" to tree. Ancestor: "
+                            + ancestorId + " does not exists for edgetype " + edgeType.name());
+        }
         for (InstrumentGraphEntry entry : ancestorGraphEntries) {
             InstrumentGraphEntry newEntry = new InstrumentGraphEntry(entry.getId().getAncestor(), instrumentId, edgeType);
             newEntry.setPathlength(entry.getPathlength()+1);
@@ -350,10 +407,13 @@ public class InstrumentServiceImpl implements InstrumentService {
         return budgetId;
     }
 
-    protected int newBudgetGroup(String description, LocalDateTime ts) {
+    protected int newBudgetGroup(String description, int tenantId, LocalDateTime ts) {
         BudgetGroup budgetGroup = new BudgetGroup(description, true, ts);
         instrumentDao.saveInstrument(budgetGroup);
-        return budgetGroup.getInstrumentid();
+        int budgetGroupId = budgetGroup.getInstrumentid();
+        addInstrumentToGraph(budgetGroupId, tenantId, EdgeType.TENANTGRAPH);
+        addInstrumentToGraph(budgetGroupId,budgetGroupId,EdgeType.INCOMEBUDGET);
+        return budgetGroupId;
     }
 
     protected int newAccountPortfolio(String description, LocalDateTime ts) {
@@ -543,6 +603,107 @@ public class InstrumentServiceImpl implements InstrumentService {
             auditService.saveMessage(transactionDao.deleteTransaction(transactionId),
                     Severity.INFO, AUDIT_MSG_TYPE);
         }
+    }
+
+    @Override
+    public List<RecurrentTransaction> listRecurrentTransactions() {
+        return recurrentTransactionDao.listRecurrentTransactions();
+    }
+
+    @Override
+    public void newRecurrentTransaction(String description, int srcInstrumentId, int trgInstrumentId, RecurrentFrequency recurrentFrequency, double value, LocalDate nextTransactionDate, LocalDateTime ts) {
+        Optional<Instrument> src = instrumentDao.getInstrument(srcInstrumentId);
+        RecurrentTransactionType recurrentTransactionType = RecurrentTransactionType.Transfer;
+        if(!src.isPresent()){
+            throw new MFException(MFMsgKey.UNKNOWN_INSTRUMENT_EXCEPTION, "RecurrentTransfer not saved: unknown instrument:"+srcInstrumentId);
+        }
+        Optional<Instrument> trg = instrumentDao.getInstrument(trgInstrumentId);
+        if(!trg.isPresent()){
+            throw new MFException(MFMsgKey.UNKNOWN_INSTRUMENT_EXCEPTION, "RecurrentTransfer not saved: unknown instrument:"+trgInstrumentId);
+        }
+        if(src.get().getInstrumentType() == InstrumentType.Budget && trg.get().getInstrumentType() == InstrumentType.Budget) {
+            recurrentTransactionType = RecurrentTransactionType.BudgetTransfer;
+        } else if (src.get().getInstrumentType() == InstrumentType.Budget) {
+            if( !isAccountTransferAllowed(trg.get())) {
+                throw new MFException(MFMsgKey.WRONG_INSTRUMENTTYPE_EXCEPTION, "No Transfer allowed for this account:"+trgInstrumentId);
+            }
+            recurrentTransactionType = getRecurrentTransactiontype(value);
+        } else if (trg.get().getInstrumentType() == InstrumentType.Budget) {
+            if( !isAccountTransferAllowed(src.get())) {
+                throw new MFException(MFMsgKey.WRONG_INSTRUMENTTYPE_EXCEPTION, "No Transfer allowed for this account:"+srcInstrumentId);
+            }
+            recurrentTransactionType = getRecurrentTransactiontype(value);
+        } else {
+            if( !isAccountTransferAllowed(trg.get())){
+                throw new MFException(MFMsgKey.WRONG_INSTRUMENTTYPE_EXCEPTION, "No Transfer allowed for this account:"+trgInstrumentId);
+            }
+            if( !isAccountTransferAllowed(src.get())){
+                throw new MFException(MFMsgKey.WRONG_INSTRUMENTTYPE_EXCEPTION, "No Transfer allowed for this account:"+srcInstrumentId);
+            }
+            recurrentTransactionType = RecurrentTransactionType.Transfer;
+        }
+
+        Optional<Integer> tenantSrc = instrumentDao.getRootInstrument(srcInstrumentId, EdgeType.TENANTGRAPH);
+        Optional<Integer> tenantTrg = instrumentDao.getRootInstrument(trgInstrumentId, EdgeType.TENANTGRAPH);
+
+        if(!tenantSrc.isPresent()
+                || !tenantTrg.isPresent()
+                || tenantSrc.get()!=tenantTrg.get()){
+            throw new MFException(MFMsgKey.WRONG_TENENT_EXCEPTION, "RecurrentTransfer not saved: budget and account have not the same tenant");
+        }
+        RecurrentTransaction recurrentTransaction = new RecurrentTransaction(src.get(), trg.get(), recurrentTransactionType.getValue(), description, value, nextTransactionDate, recurrentFrequency);
+
+        auditService.saveMessage("new recurrenttransaction saved for Instrument "+srcInstrumentId+
+                        " and  "+trgInstrumentId+". nextTransactionDate:" + nextTransactionDate +
+                        ", value:" + value + ", desc:" +description + ", frequency:" +recurrentFrequency,
+                Severity.INFO, AUDIT_MSG_TYPE);
+        recurrentTransactionDao.saveRecurrentTransaction(recurrentTransaction);
+    }
+
+    @Override
+    public void deleteRecurrentTransaction(int recurrentTransactionId) {
+        Optional<RecurrentTransaction> transaction = recurrentTransactionDao.getRecurrentTransaction(recurrentTransactionId);
+        if(transaction.isPresent()){
+            auditService.saveMessage(recurrentTransactionDao.deleteRecurrentTransaction(recurrentTransactionId),
+                    Severity.INFO, AUDIT_MSG_TYPE);
+        }
+    }
+
+    @Override
+    public void updateRecurrentTransaction(int id, String description, double value, LocalDate nexttransaction, LocalDateTime ts) {
+        Optional<RecurrentTransaction> transaction = recurrentTransactionDao.getRecurrentTransaction(id);
+        if(!transaction.isPresent()){
+            throw new MFException(MFMsgKey.UNKNOWN_TRANSACTION_EXCEPTION, "RecurrentTransaction not updated: RecurrentTransaction for id:"+id + " not found");
+        }
+        RecurrentTransaction oldtransaction = transaction.get();
+        if(
+                (RecurrentTransactionType.getRecurrentTransactionTypeById(oldtransaction.getRecurrencytype()) != RecurrentTransactionType.Expenses
+                    && value < 0) || (
+            RecurrentTransactionType.getRecurrentTransactionTypeById(oldtransaction.getRecurrencytype()) == RecurrentTransactionType.Expenses
+                    && value > 0) ){
+            throw new MFException(MFMsgKey.WRONG_TRNSACTIONTYPE_EXCEPTION, "RecurrentTransaction not updated: Type:"
+                    +RecurrentTransactionType.getRecurrentTransactionTypeById(oldtransaction.getRecurrencytype()) +
+                    " and value:"+value + " do not match");
+        }
+
+        recurrentTransactionDao.updateRecurrentTransaction(id, description, value, nexttransaction);
+
+        auditService.saveMessage(" recurrenttransaction with id "+id+" ,desc: '"+oldtransaction.getDescription()+
+                        "' ,value:" + oldtransaction.getValue() + "" +
+                        " and next transaction:" + oldtransaction.getNexttransaction()
+                        + "updated to desc="+description + ", date=" + nexttransaction +
+                        " and value=" + value,
+                Severity.INFO, AUDIT_MSG_TYPE);
+    }
+
+    private RecurrentTransactionType getRecurrentTransactiontype(double value) {
+        RecurrentTransactionType recurrentTransactionType;
+        if(value <0) {
+            recurrentTransactionType = RecurrentTransactionType.Expenses;
+        } else {
+            recurrentTransactionType = RecurrentTransactionType.Income;
+        }
+        return recurrentTransactionType;
     }
 
     protected boolean isAccountTransferAllowed(Instrument instrument){

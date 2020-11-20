@@ -28,7 +28,6 @@ import java.util.Optional;
 public interface InstrumentService {
     List<Instrument> listInstruments();
     List<Instrument> listInstruments(int tenantId);
-
     List<Instrument> listInstruments(int tenantId, InstrumentType instrumentType);
 
     Optional<Instrument> getCurrency(String currencyCode);
@@ -42,6 +41,7 @@ public interface InstrumentService {
     Map<LocalDate, Double> getValueCurve(int instrumentId);
     Map<LocalDate, Double> getValueCurve(int instrumentId, LocalDate startDate, LocalDate endDate);
     double getValue(int instrumentId, LocalDate date);
+    Instrument getIncomeBudget(int tenantId);
 
     void saveEquity(String isin, String description);
     void saveSymbol(String isin, String symbol, String currencyCode);
@@ -62,7 +62,14 @@ public interface InstrumentService {
     List<Cashflow> listInstrumentCashflows(int instrumentId);
     void deleteTransaction(int transactionId);
 
+    List<RecurrentTransaction> listRecurrentTransactions();
+    void newRecurrentTransaction(String description, int srcInstrumentId, int trgInstrumentId, RecurrentFrequency recurrentFrequency, double value, LocalDate nextTransactionDate, LocalDateTime ts);
+    void deleteRecurrentTransaction(int recurrentTransactionId);
+    void updateRecurrentTransaction(int id, String description, double value, LocalDate nexttransaction, LocalDateTime ts);
+
     void importPrices(LocalDateTime ts);
     void fillPriceHistory(int sourceId, String isin, LocalDateTime ts);
+
+    void bookRecurrentTransactions(LocalDateTime ts);
 
 }

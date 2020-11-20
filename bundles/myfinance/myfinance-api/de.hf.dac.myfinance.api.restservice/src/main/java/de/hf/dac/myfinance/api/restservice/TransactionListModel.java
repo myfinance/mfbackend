@@ -1,10 +1,10 @@
 /**
  * ----------------------------------------------------------------------------
- * ---          DZ Bank FfM - Application Development                       ---
+ * ---          Application Development                       ---
  * Copyright (c) 2014, ... All Rights Reserved
  * Project     : dac
  * File        : TransactionListModel.java
- * Author(s)   : xn01598
+ * Author(s)   : HF
  * Created     : 21.03.2019
  * ----------------------------------------------------------------------------
  */
