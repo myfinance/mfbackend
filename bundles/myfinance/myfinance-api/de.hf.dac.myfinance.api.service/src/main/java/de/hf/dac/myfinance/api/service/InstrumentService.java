@@ -28,7 +28,8 @@ import java.util.Optional;
 public interface InstrumentService {
     List<Instrument> listInstruments();
     List<Instrument> listInstruments(int tenantId);
-    List<Instrument> listInstruments(int tenantId, InstrumentType instrumentType);
+    List<Instrument> listInstruments(int tenantId, boolean onlyActive);
+    List<Instrument> listInstruments(int tenantId, InstrumentType instrumentType, boolean onlyActive);
 
     Optional<Instrument> getCurrency(String currencyCode);
     Optional<Equity> getEquity(String isin);
