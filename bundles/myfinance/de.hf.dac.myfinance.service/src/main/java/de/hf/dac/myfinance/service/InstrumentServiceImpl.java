@@ -73,13 +73,25 @@ public class InstrumentServiceImpl implements InstrumentService {
 
     @Override
     public List<Instrument> listInstruments(int tenantId) {
-        List<Instrument> instruments = instrumentDao.getInstrumentChilds(tenantId, EdgeType.TENANTGRAPH);
+        return instrumentDao.getInstrumentChilds(tenantId, EdgeType.TENANTGRAPH);
+    }
+
+    @Override
+    public List<Instrument> listInstruments(int tenantId, boolean onlyActive) {
+        List<Instrument> instruments = listInstruments(tenantId);
+        if ( instruments!= null && !instruments.isEmpty()) {
+            instruments = instruments.stream().filter(
+                    i->(!onlyActive || i.isIsactive())
+            ).collect(Collectors.toList());
+        }
         return instruments;
     }
 
     @Override
-    public List<Instrument> listInstruments(int tenantId, InstrumentType instrumentType) {
-        List<Instrument> instruments = listInstruments(tenantId).stream().filter(i->i.getInstrumentType().equals(instrumentType)).collect(Collectors.toList());
+    public List<Instrument> listInstruments(int tenantId, InstrumentType instrumentType, boolean onlyActive) {
+        List<Instrument> instruments = listInstruments(tenantId).stream().filter(
+                    i->i.getInstrumentType().equals(instrumentType) && (!onlyActive || i.isIsactive())
+                ).collect(Collectors.toList());
         return instruments;
     }
 
