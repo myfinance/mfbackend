@@ -1,63 +1,6 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ .Values.mfbackend.db_name }} 
-spec:
-  replicas: {{ .Values.replicaCount }}
-  selector:
-    matchLabels:
-      app: {{ .Values.mfbackend.db_name }}  
-  template:
-    metadata:
-      labels:
-        app: {{ .Values.mfbackend.db_name }}
-    spec:
-      containers:
-        - name: {{ .Values.mfbackend.db_name }}
-          image: "{{ .Values.image.repository }}mfpostgres:{{ .Chart.AppVersion }}"
-          imagePullPolicy: {{ .Values.image.pullPolicy }}   
-          volumeMounts:
-           - name: myfinancedata
-             mountPath: /var/lib/postgresql/data
-          env:
-          - name: POSTGRES_PASSWORD
-            value: {{ .Values.mfbackend.db_pw }}   
-      volumes:
-        - name: myfinancedata
-          persistentVolumeClaim:
-              claimName: {{ .Values.pv.mfdbpvc }}  
-
----
-
-apiVersion: batch/v1
-kind: Job
-metadata:
-  #add timestamp to always have a new jobname
-  name: mfupgrade{{ date "20060102150405" .Release.Time }}
-spec:
-  #autocleanup after seconds
-  ttlSecondsAfterFinished: 180
-  template:
-    spec:
-      containers: 
-      - name: mfupgrade
-        image: "{{ .Values.image.repository }}mfdbupdate:{{ .Chart.AppVersion }}"
-        imagePullPolicy: {{ .Values.image.pullPolicy }}                     
-        env:
-        - name: DB_PW
-          value: "{{ .Values.mfbackend.db_pw }}"   
-        - name: DB_IMAGE
-          value: {{ .Values.mfbackend.db_name }}  
-        - name: DB_USER
-          value: postgres  
-      restartPolicy: OnFailure     
-  backoffLimit: 4 
-
----
-
-apiVersion: apps/v1
-kind: Deployment
-metadata:
   name: myfinance
 spec:
   replicas: {{ .Values.replicaCount }}
