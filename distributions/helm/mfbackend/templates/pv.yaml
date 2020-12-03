@@ -26,33 +26,4 @@ spec:
     path: {{ .Values.pv.mntpath }}{{ .Values.stage }}{{ .Values.pv.configstorage }}
     type: DirectoryOrCreate 
 
----
-
-apiVersion: v1
-kind: PersistentVolumeClaim
-metadata:
-  name: {{ .Values.pv.mfdbpvc }}
-spec:
-  storageClassName: mfdbstorage
-  accessModes:
-    - ReadWriteOnce
-  resources:
-    requests:
-      storage: {{ .Values.pv.mfdbstoragesize }}   
-
----
-
-apiVersion: v1
-kind: PersistentVolume
-metadata:
-  name: localstorage
-spec:
-  storageClassName: mfdbstorage
-  accessModes:
-    - ReadWriteOnce
-  capacity:
-    storage: {{ .Values.pv.mfdbstoragesize }}    
-  hostPath:
-    path: {{ .Values.pv.mfdbstorage }}
-    type: Directory  
 

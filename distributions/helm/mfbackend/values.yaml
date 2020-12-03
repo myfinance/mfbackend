@@ -15,9 +15,6 @@ pv:
   configpvc: mfconfigpvc
   configstorage: _config/
   configstoragesize: 1Mi
-  mfdbstorage: /opt/mf/prod_db/
-  mfdbpvc: mfdbpvc
-  mfdbstoragesize: 5Gi
 
 mfbackend:
   db_pw: vulkan
