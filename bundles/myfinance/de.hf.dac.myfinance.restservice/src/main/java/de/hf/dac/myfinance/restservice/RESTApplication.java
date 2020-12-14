@@ -102,7 +102,7 @@ public class RESTApplication {
             /*if(!RESTApplicationConfiguration.corsAllowedOrigins().isEmpty()) {
                 crossOriginResourceSharingFilter.setAllowOrigins(Arrays.asList(RESTApplicationConfiguration.corsAllowedOrigins().split(",")));
             }*/
-
+            crossOriginResourceSharingFilter.setAllowOrigins(new ArrayList());   
             sf.setProvider(crossOriginResourceSharingFilter);
         }
         server = sf.create();
