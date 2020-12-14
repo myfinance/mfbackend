@@ -36,6 +36,7 @@ import org.osgi.service.component.annotations.Deactivate;
 import org.osgi.service.metatype.annotations.Designate;
 
 import java.util.Arrays;
+import java.util.ArrayList;
 
 @Designate(ocd = RESTApplicationConfiguration.class)
 @Component(
