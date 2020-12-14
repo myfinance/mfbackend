@@ -99,9 +99,9 @@ public class RESTApplication {
                 crossOriginResourceSharingFilter.setAllowHeaders(Arrays.asList(RESTApplicationConfiguration.corsAllowedHeaders().split(",")));
             }
 
-            if(!RESTApplicationConfiguration.corsAllowedOrigins().isEmpty()) {
+            /*if(!RESTApplicationConfiguration.corsAllowedOrigins().isEmpty()) {
                 crossOriginResourceSharingFilter.setAllowOrigins(Arrays.asList(RESTApplicationConfiguration.corsAllowedOrigins().split(",")));
-            }
+            }*/
 
             sf.setProvider(crossOriginResourceSharingFilter);
         }
