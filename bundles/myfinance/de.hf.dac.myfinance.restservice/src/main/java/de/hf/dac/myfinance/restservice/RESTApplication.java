@@ -100,12 +100,9 @@ public class RESTApplication {
                 crossOriginResourceSharingFilter.setAllowHeaders(Arrays.asList(RESTApplicationConfiguration.corsAllowedHeaders().split(",")));
             }
 
-            /*if(!RESTApplicationConfiguration.corsAllowedOrigins().isEmpty()) {
+            if(!RESTApplicationConfiguration.corsAllowedOrigins().isEmpty()) {
                 crossOriginResourceSharingFilter.setAllowOrigins(Arrays.asList(RESTApplicationConfiguration.corsAllowedOrigins().split(",")));
-            }*/
-            ArrayList allowedOrigin = new ArrayList();
-            allowedOrigin.add("http://*.gitpod.io");
-            crossOriginResourceSharingFilter.setAllowOrigins(new ArrayList());   
+            } 
             sf.setProvider(crossOriginResourceSharingFilter);
         }
         server = sf.create();
