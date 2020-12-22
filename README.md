@@ -199,3 +199,28 @@ git log --oneline --graph --decorate
 modify test/md-int-test/src/main/test/resources/dac.res to define the backend url for the tests
 run 'mvn clean install -f test/pom.xml -DNEXUS_URL=192.168.100.73:31001'
 version is the mfbackendversion 
+
+## Backend access ##
+
+for the development of the frontend with the gitpod ide it is necessary to have a dev backend available. For this the backend will publish via ci after every commit at my server https://babcom.myds.me:30022/dac/rest. 
+SSL usage is important or other wise no connection is allowed from an gitpod envirmonment. 
+to create a certificate I've used my synology:
+- control_center-external_access-ddns add babcom.myds.me
+- control_center-security-certificate add new lets encrypt certifikate
+- control_center-security-certificate export certificate
+the is easier but you can use lets encrypt directly or any other service to create a certificate as well
+
+to use the certificate in the backend you have to do the following steps:
+- unzip at your win-client and upload them to a linix server with java installed
+- openssl pkcs12 -export -out eneCert.pkcs12 -inkey privkey.pem -in cert.pem
+- keytool -genkey -keyalg RSA -alias selfsigned -keystore devkeystore.jks  //use your personal infos but mind to use the same password as configured in in dac.res org.ops4j.pax.web.ssl.password
+- keytool -delete -alias selfsigned -keystore devkeystore.jks //delete default certifikate 
+- keytool -v -importkeystore -srckeystore eneCert.pkcs12 -srcstoretype PKCS12 -destkeystore devkeystore.jks -deststoretype JKS
+- copy the certificate to /mnt/data/mf/dev_config and restart the container.
+- add a portforwarding to the backend ssl port 30022
+
+For Prod it is not recommended to publish your backend as long as not client from outside your cluster will connect you api
+Just publish your frontend. I would use a reversproxy for this. In this case the user do not have to use a special port and you don't have to add a ssl certificate to your frontend - just handle this in your reverse proxy
+
+
+
