@@ -117,7 +117,7 @@ public abstract class BaseSecurityProviderImpl<
 
         EntityManager em = getEMFactory().createEntityManager();
 
-        Query query = em.createQuery("SELECT DISTINCT(c.resource) FROM " + getTableName() + " c WHERE c.restapp = :restApp ");
+        Query query = em.createQuery("SELECT DISTINCT(c.resource) FROM DacRestauthorization c WHERE c.restapp = :restApp ");
         query.setParameter("restApp", system);
 
         List<String> ol = query.getResultList();
@@ -125,10 +125,6 @@ public abstract class BaseSecurityProviderImpl<
             ret.add(Enum.valueOf(clazz,o));
         }
         return ret;
-    }
-
-    protected String getTableName() {
-        return DacRestauthorization.class.getSimpleName();
     }
 
     private void setUserPermissions(Subject subject){
@@ -199,7 +195,7 @@ public abstract class BaseSecurityProviderImpl<
         List<AuthMatcherImpl> ret = new ArrayList<>();
 
         EntityManager em = getEMFactory().createEntityManager();
-        Query query = em.createQuery("SELECT c FROM " + getTableName() + " c WHERE " +
+        Query query = em.createQuery("SELECT c FROM DacRestauthorization c WHERE " +
             "c.resource = :resource and " +
             "c.restapp = :restApp and " +
             "c.restoptype = :restOpType ");
