@@ -219,8 +219,10 @@ to use the certificate in the backend you have to do the following steps:
 - copy the certificate to /mnt/data/mf/dev_config and restart the container.
 - add a portforwarding to the backend ssl port 30022
 
-For Prod it is not recommended to publish your backend as long as not client from outside your cluster will connect you api
-Just publish your frontend. I would use a reversproxy for this. In this case the user do not have to use a special port and you don't have to add a ssl certificate to your frontend - just handle this in your reverse proxy
+It is the same for Prod but with another port(for me 30042). 
+I use a reversproxy for frontend. In this case the user do not have to use a special port and you don't have to add a ssl certificate to your frontend - just handle this in your reverse proxy.
+I would like to do it the same way for the backend but unfortunately my integrated Reversproxy in the firewall is only working for the root domain. 
+You have to publish the backend with https as well because an https frontend is not allowed to communicate with an unsecure backend.
 
 
 
