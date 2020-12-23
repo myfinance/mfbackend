@@ -27,6 +27,9 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 public class DefaultExecutionContext implements ExecutionContext {
 
 
@@ -34,7 +37,7 @@ public class DefaultExecutionContext implements ExecutionContext {
     protected final Properties properties;
     private ReferenceBag bag;
     private Plugin plugin;
-
+    private static final Logger LOG = LoggerFactory.getLogger(DefaultExecutionContext.class);
 
 
     public DefaultExecutionContext(String env, Plugin plugin) {
@@ -45,7 +48,7 @@ public class DefaultExecutionContext implements ExecutionContext {
             if (is != null)
                 properties.load(is);
         } catch (IOException e) {
-            e.printStackTrace();
+            LOG.error(e.getMessage());
         }
     }
 
