@@ -31,7 +31,7 @@ public class LDAPCache {
 
     public static final Logger LOG = LoggerFactory.getLogger(LDAPCache.class);
 
-    public static final long MAX_CACHE_LIFETIME = 10 * 60 * 1000;
+    public static final long MAX_CACHE_LIFETIME = (long)600000;
 
     /** One Cache per unique LDAP URL*/
     private static final ConcurrentMap<String, LDAPCache> CACHES = new ConcurrentHashMap();

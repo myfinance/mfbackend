@@ -37,7 +37,7 @@ public class BaseJobResult<T extends Serializable> extends BaseRoutable implemen
         this(uid, routingID, null);
     }
 
-    private void setMessage(String s) {
+    public void setMessage(String s) {
         this.message = s;
     }
 

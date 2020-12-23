@@ -64,10 +64,6 @@ public class RunnerLaunchResult extends BaseJobResult {
         return message;
     }
 
-    public void setMessage(String message) {
-        this.message = message;
-    }
-
     public RunnerLaunchParameter getParams() {
         return params;
     }
