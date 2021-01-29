@@ -64,6 +64,9 @@ public class ValueCurveService {
             case CASHACCOUNT:
                 valueHandler = new CashAccValueHandler(instrumentDao);
                 break;
+            case TENANT:
+                valueHandler = new TenantValueHandler(instrumentDao, this);
+                break;                
             case UNKNOWN:
                 throw new MFException(MFMsgKey.UNKNOWN_INSTRUMENTTYPE_EXCEPTION, "Type:"+instrumentType);
         }

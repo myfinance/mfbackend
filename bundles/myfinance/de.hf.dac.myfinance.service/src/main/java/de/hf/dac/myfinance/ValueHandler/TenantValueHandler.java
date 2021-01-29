@@ -45,17 +45,28 @@ public class TenantValueHandler implements ValueHandler{
         if(accs==null || accs.isEmpty()) {
             return createZeroCurve(valueCurve);
         }
-        List<TreeMap<LocalDate, Double>> accValueCurveList = new ArrayList<TreeMap<LocalDate, Double>>();
         LocalDate startDate = LocalDate.now();
         for (Instrument acc : accs) {
             TreeMap<LocalDate, Double> accValueCurve = this.valueCurveService.getValueCurve(acc.getInstrumentid());
-            accValueCurveList.add(accValueCurve);
             LocalDate minDate = accValueCurve.firstKey();
             if(minDate.isBefore(startDate)) {
                 startDate = minDate;
             }
         }
 
+        return getCombinedValueCurve(accs, startDate);
+    }
+
+    private TreeMap<LocalDate, Double> getCombinedValueCurve(List<Instrument>  accs, LocalDate startDate) {
+        TreeMap<LocalDate, Double> valueCurve = new TreeMap<>();
+        while(!startDate.isAfter(LocalDate.now())) {
+            double value = 0.0;
+            for (Instrument accValueCurve : accs) {
+                value+=valueCurveService.getValue(accValueCurve.getInstrumentid(), startDate);
+            }
+            valueCurve.put(startDate, value);
+            startDate = startDate.plusDays(1);
+        }
         return valueCurve;
     }
 

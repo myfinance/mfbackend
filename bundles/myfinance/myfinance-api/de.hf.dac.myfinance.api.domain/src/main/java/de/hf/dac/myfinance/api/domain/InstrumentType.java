@@ -75,7 +75,7 @@ public enum InstrumentType {
 
     public InstrumentTypeGroup getTypeGroup(){
         switch(value){
-            case 6: return InstrumentTypeGroup.PORTFOLIO;
+            case 6: return InstrumentTypeGroup.TENANT;
             //case 7: return InstrumentTypeGroup.PORTFOLIO;
             case 8: return InstrumentTypeGroup.PORTFOLIO;
             case 9: return InstrumentTypeGroup.PORTFOLIO;
