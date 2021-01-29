@@ -43,5 +43,6 @@ public interface InstrumentDao {
     Optional<Integer> getRootInstrument(int instrumentId, EdgeType edgeType);
     void saveGraphEntry(InstrumentGraphEntry instrumentGraphEntry);
     List<Instrument> getInstrumentChilds(int instrumentId, EdgeType edgeType);
+    List<Instrument> getInstrumentChilds(int instrumentId, EdgeType edgeType, int pathlength);
     Optional<Instrument> getAccountPortfolio(int tenantId);
 }

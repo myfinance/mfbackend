@@ -1,6 +1,6 @@
 /** ----------------------------------------------------------------------------
  *
- * ---          DZ Bank FfM - Application Development                       ---
+ * ---          HF - Application Development                       ---
  *              Copyright (c) 2014, ... All Rights Reserved
  *
  *
@@ -236,6 +236,22 @@ public class InstrumentDaoImpl extends BaseDao<Instrument> implements Instrument
             Query query = marketDataEm.createQuery("select i FROM Instrument i JOIN InstrumentGraphEntry a ON i.instrumentid=a.id.descendant WHERE a.id.ancestor= :instrumentid and a.id.edgetype= :edgetype and a.pathlength>0");
             query.setParameter("instrumentid", instrumentId);
             query.setParameter("edgetype", edgeType);
+            result = (List<Instrument>) query.getResultList();
+        } finally {
+            marketDataEm.close();
+        }
+        return result;
+    }
+
+    @Override
+    public List<Instrument> getInstrumentChilds(int instrumentId, EdgeType edgeType, int pathlength) {
+        List<Instrument> result;
+        try{
+            marketDataEm = this.marketDataEmf.createEntityManager();
+            Query query = marketDataEm.createQuery("select i FROM Instrument i JOIN InstrumentGraphEntry a ON i.instrumentid=a.id.descendant WHERE a.id.ancestor= :instrumentid and a.id.edgetype= :edgetype and a.pathlength= :pathlength");
+            query.setParameter("instrumentid", instrumentId);
+            query.setParameter("edgetype", edgeType);
+            query.setParameter("pathlength", pathlength);
             result = (List<Instrument>) query.getResultList();
         } finally {
             marketDataEm.close();
