@@ -15,7 +15,7 @@
  * ----------------------------------------------------------------------------
  */
 
-package de.hf.dac.myfinance.valuehandler;
+package de.hf.dac.myfinance.service;
 
 import de.hf.dac.myfinance.api.domain.Instrument;
 import de.hf.dac.myfinance.api.domain.InstrumentType;
@@ -24,6 +24,12 @@ import de.hf.dac.myfinance.api.exceptions.MFMsgKey;
 import de.hf.dac.myfinance.api.persistence.dao.EndOfDayPriceDao;
 import de.hf.dac.myfinance.api.persistence.dao.InstrumentDao;
 import de.hf.dac.myfinance.api.service.ValueCurveService;
+import de.hf.dac.myfinance.valuehandler.CashAccValueHandler;
+import de.hf.dac.myfinance.valuehandler.SecurityValueHandler;
+import de.hf.dac.myfinance.valuehandler.SimpleCurveCache;
+import de.hf.dac.myfinance.valuehandler.TenantValueHandler;
+import de.hf.dac.myfinance.valuehandler.ValueCurveCache;
+import de.hf.dac.myfinance.valuehandler.ValueHandler;
 
 import java.time.LocalDate;
 import java.util.Optional;
