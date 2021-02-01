@@ -15,7 +15,7 @@
  * ----------------------------------------------------------------------------
  */
 
-package de.hf.dac.myfinance.ValueHandler;
+package de.hf.dac.myfinance.valuehandler;
 
 import java.time.LocalDate;
 import java.util.HashMap;

@@ -39,7 +39,13 @@ import de.hf.dac.myfinance.api.exceptions.MFMsgKey;
 import de.hf.dac.myfinance.api.persistence.dao.*;
 import de.hf.dac.myfinance.persistence.*;
 import de.hf.dac.myfinance.api.service.InstrumentService;
+import de.hf.dac.myfinance.api.service.PriceService;
+import de.hf.dac.myfinance.api.service.TransactionService;
+import de.hf.dac.myfinance.api.service.ValueService;
 import de.hf.dac.myfinance.service.InstrumentServiceImpl;
+import de.hf.dac.myfinance.service.PriceServiceImpl;
+import de.hf.dac.myfinance.service.TransactionServiceImpl;
+import de.hf.dac.myfinance.service.ValueServiceImpl;
 
 import javax.persistence.EntityManagerFactory;
 import javax.transaction.TransactionManager;
@@ -82,7 +88,9 @@ public class MFEnvironmentBuilderModule extends AbstractModule {
         bind(CashflowDao.class).to(CashflowDaoImpl.class);
         bind(EndOfDayPriceDao.class).to(EndOfDayPriceDaoImpl.class);
         bind(InstrumentService.class).to(InstrumentServiceImpl.class);
-
+        bind(ValueService.class).to(ValueServiceImpl.class);
+        bind(TransactionService.class).to(TransactionServiceImpl.class);
+        bind(PriceService.class).to(PriceServiceImpl.class);
         bind(MarketDataEnvironment.class).to(MFEnvironmentImpl.class);
     }
 

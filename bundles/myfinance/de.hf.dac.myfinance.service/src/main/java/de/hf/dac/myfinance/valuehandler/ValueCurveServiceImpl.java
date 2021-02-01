@@ -15,7 +15,7 @@
  * ----------------------------------------------------------------------------
  */
 
-package de.hf.dac.myfinance.ValueHandler;
+package de.hf.dac.myfinance.valuehandler;
 
 import de.hf.dac.myfinance.api.domain.Instrument;
 import de.hf.dac.myfinance.api.domain.InstrumentType;
@@ -23,22 +23,25 @@ import de.hf.dac.myfinance.api.exceptions.MFException;
 import de.hf.dac.myfinance.api.exceptions.MFMsgKey;
 import de.hf.dac.myfinance.api.persistence.dao.EndOfDayPriceDao;
 import de.hf.dac.myfinance.api.persistence.dao.InstrumentDao;
+import de.hf.dac.myfinance.api.service.ValueCurveService;
 
 import java.time.LocalDate;
 import java.util.Optional;
 import java.util.TreeMap;
 
-public class ValueCurveService {
+import javax.inject.Inject;
+
+public class ValueCurveServiceImpl implements ValueCurveService {
 
     private InstrumentDao instrumentDao;
     private EndOfDayPriceDao endOfDayPriceDao;
+    ValueCurveCache cache = new SimpleCurveCache();
 
-    public ValueCurveService(InstrumentDao instrumentDao, EndOfDayPriceDao endOfDayPriceDao){
+    @Inject
+    public ValueCurveServiceImpl(InstrumentDao instrumentDao, EndOfDayPriceDao endOfDayPriceDao){
         this.instrumentDao = instrumentDao;
         this.endOfDayPriceDao = endOfDayPriceDao;
     }
-
-    ValueCurveCache cache = new SimpleCurveCache();
 
     public TreeMap<LocalDate, Double> getValueCurve(int instrumentId){
         TreeMap<LocalDate, Double> valueCurve = cache.getValueCurve(instrumentId);
