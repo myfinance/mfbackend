@@ -19,7 +19,7 @@ package de.hf.dac.myfinance.runner;
 
 import de.hf.dac.myfinance.api.runner.BaseMFRunnerParameter;
 import de.hf.dac.myfinance.api.runner.Runner;
-import de.hf.dac.myfinance.api.service.InstrumentService;
+import de.hf.dac.myfinance.api.service.PriceService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -29,7 +29,7 @@ import java.time.LocalDateTime;
 public class ImportRunner implements Runner {
     public static final Logger LOG = LoggerFactory.getLogger(ImportRunner.class);
     @Inject
-    InstrumentService service;
+    PriceService service;
 
     @Override
     public void run(BaseMFRunnerParameter params) {

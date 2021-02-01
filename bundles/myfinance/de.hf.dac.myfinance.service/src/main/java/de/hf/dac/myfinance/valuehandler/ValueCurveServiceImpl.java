@@ -62,7 +62,7 @@ public class ValueCurveServiceImpl implements ValueCurveService {
         ValueHandler valueHandler = null;
         switch(instrumentType.getTypeGroup()){
             case SECURITY:
-                valueHandler = new SecurityValueHandler(instrumentDao, endOfDayPriceDao);
+                valueHandler = new SecurityValueHandler(this, endOfDayPriceDao);
                 break;
             case CASHACCOUNT:
                 valueHandler = new CashAccValueHandler(instrumentDao);
