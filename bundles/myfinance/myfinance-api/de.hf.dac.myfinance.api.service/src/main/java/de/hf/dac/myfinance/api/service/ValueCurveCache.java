@@ -15,7 +15,7 @@
  * ----------------------------------------------------------------------------
  */
 
-package de.hf.dac.myfinance.valuehandler;
+package de.hf.dac.myfinance.api.service;
 
 import java.time.LocalDate;
 import java.util.TreeMap;

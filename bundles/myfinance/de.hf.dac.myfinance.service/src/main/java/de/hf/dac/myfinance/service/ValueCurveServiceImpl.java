@@ -23,12 +23,11 @@ import de.hf.dac.myfinance.api.exceptions.MFException;
 import de.hf.dac.myfinance.api.exceptions.MFMsgKey;
 import de.hf.dac.myfinance.api.persistence.dao.EndOfDayPriceDao;
 import de.hf.dac.myfinance.api.persistence.dao.InstrumentDao;
+import de.hf.dac.myfinance.api.service.ValueCurveCache;
 import de.hf.dac.myfinance.api.service.ValueCurveService;
 import de.hf.dac.myfinance.valuehandler.CashAccValueHandler;
 import de.hf.dac.myfinance.valuehandler.SecurityValueHandler;
-import de.hf.dac.myfinance.valuehandler.SimpleCurveCache;
 import de.hf.dac.myfinance.valuehandler.TenantValueHandler;
-import de.hf.dac.myfinance.valuehandler.ValueCurveCache;
 import de.hf.dac.myfinance.valuehandler.ValueHandler;
 
 import java.time.LocalDate;
@@ -41,12 +40,13 @@ public class ValueCurveServiceImpl implements ValueCurveService {
 
     private InstrumentDao instrumentDao;
     private EndOfDayPriceDao endOfDayPriceDao;
-    ValueCurveCache cache = new SimpleCurveCache();
+    ValueCurveCache cache;
 
     @Inject
-    public ValueCurveServiceImpl(InstrumentDao instrumentDao, EndOfDayPriceDao endOfDayPriceDao){
+    public ValueCurveServiceImpl(InstrumentDao instrumentDao, EndOfDayPriceDao endOfDayPriceDao, ValueCurveCache cache){
         this.instrumentDao = instrumentDao;
         this.endOfDayPriceDao = endOfDayPriceDao;
+        this.cache = cache;
     }
 
     public TreeMap<LocalDate, Double> getValueCurve(int instrumentId){
