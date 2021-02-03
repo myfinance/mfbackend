@@ -50,7 +50,7 @@ public class InstrumentDaoTestImpl implements InstrumentDao {
     @Override
     public Optional<Instrument> getInstrument(int instrumentId) {
         Instrument instrument = new Giro();
-        return null;
+        return Optional.of(instrument);
     }
 
     @Override
