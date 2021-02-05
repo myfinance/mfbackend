@@ -27,8 +27,7 @@ public class CashAccValueHandlerTest {
         String yearStr = "2020";
         Year year = Year.parse(yearStr);
         LocalDate date = year.atMonth(Month.JANUARY).atDay(1);
-        //assertEquals(0.0,valueservice.getValue(1, date));
-        //assertEquals(0.0,new ValueCurveServiceImpl(new InstrumentDaoTestImpl(), new EndOfDayPriceDaoTestImpl(), new SimpleCurveCache()).getValue(1, LocalDate.now()));
-        assertEquals(0.0,0.0);
+        assertEquals(0.0,new ValueCurveServiceImpl(new InstrumentDaoTestImpl(), new EndOfDayPriceDaoTestImpl(), new SimpleCurveCache()).getValue(1, LocalDate.now()));
+
     }
 }

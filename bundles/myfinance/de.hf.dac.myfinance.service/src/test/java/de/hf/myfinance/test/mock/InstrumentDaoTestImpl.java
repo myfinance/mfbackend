@@ -1,6 +1,7 @@
 package de.hf.myfinance.test.mock;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -49,7 +50,8 @@ public class InstrumentDaoTestImpl implements InstrumentDao {
 
     @Override
     public Optional<Instrument> getInstrument(int instrumentId) {
-        Instrument instrument = new Giro();
+        Instrument instrument = new Giro("testgiro", true, LocalDateTime.now());
+        instrument.setInstrumentid(instrumentId);
         return Optional.of(instrument);
     }
 
