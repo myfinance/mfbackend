@@ -8,3 +8,6 @@ vscode:
   extensions:
     - sonarsource.sonarlint-vscode@1.19.0:0efl2ERJ3aA2ElF84T/Qjg==
     - vscjava.vscode-java-test@0.27.0:gNh98vNbqtZC6ydHasFxAQ==
+    - redhat.fabric8-analytics@0.3.1:8u6s00NyXaiCjHZXBgr3iA==
+    - bajdzis.vscode-database@2.2.3:nBZ1zB8XJrPu5oCtaTFB+g==
+    - vscjava.vscode-maven@0.21.2:tFEkt2FqLujaNTLU5AmRiQ==
