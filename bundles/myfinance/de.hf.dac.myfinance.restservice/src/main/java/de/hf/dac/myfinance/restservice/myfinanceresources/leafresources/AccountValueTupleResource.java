@@ -24,7 +24,7 @@ public class AccountValueTupleResource extends MapResource<Instrument, Instrumen
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     @ApiOperation(value = "Map Data", response = AccountValueTupleModel.class)
-    public Response getValueMap(
+    public Response getAccountValueTupleMap(
         @Context
             UriInfo uriInfo) {
         return super.getData(uriInfo);
