@@ -27,7 +27,9 @@ public interface InstrumentService {
     List<Instrument> listInstruments(int tenantId);
     List<Instrument> listInstruments(int tenantId, boolean onlyActive);
     List<Instrument> listInstruments(int tenantId, InstrumentType instrumentType, boolean onlyActive);
+    List<Instrument> listAccounts(int tenantId);
     List<Instrument> listTenants();
+    Optional<Instrument> getInstrument(int instrumentId);
     Instrument getIncomeBudget(int tenantId);
     void newTenant(String description, LocalDateTime ts);
     void updateInstrument(int instrumentId, String description, boolean isActive);

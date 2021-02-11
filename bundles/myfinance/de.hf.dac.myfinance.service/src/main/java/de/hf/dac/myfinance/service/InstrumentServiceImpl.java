@@ -58,8 +58,7 @@ public class InstrumentServiceImpl implements InstrumentService {
 
     @Override
     public List<Instrument> listInstruments() {
-        List<Instrument> instruments = instrumentDao.listInstruments();
-        return instruments;
+        return instrumentDao.listInstruments();
     }
 
     @Override
@@ -80,10 +79,28 @@ public class InstrumentServiceImpl implements InstrumentService {
 
     @Override
     public List<Instrument> listInstruments(int tenantId, InstrumentType instrumentType, boolean onlyActive) {
-        List<Instrument> instruments = listInstruments(tenantId).stream().filter(
+        return listInstruments(tenantId).stream().filter(
                     i->i.getInstrumentType().equals(instrumentType) && (!onlyActive || i.isIsactive())
                 ).collect(Collectors.toList());
-        return instruments;
+    }
+
+    @Override
+    public Optional<Instrument> getInstrument(int instrumentId) {
+        return instrumentDao.getInstrument(instrumentId);
+    }
+
+    @Override
+    public List<Instrument> listAccounts(int tenantId) {
+        List<Instrument> accs = new ArrayList<>();
+        List<Instrument>  childs = instrumentDao.getInstrumentChilds(tenantId, EdgeType.TENANTGRAPH, 1);
+        if(childs==null || childs.isEmpty()) {
+            return accs;
+        }
+        Optional<Instrument> accPF = childs.stream().filter(i -> i.getInstrumentType().equals(InstrumentType.AccountPortfolio)).findFirst();
+        if(!accPF.isPresent()) {
+            return accs;
+        }
+        return instrumentDao.getInstrumentChilds(accPF.get().getInstrumentid(), EdgeType.TENANTGRAPH, 1);
     }
 
     @Override

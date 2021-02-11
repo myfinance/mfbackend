@@ -24,7 +24,7 @@ import de.hf.dac.myfinance.api.domain.InstrumentType;
 import de.hf.dac.myfinance.api.exceptions.MFException;
 import de.hf.dac.myfinance.api.exceptions.MFMsgKey;
 import de.hf.dac.myfinance.api.persistence.dao.EndOfDayPriceDao;
-import de.hf.dac.myfinance.api.persistence.dao.InstrumentDao;
+import de.hf.dac.myfinance.api.service.InstrumentService;
 import de.hf.dac.myfinance.api.service.ValueCurveCache;
 import de.hf.dac.myfinance.api.service.ValueCurveService;
 import de.hf.dac.myfinance.valuehandler.CashAccValueHandler;
@@ -42,13 +42,13 @@ import javax.inject.Inject;
 
 public class ValueCurveServiceImpl implements ValueCurveService {
 
-    private InstrumentDao instrumentDao;
+    private InstrumentService instrumentService;
     private EndOfDayPriceDao endOfDayPriceDao;
     ValueCurveCache cache;
 
     @Inject
-    public ValueCurveServiceImpl(InstrumentDao instrumentDao, EndOfDayPriceDao endOfDayPriceDao, ValueCurveCache cache){
-        this.instrumentDao = instrumentDao;
+    public ValueCurveServiceImpl(InstrumentService instrumentService, EndOfDayPriceDao endOfDayPriceDao, ValueCurveCache cache){
+        this.instrumentService = instrumentService;
         this.endOfDayPriceDao = endOfDayPriceDao;
         this.cache = cache;
     }
@@ -56,7 +56,7 @@ public class ValueCurveServiceImpl implements ValueCurveService {
     public TreeMap<LocalDate, Double> getValueCurve(int instrumentId){
         TreeMap<LocalDate, Double> valueCurve = cache.getValueCurve(instrumentId);
         if(valueCurve==null){
-            Optional<Instrument> instrument = instrumentDao.getInstrument(instrumentId);
+            Optional<Instrument> instrument = instrumentService.getInstrument(instrumentId);
             if(instrument.isPresent()){
                 valueCurve = getValueHandler(instrument.get().getInstrumentType()).calcValueCurve(instrument.get());
                 cache.addValueCurve(instrumentId, valueCurve);

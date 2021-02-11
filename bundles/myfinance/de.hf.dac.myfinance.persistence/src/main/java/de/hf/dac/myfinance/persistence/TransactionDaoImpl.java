@@ -13,13 +13,16 @@ package de.hf.dac.myfinance.persistence;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
-import de.hf.dac.myfinance.api.application.EnvTarget;
 import de.hf.dac.myfinance.api.domain.Cashflow;
 import de.hf.dac.myfinance.api.domain.Transaction;
 import de.hf.dac.myfinance.api.persistence.dao.TransactionDao;
+import de.hf.dac.myfinance.api.application.EnvTarget;
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.persistence.EntityManagerFactory;
@@ -61,6 +64,46 @@ public class TransactionDaoImpl  extends BaseDao<Transaction> implements Transac
             marketDataEm.close();
         }
         return result;
+    }
+
+    @Override
+    public  List<Cashflow> listInstrumentCashflows(int instrumentId){
+        List<Cashflow> returnValue;
+        try{
+            marketDataEm = this.marketDataEmf.createEntityManager();
+            returnValue = getCashflows(instrumentId);
+        } finally {
+            marketDataEm.close();
+        }
+        return returnValue;
+    }
+
+    private List<Cashflow> getCashflows(int instrumentId) {
+        List<Cashflow> returnValue;
+        Query query = marketDataEm.createQuery("select a FROM Cashflow a WHERE a.instrument.instrumentid = :instrumentid");
+        query.setParameter("instrumentid", instrumentId);
+        returnValue=(List<Cashflow>) query.getResultList();
+        return returnValue;
+    }
+
+    @Override
+    public  Map<LocalDate, List<Cashflow>> getInstrumentCashflowMap(int instrumentId){
+        Map<LocalDate, List<Cashflow>> returnValue = new HashMap<>();
+        try{
+            marketDataEm = this.marketDataEmf.createEntityManager();
+            getCashflows(instrumentId).forEach(x->{
+                List<Cashflow> cashflows = new ArrayList<>();
+                cashflows.add(x);
+                if(returnValue.containsKey(x.getTransaction().getTransactiondate())) {
+                    cashflows.addAll(returnValue.get(x.getTransaction().getTransactiondate()));
+                    returnValue.remove(x.getTransaction().getTransactiondate());
+                }
+                returnValue.put(x.getTransaction().getTransactiondate(), cashflows);
+            });
+        } finally {
+            marketDataEm.close();
+        }
+        return returnValue;
     }
 
     public String deleteTransaction(int transactionId) {

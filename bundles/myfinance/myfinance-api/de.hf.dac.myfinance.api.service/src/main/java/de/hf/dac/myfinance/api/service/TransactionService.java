@@ -15,6 +15,7 @@ public interface TransactionService {
     void newTransfer(String description, int srcInstrumentId, int trgInstrumentId, double value, LocalDate transactionDate, LocalDateTime ts);
     List<Transaction> listTransactions(LocalDate startDate, LocalDate endDate);
     List<Cashflow> listInstrumentCashflows(int instrumentId);
+    Map<LocalDate, List<Cashflow>> getInstrumentCashflowMap(int instrumentId);
     void deleteTransaction(int transactionId);
     List<RecurrentTransaction> listRecurrentTransactions();
     void newRecurrentTransaction(String description, int srcInstrumentId, int trgInstrumentId, RecurrentFrequency recurrentFrequency, double value, LocalDate nextTransactionDate, LocalDateTime ts);

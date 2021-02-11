@@ -17,33 +17,26 @@ import de.hf.dac.myfinance.api.domain.EdgeType;
 import de.hf.dac.myfinance.api.domain.Instrument;
 import de.hf.dac.myfinance.api.domain.InstrumentType;
 import de.hf.dac.myfinance.api.persistence.dao.InstrumentDao;
+import de.hf.dac.myfinance.api.service.InstrumentService;
 import de.hf.dac.myfinance.api.service.ValueCurveService;
 
 
 public class TenantValueHandler  extends AbsValueHandler{
-    private InstrumentDao instrumentDao;
+    private InstrumentService instrumentService;
 
-    public TenantValueHandler(InstrumentDao instrumentDao, ValueCurveService valueCurveService){
+    public TenantValueHandler(InstrumentService instrumentService, ValueCurveService valueCurveService){
         super(valueCurveService);
-        this.instrumentDao = instrumentDao;
+        this.instrumentService = instrumentService;
     }
 
     public TreeMap<LocalDate, Double> calcValueCurve(Instrument instrument) {
+        List<Instrument> accounts = instrumentService.listAccounts(instrument.getInstrumentid());
         TreeMap<LocalDate, Double> valueCurve = new TreeMap<>();
-        List<Instrument>  childs = instrumentDao.getInstrumentChilds(instrument.getInstrumentid(), EdgeType.TENANTGRAPH, 1);
-        if(childs==null || childs.isEmpty()) {
-            return createZeroCurve(valueCurve);
-        }
-        Optional<Instrument> accPF = childs.stream().filter(i -> i.getInstrumentType().equals(InstrumentType.AccountPortfolio)).findFirst();
-        if(!accPF.isPresent()) {
-            return createZeroCurve(valueCurve);
-        }
-        List<Instrument>  accs = instrumentDao.getInstrumentChilds(accPF.get().getInstrumentid(), EdgeType.TENANTGRAPH, 1);
-        if(accs==null || accs.isEmpty()) {
+        if(accounts==null || accounts.isEmpty()) {
             return createZeroCurve(valueCurve);
         }
         LocalDate startDate = LocalDate.now();
-        for (Instrument acc : accs) {
+        for (Instrument acc : accounts) {
             TreeMap<LocalDate, Double> accValueCurve = this.valueCurveService.getValueCurve(acc.getInstrumentid());
             LocalDate minDate = accValueCurve.firstKey();
             if(minDate.isBefore(startDate)) {
@@ -51,6 +44,6 @@ public class TenantValueHandler  extends AbsValueHandler{
             }
         }
 
-        return getCombinedValueCurve(accs, startDate);
+        return getCombinedValueCurve(accounts, startDate);
     }
 }

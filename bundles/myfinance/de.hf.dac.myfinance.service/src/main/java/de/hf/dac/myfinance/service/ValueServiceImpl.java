@@ -23,6 +23,8 @@ import java.util.Map;
 
 import javax.inject.Inject;
 
+import de.hf.dac.myfinance.api.domain.Instrument;
+import de.hf.dac.myfinance.api.domain.InstrumentValuesTuple;
 import de.hf.dac.myfinance.api.service.ValueCurveService;
 import de.hf.dac.myfinance.api.service.ValueService;
 
@@ -58,5 +60,12 @@ public class ValueServiceImpl implements ValueService {
     @Override
     public double getValue(final int instrumentId, final LocalDate date) {
         return service.getValue(instrumentId, date);
+    }
+
+    @Override
+    public Map<Instrument, InstrumentValuesTuple> getAccValues(int tenantId, LocalDate date) {
+        Map<Instrument, InstrumentValuesTuple> valueMap = new HashMap<>();
+
+        return valueMap;
     }
 }

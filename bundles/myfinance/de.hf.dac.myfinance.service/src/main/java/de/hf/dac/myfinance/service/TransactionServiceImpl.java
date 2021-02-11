@@ -26,12 +26,13 @@ import de.hf.dac.myfinance.api.persistence.dao.CashflowDao;
 import de.hf.dac.myfinance.api.persistence.dao.InstrumentDao;
 import de.hf.dac.myfinance.api.persistence.dao.RecurrentTransactionDao;
 import de.hf.dac.myfinance.api.persistence.dao.TransactionDao;
+import de.hf.dac.myfinance.api.service.InstrumentService;
 import de.hf.dac.myfinance.api.service.TransactionService;
 import de.hf.dac.myfinance.api.service.ValueCurveService;
 
 public class TransactionServiceImpl implements TransactionService {
 
-    private InstrumentDao instrumentDao;
+    private InstrumentService instrumentService;
     private ValueCurveService service;
     private AuditService auditService;
     private TransactionDao transactionDao;
@@ -41,9 +42,9 @@ public class TransactionServiceImpl implements TransactionService {
     private static final String AUDIT_MSG_TYPE="TransactionService_User_Event";
 
     @Inject
-    public TransactionServiceImpl(InstrumentDao instrumentDao, TransactionDao transactionDao, RecurrentTransactionDao recurrentTransactionDao, CashflowDao cashflowDao, 
+    public TransactionServiceImpl(InstrumentService instrumentService, TransactionDao transactionDao, RecurrentTransactionDao recurrentTransactionDao, CashflowDao cashflowDao, 
                 AuditService auditService, ValueCurveService service){
-        this.instrumentDao = instrumentDao;
+        this.instrumentService = instrumentService;
         this.transactionDao = transactionDao;
         this.recurrentTransactionDao = recurrentTransactionDao;
         this.cashflowDao = cashflowDao;
@@ -53,11 +54,11 @@ public class TransactionServiceImpl implements TransactionService {
 
     @Override
     public void newIncomeExpense(String description, int accId, int budgetId, double value, LocalDate transactionDate, LocalDateTime ts){
-        Optional<Instrument> account = instrumentDao.getInstrument(accId);
+        Optional<Instrument> account = instrumentService.getInstrument(accId);
         if(!account.isPresent() || account.get().getInstrumentType()!=InstrumentType.Giro){
             throw new MFException(MFMsgKey.UNKNOWN_INSTRUMENT_EXCEPTION, "IncomeExpense not saved: unknown account oder wrong account type:"+accId);
         }
-        Optional<Instrument> budget = instrumentDao.getInstrument(budgetId);
+        Optional<Instrument> budget = instrumentService.getInstrument(budgetId);
         if(!budget.isPresent() || budget.get().getInstrumentType()!=InstrumentType.Budget){
             throw new MFException(MFMsgKey.UNKNOWN_INSTRUMENT_EXCEPTION, "IncomeExpense not saved: unknown budget:"+budgetId);
         }
@@ -90,12 +91,12 @@ public class TransactionServiceImpl implements TransactionService {
 
     @Override
     public void newTransfer(String description, int srcInstrumentId, int trgInstrumentId, double value, LocalDate transactionDate, LocalDateTime ts){
-        Optional<Instrument> src = instrumentDao.getInstrument(srcInstrumentId);
+        Optional<Instrument> src = instrumentService.getInstrument(srcInstrumentId);
         TransactionType transactionType =TransactionType.TRANSFER;
         if(!src.isPresent()){
             throw new MFException(MFMsgKey.UNKNOWN_INSTRUMENT_EXCEPTION, "Transfer not saved: unknown instrument:"+srcInstrumentId);
         }
-        Optional<Instrument> trg = instrumentDao.getInstrument(trgInstrumentId);
+        Optional<Instrument> trg = instrumentService.getInstrument(trgInstrumentId);
         if(!trg.isPresent()){
             throw new MFException(MFMsgKey.UNKNOWN_INSTRUMENT_EXCEPTION, "Transfer not saved: unknown instrument:"+trgInstrumentId);
         }
@@ -188,12 +189,12 @@ public class TransactionServiceImpl implements TransactionService {
 
     @Override
     public void newRecurrentTransaction(String description, int srcInstrumentId, int trgInstrumentId, RecurrentFrequency recurrentFrequency, double value, LocalDate nextTransactionDate, LocalDateTime ts) {
-        Optional<Instrument> src = instrumentDao.getInstrument(srcInstrumentId);
+        Optional<Instrument> src = instrumentService.getInstrument(srcInstrumentId);
         RecurrentTransactionType recurrentTransactionType = RecurrentTransactionType.Transfer;
         if(!src.isPresent()){
             throw new MFException(MFMsgKey.UNKNOWN_INSTRUMENT_EXCEPTION, "RecurrentTransfer not saved: unknown instrument:"+srcInstrumentId);
         }
-        Optional<Instrument> trg = instrumentDao.getInstrument(trgInstrumentId);
+        Optional<Instrument> trg = instrumentService.getInstrument(trgInstrumentId);
         if(!trg.isPresent()){
             throw new MFException(MFMsgKey.UNKNOWN_INSTRUMENT_EXCEPTION, "RecurrentTransfer not saved: unknown instrument:"+trgInstrumentId);
         }
@@ -295,14 +296,12 @@ public class TransactionServiceImpl implements TransactionService {
 
     @Override
     public List<Transaction> listTransactions(LocalDate startDate, LocalDate endDate){
-        List<Transaction> transactions = transactionDao.listTransactions(startDate, endDate);
-        return transactions;
+        return transactionDao.listTransactions(startDate, endDate);
     }
 
     @Override
     public List<Cashflow> listInstrumentCashflows(int instrumentId){
-        List<Cashflow> cashflows = instrumentDao.listInstrumentCashflows(instrumentId);
-        return cashflows;
+        return listInstrumentCashflows(instrumentId);
     }  
     
     @Override
