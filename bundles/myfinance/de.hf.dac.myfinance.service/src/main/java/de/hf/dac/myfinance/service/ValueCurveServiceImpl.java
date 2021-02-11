@@ -75,13 +75,13 @@ public class ValueCurveServiceImpl implements ValueCurveService {
                 valueHandler = new SecurityValueHandler(this, endOfDayPriceDao);
                 break;
             case CASHACCOUNT:
-                valueHandler = new CashAccValueHandler(instrumentDao);
+                valueHandler = new CashAccValueHandler(instrumentService);
                 break;
             case TENANT:
-                valueHandler = new TenantValueHandler(instrumentDao, this);
+                valueHandler = new TenantValueHandler(instrumentService, this);
                 break;  
             case PORTFOLIO:
-                valueHandler = new PortfolioValueHandler(instrumentDao, this);
+                valueHandler = new PortfolioValueHandler(instrumentService, this);
                 break;                                
             case DEPRECATIONOBJECT:
             case LIVEINSURANCE:

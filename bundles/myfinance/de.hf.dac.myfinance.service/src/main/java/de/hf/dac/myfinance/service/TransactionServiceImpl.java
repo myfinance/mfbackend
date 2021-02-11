@@ -4,6 +4,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 
@@ -23,7 +24,6 @@ import de.hf.dac.myfinance.api.domain.TransactionType;
 import de.hf.dac.myfinance.api.exceptions.MFException;
 import de.hf.dac.myfinance.api.exceptions.MFMsgKey;
 import de.hf.dac.myfinance.api.persistence.dao.CashflowDao;
-import de.hf.dac.myfinance.api.persistence.dao.InstrumentDao;
 import de.hf.dac.myfinance.api.persistence.dao.RecurrentTransactionDao;
 import de.hf.dac.myfinance.api.persistence.dao.TransactionDao;
 import de.hf.dac.myfinance.api.service.InstrumentService;
@@ -31,7 +31,6 @@ import de.hf.dac.myfinance.api.service.TransactionService;
 import de.hf.dac.myfinance.api.service.ValueCurveService;
 
 public class TransactionServiceImpl implements TransactionService {
-
     private InstrumentService instrumentService;
     private ValueCurveService service;
     private AuditService auditService;
@@ -62,8 +61,8 @@ public class TransactionServiceImpl implements TransactionService {
         if(!budget.isPresent() || budget.get().getInstrumentType()!=InstrumentType.Budget){
             throw new MFException(MFMsgKey.UNKNOWN_INSTRUMENT_EXCEPTION, "IncomeExpense not saved: unknown budget:"+budgetId);
         }
-        Optional<Integer> tenantOfAcc = instrumentDao.getRootInstrument(accId, EdgeType.TENANTGRAPH);
-        Optional<Integer> tenantOfBudget = instrumentDao.getRootInstrument(budgetId, EdgeType.TENANTGRAPH);
+        Optional<Integer> tenantOfAcc = instrumentService.getRootInstrument(accId, EdgeType.TENANTGRAPH);
+        Optional<Integer> tenantOfBudget = instrumentService.getRootInstrument(budgetId, EdgeType.TENANTGRAPH);
 
         if(!tenantOfAcc.isPresent()
             || !tenantOfBudget.isPresent()
@@ -111,8 +110,8 @@ public class TransactionServiceImpl implements TransactionService {
             }
         }
 
-        Optional<Integer> tenantSrc = instrumentDao.getRootInstrument(srcInstrumentId, EdgeType.TENANTGRAPH);
-        Optional<Integer> tenantTrg = instrumentDao.getRootInstrument(trgInstrumentId, EdgeType.TENANTGRAPH);
+        Optional<Integer> tenantSrc = instrumentService.getRootInstrument(srcInstrumentId, EdgeType.TENANTGRAPH);
+        Optional<Integer> tenantTrg = instrumentService.getRootInstrument(trgInstrumentId, EdgeType.TENANTGRAPH);
 
         if(!tenantSrc.isPresent()
             || !tenantTrg.isPresent()
@@ -220,8 +219,8 @@ public class TransactionServiceImpl implements TransactionService {
             recurrentTransactionType = RecurrentTransactionType.Transfer;
         }
 
-        Optional<Integer> tenantSrc = instrumentDao.getRootInstrument(srcInstrumentId, EdgeType.TENANTGRAPH);
-        Optional<Integer> tenantTrg = instrumentDao.getRootInstrument(trgInstrumentId, EdgeType.TENANTGRAPH);
+        Optional<Integer> tenantSrc = instrumentService.getRootInstrument(srcInstrumentId, EdgeType.TENANTGRAPH);
+        Optional<Integer> tenantTrg = instrumentService.getRootInstrument(trgInstrumentId, EdgeType.TENANTGRAPH);
 
         if(!tenantSrc.isPresent()
                 || !tenantTrg.isPresent()
@@ -303,6 +302,11 @@ public class TransactionServiceImpl implements TransactionService {
     public List<Cashflow> listInstrumentCashflows(int instrumentId){
         return listInstrumentCashflows(instrumentId);
     }  
+
+    @Override
+    public  Map<LocalDate, List<Cashflow>> getInstrumentCashflowMap(int instrumentId){
+        return transactionDao.getInstrumentCashflowMap(instrumentId);
+    }
     
     @Override
     public void bookRecurrentTransactions(LocalDateTime ts){

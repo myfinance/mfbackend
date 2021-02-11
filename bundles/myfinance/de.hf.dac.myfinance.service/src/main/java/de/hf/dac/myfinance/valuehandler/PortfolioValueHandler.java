@@ -15,21 +15,21 @@ import java.time.LocalDate;
 import java.util.*;
 import de.hf.dac.myfinance.api.domain.EdgeType;
 import de.hf.dac.myfinance.api.domain.Instrument;
-import de.hf.dac.myfinance.api.persistence.dao.InstrumentDao;
+import de.hf.dac.myfinance.api.service.InstrumentService;
 import de.hf.dac.myfinance.api.service.ValueCurveService;
 
 
 public class PortfolioValueHandler extends AbsValueHandler{
-    private InstrumentDao instrumentDao;
+    private InstrumentService instrumentService;
 
-    public PortfolioValueHandler(InstrumentDao instrumentDao, ValueCurveService valueCurveService){
+    public PortfolioValueHandler(InstrumentService instrumentService, ValueCurveService valueCurveService){
         super(valueCurveService);
-        this.instrumentDao = instrumentDao;
+        this.instrumentService = instrumentService;
     }
 
     public TreeMap<LocalDate, Double> calcValueCurve(Instrument instrument) {
         TreeMap<LocalDate, Double> valueCurve = new TreeMap<>();
-        List<Instrument>  childs = instrumentDao.getInstrumentChilds(instrument.getInstrumentid(), EdgeType.TENANTGRAPH, 1);
+        List<Instrument>  childs = instrumentService.getInstrumentChilds(instrument.getInstrumentid(), EdgeType.TENANTGRAPH, 1);
         if(childs==null || childs.isEmpty()) {
             return createZeroCurve(valueCurve);
         }

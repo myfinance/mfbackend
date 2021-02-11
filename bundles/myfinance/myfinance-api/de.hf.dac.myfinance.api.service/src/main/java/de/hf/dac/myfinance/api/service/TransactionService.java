@@ -3,6 +3,7 @@ package de.hf.dac.myfinance.api.service;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Map;
 
 import de.hf.dac.myfinance.api.domain.Cashflow;
 import de.hf.dac.myfinance.api.domain.RecurrentFrequency;
