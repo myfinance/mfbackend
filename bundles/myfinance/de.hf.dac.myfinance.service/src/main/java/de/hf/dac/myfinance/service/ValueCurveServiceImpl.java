@@ -28,6 +28,7 @@ import de.hf.dac.myfinance.api.persistence.dao.InstrumentDao;
 import de.hf.dac.myfinance.api.service.ValueCurveCache;
 import de.hf.dac.myfinance.api.service.ValueCurveService;
 import de.hf.dac.myfinance.valuehandler.CashAccValueHandler;
+import de.hf.dac.myfinance.valuehandler.PortfolioValueHandler;
 import de.hf.dac.myfinance.valuehandler.SecurityValueHandler;
 import de.hf.dac.myfinance.valuehandler.TenantValueHandler;
 import de.hf.dac.myfinance.valuehandler.ValueHandler;
@@ -68,7 +69,7 @@ public class ValueCurveServiceImpl implements ValueCurveService {
     }
 
     private ValueHandler getValueHandler(InstrumentType instrumentType){
-        ValueHandler valueHandler = null;
+        ValueHandler valueHandler;
         switch(instrumentType.getTypeGroup()){
             case SECURITY:
                 valueHandler = new SecurityValueHandler(this, endOfDayPriceDao);
@@ -78,9 +79,17 @@ public class ValueCurveServiceImpl implements ValueCurveService {
                 break;
             case TENANT:
                 valueHandler = new TenantValueHandler(instrumentDao, this);
-                break;                
-            case UNKNOWN:
-                throw new MFException(MFMsgKey.UNKNOWN_INSTRUMENTTYPE_EXCEPTION, "Type:"+instrumentType);
+                break;  
+            case PORTFOLIO:
+                valueHandler = new PortfolioValueHandler(instrumentDao, this);
+                break;                                
+            case DEPRECATIONOBJECT:
+            case LIVEINSURANCE:
+            case LOAN:
+            case REALESTATE:
+            case UNKNOWN:           
+            default:
+                throw new MFException(MFMsgKey.UNKNOWN_INSTRUMENTTYPE_EXCEPTION, "Type:"+instrumentType);   
         }
         return valueHandler;
     }
