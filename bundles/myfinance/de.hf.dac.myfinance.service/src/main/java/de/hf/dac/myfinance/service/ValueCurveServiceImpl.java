@@ -17,7 +17,9 @@
 
 package de.hf.dac.myfinance.service;
 
+import de.hf.dac.myfinance.api.domain.EdgeType;
 import de.hf.dac.myfinance.api.domain.Instrument;
+import de.hf.dac.myfinance.api.domain.InstrumentGraphEntry;
 import de.hf.dac.myfinance.api.domain.InstrumentType;
 import de.hf.dac.myfinance.api.exceptions.MFException;
 import de.hf.dac.myfinance.api.exceptions.MFMsgKey;
@@ -31,6 +33,7 @@ import de.hf.dac.myfinance.valuehandler.TenantValueHandler;
 import de.hf.dac.myfinance.valuehandler.ValueHandler;
 
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Optional;
 import java.util.TreeMap;
 
@@ -96,6 +99,11 @@ public class ValueCurveServiceImpl implements ValueCurveService {
     }
 
     public void updateCache(int instrumentId){
-        cache.removeCurve(instrumentId);
+        List<InstrumentGraphEntry> ancestorGraphEntries = instrumentDao.getAncestorGraphEntries(instrumentId, EdgeType.TENANTGRAPH);
+        if(ancestorGraphEntries != null && !ancestorGraphEntries.isEmpty()){
+            for (InstrumentGraphEntry entry : ancestorGraphEntries) {
+                cache.removeCurve(entry.getId().getAncestor());
+            }
+        }
     }
 }

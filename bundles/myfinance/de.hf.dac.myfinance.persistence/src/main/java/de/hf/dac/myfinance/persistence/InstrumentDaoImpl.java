@@ -82,7 +82,7 @@ public class InstrumentDaoImpl extends BaseDao<Instrument> implements Instrument
         try{
             marketDataEm = this.marketDataEmf.createEntityManager();
             getCashflows(instrumentId).forEach(x->{
-                List<Cashflow> cashflows = new ArrayList();
+                List<Cashflow> cashflows = new ArrayList<>();
                 cashflows.add(x);
                 if(returnValue.containsKey(x.getTransaction().getTransactiondate())) {
                     cashflows.addAll(returnValue.get(x.getTransaction().getTransactiondate()));
