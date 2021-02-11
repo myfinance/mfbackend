@@ -30,6 +30,7 @@ public interface InstrumentService {
     List<Instrument> listAccounts(int tenantId);
     List<Instrument> listTenants();
     Optional<Instrument> getInstrument(int instrumentId);
+    Optional<Integer> getRootInstrument(int instrumentId, EdgeType edgeType);
     Instrument getIncomeBudget(int tenantId);
     void newTenant(String description, LocalDateTime ts);
     void updateInstrument(int instrumentId, String description, boolean isActive);

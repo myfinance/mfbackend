@@ -90,6 +90,11 @@ public class InstrumentServiceImpl implements InstrumentService {
     }
 
     @Override
+    public Optional<Integer> getRootInstrument(int instrumentId, EdgeType edgeType) {
+        return instrumentDao.getRootInstrument(instrumentId, edgeType);
+    }
+
+    @Override
     public List<Instrument> listAccounts(int tenantId) {
         List<Instrument> accs = new ArrayList<>();
         List<Instrument>  childs = instrumentDao.getInstrumentChilds(tenantId, EdgeType.TENANTGRAPH, 1);
