@@ -16,20 +16,19 @@ import java.util.*;
 
 import de.hf.dac.myfinance.api.domain.Cashflow;
 import de.hf.dac.myfinance.api.domain.Instrument;
-import de.hf.dac.myfinance.api.persistence.dao.InstrumentDao;
-import de.hf.dac.myfinance.api.service.InstrumentService;
+import de.hf.dac.myfinance.api.service.TransactionService;
 
 
 public class CashAccValueHandler implements ValueHandler{
-    private InstrumentService instrumentService;
+    private TransactionService transactionService;
 
-    public CashAccValueHandler(InstrumentService instrumentService){
-        this.instrumentService = instrumentService;
+    public CashAccValueHandler(TransactionService transactionService){
+        this.transactionService = transactionService;
     }
 
     public TreeMap<LocalDate, Double> calcValueCurve(Instrument instrument) {
         TreeMap<LocalDate, Double> valueCurve = new TreeMap<>();
-        Map<LocalDate, List<Cashflow>> cashflows = instrumentService.getInstrumentCashflowMap(instrument.getInstrumentid());
+        Map<LocalDate, List<Cashflow>> cashflows = transactionService.getInstrumentCashflowMap(instrument.getInstrumentid());
         double value = 0.0;
         if(cashflows==null || cashflows.isEmpty()) {
             valueCurve.put(LocalDate.now(), value);

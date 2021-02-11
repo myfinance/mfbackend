@@ -15,7 +15,7 @@ import de.hf.dac.api.rest.model.data.MapModel;
 import de.hf.dac.services.resources.leaf.LeafResource;
 
 public abstract class MapResource<T, U> extends LeafResource {
-    public MapResource(MapModel<T, U> data) {
+    protected MapResource(MapModel<T, U> data) {
         this.data = data;
     }
 }

@@ -31,6 +31,8 @@ public interface InstrumentService {
     List<Instrument> listTenants();
     Optional<Instrument> getInstrument(int instrumentId);
     Optional<Integer> getRootInstrument(int instrumentId, EdgeType edgeType);
+    List<InstrumentGraphEntry> getAncestorGraphEntries(int instrumentId, EdgeType edgeType);
+    List<Instrument> getInstrumentChilds(int instrumentId, EdgeType edgeType, int pathlength);
     Instrument getIncomeBudget(int tenantId);
     void newTenant(String description, LocalDateTime ts);
     void updateInstrument(int instrumentId, String description, boolean isActive);

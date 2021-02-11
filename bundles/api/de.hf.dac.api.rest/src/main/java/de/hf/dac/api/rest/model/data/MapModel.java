@@ -1,10 +1,10 @@
 /**
  * ----------------------------------------------------------------------------
- * ---          DZ Bank FfM - Application Development                       ---
+ * ---          - Application Development                       ---
  * Copyright (c) 2014, ... All Rights Reserved
  * Project     : dac
  * File        : MapModel.java
- * Author(s)   : xn01598
+ * Author(s)   : hf
  * Created     : 14.03.2019
  * ----------------------------------------------------------------------------
  */
@@ -18,9 +18,13 @@ import de.hf.dac.api.rest.model.ModelBase;
 
 public class MapModel<T, U> extends ModelBase implements Serializable {
 
+    /**
+     *
+     */
+    private static final long serialVersionUID = -6103196936718227555L;
     final protected Map<T, U> values;
 
-    public MapModel(Map<T, U> map) {
+    public MapModel(final Map<T, U> map) {
         this.values = map;
     }
 

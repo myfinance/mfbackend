@@ -25,6 +25,7 @@ import de.hf.dac.myfinance.api.exceptions.MFException;
 import de.hf.dac.myfinance.api.exceptions.MFMsgKey;
 import de.hf.dac.myfinance.api.persistence.dao.EndOfDayPriceDao;
 import de.hf.dac.myfinance.api.service.InstrumentService;
+import de.hf.dac.myfinance.api.service.TransactionService;
 import de.hf.dac.myfinance.api.service.ValueCurveCache;
 import de.hf.dac.myfinance.api.service.ValueCurveService;
 import de.hf.dac.myfinance.valuehandler.CashAccValueHandler;
@@ -43,13 +44,15 @@ import javax.inject.Inject;
 public class ValueCurveServiceImpl implements ValueCurveService {
 
     private InstrumentService instrumentService;
+    private TransactionService transactionService;
     private EndOfDayPriceDao endOfDayPriceDao;
     ValueCurveCache cache;
 
     @Inject
-    public ValueCurveServiceImpl(InstrumentService instrumentService, EndOfDayPriceDao endOfDayPriceDao, ValueCurveCache cache){
+    public ValueCurveServiceImpl(InstrumentService instrumentService, EndOfDayPriceDao endOfDayPriceDao, ValueCurveCache cache, TransactionService transactionService){
         this.instrumentService = instrumentService;
         this.endOfDayPriceDao = endOfDayPriceDao;
+        this.transactionService = transactionService;
         this.cache = cache;
     }
 
@@ -75,7 +78,7 @@ public class ValueCurveServiceImpl implements ValueCurveService {
                 valueHandler = new SecurityValueHandler(this, endOfDayPriceDao);
                 break;
             case CASHACCOUNT:
-                valueHandler = new CashAccValueHandler(instrumentService);
+                valueHandler = new CashAccValueHandler(transactionService);
                 break;
             case TENANT:
                 valueHandler = new TenantValueHandler(instrumentService, this);
@@ -108,7 +111,7 @@ public class ValueCurveServiceImpl implements ValueCurveService {
     }
 
     public void updateCache(int instrumentId){
-        List<InstrumentGraphEntry> ancestorGraphEntries = instrumentDao.getAncestorGraphEntries(instrumentId, EdgeType.TENANTGRAPH);
+        List<InstrumentGraphEntry> ancestorGraphEntries = instrumentService.getAncestorGraphEntries(instrumentId, EdgeType.TENANTGRAPH);
         if(ancestorGraphEntries != null && !ancestorGraphEntries.isEmpty()){
             for (InstrumentGraphEntry entry : ancestorGraphEntries) {
                 cache.removeCurve(entry.getId().getAncestor());

@@ -29,6 +29,7 @@ import de.hf.dac.myfinance.api.domain.InstrumentType;
 import de.hf.dac.myfinance.api.domain.RecurrentFrequency;
 import de.hf.dac.myfinance.api.exceptions.MFException;
 import de.hf.dac.myfinance.api.exceptions.MFMsgKey;
+import de.hf.dac.myfinance.api.restservice.AccountValueTupleModel;
 import de.hf.dac.myfinance.api.restservice.InstrumentListModel;
 import de.hf.dac.myfinance.api.restservice.InstrumentModel;
 import de.hf.dac.myfinance.api.restservice.RecurrentTransactionListModel;
@@ -145,16 +146,16 @@ public class EnvironmentDataResource extends BaseSecuredResource<OpType,OpLevel>
 
     }
 
-    @Path("/getaccountvalues/{instrumentId}")
+    @Path("/getaccountvalues/{tenantId}")
     @Produces(MediaType.APPLICATION_JSON)
     @ApiOperation(value = "get all account values grouped by liquidity for a tenant with diff to previous Date", response = ValueMapResource.class)
-    public ValueMapResource getAccountValues(@PathParam("tenatId") @ApiParam(value="the tenatId") int tenatId,
+    public AccountValueTupleResource getAccountValues(@PathParam("tenantId") @ApiParam(value="the tenantId") int tenantId,
         @QueryParam("date") @ApiParam(value="date in Format yyyy-mm-dd") String date,
         @QueryParam("diffdate") @ApiParam(value="date for value diff in Format yyyy-mm-dd") String diffdate) {
         checkOperationAllowed(OpType.READ);
-        LocalDate start = LocalDate.parse(date);
-        LocalDate end = LocalDate.parse(diffdate);
-        return new ValueMapResource(new DateDoubleModel(marketDataEnvironment.getValueService().getValueCurve(instrumentId, start, end)));
+        LocalDate valueDate = LocalDate.parse(date);
+        LocalDate diffDate = LocalDate.parse(diffdate);
+        return new AccountValueTupleResource(new AccountValueTupleModel(marketDataEnvironment.getValueService().getAccValues(marketDataEnvironment.getInstrumentService().listAccounts(tenantId), valueDate, diffDate)));
 
     }
 

@@ -95,6 +95,16 @@ public class InstrumentServiceImpl implements InstrumentService {
     }
 
     @Override
+    public List<InstrumentGraphEntry> getAncestorGraphEntries(int instrumentId, EdgeType edgeType) {
+        return instrumentDao.getAncestorGraphEntries(instrumentId, edgeType);
+     }
+
+    @Override
+    public List<Instrument> getInstrumentChilds(int instrumentId, EdgeType edgeType, int pathlength){
+        return instrumentDao.getInstrumentChilds(instrumentId, edgeType, pathlength);
+    }
+
+    @Override
     public List<Instrument> listAccounts(int tenantId) {
         List<Instrument> accs = new ArrayList<>();
         List<Instrument>  childs = instrumentDao.getInstrumentChilds(tenantId, EdgeType.TENANTGRAPH, 1);
