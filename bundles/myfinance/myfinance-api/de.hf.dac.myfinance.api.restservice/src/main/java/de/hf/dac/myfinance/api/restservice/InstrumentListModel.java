@@ -21,7 +21,12 @@ import io.swagger.annotations.ApiModelProperty;
 @ApiModel
 public class InstrumentListModel extends ListModel<Instrument>{
 
-    public InstrumentListModel(List<Instrument> list){
+    /**
+     *
+     */
+    private static final long serialVersionUID = 1100148638349335873L;
+
+    public InstrumentListModel(List<Instrument> list) {
         super(list);
     }
 

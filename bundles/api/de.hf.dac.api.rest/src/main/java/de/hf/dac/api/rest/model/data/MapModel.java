@@ -22,7 +22,7 @@ public class MapModel<T, U> extends ModelBase implements Serializable {
      *
      */
     private static final long serialVersionUID = -6103196936718227555L;
-    final protected Map<T, U> values;
+    protected final Map<T, U> values;
 
     public MapModel(final Map<T, U> map) {
         this.values = map;

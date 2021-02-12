@@ -7,23 +7,22 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 
-import de.hf.dac.myfinance.api.domain.Instrument;
-import de.hf.dac.myfinance.api.domain.InstrumentValuesTuple;
-import de.hf.dac.myfinance.api.restservice.AccountValueTupleModel;
+import de.hf.dac.myfinance.api.domain.InstrumentDetails;
+import de.hf.dac.myfinance.api.restservice.InstrumentDetailModel;
 import de.hf.dac.services.resources.leaf.map.MapResource;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 
 @Api(hidden = false, tags = "UtilityResources")
-public class AccountValueTupleResource extends MapResource<Instrument, InstrumentValuesTuple> {
+public class InstrumentDetailResource extends MapResource<Integer, InstrumentDetails> {
 
-    public AccountValueTupleResource(AccountValueTupleModel data) {
+    public InstrumentDetailResource(InstrumentDetailModel data) {
         super(data);
     }
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    @ApiOperation(value = "Map Data", response = AccountValueTupleModel.class)
+    @ApiOperation(value = "Map Data", response = InstrumentDetailModel.class)
     public Response getAccountValueTupleMap(
         @Context
             UriInfo uriInfo) {

@@ -25,7 +25,7 @@ import java.util.Map;
 import javax.inject.Inject;
 
 import de.hf.dac.myfinance.api.domain.Instrument;
-import de.hf.dac.myfinance.api.domain.InstrumentValuesTuple;
+import de.hf.dac.myfinance.api.domain.InstrumentDetails;
 import de.hf.dac.myfinance.api.service.ValueCurveService;
 import de.hf.dac.myfinance.api.service.ValueService;
 
@@ -64,12 +64,18 @@ public class ValueServiceImpl implements ValueService {
     }
 
     @Override
-    public Map<Instrument, InstrumentValuesTuple> getAccValues(List<Instrument> accounts, LocalDate date, LocalDate diffDate) {
-        Map<Instrument, InstrumentValuesTuple> valueMap = new HashMap<>();
+    public Map<Integer, InstrumentDetails> getAccValues(List<Instrument> accounts, LocalDate date, LocalDate diffDate) {
+        Map<Integer, InstrumentDetails> valueMap = new HashMap<>();
         for (Instrument instrument : accounts) {
             double value = getValue(instrument.getInstrumentid(), date);
-            double valueChange = value - getValue(instrument.getInstrumentid(), diffDate);
-            valueMap.put(instrument, new InstrumentValuesTuple(value, instrument.getInstrumentType().getLiquidityType(), valueChange));
+            double valueDiffdate = getValue(instrument.getInstrumentid(), diffDate);
+            double valueChange = value - valueDiffdate;
+            InstrumentDetails instrumentDetails = new InstrumentDetails();
+            instrumentDetails.putValue("value", String.valueOf(value));
+            instrumentDetails.putValue("valueDiffDate", String.valueOf(valueDiffdate));
+            instrumentDetails.putValue("valueChange", String.valueOf(valueChange));
+            instrumentDetails.putValue("liquiditytype", String.valueOf(instrument.getInstrumentType().getLiquidityType()));
+            valueMap.put(instrument.getInstrumentid(), instrumentDetails);
         }
         return valueMap;
     }

@@ -24,7 +24,11 @@ import java.util.List;
 
 public class ListModel<T> extends ModelBase implements Serializable {
 
-    final protected List<T> values;
+    /**
+     *
+     */
+    private static final long serialVersionUID = -8915222530836443973L;
+    protected final List<T> values;
 
     public ListModel(List<T> list) {
         this.values = list;
