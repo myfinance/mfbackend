@@ -101,7 +101,7 @@ public class ValueServiceImpl implements ValueService {
         double expensesLastYear = 0.0;
         List<String[]> expensesLastMonth = new ArrayList<>();
         List<String[]> incomeLastMonth = new ArrayList<>();
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-mm-dd");
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         for (Map.Entry<LocalDate, List<Cashflow>> entry : cashflowmap.entrySet()) {
             LocalDate currentDate = entry.getKey();
             if(currentDate.isBefore(firstCashflowDate)) {
