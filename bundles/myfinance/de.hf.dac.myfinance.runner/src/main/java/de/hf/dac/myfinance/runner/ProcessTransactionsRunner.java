@@ -11,7 +11,7 @@
 
 package de.hf.dac.myfinance.runner;
 
-import de.hf.dac.myfinance.api.service.InstrumentService;
+import de.hf.dac.myfinance.api.service.TransactionService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -28,7 +28,7 @@ import java.time.LocalDateTime;
 public class ProcessTransactionsRunner implements Runner {
     public static final Logger LOG = LoggerFactory.getLogger(ProcessTransactionsRunner.class);
     @Inject
-    InstrumentService service;
+    TransactionService service;
 
     @Override
     public void run(BaseMFRunnerParameter params) {

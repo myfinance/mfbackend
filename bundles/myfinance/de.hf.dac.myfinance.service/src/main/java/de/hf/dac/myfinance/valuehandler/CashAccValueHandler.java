@@ -9,27 +9,26 @@
  * ----------------------------------------------------------------------------
  */
 
-package de.hf.dac.myfinance.ValueHandler;
+package de.hf.dac.myfinance.valuehandler;
 
 import java.time.LocalDate;
 import java.util.*;
-import java.util.stream.Collectors;
 
 import de.hf.dac.myfinance.api.domain.Cashflow;
 import de.hf.dac.myfinance.api.domain.Instrument;
-import de.hf.dac.myfinance.api.persistence.dao.InstrumentDao;
+import de.hf.dac.myfinance.api.service.TransactionService;
 
 
 public class CashAccValueHandler implements ValueHandler{
-    private InstrumentDao instrumentDao;
+    private TransactionService transactionService;
 
-    public CashAccValueHandler(InstrumentDao instrumentDao){
-        this.instrumentDao = instrumentDao;
+    public CashAccValueHandler(TransactionService transactionService){
+        this.transactionService = transactionService;
     }
 
     public TreeMap<LocalDate, Double> calcValueCurve(Instrument instrument) {
         TreeMap<LocalDate, Double> valueCurve = new TreeMap<>();
-        Map<LocalDate, List<Cashflow>> cashflows = instrumentDao.getInstrumentCashflowMap(instrument.getInstrumentid());
+        Map<LocalDate, List<Cashflow>> cashflows = transactionService.getInstrumentCashflowMap(instrument.getInstrumentid());
         double value = 0.0;
         if(cashflows==null || cashflows.isEmpty()) {
             valueCurve.put(LocalDate.now(), value);

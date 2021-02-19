@@ -44,7 +44,8 @@ auch muss dann die Eindeutigkeit des currencycodes noch sichergestellt werden. D
 == Liquidität
 
 Jedes Instrument hat einen LiquidityType, der beschreibt wie schnell man es verkaufen kann ohne zusätzliche Kosten bzw. ob man jeder Zeit Geld Transferieren kann.
-Bei den meisten Instrumenten kann man den LiquidityType implizit am InstrumentType(z.b. Giro=Liquide) oder an der Maturity festmachen, so dass der Type nicht explizit in der DB stehen muss.
+Bei den meisten Instrumenten kann man den LiquidityType implizit am InstrumentType(z.b. Giro=Liquide) oder an der Maturity festmachen, so dass der Type nicht explizit in der DB stehen muss. 
+Bei manchen Instrumenttypen wie dem TimeDeposit hängt der LiquidityType an der Maturity und muss entsprechend je Konto berechnet werden. Dadurch können Konten nicht fest einem LiquidityType zugeordnet werden.
 
 
 *LiquidityType-tabelle*
@@ -53,7 +54,7 @@ Bei den meisten Instrumenten kann man den LiquidityType implizit am InstrumentTy
 |=====================================================================================
 |*Typ* | *Beschreibung*
 | Liquide | jeder Zeit auflösbar
-| ShortTerm | innerhalb weniger Tage
+| ShortTerm | bis zu 3 Monate
 | MidTerm | bis zu einem Jahr
 | LongTerm | länger als ein Jahr
 |=====================================================================================
@@ -273,7 +274,7 @@ So muss meist nur ein mal Jährlich eine kleine korrekturbuchung vorgenommen wer
 [NOTE]
 die Automatische Zinsberechnung wird zunächst nicht umgesetzt da die Zinsen zu volatil sind und es einfaches ist einmalig im Jahr alle Zinsen nachzutragen
 
-Der LiquidityType ist immer ShortTerm.
+Der LiquidityType ist immer Liquid.
 
 
 BusinessKey=IBAN
@@ -379,6 +380,7 @@ BusinessKey=IBAN
 ==== Buildingsaving
 
 Ein Bausparvertrag besteht aus dem Cashaccount vom Typ Bausparkonto und ggf aus einen Bausparkredit (Loan)
+Die liquidität berechnet sich aus der kreditlaufzeit oder ist midterm falls kein kredit sondern ein ein aktives bausparkonto existiert
 
 
 === Securities
@@ -520,7 +522,7 @@ Damit sich die Abschreibung auch in der Budgetsicht wiederspiegelt muss der Wert
 
 
 
-Der LiquidityType berechnet sich aus der Maturity
+Der LiquidityType ist MidTerm da Autos etc auch verkauft werden können innerhalb eines Jahres
 
 additional properties:
 

@@ -1,6 +1,6 @@
 /** ----------------------------------------------------------------------------
  *
- * ---          DZ Bank FfM - Application Development                       ---
+ * ---          HF - Application Development                       ---
  *              Copyright (c) 2014, ... All Rights Reserved
  *
  *
@@ -25,8 +25,6 @@ import javax.inject.Inject;
 import javax.inject.Named;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Query;
-
-import java.time.LocalDate;
 import java.util.*;
 
 public class InstrumentDaoImpl extends BaseDao<Instrument> implements InstrumentDao {
@@ -54,46 +52,6 @@ public class InstrumentDaoImpl extends BaseDao<Instrument> implements Instrument
             marketDataEm.close();
         }
         return result;
-    }
-
-    @Override
-    public  List<Cashflow> listInstrumentCashflows(int instrumentId){
-        List<Cashflow> returnValue;
-        try{
-            marketDataEm = this.marketDataEmf.createEntityManager();
-            returnValue = getCashflows(instrumentId);
-        } finally {
-            marketDataEm.close();
-        }
-        return returnValue;
-    }
-
-    private List<Cashflow> getCashflows(int instrumentId) {
-        List<Cashflow> returnValue;
-        Query query = marketDataEm.createQuery("select a FROM Cashflow a WHERE a.instrument.instrumentid = :instrumentid");
-        query.setParameter("instrumentid", instrumentId);
-        returnValue=(List<Cashflow>) query.getResultList();
-        return returnValue;
-    }
-
-    @Override
-    public  Map<LocalDate, List<Cashflow>> getInstrumentCashflowMap(int instrumentId){
-        Map<LocalDate, List<Cashflow>> returnValue = new HashMap<>();
-        try{
-            marketDataEm = this.marketDataEmf.createEntityManager();
-            getCashflows(instrumentId).forEach(x->{
-                List<Cashflow> cashflows = new ArrayList();
-                cashflows.add(x);
-                if(returnValue.containsKey(x.getTransaction().getTransactiondate())) {
-                    cashflows.addAll(returnValue.get(x.getTransaction().getTransactiondate()));
-                    returnValue.remove(x.getTransaction().getTransactiondate());
-                }
-                returnValue.put(x.getTransaction().getTransactiondate(), cashflows);
-            });
-        } finally {
-            marketDataEm.close();
-        }
-        return returnValue;
     }
 
     @Override
@@ -236,6 +194,22 @@ public class InstrumentDaoImpl extends BaseDao<Instrument> implements Instrument
             Query query = marketDataEm.createQuery("select i FROM Instrument i JOIN InstrumentGraphEntry a ON i.instrumentid=a.id.descendant WHERE a.id.ancestor= :instrumentid and a.id.edgetype= :edgetype and a.pathlength>0");
             query.setParameter("instrumentid", instrumentId);
             query.setParameter("edgetype", edgeType);
+            result = (List<Instrument>) query.getResultList();
+        } finally {
+            marketDataEm.close();
+        }
+        return result;
+    }
+
+    @Override
+    public List<Instrument> getInstrumentChilds(int instrumentId, EdgeType edgeType, int pathlength) {
+        List<Instrument> result;
+        try{
+            marketDataEm = this.marketDataEmf.createEntityManager();
+            Query query = marketDataEm.createQuery("select i FROM Instrument i JOIN InstrumentGraphEntry a ON i.instrumentid=a.id.descendant WHERE a.id.ancestor= :instrumentid and a.id.edgetype= :edgetype and a.pathlength= :pathlength");
+            query.setParameter("instrumentid", instrumentId);
+            query.setParameter("edgetype", edgeType);
+            query.setParameter("pathlength", pathlength);
             result = (List<Instrument>) query.getResultList();
         } finally {
             marketDataEm.close();

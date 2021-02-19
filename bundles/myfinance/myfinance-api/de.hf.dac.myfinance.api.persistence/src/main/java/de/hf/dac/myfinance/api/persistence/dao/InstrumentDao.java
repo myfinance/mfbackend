@@ -19,10 +19,7 @@ package de.hf.dac.myfinance.api.persistence.dao;
 
 
 import de.hf.dac.myfinance.api.domain.*;
-
-import java.time.LocalDate;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 
 public interface InstrumentDao {
@@ -34,8 +31,6 @@ public interface InstrumentDao {
     Optional<Instrument> getInstrument(int instrumentId);
     Optional<Source> getSource(int sourceId);
     List<Source> getActiveSources();
-    Map<LocalDate, List<Cashflow>>getInstrumentCashflowMap(int instrumentId);
-    List<Cashflow> listInstrumentCashflows(int instrumentId);
     void saveInstrument(Instrument instrument);
     void updateInstrument(int instrumentId, String description, boolean isActive);
     void saveSymbol(SecuritySymbols symbol);
@@ -43,5 +38,6 @@ public interface InstrumentDao {
     Optional<Integer> getRootInstrument(int instrumentId, EdgeType edgeType);
     void saveGraphEntry(InstrumentGraphEntry instrumentGraphEntry);
     List<Instrument> getInstrumentChilds(int instrumentId, EdgeType edgeType);
+    List<Instrument> getInstrumentChilds(int instrumentId, EdgeType edgeType, int pathlength);
     Optional<Instrument> getAccountPortfolio(int tenantId);
 }

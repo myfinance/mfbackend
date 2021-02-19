@@ -6,7 +6,7 @@
  *
  *  Project     : dac
  *
- *  File        : ValueCurveCache.java
+ *  File        : ValueHandler.java
  *
  *  Author(s)   : hf
  *
@@ -15,14 +15,13 @@
  * ----------------------------------------------------------------------------
  */
 
-package de.hf.dac.myfinance.ValueHandler;
+package de.hf.dac.myfinance.valuehandler;
+
+import de.hf.dac.myfinance.api.domain.Instrument;
 
 import java.time.LocalDate;
 import java.util.TreeMap;
 
-public interface ValueCurveCache {
-    TreeMap<LocalDate, Double> getValueCurve(int instrumentId);
-    void addValueCurve(int instrumentId, TreeMap<LocalDate, Double> valueCurve);
-    void removeCurve(int instrumentId);
-    void flush();
+public interface ValueHandler {
+    TreeMap<LocalDate, Double> calcValueCurve(Instrument instrument);
 }

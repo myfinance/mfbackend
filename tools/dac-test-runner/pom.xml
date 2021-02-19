@@ -14,7 +14,7 @@
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
-            <version>${junit.version}</version>
+            <version>${junit-testrunner.version}</version>
             <scope>compile</scope>
         </dependency>
         <!-- redirect all jul logging to slf4j -->

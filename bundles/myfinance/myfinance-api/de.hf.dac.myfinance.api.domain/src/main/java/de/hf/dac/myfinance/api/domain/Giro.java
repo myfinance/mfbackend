@@ -25,7 +25,7 @@ import io.swagger.annotations.ApiModel;
 @Inheritance(strategy= InheritanceType.SINGLE_TABLE)
 @DiscriminatorValue(InstrumentType.GIRO_IDSTRING)
 public class Giro  extends Instrument {
-    public Giro(){
+    protected Giro(){
         super();
     }
 

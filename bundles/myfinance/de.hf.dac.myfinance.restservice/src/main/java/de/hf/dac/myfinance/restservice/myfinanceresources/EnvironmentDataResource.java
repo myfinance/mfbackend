@@ -29,6 +29,7 @@ import de.hf.dac.myfinance.api.domain.InstrumentType;
 import de.hf.dac.myfinance.api.domain.RecurrentFrequency;
 import de.hf.dac.myfinance.api.exceptions.MFException;
 import de.hf.dac.myfinance.api.exceptions.MFMsgKey;
+import de.hf.dac.myfinance.api.restservice.InstrumentDetailModel;
 import de.hf.dac.myfinance.api.restservice.InstrumentListModel;
 import de.hf.dac.myfinance.api.restservice.InstrumentModel;
 import de.hf.dac.myfinance.api.restservice.RecurrentTransactionListModel;
@@ -119,7 +120,7 @@ public class EnvironmentDataResource extends BaseSecuredResource<OpType,OpLevel>
         checkOperationAllowed(OpType.READ);
         LocalDate start = LocalDate.parse(startdate);
         LocalDate end = LocalDate.parse(enddate);
-        return new TransactionListResource(new TransactionListModel(marketDataEnvironment.getInstrumentService().listTransactions(start, end)));
+        return new TransactionListResource(new TransactionListModel(marketDataEnvironment.getTransactionService().listTransactions(start, end)));
 
     }
 
@@ -128,7 +129,7 @@ public class EnvironmentDataResource extends BaseSecuredResource<OpType,OpLevel>
     @ApiOperation(value = "get RecurrentTransactions", response = RecurrentTransactionListResource.class)
     public RecurrentTransactionListResource getRecurrentTransaction() {
         checkOperationAllowed(OpType.READ);
-        return new RecurrentTransactionListResource(new RecurrentTransactionListModel(marketDataEnvironment.getInstrumentService().listRecurrentTransactions()));
+        return new RecurrentTransactionListResource(new RecurrentTransactionListModel(marketDataEnvironment.getTransactionService().listRecurrentTransactions()));
 
     }
 
@@ -141,7 +142,20 @@ public class EnvironmentDataResource extends BaseSecuredResource<OpType,OpLevel>
         checkOperationAllowed(OpType.READ);
         LocalDate start = LocalDate.parse(startdate);
         LocalDate end = LocalDate.parse(enddate);
-        return new ValueMapResource(new DateDoubleModel(marketDataEnvironment.getInstrumentService().getValueCurve(instrumentId, start, end)));
+        return new ValueMapResource(new DateDoubleModel(marketDataEnvironment.getValueService().getValueCurve(instrumentId, start, end)));
+
+    }
+
+    @Path("/getinstrumentvalues/{tenantId}")
+    @Produces(MediaType.APPLICATION_JSON)
+    @ApiOperation(value = "get all instrument values for a tenant with diff to previous Date and details", response = ValueMapResource.class)
+    public InstrumentDetailResource getInstrumentValues(@PathParam("tenantId") @ApiParam(value="the tenantId") int tenantId,
+        @QueryParam("date") @ApiParam(value="date in Format yyyy-mm-dd") String date,
+        @QueryParam("diffdate") @ApiParam(value="date for value diff in Format yyyy-mm-dd") String diffdate) {
+        checkOperationAllowed(OpType.READ);
+        LocalDate valueDate = LocalDate.parse(date);
+        LocalDate diffDate = LocalDate.parse(diffdate);
+        return new InstrumentDetailResource(new InstrumentDetailModel(marketDataEnvironment.getValueService().getInstrumentValues(marketDataEnvironment.getInstrumentService().listInstruments(tenantId), valueDate, diffDate)));
 
     }
 
@@ -154,7 +168,7 @@ public class EnvironmentDataResource extends BaseSecuredResource<OpType,OpLevel>
         @ApiResponse(code = HttpStatus.SC_INTERNAL_SERVER_ERROR, message = "Something wrong in Server")})
     public Response importPrices() {
         checkOperationAllowed(OpType.EXECUTE);
-        marketDataEnvironment.getInstrumentService().importPrices(LocalDateTime.now());
+        marketDataEnvironment.getPriceService().importPrices(LocalDateTime.now());
         return Response.ok().build();
     }
 
@@ -167,7 +181,7 @@ public class EnvironmentDataResource extends BaseSecuredResource<OpType,OpLevel>
             @ApiResponse(code = HttpStatus.SC_INTERNAL_SERVER_ERROR, message = "Something wrong in Server")})
     public Response bookRecurrentTransactions() {
         checkOperationAllowed(OpType.EXECUTE);
-        marketDataEnvironment.getInstrumentService().bookRecurrentTransactions(LocalDateTime.now());
+        marketDataEnvironment.getTransactionService().bookRecurrentTransactions(LocalDateTime.now());
         return Response.ok().build();
     }
 
@@ -246,7 +260,7 @@ public class EnvironmentDataResource extends BaseSecuredResource<OpType,OpLevel>
         @QueryParam("dayofprice") @ApiParam(value="the dayofprice(yyyy-mm-dd") String dayofprice,
         @QueryParam("value") @ApiParam(value="value") double value) {
         checkOperationAllowed(OpType.WRITE);
-        marketDataEnvironment.getInstrumentService().saveEndOfDayPrice(currencyCode, isin, LocalDate.parse(dayofprice), value, LocalDateTime.now());
+        marketDataEnvironment.getPriceService().saveEndOfDayPrice(currencyCode, isin, LocalDate.parse(dayofprice), value, LocalDateTime.now());
         return Response.ok().build();
     }
 
@@ -260,7 +274,7 @@ public class EnvironmentDataResource extends BaseSecuredResource<OpType,OpLevel>
     public Response fillPricesHistory(@QueryParam("sourceId") @ApiParam(value="the sourceId") int sourceId,
         @QueryParam("isin") @ApiParam(value="the isin") String isin) {
         checkOperationAllowed(OpType.WRITE);
-        marketDataEnvironment.getInstrumentService().fillPriceHistory(sourceId, isin, LocalDateTime.now());
+        marketDataEnvironment.getPriceService().fillPriceHistory(sourceId, isin, LocalDateTime.now());
         return Response.ok().build();
     }
 
@@ -333,7 +347,7 @@ public class EnvironmentDataResource extends BaseSecuredResource<OpType,OpLevel>
         @QueryParam("value") @ApiParam(value="the value of the income or expense") double value,
         @QueryParam("transactiondate") @ApiParam(value="the transactiondate(yyyy-mm-dd") String transactiondate) {
         checkOperationAllowed(OpType.WRITE);
-        marketDataEnvironment.getInstrumentService().newIncomeExpense(description, accId, budgetId, value, LocalDate.parse(transactiondate), LocalDateTime.now());
+        marketDataEnvironment.getTransactionService().newIncomeExpense(description, accId, budgetId, value, LocalDate.parse(transactiondate), LocalDateTime.now());
         return Response.ok().build();
     }
 
@@ -349,7 +363,7 @@ public class EnvironmentDataResource extends BaseSecuredResource<OpType,OpLevel>
                                       @QueryParam("value") @ApiParam(value="the value of the income or expense") double value,
                                       @QueryParam("transactiondate") @ApiParam(value="the transactiondate(yyyy-mm-dd") String transactiondate) {
         checkOperationAllowed(OpType.WRITE);
-        marketDataEnvironment.getInstrumentService().updateTransaction(id, description, value, LocalDate.parse(transactiondate), LocalDateTime.now());
+        marketDataEnvironment.getTransactionService().updateTransaction(id, description, value, LocalDate.parse(transactiondate), LocalDateTime.now());
         return Response.ok().build();
     }
 
@@ -366,7 +380,7 @@ public class EnvironmentDataResource extends BaseSecuredResource<OpType,OpLevel>
         @QueryParam("value") @ApiParam(value="the value of the income or expense") double value,
         @QueryParam("transactiondate") @ApiParam(value="the transactiondate(yyyy-mm-dd") String transactiondate) {
         checkOperationAllowed(OpType.WRITE);
-        marketDataEnvironment.getInstrumentService().newTransfer(description, srcId, trgId, value, LocalDate.parse(transactiondate), LocalDateTime.now());
+        marketDataEnvironment.getTransactionService().newTransfer(description, srcId, trgId, value, LocalDate.parse(transactiondate), LocalDateTime.now());
         return Response.ok().build();
     }
 
@@ -384,7 +398,7 @@ public class EnvironmentDataResource extends BaseSecuredResource<OpType,OpLevel>
                                 @QueryParam("value") @ApiParam(value="the value of the income or expense") double value,
                                 @QueryParam("transactiondate") @ApiParam(value="the transactiondate(yyyy-mm-dd") String transactiondate) {
         checkOperationAllowed(OpType.WRITE);
-        marketDataEnvironment.getInstrumentService().newRecurrentTransaction(description, srcId, trgId, recurrentFrequency, value, LocalDate.parse(transactiondate), LocalDateTime.now());
+        marketDataEnvironment.getTransactionService().newRecurrentTransaction(description, srcId, trgId, recurrentFrequency, value, LocalDate.parse(transactiondate), LocalDateTime.now());
         return Response.ok().build();
     }
 
@@ -400,7 +414,7 @@ public class EnvironmentDataResource extends BaseSecuredResource<OpType,OpLevel>
                                       @QueryParam("value") @ApiParam(value="the value of the income or expense") double value,
                                       @QueryParam("nexttransaction") @ApiParam(value="the transactiondate(yyyy-mm-dd") String nexttransaction) {
         checkOperationAllowed(OpType.WRITE);
-        marketDataEnvironment.getInstrumentService().updateRecurrentTransaction(id, description, value, LocalDate.parse(nexttransaction), LocalDateTime.now());
+        marketDataEnvironment.getTransactionService().updateRecurrentTransaction(id, description, value, LocalDate.parse(nexttransaction), LocalDateTime.now());
         return Response.ok().build();
     }
 
@@ -413,7 +427,7 @@ public class EnvironmentDataResource extends BaseSecuredResource<OpType,OpLevel>
         @ApiResponse(code = HttpStatus.SC_INTERNAL_SERVER_ERROR, message = "Something wrong in Server")})
     public Response delTransfer(@QueryParam("transactionId") @ApiParam(value="transactionId") int transactionId) {
         checkOperationAllowed(OpType.WRITE);
-        marketDataEnvironment.getInstrumentService().deleteTransaction(transactionId);
+        marketDataEnvironment.getTransactionService().deleteTransaction(transactionId);
         return Response.ok().build();
     }
 
@@ -426,7 +440,7 @@ public class EnvironmentDataResource extends BaseSecuredResource<OpType,OpLevel>
             @ApiResponse(code = HttpStatus.SC_INTERNAL_SERVER_ERROR, message = "Something wrong in Server")})
     public Response delRecurrentTransfer(@QueryParam("recurrentTransactionId") @ApiParam(value="recurrentTransactionId") int recurrentTransactionId) {
         checkOperationAllowed(OpType.WRITE);
-        marketDataEnvironment.getInstrumentService().deleteRecurrentTransaction(recurrentTransactionId);
+        marketDataEnvironment.getTransactionService().deleteRecurrentTransaction(recurrentTransactionId);
         return Response.ok().build();
     }
 }

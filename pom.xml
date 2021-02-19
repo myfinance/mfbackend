@@ -45,7 +45,6 @@
         <pax-jdbc.version>1.1.0</pax-jdbc.version><!--feature to create Datasources -->
         <apache-cxf.version>3.4.0</apache-cxf.version><!-- rest für osgi -->
         <servicemix-reflections.version>0.9.10_3</servicemix-reflections.version>
-        <junit.version>4.13</junit.version>
         <httpcore-osgi.version>4.4.5</httpcore-osgi.version>
         <narayana.version>5.6.2.Final</narayana.version>
 
@@ -99,7 +98,7 @@
         <clean-plugin.version>3.0.0</clean-plugin.version>
         <install-plugin.version>2.5.2</install-plugin.version>
         <failsaveplugin.version>2.21.0</failsaveplugin.version>
-        <surefire-plugin.version>2.21.0</surefire-plugin.version>
+        <surefire-plugin.version>2.22.2</surefire-plugin.version>
         <exec-maven-plugin.version>1.6.0</exec-maven-plugin.version>
         <docker-maven-plugin.version>0.33.0</docker-maven-plugin.version>
         <jar-plugin.version>3.0.2</jar-plugin.version>
@@ -111,6 +110,9 @@
         <asciidoctorj-diagram.version>1.5.10</asciidoctorj-diagram.version>
         <asciidoctorj-pdf.version>1.5.0-alpha.16</asciidoctorj-pdf.version>
 
+        <junit.version>5.7.0</junit.version>
+        <!--old junitversion for test-runner-->
+        <junit-testrunner.version>4.13</junit-testrunner.version>
     </properties>
 
     <modules>
@@ -389,11 +391,17 @@
 
             <!--test-->
             <dependency>
-                <groupId>junit</groupId>
-                <artifactId>junit</artifactId>
+                <groupId>org.junit.jupiter</groupId>
+                <artifactId>junit-jupiter-api</artifactId>
                 <version>${junit.version}</version>
                 <scope>test</scope>
             </dependency>
+            <dependency>
+                <groupId>org.junit.jupiter</groupId>
+                <artifactId>junit-jupiter-engine</artifactId>
+                <version>${junit.version}</version>
+                <scope>test</scope>
+            </dependency>         
         </dependencies>
     </dependencyManagement>
 

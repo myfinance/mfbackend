@@ -1,10 +1,10 @@
 /**
  * ----------------------------------------------------------------------------
- * ---          DZ Bank FfM - Application Development                       ---
+ * ---          Application Development                       ---
  * Copyright (c) 2014, ... All Rights Reserved
  * Project     : dac
  * File        : DateDoubleModel.java
- * Author(s)   : xn01598
+ * Author(s)   : hf
  * Created     : 14.03.2019
  * ----------------------------------------------------------------------------
  */

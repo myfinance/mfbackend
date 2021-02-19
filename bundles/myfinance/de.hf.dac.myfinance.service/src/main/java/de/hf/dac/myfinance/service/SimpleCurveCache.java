@@ -15,12 +15,14 @@
  * ----------------------------------------------------------------------------
  */
 
-package de.hf.dac.myfinance.ValueHandler;
+package de.hf.dac.myfinance.service;
 
 import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.TreeMap;
+
+import de.hf.dac.myfinance.api.service.ValueCurveCache;
 
 public class SimpleCurveCache implements ValueCurveCache {
 

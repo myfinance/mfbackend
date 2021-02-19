@@ -13,6 +13,7 @@ package de.hf.dac.myfinance.api.domain;
 
 public enum InstrumentTypeGroup {
     CASHACCOUNT,
+    TENANT,
     PORTFOLIO,
     SECURITY,
     LIVEINSURANCE,

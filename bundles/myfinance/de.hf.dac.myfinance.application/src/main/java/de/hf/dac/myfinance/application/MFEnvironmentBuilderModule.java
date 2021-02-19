@@ -39,7 +39,17 @@ import de.hf.dac.myfinance.api.exceptions.MFMsgKey;
 import de.hf.dac.myfinance.api.persistence.dao.*;
 import de.hf.dac.myfinance.persistence.*;
 import de.hf.dac.myfinance.api.service.InstrumentService;
+import de.hf.dac.myfinance.api.service.PriceService;
+import de.hf.dac.myfinance.api.service.TransactionService;
+import de.hf.dac.myfinance.api.service.ValueCurveCache;
+import de.hf.dac.myfinance.api.service.ValueCurveService;
+import de.hf.dac.myfinance.api.service.ValueService;
 import de.hf.dac.myfinance.service.InstrumentServiceImpl;
+import de.hf.dac.myfinance.service.PriceServiceImpl;
+import de.hf.dac.myfinance.service.SimpleCurveCache;
+import de.hf.dac.myfinance.service.TransactionServiceImpl;
+import de.hf.dac.myfinance.service.ValueServiceImpl;
+import de.hf.dac.myfinance.service.ValueCurveServiceImpl;
 
 import javax.persistence.EntityManagerFactory;
 import javax.transaction.TransactionManager;
@@ -55,6 +65,7 @@ public class MFEnvironmentBuilderModule extends AbstractModule {
     TransactionManager jtaManager;
     private String env;
     WebRequestService webRequestService;
+    ValueCurveCache cache;
 
     public MFEnvironmentBuilderModule(EnvironmentService envService, EntityManagerFactorySetup emfb,
         TransactionManager jtaManager, String env, WebRequestService webRequestService){
@@ -63,6 +74,7 @@ public class MFEnvironmentBuilderModule extends AbstractModule {
         this.jtaManager=jtaManager;
         this.env = env;
         this.webRequestService = webRequestService;
+        this.cache = new SimpleCurveCache();
     }
 
     @Override
@@ -82,7 +94,11 @@ public class MFEnvironmentBuilderModule extends AbstractModule {
         bind(CashflowDao.class).to(CashflowDaoImpl.class);
         bind(EndOfDayPriceDao.class).to(EndOfDayPriceDaoImpl.class);
         bind(InstrumentService.class).to(InstrumentServiceImpl.class);
-
+        bind(ValueCurveCache.class).toInstance(cache);
+        bind(ValueCurveService.class).to(ValueCurveServiceImpl.class);
+        bind(ValueService.class).to(ValueServiceImpl.class);
+        bind(TransactionService.class).to(TransactionServiceImpl.class);
+        bind(PriceService.class).to(PriceServiceImpl.class);
         bind(MarketDataEnvironment.class).to(MFEnvironmentImpl.class);
     }
 
