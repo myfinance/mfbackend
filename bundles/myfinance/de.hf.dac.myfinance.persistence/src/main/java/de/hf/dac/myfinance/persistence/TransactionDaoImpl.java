@@ -93,6 +93,7 @@ public class TransactionDaoImpl  extends BaseDao<Transaction> implements Transac
             marketDataEm = this.marketDataEmf.createEntityManager();
             getCashflows(instrumentId).forEach(x->{
                 List<Cashflow> cashflows = new ArrayList<>();
+                x.setDescription(x.getTransaction().getDescription());
                 cashflows.add(x);
                 if(returnValue.containsKey(x.getTransaction().getTransactiondate())) {
                     cashflows.addAll(returnValue.get(x.getTransaction().getTransactiondate()));
@@ -105,7 +106,7 @@ public class TransactionDaoImpl  extends BaseDao<Transaction> implements Transac
         }
         return returnValue;
     }
-
+    
     public String deleteTransaction(int transactionId) {
         String result = " transaction with id "+transactionId;
         try {

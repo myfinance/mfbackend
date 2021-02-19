@@ -11,5 +11,5 @@ public interface ValueService {
     Map<LocalDate, Double> getValueCurve(int instrumentId);
     Map<LocalDate, Double> getValueCurve(int instrumentId, LocalDate startDate, LocalDate endDate);
     double getValue(int instrumentId, LocalDate date);
-    Map<Integer, InstrumentDetails> getAccValues(List<Instrument> accounts, LocalDate date, LocalDate diffDate);
+    Map<Integer, InstrumentDetails> getInstrumentValues(List<Instrument> instruments, LocalDate date, LocalDate diffDate);
 }

@@ -146,16 +146,16 @@ public class EnvironmentDataResource extends BaseSecuredResource<OpType,OpLevel>
 
     }
 
-    @Path("/getaccountvalues/{tenantId}")
+    @Path("/getinstrumentvalues/{tenantId}")
     @Produces(MediaType.APPLICATION_JSON)
-    @ApiOperation(value = "get all account values grouped by liquidity for a tenant with diff to previous Date", response = ValueMapResource.class)
-    public InstrumentDetailResource getAccountValues(@PathParam("tenantId") @ApiParam(value="the tenantId") int tenantId,
+    @ApiOperation(value = "get all instrument values for a tenant with diff to previous Date and details", response = ValueMapResource.class)
+    public InstrumentDetailResource getInstrumentValues(@PathParam("tenantId") @ApiParam(value="the tenantId") int tenantId,
         @QueryParam("date") @ApiParam(value="date in Format yyyy-mm-dd") String date,
         @QueryParam("diffdate") @ApiParam(value="date for value diff in Format yyyy-mm-dd") String diffdate) {
         checkOperationAllowed(OpType.READ);
         LocalDate valueDate = LocalDate.parse(date);
         LocalDate diffDate = LocalDate.parse(diffdate);
-        return new InstrumentDetailResource(new InstrumentDetailModel(marketDataEnvironment.getValueService().getAccValues(marketDataEnvironment.getInstrumentService().listAccounts(tenantId), valueDate, diffDate)));
+        return new InstrumentDetailResource(new InstrumentDetailModel(marketDataEnvironment.getValueService().getInstrumentValues(marketDataEnvironment.getInstrumentService().listInstruments(tenantId), valueDate, diffDate)));
 
     }
 
