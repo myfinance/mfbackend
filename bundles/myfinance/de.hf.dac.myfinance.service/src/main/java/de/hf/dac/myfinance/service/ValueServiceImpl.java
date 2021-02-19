@@ -129,7 +129,7 @@ public class ValueServiceImpl implements ValueService {
                 }
             }            
         }
-        long relevantMonth = ChronoUnit.MONTHS.between(firstCashflowDate, date);
+        long relevantMonth = ChronoUnit.MONTHS.between(firstCashflowDate, date) +1;
         long relevantMonthOfTheYear = 12;
         if (relevantMonth<12) relevantMonthOfTheYear = relevantMonth;
         Double avgCashoutLastYear = expensesLastYear / relevantMonthOfTheYear;
