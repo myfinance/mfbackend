@@ -79,6 +79,7 @@ public class ValueServiceImpl implements ValueService {
             double valueDiffdate = getValue(instrument.getInstrumentid(), diffDate);
             double valueChange = value - valueDiffdate;
             InstrumentDetails instrumentDetails = new InstrumentDetails();
+            instrumentDetails.putValue("description", instrument.getDescription());
             instrumentDetails.putValue("instrumenttype", String.valueOf(instrument.getInstrumentType()));
             instrumentDetails.putValue("value", String.valueOf(value));
             instrumentDetails.putValue("valueDiffDate", String.valueOf(valueDiffdate));
