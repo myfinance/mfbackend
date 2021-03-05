@@ -177,7 +177,7 @@ git push origin dev
 git checkout master
 git merge dev
 git tag -a Release_major_minor_micro -m "this is the latest commit"
-git push origin master
+git push origin master --follow-tags
 //after sucessful rollout
 
 prepare for next release:
