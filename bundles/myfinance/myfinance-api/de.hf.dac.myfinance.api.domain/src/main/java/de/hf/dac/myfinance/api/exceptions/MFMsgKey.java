@@ -31,6 +31,7 @@ public enum MFMsgKey implements MsgKey {
     EXECUTION_EXCEPTION(10102),
     // 15000 - 19999: hibernate, database, sybase
     NO_TARGET_CONFIG_EXCEPTION(15001),
+    UNABLE_TO_CREATE_ENTITYMANAGER_EXCEPTION(15002),
     // 20000 - 20999: memory, caching, couchbase
     // 21000 - 24999: imports and calculation
     NO_RESPONSE_FROM_URL_EXCEPTION(21001),

@@ -103,14 +103,14 @@ public class MFEnvironmentBuilderModule extends AbstractModule {
     }
 
     private EntityManagerFactory provideEntityManagerFactory(String targetName, ClassLoader classLoader) {
-        Optional<EnvironmentTargetInfo> targetInfo = envService.getTarget(env, targetName);
-        EnvironmentTargetInfo dataTargetInfo = targetInfo.get();
-        DatabaseInfo dbi = (DatabaseInfo) dataTargetInfo.getTargetDetails();
+        var targetInfo = envService.getTarget(env, targetName);
         // TODO: 09.01.2017 die extra hibernate properties sollten aus dertabelle dacenvironmentconfiguration gelesen werden
             /* Properties extraHibernateProperties = new Properties();
             extraHibernateProperties.put("hibernate.hbm2ddl.auto", "create-drop");
             dbi.setExtraHibernateProperties(extraHibernateProperties);*/
         if (targetInfo.isPresent()) {
+            var dataTargetInfo = targetInfo.get();
+            DatabaseInfo dbi = (DatabaseInfo) dataTargetInfo.getTargetDetails();
             return new WrappedEntityManagerFactory(jtaManager,
                 emfb.getOrCreateEntityManagerFactory(targetName, EntityManagerFactorySetup.PoolSize.SMALL, new Class[] {},
                     new ClassLoader[] { classLoader }, dbi));
@@ -119,5 +119,4 @@ public class MFEnvironmentBuilderModule extends AbstractModule {
                 "No Config for Target " + targetName + " and Environment " + env + " found.");
         }
     }
-
 }

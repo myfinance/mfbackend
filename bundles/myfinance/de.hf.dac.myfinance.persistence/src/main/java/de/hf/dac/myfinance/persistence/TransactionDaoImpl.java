@@ -137,13 +137,15 @@ public class TransactionDaoImpl  extends BaseDao<Transaction> implements Transac
             Query query = marketDataEm.createQuery("select a FROM Transaction a WHERE transactionid= :transactionid");
             query.setParameter("transactionid", transactionid);
             Optional<Transaction> transaction = getFirstQueryResult(query);
-            Transaction newTransaction = transaction.get();
-            newTransaction.setDescription(description);
-            newTransaction.setTransactiondate(transactionDate);
-            newTransaction.setLastchanged(ts);
-            marketDataEm.getTransaction().begin();
-            marketDataEm.persist(newTransaction);
-            marketDataEm.getTransaction().commit();
+            if(transaction.isPresent()) {
+                Transaction newTransaction = transaction.get();
+                newTransaction.setDescription(description);
+                newTransaction.setTransactiondate(transactionDate);
+                newTransaction.setLastchanged(ts);
+                marketDataEm.getTransaction().begin();
+                marketDataEm.persist(newTransaction);
+                marketDataEm.getTransaction().commit();
+            }
         } finally {
             marketDataEm.close();
         }

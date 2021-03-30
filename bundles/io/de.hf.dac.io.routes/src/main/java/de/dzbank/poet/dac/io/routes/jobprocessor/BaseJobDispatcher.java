@@ -76,8 +76,10 @@ public class BaseJobDispatcher implements JobDispatcher<JobParameter> {
             LOG.info("Dispatching JobParameter {} ", (job != null ? job.getClass().getName() : "null"));
             // Wrap and remmeber job information. Assign unique id as well
             JobInformation jobInfo = registerJob(job);
-            routingContext.sendMessage(DIRECT_VM_DAC_JOB_IN, jobInfo.getPayload());
-            return jobInfo;
+            if(jobInfo!=null) {
+                routingContext.sendMessage(DIRECT_VM_DAC_JOB_IN, jobInfo.getPayload());
+                return jobInfo;
+            }
         }
         return new JobInformation(UUID.randomUUID().toString());
     }
@@ -149,7 +151,7 @@ public class BaseJobDispatcher implements JobDispatcher<JobParameter> {
         String[] ids = handler.getRoutingIDs();
 
         for (String id : ids) {
-            JobHandler jobHandler = this.routingidToHandlerMap.get(id);
+            var jobHandler = this.routingidToHandlerMap.get(id);
             if (jobHandler != null) {
                 jobHandler.postUnBind();
             }

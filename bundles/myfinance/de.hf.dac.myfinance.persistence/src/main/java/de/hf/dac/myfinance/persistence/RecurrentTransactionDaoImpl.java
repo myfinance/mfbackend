@@ -71,13 +71,15 @@ public class RecurrentTransactionDaoImpl  extends BaseDao<RecurrentTransaction> 
             Query query = marketDataEm.createQuery("select a FROM RecurrentTransaction a WHERE recurrenttransactionid= :recurrenttransactionid");
             query.setParameter("recurrenttransactionid", recurrenttransactionid);
             Optional<RecurrentTransaction> transaction = getFirstQueryResult(query);
-            RecurrentTransaction newTransaction = transaction.get();
-            newTransaction.setDescription(description);
-            newTransaction.setNexttransaction(nexttransactionDate);
-            newTransaction.setValue(value);
-            marketDataEm.getTransaction().begin();
-            marketDataEm.persist(newTransaction);
-            marketDataEm.getTransaction().commit();
+            if(transaction.isPresent()) {
+                RecurrentTransaction newTransaction = transaction.get();
+                newTransaction.setDescription(description);
+                newTransaction.setNexttransaction(nexttransactionDate);
+                newTransaction.setValue(value);
+                marketDataEm.getTransaction().begin();
+                marketDataEm.persist(newTransaction);
+                marketDataEm.getTransaction().commit();
+            }
         } finally {
             marketDataEm.close();
         }

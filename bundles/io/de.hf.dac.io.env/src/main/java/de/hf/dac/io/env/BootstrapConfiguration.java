@@ -135,7 +135,7 @@ public class BootstrapConfiguration implements Serializable {
         }
 
         String dbdriver = parts[3];
-        if (dbUrl == null) {
+        if (dbdriver == null) {
             throw new RuntimeException("dbdriver not found not for DB " + loginInfoAlias + " in res files");
         }
         DatabaseInfo dbinfo = new DatabaseInfo(dbUrl, dbUser, dbPasswd, dbdriver, null, null);
