@@ -25,6 +25,8 @@ import de.hf.dac.api.io.efmb.EntityManagerFactorySetup;
 import de.hf.dac.api.io.env.EnvironmentService;
 import de.hf.dac.api.io.env.EnvironmentTargetInfo;
 import de.hf.dac.myfinance.api.application.EnvTarget;
+import de.hf.dac.myfinance.api.exceptions.MFException;
+import de.hf.dac.myfinance.api.exceptions.MFMsgKey;
 
 import javax.persistence.EntityManagerFactory;
 
@@ -53,21 +55,28 @@ public class MFSecurityApplicationContextModule extends AbstractModule {
     }
 
     EntityManagerFactory provideSdbEntityManagerFactory() {
-        EnvironmentTargetInfo sdbTargetInfo = envService.getTarget(env, EnvTarget.SDB).get();
-        DatabaseInfo dbi = (DatabaseInfo) sdbTargetInfo.getTargetDetails();
         EntityManagerFactory emf = null;
-        try {
-            emf = emfb
-                .getOrCreateEntityManagerFactory(
-                    this.buildPersistenceUnitName("SECURITY"),
-                    EntityManagerFactorySetup.PoolSize.SMALL,
-                    new Class[] {},
-                    new ClassLoader[] { DacRestauthorization.class.getClassLoader() },
-                    dbi
-                );
-        }
-        catch (Exception ex) {
-            throw new RuntimeException(ex);
+        var sdbTargetInfoOptional = envService.getTarget(env, EnvTarget.SDB);
+        if(sdbTargetInfoOptional.isPresent()) {
+            var sdbTargetInfo = sdbTargetInfoOptional.get();
+            DatabaseInfo dbi = (DatabaseInfo) sdbTargetInfo.getTargetDetails();
+            try {
+                emf = emfb
+                    .getOrCreateEntityManagerFactory(
+                        this.buildPersistenceUnitName("SECURITY"),
+                        EntityManagerFactorySetup.PoolSize.SMALL,
+                        new Class[] {},
+                        new ClassLoader[] { DacRestauthorization.class.getClassLoader() },
+                        dbi
+                    );
+            }
+            catch (Exception ex) {
+                throw new MFException(MFMsgKey.UNABLE_TO_CREATE_ENTITYMANAGER_EXCEPTION,
+                "Unable to create EntityManagerFactory:" + ex);
+            }
+        } else {
+            throw new MFException(MFMsgKey.NO_TARGET_CONFIG_EXCEPTION,
+                "No Config for Target " + EnvTarget.SDB + " and Environment " + env + " found.");
         }
         return emf;
     }

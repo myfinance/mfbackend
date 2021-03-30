@@ -25,11 +25,13 @@ public class CashflowDaoImpl extends BaseDao<Cashflow> implements CashflowDao {
             Query query = marketDataEm.createQuery("select a FROM Cashflow a WHERE cashflowid= :cashflowid");
             query.setParameter("cashflowid", cashflowid);
             Optional<Cashflow> cashflow = getFirstQueryResult(query);
-            Cashflow newCashflow = cashflow.get();
-            newCashflow.setValue(value);
-            marketDataEm.getTransaction().begin();
-            marketDataEm.persist(newCashflow);
-            marketDataEm.getTransaction().commit();
+            if(cashflow.isPresent()) {
+                Cashflow newCashflow = cashflow.get();
+                newCashflow.setValue(value);
+                marketDataEm.getTransaction().begin();
+                marketDataEm.persist(newCashflow);
+                marketDataEm.getTransaction().commit();
+            }
         } finally {
             marketDataEm.close();
         }

@@ -155,12 +155,14 @@ public class InstrumentDaoImpl extends BaseDao<Instrument> implements Instrument
             Query query = marketDataEm.createQuery("select a FROM Instrument a WHERE instrumentid = :instrumentid");
             query.setParameter("instrumentid", instrumentId);
             Optional<Instrument> instrument = getFirstQueryResult(query);
-            Instrument newInstrument = instrument.get();
-            newInstrument.setDescription(description);
-            newInstrument.setIsactive(isActive);
-            marketDataEm.getTransaction().begin();
-            marketDataEm.persist(newInstrument);
-            marketDataEm.getTransaction().commit();
+            if(instrument.isPresent()) {
+                Instrument newInstrument = instrument.get();
+                newInstrument.setDescription(description);
+                newInstrument.setIsactive(isActive);
+                marketDataEm.getTransaction().begin();
+                marketDataEm.persist(newInstrument);
+                marketDataEm.getTransaction().commit();
+            }
         } finally {
             marketDataEm.close();
         }
