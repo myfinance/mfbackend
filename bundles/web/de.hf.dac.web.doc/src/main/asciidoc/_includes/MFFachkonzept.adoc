@@ -483,17 +483,11 @@ Die dynamische Berechnung der Überschüsse ist starken schwankungen ausgesetzt 
 Wie oben angedeutet besitz jede Immobilie eine eigene BudgetGruppe. Dies ist so damit zur Verwaltung einer Immobilie extra Budgets angelegt werden können
 z.B. für regelmäßige Wartungskosten etc.
 
-
-investitionen in das haus(zb wohnungsausbau) werden als kredit von mandanten zu sich selber dargestellt dass das haus mit zins und tilgung zurückzahlt. Dies wird aber nicht extra in der Datenbank abgelegt sondern nur in der Berechnung des wertes und der rendite der oben genannten sicht beruecksichtigt.
-alle sonstigen kosten und rücklagen werden über budget geglättet -> alle hausbudget spielen keine rolle für den hauswert bzw dessen rendite
-
 Hauseinnahmen fuellen Hausbudget. Dies gilt auch fuer das Eigenheim. Hier ist die Einnahme die virtuale Miete des Mandanten an sich selbst. Dabei ist zu beachten das die Miete an sich selbst durch eine ausgabe auf einem nicht hausbudget und einer einnahme auf dem haus abgebildet wird. Dies deckt hier anfangs aber nur Zinsen. Die Tilgung sollte wieder ueber einen Kredit an sich selbst abgebildet werden.
 
 wertsteigernde investitionen werden durch ausgaben auf budgets ausserhalb der hausbudgetgruppe dargestellt(aehnlich wie trade). Der Hauswert sollte sich entsprechend steigern durch erhoehten ertrag. Ggf muss noch ein link zu der investition hergestellt werden
 
 Wertsteigernde Investitionen werden wie der initiale Kaufpreis als Ausgabe auf der common budgetgroup abgebildet mit einem link(refaccount) zu der immobilie
-
-Investitionen werden als ausgabe auf commonbudget mit referenz auf das haus abgebildet
 
 Der LiquidityType ist LongTerm
 
