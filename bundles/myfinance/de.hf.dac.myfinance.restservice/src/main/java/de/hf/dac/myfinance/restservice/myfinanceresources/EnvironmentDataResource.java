@@ -335,6 +335,22 @@ public class EnvironmentDataResource extends BaseSecuredResource<OpType,OpLevel>
     }
 
     @POST
+    @Path("/addRealestate")
+    @Produces(MediaType.APPLICATION_JSON)
+    @ApiOperation(value = "save Realestate")
+    @ApiResponses(value = {
+        @ApiResponse(code = HttpStatus.SC_NO_CONTENT, message = "added"),
+        @ApiResponse(code = HttpStatus.SC_INTERNAL_SERVER_ERROR, message = "Something wrong in Server")})
+    public Response addRealestate(@QueryParam("description") @ApiParam(value="description") String description,
+        @QueryParam("tenantId") @ApiParam(value="the Id of the tenant which the realestate is attached to") int tenantId,
+        @QueryParam("acquisitiondate") @ApiParam(value="the date of acquirement of the realestate") String acquisitiondate,
+        @QueryParam("valueBudgetId") @ApiParam(value="the budget to add the value of the realestate") int valueBudgetId) {
+        checkOperationAllowed(OpType.WRITE);
+        marketDataEnvironment.getInstrumentService().newGiroAccount(description, tenantId, LocalDateTime.now());
+        return Response.ok().build();
+    }
+
+    @POST
     @Path("/addIncomeExpense")
     @Produces(MediaType.APPLICATION_JSON)
     @ApiOperation(value = "save Income or Expense")
