@@ -34,6 +34,7 @@ import de.hf.dac.myfinance.api.restservice.InstrumentListModel;
 import de.hf.dac.myfinance.api.restservice.InstrumentModel;
 import de.hf.dac.myfinance.api.restservice.RecurrentTransactionListModel;
 import de.hf.dac.myfinance.api.restservice.TransactionListModel;
+import de.hf.dac.myfinance.api.restservice.ValuePerDateModel;
 import de.hf.dac.myfinance.restservice.myfinanceresources.leafresources.*;
 import de.hf.dac.services.resources.BaseSecuredResource;
 import io.swagger.annotations.ApiOperation;
@@ -346,7 +347,7 @@ public class EnvironmentDataResource extends BaseSecuredResource<OpType,OpLevel>
         @QueryParam("tenantId") @ApiParam(value="the Id of the tenant which the realestate is attached to") int tenantId,
         @QueryParam("acquisitiondate") @ApiParam(value="the date of acquirement of the realestate") String acquisitiondate,
         @QueryParam("valueBudgetId") @ApiParam(value="the budget to add the value of the realestate") int valueBudgetId,
-        @QueryParam("yieldgoal") @ApiParam(value="all yieldgoals with valid from date") List<String[]> yieldgoals) {
+        @QueryParam("yieldgoal") @ApiParam(value="all yieldgoals with valid from date") List<ValuePerDateModel> yieldgoals) {
         checkOperationAllowed(OpType.WRITE);
         //marketDataEnvironment.getInstrumentService().newGiroAccount(description, tenantId, LocalDateTime.now());
         return Response.ok().build();
