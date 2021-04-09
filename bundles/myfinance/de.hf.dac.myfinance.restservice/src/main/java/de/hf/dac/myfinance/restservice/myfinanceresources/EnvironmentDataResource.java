@@ -47,6 +47,7 @@ import javax.ws.rs.core.Response;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
 
 import org.apache.http.HttpStatus;
@@ -344,9 +345,10 @@ public class EnvironmentDataResource extends BaseSecuredResource<OpType,OpLevel>
     public Response addRealestate(@QueryParam("description") @ApiParam(value="description") String description,
         @QueryParam("tenantId") @ApiParam(value="the Id of the tenant which the realestate is attached to") int tenantId,
         @QueryParam("acquisitiondate") @ApiParam(value="the date of acquirement of the realestate") String acquisitiondate,
-        @QueryParam("valueBudgetId") @ApiParam(value="the budget to add the value of the realestate") int valueBudgetId) {
+        @QueryParam("valueBudgetId") @ApiParam(value="the budget to add the value of the realestate") int valueBudgetId,
+        @QueryParam("yieldgoal") @ApiParam(value="all yieldgoals with valid from date") List<String[]> yieldgoals) {
         checkOperationAllowed(OpType.WRITE);
-        marketDataEnvironment.getInstrumentService().newGiroAccount(description, tenantId, LocalDateTime.now());
+        //marketDataEnvironment.getInstrumentService().newGiroAccount(description, tenantId, LocalDateTime.now());
         return Response.ok().build();
     }
 
