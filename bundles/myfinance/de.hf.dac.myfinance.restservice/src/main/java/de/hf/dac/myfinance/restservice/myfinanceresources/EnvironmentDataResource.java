@@ -27,6 +27,7 @@ import de.hf.dac.myfinance.api.application.servicecontext.MDEnvironmentContext;
 import de.hf.dac.myfinance.api.domain.Equity;
 import de.hf.dac.myfinance.api.domain.InstrumentType;
 import de.hf.dac.myfinance.api.domain.RecurrentFrequency;
+import de.hf.dac.myfinance.api.domain.ValuePerDate;
 import de.hf.dac.myfinance.api.exceptions.MFException;
 import de.hf.dac.myfinance.api.exceptions.MFMsgKey;
 import de.hf.dac.myfinance.api.restservice.InstrumentDetailModel;
@@ -34,7 +35,6 @@ import de.hf.dac.myfinance.api.restservice.InstrumentListModel;
 import de.hf.dac.myfinance.api.restservice.InstrumentModel;
 import de.hf.dac.myfinance.api.restservice.RecurrentTransactionListModel;
 import de.hf.dac.myfinance.api.restservice.TransactionListModel;
-import de.hf.dac.myfinance.api.restservice.ValuePerDateModel;
 import de.hf.dac.myfinance.restservice.myfinanceresources.leafresources.*;
 import de.hf.dac.services.resources.BaseSecuredResource;
 import io.swagger.annotations.ApiOperation;
@@ -48,6 +48,7 @@ import javax.ws.rs.core.Response;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -347,9 +348,20 @@ public class EnvironmentDataResource extends BaseSecuredResource<OpType,OpLevel>
         @QueryParam("tenantId") @ApiParam(value="the Id of the tenant which the realestate is attached to") int tenantId,
         @QueryParam("acquisitiondate") @ApiParam(value="the date of acquirement of the realestate") String acquisitiondate,
         @QueryParam("valueBudgetId") @ApiParam(value="the budget to add the value of the realestate") int valueBudgetId,
-        @QueryParam("yieldgoal") @ApiParam(value="all yieldgoals with valid from date") List<ValuePerDateModel> yieldgoals) {
+        @QueryParam("yieldgoal") @ApiParam(value="all yieldgoals with valid from date") List<String> yieldgoals,
+        @QueryParam("realEstateProfit") @ApiParam(value="all realEstateProfits with valid from date") List<String> realEstateProfits) {
         checkOperationAllowed(OpType.WRITE);
-        //marketDataEnvironment.getInstrumentService().newGiroAccount(description, tenantId, LocalDateTime.now());
+        var yieldgoalList = new ArrayList<ValuePerDate>();
+        for (var entry : yieldgoals) {
+            yieldgoalList.add(new ValuePerDate(entry));
+
+        }
+        var realEstateProfitList = new ArrayList<ValuePerDate>();
+        for (var entry : realEstateProfits) {
+            realEstateProfitList.add(new ValuePerDate(entry));
+
+        }
+        marketDataEnvironment.getInstrumentService().newRealEstate(description, tenantId, LocalDate.parse(acquisitiondate), valueBudgetId, yieldgoalList, realEstateProfitList, LocalDateTime.now());
         return Response.ok().build();
     }
 

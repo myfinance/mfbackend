@@ -18,6 +18,8 @@
 package de.hf.dac.myfinance.api.service;
 
 import de.hf.dac.myfinance.api.domain.*;
+
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
@@ -38,6 +40,7 @@ public interface InstrumentService {
     void updateInstrument(int instrumentId, String description, boolean isActive);
     void newBudget(String description, int budgetGroupId, LocalDateTime ts);
     void newGiroAccount(String description, int tenantId, LocalDateTime ts);
+    void newRealEstate(String description, int tenantId, LocalDate acquisitiondate, int valueBudgetId, List<ValuePerDate> yieldgoals, List<ValuePerDate> realEstateProfits, LocalDateTime ts);
     Optional<Instrument> getCurrency(String currencyCode);
     Optional<Equity> getEquity(String isin);
     List<Instrument> getSecurities();

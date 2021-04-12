@@ -287,6 +287,11 @@ public class InstrumentServiceImpl implements InstrumentService {
     }
 
     @Override
+    void newRealEstate(String description, int tenantId, LocalDate acquisitiondate, int valueBudgetId, List<ValuePerDate> yieldgoals, List<ValuePerDate> realEstateProfits, LocalDateTime ts) {
+
+    }
+
+    @Override
     public void updateInstrument(int instrumentId, String description, boolean isActive) {
         Optional<Instrument> instrument = instrumentDao.getInstrument(instrumentId);
         if(!instrument.isPresent()){
