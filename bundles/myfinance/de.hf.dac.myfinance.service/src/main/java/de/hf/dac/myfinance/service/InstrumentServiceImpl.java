@@ -287,8 +287,23 @@ public class InstrumentServiceImpl implements InstrumentService {
     }
 
     @Override
-    void newRealEstate(String description, int tenantId, LocalDate acquisitiondate, int valueBudgetId, List<ValuePerDate> yieldgoals, List<ValuePerDate> realEstateProfits, LocalDateTime ts) {
+    public void newRealEstate(String description, int tenantId, LocalDate acquisitiondate, int valueBudgetId, List<ValuePerDate> yieldgoals, List<ValuePerDate> realEstateProfits, LocalDateTime ts) {
+        Optional<Instrument> accportfolio = instrumentDao.getAccountPortfolio(tenantId);
+        if(!accportfolio.isPresent()) {
+            throw new MFException(MFMsgKey.UNKNOWN_INSTRUMENT_EXCEPTION,  "RealEstate not saved: tenant for the id:"+tenantId+" not exists or has no accountPortfolio");
+        }
+        RealEstate realEstate = new RealEstate(description, true, ts);
+        auditService.saveMessage("new RealEstate inserted:" + description, Severity.INFO, AUDIT_MSG_TYPE);
+        instrumentDao.saveInstrument(realEstate);
+        addInstrumentToGraph(realEstate.getInstrumentid(), accportfolio.get().getInstrumentid(), EdgeType.TENANTGRAPH);
+    }
 
+    private void updateInstrumentPropertyList(int instrumentId, InstrumentPropertyType propertyType, List<ValuePerDate> values) {
+        //todo: delete all properties for this instrumentid and propertype 
+        for(var value : values) {
+            var properties = new InstrumentProperties(propertyType, instrumentId, value.getValue(), propertyType.getValueType(), value.getDate(), null);
+        }
+        
     }
 
     @Override

@@ -17,4 +17,8 @@ public class ValuePerDate {
         return value;
     }
 
+    public LocalDate getDate() {
+        return date;
+    }
+
 }
