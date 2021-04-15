@@ -296,14 +296,29 @@ public class InstrumentServiceImpl implements InstrumentService {
         auditService.saveMessage("new RealEstate inserted:" + description, Severity.INFO, AUDIT_MSG_TYPE);
         instrumentDao.saveInstrument(realEstate);
         addInstrumentToGraph(realEstate.getInstrumentid(), accportfolio.get().getInstrumentid(), EdgeType.TENANTGRAPH);
+        saveYieldgoals(realEstate.getInstrumentid(), yieldgoals);
+        saveRealestateProfits(realEstate.getInstrumentid(), realEstateProfits);
     }
 
-    private void updateInstrumentPropertyList(int instrumentId, InstrumentPropertyType propertyType, List<ValuePerDate> values) {
-        //todo: delete all properties for this instrumentid and propertype 
-        for(var value : values) {
-            var properties = new InstrumentProperties(propertyType, instrumentId, value.getValue(), propertyType.getValueType(), value.getDate(), null);
+    private void deleteInstrumentPropertyList(int instrumentId) {
+        var instrumentProperties = instrumentDao.getInstrumentProperties(instrumentId);
+        for (InstrumentProperties instrumentProperty : instrumentProperties) {
+            auditService.saveMessage(instrumentDao.deleteInstrumentProperty(instrumentProperty.getPropertyid()),
+                Severity.INFO, AUDIT_MSG_TYPE);
         }
         
+    }
+
+    private void saveYieldgoals(int instrumentId, List<ValuePerDate> values) {
+        for(var value : values) {
+            instrumentDao.saveInstrumentProperty(new InstrumentProperties(InstrumentPropertyType.YIELDGOAL.getValueType(), instrumentId, String.valueOf(value.getValue()), InstrumentPropertyType.YIELDGOAL.getValueType(), value.getDate(), null));
+        } 
+    }
+
+    private void saveRealestateProfits(int instrumentId, List<ValuePerDate> values) {
+        for(var value : values) {
+            instrumentDao.saveInstrumentProperty(new InstrumentProperties(InstrumentPropertyType.REALESTATEPROFITS.getValueType(), instrumentId, String.valueOf(value.getValue()), InstrumentPropertyType.REALESTATEPROFITS.getValueType(), value.getDate(), null));
+        } 
     }
 
     @Override

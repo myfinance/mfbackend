@@ -25,8 +25,6 @@ import java.util.Optional;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Query;
-
-import de.hf.dac.myfinance.api.domain.Instrument;
 import de.hf.dac.myfinance.api.domain.InstrumentType;
 import de.hf.dac.myfinance.api.domain.InstrumentTypeGroup;
 
@@ -40,7 +38,7 @@ public abstract class BaseDao<T> {
 
     protected final RepositoryService repositoryService = new RepositoryService();
 
-    public BaseDao(EntityManagerFactory marketDataEmf) {
+    protected BaseDao(EntityManagerFactory marketDataEmf) {
         this.marketDataEmf = marketDataEmf;
         marketDataEm = this.marketDataEmf.createEntityManager();
     }
@@ -90,7 +88,7 @@ public abstract class BaseDao<T> {
     }
 
     protected List<Integer> getInstrumentTypeIds() {
-        List instrumentTypeIds = new ArrayList<Integer>();
+        var instrumentTypeIds = new ArrayList<Integer>();
         EnumSet.allOf(InstrumentType.class).stream().filter(i->i.getTypeGroup()== InstrumentTypeGroup.SECURITY)
                .forEach(i-> instrumentTypeIds.add(i.getValue()));
         return instrumentTypeIds;
