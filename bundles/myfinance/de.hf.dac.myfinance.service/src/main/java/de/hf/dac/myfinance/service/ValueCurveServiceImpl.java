@@ -59,13 +59,9 @@ public class ValueCurveServiceImpl implements ValueCurveService {
     public TreeMap<LocalDate, Double> getValueCurve(int instrumentId){
         TreeMap<LocalDate, Double> valueCurve = cache.getValueCurve(instrumentId);
         if(valueCurve==null){
-            Optional<Instrument> instrument = instrumentService.getInstrument(instrumentId);
-            if(instrument.isPresent()){
-                valueCurve = getValueHandler(instrument.get().getInstrumentType()).calcValueCurve(instrument.get());
-                cache.addValueCurve(instrumentId, valueCurve);
-            } else {
-                throw new MFException(MFMsgKey.NO_INSTRUMENT_FOUND_EXCEPTION, "Instrument with id:"+instrumentId+" not found");
-            }
+            var instrument = instrumentService.getInstrument(instrumentId);
+            valueCurve = getValueHandler(instrument.getInstrumentType()).calcValueCurve(instrument);
+            cache.addValueCurve(instrumentId, valueCurve);
 
         }
         return valueCurve;

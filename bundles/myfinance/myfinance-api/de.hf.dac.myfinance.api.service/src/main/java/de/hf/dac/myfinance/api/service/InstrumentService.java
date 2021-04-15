@@ -31,7 +31,8 @@ public interface InstrumentService {
     List<Instrument> listInstruments(int tenantId, InstrumentType instrumentType, boolean onlyActive);
     List<Instrument> listAccounts(int tenantId);
     List<Instrument> listTenants();
-    Optional<Instrument> getInstrument(int instrumentId);
+    Instrument getInstrument(int instrumentId);
+    Instrument getInstrument(int instrumentId, String errMsg);
     Optional<Integer> getRootInstrument(int instrumentId, EdgeType edgeType);
     List<InstrumentGraphEntry> getAncestorGraphEntries(int instrumentId, EdgeType edgeType);
     List<Instrument> getInstrumentChilds(int instrumentId, EdgeType edgeType, int pathlength);
@@ -41,6 +42,7 @@ public interface InstrumentService {
     void newBudget(String description, int budgetGroupId, LocalDateTime ts);
     void newGiroAccount(String description, int tenantId, LocalDateTime ts);
     void newRealEstate(String description, int tenantId, LocalDate acquisitiondate, int valueBudgetId, List<ValuePerDate> yieldgoals, List<ValuePerDate> realEstateProfits, LocalDateTime ts);
+    void updateRealEstate(int instrumentId, String description, List<ValuePerDate> yieldgoals, List<ValuePerDate> realEstateProfits, boolean isActive);
     Optional<Instrument> getCurrency(String currencyCode);
     Optional<Equity> getEquity(String isin);
     List<Instrument> getSecurities();
