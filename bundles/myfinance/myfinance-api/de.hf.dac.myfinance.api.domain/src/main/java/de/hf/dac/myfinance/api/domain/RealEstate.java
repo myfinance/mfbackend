@@ -19,6 +19,6 @@ public class RealEstate  extends Instrument {
     }
 
     public RealEstate(String description, boolean isactive, LocalDateTime treelastchanged){
-        super(InstrumentType.RealEstate, description, isactive, treelastchanged);
+        super(InstrumentType.REALESTATE, description, isactive, treelastchanged);
     }
 }

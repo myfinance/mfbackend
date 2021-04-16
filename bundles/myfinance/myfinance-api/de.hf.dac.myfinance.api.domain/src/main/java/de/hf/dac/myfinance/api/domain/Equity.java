@@ -36,7 +36,7 @@ public class Equity extends Instrument {
     }
 
     public Equity(String isin, String description, boolean isactive, LocalDateTime treelastchanged){
-        super(InstrumentType.Equity, description, isactive, treelastchanged);
+        super(InstrumentType.EQUITY, description, isactive, treelastchanged);
         setBusinesskey(isin);
     }
 

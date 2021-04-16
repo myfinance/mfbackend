@@ -82,6 +82,8 @@ Es gibt verschiedene Arten von Beziehungen die über den Edgetype abgebildet wer
  * RealEstateBudgetGroup: An jede Immobilie wird eine BudgetGroup gehängt über die die budgetierung erfolgt
  * incomeBudget: Einer BudgetGroup(ancestor) kann genau ein incomeBudget zugewiesen werden. Wird verwendet als StandardBudget zur Verbuchung von regelmäßigen Einnahmen z.B. Loan
 
+Tenent-Graph:
+
 [plantuml]
 ....
 @startuml
@@ -103,8 +105,10 @@ rectangle Bauspardarlehen
 rectangle Haus
 rectangle HausBudgetGroup
 
-Tenant --> BudgetGroup
+Tenant --> BudgetPortfolio
 Tenant --> AccountPortfolio
+BudgetPortfolio --> BudgetGroup
+BudgetPortfolio --> HausBudgetGroup
 BudgetGroup --> Budget1
 BudgetGroup --> Budget2
 AccountPortfolio --> Depot1
@@ -116,6 +120,22 @@ AccountPortfolio --> Haus
 Haus --> HausBudgetGroup
 HausBudgetGroup --> Budget3
 HausBudgetGroup --> Budget4
+
+@enduml
+....
+
+RealEstateBudgetGroup:
+
+[plantuml]
+....
+@startuml
+!pragma graphviz_dot jdot
+skinparam componentStyle uml2
+
+rectangle Haus
+rectangle HausBudgetGroup
+
+Haus --> HausBudgetGroup
 
 @enduml
 ....

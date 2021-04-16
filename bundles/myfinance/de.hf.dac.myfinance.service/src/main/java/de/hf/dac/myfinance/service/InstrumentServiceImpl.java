@@ -44,9 +44,10 @@ public class InstrumentServiceImpl implements InstrumentService {
     private ValueCurveService service;
     private AuditService auditService;
     private static final String AUDIT_MSG_TYPE="InstrumentService_User_Event";
-    private final static String DEFAULT_BUDGETGROUP_PREFIX = "budgetGroup_";
-    private final static String DEFAULT_INCOMEBUDGET_PREFIX = "incomeBudget_";
-    private final static String DEFAULT_ACCPF_PREFIX = "accountPf_";
+    private static final String DEFAULT_BUDGETGROUP_PREFIX = "budgetGroup_";
+    private static final String DEFAULT_INCOMEBUDGET_PREFIX = "incomeBudget_";
+    private static final String DEFAULT_ACCPF_PREFIX = "accountPf_";
+    private static final String DEFAULT_BUDGETPF_PREFIX = "budgetPf_";
 
     @Inject
     public InstrumentServiceImpl(InstrumentDao instrumentDao, RecurrentTransactionDao recurrentTransactionDao, WebRequestService webRequestService, AuditService auditService, ValueCurveService service ){
@@ -121,7 +122,7 @@ public class InstrumentServiceImpl implements InstrumentService {
         if(childs==null || childs.isEmpty()) {
             return accs;
         }
-        Optional<Instrument> accPF = childs.stream().filter(i -> i.getInstrumentType().equals(InstrumentType.AccountPortfolio)).findFirst();
+        Optional<Instrument> accPF = childs.stream().filter(i -> i.getInstrumentType().equals(InstrumentType.ACCOUNTPORTFOLIO)).findFirst();
         if(!accPF.isPresent()) {
             return accs;
         }
@@ -145,7 +146,7 @@ public class InstrumentServiceImpl implements InstrumentService {
 
     @Override
     public List<Instrument> listTenants(){
-        return instrumentDao.listInstruments().stream().filter(i->i.getInstrumentType().equals(InstrumentType.Tenant)).collect(Collectors.toList());
+        return instrumentDao.listInstruments().stream().filter(i->i.getInstrumentType().equals(InstrumentType.TENANT)).collect(Collectors.toList());
     }
 
     @Override
@@ -224,9 +225,9 @@ public class InstrumentServiceImpl implements InstrumentService {
         auditService.saveMessage("Tenant inserted:" + description, Severity.INFO, AUDIT_MSG_TYPE);
         addInstrumentToGraph(tenant.getInstrumentid(),tenant.getInstrumentid(),EdgeType.TENANTGRAPH);
 
-        int budgetGroupId = newBudgetGroup(DEFAULT_BUDGETGROUP_PREFIX+description, tenant.getInstrumentid(), ts);
-        int incomeBudgetId = createBudget(DEFAULT_INCOMEBUDGET_PREFIX+description, budgetGroupId, ts);
-        addInstrumentToGraph(incomeBudgetId, budgetGroupId, EdgeType.INCOMEBUDGET);
+        int budgetPfId = newBudgetPortfolio(DEFAULT_BUDGETPF_PREFIX+description, ts);
+        addInstrumentToGraph(budgetPfId, tenant.getInstrumentid(), EdgeType.TENANTGRAPH);
+        newBudgetGroup(description, budgetPfId, ts);
         int accPfId = newAccountPortfolio(DEFAULT_ACCPF_PREFIX+description, ts);
         addInstrumentToGraph(accPfId, tenant.getInstrumentid(), EdgeType.TENANTGRAPH);
     }
@@ -254,7 +255,7 @@ public class InstrumentServiceImpl implements InstrumentService {
         if(!budgetGroup.isPresent()){
             throw new MFException(MFMsgKey.UNKNOWN_BUDGETGROUP_EXCEPTION, "Budget not saved: unknown budgetGroupId:"+budgetGroupId);
         }
-        if(budgetGroup.get().getInstrumentType() != InstrumentType.BudgetGroup){
+        if(budgetGroup.get().getInstrumentType() != InstrumentType.BUDGETGROUP){
             throw new MFException(MFMsgKey.UNKNOWN_BUDGETGROUP_EXCEPTION,  "Budget not saved: Instrument with Id "+budgetGroupId + " is not a Budgetgroup");
         }
         createBudget(description, budgetGroupId, ts);
@@ -269,12 +270,14 @@ public class InstrumentServiceImpl implements InstrumentService {
         return budgetId;
     }
 
-    protected int newBudgetGroup(String description, int tenantId, LocalDateTime ts) {
-        BudgetGroup budgetGroup = new BudgetGroup(description, true, ts);
+    protected int newBudgetGroup(String description, int budgetPFId, LocalDateTime ts) {
+        BudgetGroup budgetGroup = new BudgetGroup(DEFAULT_BUDGETGROUP_PREFIX+description, true, ts);
         instrumentDao.saveInstrument(budgetGroup);
         int budgetGroupId = budgetGroup.getInstrumentid();
-        addInstrumentToGraph(budgetGroupId, tenantId, EdgeType.TENANTGRAPH);
+        addInstrumentToGraph(budgetGroupId, budgetPFId, EdgeType.TENANTGRAPH);
         addInstrumentToGraph(budgetGroupId,budgetGroupId,EdgeType.INCOMEBUDGET);
+        int incomeBudgetId = createBudget(DEFAULT_INCOMEBUDGET_PREFIX+description, budgetGroupId, ts);
+        addInstrumentToGraph(incomeBudgetId, budgetGroupId, EdgeType.INCOMEBUDGET);
         return budgetGroupId;
     }
 
@@ -282,6 +285,12 @@ public class InstrumentServiceImpl implements InstrumentService {
         AccountPortfolio accountPortfolio = new AccountPortfolio(description, true, ts);
         instrumentDao.saveInstrument(accountPortfolio);
         return accountPortfolio.getInstrumentid();
+    }
+
+    protected int newBudgetPortfolio(String description, LocalDateTime ts) {
+        var budgetPortfolio = new  BudgetPortfolio(description, true, ts);
+        instrumentDao.saveInstrument(budgetPortfolio);
+        return budgetPortfolio.getInstrumentid();
     }
 
     @Override
@@ -302,12 +311,17 @@ public class InstrumentServiceImpl implements InstrumentService {
         if(!accportfolio.isPresent()) {
             throw new MFException(MFMsgKey.UNKNOWN_INSTRUMENT_EXCEPTION,  "RealEstate not saved: tenant for the id:"+tenantId+" not exists or has no accountPortfolio");
         }
+        Optional<Instrument> budgetportfolio = instrumentDao.getBudgetPortfolio(tenantId);
+        if(!budgetportfolio.isPresent()) {
+            throw new MFException(MFMsgKey.UNKNOWN_INSTRUMENT_EXCEPTION,  "RealEstate not saved: tenant for the id:"+tenantId+" not exists or has no budgetPortfolio");
+        }
         RealEstate realEstate = new RealEstate(description, true, ts);
         auditService.saveMessage("new RealEstate inserted:" + description, Severity.INFO, AUDIT_MSG_TYPE);
         instrumentDao.saveInstrument(realEstate);
         addInstrumentToGraph(realEstate.getInstrumentid(), accportfolio.get().getInstrumentid(), EdgeType.TENANTGRAPH);
         saveYieldgoals(realEstate.getInstrumentid(), yieldgoals);
         saveRealestateProfits(realEstate.getInstrumentid(), realEstateProfits);
+        newBudgetGroup(description, budgetportfolio.get().getInstrumentid(), ts);
     }
 
     @Override
@@ -345,7 +359,7 @@ public class InstrumentServiceImpl implements InstrumentService {
         validateInstrument4Inactivation(instrument.getInstrumentid(), instrument.getInstrumentType(), instrument.isIsactive(),  isActive);
         String oldDesc = instrument.getDescription();
         instrumentDao.updateInstrument(instrumentId, description, isActive);
-        if(instrument.getInstrumentType()==InstrumentType.Tenant) {
+        if(instrument.getInstrumentType()==InstrumentType.TENANT) {
             List<Instrument> instruments = instrumentDao.listInstruments();
             renameDefaultTenantChild(instrumentId, description, oldDesc, DEFAULT_BUDGETGROUP_PREFIX, instruments);
             renameDefaultTenantChild(instrumentId, description, oldDesc, DEFAULT_ACCPF_PREFIX, instruments);
@@ -357,10 +371,10 @@ public class InstrumentServiceImpl implements InstrumentService {
         // try to deactivate instrument ?
         if(!isActiveAfterUpdate && isActiveBeforeUpdate) {
             if( !(
-                instrumentType==InstrumentType.Tenant
-                || instrumentType==InstrumentType.Giro
-                || instrumentType==InstrumentType.Budget
-                || instrumentType==InstrumentType.RealEstate
+                instrumentType==InstrumentType.TENANT
+                || instrumentType==InstrumentType.GIRO
+                || instrumentType==InstrumentType.BUDGET
+                || instrumentType==InstrumentType.REALESTATE
                 )
             ) {
                 throw new MFException(MFMsgKey.WRONG_INSTRUMENTTYPE_EXCEPTION, "instrument with id:"+instrumentId + " not deactivated. It is not allowed for type " + instrumentType);
@@ -373,14 +387,14 @@ public class InstrumentServiceImpl implements InstrumentService {
     }
 
     private void validateInstrumentValue4Inactivation(int instrumentId, InstrumentType instrumentType) {
-        if( (instrumentType==InstrumentType.Giro || instrumentType==InstrumentType.Budget|| instrumentType==InstrumentType.RealEstate) 
+        if( (instrumentType==InstrumentType.GIRO || instrumentType==InstrumentType.BUDGET|| instrumentType==InstrumentType.REALESTATE) 
             && service.getValue(instrumentId, LocalDate.MAX)!=0.0 ){
             throw new MFException(MFMsgKey.NO_VALID_INSTRUMENT_FOR_DEACTIVATION, "instrument with id:"+instrumentId + " not deactivated. The current value is not 0");
         }
     }
 
     private void validateRecurrentTransactions4InstrumentInactivation(int instrumentId, InstrumentType instrumentType) {
-        if(instrumentType==InstrumentType.Giro || instrumentType==InstrumentType.Budget) {
+        if(instrumentType==InstrumentType.GIRO || instrumentType==InstrumentType.BUDGET) {
             for (RecurrentTransaction r : recurrentTransactionDao.listRecurrentTransactions()) {
 
                 if( r.getInstrumentByInstrumentid1().getInstrumentid() == instrumentId ||

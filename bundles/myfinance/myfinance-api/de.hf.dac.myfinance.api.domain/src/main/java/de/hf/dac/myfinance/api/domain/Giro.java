@@ -30,6 +30,6 @@ public class Giro  extends Instrument {
     }
 
     public Giro(String description, boolean isactive, LocalDateTime treelastchanged){
-        super(InstrumentType.Giro, description, isactive, treelastchanged);
+        super(InstrumentType.GIRO, description, isactive, treelastchanged);
     }
 }

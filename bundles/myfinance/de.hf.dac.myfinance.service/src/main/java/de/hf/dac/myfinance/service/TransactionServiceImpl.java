@@ -54,11 +54,11 @@ public class TransactionServiceImpl implements TransactionService {
     @Override
     public void newIncomeExpense(String description, int accId, int budgetId, double value, LocalDate transactionDate, LocalDateTime ts){
         var account = instrumentService.getInstrument(accId, "IncomeExpense not saved. Unknown account:");
-        if(account.getInstrumentType()!=InstrumentType.Giro){
+        if(account.getInstrumentType()!=InstrumentType.GIRO){
             throw new MFException(MFMsgKey.UNKNOWN_INSTRUMENT_EXCEPTION, "IncomeExpense not saved: wrong instrument type:"+accId);
         }
         var budget = instrumentService.getInstrument(budgetId, "IncomeExpense not saved: unknown budget:");
-        if(budget.getInstrumentType()!=InstrumentType.Budget){
+        if(budget.getInstrumentType()!=InstrumentType.BUDGET){
             throw new MFException(MFMsgKey.UNKNOWN_INSTRUMENT_EXCEPTION, "IncomeExpense not saved: wrong instrument type:"+budgetId);
         }
         Optional<Integer> tenantOfAcc = instrumentService.getRootInstrument(accId, EdgeType.TENANTGRAPH);
@@ -71,9 +71,9 @@ public class TransactionServiceImpl implements TransactionService {
         }
         Transaction transaction = new Transaction(description, transactionDate, ts, TransactionType.INCOMEEXPENSES);
 
-        Cashflow accountCashflow = new Cashflow(account.get(), value);
+        Cashflow accountCashflow = new Cashflow(account, value);
         accountCashflow.setTransaction(transaction);
-        Cashflow budgetCashflow = new Cashflow(budget.get(), value);
+        Cashflow budgetCashflow = new Cashflow(budget, value);
         budgetCashflow.setTransaction(transaction);
         Set<Cashflow> cashflows = new HashSet<>();
         cashflows.add(accountCashflow);
@@ -93,9 +93,9 @@ public class TransactionServiceImpl implements TransactionService {
         var src = instrumentService.getInstrument(srcInstrumentId, "Transfer not saved:");
         TransactionType transactionType =TransactionType.TRANSFER;
         var trg = instrumentService.getInstrument(trgInstrumentId, "Transfer not saved:");
-        if(trg.getInstrumentType() == InstrumentType.Budget){
+        if(trg.getInstrumentType() == InstrumentType.BUDGET){
             transactionType =TransactionType.BUDGETTRANSFER;
-            if(src.getInstrumentType() != InstrumentType.Budget){
+            if(src.getInstrumentType() != InstrumentType.BUDGET){
                 throw new MFException(MFMsgKey.WRONG_INSTRUMENTTYPE_EXCEPTION, "Only transfers from budget to Budget or from Account to Account are allowed");
             }
         } else {
@@ -114,9 +114,9 @@ public class TransactionServiceImpl implements TransactionService {
         }
         Transaction transaction = new Transaction(description, transactionDate, ts, transactionType);
 
-        Cashflow srcCashflow = new Cashflow(src.get(), value * -1);
+        Cashflow srcCashflow = new Cashflow(src, value * -1);
         srcCashflow.setTransaction(transaction);
-        Cashflow trgCashflow = new Cashflow(trg.get(), value);
+        Cashflow trgCashflow = new Cashflow(trg, value);
         trgCashflow.setTransaction(transaction);
         Set<Cashflow> cashflows = new HashSet<>();
         cashflows.add(srcCashflow);
@@ -185,14 +185,14 @@ public class TransactionServiceImpl implements TransactionService {
         var src = instrumentService.getInstrument(srcInstrumentId, "RecurrentTransfer not saved:");
         RecurrentTransactionType recurrentTransactionType = RecurrentTransactionType.Transfer;
         var trg = instrumentService.getInstrument(trgInstrumentId, "RecurrentTransfer not saved:");
-        if(src.getInstrumentType() == InstrumentType.Budget && trg.getInstrumentType() == InstrumentType.Budget) {
+        if(src.getInstrumentType() == InstrumentType.BUDGET && trg.getInstrumentType() == InstrumentType.BUDGET) {
             recurrentTransactionType = RecurrentTransactionType.BudgetTransfer;
-        } else if (src.getInstrumentType() == InstrumentType.Budget) {
+        } else if (src.getInstrumentType() == InstrumentType.BUDGET) {
             if( !isAccountTransferAllowed(trg)) {
                 throw new MFException(MFMsgKey.WRONG_INSTRUMENTTYPE_EXCEPTION, "No Transfer allowed for this account:"+trgInstrumentId);
             }
             recurrentTransactionType = getRecurrentTransactiontype(value);
-        } else if (trg.getInstrumentType() == InstrumentType.Budget) {
+        } else if (trg.getInstrumentType() == InstrumentType.BUDGET) {
             if( !isAccountTransferAllowed(src)) {
                 throw new MFException(MFMsgKey.WRONG_INSTRUMENTTYPE_EXCEPTION, "No Transfer allowed for this account:"+srcInstrumentId);
             }
@@ -272,11 +272,11 @@ public class TransactionServiceImpl implements TransactionService {
 
     protected boolean isAccountTransferAllowed(Instrument instrument){
         switch(instrument.getInstrumentType()){
-            case Giro:
-            case MoneyAtCall:
-            case TimeDeposit:
-            case BuildingsavingAccount:
-            case LifeInsurance: return true;
+            case GIRO:
+            case MONEYATCALL:
+            case TIMEDEPOSIT:
+            case BUILDINGSAVINGACCOUNT:
+            case LIFEINSURANCE: return true;
             default: return false;
         }
     }

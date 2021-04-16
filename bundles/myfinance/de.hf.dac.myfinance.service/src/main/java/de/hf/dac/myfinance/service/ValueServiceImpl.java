@@ -86,7 +86,7 @@ public class ValueServiceImpl implements ValueService {
             instrumentDetails.putValue("valueChange", String.valueOf(valueChange));
             instrumentDetails.putValue("liquiditytype", String.valueOf(instrument.getInstrumentType().getLiquidityType()));
             valueMap.put(instrument.getInstrumentid(), instrumentDetails);
-            if(instrument.getInstrumentType() == InstrumentType.Budget || instrument.getInstrumentType() == InstrumentType.Giro) {
+            if(instrument.getInstrumentType() == InstrumentType.BUDGET || instrument.getInstrumentType() == InstrumentType.GIRO) {
                 instrumentDetails = setCashflowData(instrument, instrumentDetails, date);
             }
         }
