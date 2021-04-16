@@ -3,7 +3,9 @@ package de.hf.dac.myfinance.valuehandler;
 import java.time.LocalDate;
 import java.util.TreeMap;
 
+import de.hf.dac.myfinance.api.domain.Instrument;
 import de.hf.dac.myfinance.api.service.InstrumentService;
+import de.hf.dac.myfinance.api.service.ValueCurveService;
 
 public class RealEstateValueHandler extends AbsValueHandler{
     private InstrumentService instrumentService;
@@ -15,18 +17,7 @@ public class RealEstateValueHandler extends AbsValueHandler{
 
     public TreeMap<LocalDate, Double> calcValueCurve(Instrument instrument) {
         TreeMap<LocalDate, Double> valueCurve = new TreeMap<>();
-        var  childs = instrumentService.getInstrumentChilds(instrument.getInstrumentid(), EdgeType.TENANTGRAPH, 1);
-        if(childs==null || childs.isEmpty()) {
-            return createZeroCurve(valueCurve);
-        }
-        LocalDate startDate = LocalDate.now();
-        for (Instrument child : childs) {
-            TreeMap<LocalDate, Double> childValueCurve = this.valueCurveService.getValueCurve(child.getInstrumentid());
-            LocalDate minDate = childValueCurve.firstKey();
-            if(minDate.isBefore(startDate)) {
-                startDate = minDate;
-            }
-        }
-        return getCombinedValueCurve(childs, startDate);
+
+        return valueCurve;
     }
 }
