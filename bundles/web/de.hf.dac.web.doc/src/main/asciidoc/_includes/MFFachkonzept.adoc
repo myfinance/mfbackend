@@ -92,6 +92,7 @@ skinparam componentStyle uml2
 
 rectangle Tenant
 rectangle AccountPortfolio
+rectangle BudgetPortfolio
 rectangle BudgetGroup
 rectangle Budget1
 rectangle Budget2
@@ -117,7 +118,6 @@ AccountPortfolio --> Bausparvertrag
 Bausparvertrag --> Bausparkonto
 Bausparvertrag --> Bauspardarlehen
 AccountPortfolio --> Haus
-Haus --> HausBudgetGroup
 HausBudgetGroup --> Budget3
 HausBudgetGroup --> Budget4
 
