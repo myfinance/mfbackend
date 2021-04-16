@@ -235,9 +235,10 @@ public class InstrumentServiceImpl implements InstrumentService {
     protected void addInstrumentToGraph(int instrumentId, int ancestorId, EdgeType edgeType){
         List<InstrumentGraphEntry> ancestorGraphEntries = instrumentDao.getAncestorGraphEntries(ancestorId, edgeType);
         if(instrumentId!=ancestorId && ancestorGraphEntries.isEmpty()){
-            throw new MFException(MFMsgKey.ANCESTOR_DOES_NOT_EXIST_EXCEPTION,
-                    "Can not add instrument "+instrumentId+" to tree. Ancestor: "
-                            + ancestorId + " does not exists for edgetype " + edgeType.name());
+            InstrumentGraphEntry newEntry = new InstrumentGraphEntry(ancestorId, ancestorId, edgeType);
+            newEntry.setPathlength(0);
+            instrumentDao.saveGraphEntry(newEntry);
+            ancestorGraphEntries = instrumentDao.getAncestorGraphEntries(ancestorId, edgeType);
         }
         for (InstrumentGraphEntry entry : ancestorGraphEntries) {
             InstrumentGraphEntry newEntry = new InstrumentGraphEntry(entry.getId().getAncestor(), instrumentId, edgeType);
@@ -322,7 +323,7 @@ public class InstrumentServiceImpl implements InstrumentService {
         saveYieldgoals(realEstate.getInstrumentid(), yieldgoals);
         saveRealestateProfits(realEstate.getInstrumentid(), realEstateProfits);
         newBudgetGroup(description, budgetportfolio.get().getInstrumentid(), ts);
-        addInstrumentToGraph(valueBudgetId, realEstate.getInstrumentid(), EdgeType.VALUEBUDGET);
+        addInstrumentToGraph(realEstate.getInstrumentid(), valueBudgetId, EdgeType.VALUEBUDGET);
     }
 
     @Override
