@@ -322,6 +322,7 @@ public class InstrumentServiceImpl implements InstrumentService {
         saveYieldgoals(realEstate.getInstrumentid(), yieldgoals);
         saveRealestateProfits(realEstate.getInstrumentid(), realEstateProfits);
         newBudgetGroup(description, budgetportfolio.get().getInstrumentid(), ts);
+        addInstrumentToGraph(valueBudgetId, realEstate.getInstrumentid(), EdgeType.VALUEBUDGET);
     }
 
     @Override
