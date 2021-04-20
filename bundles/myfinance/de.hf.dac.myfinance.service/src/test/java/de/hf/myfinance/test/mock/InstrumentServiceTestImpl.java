@@ -150,7 +150,7 @@ public class InstrumentServiceTestImpl implements InstrumentService {
     }
 
     @Override
-    public void newRealEstate(String description, int tenantId, LocalDate acquisitiondate, int valueBudgetId,
+    public void newRealEstate(String description, int tenantId, int valueBudgetId,
             List<ValuePerDate> yieldgoals, List<ValuePerDate> realEstateProfits, LocalDateTime ts) {
         // TODO Auto-generated method stub
         

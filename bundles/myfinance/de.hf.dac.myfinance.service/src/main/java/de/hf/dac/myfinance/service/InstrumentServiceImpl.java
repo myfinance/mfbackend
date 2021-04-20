@@ -307,7 +307,7 @@ public class InstrumentServiceImpl implements InstrumentService {
     }
 
     @Override
-    public void newRealEstate(String description, int tenantId, LocalDate acquisitiondate, int valueBudgetId, List<ValuePerDate> yieldgoals, List<ValuePerDate> realEstateProfits, LocalDateTime ts) {
+    public void newRealEstate(String description, int tenantId, int valueBudgetId, List<ValuePerDate> yieldgoals, List<ValuePerDate> realEstateProfits, LocalDateTime ts) {
         Optional<Instrument> accportfolio = instrumentDao.getAccountPortfolio(tenantId);
         if(!accportfolio.isPresent()) {
             throw new MFException(MFMsgKey.UNKNOWN_INSTRUMENT_EXCEPTION,  "RealEstate not saved: tenant for the id:"+tenantId+" not exists or has no accountPortfolio");
@@ -345,13 +345,13 @@ public class InstrumentServiceImpl implements InstrumentService {
 
     private void saveYieldgoals(int instrumentId, List<ValuePerDate> values) {
         for(var value : values) {
-            instrumentDao.saveInstrumentProperty(new InstrumentProperties(InstrumentPropertyType.YIELDGOAL.getValueType(), instrumentId, String.valueOf(value.getValue()), InstrumentPropertyType.YIELDGOAL.getValueType(), value.getDate(), null));
+            instrumentDao.saveInstrumentProperty(new InstrumentProperties(InstrumentPropertyType.YIELDGOAL.name(), instrumentId, String.valueOf(value.getValue()), InstrumentPropertyType.YIELDGOAL.getValueType(), value.getDate(), null));
         } 
     }
 
     private void saveRealestateProfits(int instrumentId, List<ValuePerDate> values) {
         for(var value : values) {
-            instrumentDao.saveInstrumentProperty(new InstrumentProperties(InstrumentPropertyType.REALESTATEPROFITS.getValueType(), instrumentId, String.valueOf(value.getValue()), InstrumentPropertyType.REALESTATEPROFITS.getValueType(), value.getDate(), null));
+            instrumentDao.saveInstrumentProperty(new InstrumentProperties(InstrumentPropertyType.REALESTATEPROFITS.name(), instrumentId, String.valueOf(value.getValue()), InstrumentPropertyType.REALESTATEPROFITS.getValueType(), value.getDate(), null));
         } 
     }
 

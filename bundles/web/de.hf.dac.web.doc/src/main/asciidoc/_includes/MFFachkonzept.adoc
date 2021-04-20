@@ -140,6 +140,22 @@ Haus --> HausBudgetGroup
 @enduml
 ....
 
+IncomeBudget:
+
+[plantuml]
+....
+@startuml
+!pragma graphviz_dot jdot
+skinparam componentStyle uml2
+
+rectangle BudgetGroup
+rectangle IncomeBudget
+
+BudgetGroup --> IncomeBudget
+
+@enduml
+....
+
 Jedes Budget darf für diesen Edgetype nur einer BudgetGroup, eine BudgetGroup nur einem BudgetGroupPortfolio, dieser nur einem Tenant zugeordnet sein.
 Jeder Account darf nur einem AccountPortfolio und einem Tenant zugeordnet sein
 
@@ -521,6 +537,8 @@ additional properties:
  * Optional CalculateProfit: Default=no Es ist möglich anhand von Cashflows zu ermitteln wie hoch der Profit ist.
  Dies ist aber starken schwankungen ausgesetzt weshalb dies zunächst nicht umgesetzt wird
  * Optional periodForCalcInMonth: Anzahl der Monate die für die Berechnung des Profits herangezogen werden. Nicht verwendet da die Berechnung nicht umgesetzt wurde
+
+ Das Kaufdatum (AcquisitionDate) muss nicht extra gespeichert werden. Es ist immer das älteste ValidFrom von YieldGoal bzw RealEstateProfit. Dies muss bei beiden gleich sein.
 
 === DepreciationObject
 
