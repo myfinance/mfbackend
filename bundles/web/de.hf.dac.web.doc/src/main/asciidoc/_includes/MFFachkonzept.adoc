@@ -538,7 +538,7 @@ additional properties:
  Dies ist aber starken schwankungen ausgesetzt weshalb dies zunächst nicht umgesetzt wird
  * Optional periodForCalcInMonth: Anzahl der Monate die für die Berechnung des Profits herangezogen werden. Nicht verwendet da die Berechnung nicht umgesetzt wurde
 
- Das Kaufdatum (AcquisitionDate) muss nicht extra gespeichert werden. Es ist immer das älteste ValidFrom von YieldGoal bzw RealEstateProfit. Dies muss bei beiden gleich sein.
+ Das Kaufdatum (AcquisitionDate) muss nicht extra gespeichert werden. Es ist immer das älteste ValidFrom von YieldGoal bzw RealEstateProfit. Dies muss bei beiden gleich sein. Ist das nicht der Fall wird der andere Wert als 0 angenommen.
 
 === DepreciationObject
 
