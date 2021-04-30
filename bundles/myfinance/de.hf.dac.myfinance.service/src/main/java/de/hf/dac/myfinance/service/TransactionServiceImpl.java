@@ -53,22 +53,42 @@ public class TransactionServiceImpl implements TransactionService {
 
     @Override
     public void newIncomeExpense(String description, int accId, int budgetId, double value, LocalDate transactionDate, LocalDateTime ts){
+        validateAndSaveIncomeExpense(description, accId, budgetId, value, transactionDate, ts, 0, false);
+    }
+
+    @Override
+    public void newLinkedIncomeExpense(String description, int accId, int linkedAccId, int budgetId, double value, LocalDate transactionDate, LocalDateTime ts){
+        validateAndSaveIncomeExpense(description, accId, budgetId, value, transactionDate, ts, linkedAccId, true);
+    }
+
+    private void validateAndSaveIncomeExpense(String description, int accId, int budgetId, double value, LocalDate transactionDate, LocalDateTime ts, int linkedAccId, boolean isLinkedTransaction){
         var account = instrumentService.getInstrument(accId, "IncomeExpense not saved. Unknown account:");
         if(account.getInstrumentType()!=InstrumentType.GIRO){
-            throw new MFException(MFMsgKey.UNKNOWN_INSTRUMENT_EXCEPTION, "IncomeExpense not saved: wrong instrument type:"+accId);
+            throw new MFException(MFMsgKey.UNKNOWN_INSTRUMENT_EXCEPTION, "IncomeExpense not saved: wrong instrument type:"+account.getInstrumentid());
         }
         var budget = instrumentService.getInstrument(budgetId, "IncomeExpense not saved: unknown budget:");
         if(budget.getInstrumentType()!=InstrumentType.BUDGET){
-            throw new MFException(MFMsgKey.UNKNOWN_INSTRUMENT_EXCEPTION, "IncomeExpense not saved: wrong instrument type:"+budgetId);
+            throw new MFException(MFMsgKey.UNKNOWN_INSTRUMENT_EXCEPTION, "IncomeExpense not saved: wrong instrument type:"+budget.getInstrumentid());
         }
-        Optional<Integer> tenantOfAcc = instrumentService.getRootInstrument(accId, EdgeType.TENANTGRAPH);
-        Optional<Integer> tenantOfBudget = instrumentService.getRootInstrument(budgetId, EdgeType.TENANTGRAPH);
+        Instrument linkedaccount = null;
+        if(isLinkedTransaction) {
+            linkedaccount = instrumentService.getInstrument(linkedAccId, "IncomeExpense not saved. Unknown linked account:");
+            if(linkedaccount.getInstrumentType()!=InstrumentType.REALESTATE){
+                throw new MFException(MFMsgKey.UNKNOWN_INSTRUMENT_EXCEPTION, "IncomeExpense not saved: wrong linked instrument type:" + linkedaccount.getInstrumentid());
+            }
+        }
+        Optional<Integer> tenantOfAcc = instrumentService.getRootInstrument(account.getInstrumentid(), EdgeType.TENANTGRAPH);
+        Optional<Integer> tenantOfBudget = instrumentService.getRootInstrument(budget.getInstrumentid(), EdgeType.TENANTGRAPH);
 
         if(!tenantOfAcc.isPresent()
             || !tenantOfBudget.isPresent()
-            || tenantOfAcc.get()!=tenantOfBudget.get()){
+            || tenantOfAcc.get().equals(tenantOfBudget.get())){
             throw new MFException(MFMsgKey.WRONG_TENENT_EXCEPTION, "IncomeExpense not saved: budget and account have not the same tenant");
         }
+        saveIncomeExpense(account, budget, linkedaccount, isLinkedTransaction, description, value, transactionDate, ts);
+    }
+
+    private void saveIncomeExpense(Instrument account, Instrument budget, Instrument linkedaccount, boolean isLinkedTransaction, String description, double value, LocalDate transactionDate, LocalDateTime ts){
         Transaction transaction = new Transaction(description, transactionDate, ts, TransactionType.INCOMEEXPENSES);
 
         Cashflow accountCashflow = new Cashflow(account, value);
@@ -78,12 +98,16 @@ public class TransactionServiceImpl implements TransactionService {
         Set<Cashflow> cashflows = new HashSet<>();
         cashflows.add(accountCashflow);
         cashflows.add(budgetCashflow);
-
-        service.updateCache(accId);
-        service.updateCache(budgetId);
+        if(isLinkedTransaction) {
+            Cashflow linkedAccCashflow = new Cashflow(linkedaccount, value);
+            linkedAccCashflow.setTransaction(transaction);
+            cashflows.add(linkedAccCashflow);
+        }
+        service.updateCache(account.getInstrumentid());
+        service.updateCache(budget.getInstrumentid());
 
         transaction.setCashflows(cashflows);
-        auditService.saveMessage("new transaction saved for Account "+accId+" and Budget "+budgetId+". Date:" + transactionDate + ", value:" + value + ", desc:" +description,
+        auditService.saveMessage("new transaction saved for Account "+account.getInstrumentid()+" and Budget "+budget.getInstrumentid()+". Date:" + transactionDate + ", value:" + value + ", desc:" +description,
             Severity.INFO, AUDIT_MSG_TYPE);
         transactionDao.saveTransaction(transaction);
     }

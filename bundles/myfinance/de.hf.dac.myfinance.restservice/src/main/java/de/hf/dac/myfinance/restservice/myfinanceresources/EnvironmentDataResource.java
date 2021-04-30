@@ -403,6 +403,24 @@ public class EnvironmentDataResource extends BaseSecuredResource<OpType,OpLevel>
     }
 
     @POST
+    @Path("/addLinkedIncomeExpense")
+    @Produces(MediaType.APPLICATION_JSON)
+    @ApiOperation(value = "save Income or Expense linked to an additional account")
+    @ApiResponses(value = {
+        @ApiResponse(code = HttpStatus.SC_NO_CONTENT, message = "added"),
+        @ApiResponse(code = HttpStatus.SC_INTERNAL_SERVER_ERROR, message = "Something wrong in Server")})
+    public Response addLinkedIncomeExpense(@QueryParam("description") @ApiParam(value="description") String description,
+        @QueryParam("accId") @ApiParam(value="the accountId of the income or expense") int accId,
+        @QueryParam("linkedAccId") @ApiParam(value="the linked accountId of the income or expense") int linkedAccId,
+        @QueryParam("budgetId") @ApiParam(value="the budgetId of the income or expense") int budgetId,
+        @QueryParam("value") @ApiParam(value="the value of the income or expense") double value,
+        @QueryParam("transactiondate") @ApiParam(value="the transactiondate(yyyy-mm-dd") String transactiondate) {
+        checkOperationAllowed(OpType.WRITE);
+        marketDataEnvironment.getTransactionService().newLinkedIncomeExpense(description, accId, linkedAccId, budgetId, value, LocalDate.parse(transactiondate), LocalDateTime.now());
+        return Response.ok().build();
+    }
+
+    @POST
     @Path("/updateTransaction")
     @Produces(MediaType.APPLICATION_JSON)
     @ApiOperation(value = "update Transaction")
