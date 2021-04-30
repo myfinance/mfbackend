@@ -376,7 +376,6 @@ public class InstrumentServiceImpl implements InstrumentService {
                 instrumentType==InstrumentType.TENANT
                 || instrumentType==InstrumentType.GIRO
                 || instrumentType==InstrumentType.BUDGET
-                || instrumentType==InstrumentType.REALESTATE
                 )
             ) {
                 throw new MFException(MFMsgKey.WRONG_INSTRUMENTTYPE_EXCEPTION, "instrument with id:"+instrumentId + " not deactivated. It is not allowed for type " + instrumentType);
@@ -389,7 +388,7 @@ public class InstrumentServiceImpl implements InstrumentService {
     }
 
     private void validateInstrumentValue4Inactivation(int instrumentId, InstrumentType instrumentType) {
-        if( (instrumentType==InstrumentType.GIRO || instrumentType==InstrumentType.BUDGET|| instrumentType==InstrumentType.REALESTATE) 
+        if( (instrumentType==InstrumentType.GIRO || instrumentType==InstrumentType.BUDGET) 
             && service.getValue(instrumentId, LocalDate.MAX)!=0.0 ){
             throw new MFException(MFMsgKey.NO_VALID_INSTRUMENT_FOR_DEACTIVATION, "instrument with id:"+instrumentId + " not deactivated. The current value is not 0");
         }

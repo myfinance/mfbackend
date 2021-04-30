@@ -540,6 +540,8 @@ additional properties:
 
  Das Kaufdatum (AcquisitionDate) muss nicht extra gespeichert werden. Es ist immer das älteste ValidFrom von YieldGoal bzw RealEstateProfit. Dies muss bei beiden gleich sein. Ist das nicht der Fall wird der andere Wert als 0 angenommen.
 
+ Beim Verkauf werden alle Werte der Budgets aus der haus_budget_group in das income-budget der default budget-group geschoben und inaktiviert
+
 === DepreciationObject
 
 Abschreibungsobjekt. Große Konsumausgaben wie z.B: Autos die noch über einige Jahre einen Wiederverkaufswert besitzen werden über einen größeren Zeitraum abgeschrieben.
