@@ -539,8 +539,11 @@ additional properties:
  * Optional periodForCalcInMonth: Anzahl der Monate die für die Berechnung des Profits herangezogen werden. Nicht verwendet da die Berechnung nicht umgesetzt wurde
 
  Das Kaufdatum (AcquisitionDate) muss nicht extra gespeichert werden. Es ist immer das älteste ValidFrom von YieldGoal bzw RealEstateProfit. Dies muss bei beiden gleich sein. Ist das nicht der Fall wird der andere Wert als 0 angenommen.
+ Der Kaufpreis einer Immobilie ist als LinkedTransaction abgebildet - daher eine Ausgabe mit zusätzlichem Cashflow auf der Immobilie. Da hier ein Kauf in mehreren Tranchen möglich ist müssen die Transaktionen extra eingegeben werden.
+ Es ist dabei möglich dass das Transaktionsdatum vor dem Kaufdatum liegt, da während der bauphase noch kein Eigentum übergegangen ist. Die Immobilien muss dabei im System aber bereits angelegt sein (mit Wert 0)
 
- Beim Verkauf werden alle Werte der Budgets aus der haus_budget_group in das income-budget der default budget-group geschoben und inaktiviert
+ Beim Verkauf werden alle Werte der Budgets aus der haus_budget_group in das income-budget der default budget-group geschoben und inaktiviert. Die Verkaufstransaktion wird extra als Linked_Transaction abgebildet wie die Kauf-Transaktion
+ Achtung: bis MYF-466 umgesetzt ist müssen alle Budgets manuell auf Wert 0 gebracht werden. Inaktiviert werden sie automatisch
 
 === DepreciationObject
 
