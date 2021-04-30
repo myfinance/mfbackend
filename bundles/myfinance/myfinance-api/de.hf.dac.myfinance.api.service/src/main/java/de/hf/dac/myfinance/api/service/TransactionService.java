@@ -13,6 +13,7 @@ import de.hf.dac.myfinance.api.domain.Transaction;
 public interface TransactionService {
     void updateTransaction(int transactionId, String description, double value, LocalDate transactionDate, LocalDateTime ts);
     void newIncomeExpense(String description, int accId, int budgetId, double value, LocalDate transactionDate, LocalDateTime ts);
+    void newLinkedIncomeExpense(String description, int accId, int linkedAccId, int budgetId, double value, LocalDate transactionDate, LocalDateTime ts);
     void newTransfer(String description, int srcInstrumentId, int trgInstrumentId, double value, LocalDate transactionDate, LocalDateTime ts);
     List<Transaction> listTransactions(LocalDate startDate, LocalDate endDate);
     List<Cashflow> listInstrumentCashflows(int instrumentId);
