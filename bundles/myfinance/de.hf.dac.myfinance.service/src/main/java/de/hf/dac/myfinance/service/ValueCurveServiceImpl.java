@@ -18,7 +18,6 @@
 package de.hf.dac.myfinance.service;
 
 import de.hf.dac.myfinance.api.domain.EdgeType;
-import de.hf.dac.myfinance.api.domain.Instrument;
 import de.hf.dac.myfinance.api.domain.InstrumentGraphEntry;
 import de.hf.dac.myfinance.api.domain.InstrumentType;
 import de.hf.dac.myfinance.api.exceptions.MFException;
@@ -36,7 +35,6 @@ import de.hf.dac.myfinance.valuehandler.ValueHandler;
 
 import java.time.LocalDate;
 import java.util.List;
-import java.util.Optional;
 import java.util.TreeMap;
 
 import javax.inject.Inject;
@@ -59,13 +57,9 @@ public class ValueCurveServiceImpl implements ValueCurveService {
     public TreeMap<LocalDate, Double> getValueCurve(int instrumentId){
         TreeMap<LocalDate, Double> valueCurve = cache.getValueCurve(instrumentId);
         if(valueCurve==null){
-            Optional<Instrument> instrument = instrumentService.getInstrument(instrumentId);
-            if(instrument.isPresent()){
-                valueCurve = getValueHandler(instrument.get().getInstrumentType()).calcValueCurve(instrument.get());
-                cache.addValueCurve(instrumentId, valueCurve);
-            } else {
-                throw new MFException(MFMsgKey.NO_INSTRUMENT_FOUND_EXCEPTION, "Instrument with id:"+instrumentId+" not found");
-            }
+            var instrument = instrumentService.getInstrument(instrumentId);
+            valueCurve = getValueHandler(instrument.getInstrumentType()).calcValueCurve(instrument);
+            cache.addValueCurve(instrumentId, valueCurve);
 
         }
         return valueCurve;

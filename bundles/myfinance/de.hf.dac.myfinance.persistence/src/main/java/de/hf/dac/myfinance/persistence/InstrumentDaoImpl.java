@@ -60,7 +60,7 @@ public class InstrumentDaoImpl extends BaseDao<Instrument> implements Instrument
         try{
             marketDataEm = this.marketDataEmf.createEntityManager();
             Query query = marketDataEm.createQuery("select a FROM Instrument a WHERE instrumentTypeId= :instrumentTypeId and businesskey = :isin");
-            query.setParameter("instrumentTypeId", InstrumentType.Equity.getValue());
+            query.setParameter("instrumentTypeId", InstrumentType.EQUITY.getValue());
             query.setParameter("isin", isin);
             result = getFirstEquityQueryResult(query);
         } finally {
@@ -221,14 +221,23 @@ public class InstrumentDaoImpl extends BaseDao<Instrument> implements Instrument
 
     @Override
     public Optional<Instrument> getAccountPortfolio(int tenantId){
+        return getFirstInstrumentByType(tenantId, EdgeType.TENANTGRAPH, InstrumentType.ACCOUNTPORTFOLIO);
+    }
+
+    @Override
+    public Optional<Instrument> getBudgetPortfolio(int tenantId){
+        return getFirstInstrumentByType(tenantId, EdgeType.TENANTGRAPH, InstrumentType.BUDGETPORTFOLIO);
+    }
+
+    protected Optional<Instrument> getFirstInstrumentByType(int tenantId, EdgeType edgetype, InstrumentType instrumentType){
         Optional<Instrument> result;
         try {
             marketDataEm = this.marketDataEmf.createEntityManager();
             Query query = marketDataEm.createQuery("select i FROM InstrumentGraphEntry a JOIN Instrument i ON i.instrumentid=a.id.descendant "
                 + "WHERE a.id.ancestor= :instrumentid and a.id.edgetype= :edgetype and a.pathlength=1 and i.instrumentTypeId= :instrumenttype");
             query.setParameter("instrumentid", tenantId);
-            query.setParameter("edgetype", EdgeType.TENANTGRAPH);
-            query.setParameter("instrumenttype", InstrumentType.AccountPortfolio.getValue());
+            query.setParameter("edgetype", edgetype);
+            query.setParameter("instrumenttype", instrumentType.getValue());
             result = getFirstQueryResult(query);
         } finally {
             marketDataEm.close();
@@ -269,6 +278,47 @@ public class InstrumentDaoImpl extends BaseDao<Instrument> implements Instrument
         Optional<Source> result = Optional.empty();
         Object object = getFirstQueryObjectResult(query);
         if(object!=null) result = Optional.of((Source) object);
+        return result;
+    }
+
+    @Override
+    public void saveInstrumentProperty(InstrumentProperties instrumentProperty) {
+        save(instrumentProperty);
+    }
+
+    @Override
+    public List<InstrumentProperties> getInstrumentProperties(int instrumentId) {
+        List<InstrumentProperties> result;
+        try{
+            marketDataEm = this.marketDataEmf.createEntityManager();
+            Query query = marketDataEm.createQuery(
+                "select a FROM InstrumentProperties a WHERE a.instrumentid= :instrumentId"
+            );
+            query.setParameter("instrumentId", instrumentId);
+            result = (List<InstrumentProperties>) query.getResultList();
+        } finally {
+            marketDataEm.close();
+        }
+        return result;
+    }
+
+    @Override
+    public String deleteInstrumentProperty(int instrumentPropertyId) {
+        String result = " instrumentProperty with id "+instrumentPropertyId;
+        try {
+
+            marketDataEm = this.marketDataEmf.createEntityManager();
+            marketDataEm.getTransaction().begin();
+            InstrumentProperties instrumentProperty = marketDataEm.find(InstrumentProperties.class, instrumentPropertyId);
+            result+=" ,type: '"+instrumentProperty.getPropertyname()+
+                    "' ,value:" + instrumentProperty.getValue() + 
+                    "' ,validfrom:" + instrumentProperty.getValidfrom() + " deleted";
+            marketDataEm.remove(instrumentProperty);
+
+            marketDataEm.getTransaction().commit();
+        } finally {
+            marketDataEm.close();
+        }
         return result;
     }
 }

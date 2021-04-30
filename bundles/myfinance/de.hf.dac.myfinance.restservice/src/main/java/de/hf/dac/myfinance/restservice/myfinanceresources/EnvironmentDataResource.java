@@ -27,6 +27,7 @@ import de.hf.dac.myfinance.api.application.servicecontext.MDEnvironmentContext;
 import de.hf.dac.myfinance.api.domain.Equity;
 import de.hf.dac.myfinance.api.domain.InstrumentType;
 import de.hf.dac.myfinance.api.domain.RecurrentFrequency;
+import de.hf.dac.myfinance.api.domain.ValuePerDate;
 import de.hf.dac.myfinance.api.exceptions.MFException;
 import de.hf.dac.myfinance.api.exceptions.MFMsgKey;
 import de.hf.dac.myfinance.api.restservice.InstrumentDetailModel;
@@ -47,6 +48,8 @@ import javax.ws.rs.core.Response;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 import org.apache.http.HttpStatus;
@@ -333,6 +336,54 @@ public class EnvironmentDataResource extends BaseSecuredResource<OpType,OpLevel>
         marketDataEnvironment.getInstrumentService().newGiroAccount(description, tenantId, LocalDateTime.now());
         return Response.ok().build();
     }
+
+    @POST
+    @Path("/addRealestate")
+    @Produces(MediaType.APPLICATION_JSON)
+    @ApiOperation(value = "save Realestate")
+    @ApiResponses(value = {
+        @ApiResponse(code = HttpStatus.SC_NO_CONTENT, message = "added"),
+        @ApiResponse(code = HttpStatus.SC_INTERNAL_SERVER_ERROR, message = "Something wrong in Server")})
+    public Response addRealestate(@QueryParam("description") @ApiParam(value="description") String description,
+        @QueryParam("tenantId") @ApiParam(value="the Id of the tenant which the realestate is attached to") int tenantId,
+        @QueryParam("valueBudgetId") @ApiParam(value="the budget to add the value of the realestate") int valueBudgetId,
+        @QueryParam("yieldgoal") @ApiParam(value="all yieldgoals with valid from date") List<String> yieldgoals,
+        @QueryParam("realEstateProfit") @ApiParam(value="all realEstateProfits with valid from date") List<String> realEstateProfits) {
+        checkOperationAllowed(OpType.WRITE);
+        var yieldgoalList = parseListPerDateString(yieldgoals);
+        var realEstateProfitList = parseListPerDateString(realEstateProfits);
+        marketDataEnvironment.getInstrumentService().newRealEstate(description, tenantId, valueBudgetId, yieldgoalList, realEstateProfitList, LocalDateTime.now());
+        return Response.ok().build();
+    }
+
+    @POST
+    @Path("/updateRealestate")
+    @Produces(MediaType.APPLICATION_JSON)
+    @ApiOperation(value = "update Realestate")
+    @ApiResponses(value = {
+        @ApiResponse(code = HttpStatus.SC_NO_CONTENT, message = "updated"),
+        @ApiResponse(code = HttpStatus.SC_INTERNAL_SERVER_ERROR, message = "Something wrong in Server")})
+    public Response updateRealestate( @QueryParam("realestateIdId") @ApiParam(value="the Id of the RealEstate") int realEstateId,
+        @QueryParam("description") @ApiParam(value="description") String description,
+        @QueryParam("yieldgoal") @ApiParam(value="all yieldgoals with valid from date") List<String> yieldgoals,
+        @QueryParam("realEstateProfit") @ApiParam(value="all realEstateProfits with valid from date") List<String> realEstateProfits,
+        @QueryParam("isactive") @ApiParam(value="isactive") boolean isactive) {
+        checkOperationAllowed(OpType.WRITE);
+        var yieldgoalList = parseListPerDateString(yieldgoals);
+        var realEstateProfitList = parseListPerDateString(realEstateProfits);
+        marketDataEnvironment.getInstrumentService().updateRealEstate(realEstateId, description, yieldgoalList, realEstateProfitList, isactive);
+        return Response.ok().build();
+    }
+
+    private List<ValuePerDate> parseListPerDateString(List<String> stringValues) {
+        var valueList = new ArrayList<ValuePerDate>();
+        for (var entry : stringValues) {
+            valueList.add(new ValuePerDate(entry));
+
+        }
+        return valueList;
+    }
+
 
     @POST
     @Path("/addIncomeExpense")

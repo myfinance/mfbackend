@@ -79,7 +79,7 @@ public class PriceServiceImpl implements PriceService{
         ImportHandler handler = new ImportHandler(sources, eur.get(), webRequestService);
         for(Instrument security : secuirities){
             //all prices are in EUR so we do not need prices for this currency
-            if(security.getInstrumentType()==InstrumentType.Currency && security.getBusinesskey().equals("EUR")) continue;
+            if(security.getInstrumentType()==InstrumentType.CURRENCY && security.getBusinesskey().equals("EUR")) continue;
             LocalDate lastPricedDay = endOfDayPriceDao.getLastPricedDay(security.getInstrumentid());
             Map<LocalDate, EndOfDayPrice> prices = new HashMap<>();
             prices.putAll(handler.importSource(security, lastPricedDay, ts));
@@ -103,7 +103,7 @@ public class PriceServiceImpl implements PriceService{
         sources.add(source.get());
 
         //all prices are in EUR so we do not need prices for this currency
-        if(security.get().getInstrumentType()==InstrumentType.Currency && security.get().getBusinesskey().equals("EUR")) {
+        if(security.get().getInstrumentType()==InstrumentType.CURRENCY && security.get().getBusinesskey().equals("EUR")) {
             throw new MFException(MFMsgKey.WRONG_REQUEST_EXCEPTION, "Prices for currency EUR are not necessary");
         }
 

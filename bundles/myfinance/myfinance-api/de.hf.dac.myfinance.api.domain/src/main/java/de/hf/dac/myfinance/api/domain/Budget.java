@@ -30,6 +30,6 @@ public class Budget extends Instrument {
     }
 
     public Budget(String description, boolean isactive, LocalDateTime treelastchanged){
-        super(InstrumentType.Budget, description, isactive, treelastchanged);
+        super(InstrumentType.BUDGET, description, isactive, treelastchanged);
     }
 }

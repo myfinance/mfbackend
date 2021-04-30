@@ -30,6 +30,6 @@ public class BudgetGroup extends Instrument {
     }
 
     public BudgetGroup(String description, boolean isactive, LocalDateTime treelastchanged){
-        super(InstrumentType.BudgetGroup, description, isactive, treelastchanged);
+        super(InstrumentType.BUDGETGROUP, description, isactive, treelastchanged);
     }
 }

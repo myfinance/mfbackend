@@ -18,6 +18,8 @@
 package de.hf.dac.myfinance.api.service;
 
 import de.hf.dac.myfinance.api.domain.*;
+
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
@@ -29,7 +31,8 @@ public interface InstrumentService {
     List<Instrument> listInstruments(int tenantId, InstrumentType instrumentType, boolean onlyActive);
     List<Instrument> listAccounts(int tenantId);
     List<Instrument> listTenants();
-    Optional<Instrument> getInstrument(int instrumentId);
+    Instrument getInstrument(int instrumentId);
+    Instrument getInstrument(int instrumentId, String errMsg);
     Optional<Integer> getRootInstrument(int instrumentId, EdgeType edgeType);
     List<InstrumentGraphEntry> getAncestorGraphEntries(int instrumentId, EdgeType edgeType);
     List<Instrument> getInstrumentChilds(int instrumentId, EdgeType edgeType, int pathlength);
@@ -38,6 +41,8 @@ public interface InstrumentService {
     void updateInstrument(int instrumentId, String description, boolean isActive);
     void newBudget(String description, int budgetGroupId, LocalDateTime ts);
     void newGiroAccount(String description, int tenantId, LocalDateTime ts);
+    void newRealEstate(String description, int tenantId, int valueBudgetId, List<ValuePerDate> yieldgoals, List<ValuePerDate> realEstateProfits, LocalDateTime ts);
+    void updateRealEstate(int instrumentId, String description, List<ValuePerDate> yieldgoals, List<ValuePerDate> realEstateProfits, boolean isActive);
     Optional<Instrument> getCurrency(String currencyCode);
     Optional<Equity> getEquity(String isin);
     List<Instrument> getSecurities();

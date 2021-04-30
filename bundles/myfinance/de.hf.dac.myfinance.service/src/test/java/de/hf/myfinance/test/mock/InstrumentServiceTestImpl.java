@@ -1,5 +1,6 @@
 package de.hf.myfinance.test.mock;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
@@ -10,6 +11,7 @@ import de.hf.dac.myfinance.api.domain.Giro;
 import de.hf.dac.myfinance.api.domain.Instrument;
 import de.hf.dac.myfinance.api.domain.InstrumentGraphEntry;
 import de.hf.dac.myfinance.api.domain.InstrumentType;
+import de.hf.dac.myfinance.api.domain.ValuePerDate;
 import de.hf.dac.myfinance.api.service.InstrumentService;
 
 public class InstrumentServiceTestImpl implements InstrumentService {
@@ -49,14 +51,7 @@ public class InstrumentServiceTestImpl implements InstrumentService {
         // TODO Auto-generated method stub
         return null;
     }
-
-    @Override
-    public Optional<Instrument> getInstrument(int instrumentId) {
-        Instrument instrument = new Giro("testgiro", true, LocalDateTime.now());
-        instrument.setInstrumentid(instrumentId);
-        return Optional.of(instrument);
-    }
-
+    
     @Override
     public Optional<Integer> getRootInstrument(int instrumentId, EdgeType edgeType) {
         // TODO Auto-generated method stub
@@ -139,6 +134,33 @@ public class InstrumentServiceTestImpl implements InstrumentService {
     public void saveCurrency(String currencyCode, String description) {
         // TODO Auto-generated method stub
 
+    }
+
+    @Override
+    public Instrument getInstrument(int instrumentId) {
+        Instrument instrument = new Giro("testgiro", true, LocalDateTime.now());
+        instrument.setInstrumentid(instrumentId);
+        return instrument;
+    }
+
+    @Override
+    public Instrument getInstrument(int instrumentId, String errMsg) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public void newRealEstate(String description, int tenantId, int valueBudgetId,
+            List<ValuePerDate> yieldgoals, List<ValuePerDate> realEstateProfits, LocalDateTime ts) {
+        // TODO Auto-generated method stub
+        
+    }
+
+    @Override
+    public void updateRealEstate(int instrumentId, String description, List<ValuePerDate> yieldgoals,
+            List<ValuePerDate> realEstateProfits, boolean isActive) {
+        // TODO Auto-generated method stub
+        
     }
     
 }

@@ -52,7 +52,7 @@ public class AlphavantageHandler extends AbsHandler implements Handler {
             values.putAll(getEqPricesForSymbols(security, lastPricedDate, ts, securityType));
 
         } else {
-            if(!securityType.equals(InstrumentType.Currency)) return values;
+            if(!securityType.equals(InstrumentType.CURRENCY)) return values;
             try{
                 values.putAll(convertToEndOfDayPrice(getFxPrices((Instrument) security), lastPricedDate,
                     eur, source,
@@ -68,7 +68,7 @@ public class AlphavantageHandler extends AbsHandler implements Handler {
 
     private Map<LocalDate, EndOfDayPrice> getEqPricesForSymbols(Instrument security, LocalDate lastPricedDate, LocalDateTime ts, InstrumentType securityType) {
         Map<LocalDate, EndOfDayPrice> values = new HashMap<>();
-        if(!securityType.equals(InstrumentType.Equity))
+        if(!securityType.equals(InstrumentType.EQUITY))
             return values;
 
         Set<SecuritySymbols> symbols = ((Equity)security).getSymbols();

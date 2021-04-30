@@ -31,7 +31,7 @@ public class Currency extends Instrument {
     }
 
     public Currency(String currencyCode, String description, boolean isactive, LocalDateTime treelastchanged){
-        super(InstrumentType.Currency, description, isactive, treelastchanged);
+        super(InstrumentType.CURRENCY, description, isactive, treelastchanged);
         setBusinesskey(currencyCode);
     }
 }

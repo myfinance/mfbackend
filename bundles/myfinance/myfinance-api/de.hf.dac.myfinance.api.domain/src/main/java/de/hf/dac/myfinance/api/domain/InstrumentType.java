@@ -18,28 +18,29 @@
 package de.hf.dac.myfinance.api.domain;
 
 public enum InstrumentType {
-    Giro(Integer.valueOf(1)),
-    MoneyAtCall(Integer.valueOf(2)),
-    TimeDeposit(Integer.valueOf(3)),
-    BuildingsavingAccount(Integer.valueOf(4)),
-    Budget(Integer.valueOf(5)),
-    Tenant(Integer.valueOf(6)),
+    GIRO(Integer.valueOf(1)),
+    MONEYATCALL(Integer.valueOf(2)),
+    TIMEDEPOSIT(Integer.valueOf(3)),
+    BUILDINGSAVINGACCOUNT(Integer.valueOf(4)),
+    BUDGET(Integer.valueOf(5)),
+    TENANT(Integer.valueOf(6)),
     //BudgetGroupPortfolio(new Integer(7)),
-    AccountPortfolio(Integer.valueOf(8)),
-    ArtificialPortfolio(Integer.valueOf(9)),
-    BudgetGroup(Integer.valueOf(10)),
-    Depot(Integer.valueOf(10)),
-    Buildingsaving(Integer.valueOf(12)),
-    Currency(Integer.valueOf(13)),
-    Equity(Integer.valueOf(14)),
-    Fonds(Integer.valueOf(15)),
+    ACCOUNTPORTFOLIO(Integer.valueOf(8)),
+    ARTIFICALPORTFOLIO(Integer.valueOf(9)),
+    BUDGETGROUP(Integer.valueOf(10)),
+    DEPOT(Integer.valueOf(10)),
+    BUILDINGSAVING(Integer.valueOf(12)),
+    CURRENCY(Integer.valueOf(13)),
+    EQUITY(Integer.valueOf(14)),
+    FONDS(Integer.valueOf(15)),
     ETF(Integer.valueOf(16)),
-    Index(Integer.valueOf(17)),
-    Bond(Integer.valueOf(18)),
-    LifeInsurance(Integer.valueOf(19)),
-    DepreciationObject(Integer.valueOf(20)),
-    RealEstate(Integer.valueOf(21)),
-    Loan(Integer.valueOf(22)),
+    INDEX(Integer.valueOf(17)),
+    BOND(Integer.valueOf(18)),
+    LIFEINSURANCE(Integer.valueOf(19)),
+    DEPRECATIONOBJECT(Integer.valueOf(20)),
+    REALESTATE(Integer.valueOf(21)),
+    LOAN(Integer.valueOf(22)),
+    BUDGETPORTFOLIO(Integer.valueOf(23)),
     UNKNOWN(Integer.valueOf(99));
 
     public static final String GIRO_IDSTRING = "1";
@@ -64,6 +65,7 @@ public enum InstrumentType {
     public static final String DEPRECATIONOBJECT_IDSTRING = "20";
     public static final String REALESTATE_IDSTRING = "21";
     public static final String LOAN_IDSTRING = "22";
+    public static final String BUDGETPORTFOLIO_IDSTRING = "23";
 
     private final Integer value;
 
@@ -92,34 +94,36 @@ public enum InstrumentType {
             case 20: return InstrumentTypeGroup.DEPRECATIONOBJECT;
             case 21: return InstrumentTypeGroup.REALESTATE;
             case 22: return InstrumentTypeGroup.LOAN;
+            case 23: return InstrumentTypeGroup.PORTFOLIO;
             default: return InstrumentTypeGroup.CASHACCOUNT;
         }
     }
 
     public static InstrumentType getInstrumentTypeById(int instrumenttypeId){
         switch(instrumenttypeId){
-            case 1: return InstrumentType.Giro;
-            case 2: return InstrumentType.MoneyAtCall;
-            case 3: return InstrumentType.TimeDeposit;
-            case 4: return InstrumentType.BuildingsavingAccount;
-            case 5: return InstrumentType.Budget;
-            case 6: return InstrumentType.Tenant;
+            case 1: return InstrumentType.GIRO;
+            case 2: return InstrumentType.MONEYATCALL;
+            case 3: return InstrumentType.TIMEDEPOSIT;
+            case 4: return InstrumentType.BUILDINGSAVINGACCOUNT;
+            case 5: return InstrumentType.BUDGET;
+            case 6: return InstrumentType.TENANT;
             //case 7: return InstrumentType.BudgetGroupPortfolio;
-            case 8: return InstrumentType.AccountPortfolio;
-            case 9: return InstrumentType.ArtificialPortfolio;
-            case 10: return InstrumentType.BudgetGroup;
-            case 11: return InstrumentType.Depot;
-            case 12: return InstrumentType.Buildingsaving;
-            case 13: return InstrumentType.Currency;
-            case 14: return InstrumentType.Equity;
-            case 15: return InstrumentType.Fonds;
+            case 8: return InstrumentType.ACCOUNTPORTFOLIO;
+            case 9: return InstrumentType.ARTIFICALPORTFOLIO;
+            case 10: return InstrumentType.BUDGETGROUP;
+            case 11: return InstrumentType.DEPOT;
+            case 12: return InstrumentType.BUILDINGSAVING;
+            case 13: return InstrumentType.CURRENCY;
+            case 14: return InstrumentType.EQUITY;
+            case 15: return InstrumentType.FONDS;
             case 16: return InstrumentType.ETF;
-            case 17: return InstrumentType.Index;
-            case 18: return InstrumentType.Bond;
-            case 19: return InstrumentType.LifeInsurance;
-            case 20: return InstrumentType.DepreciationObject;
-            case 21: return InstrumentType.RealEstate;
-            case 22: return InstrumentType.Loan;
+            case 17: return InstrumentType.INDEX;
+            case 18: return InstrumentType.BOND;
+            case 19: return InstrumentType.LIFEINSURANCE;
+            case 20: return InstrumentType.DEPRECATIONOBJECT;
+            case 21: return InstrumentType.REALESTATE;
+            case 22: return InstrumentType.LOAN;
+            case 23: return InstrumentType.BUDGETPORTFOLIO;
             default: return InstrumentType.UNKNOWN;
         }
     }

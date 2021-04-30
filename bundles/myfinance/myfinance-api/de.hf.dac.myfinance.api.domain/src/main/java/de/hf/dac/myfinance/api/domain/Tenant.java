@@ -32,6 +32,6 @@ public class Tenant extends Instrument {
     }
 
     public Tenant(String description, boolean isactive, LocalDateTime treelastchanged){
-        super(InstrumentType.Tenant, description, isactive, treelastchanged);
+        super(InstrumentType.TENANT, description, isactive, treelastchanged);
     }
 }

@@ -30,6 +30,6 @@ public class AccountPortfolio  extends Instrument {
     }
 
     public AccountPortfolio(String description, boolean isactive, LocalDateTime treelastchanged){
-        super(InstrumentType.AccountPortfolio, description, isactive, treelastchanged);
+        super(InstrumentType.ACCOUNTPORTFOLIO, description, isactive, treelastchanged);
     }
 }

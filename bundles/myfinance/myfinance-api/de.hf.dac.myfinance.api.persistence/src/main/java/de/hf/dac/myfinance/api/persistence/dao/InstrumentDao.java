@@ -40,4 +40,8 @@ public interface InstrumentDao {
     List<Instrument> getInstrumentChilds(int instrumentId, EdgeType edgeType);
     List<Instrument> getInstrumentChilds(int instrumentId, EdgeType edgeType, int pathlength);
     Optional<Instrument> getAccountPortfolio(int tenantId);
+    Optional<Instrument> getBudgetPortfolio(int tenantId);
+    void saveInstrumentProperty(InstrumentProperties instrumentProperty);
+    List<InstrumentProperties> getInstrumentProperties(int instrumentId);
+    String deleteInstrumentProperty(int instrumentPropertyId);
 }

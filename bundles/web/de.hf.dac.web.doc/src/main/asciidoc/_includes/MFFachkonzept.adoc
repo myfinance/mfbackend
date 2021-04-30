@@ -82,6 +82,8 @@ Es gibt verschiedene Arten von Beziehungen die über den Edgetype abgebildet wer
  * RealEstateBudgetGroup: An jede Immobilie wird eine BudgetGroup gehängt über die die budgetierung erfolgt
  * incomeBudget: Einer BudgetGroup(ancestor) kann genau ein incomeBudget zugewiesen werden. Wird verwendet als StandardBudget zur Verbuchung von regelmäßigen Einnahmen z.B. Loan
 
+Tenent-Graph:
+
 [plantuml]
 ....
 @startuml
@@ -90,6 +92,7 @@ skinparam componentStyle uml2
 
 rectangle Tenant
 rectangle AccountPortfolio
+rectangle BudgetPortfolio
 rectangle BudgetGroup
 rectangle Budget1
 rectangle Budget2
@@ -103,8 +106,10 @@ rectangle Bauspardarlehen
 rectangle Haus
 rectangle HausBudgetGroup
 
-Tenant --> BudgetGroup
+Tenant --> BudgetPortfolio
 Tenant --> AccountPortfolio
+BudgetPortfolio --> BudgetGroup
+BudgetPortfolio --> HausBudgetGroup
 BudgetGroup --> Budget1
 BudgetGroup --> Budget2
 AccountPortfolio --> Depot1
@@ -113,9 +118,40 @@ AccountPortfolio --> Bausparvertrag
 Bausparvertrag --> Bausparkonto
 Bausparvertrag --> Bauspardarlehen
 AccountPortfolio --> Haus
-Haus --> HausBudgetGroup
 HausBudgetGroup --> Budget3
 HausBudgetGroup --> Budget4
+
+@enduml
+....
+
+RealEstateBudgetGroup:
+
+[plantuml]
+....
+@startuml
+!pragma graphviz_dot jdot
+skinparam componentStyle uml2
+
+rectangle Haus
+rectangle HausBudgetGroup
+
+Haus --> HausBudgetGroup
+
+@enduml
+....
+
+IncomeBudget:
+
+[plantuml]
+....
+@startuml
+!pragma graphviz_dot jdot
+skinparam componentStyle uml2
+
+rectangle BudgetGroup
+rectangle IncomeBudget
+
+BudgetGroup --> IncomeBudget
 
 @enduml
 ....
@@ -501,6 +537,10 @@ additional properties:
  * Optional CalculateProfit: Default=no Es ist möglich anhand von Cashflows zu ermitteln wie hoch der Profit ist.
  Dies ist aber starken schwankungen ausgesetzt weshalb dies zunächst nicht umgesetzt wird
  * Optional periodForCalcInMonth: Anzahl der Monate die für die Berechnung des Profits herangezogen werden. Nicht verwendet da die Berechnung nicht umgesetzt wurde
+
+ Das Kaufdatum (AcquisitionDate) muss nicht extra gespeichert werden. Es ist immer das älteste ValidFrom von YieldGoal bzw RealEstateProfit. Dies muss bei beiden gleich sein. Ist das nicht der Fall wird der andere Wert als 0 angenommen.
+
+ Beim Verkauf werden alle Werte der Budgets aus der haus_budget_group in das income-budget der default budget-group geschoben und inaktiviert
 
 === DepreciationObject
 
