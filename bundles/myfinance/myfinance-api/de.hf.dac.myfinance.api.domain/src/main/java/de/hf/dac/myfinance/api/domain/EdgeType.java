@@ -15,5 +15,6 @@ public enum EdgeType {
     TENANTGRAPH,
     VALUEBUDGET,
     INCOMEBUDGET,
+    REALESTATEBUDGETGROUP,
     CUSTOM
 }

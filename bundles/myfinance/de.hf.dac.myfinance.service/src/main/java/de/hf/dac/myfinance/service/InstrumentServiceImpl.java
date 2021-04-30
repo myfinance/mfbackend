@@ -322,7 +322,9 @@ public class InstrumentServiceImpl implements InstrumentService {
         addInstrumentToGraph(realEstate.getInstrumentid(), accportfolio.get().getInstrumentid(), EdgeType.TENANTGRAPH);
         saveYieldgoals(realEstate.getInstrumentid(), yieldgoals);
         saveRealestateProfits(realEstate.getInstrumentid(), realEstateProfits);
-        newBudgetGroup(description, budgetportfolio.get().getInstrumentid(), ts);
+        var budgetGroupId = newBudgetGroup(description, budgetportfolio.get().getInstrumentid(), ts);
+        addInstrumentToGraph(realEstate.getInstrumentid(), realEstate.getInstrumentid(), EdgeType.REALESTATEBUDGETGROUP);
+        addInstrumentToGraph(budgetGroupId, realEstate.getInstrumentid(), EdgeType.REALESTATEBUDGETGROUP);
         addInstrumentToGraph(realEstate.getInstrumentid(), valueBudgetId, EdgeType.VALUEBUDGET);
     }
 
@@ -376,21 +378,29 @@ public class InstrumentServiceImpl implements InstrumentService {
                 instrumentType==InstrumentType.TENANT
                 || instrumentType==InstrumentType.GIRO
                 || instrumentType==InstrumentType.BUDGET
+                || instrumentType==InstrumentType.REALESTATE
                 )
             ) {
                 throw new MFException(MFMsgKey.WRONG_INSTRUMENTTYPE_EXCEPTION, "instrument with id:"+instrumentId + " not deactivated. It is not allowed for type " + instrumentType);
             }
             validateInstrumentValue4Inactivation(instrumentId, instrumentType);
             validateRecurrentTransactions4InstrumentInactivation(instrumentId, instrumentType);
-        }
-
-        
+        }        
     }
 
     private void validateInstrumentValue4Inactivation(int instrumentId, InstrumentType instrumentType) {
         if( (instrumentType==InstrumentType.GIRO || instrumentType==InstrumentType.BUDGET) 
             && service.getValue(instrumentId, LocalDate.MAX)!=0.0 ){
             throw new MFException(MFMsgKey.NO_VALID_INSTRUMENT_FOR_DEACTIVATION, "instrument with id:"+instrumentId + " not deactivated. The current value is not 0");
+        } else if(instrumentType==InstrumentType.REALESTATE) {
+            for(Instrument budgetGroup : getInstrumentChilds(instrumentId, EdgeType.REALESTATEBUDGETGROUP, 1)) {
+                validateInstrumentValue4Inactivation(budgetGroup.getInstrumentid(), budgetGroup.getInstrumentType());
+                instrumentDao.updateInstrument(budgetGroup.getInstrumentid(), budgetGroup.getDescription(), false);
+            }
+        } else if (instrumentType==InstrumentType.BUDGETGROUP) {
+            for(Instrument budget : getInstrumentChilds(instrumentId, EdgeType.TENANTGRAPH, 1)) {
+                updateInstrument(budget.getInstrumentid(), budget.getDescription(), false);
+            }
         }
     }
 
