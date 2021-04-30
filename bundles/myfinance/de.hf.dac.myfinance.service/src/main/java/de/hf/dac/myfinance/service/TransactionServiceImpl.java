@@ -82,7 +82,7 @@ public class TransactionServiceImpl implements TransactionService {
 
         if(!tenantOfAcc.isPresent()
             || !tenantOfBudget.isPresent()
-            || tenantOfAcc.get().equals(tenantOfBudget.get())){
+            || !tenantOfAcc.get().equals(tenantOfBudget.get())){
             throw new MFException(MFMsgKey.WRONG_TENENT_EXCEPTION, "IncomeExpense not saved: budget and account have not the same tenant");
         }
         saveIncomeExpense(account, budget, linkedaccount, isLinkedTransaction, description, value, transactionDate, ts);
