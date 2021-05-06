@@ -28,7 +28,7 @@ import javax.persistence.Query;
 import java.util.*;
 
 public class InstrumentDaoImpl extends BaseDao<Instrument> implements InstrumentDao {
-
+    private static final String INSTRUMENTID = "instrumentid";
 
     @Inject
     public InstrumentDaoImpl(@Named(EnvTarget.MDB) EntityManagerFactory marketDataEmf) {
@@ -46,7 +46,7 @@ public class InstrumentDaoImpl extends BaseDao<Instrument> implements Instrument
         try{
             marketDataEm = this.marketDataEmf.createEntityManager();
             Query query = marketDataEm.createQuery("select a FROM Instrument a WHERE instrumentid = :instrumentid");
-            query.setParameter("instrumentid", instrumentId);
+            query.setParameter(INSTRUMENTID, instrumentId);
             result = getFirstQueryResult(query);
         } finally {
             marketDataEm.close();
@@ -71,7 +71,7 @@ public class InstrumentDaoImpl extends BaseDao<Instrument> implements Instrument
 
     @Override
     public Optional<Instrument> getSecurity(String businesskey) {
-        List instrumentTypeIds=getInstrumentTypeIds();
+        var instrumentTypeIds=getInstrumentTypeIds();
         Optional<Instrument> result;
         try {
             marketDataEm = this.marketDataEmf.createEntityManager();
@@ -153,7 +153,7 @@ public class InstrumentDaoImpl extends BaseDao<Instrument> implements Instrument
         try{
             marketDataEm = this.marketDataEmf.createEntityManager();
             Query query = marketDataEm.createQuery("select a FROM Instrument a WHERE instrumentid = :instrumentid");
-            query.setParameter("instrumentid", instrumentId);
+            query.setParameter(INSTRUMENTID, instrumentId);
             Optional<Instrument> instrument = getFirstQueryResult(query);
             if(instrument.isPresent()) {
                 Instrument newInstrument = instrument.get();
@@ -179,7 +179,7 @@ public class InstrumentDaoImpl extends BaseDao<Instrument> implements Instrument
         try{
             marketDataEm = this.marketDataEmf.createEntityManager();
             Query query = marketDataEm.createQuery("select a FROM InstrumentGraphEntry a WHERE a.id.descendant= :instrumentid and a.id.edgetype= :edgetype");
-            query.setParameter("instrumentid", instrumentId);
+            query.setParameter(INSTRUMENTID, instrumentId);
             query.setParameter("edgetype", edgeType);
             result = (List<InstrumentGraphEntry>) query.getResultList();
         } finally {
@@ -194,7 +194,7 @@ public class InstrumentDaoImpl extends BaseDao<Instrument> implements Instrument
         try{
             marketDataEm = this.marketDataEmf.createEntityManager();
             Query query = marketDataEm.createQuery("select i FROM Instrument i JOIN InstrumentGraphEntry a ON i.instrumentid=a.id.descendant WHERE a.id.ancestor= :instrumentid and a.id.edgetype= :edgetype and a.pathlength>0");
-            query.setParameter("instrumentid", instrumentId);
+            query.setParameter(INSTRUMENTID, instrumentId);
             query.setParameter("edgetype", edgeType);
             result = (List<Instrument>) query.getResultList();
         } finally {
@@ -209,7 +209,7 @@ public class InstrumentDaoImpl extends BaseDao<Instrument> implements Instrument
         try{
             marketDataEm = this.marketDataEmf.createEntityManager();
             Query query = marketDataEm.createQuery("select i FROM Instrument i JOIN InstrumentGraphEntry a ON i.instrumentid=a.id.descendant WHERE a.id.ancestor= :instrumentid and a.id.edgetype= :edgetype and a.pathlength= :pathlength");
-            query.setParameter("instrumentid", instrumentId);
+            query.setParameter(INSTRUMENTID, instrumentId);
             query.setParameter("edgetype", edgeType);
             query.setParameter("pathlength", pathlength);
             result = (List<Instrument>) query.getResultList();
@@ -235,7 +235,7 @@ public class InstrumentDaoImpl extends BaseDao<Instrument> implements Instrument
             marketDataEm = this.marketDataEmf.createEntityManager();
             Query query = marketDataEm.createQuery("select i FROM InstrumentGraphEntry a JOIN Instrument i ON i.instrumentid=a.id.descendant "
                 + "WHERE a.id.ancestor= :instrumentid and a.id.edgetype= :edgetype and a.pathlength=1 and i.instrumentTypeId= :instrumenttype");
-            query.setParameter("instrumentid", tenantId);
+            query.setParameter(INSTRUMENTID, tenantId);
             query.setParameter("edgetype", edgetype);
             query.setParameter("instrumenttype", instrumentType.getValue());
             result = getFirstQueryResult(query);
@@ -253,7 +253,7 @@ public class InstrumentDaoImpl extends BaseDao<Instrument> implements Instrument
             Query query = marketDataEm.createQuery("select a.id.ancestor FROM InstrumentGraphEntry a "
                 + "WHERE a.id.descendant= :instrumentid and a.id.edgetype= :edgetype "
                 + "ORDER BY a.pathlength desc ");
-            query.setParameter("instrumentid", instrumentId);
+            query.setParameter(INSTRUMENTID, instrumentId);
             query.setParameter("edgetype", edgeType);
             result = getFirstIntegerQueryResult(query);
         } finally {

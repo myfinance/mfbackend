@@ -159,6 +159,11 @@ public class InstrumentServiceImpl implements InstrumentService {
     }
 
     @Override
+    public List<InstrumentProperties> getInstrumentProperties(int instrumentId) {
+        return instrumentDao.getInstrumentProperties(instrumentId);
+    }
+
+    @Override
     public void saveEquity(String theisin, String description) {
         String isin = theisin.toUpperCase();
         Optional<Equity> existingSec = getEquity(isin);

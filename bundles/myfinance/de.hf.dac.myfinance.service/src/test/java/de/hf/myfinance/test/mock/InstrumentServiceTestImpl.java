@@ -1,6 +1,5 @@
 package de.hf.myfinance.test.mock;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
@@ -10,6 +9,7 @@ import de.hf.dac.myfinance.api.domain.Equity;
 import de.hf.dac.myfinance.api.domain.Giro;
 import de.hf.dac.myfinance.api.domain.Instrument;
 import de.hf.dac.myfinance.api.domain.InstrumentGraphEntry;
+import de.hf.dac.myfinance.api.domain.InstrumentProperties;
 import de.hf.dac.myfinance.api.domain.InstrumentType;
 import de.hf.dac.myfinance.api.domain.ValuePerDate;
 import de.hf.dac.myfinance.api.service.InstrumentService;
@@ -161,6 +161,12 @@ public class InstrumentServiceTestImpl implements InstrumentService {
             List<ValuePerDate> realEstateProfits, boolean isActive) {
         // TODO Auto-generated method stub
         
+    }
+
+    @Override
+    public List<InstrumentProperties> getInstrumentProperties(int instrumentId) {
+        // TODO Auto-generated method stub
+        return null;
     }
     
 }

@@ -18,8 +18,6 @@
 package de.hf.dac.myfinance.api.service;
 
 import de.hf.dac.myfinance.api.domain.*;
-
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
@@ -37,6 +35,7 @@ public interface InstrumentService {
     List<InstrumentGraphEntry> getAncestorGraphEntries(int instrumentId, EdgeType edgeType);
     List<Instrument> getInstrumentChilds(int instrumentId, EdgeType edgeType, int pathlength);
     Instrument getIncomeBudget(int tenantId);
+    List<InstrumentProperties> getInstrumentProperties(int instrumentId);
     void newTenant(String description, LocalDateTime ts);
     void updateInstrument(int instrumentId, String description, boolean isActive);
     void newBudget(String description, int budgetGroupId, LocalDateTime ts);
