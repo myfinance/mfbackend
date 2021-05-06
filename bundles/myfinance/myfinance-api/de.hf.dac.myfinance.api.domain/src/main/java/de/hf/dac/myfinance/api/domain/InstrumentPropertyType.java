@@ -20,4 +20,12 @@ public enum InstrumentPropertyType {
             default: return "int";
         }
     }
+
+    public String getStringValue(){
+        switch(value){
+            case 1: return "YIELDGOAL";
+            case 2: return "REALESTATEPROFITS";
+            default: return "NA";
+        }
+    }
 }
