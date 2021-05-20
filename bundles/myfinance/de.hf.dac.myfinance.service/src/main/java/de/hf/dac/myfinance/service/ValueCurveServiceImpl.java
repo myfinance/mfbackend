@@ -29,6 +29,7 @@ import de.hf.dac.myfinance.api.service.ValueCurveCache;
 import de.hf.dac.myfinance.api.service.ValueCurveService;
 import de.hf.dac.myfinance.valuehandler.CashAccValueHandler;
 import de.hf.dac.myfinance.valuehandler.PortfolioValueHandler;
+import de.hf.dac.myfinance.valuehandler.RealEstateValueHandler;
 import de.hf.dac.myfinance.valuehandler.SecurityValueHandler;
 import de.hf.dac.myfinance.valuehandler.TenantValueHandler;
 import de.hf.dac.myfinance.valuehandler.ValueHandler;
@@ -79,11 +80,13 @@ public class ValueCurveServiceImpl implements ValueCurveService {
                 break;  
             case PORTFOLIO:
                 valueHandler = new PortfolioValueHandler(instrumentService, this);
-                break;                                
+                break;   
+            case REALESTATE: 
+                valueHandler = new RealEstateValueHandler(instrumentService, this);
+                break;                                             
             case DEPRECATIONOBJECT:
             case LIVEINSURANCE:
             case LOAN:
-            case REALESTATE:
             case UNKNOWN:           
             default:
                 throw new MFException(MFMsgKey.UNKNOWN_INSTRUMENTTYPE_EXCEPTION, "Type:"+instrumentType);   
