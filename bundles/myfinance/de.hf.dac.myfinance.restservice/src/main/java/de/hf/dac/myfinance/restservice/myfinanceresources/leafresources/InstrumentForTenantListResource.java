@@ -1,10 +1,10 @@
 /**
  * ----------------------------------------------------------------------------
- * ---          DZ Bank FfM - Application Development                       ---
+ * ---          hf - Application Development                       ---
  * Copyright (c) 2014, ... All Rights Reserved
  * Project     : dac
  * File        : InstrumentForTenantListResource.java
- * Author(s)   : xn01598
+ * Author(s)   : hf
  * Created     : 09.09.2019
  * ----------------------------------------------------------------------------
  */

@@ -1,10 +1,10 @@
 /**
  * ----------------------------------------------------------------------------
- * ---          DZ Bank FfM - Application Development                       ---
+ * ---          HF - Application Development                       ---
  * Copyright (c) 2014, ... All Rights Reserved
  * Project     : dac
  * File        : InstrumentListModel.java
- * Author(s)   : xn01598
+ * Author(s)   : hf
  * Created     : 01.06.2018
  * ----------------------------------------------------------------------------
  */

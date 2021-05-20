@@ -1,7 +1,6 @@
 package de.hf.dac.myfinance.valuehandler;
 
 import java.time.LocalDate;
-import java.util.HashSet;
 import java.util.TreeMap;
 import java.util.TreeSet;
 
