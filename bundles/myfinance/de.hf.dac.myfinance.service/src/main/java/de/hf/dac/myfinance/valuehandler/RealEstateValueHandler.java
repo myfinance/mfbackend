@@ -38,6 +38,7 @@ public class RealEstateValueHandler extends AbsValueHandler{
         var currentYieldgoal = 0.0;
         var currentProfit = 0.0;
         Double currentValue;
+        valueCurve.put(dates.first().minusDays(1),0.0);
         for( var date : dates) {
             if(profits.containsKey(date)) {
                 currentProfit = profits.get(date);
