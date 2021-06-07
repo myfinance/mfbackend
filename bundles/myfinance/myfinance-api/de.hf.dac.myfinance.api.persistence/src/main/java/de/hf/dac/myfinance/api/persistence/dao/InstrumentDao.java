@@ -34,6 +34,7 @@ public interface InstrumentDao {
     void saveInstrument(Instrument instrument);
     void updateInstrument(int instrumentId, String description, boolean isActive);
     void saveSymbol(SecuritySymbols symbol);
+    String deleteSymbols(int symbolId);
     List<InstrumentGraphEntry> getAncestorGraphEntries(int instrumentId, EdgeType edgeType);
     Optional<Integer> getRootInstrument(int instrumentId, EdgeType edgeType);
     void saveGraphEntry(InstrumentGraphEntry instrumentGraphEntry);

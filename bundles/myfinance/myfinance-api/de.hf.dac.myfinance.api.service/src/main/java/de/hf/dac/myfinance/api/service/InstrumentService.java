@@ -47,5 +47,6 @@ public interface InstrumentService {
     List<Instrument> getSecurities();
     void saveEquity(String isin, String description);
     void saveSymbol(String isin, String symbol, String currencyCode);
+    void deleteSymbols(String theisin);
     void saveCurrency(String currencyCode, String description);
 }

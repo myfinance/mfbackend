@@ -248,6 +248,19 @@ public class EnvironmentDataResource extends BaseSecuredResource<OpType,OpLevel>
     }
 
     @POST
+    @Path("/rmSymbols")
+    @Produces(MediaType.APPLICATION_JSON)
+    @ApiOperation(value = "remove symbols")
+    @ApiResponses(value = {
+        @ApiResponse(code = HttpStatus.SC_NO_CONTENT, message = "removed"),
+        @ApiResponse(code = HttpStatus.SC_INTERNAL_SERVER_ERROR, message = "Something wrong in Server")})
+    public Response rmSymbols(@QueryParam("isin") @ApiParam(value="the isin") String isin) {
+        checkOperationAllowed(OpType.WRITE);
+        marketDataEnvironment.getInstrumentService().deleteSymbols(isin);
+        return Response.ok().build();
+    }
+
+    @POST
     @Path("/addCurrency")
     @Produces(MediaType.APPLICATION_JSON)
     @ApiOperation(value = "save Instrument")

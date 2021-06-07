@@ -168,5 +168,11 @@ public class InstrumentServiceTestImpl implements InstrumentService {
         // TODO Auto-generated method stub
         return null;
     }
+
+    @Override
+    public void deleteSymbols(String theisin) {
+        // TODO Auto-generated method stub
+
+    }
     
 }

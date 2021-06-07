@@ -210,6 +210,21 @@ public class InstrumentServiceImpl implements InstrumentService {
     }
 
     @Override
+    public void deleteSymbols(String theisin){
+
+        String isin = theisin.toUpperCase();
+
+        Optional<Equity> existingSec = getEquity(isin);
+        if(!existingSec.isPresent()){
+            throw new MFException(MFMsgKey.UNKNOWN_INSTRUMENT_EXCEPTION, "Symbols not deleted: unknown security:"+isin);
+        }
+        Set<SecuritySymbols> symbols = existingSec.get().getSymbols();
+        for (SecuritySymbols securitySymbol : symbols) {
+            auditService.saveMessage(instrumentDao.deleteSymbols(securitySymbol.getSymbolid()), Severity.INFO, AUDIT_MSG_TYPE);
+        }
+    }
+
+    @Override
     public void saveCurrency(String currencyCode, String description) {
         String curCode = currencyCode.toUpperCase();
         Optional<Instrument> existingCur = getCurrency(curCode);
