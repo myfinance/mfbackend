@@ -87,7 +87,7 @@ public class InstrumentDaoImpl extends BaseDao<Instrument> implements Instrument
 
     @Override
     public List<Instrument> getSecurities() {
-        List instrumentTypeIds=getInstrumentTypeIds();
+        var instrumentTypeIds=getInstrumentTypeIds();
         List<Instrument> result;
         try{
             marketDataEm = this.marketDataEmf.createEntityManager();
@@ -171,6 +171,24 @@ public class InstrumentDaoImpl extends BaseDao<Instrument> implements Instrument
     @Override
     public void saveSymbol(SecuritySymbols symbol) {
         save(symbol);
+    }
+
+    @Override
+    public String deleteSymbols(int symbolId) {
+        String result = " symbol with id "+symbolId;
+        try {
+
+            marketDataEm = this.marketDataEmf.createEntityManager();
+            marketDataEm.getTransaction().begin();
+            SecuritySymbols securitySymbols = marketDataEm.find(SecuritySymbols.class, symbolId);
+            result+=" ,symbol: '"+securitySymbols.getSymbol()+ " deleted";
+            marketDataEm.remove(securitySymbols);
+
+            marketDataEm.getTransaction().commit();
+        } finally {
+            marketDataEm.close();
+        }
+        return result;
     }
 
     @Override
