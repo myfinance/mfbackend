@@ -221,7 +221,7 @@ public class EnvironmentDataResource extends BaseSecuredResource<OpType,OpLevel>
     @POST
     @Path("/addEquity")
     @Produces(MediaType.APPLICATION_JSON)
-    @ApiOperation(value = "save Instrument")
+    @ApiOperation(value = "save Equity")
     @ApiResponses(value = {
         @ApiResponse(code = HttpStatus.SC_NO_CONTENT, message = "added"),
         @ApiResponse(code = HttpStatus.SC_INTERNAL_SERVER_ERROR, message = "Something wrong in Server")})
@@ -229,6 +229,21 @@ public class EnvironmentDataResource extends BaseSecuredResource<OpType,OpLevel>
         @QueryParam("description") @ApiParam(value="description") String description) {
         checkOperationAllowed(OpType.WRITE);
         marketDataEnvironment.getInstrumentService().saveEquity(isin, description);
+        return Response.ok().build();
+    }
+
+    @POST
+    @Path("/addFullEquity")
+    @Produces(MediaType.APPLICATION_JSON)
+    @ApiOperation(value = "save Equity with symbols")
+    @ApiResponses(value = {
+        @ApiResponse(code = HttpStatus.SC_NO_CONTENT, message = "added"),
+        @ApiResponse(code = HttpStatus.SC_INTERNAL_SERVER_ERROR, message = "Something wrong in Server")})
+    public Response addFullEquity(@QueryParam("isin") @ApiParam(value="the isin") String isin,
+        @QueryParam("description") @ApiParam(value="description") String description,
+        @QueryParam("symbols") @ApiParam(value="symbols") List<String> symbols) {
+        checkOperationAllowed(OpType.WRITE);
+        marketDataEnvironment.getInstrumentService().saveFullEquity(isin, description, parseSymbolList(symbols));
         return Response.ok().build();
     }
 
@@ -402,6 +417,15 @@ public class EnvironmentDataResource extends BaseSecuredResource<OpType,OpLevel>
         var valueList = new ArrayList<ValuePerDate>();
         for (var entry : stringValues) {
             valueList.add(new ValuePerDate(entry));
+
+        }
+        return valueList;
+    }
+
+    private List<String[]> parseSymbolList(List<String> stringValues) {
+        var valueList = new ArrayList<String[]>();
+        for (var entry : stringValues) {
+            valueList.add(entry.split(","));
 
         }
         return valueList;

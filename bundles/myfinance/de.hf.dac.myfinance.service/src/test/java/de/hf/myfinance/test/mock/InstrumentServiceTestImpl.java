@@ -174,5 +174,11 @@ public class InstrumentServiceTestImpl implements InstrumentService {
         // TODO Auto-generated method stub
 
     }
+
+    @Override
+    public void saveFullEquity(String theisin, String description, List<String[]> symbols) {
+        // TODO Auto-generated method stub
+
+    }
     
 }

@@ -46,6 +46,7 @@ public interface InstrumentService {
     Optional<Equity> getEquity(String isin);
     List<Instrument> getSecurities();
     void saveEquity(String isin, String description);
+    void saveFullEquity(String theisin, String description, List<String[]> symbols);
     void saveSymbol(String isin, String symbol, String currencyCode);
     void deleteSymbols(String theisin);
     void saveCurrency(String currencyCode, String description);

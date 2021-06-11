@@ -174,7 +174,16 @@ public class InstrumentServiceImpl implements InstrumentService {
         } else {
             existingSec.get().setDescription(description);
             auditService.saveMessage("Equity " + theisin +" updated with new description: " + description, Severity.INFO, AUDIT_MSG_TYPE);
-            instrumentDao.saveInstrument(existingSec.get());
+            instrumentDao.updateInstrument(existingSec.get().getInstrumentid(), description, true);
+        }
+    }
+
+    @Override
+    public void saveFullEquity(String theisin, String description, List<String[]> symbols) {
+        saveEquity(theisin, description);
+        deleteSymbols(theisin);
+        for (String[] symbol : symbols) {
+            saveSymbol(theisin, symbol[0], symbol[1]);
         }
     }
 
@@ -183,7 +192,7 @@ public class InstrumentServiceImpl implements InstrumentService {
 
         String isin = theisin.toUpperCase();
         String symbol = thesymbol.toUpperCase();
-        String currencyCode = thecurrencyCode.toUpperCase();
+        String currencyCode = thecurrencyCode.toUpperCase().trim();
 
         Optional<Instrument> currency = getCurrency(currencyCode);
         if(!currency.isPresent()) {

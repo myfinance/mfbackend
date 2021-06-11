@@ -107,8 +107,8 @@ public class InstrumentDaoImpl extends BaseDao<Instrument> implements Instrument
         Optional<Instrument> result;
         try {
             marketDataEm = this.marketDataEmf.createEntityManager();
-            Query query = marketDataEm.createQuery("select a FROM Currency a WHERE businesskey = :currencycode");
-            query.setParameter("currencycode", currencyCode);
+            Query query = marketDataEm.createQuery("select a FROM Currency a WHERE businesskey = :businesskey");
+            query.setParameter("businesskey", currencyCode);
             result = getFirstQueryResult(query);
         } finally {
             marketDataEm.close();
