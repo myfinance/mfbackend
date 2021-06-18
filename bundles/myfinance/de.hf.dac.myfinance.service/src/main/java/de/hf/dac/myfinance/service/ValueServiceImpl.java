@@ -24,6 +24,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.TreeMap;
 
 import javax.inject.Inject;
 
@@ -54,7 +55,7 @@ public class ValueServiceImpl implements ValueService {
     @Override
     public Map<LocalDate, Double> getValueCurve(final int instrumentId, final LocalDate startDate,
             final LocalDate endDate) {
-        final Map<LocalDate, Double> adjValueCurve = new HashMap<>();
+        final Map<LocalDate, Double> adjValueCurve = new TreeMap<>();
         if (startDate.isAfter(endDate) || startDate.getYear() < 1970)
             return adjValueCurve;
         final Map<LocalDate, Double> valueCurve = getValueCurve(instrumentId);
