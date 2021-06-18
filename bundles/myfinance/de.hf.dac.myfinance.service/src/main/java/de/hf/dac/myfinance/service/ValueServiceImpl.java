@@ -58,12 +58,31 @@ public class ValueServiceImpl implements ValueService {
         if (startDate.isAfter(endDate) || startDate.getYear() < 1970)
             return adjValueCurve;
         final Map<LocalDate, Double> valueCurve = getValueCurve(instrumentId);
+        var first = LocalDate.MIN;
+        var last = LocalDate.MAX;
         for (final LocalDate date : valueCurve.keySet()) {
+            if(first==LocalDate.MIN) {
+                first = date;
+            }
             if (!date.isBefore(startDate) && !date.isAfter(endDate)) {
                 adjValueCurve.put(date, valueCurve.get(date));
             }
+            last = date;
         }
-        return valueCurve;
+        if(!valueCurve.isEmpty()) {
+            if(first.isAfter(endDate)) {
+                adjValueCurve.put(startDate, valueCurve.get(first));
+                adjValueCurve.put(endDate, valueCurve.get(first));
+            } else if(last.isBefore(startDate)) {
+                adjValueCurve.put(startDate, valueCurve.get(last));
+                adjValueCurve.put(endDate, valueCurve.get(last));
+            } else if(first.isAfter(startDate)) {
+                adjValueCurve.put(startDate, valueCurve.get(first));
+            } else if(last.isBefore(endDate)) {
+                adjValueCurve.put(endDate, valueCurve.get(last));
+            }
+        }
+        return adjValueCurve;
     }
 
     @Override

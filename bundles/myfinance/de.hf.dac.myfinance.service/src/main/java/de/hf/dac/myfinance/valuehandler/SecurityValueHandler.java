@@ -19,6 +19,7 @@ package de.hf.dac.myfinance.valuehandler;
 
 import de.hf.dac.myfinance.api.domain.EndOfDayPrice;
 import de.hf.dac.myfinance.api.domain.Instrument;
+import de.hf.dac.myfinance.api.domain.InstrumentType;
 import de.hf.dac.myfinance.api.persistence.dao.EndOfDayPriceDao;
 import de.hf.dac.myfinance.api.service.ValueCurveService;
 
@@ -47,6 +48,10 @@ public class SecurityValueHandler implements ValueHandler{
 
     public TreeMap<LocalDate, Double> calcValueCurve(Instrument instrument){
         TreeMap<LocalDate, Double> valueCurve = new TreeMap<>();
+        if(instrument.getInstrumentType()==InstrumentType.CURRENCY && instrument.getBusinesskey().equals("EUR")) {
+            valueCurve.put(LocalDate.now(), 1.0);
+            return valueCurve;
+        }
 
         Map<LocalDate, EndOfDayPrice> prices = endOfDayPriceDao.listEndOfDayPrices(instrument.getInstrumentid()).stream().collect(
             Collectors.toMap(x->x.getDayofprice(), x->x));
