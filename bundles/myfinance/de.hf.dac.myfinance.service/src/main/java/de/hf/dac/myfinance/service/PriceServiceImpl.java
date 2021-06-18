@@ -7,6 +7,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
 
 import javax.inject.Inject;
 
@@ -17,6 +18,7 @@ import de.hf.dac.myfinance.api.domain.EndOfDayPrice;
 import de.hf.dac.myfinance.api.domain.Equity;
 import de.hf.dac.myfinance.api.domain.Instrument;
 import de.hf.dac.myfinance.api.domain.InstrumentType;
+import de.hf.dac.myfinance.api.domain.SecuritySymbols;
 import de.hf.dac.myfinance.api.domain.Source;
 import de.hf.dac.myfinance.api.domain.SourceName;
 import de.hf.dac.myfinance.api.exceptions.MFException;
@@ -46,6 +48,15 @@ public class PriceServiceImpl implements PriceService{
     public List<EndOfDayPrice> listEodPrices(int instrumentId) {
 
         return endOfDayPriceDao.listEndOfDayPrices(instrumentId);
+    }
+
+    @Override
+    public Set<SecuritySymbols> listSymbols(String isin) {
+        Optional<Equity> equity = instrumentDao.getEquity(isin);
+        if(!equity.isPresent()){
+            throw new MFException(MFMsgKey.UNKNOWN_INSTRUMENT_EXCEPTION, "Equity with isin "+isin+" is not available");
+        }
+        return equity.get().getSymbols();
     }
 
     @Override

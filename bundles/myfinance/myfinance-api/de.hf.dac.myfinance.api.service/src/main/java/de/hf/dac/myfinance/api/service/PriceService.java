@@ -4,7 +4,9 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
+import de.hf.dac.myfinance.api.domain.SecuritySymbols;
 import de.hf.dac.myfinance.api.domain.EndOfDayPrice;
 import de.hf.dac.myfinance.api.domain.Source;
 
@@ -16,4 +18,5 @@ public interface PriceService {
     void saveEndOfDayPrice(String currencyCode, String isin, LocalDate dayofprice, Double value, LocalDateTime lastchanged);
     void importPrices(LocalDateTime ts);
     void fillPriceHistory(int sourceId, String isin, LocalDateTime ts);
+    Set<SecuritySymbols> listSymbols(String isin);
 }

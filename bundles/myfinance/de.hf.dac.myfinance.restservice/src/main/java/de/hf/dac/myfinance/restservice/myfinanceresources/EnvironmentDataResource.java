@@ -25,6 +25,7 @@ import de.hf.dac.myfinance.api.application.OpLevel;
 import de.hf.dac.myfinance.api.application.OpType;
 import de.hf.dac.myfinance.api.application.servicecontext.MDEnvironmentContext;
 import de.hf.dac.myfinance.api.domain.Equity;
+import de.hf.dac.myfinance.api.domain.SecuritySymbols;
 import de.hf.dac.myfinance.api.domain.InstrumentType;
 import de.hf.dac.myfinance.api.domain.RecurrentFrequency;
 import de.hf.dac.myfinance.api.domain.ValuePerDate;
@@ -35,6 +36,7 @@ import de.hf.dac.myfinance.api.restservice.InstrumentListModel;
 import de.hf.dac.myfinance.api.restservice.InstrumentModel;
 import de.hf.dac.myfinance.api.restservice.InstrumentPropertyListModel;
 import de.hf.dac.myfinance.api.restservice.RecurrentTransactionListModel;
+import de.hf.dac.myfinance.api.restservice.SymbolListModel;
 import de.hf.dac.myfinance.api.restservice.TransactionListModel;
 import de.hf.dac.myfinance.restservice.myfinanceresources.leafresources.*;
 import de.hf.dac.services.resources.BaseSecuredResource;
@@ -260,6 +262,17 @@ public class EnvironmentDataResource extends BaseSecuredResource<OpType,OpLevel>
         checkOperationAllowed(OpType.WRITE);
         marketDataEnvironment.getInstrumentService().saveSymbol(isin, symbol, currencyCode);
         return Response.ok().build();
+    }
+
+    @Path("/getsymbols")
+    @Produces(MediaType.APPLICATION_JSON)
+    @ApiOperation(value = "get the symbols for an equity",
+            response = SymbolsForEquityListResource.class)
+    public SymbolsForEquityListResource getSymbols(@QueryParam("isin") @ApiParam(value="isin") String isin) {
+        checkOperationAllowed(OpType.READ);
+        var securitySymbols = new ArrayList<SecuritySymbols>();
+        securitySymbols.addAll(marketDataEnvironment.getPriceService().listSymbols(isin));
+        return new SymbolsForEquityListResource(new SymbolListModel(securitySymbols));
     }
 
     @POST
