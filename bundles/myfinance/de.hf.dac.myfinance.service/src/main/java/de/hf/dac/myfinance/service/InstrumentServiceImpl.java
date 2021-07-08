@@ -336,6 +336,18 @@ public class InstrumentServiceImpl implements InstrumentService {
     }
 
     @Override
+    public void newDepotAccount(String description, int tenantId, LocalDateTime ts) {
+        Optional<Instrument> accportfolio = instrumentDao.getAccountPortfolio(tenantId);
+        if(!accportfolio.isPresent()) {
+            throw new MFException(MFMsgKey.UNKNOWN_INSTRUMENT_EXCEPTION,  "Depot not saved: tenant for the id:"+tenantId+" not exists or has no accountPortfolio");
+        }
+        Depot depot = new Depot(description, true, ts);
+        auditService.saveMessage("new depot inserted:" + description, Severity.INFO, AUDIT_MSG_TYPE);
+        instrumentDao.saveInstrument(depot);
+        addInstrumentToGraph(depot.getInstrumentid(), accportfolio.get().getInstrumentid(), EdgeType.TENANTGRAPH);
+    }
+
+    @Override
     public void newRealEstate(String description, int tenantId, int valueBudgetId, List<ValuePerDate> yieldgoals, List<ValuePerDate> realEstateProfits, LocalDateTime ts) {
         Optional<Instrument> accportfolio = instrumentDao.getAccountPortfolio(tenantId);
         if(!accportfolio.isPresent()) {

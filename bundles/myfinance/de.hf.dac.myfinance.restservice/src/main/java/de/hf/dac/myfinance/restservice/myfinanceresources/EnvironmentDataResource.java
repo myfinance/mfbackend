@@ -389,6 +389,19 @@ public class EnvironmentDataResource extends BaseSecuredResource<OpType,OpLevel>
     }
 
     @POST
+    @Path("/addDepo")
+    @Produces(MediaType.APPLICATION_JSON)
+    @ApiOperation(value = "save Depot")
+    @ApiResponses(value = {
+        @ApiResponse(code = HttpStatus.SC_NO_CONTENT, message = "added"),
+        @ApiResponse(code = HttpStatus.SC_INTERNAL_SERVER_ERROR, message = "Something wrong in Server")})
+    public Response addDepot(@QueryParam("description") @ApiParam(value="description") String description,
+        @QueryParam("tenantId") @ApiParam(value="the Id of the tenant which the giro is attached to") int tenantId) {
+        checkOperationAllowed(OpType.WRITE);
+        marketDataEnvironment.getInstrumentService().newDepotAccount(description, tenantId, LocalDateTime.now());
+        return Response.ok().build();
+
+    @POST
     @Path("/addRealestate")
     @Produces(MediaType.APPLICATION_JSON)
     @ApiOperation(value = "save Realestate")

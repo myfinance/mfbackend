@@ -211,7 +211,8 @@ to create a certificate I've used my synology:
 the is easier but you can use lets encrypt directly or any other service to create a certificate as well
 
 to use the certificate in the backend you have to do the following steps:
-- unzip at your win-client and upload them to a linix server with java installed
+- unzip at your win-client and upload them to a linix server with java installed (currently my devenv2 server see MYF-527)
+- rename privkey.pem to privkey.key
 - openssl pkcs12 -export -out eneCert.pkcs12 -inkey privkey.pem -in cert.pem
 - keytool -genkey -keyalg RSA -alias selfsigned -keystore devkeystore.jks  //use your personal infos but mind to use the same password as configured in in dac.res org.ops4j.pax.web.ssl.password
 - keytool -delete -alias selfsigned -keystore devkeystore.jks //delete default certifikate 

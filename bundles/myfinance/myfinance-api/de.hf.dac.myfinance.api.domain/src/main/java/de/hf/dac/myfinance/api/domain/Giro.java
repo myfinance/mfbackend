@@ -24,7 +24,7 @@ import io.swagger.annotations.ApiModel;
 @PrimaryKeyJoinColumn(name="instrumentid")
 @Inheritance(strategy= InheritanceType.SINGLE_TABLE)
 @DiscriminatorValue(InstrumentType.GIRO_IDSTRING)
-public class Giro  extends Instrument {
+public class Giro extends Instrument {
     protected Giro(){
         super();
     }
