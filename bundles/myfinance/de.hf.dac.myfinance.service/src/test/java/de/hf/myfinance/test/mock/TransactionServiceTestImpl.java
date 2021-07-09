@@ -96,5 +96,12 @@ public class TransactionServiceTestImpl implements TransactionService {
         // TODO Auto-generated method stub
         
     }
+
+    @Override
+    public void newTrade(String description, int depotId, String isin, double amount, int accId, int budgetId,
+            double value, LocalDate transactionDate, LocalDateTime ts) {
+        // TODO Auto-generated method stub
+
+    }
     
 }

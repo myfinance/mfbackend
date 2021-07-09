@@ -140,6 +140,20 @@ public class InstrumentServiceImpl implements InstrumentService {
     }
 
     @Override
+    public Instrument getSecurity(String isin){
+        return getSecurity(isin, "");
+    }
+
+    @Override
+    public Instrument getSecurity(String isin, String errMsg) {
+        var instrument = instrumentDao.getSecurity(isin);
+        if(!instrument.isPresent()){
+            throw new MFException(MFMsgKey.UNKNOWN_INSTRUMENT_EXCEPTION, errMsg + " Instrument for isin:"+isin + " not found");
+        }
+        return instrument.get();
+    }
+
+    @Override
     public List<Instrument> getSecurities(){
         return instrumentDao.getSecurities();
     }

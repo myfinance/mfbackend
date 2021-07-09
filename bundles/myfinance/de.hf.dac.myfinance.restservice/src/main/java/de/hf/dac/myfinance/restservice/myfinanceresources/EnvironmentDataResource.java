@@ -389,7 +389,7 @@ public class EnvironmentDataResource extends BaseSecuredResource<OpType,OpLevel>
     }
 
     @POST
-    @Path("/addDepo")
+    @Path("/addDepot")
     @Produces(MediaType.APPLICATION_JSON)
     @ApiOperation(value = "save Depot")
     @ApiResponses(value = {
@@ -400,6 +400,7 @@ public class EnvironmentDataResource extends BaseSecuredResource<OpType,OpLevel>
         checkOperationAllowed(OpType.WRITE);
         marketDataEnvironment.getInstrumentService().newDepotAccount(description, tenantId, LocalDateTime.now());
         return Response.ok().build();
+    }
 
     @POST
     @Path("/addRealestate")
@@ -583,6 +584,26 @@ public class EnvironmentDataResource extends BaseSecuredResource<OpType,OpLevel>
     public Response delRecurrentTransfer(@QueryParam("recurrentTransactionId") @ApiParam(value="recurrentTransactionId") int recurrentTransactionId) {
         checkOperationAllowed(OpType.WRITE);
         marketDataEnvironment.getTransactionService().deleteRecurrentTransaction(recurrentTransactionId);
+        return Response.ok().build();
+    }
+
+    @POST
+    @Path("/addTrade")
+    @Produces(MediaType.APPLICATION_JSON)
+    @ApiOperation(value = "save trade")
+    @ApiResponses(value = {
+        @ApiResponse(code = HttpStatus.SC_NO_CONTENT, message = "added"),
+        @ApiResponse(code = HttpStatus.SC_INTERNAL_SERVER_ERROR, message = "Something wrong in Server")})
+    public Response addTrade(@QueryParam("description") @ApiParam(value="description") String description,
+        @QueryParam("depotId") @ApiParam(value="the depotId of the trade") int depotId,
+        @QueryParam("isin") @ApiParam(value="the isin of the instrument") String isin,
+        @QueryParam("amount") @ApiParam(value="the amount of instruments") double amount,
+        @QueryParam("transactiondate") @ApiParam(value="the transactiondate(yyyy-mm-dd") String transactiondate,
+        @QueryParam("accId") @ApiParam(value="the accountId of the giro") int accId,
+        @QueryParam("budgetId") @ApiParam(value="the budgetId of the trade") int budgetId,
+        @QueryParam("value") @ApiParam(value="the value of the trade") double value) {
+        checkOperationAllowed(OpType.WRITE);
+        marketDataEnvironment.getTransactionService().newTrade(description, depotId, isin, amount, accId, budgetId, value, LocalDate.parse(transactiondate), LocalDateTime.now());
         return Response.ok().build();
     }
 }

@@ -180,5 +180,23 @@ public class InstrumentServiceTestImpl implements InstrumentService {
         // TODO Auto-generated method stub
 
     }
+
+    @Override
+    public void newDepotAccount(String description, int tenantId, LocalDateTime ts) {
+        // TODO Auto-generated method stub
+
+    }
+
+    @Override
+    public Instrument getSecurity(String isin) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public Instrument getSecurity(String isin, String errMsg) {
+        // TODO Auto-generated method stub
+        return null;
+    }
     
 }
