@@ -4,6 +4,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.HashSet;
 
+import de.hf.dac.api.io.audit.AuditService;
 import de.hf.dac.myfinance.api.domain.Instrument;
 import de.hf.dac.myfinance.api.domain.InstrumentType;
 import de.hf.dac.myfinance.api.domain.Trade;
@@ -11,25 +12,41 @@ import de.hf.dac.myfinance.api.domain.Transaction;
 import de.hf.dac.myfinance.api.domain.TransactionType;
 import de.hf.dac.myfinance.api.exceptions.MFException;
 import de.hf.dac.myfinance.api.exceptions.MFMsgKey;
+import de.hf.dac.myfinance.api.persistence.dao.CashflowDao;
+import de.hf.dac.myfinance.api.persistence.dao.TransactionDao;
 import de.hf.dac.myfinance.api.service.InstrumentService;
+import de.hf.dac.myfinance.api.service.ValueCurveService;
 
-public class TradeHandler extends AbsTransactionHandler {
+public class TradeHandler extends IncomeExpensesHandler {
     Instrument security;
     Instrument depot;
     double amount;
     
     public TradeHandler(InstrumentService instrumentService, 
-            int accId, 
+            TransactionDao transactionDao, 
+            AuditService auditService,
+            ValueCurveService valueCurveService,
+            CashflowDao cashflowDao) {
+        super(instrumentService, transactionDao, auditService, valueCurveService, cashflowDao);
+        transactionType = TransactionType.TRADE;
+    }
+
+    public void init(int accId, 
             int budgetId,
             String isin,
             int depotId,
-            double amount) {
-        super(instrumentService, accId, budgetId);
-        this.amount = amount;
-        transactionType = TransactionType.TRADE;
+            double amount,
+            LocalDateTime ts, 
+            String description, 
+            double value,
+            LocalDate transactionDate) {
+        super.init(accId, budgetId, ts, description, value, transactionDate);                
         this.security = validateSecurity(isin);
         this.depot = validateInstrument(depotId, InstrumentType.DEPOT);
+        this.amount = amount;
+        saveMsg="new Trade saved with properties: isin "+ isin + ", amount " + amount + ", depot: " + depotId + ", Account "+account.getInstrumentid()+", Budget "+budget.getInstrumentid();
     }
+
 
     private Instrument validateSecurity(String isin) {
         var thesecurity = instrumentService.getSecurity(isin, ERROR_MSG + ": Unknown security:");
@@ -51,5 +68,11 @@ public class TradeHandler extends AbsTransactionHandler {
     protected Transaction prepareTransaction(LocalDateTime ts, String description, double value, LocalDate transactionDate) {
         var transaction = super.prepareTransaction(ts, description, value, transactionDate);
         return prepareTrade(transaction);
+    }
+
+    @Override
+    protected void updateCache() {
+        super.updateCache();
+        valueCurveService.updateCache(depot.getInstrumentid());
     }
 }

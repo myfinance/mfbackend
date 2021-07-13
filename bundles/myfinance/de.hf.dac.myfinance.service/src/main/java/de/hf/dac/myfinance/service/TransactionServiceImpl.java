@@ -2,11 +2,9 @@ package de.hf.dac.myfinance.service;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-import java.util.Set;
 
 import javax.inject.Inject;
 
@@ -14,7 +12,6 @@ import de.hf.dac.api.io.audit.AuditService;
 import de.hf.dac.api.io.domain.Severity;
 import de.hf.dac.myfinance.api.domain.Cashflow;
 import de.hf.dac.myfinance.api.domain.EdgeType;
-import de.hf.dac.myfinance.api.domain.Instrument;
 import de.hf.dac.myfinance.api.domain.InstrumentType;
 import de.hf.dac.myfinance.api.domain.RecurrentFrequency;
 import de.hf.dac.myfinance.api.domain.RecurrentTransaction;
@@ -29,116 +26,63 @@ import de.hf.dac.myfinance.api.persistence.dao.TransactionDao;
 import de.hf.dac.myfinance.api.service.InstrumentService;
 import de.hf.dac.myfinance.api.service.TransactionService;
 import de.hf.dac.myfinance.api.service.ValueCurveService;
+import de.hf.dac.myfinance.service.transactionhandler.AbsTransactionHandler;
+import de.hf.dac.myfinance.service.transactionhandler.AbsTransferHandler;
 import de.hf.dac.myfinance.service.transactionhandler.IncomeExpensesHandler;
 import de.hf.dac.myfinance.service.transactionhandler.LinkedIncomeExpensesHandler;
 import de.hf.dac.myfinance.service.transactionhandler.TradeHandler;
+import de.hf.dac.myfinance.service.transactionhandler.TransactionHandlerFactory;
 
 public class TransactionServiceImpl implements TransactionService {
     private InstrumentService instrumentService;
-    private ValueCurveService service;
+    private ValueCurveService valueCurveService;
     private AuditService auditService;
     private TransactionDao transactionDao;
     private RecurrentTransactionDao recurrentTransactionDao;
     private CashflowDao cashflowDao;
+    private TransactionHandlerFactory transactionHandlerFactory;
 
     private static final String AUDIT_MSG_TYPE="TransactionService_User_Event";
 
     @Inject
     public TransactionServiceImpl(InstrumentService instrumentService, TransactionDao transactionDao, RecurrentTransactionDao recurrentTransactionDao, CashflowDao cashflowDao, 
-                AuditService auditService, ValueCurveService service){
+                AuditService auditService, ValueCurveService valueCurveService){
         this.instrumentService = instrumentService;
         this.transactionDao = transactionDao;
         this.recurrentTransactionDao = recurrentTransactionDao;
         this.cashflowDao = cashflowDao;
-        this.service = service;
+        this.valueCurveService = valueCurveService;
         this.auditService = auditService;
+        this.transactionHandlerFactory = new TransactionHandlerFactory(this.instrumentService, this.transactionDao, this.auditService, this.valueCurveService, this.cashflowDao);
     }
 
     @Override
     public void newIncomeExpense(String description, int accId, int budgetId, double value, LocalDate transactionDate, LocalDateTime ts){
-        var transactionHandler = new IncomeExpensesHandler(instrumentService, accId, budgetId);
-        transactionHandler.save(transactionDao, auditService, service, ts, description, value, transactionDate);
+        IncomeExpensesHandler transactionHandler = transactionHandlerFactory.createIncomeExpensesHandler();
+        transactionHandler.init(accId, budgetId, ts, description, value, transactionDate);
+        transactionHandler.save();
     }
 
     @Override
     public void newLinkedIncomeExpense(String description, int accId, int linkedAccId, int budgetId, double value, LocalDate transactionDate, LocalDateTime ts){
-        var transactionHandler = new LinkedIncomeExpensesHandler(instrumentService, accId, budgetId, linkedAccId, true);
-        transactionHandler.save(transactionDao, auditService, service, ts, description, value, transactionDate);
+        LinkedIncomeExpensesHandler transactionHandler = transactionHandlerFactory.createLinkedIncomeExpensesHandler();
+        transactionHandler.init(accId, budgetId, ts, description, value, transactionDate, linkedAccId);
+        transactionHandler.save();
     }
 
     @Override
     public void newTransfer(String description, int srcInstrumentId, int trgInstrumentId, double value, LocalDate transactionDate, LocalDateTime ts){
-        var src = instrumentService.getInstrument(srcInstrumentId, "Transfer not saved:");
-        TransactionType transactionType =TransactionType.TRANSFER;
-        var trg = instrumentService.getInstrument(trgInstrumentId, "Transfer not saved:");
-        if(trg.getInstrumentType() == InstrumentType.BUDGET){
-            transactionType =TransactionType.BUDGETTRANSFER;
-            if(src.getInstrumentType() != InstrumentType.BUDGET){
-                throw new MFException(MFMsgKey.WRONG_INSTRUMENTTYPE_EXCEPTION, "Only transfers from budget to Budget or from Account to Account are allowed");
-            }
-        } else {
-            if( !isAccountTransferAllowed(trg) || !isAccountTransferAllowed(src) ){
-                throw new MFException(MFMsgKey.WRONG_INSTRUMENTTYPE_EXCEPTION, "No Transfer allowed for this accounts:");
-            }
-        }
-
-        Optional<Integer> tenantSrc = instrumentService.getRootInstrument(srcInstrumentId, EdgeType.TENANTGRAPH);
-        Optional<Integer> tenantTrg = instrumentService.getRootInstrument(trgInstrumentId, EdgeType.TENANTGRAPH);
-
-        if(!tenantSrc.isPresent()
-            || !tenantTrg.isPresent()
-            || tenantSrc.get()!=tenantTrg.get()){
-            throw new MFException(MFMsgKey.WRONG_TENENT_EXCEPTION, "IncomeExpense not saved: budget and account have not the same tenant");
-        }
-        Transaction transaction = new Transaction(description, transactionDate, ts, transactionType);
-
-        Cashflow srcCashflow = new Cashflow(src, value * -1);
-        srcCashflow.setTransaction(transaction);
-        Cashflow trgCashflow = new Cashflow(trg, value);
-        trgCashflow.setTransaction(transaction);
-        Set<Cashflow> cashflows = new HashSet<>();
-        cashflows.add(srcCashflow);
-        cashflows.add(trgCashflow);
-
-        service.updateCache(srcInstrumentId);
-        service.updateCache(trgInstrumentId);
-
-        transaction.setCashflows(cashflows);
-        auditService.saveMessage("new transaction saved for Instrument "+srcInstrumentId+" and  "+trgInstrumentId+". Date:" + transactionDate + ", value:" + value + ", desc:" +description,
-            Severity.INFO, AUDIT_MSG_TYPE);
-        transactionDao.saveTransaction(transaction);
+        var srcInstrument = instrumentService.getInstrument(srcInstrumentId, "Can not add transfer: Unknown instrument:");
+        var trgInstrument = instrumentService.getInstrument(trgInstrumentId, "Can not add transfer: Unknown instrument:");
+        AbsTransferHandler transactionHandler = transactionHandlerFactory.createTransferOrBudgetTransferHandler(srcInstrument);
+        transactionHandler.init(srcInstrument, trgInstrument, ts, description, value, transactionDate);
+        transactionHandler.save();
     }
 
     @Override
     public void updateTransaction(int transactionId, String description, double value, LocalDate transactionDate, LocalDateTime ts){
-        Optional<Transaction> transaction = transactionDao.getTransaction(transactionId);
-        if(!transaction.isPresent()){
-            throw new MFException(MFMsgKey.UNKNOWN_TRANSACTION_EXCEPTION, "Transaction not updated: Transaction for id:"+transactionId + " not found");
-        }
-        Transaction oldtransaction = transaction.get();
-        transactionDao.updateTransaction(transactionId, description, transactionDate, ts);
-        if(oldtransaction.getTransactionType() == TransactionType.INCOMEEXPENSES) {
-            oldtransaction.getCashflows().forEach(i-> {
-                if(i.getValue()!=value) {
-                    cashflowDao.updateCashflow(i.getCashflowid(), value);
-                    service.updateCache(i.getInstrument().getInstrumentid());
-                }});
-        } else if(oldtransaction.getTransactionType() == TransactionType.BUDGETTRANSFER ||
-                oldtransaction.getTransactionType() == TransactionType.TRANSFER) {
-            oldtransaction.getCashflows().forEach(i-> {
-                if( (i.getValue() < 0 && value < 0) || (i.getValue() > 0 && value > 0)) {
-                    cashflowDao.updateCashflow(i.getCashflowid(), value);
-                } else {
-                    cashflowDao.updateCashflow(i.getCashflowid(), -1 * value);
-                }
-                service.updateCache(i.getInstrument().getInstrumentid());
-            });
-        }
-        auditService.saveMessage(" transaction with id "+transactionId+" ,desc: '"+oldtransaction.getDescription()+
-                        "' and Transactiondate:" + oldtransaction.getTransactiondate() + "updated to desc="+description + ", date=" + transactionDate +
-                        " and value=" + value,
-                Severity.INFO, AUDIT_MSG_TYPE);
-
+        AbsTransactionHandler transactionHandler = transactionHandlerFactory.createTransactionHandler(transactionId);
+        transactionHandler.updateTransaction(description, value, transactionDate, ts);
     }
 
     @Override
@@ -146,7 +90,7 @@ public class TransactionServiceImpl implements TransactionService {
         Optional<Transaction> transaction = transactionDao.getTransaction(transactionId);
         if(transaction.isPresent()){
             transaction.get().getCashflows().forEach(i-> {
-                service.updateCache(i.getInstrument().getInstrumentid());
+                valueCurveService.updateCache(i.getInstrument().getInstrumentid());
             });
             auditService.saveMessage(transactionDao.deleteTransaction(transactionId),
                     Severity.INFO, AUDIT_MSG_TYPE);
@@ -248,16 +192,7 @@ public class TransactionServiceImpl implements TransactionService {
         return recurrentTransactionType;
     }
 
-    protected boolean isAccountTransferAllowed(Instrument instrument){
-        switch(instrument.getInstrumentType()){
-            case GIRO:
-            case MONEYATCALL:
-            case TIMEDEPOSIT:
-            case BUILDINGSAVINGACCOUNT:
-            case LIFEINSURANCE: return true;
-            default: return false;
-        }
-    }
+
 
     @Override
     public List<Transaction> listTransactions(LocalDate startDate, LocalDate endDate){
@@ -319,8 +254,9 @@ public class TransactionServiceImpl implements TransactionService {
 
     @Override
     public void newTrade(String description, int depotId, String isin, double amount, int accId, int budgetId, double value, LocalDate transactionDate, LocalDateTime ts){
-        var transactionHandler = new TradeHandler(instrumentService, accId, budgetId, isin, depotId, amount);
-        transactionHandler.save(transactionDao, auditService, service, ts, description, value, transactionDate);
+        var transactionHandler = transactionHandlerFactory.createTradeHandler();
+        transactionHandler.init(accId, budgetId, isin, depotId, amount, ts, description, value, transactionDate);
+        transactionHandler.save();
     }
 
 }
