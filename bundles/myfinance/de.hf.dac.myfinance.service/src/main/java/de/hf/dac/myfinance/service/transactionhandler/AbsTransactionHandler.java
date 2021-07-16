@@ -2,13 +2,11 @@ package de.hf.dac.myfinance.service.transactionhandler;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.Optional;
 import java.util.Set;
 
 import de.hf.dac.api.io.audit.AuditService;
 import de.hf.dac.api.io.domain.Severity;
 import de.hf.dac.myfinance.api.domain.Cashflow;
-import de.hf.dac.myfinance.api.domain.EdgeType;
 import de.hf.dac.myfinance.api.domain.Instrument;
 import de.hf.dac.myfinance.api.domain.InstrumentType;
 import de.hf.dac.myfinance.api.domain.Transaction;
@@ -20,11 +18,8 @@ import de.hf.dac.myfinance.api.persistence.dao.TransactionDao;
 import de.hf.dac.myfinance.api.service.InstrumentService;
 import de.hf.dac.myfinance.api.service.ValueCurveService;
 
-public abstract class AbsTransactionHandler {
-    protected InstrumentService instrumentService;
+public abstract class AbsTransactionHandler extends AbsHandler{
 
-    
-    protected static final String ERROR_MSG = "IncomeExpense not saved"; 
 
     protected static final String AUDIT_MSG_TYPE="TransactionHandler_User_Event";
     protected String saveMsg = "Transaction saved";
@@ -47,7 +42,7 @@ public abstract class AbsTransactionHandler {
             AuditService auditService,
             ValueCurveService valueCurveService,
             CashflowDao cashflowDao) {
-        this.instrumentService = instrumentService;   
+        super(instrumentService);
         this.auditService = auditService;  
         this.transactionDao = transactionDao;   
         this.valueCurveService = valueCurveService;
@@ -79,20 +74,9 @@ public abstract class AbsTransactionHandler {
         return instrument;
     }
 
-    protected void validateTenant(Instrument firstInstrument, Instrument secondInstrument) {
-        Optional<Integer> tenantOfFirstInstrument = instrumentService.getRootInstrument(firstInstrument.getInstrumentid(), EdgeType.TENANTGRAPH);
-        Optional<Integer> tenantOfSecInstrument = instrumentService.getRootInstrument(secondInstrument.getInstrumentid(), EdgeType.TENANTGRAPH);
-
-        if(!tenantOfFirstInstrument.isPresent()
-            || !tenantOfSecInstrument.isPresent()
-            || !tenantOfFirstInstrument.get().equals(tenantOfSecInstrument.get())){
-            throw new MFException(MFMsgKey.WRONG_TENENT_EXCEPTION, ERROR_MSG + ": instruments have not the same tenant");
-        }
-    }
-
     public void save(){
 
-        Transaction transaction = prepareTransaction(ts, description, value, transactionDate);
+        prepareTransaction(ts, description, value, transactionDate);
         transactionDao.saveTransaction(transaction);
         auditService.saveMessage(saveMsg + ", Date:" + transactionDate + ", value:" + value + ", desc:" +description,
             Severity.INFO, AUDIT_MSG_TYPE);
@@ -103,11 +87,10 @@ public abstract class AbsTransactionHandler {
 
     abstract Set<Cashflow> buildCashflows(double value, Transaction transaction);
 
-    protected Transaction prepareTransaction(LocalDateTime ts, String description, double value, LocalDate transactionDate) {
-        Transaction transaction = new Transaction(description, transactionDate, ts, transactionType);
+    protected void prepareTransaction(LocalDateTime ts, String description, double value, LocalDate transactionDate) {
+        transaction = new Transaction(description, transactionDate, ts, transactionType);
         var cashflows = buildCashflows(value, transaction);
         transaction.setCashflows(cashflows);
-        return transaction;
     }
 
     abstract void updateCashflows();
@@ -127,20 +110,6 @@ public abstract class AbsTransactionHandler {
         auditService.saveMessage(" transaction with id "+transaction.getTransactionid()+" ,desc: '"+transaction.getDescription()+
             "' and Transactiondate:" + transaction.getTransactiondate() + "updated to desc="+description + ", date=" + transactionDate +
             " and value=" + value, Severity.INFO, AUDIT_MSG_TYPE);
-
- else if(oldtransaction.getTransactionType() == TransactionType.BUDGETTRANSFER ||
-                oldtransaction.getTransactionType() == TransactionType.TRANSFER) {
-            oldtransaction.getCashflows().forEach(i-> {
-                if( (i.getValue() < 0 && value < 0) || (i.getValue() > 0 && value > 0)) {
-                    cashflowDao.updateCashflow(i.getCashflowid(), value);
-                } else {
-                    cashflowDao.updateCashflow(i.getCashflowid(), -1 * value);
-                }
-                valueCurveService.updateCache(i.getInstrument().getInstrumentid());
-            });
-        }
-
-
     }
 
 }

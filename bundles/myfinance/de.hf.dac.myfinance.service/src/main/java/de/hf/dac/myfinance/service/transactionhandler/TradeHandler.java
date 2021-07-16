@@ -65,9 +65,9 @@ public class TradeHandler extends IncomeExpensesHandler {
     }
 
     @Override
-    protected Transaction prepareTransaction(LocalDateTime ts, String description, double value, LocalDate transactionDate) {
-        var transaction = super.prepareTransaction(ts, description, value, transactionDate);
-        return prepareTrade(transaction);
+    protected void prepareTransaction(LocalDateTime ts, String description, double value, LocalDate transactionDate) {
+        super.prepareTransaction(ts, description, value, transactionDate);
+        prepareTrade(transaction);
     }
 
     @Override

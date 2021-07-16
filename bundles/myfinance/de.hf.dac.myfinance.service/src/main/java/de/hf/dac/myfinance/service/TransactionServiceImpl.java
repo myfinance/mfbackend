@@ -11,15 +11,10 @@ import javax.inject.Inject;
 import de.hf.dac.api.io.audit.AuditService;
 import de.hf.dac.api.io.domain.Severity;
 import de.hf.dac.myfinance.api.domain.Cashflow;
-import de.hf.dac.myfinance.api.domain.EdgeType;
-import de.hf.dac.myfinance.api.domain.InstrumentType;
 import de.hf.dac.myfinance.api.domain.RecurrentFrequency;
 import de.hf.dac.myfinance.api.domain.RecurrentTransaction;
 import de.hf.dac.myfinance.api.domain.RecurrentTransactionType;
 import de.hf.dac.myfinance.api.domain.Transaction;
-import de.hf.dac.myfinance.api.domain.TransactionType;
-import de.hf.dac.myfinance.api.exceptions.MFException;
-import de.hf.dac.myfinance.api.exceptions.MFMsgKey;
 import de.hf.dac.myfinance.api.persistence.dao.CashflowDao;
 import de.hf.dac.myfinance.api.persistence.dao.RecurrentTransactionDao;
 import de.hf.dac.myfinance.api.persistence.dao.TransactionDao;
@@ -30,7 +25,7 @@ import de.hf.dac.myfinance.service.transactionhandler.AbsTransactionHandler;
 import de.hf.dac.myfinance.service.transactionhandler.AbsTransferHandler;
 import de.hf.dac.myfinance.service.transactionhandler.IncomeExpensesHandler;
 import de.hf.dac.myfinance.service.transactionhandler.LinkedIncomeExpensesHandler;
-import de.hf.dac.myfinance.service.transactionhandler.TradeHandler;
+import de.hf.dac.myfinance.service.transactionhandler.RecurrentTransactionHandler;
 import de.hf.dac.myfinance.service.transactionhandler.TransactionHandlerFactory;
 
 public class TransactionServiceImpl implements TransactionService {
@@ -41,6 +36,7 @@ public class TransactionServiceImpl implements TransactionService {
     private RecurrentTransactionDao recurrentTransactionDao;
     private CashflowDao cashflowDao;
     private TransactionHandlerFactory transactionHandlerFactory;
+    private RecurrentTransactionHandler recurrentTransactionHandler;
 
     private static final String AUDIT_MSG_TYPE="TransactionService_User_Event";
 
@@ -54,6 +50,7 @@ public class TransactionServiceImpl implements TransactionService {
         this.valueCurveService = valueCurveService;
         this.auditService = auditService;
         this.transactionHandlerFactory = new TransactionHandlerFactory(this.instrumentService, this.transactionDao, this.auditService, this.valueCurveService, this.cashflowDao);
+        this.recurrentTransactionHandler = new RecurrentTransactionHandler(instrumentService, transactionDao, auditService, recurrentTransactionDao);
     }
 
     @Override
@@ -104,95 +101,21 @@ public class TransactionServiceImpl implements TransactionService {
 
     @Override
     public void newRecurrentTransaction(String description, int srcInstrumentId, int trgInstrumentId, RecurrentFrequency recurrentFrequency, double value, LocalDate nextTransactionDate, LocalDateTime ts) {
-        var src = instrumentService.getInstrument(srcInstrumentId, "RecurrentTransfer not saved:");
-        RecurrentTransactionType recurrentTransactionType = RecurrentTransactionType.Transfer;
-        var trg = instrumentService.getInstrument(trgInstrumentId, "RecurrentTransfer not saved:");
-        if(src.getInstrumentType() == InstrumentType.BUDGET && trg.getInstrumentType() == InstrumentType.BUDGET) {
-            recurrentTransactionType = RecurrentTransactionType.BudgetTransfer;
-        } else if (src.getInstrumentType() == InstrumentType.BUDGET) {
-            if( !isAccountTransferAllowed(trg)) {
-                throw new MFException(MFMsgKey.WRONG_INSTRUMENTTYPE_EXCEPTION, "No Transfer allowed for this account:"+trgInstrumentId);
-            }
-            recurrentTransactionType = getRecurrentTransactiontype(value);
-        } else if (trg.getInstrumentType() == InstrumentType.BUDGET) {
-            if( !isAccountTransferAllowed(src)) {
-                throw new MFException(MFMsgKey.WRONG_INSTRUMENTTYPE_EXCEPTION, "No Transfer allowed for this account:"+srcInstrumentId);
-            }
-            recurrentTransactionType = getRecurrentTransactiontype(value);
-        } else {
-            if( !isAccountTransferAllowed(trg)){
-                throw new MFException(MFMsgKey.WRONG_INSTRUMENTTYPE_EXCEPTION, "No Transfer allowed for this account:"+trgInstrumentId);
-            }
-            if( !isAccountTransferAllowed(src)){
-                throw new MFException(MFMsgKey.WRONG_INSTRUMENTTYPE_EXCEPTION, "No Transfer allowed for this account:"+srcInstrumentId);
-            }
-            recurrentTransactionType = RecurrentTransactionType.Transfer;
-        }
-
-        Optional<Integer> tenantSrc = instrumentService.getRootInstrument(srcInstrumentId, EdgeType.TENANTGRAPH);
-        Optional<Integer> tenantTrg = instrumentService.getRootInstrument(trgInstrumentId, EdgeType.TENANTGRAPH);
-
-        if(!tenantSrc.isPresent()
-                || !tenantTrg.isPresent()
-                || tenantSrc.get()!=tenantTrg.get()){
-            throw new MFException(MFMsgKey.WRONG_TENENT_EXCEPTION, "RecurrentTransfer not saved: budget and account have not the same tenant");
-        }
-        RecurrentTransaction recurrentTransaction = new RecurrentTransaction(src, trg, recurrentTransactionType.getValue(), description, value, nextTransactionDate, recurrentFrequency);
-
-        auditService.saveMessage("new recurrenttransaction saved for Instrument "+srcInstrumentId+
-                        " and  "+trgInstrumentId+". nextTransactionDate:" + nextTransactionDate +
-                        ", value:" + value + ", desc:" +description + ", frequency:" +recurrentFrequency,
-                Severity.INFO, AUDIT_MSG_TYPE);
-        recurrentTransactionDao.saveRecurrentTransaction(recurrentTransaction);
+        recurrentTransactionHandler.init(description, srcInstrumentId, trgInstrumentId, recurrentFrequency, value, nextTransactionDate, ts);
+        recurrentTransactionHandler.save();
     }
 
     @Override
     public void deleteRecurrentTransaction(int recurrentTransactionId) {
-        Optional<RecurrentTransaction> transaction = recurrentTransactionDao.getRecurrentTransaction(recurrentTransactionId);
-        if(transaction.isPresent()){
-            auditService.saveMessage(recurrentTransactionDao.deleteRecurrentTransaction(recurrentTransactionId),
-                    Severity.INFO, AUDIT_MSG_TYPE);
-        }
+        recurrentTransactionHandler.init(recurrentTransactionId);
+        recurrentTransactionHandler.delete();
     }
 
     @Override
     public void updateRecurrentTransaction(int id, String description, double value, LocalDate nexttransaction, LocalDateTime ts) {
-        Optional<RecurrentTransaction> transaction = recurrentTransactionDao.getRecurrentTransaction(id);
-        if(!transaction.isPresent()){
-            throw new MFException(MFMsgKey.UNKNOWN_TRANSACTION_EXCEPTION, "RecurrentTransaction not updated: RecurrentTransaction for id:"+id + " not found");
-        }
-        RecurrentTransaction oldtransaction = transaction.get();
-        if(
-                (RecurrentTransactionType.getRecurrentTransactionTypeById(oldtransaction.getRecurrencytype()) != RecurrentTransactionType.Expenses
-                    && value < 0) || (
-            RecurrentTransactionType.getRecurrentTransactionTypeById(oldtransaction.getRecurrencytype()) == RecurrentTransactionType.Expenses
-                    && value > 0) ){
-            throw new MFException(MFMsgKey.WRONG_TRNSACTIONTYPE_EXCEPTION, "RecurrentTransaction not updated: Type:"
-                    +RecurrentTransactionType.getRecurrentTransactionTypeById(oldtransaction.getRecurrencytype()) +
-                    " and value:"+value + " do not match");
-        }
-
-        recurrentTransactionDao.updateRecurrentTransaction(id, description, value, nexttransaction);
-
-        auditService.saveMessage(" recurrenttransaction with id "+id+" ,desc: '"+oldtransaction.getDescription()+
-                        "' ,value:" + oldtransaction.getValue() + "" +
-                        " and next transaction:" + oldtransaction.getNexttransaction()
-                        + "updated to desc="+description + ", date=" + nexttransaction +
-                        " and value=" + value,
-                Severity.INFO, AUDIT_MSG_TYPE);
+        recurrentTransactionHandler.init(id);
+        recurrentTransactionHandler.update();
     }
-
-    private RecurrentTransactionType getRecurrentTransactiontype(double value) {
-        RecurrentTransactionType recurrentTransactionType;
-        if(value <0) {
-            recurrentTransactionType = RecurrentTransactionType.Expenses;
-        } else {
-            recurrentTransactionType = RecurrentTransactionType.Income;
-        }
-        return recurrentTransactionType;
-    }
-
-
 
     @Override
     public List<Transaction> listTransactions(LocalDate startDate, LocalDate endDate){

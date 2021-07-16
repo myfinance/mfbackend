@@ -41,16 +41,5 @@ public class TransferHandler extends AbsTransferHandler {
             throw new MFException(MFMsgKey.WRONG_INSTRUMENTTYPE_EXCEPTION, "No Transfer allowed for this accounts:");
         }
     }
-   
-    protected boolean isAccountTransferAllowed(Instrument instrument){
-        switch(instrument.getInstrumentType()){
-            case GIRO:
-            case MONEYATCALL:
-            case TIMEDEPOSIT:
-            case BUILDINGSAVINGACCOUNT:
-            case LIFEINSURANCE: return true;
-            default: return false;
-        }
-    }
 }
 
