@@ -28,7 +28,7 @@ import javax.inject.Named;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Query;
 
-public class TransactionDaoImpl  extends BaseDao<Transaction> implements TransactionDao {
+public class TransactionDaoImpl extends BaseDao<Transaction> implements TransactionDao {
 
     @Inject
     public TransactionDaoImpl(

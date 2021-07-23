@@ -106,6 +106,7 @@ public abstract class AbsTransactionHandler extends AbsHandler{
             LocalDateTime ts){
 
         transactionDao.updateTransaction(transaction.getTransactionid(), description, transactionDate, ts);
+        this.value = value;
         updateCashflows();
         auditService.saveMessage(" transaction with id "+transaction.getTransactionid()+" ,desc: '"+transaction.getDescription()+
             "' and Transactiondate:" + transaction.getTransactiondate() + "updated to desc="+description + ", date=" + transactionDate +

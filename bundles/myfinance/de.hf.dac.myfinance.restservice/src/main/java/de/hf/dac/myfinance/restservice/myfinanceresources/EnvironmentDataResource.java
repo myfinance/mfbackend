@@ -606,4 +606,21 @@ public class EnvironmentDataResource extends BaseSecuredResource<OpType,OpLevel>
         marketDataEnvironment.getTransactionService().newTrade(description, depotId, isin, amount, accId, budgetId, value, LocalDate.parse(transactiondate), LocalDateTime.now());
         return Response.ok().build();
     }
+
+    @POST
+    @Path("/updateTrade")
+    @Produces(MediaType.APPLICATION_JSON)
+    @ApiOperation(value = "update Trade")
+    @ApiResponses(value = {
+            @ApiResponse(code = HttpStatus.SC_NO_CONTENT, message = "updated"),
+            @ApiResponse(code = HttpStatus.SC_INTERNAL_SERVER_ERROR, message = "Something wrong in Server")})
+    public Response updateTrade(@QueryParam("id") @ApiParam(value="transactionid") int transactionid,
+                                      @QueryParam("description") @ApiParam(value="description") String description,
+                                      @QueryParam("value") @ApiParam(value="the value of the trade") double value,
+                                      @QueryParam("amount") @ApiParam(value="the amount of the security") double amount,
+                                      @QueryParam("transactiondate") @ApiParam(value="the transactiondate(yyyy-mm-dd") String transactiondate) {
+        checkOperationAllowed(OpType.WRITE);
+        marketDataEnvironment.getTransactionService().updateTrade(transactionid, description, amount, value, LocalDate.parse(transactiondate), LocalDateTime.now());
+        return Response.ok().build();
+    }
 }

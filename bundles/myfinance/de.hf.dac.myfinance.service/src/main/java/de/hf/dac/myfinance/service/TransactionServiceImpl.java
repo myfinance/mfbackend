@@ -17,6 +17,7 @@ import de.hf.dac.myfinance.api.domain.RecurrentTransactionType;
 import de.hf.dac.myfinance.api.domain.Transaction;
 import de.hf.dac.myfinance.api.persistence.dao.CashflowDao;
 import de.hf.dac.myfinance.api.persistence.dao.RecurrentTransactionDao;
+import de.hf.dac.myfinance.api.persistence.dao.TradeDao;
 import de.hf.dac.myfinance.api.persistence.dao.TransactionDao;
 import de.hf.dac.myfinance.api.service.InstrumentService;
 import de.hf.dac.myfinance.api.service.TransactionService;
@@ -35,6 +36,7 @@ public class TransactionServiceImpl implements TransactionService {
     private TransactionDao transactionDao;
     private RecurrentTransactionDao recurrentTransactionDao;
     private CashflowDao cashflowDao;
+    private TradeDao tradeDao;
     private TransactionHandlerFactory transactionHandlerFactory;
     private RecurrentTransactionHandler recurrentTransactionHandler;
 
@@ -42,14 +44,15 @@ public class TransactionServiceImpl implements TransactionService {
 
     @Inject
     public TransactionServiceImpl(InstrumentService instrumentService, TransactionDao transactionDao, RecurrentTransactionDao recurrentTransactionDao, CashflowDao cashflowDao, 
-                AuditService auditService, ValueCurveService valueCurveService){
+        TradeDao tradeDao,AuditService auditService, ValueCurveService valueCurveService){
         this.instrumentService = instrumentService;
         this.transactionDao = transactionDao;
         this.recurrentTransactionDao = recurrentTransactionDao;
         this.cashflowDao = cashflowDao;
+        this.tradeDao = tradeDao;
         this.valueCurveService = valueCurveService;
         this.auditService = auditService;
-        this.transactionHandlerFactory = new TransactionHandlerFactory(this.instrumentService, this.transactionDao, this.auditService, this.valueCurveService, this.cashflowDao);
+        this.transactionHandlerFactory = new TransactionHandlerFactory(this.instrumentService, this.transactionDao, this.auditService, this.valueCurveService, this.cashflowDao, this.tradeDao);
         this.recurrentTransactionHandler = new RecurrentTransactionHandler(instrumentService, transactionDao, auditService, recurrentTransactionDao);
     }
 
@@ -182,11 +185,10 @@ public class TransactionServiceImpl implements TransactionService {
         transactionHandler.save();
     }
 
-    public void updateTrade(int tradeId, String description, double amount, int budgetId, double value, LocalDate transactionDate, LocalDateTime ts){
-        var transactionHandler = transactionHandlerFactory.createTradeHandler();
-        //transactionHandler.
-        //transactionHandler.init(accId, budgetId, isin, depotId, amount, ts, description, value, transactionDate);
-        //transactionHandler.save();
+    @Override
+    public void updateTrade(int tradsactionid, String description, double amount, double value, LocalDate transactionDate, LocalDateTime ts) {
+        var tradeHandler = transactionHandlerFactory.createTradeHandler(tradsactionid);
+        tradeHandler.updateTrade(description, amount, value, transactionDate, ts);
     }
 
 }

@@ -25,4 +25,5 @@ public interface TransactionService {
     void updateRecurrentTransaction(int id, String description, double value, LocalDate nexttransaction, LocalDateTime ts);
     void bookRecurrentTransactions(LocalDateTime ts);
     void newTrade(String description, int depotId, String isin, double amount, int accId, int budgetId, double value, LocalDate transactionDate, LocalDateTime ts);
+    void updateTrade(int tradsactionid, String description, double amount, double value, LocalDate transactionDate, LocalDateTime ts);
 }

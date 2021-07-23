@@ -13,6 +13,7 @@ import de.hf.dac.myfinance.api.domain.TransactionType;
 import de.hf.dac.myfinance.api.exceptions.MFException;
 import de.hf.dac.myfinance.api.exceptions.MFMsgKey;
 import de.hf.dac.myfinance.api.persistence.dao.CashflowDao;
+import de.hf.dac.myfinance.api.persistence.dao.TradeDao;
 import de.hf.dac.myfinance.api.persistence.dao.TransactionDao;
 import de.hf.dac.myfinance.api.service.InstrumentService;
 import de.hf.dac.myfinance.api.service.ValueCurveService;
@@ -21,13 +22,16 @@ public class TradeHandler extends IncomeExpensesHandler {
     Instrument security;
     Instrument depot;
     double amount;
+    TradeDao tradeDao;
     
     public TradeHandler(InstrumentService instrumentService, 
             TransactionDao transactionDao, 
             AuditService auditService,
             ValueCurveService valueCurveService,
-            CashflowDao cashflowDao) {
+            CashflowDao cashflowDao,
+            TradeDao tradeDao) {
         super(instrumentService, transactionDao, auditService, valueCurveService, cashflowDao);
+        this.tradeDao = tradeDao;
         transactionType = TransactionType.TRADE;
     }
 
@@ -74,5 +78,14 @@ public class TradeHandler extends IncomeExpensesHandler {
     protected void updateCache() {
         super.updateCache();
         valueCurveService.updateCache(depot.getInstrumentid());
+    }
+
+    public void updateTrade(String description, double amount, double value, LocalDate transactionDate, LocalDateTime ts) {
+        updateTransaction(description, value, transactionDate, ts);
+        transaction.getTrades().forEach(i-> {
+            if(i.getAmount()!=amount) {
+                tradeDao.updateTrade(i.getTradeid(), amount);
+                valueCurveService.updateCache(i.getDepot().getInstrumentid());
+            }});
     }
 }

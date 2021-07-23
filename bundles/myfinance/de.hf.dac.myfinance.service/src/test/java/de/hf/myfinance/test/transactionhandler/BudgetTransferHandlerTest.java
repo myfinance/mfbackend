@@ -14,6 +14,7 @@ import de.hf.dac.myfinance.service.transactionhandler.AbsTransferHandler;
 import de.hf.dac.myfinance.service.transactionhandler.TransactionHandlerFactory;
 import de.hf.myfinance.test.mock.AuditServiceMockImpl;
 import de.hf.myfinance.test.mock.CashflowDaoMock;
+import de.hf.myfinance.test.mock.TradeDaoMock;
 import de.hf.myfinance.test.mock.InstrumentServiceTestImpl;
 import de.hf.myfinance.test.mock.TransactionDaoMock;
 import de.hf.myfinance.test.mock.ValueCurveServiceMock;
@@ -26,7 +27,7 @@ public class BudgetTransferHandlerTest {
         var srcInstrument = instrumentService.getInstrument(2, "Can not add transfer: Unknown instrument:");
         var trgInstrument = instrumentService.getInstrument(4, "Can not add transfer: Unknown instrument:");
 
-        TransactionHandlerFactory transactionHandlerFactory = new TransactionHandlerFactory(instrumentService, transactionDaoMock, new AuditServiceMockImpl(), new ValueCurveServiceMock(), new CashflowDaoMock());
+        TransactionHandlerFactory transactionHandlerFactory = new TransactionHandlerFactory(instrumentService, transactionDaoMock, new AuditServiceMockImpl(), new ValueCurveServiceMock(), new CashflowDaoMock(), new TradeDaoMock());
 
         AbsTransferHandler transactionHandler = transactionHandlerFactory.createTransferOrBudgetTransferHandler(srcInstrument);
         transactionHandler.init(srcInstrument, trgInstrument, LocalDateTime.now(), "testbudgettransfer", 100, LocalDate.now());

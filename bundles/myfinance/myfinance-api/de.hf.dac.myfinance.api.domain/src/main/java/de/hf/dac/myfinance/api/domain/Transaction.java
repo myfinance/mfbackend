@@ -105,8 +105,8 @@ public class Transaction  implements java.io.Serializable {
         this.lastchanged = lastchanged;
     }
 
-    @OneToMany(fetch=FetchType.EAGER, cascade = CascadeType.ALL)
-    @JoinColumn(name = "tradeid")
+    @OneToMany(fetch=FetchType.EAGER, cascade = CascadeType.ALL, mappedBy = "transaction")
+    @Column(nullable = false)
     @ApiModelProperty(required = false)
     public Set<Trade> getTrades() {
         return this.trades;

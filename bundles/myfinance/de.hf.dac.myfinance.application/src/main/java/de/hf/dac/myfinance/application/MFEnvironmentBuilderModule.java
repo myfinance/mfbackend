@@ -27,7 +27,6 @@ import de.hf.dac.api.io.efmb.DatabaseInfo;
 import de.hf.dac.api.io.efmb.EntityManagerFactorySetup;
 import de.hf.dac.api.io.efmb.tx.WrappedEntityManagerFactory;
 import de.hf.dac.api.io.env.EnvironmentService;
-import de.hf.dac.api.io.env.EnvironmentTargetInfo;
 import de.hf.dac.api.io.web.WebRequestService;
 import de.hf.dac.io.audit.AuditDaoImpl;
 import de.hf.dac.io.audit.AuditServiceImpl;
@@ -53,7 +52,6 @@ import de.hf.dac.myfinance.service.ValueCurveServiceImpl;
 
 import javax.persistence.EntityManagerFactory;
 import javax.transaction.TransactionManager;
-import java.util.Optional;
 
 /**
  * Provides the application context of myfinance
@@ -92,6 +90,7 @@ public class MFEnvironmentBuilderModule extends AbstractModule {
         bind(TransactionDao.class).to(TransactionDaoImpl.class);
         bind(RecurrentTransactionDao.class).to(RecurrentTransactionDaoImpl.class);
         bind(CashflowDao.class).to(CashflowDaoImpl.class);
+        bind(TradeDao.class).to(TradeDaoImpl.class);
         bind(EndOfDayPriceDao.class).to(EndOfDayPriceDaoImpl.class);
         bind(InstrumentService.class).to(InstrumentServiceImpl.class);
         bind(ValueCurveCache.class).toInstance(cache);
