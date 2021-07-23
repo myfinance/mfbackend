@@ -28,7 +28,7 @@ public enum InstrumentType {
     ACCOUNTPORTFOLIO(Integer.valueOf(8)),
     ARTIFICALPORTFOLIO(Integer.valueOf(9)),
     BUDGETGROUP(Integer.valueOf(10)),
-    DEPOT(Integer.valueOf(10)),
+    DEPOT(Integer.valueOf(11)),
     BUILDINGSAVING(Integer.valueOf(12)),
     CURRENCY(Integer.valueOf(13)),
     EQUITY(Integer.valueOf(14)),

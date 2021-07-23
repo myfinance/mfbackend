@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
+import de.hf.dac.myfinance.api.domain.Budget;
 import de.hf.dac.myfinance.api.domain.EdgeType;
 import de.hf.dac.myfinance.api.domain.Equity;
 import de.hf.dac.myfinance.api.domain.Giro;
@@ -54,8 +55,8 @@ public class InstrumentServiceTestImpl implements InstrumentService {
     
     @Override
     public Optional<Integer> getRootInstrument(int instrumentId, EdgeType edgeType) {
-        // TODO Auto-generated method stub
-        return null;
+
+        return Optional.of(0);
     }
 
     @Override
@@ -145,7 +146,26 @@ public class InstrumentServiceTestImpl implements InstrumentService {
 
     @Override
     public Instrument getInstrument(int instrumentId, String errMsg) {
-        // TODO Auto-generated method stub
+        switch (instrumentId) {
+            case 1:
+                Instrument giro = new Giro("testgiro", true, LocalDateTime.now());
+                giro.setInstrumentid(instrumentId);
+                return giro;
+            case 2:
+                Instrument budget = new Budget("testbudget", true, LocalDateTime.now());        
+                budget.setInstrumentid(instrumentId);
+                return budget;    
+            case 3:
+                Instrument giro2 = new Giro("testgiro2", true, LocalDateTime.now());
+                giro2.setInstrumentid(instrumentId);
+                return giro2; 
+            case 4:
+                Instrument budget2 = new Budget("testbudget2", true, LocalDateTime.now());        
+                budget2.setInstrumentid(instrumentId);
+                return budget2;                                      
+            default:
+                break;
+        }
         return null;
     }
 

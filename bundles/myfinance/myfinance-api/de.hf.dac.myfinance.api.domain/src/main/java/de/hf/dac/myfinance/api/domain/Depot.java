@@ -12,7 +12,7 @@ import io.swagger.annotations.ApiModel;
 @ApiModel
 @PrimaryKeyJoinColumn(name="instrumentid")
 @Inheritance(strategy= InheritanceType.SINGLE_TABLE)
-@DiscriminatorValue(InstrumentType.GIRO_IDSTRING)
+@DiscriminatorValue(InstrumentType.DEPOT_IDSTRING)
 public class Depot extends Instrument {
 
     private static final long serialVersionUID = 1L;

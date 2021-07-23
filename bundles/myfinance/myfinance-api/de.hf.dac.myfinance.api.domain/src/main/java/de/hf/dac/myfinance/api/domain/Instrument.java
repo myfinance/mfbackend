@@ -53,10 +53,10 @@ public abstract class Instrument  implements java.io.Serializable {
     private LocalDateTime treelastchanged;
     private String businesskey;
 
-    public Instrument() {
+    protected Instrument() {
     }
 
-    public Instrument(InstrumentType instrumentType, String description, boolean isactive, LocalDateTime treelastchanged) {
+    protected Instrument(InstrumentType instrumentType, String description, boolean isactive, LocalDateTime treelastchanged) {
         setInstrumentTypeId(instrumentType.getValue());
         this.description = description;
         this.isactive = isactive;

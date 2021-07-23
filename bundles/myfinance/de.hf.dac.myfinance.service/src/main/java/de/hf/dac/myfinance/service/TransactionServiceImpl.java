@@ -124,7 +124,7 @@ public class TransactionServiceImpl implements TransactionService {
 
     @Override
     public List<Cashflow> listInstrumentCashflows(int instrumentId){
-        return listInstrumentCashflows(instrumentId);
+        return transactionDao.listInstrumentCashflows(instrumentId);
     }  
 
     @Override
@@ -180,6 +180,13 @@ public class TransactionServiceImpl implements TransactionService {
         var transactionHandler = transactionHandlerFactory.createTradeHandler();
         transactionHandler.init(accId, budgetId, isin, depotId, amount, ts, description, value, transactionDate);
         transactionHandler.save();
+    }
+
+    public void updateTrade(int tradeId, String description, double amount, int budgetId, double value, LocalDate transactionDate, LocalDateTime ts){
+        var transactionHandler = transactionHandlerFactory.createTradeHandler();
+        //transactionHandler.
+        //transactionHandler.init(accId, budgetId, isin, depotId, amount, ts, description, value, transactionDate);
+        //transactionHandler.save();
     }
 
 }
