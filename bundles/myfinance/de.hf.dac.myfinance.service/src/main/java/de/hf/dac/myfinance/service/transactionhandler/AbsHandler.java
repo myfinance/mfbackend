@@ -38,6 +38,5 @@ public abstract class AbsHandler {
             || !tenantOfFirstInstrument.get().equals(tenantOfSecInstrument.get())){
             throw new MFException(MFMsgKey.WRONG_TENENT_EXCEPTION, ERROR_MSG + ": instruments have not the same tenant");
         }
-    }
-    
+    }    
 }

@@ -2,7 +2,6 @@ package de.hf.dac.myfinance.service.transactionhandler;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.List;
 import java.util.Optional;
 
 import de.hf.dac.api.io.audit.AuditService;

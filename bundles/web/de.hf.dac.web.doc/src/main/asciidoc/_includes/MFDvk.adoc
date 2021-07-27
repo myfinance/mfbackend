@@ -14,6 +14,7 @@ Die von der MyFinance Infrastruktur bereitgestellten Funktionalitäten und werde
 
 [plantuml]
 .APIs machen Funktionalität zugänglich
+
 ....
 @startuml
 !pragma graphviz_dot jdot
@@ -182,7 +183,35 @@ String jsonString = gson.toJson(source);
 
 *If your Resource derives from de.hf.dac.services.resources.leaf.LeafResource you just have to make the fieldannotation*
 
+== Klassenbäume
 
+[plantuml]
+....
+@startuml
+!pragma graphviz_dot jdot
+skinparam componentStyle uml2
+
+rectangle AbsHandler
+rectangle AbsTransactionHandler
+rectangle AbsTransferHandler
+rectangle BudgetTransferHandler
+rectangle IncomeExpensesHandler
+rectangle LinkedIncomeExpensesHandler
+rectangle RecurrentTransactionHandler
+rectangle TradeHandler
+rectangle TransferHandler
+
+AbsHandler --> AbsTransactionHandler
+AbsHandler --> RecurrentTransactionHandler
+AbsTransactionHandler --> AbsTransferHandler
+AbsTransactionHandler --> IncomeExpensesHandler
+AbsTransferHandler --> BudgetTransferHandler
+AbsTransferHandler --> TransferHandler
+IncomeExpensesHandler --> LinkedIncomeExpensesHandler
+IncomeExpensesHandler --> TradeHandler
+
+@enduml
+....
 
 = coding conventions for Angular
 

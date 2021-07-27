@@ -87,14 +87,8 @@ public class TransactionServiceImpl implements TransactionService {
 
     @Override
     public void deleteTransaction(int transactionId){
-        Optional<Transaction> transaction = transactionDao.getTransaction(transactionId);
-        if(transaction.isPresent()){
-            transaction.get().getCashflows().forEach(i-> {
-                valueCurveService.updateCache(i.getInstrument().getInstrumentid());
-            });
-            auditService.saveMessage(transactionDao.deleteTransaction(transactionId),
-                    Severity.INFO, AUDIT_MSG_TYPE);
-        }
+        AbsTransactionHandler transactionHandler = transactionHandlerFactory.createTransactionHandler(transactionId);
+        transactionHandler.deleteTransaction();
     }
 
     @Override
@@ -190,5 +184,4 @@ public class TransactionServiceImpl implements TransactionService {
         var tradeHandler = transactionHandlerFactory.createTradeHandler(tradsactionid);
         tradeHandler.updateTrade(description, amount, value, transactionDate, ts);
     }
-
 }

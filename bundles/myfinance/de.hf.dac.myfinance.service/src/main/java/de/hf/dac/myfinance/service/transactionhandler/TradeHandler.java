@@ -88,4 +88,10 @@ public class TradeHandler extends IncomeExpensesHandler {
                 valueCurveService.updateCache(i.getDepot().getInstrumentid());
             }});
     }
+
+    @Override
+    public void deleteTransaction(){
+        super.deleteTransaction();
+        transaction.getTrades().forEach(i->valueCurveService.updateCache(i.getDepot().getInstrumentid()));
+    }
 }

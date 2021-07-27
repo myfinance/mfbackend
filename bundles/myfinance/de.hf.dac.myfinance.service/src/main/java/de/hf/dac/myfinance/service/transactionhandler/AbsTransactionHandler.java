@@ -113,4 +113,12 @@ public abstract class AbsTransactionHandler extends AbsHandler{
             " and value=" + value, Severity.INFO, AUDIT_MSG_TYPE);
     }
 
+    public void deleteTransaction(){
+        if(transaction == null) {
+            throw new MFException(MFMsgKey.OBJECT_NOT_INITIALIZED_EXCEPTION,"AbsTransactionHandler niot initialized. Trasnaction is null");
+        }
+        transaction.getCashflows().forEach(i->valueCurveService.updateCache(i.getInstrument().getInstrumentid()));
+        auditService.saveMessage(transactionDao.deleteTransaction(transaction.getTransactionid()),Severity.INFO, AUDIT_MSG_TYPE);
+    }
+
 }
