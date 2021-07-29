@@ -4,7 +4,6 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 
 import javax.inject.Inject;
 
@@ -183,5 +182,10 @@ public class TransactionServiceImpl implements TransactionService {
     public void updateTrade(int tradsactionid, String description, double amount, double value, LocalDate transactionDate, LocalDateTime ts) {
         var tradeHandler = transactionHandlerFactory.createTradeHandler(tradsactionid);
         tradeHandler.updateTrade(description, amount, value, transactionDate, ts);
+    }
+
+    @Override
+    public List<Transaction> getTrades(int depotId){
+        return transactionDao.getTrades(depotId);
     }
 }

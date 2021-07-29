@@ -117,7 +117,7 @@ public abstract class AbsTransactionHandler extends AbsHandler{
         if(transaction == null) {
             throw new MFException(MFMsgKey.OBJECT_NOT_INITIALIZED_EXCEPTION,"AbsTransactionHandler niot initialized. Trasnaction is null");
         }
-        transaction.getCashflows().forEach(i->valueCurveService.updateCache(i.getInstrument().getInstrumentid()));
+        transaction.getCashflows().forEach(i->valueCurveService.invalidateCache(i.getInstrument().getInstrumentid()));
         auditService.saveMessage(transactionDao.deleteTransaction(transaction.getTransactionid()),Severity.INFO, AUDIT_MSG_TYPE);
     }
 

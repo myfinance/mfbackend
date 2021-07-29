@@ -57,5 +57,11 @@ public class TransactionDaoMock implements TransactionDao {
         // TODO Auto-generated method stub
 
     }
+
+    @Override
+    public List<Transaction> getTrades(int depotId) {
+        // TODO Auto-generated method stub
+        return null;
+    }
     
 }

@@ -110,5 +110,11 @@ public class TransactionServiceTestImpl implements TransactionService {
         // TODO Auto-generated method stub
 
     }
+
+    @Override
+    public List<Transaction> getTrades(int depotId) {
+        // TODO Auto-generated method stub
+        return null;
+    }
     
 }

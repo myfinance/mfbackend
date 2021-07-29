@@ -20,5 +20,6 @@ public enum InstrumentTypeGroup {
     DEPRECATIONOBJECT,
     REALESTATE,
     LOAN,
+    DEPOT,
     UNKNOWN;
 }

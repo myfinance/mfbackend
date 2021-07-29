@@ -45,8 +45,8 @@ public abstract class AbsTransferHandler extends AbsTransactionHandler {
 
     @Override
     void updateCache() {
-        valueCurveService.updateCache(srcInstrument.getInstrumentid());
-        valueCurveService.updateCache(trgInstrument.getInstrumentid());
+        valueCurveService.invalidateCache(srcInstrument.getInstrumentid());
+        valueCurveService.invalidateCache(trgInstrument.getInstrumentid());
     }
 
     @Override
@@ -69,7 +69,7 @@ public abstract class AbsTransferHandler extends AbsTransactionHandler {
             } else {
                 cashflowDao.updateCashflow(i.getCashflowid(), -1 * value);
             }
-            valueCurveService.updateCache(i.getInstrument().getInstrumentid());
+            valueCurveService.invalidateCache(i.getInstrument().getInstrumentid());
         });
     }
 }

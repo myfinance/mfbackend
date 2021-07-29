@@ -77,7 +77,7 @@ public class TradeHandler extends IncomeExpensesHandler {
     @Override
     protected void updateCache() {
         super.updateCache();
-        valueCurveService.updateCache(depot.getInstrumentid());
+        valueCurveService.invalidateCache(depot.getInstrumentid());
     }
 
     public void updateTrade(String description, double amount, double value, LocalDate transactionDate, LocalDateTime ts) {
@@ -85,13 +85,13 @@ public class TradeHandler extends IncomeExpensesHandler {
         transaction.getTrades().forEach(i-> {
             if(i.getAmount()!=amount) {
                 tradeDao.updateTrade(i.getTradeid(), amount);
-                valueCurveService.updateCache(i.getDepot().getInstrumentid());
+                valueCurveService.invalidateCache(i.getDepot().getInstrumentid());
             }});
     }
 
     @Override
     public void deleteTransaction(){
         super.deleteTransaction();
-        transaction.getTrades().forEach(i->valueCurveService.updateCache(i.getDepot().getInstrumentid()));
+        transaction.getTrades().forEach(i->valueCurveService.invalidateCache(i.getDepot().getInstrumentid()));
     }
 }

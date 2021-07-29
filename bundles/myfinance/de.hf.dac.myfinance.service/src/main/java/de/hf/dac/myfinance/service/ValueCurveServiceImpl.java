@@ -20,6 +20,7 @@ package de.hf.dac.myfinance.service;
 import de.hf.dac.myfinance.api.domain.EdgeType;
 import de.hf.dac.myfinance.api.domain.InstrumentGraphEntry;
 import de.hf.dac.myfinance.api.domain.InstrumentType;
+import de.hf.dac.myfinance.api.domain.InstrumentTypeGroup;
 import de.hf.dac.myfinance.api.exceptions.MFException;
 import de.hf.dac.myfinance.api.exceptions.MFMsgKey;
 import de.hf.dac.myfinance.api.persistence.dao.EndOfDayPriceDao;
@@ -28,6 +29,7 @@ import de.hf.dac.myfinance.api.service.TransactionService;
 import de.hf.dac.myfinance.api.service.ValueCurveCache;
 import de.hf.dac.myfinance.api.service.ValueCurveService;
 import de.hf.dac.myfinance.valuehandler.CashAccValueHandler;
+import de.hf.dac.myfinance.valuehandler.DepotValueHandler;
 import de.hf.dac.myfinance.valuehandler.PortfolioValueHandler;
 import de.hf.dac.myfinance.valuehandler.RealEstateValueHandler;
 import de.hf.dac.myfinance.valuehandler.SecurityValueHandler;
@@ -36,39 +38,64 @@ import de.hf.dac.myfinance.valuehandler.ValueHandler;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Map;
 import java.util.TreeMap;
 
 import javax.inject.Inject;
 
 public class ValueCurveServiceImpl implements ValueCurveService {
 
-    private InstrumentService instrumentService;
-    private TransactionService transactionService;
-    private EndOfDayPriceDao endOfDayPriceDao;
+    private final InstrumentService instrumentService;
+    private final TransactionService transactionService;
+    private final EndOfDayPriceDao endOfDayPriceDao;
     ValueCurveCache cache;
 
     @Inject
-    public ValueCurveServiceImpl(InstrumentService instrumentService, EndOfDayPriceDao endOfDayPriceDao, ValueCurveCache cache, TransactionService transactionService){
+    public ValueCurveServiceImpl(final InstrumentService instrumentService, final EndOfDayPriceDao endOfDayPriceDao,
+            final ValueCurveCache cache, final TransactionService transactionService) {
         this.instrumentService = instrumentService;
         this.endOfDayPriceDao = endOfDayPriceDao;
         this.transactionService = transactionService;
         this.cache = cache;
     }
 
-    public TreeMap<LocalDate, Double> getValueCurve(int instrumentId){
+    public TreeMap<LocalDate, Double> getValueCurve(final int instrumentId) {
         TreeMap<LocalDate, Double> valueCurve = cache.getValueCurve(instrumentId);
-        if(valueCurve==null){
-            var instrument = instrumentService.getInstrument(instrumentId);
+        if (valueCurve == null) {
+            final var instrument = instrumentService.getInstrument(instrumentId);
             valueCurve = getValueHandler(instrument.getInstrumentType()).calcValueCurve(instrument);
             cache.addValueCurve(instrumentId, valueCurve);
-
         }
         return valueCurve;
     }
 
-    private ValueHandler getValueHandler(InstrumentType instrumentType){
+    @Override
+    public Map<Integer, TreeMap<LocalDate, Double>> getPositionCurve(int depotId) {
+        Map<Integer, TreeMap<LocalDate, Double>> valueCurve = cache.getPositionCurve(depotId);
+        if (valueCurve == null) {
+            final var instrument = instrumentService.getInstrument(depotId);
+            if(!instrument.getInstrumentType().getTypeGroup().equals(InstrumentTypeGroup.DEPOT)){
+                throw new MFException(MFMsgKey.WRONG_INSTRUMENTTYPE_EXCEPTION, " wrong instrumenttype to calculate positions:" + instrument.getInstrumentType());
+            }
+            valueCurve = new DepotValueHandler(transactionService, this).calcPositionsCurve(depotId);
+            cache.addPositionCurve(depotId, valueCurve);
+        }
+        return valueCurve;
+    }
+
+    @Override
+    public Map<Integer, TreeMap<LocalDate, Double>> getPositionValueCurve(int depotId) {
+        Map<Integer, TreeMap<LocalDate, Double>> valueCurve = cache.getPositionValueCurve(depotId);
+        if (valueCurve == null) {
+            valueCurve = new DepotValueHandler(transactionService, this).calcPositionsValueCurve(getPositionCurve(depotId));
+            cache.addPositionValueCurve(depotId, valueCurve);
+        }
+        return valueCurve;
+    }
+
+    private ValueHandler getValueHandler(final InstrumentType instrumentType) {
         ValueHandler valueHandler;
-        switch(instrumentType.getTypeGroup()){
+        switch (instrumentType.getTypeGroup()) {
             case SECURITY:
                 valueHandler = new SecurityValueHandler(this, endOfDayPriceDao);
                 break;
@@ -77,40 +104,45 @@ public class ValueCurveServiceImpl implements ValueCurveService {
                 break;
             case TENANT:
                 valueHandler = new TenantValueHandler(instrumentService, this);
-                break;  
+                break;
             case PORTFOLIO:
                 valueHandler = new PortfolioValueHandler(instrumentService, this);
-                break;   
-            case REALESTATE: 
+                break;
+            case REALESTATE:
                 valueHandler = new RealEstateValueHandler(instrumentService, this);
-                break;                                             
+                break;
+            case DEPOT:
+                valueHandler = new DepotValueHandler(transactionService, this);
+                break;
             case DEPRECATIONOBJECT:
             case LIVEINSURANCE:
             case LOAN:
-            case UNKNOWN:           
+            case UNKNOWN:
             default:
-                throw new MFException(MFMsgKey.UNKNOWN_INSTRUMENTTYPE_EXCEPTION, "Type:"+instrumentType);   
+                throw new MFException(MFMsgKey.UNKNOWN_INSTRUMENTTYPE_EXCEPTION, "Type:" + instrumentType);
         }
         return valueHandler;
     }
 
-    public double getValue(int instrumentId, LocalDate date){
-        double value=0.0;
-        TreeMap<LocalDate, Double> valueCurve = getValueCurve(instrumentId);
-        if(valueCurve.containsKey(date)) {
-            value=valueCurve.get(date);
-        } else if(valueCurve.firstKey().isAfter(date)){
+    @Override
+    public double getValue(int instrumentId, LocalDate date) {
+        double value = 0.0;
+        final TreeMap<LocalDate, Double> valueCurve = getValueCurve(instrumentId);
+        if (valueCurve.containsKey(date)) {
+            value = valueCurve.get(date);
+        } else if (valueCurve.firstKey().isAfter(date)) {
             value = valueCurve.get(valueCurve.firstKey());
-        } else if(valueCurve.lastKey().isBefore(date)){
+        } else if (valueCurve.lastKey().isBefore(date)) {
             value = valueCurve.get(valueCurve.lastKey());
         }
         return value;
     }
 
-    public void updateCache(int instrumentId){
-        List<InstrumentGraphEntry> ancestorGraphEntries = instrumentService.getAncestorGraphEntries(instrumentId, EdgeType.TENANTGRAPH);
-        if(ancestorGraphEntries != null && !ancestorGraphEntries.isEmpty()){
-            for (InstrumentGraphEntry entry : ancestorGraphEntries) {
+    public void invalidateCache(final int instrumentId) {
+        final List<InstrumentGraphEntry> ancestorGraphEntries = instrumentService.getAncestorGraphEntries(instrumentId,
+                EdgeType.TENANTGRAPH);
+        if (ancestorGraphEntries != null && !ancestorGraphEntries.isEmpty()) {
+            for (final InstrumentGraphEntry entry : ancestorGraphEntries) {
                 cache.removeCurve(entry.getId().getAncestor());
             }
         }

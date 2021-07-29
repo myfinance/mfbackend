@@ -150,4 +150,18 @@ public class TransactionDaoImpl extends BaseDao<Transaction> implements Transact
             marketDataEm.close();
         }
     }
+
+    @Override
+    public List<Transaction> getTrades(int depotId) {
+        List<Transaction> result;
+        try{
+            marketDataEm = this.marketDataEmf.createEntityManager();
+            Query query = marketDataEm.createQuery("SELECT b FROM Trade a INNER JOIN a.transactionid b WHERE b.depotid = :depotid");
+            query.setParameter("depotid", depotId);
+            result=(List<Transaction>) query.getResultList();
+        } finally {
+            marketDataEm.close();
+        }
+        return result;
+    }
 }
