@@ -45,10 +45,10 @@ public class DepotValueHandler extends AbsValueHandler {
     }
 
     private HashMap<Integer, TreeMap<LocalDate, Double>> calcPositions(
-            final Map<Integer, TreeMap<LocalDate, Double>> tradeAmounts) {
+        final Map<Integer, TreeMap<LocalDate, Double>> tradeAmounts) {
         final var positions = new HashMap<Integer, TreeMap<LocalDate, Double>>();
         for (final Map.Entry<Integer, TreeMap<LocalDate, Double>> tradeAmountsEntry : tradeAmounts.entrySet()) {
-            final LocalDate theDate = startDate;
+            LocalDate theDate = startDate;
             final var securityTradeAmounts = tradeAmountsEntry.getValue();
             double currentAmount = 0.0;
             final var securityPosition = new TreeMap<LocalDate, Double>();
@@ -57,6 +57,7 @@ public class DepotValueHandler extends AbsValueHandler {
                     currentAmount += securityTradeAmounts.get(theDate);
                 }
                 securityPosition.put(theDate, currentAmount);
+                theDate=theDate.plusDays(1);
             }
             positions.put(tradeAmountsEntry.getKey(), securityPosition);
         }
