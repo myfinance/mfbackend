@@ -6,6 +6,7 @@ import java.util.HashSet;
 
 import de.hf.dac.api.io.audit.AuditService;
 import de.hf.dac.myfinance.api.domain.Instrument;
+import de.hf.dac.myfinance.api.domain.InstrumentPropertyType;
 import de.hf.dac.myfinance.api.domain.InstrumentType;
 import de.hf.dac.myfinance.api.domain.Trade;
 import de.hf.dac.myfinance.api.domain.Transaction;
@@ -44,11 +45,26 @@ public class TradeHandler extends IncomeExpensesHandler {
             String description, 
             double value,
             LocalDate transactionDate) {
-        super.init(accId, budgetId, ts, description, value, transactionDate);                
+        super.init(checkForDefault(accId, depotId), budgetId, ts, description, value, transactionDate);                
         this.security = validateSecurity(isin);
         this.depot = validateInstrument(depotId, InstrumentType.DEPOT);
         this.amount = amount;
         saveMsg="new Trade saved with properties: isin "+ isin + ", amount " + amount + ", depot: " + depotId + ", Account "+account.getInstrumentid()+", Budget "+budget.getInstrumentid();
+    }
+
+    private int checkForDefault(int accId, int depotId) {
+        int giroId = accId;
+        if(accId == -1) {
+            var instrumentProperties = instrumentService.getInstrumentProperties(depotId);
+            if(instrumentProperties!=null && !instrumentProperties.isEmpty()) {
+                for(var instrumentProperty : instrumentProperties) {
+                    if(instrumentProperty.getPropertyname().equals(InstrumentPropertyType.DEFAULTGIROID.getStringValue())) {
+                        giroId = Integer.parseInt(instrumentProperty.getValue());
+                    } 
+                }
+            }
+        }
+        return giroId;
     }
 
 
