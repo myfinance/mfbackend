@@ -202,7 +202,7 @@ public class InstrumentServiceTestImpl implements InstrumentService {
     }
 
     @Override
-    public void newDepotAccount(String description, int tenantId, LocalDateTime ts) {
+    public void newDepotAccount(String description, int tenantId, LocalDateTime ts, int defaultGiroId) {
         // TODO Auto-generated method stub
 
     }
@@ -217,6 +217,12 @@ public class InstrumentServiceTestImpl implements InstrumentService {
     public Instrument getSecurity(String isin, String errMsg) {
         // TODO Auto-generated method stub
         return null;
+    }
+
+    @Override
+    public void updateDepotAccount(int instrumentId, String description, boolean isActive, int defaultGiroId) {
+        // TODO Auto-generated method stub
+
     }
     
 }

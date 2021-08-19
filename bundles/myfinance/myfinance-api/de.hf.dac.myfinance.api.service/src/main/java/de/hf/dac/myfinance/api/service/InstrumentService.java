@@ -40,7 +40,8 @@ public interface InstrumentService {
     void updateInstrument(int instrumentId, String description, boolean isActive);
     void newBudget(String description, int budgetGroupId, LocalDateTime ts);
     void newGiroAccount(String description, int tenantId, LocalDateTime ts);
-    void newDepotAccount(String description, int tenantId, LocalDateTime ts);
+    void newDepotAccount(String description, int tenantId, LocalDateTime ts, int defaultGiroId);
+    void updateDepotAccount(int instrumentId, String description, boolean isActive, int defaultGiroId);
     void newRealEstate(String description, int tenantId, int valueBudgetId, List<ValuePerDate> yieldgoals, List<ValuePerDate> realEstateProfits, LocalDateTime ts);
     void updateRealEstate(int instrumentId, String description, List<ValuePerDate> yieldgoals, List<ValuePerDate> realEstateProfits, boolean isActive);
     Optional<Instrument> getCurrency(String currencyCode);

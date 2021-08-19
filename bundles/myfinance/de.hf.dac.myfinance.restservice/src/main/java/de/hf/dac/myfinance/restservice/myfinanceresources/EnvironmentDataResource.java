@@ -396,9 +396,26 @@ public class EnvironmentDataResource extends BaseSecuredResource<OpType,OpLevel>
         @ApiResponse(code = HttpStatus.SC_NO_CONTENT, message = "added"),
         @ApiResponse(code = HttpStatus.SC_INTERNAL_SERVER_ERROR, message = "Something wrong in Server")})
     public Response addDepot(@QueryParam("description") @ApiParam(value="description") String description,
-        @QueryParam("tenantId") @ApiParam(value="the Id of the tenant which the giro is attached to") int tenantId) {
+        @QueryParam("tenantId") @ApiParam(value="the Id of the tenant which the depot is attached to") int tenantId,
+        @QueryParam("defaultGiroId") @ApiParam(value="the Id of the giro which is the default for all the trades") int defaultGiroId) {
         checkOperationAllowed(OpType.WRITE);
-        marketDataEnvironment.getInstrumentService().newDepotAccount(description, tenantId, LocalDateTime.now());
+        marketDataEnvironment.getInstrumentService().newDepotAccount(description, tenantId, LocalDateTime.now(), defaultGiroId);
+        return Response.ok().build();
+    }
+
+    @POST
+    @Path("/updateDepot")
+    @Produces(MediaType.APPLICATION_JSON)
+    @ApiOperation(value = "update Depot")
+    @ApiResponses(value = {
+            @ApiResponse(code = HttpStatus.SC_NO_CONTENT, message = "updated"),
+            @ApiResponse(code = HttpStatus.SC_INTERNAL_SERVER_ERROR, message = "Something wrong in Server")})
+    public Response updateDepot(@QueryParam("id") @ApiParam(value="id") int id,
+                                     @QueryParam("description") @ApiParam(value="description") String description,
+                                     @QueryParam("isactive") @ApiParam(value="isactive") boolean isactive,
+                                     @QueryParam("defaultGiroId") @ApiParam(value="the Id of the giro which is the default for all the trades") int defaultGiroId) {
+        checkOperationAllowed(OpType.WRITE);
+        marketDataEnvironment.getInstrumentService().updateDepotAccount(id, description, isactive, defaultGiroId);
         return Response.ok().build();
     }
 
