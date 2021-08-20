@@ -202,7 +202,7 @@ public class InstrumentServiceTestImpl implements InstrumentService {
     }
 
     @Override
-    public void newDepotAccount(String description, int tenantId, LocalDateTime ts, int defaultGiroId) {
+    public void newDepotAccount(String description, int tenantId, LocalDateTime ts, int defaultGiroId, int valueBudgetId) {
         // TODO Auto-generated method stub
 
     }

@@ -397,9 +397,10 @@ public class EnvironmentDataResource extends BaseSecuredResource<OpType,OpLevel>
         @ApiResponse(code = HttpStatus.SC_INTERNAL_SERVER_ERROR, message = "Something wrong in Server")})
     public Response addDepot(@QueryParam("description") @ApiParam(value="description") String description,
         @QueryParam("tenantId") @ApiParam(value="the Id of the tenant which the depot is attached to") int tenantId,
-        @QueryParam("defaultGiroId") @ApiParam(value="the Id of the giro which is the default for all the trades") int defaultGiroId) {
+        @QueryParam("defaultGiroId") @ApiParam(value="the Id of the giro which is the default for all the trades") int defaultGiroId,
+        @QueryParam("valueBudgetId") @ApiParam(value="the Id of the valuebudget, this is default for the trade") int valueBudgetId) {
         checkOperationAllowed(OpType.WRITE);
-        marketDataEnvironment.getInstrumentService().newDepotAccount(description, tenantId, LocalDateTime.now(), defaultGiroId);
+        marketDataEnvironment.getInstrumentService().newDepotAccount(description, tenantId, LocalDateTime.now(), defaultGiroId, valueBudgetId);
         return Response.ok().build();
     }
 
