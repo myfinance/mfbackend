@@ -45,14 +45,14 @@ public class TradeHandler extends IncomeExpensesHandler {
             String description, 
             double value,
             LocalDate transactionDate) {
-        super.init(checkForDefault(accId, depotId), budgetId, ts, description, value, transactionDate);                
+        super.init(checkForDefaultGiro(accId, depotId), checkForDefaultBudget(budgetId, depotId), ts, description, value, transactionDate);                
         this.security = validateSecurity(isin);
         this.depot = validateInstrument(depotId, InstrumentType.DEPOT);
         this.amount = amount;
         saveMsg="new Trade saved with properties: isin "+ isin + ", amount " + amount + ", depot: " + depotId + ", Account "+account.getInstrumentid()+", Budget "+budget.getInstrumentid();
     }
 
-    private int checkForDefault(int accId, int depotId) {
+    private int checkForDefaultGiro(int accId, int depotId) {
         int giroId = accId;
         if(accId == -1) {
             var instrumentProperties = instrumentService.getInstrumentProperties(depotId);
@@ -65,6 +65,14 @@ public class TradeHandler extends IncomeExpensesHandler {
             }
         }
         return giroId;
+    }
+
+    private int checkForDefaultBudget(int budgetId, int depotId) {
+        int id = budgetId;
+        if(budgetId == -1) {
+
+        }
+        return id;
     }
 
 
