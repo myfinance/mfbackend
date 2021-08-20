@@ -9,7 +9,7 @@ import de.hf.dac.myfinance.service.SimpleCurveCache;
 import de.hf.dac.myfinance.service.ValueCurveServiceImpl;
 import de.hf.myfinance.test.mock.EndOfDayPriceDaoTestImpl;
 import de.hf.myfinance.test.mock.InstrumentServiceTestImpl;
-import de.hf.myfinance.test.mock.TransactionServiceTestImpl;
+import de.hf.myfinance.test.mock.TransactionServiceMock;
 
 public class CashAccValueHandlerTest {
 
@@ -19,7 +19,7 @@ public class CashAccValueHandlerTest {
             new InstrumentServiceTestImpl(), 
             new EndOfDayPriceDaoTestImpl(), 
             new SimpleCurveCache(), 
-            new TransactionServiceTestImpl());
+            new TransactionServiceMock());
         String yearStr = "2020";
         Year year = Year.parse(yearStr);
         LocalDate date = year.atMonth(Month.JANUARY).atDay(1);

@@ -28,4 +28,5 @@ public interface TransactionDao  {
     String deleteTransaction(int transactionid);
     void saveTransaction(Transaction transaction);
     void updateTransaction(int transactionid, String description, LocalDate transactionDate, LocalDateTime ts);
+    List<Transaction> getTrades(int depotId);
 }

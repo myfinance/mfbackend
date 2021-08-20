@@ -28,7 +28,7 @@ import javax.inject.Named;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Query;
 
-public class TransactionDaoImpl  extends BaseDao<Transaction> implements TransactionDao {
+public class TransactionDaoImpl extends BaseDao<Transaction> implements TransactionDao {
 
     @Inject
     public TransactionDaoImpl(
@@ -149,5 +149,19 @@ public class TransactionDaoImpl  extends BaseDao<Transaction> implements Transac
         } finally {
             marketDataEm.close();
         }
+    }
+
+    @Override
+    public List<Transaction> getTrades(int depotId) {
+        List<Transaction> result;
+        try{
+            marketDataEm = this.marketDataEmf.createEntityManager();
+            Query query = marketDataEm.createQuery("SELECT b FROM Trade a INNER JOIN a.transaction b WHERE a.depot.instrumentid = :depotid");
+            query.setParameter("depotid", depotId);
+            result=(List<Transaction>) query.getResultList();
+        } finally {
+            marketDataEm.close();
+        }
+        return result;
     }
 }

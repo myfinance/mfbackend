@@ -79,8 +79,8 @@ Es gibt verschiedene Arten von Beziehungen die über den Edgetype abgebildet wer
  * Value-Budgets: Einem Budget werden ein oder mehrer Konten zugewiesen <<verlinkte Budget>>. Jeder Account darf nur einmal mit diesem Edgetype vorkommen
  * Custom: hier sollen die beziehungen von artificial Portfolien und deviersen Accounts und Positionen abegildet werden (Soll noch nicht umgesetzt werden)
  * Tenant-Graph: Abbildung des realen und virtuellen Vermögens eines Mandanten <<Tenant>>
- * RealEstateBudgetGroup: An jede Immobilie wird eine BudgetGroup gehängt über die die budgetierung erfolgt
- * incomeBudget: Einer BudgetGroup(ancestor) kann genau ein incomeBudget zugewiesen werden. Wird verwendet als StandardBudget zur Verbuchung von regelmäßigen Einnahmen z.B. Loan
+ * RealEstateBudgetGroup: An jede Immobilie wird eine BudgetGroup gehängt über die die budgetierung erfolgt (besser als InstrumentProperty siehe DVK)
+ * incomeBudget: Einer BudgetGroup(ancestor) kann genau ein incomeBudget zugewiesen werden. Wird verwendet als StandardBudget zur Verbuchung von regelmäßigen Einnahmen z.B. Loan (besser als InstrumentProperty siehe DVK)
 
 Tenent-Graph:
 

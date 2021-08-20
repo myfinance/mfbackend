@@ -27,10 +27,22 @@ import de.hf.dac.myfinance.api.service.ValueCurveCache;
 public class SimpleCurveCache implements ValueCurveCache {
 
     static Map<Integer, TreeMap<LocalDate, Double>> valueCurveCache = new HashMap<>();
+    static Map<Integer, Map<Integer, TreeMap<LocalDate, Double>>> positionCurveCache = new HashMap<>();
+    static Map<Integer, Map<Integer, TreeMap<LocalDate, Double>>> positionValueCurveCache = new HashMap<>();
 
     @Override
     public TreeMap<LocalDate, Double> getValueCurve(int instrumentId) {
         return valueCurveCache.get(instrumentId);
+    }
+
+    @Override
+    public Map<Integer, TreeMap<LocalDate, Double>> getPositionCurve(int instrumentId) {
+        return positionCurveCache.get(instrumentId);
+    }
+
+    @Override
+    public Map<Integer, TreeMap<LocalDate, Double>> getPositionValueCurve(int instrumentId) {
+        return positionValueCurveCache.get(instrumentId);
     }
 
     @Override
@@ -39,8 +51,19 @@ public class SimpleCurveCache implements ValueCurveCache {
     }
 
     @Override
+    public void addPositionCurve(int instrumentId, Map<Integer, TreeMap<LocalDate, Double>> positionCurve) {
+        positionCurveCache.put(instrumentId, positionCurve);
+    }
+
+    @Override
+    public void addPositionValueCurve(int instrumentId, Map<Integer, TreeMap<LocalDate, Double>> positionCurve) {
+        positionValueCurveCache.put(instrumentId, positionCurve);
+    }
+
+    @Override
     public void removeCurve(int instrumentId) {
         valueCurveCache.remove(instrumentId);
+        positionCurveCache.remove(instrumentId);
     }
 
     @Override

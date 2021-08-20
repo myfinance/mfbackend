@@ -42,17 +42,17 @@ public class Trade  implements java.io.Serializable {
 
 
      private Integer tradeid;
-     private Instrument instrumentByDepotid;
-     private Instrument instrumentByInstrumentid;
+     private Instrument depot;
+     private Instrument instrument;
      private Transaction transaction;
      private double amount;
 
     public Trade() {
     }
 
-    public Trade(Instrument instrumentByDepotid, Instrument instrumentByInstrumentid, Transaction transaction, double amount) {
-       this.instrumentByDepotid = instrumentByDepotid;
-       this.instrumentByInstrumentid = instrumentByInstrumentid;
+    public Trade(Instrument depot, Instrument instrument, Transaction transaction, double amount) {
+       this.depot = depot;
+       this.instrument = instrument;
        this.transaction = transaction;
        this.amount = amount;
     }
@@ -63,37 +63,36 @@ public class Trade  implements java.io.Serializable {
     public Integer getTradeid() {
         return this.tradeid;
     }
-    
     public void setTradeid(Integer tradeid) {
         this.tradeid = tradeid;
     }
+
     @ManyToOne(fetch=FetchType.LAZY)
     @JoinColumn(name="depotid", nullable=false)
     @ApiModelProperty(required = true)
-    public Instrument getInstrumentByDepotid() {
-        return this.instrumentByDepotid;
+    public Instrument getDepot() {
+        return this.depot;
     }
-    
-    public void setInstrumentByDepotid(Instrument instrumentByDepotid) {
-        this.instrumentByDepotid = instrumentByDepotid;
+    public void setDepot(Instrument depot) {
+        this.depot = depot;
     }
+
     @ManyToOne(fetch=FetchType.LAZY)
     @JoinColumn(name="instrumentid", nullable=false)
     @ApiModelProperty(required = true)
-    public Instrument getInstrumentByInstrumentid() {
-        return this.instrumentByInstrumentid;
+    public Instrument getInstrument() {
+        return this.instrument;
     }
-    
-    public void setInstrumentByInstrumentid(Instrument instrumentByInstrumentid) {
-        this.instrumentByInstrumentid = instrumentByInstrumentid;
+    public void setInstrument(Instrument instrument) {
+        this.instrument = instrument;
     }
+
     @ManyToOne(fetch=FetchType.LAZY)
     @JoinColumn(name="transactionid", nullable=false)
     @ApiModelProperty(required = true)
     public Transaction getTransaction() {
         return this.transaction;
     }
-    
     public void setTransaction(Transaction transaction) {
         this.transaction = transaction;
     }
@@ -102,8 +101,7 @@ public class Trade  implements java.io.Serializable {
     @ApiModelProperty(required = true)
     public double getAmount() {
         return this.amount;
-    }
-    
+    } 
     public void setAmount(double amount) {
         this.amount = amount;
     }

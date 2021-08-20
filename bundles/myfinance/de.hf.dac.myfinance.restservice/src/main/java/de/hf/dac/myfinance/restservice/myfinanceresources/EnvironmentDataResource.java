@@ -389,6 +389,38 @@ public class EnvironmentDataResource extends BaseSecuredResource<OpType,OpLevel>
     }
 
     @POST
+    @Path("/addDepot")
+    @Produces(MediaType.APPLICATION_JSON)
+    @ApiOperation(value = "save Depot")
+    @ApiResponses(value = {
+        @ApiResponse(code = HttpStatus.SC_NO_CONTENT, message = "added"),
+        @ApiResponse(code = HttpStatus.SC_INTERNAL_SERVER_ERROR, message = "Something wrong in Server")})
+    public Response addDepot(@QueryParam("description") @ApiParam(value="description") String description,
+        @QueryParam("tenantId") @ApiParam(value="the Id of the tenant which the depot is attached to") int tenantId,
+        @QueryParam("defaultGiroId") @ApiParam(value="the Id of the giro which is the default for all the trades") int defaultGiroId,
+        @QueryParam("valueBudgetId") @ApiParam(value="the Id of the valuebudget, this is default for the trade") int valueBudgetId) {
+        checkOperationAllowed(OpType.WRITE);
+        marketDataEnvironment.getInstrumentService().newDepotAccount(description, tenantId, LocalDateTime.now(), defaultGiroId, valueBudgetId);
+        return Response.ok().build();
+    }
+
+    @POST
+    @Path("/updateDepot")
+    @Produces(MediaType.APPLICATION_JSON)
+    @ApiOperation(value = "update Depot")
+    @ApiResponses(value = {
+            @ApiResponse(code = HttpStatus.SC_NO_CONTENT, message = "updated"),
+            @ApiResponse(code = HttpStatus.SC_INTERNAL_SERVER_ERROR, message = "Something wrong in Server")})
+    public Response updateDepot(@QueryParam("id") @ApiParam(value="id") int id,
+                                     @QueryParam("description") @ApiParam(value="description") String description,
+                                     @QueryParam("isactive") @ApiParam(value="isactive") boolean isactive,
+                                     @QueryParam("defaultGiroId") @ApiParam(value="the Id of the giro which is the default for all the trades") int defaultGiroId) {
+        checkOperationAllowed(OpType.WRITE);
+        marketDataEnvironment.getInstrumentService().updateDepotAccount(id, description, isactive, defaultGiroId);
+        return Response.ok().build();
+    }
+
+    @POST
     @Path("/addRealestate")
     @Produces(MediaType.APPLICATION_JSON)
     @ApiOperation(value = "save Realestate")
@@ -570,6 +602,43 @@ public class EnvironmentDataResource extends BaseSecuredResource<OpType,OpLevel>
     public Response delRecurrentTransfer(@QueryParam("recurrentTransactionId") @ApiParam(value="recurrentTransactionId") int recurrentTransactionId) {
         checkOperationAllowed(OpType.WRITE);
         marketDataEnvironment.getTransactionService().deleteRecurrentTransaction(recurrentTransactionId);
+        return Response.ok().build();
+    }
+
+    @POST
+    @Path("/addTrade")
+    @Produces(MediaType.APPLICATION_JSON)
+    @ApiOperation(value = "save trade")
+    @ApiResponses(value = {
+        @ApiResponse(code = HttpStatus.SC_NO_CONTENT, message = "added"),
+        @ApiResponse(code = HttpStatus.SC_INTERNAL_SERVER_ERROR, message = "Something wrong in Server")})
+    public Response addTrade(@QueryParam("description") @ApiParam(value="description") String description,
+        @QueryParam("depotId") @ApiParam(value="the depotId of the trade") int depotId,
+        @QueryParam("isin") @ApiParam(value="the isin of the instrument") String isin,
+        @QueryParam("amount") @ApiParam(value="the amount of instruments") double amount,
+        @QueryParam("transactiondate") @ApiParam(value="the transactiondate(yyyy-mm-dd") String transactiondate,
+        @QueryParam("accId") @ApiParam(value="the accountId of the giro") int accId,
+        @QueryParam("budgetId") @ApiParam(value="the budgetId of the trade") int budgetId,
+        @QueryParam("value") @ApiParam(value="the value of the trade") double value) {
+        checkOperationAllowed(OpType.WRITE);
+        marketDataEnvironment.getTransactionService().newTrade(description, depotId, isin, amount, accId, budgetId, value, LocalDate.parse(transactiondate), LocalDateTime.now());
+        return Response.ok().build();
+    }
+
+    @POST
+    @Path("/updateTrade")
+    @Produces(MediaType.APPLICATION_JSON)
+    @ApiOperation(value = "update Trade")
+    @ApiResponses(value = {
+            @ApiResponse(code = HttpStatus.SC_NO_CONTENT, message = "updated"),
+            @ApiResponse(code = HttpStatus.SC_INTERNAL_SERVER_ERROR, message = "Something wrong in Server")})
+    public Response updateTrade(@QueryParam("id") @ApiParam(value="transactionid") int transactionid,
+                                      @QueryParam("description") @ApiParam(value="description") String description,
+                                      @QueryParam("value") @ApiParam(value="the value of the trade") double value,
+                                      @QueryParam("amount") @ApiParam(value="the amount of the security") double amount,
+                                      @QueryParam("transactiondate") @ApiParam(value="the transactiondate(yyyy-mm-dd") String transactiondate) {
+        checkOperationAllowed(OpType.WRITE);
+        marketDataEnvironment.getTransactionService().updateTrade(transactionid, description, amount, value, LocalDate.parse(transactiondate), LocalDateTime.now());
         return Response.ok().build();
     }
 }

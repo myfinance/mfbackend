@@ -14,6 +14,7 @@ Die von der MyFinance Infrastruktur bereitgestellten Funktionalitäten und werde
 
 [plantuml]
 .APIs machen Funktionalität zugänglich
+
 ....
 @startuml
 !pragma graphviz_dot jdot
@@ -182,7 +183,52 @@ String jsonString = gson.toJson(source);
 
 *If your Resource derives from de.hf.dac.services.resources.leaf.LeafResource you just have to make the fieldannotation*
 
+== Klassenbäume
 
+[plantuml]
+....
+@startuml
+!pragma graphviz_dot jdot
+skinparam componentStyle uml2
+
+rectangle AbsHandler
+rectangle AbsTransactionHandler
+rectangle AbsTransferHandler
+rectangle BudgetTransferHandler
+rectangle IncomeExpensesHandler
+rectangle LinkedIncomeExpensesHandler
+rectangle RecurrentTransactionHandler
+rectangle TradeHandler
+rectangle TransferHandler
+
+AbsHandler --> AbsTransactionHandler
+AbsHandler --> RecurrentTransactionHandler
+AbsTransactionHandler --> AbsTransferHandler
+AbsTransactionHandler --> IncomeExpensesHandler
+AbsTransferHandler --> BudgetTransferHandler
+AbsTransferHandler --> TransferHandler
+IncomeExpensesHandler --> LinkedIncomeExpensesHandler
+IncomeExpensesHandler --> TradeHandler
+
+@enduml
+....
+
+= Instrument Relations
+
+== InstrumentProperty vs InstrumentGraph for InstrumentLinks
+
+ 1 to 1 Relations between Instruments like INCOMEBUDGET, Default-Budgets or REALESTATEBUDGETGROUP are more efficient implemented in Instrumentproperties, becaus thare are 1 instead of 3 rows needed.
+ For Trees (Tenant-Graph) or 1 to n Releations (Valuebudget) the InstrumentGraph-Solution is much better. Otherwise all Properties have to be scanned for informations.
+
+== InstrumentGraph
+ 
+Implemented as directed grpah with a closure table.
+
+Most of the time update and delete makes no sense in the table because all releations are allways valid. The means if you delete an Instrument from the tenant-tree it looks like it has never existed.
+
+If you want to delete an instrument you have to invalidate the instrument not the releation in the tree. If you want to move an instrument in the tree. you have to invalidate the instrument an create a new one. This sounds complicated but it should nearly never occure.
+
+A better usecase for an update is the valuebudget. You have to be careful because you can never change this. May be it is better to set on valuebudget per tenant and liquidity-class (one for depot, realestate and other long therms and one for deprecation objects like a car as mid-therms), but this is not implemented yet. Another solution is the delete and recreate of the instrument with another valuebudget, but this cost a lot of effort. We will see if and what we need.
 
 = coding conventions for Angular
 

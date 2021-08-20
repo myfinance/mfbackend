@@ -140,6 +140,20 @@ public class InstrumentServiceImpl implements InstrumentService {
     }
 
     @Override
+    public Instrument getSecurity(String isin){
+        return getSecurity(isin, "");
+    }
+
+    @Override
+    public Instrument getSecurity(String isin, String errMsg) {
+        var instrument = instrumentDao.getSecurity(isin);
+        if(!instrument.isPresent()){
+            throw new MFException(MFMsgKey.UNKNOWN_INSTRUMENT_EXCEPTION, errMsg + " Instrument for isin:"+isin + " not found");
+        }
+        return instrument.get();
+    }
+
+    @Override
     public List<Instrument> getSecurities(){
         return instrumentDao.getSecurities();
     }
@@ -333,6 +347,38 @@ public class InstrumentServiceImpl implements InstrumentService {
         auditService.saveMessage("new giro inserted:" + description, Severity.INFO, AUDIT_MSG_TYPE);
         instrumentDao.saveInstrument(giro);
         addInstrumentToGraph(giro.getInstrumentid(), accportfolio.get().getInstrumentid(), EdgeType.TENANTGRAPH);
+    }
+
+    @Override
+    public void newDepotAccount(String description, int tenantId, LocalDateTime ts, int defaultGiroId, int valueBudgetId) {
+        Optional<Instrument> accportfolio = instrumentDao.getAccountPortfolio(tenantId);
+        if(!accportfolio.isPresent()) {
+            throw new MFException(MFMsgKey.UNKNOWN_INSTRUMENT_EXCEPTION,  "Depot not saved: tenant for the id:"+tenantId+" not exists or has no accountPortfolio");
+        }
+        var giro = getInstrument(defaultGiroId, "Depot not saved: Unknown default giro account:");
+        if(giro.getInstrumentType()!=InstrumentType.GIRO){
+            throw new MFException(MFMsgKey.WRONG_INSTRUMENTTYPE_EXCEPTION, "Depot not saved: default giro has wrong instrument type:");
+        }
+        Optional<Integer> tenantOfGiro = getRootInstrument(giro.getInstrumentid(), EdgeType.TENANTGRAPH);
+        if(!tenantOfGiro.isPresent()
+            || !tenantOfGiro.get().equals(tenantId)){
+            throw new MFException(MFMsgKey.WRONG_TENENT_EXCEPTION,  "Depot not saved: default giro has not the same tenant");
+        }
+
+        Depot depot = new Depot(description, true, ts);
+        auditService.saveMessage("new depot inserted:" + description, Severity.INFO, AUDIT_MSG_TYPE);
+        instrumentDao.saveInstrument(depot);
+        addInstrumentToGraph(depot.getInstrumentid(), accportfolio.get().getInstrumentid(), EdgeType.TENANTGRAPH);
+
+        instrumentDao.saveInstrumentProperty(new InstrumentProperties(InstrumentPropertyType.DEFAULTGIROID.name(), depot.getInstrumentid(), String.valueOf(defaultGiroId), InstrumentPropertyType.DEFAULTGIROID.getValueType()));
+        addInstrumentToGraph(depot.getInstrumentid(), valueBudgetId, EdgeType.VALUEBUDGET);
+    }
+
+    @Override
+    public void updateDepotAccount(int instrumentId, String description, boolean isActive, int defaultGiroId) {
+        updateInstrument(instrumentId, description, isActive);
+        deleteInstrumentPropertyList(instrumentId);
+        instrumentDao.saveInstrumentProperty(new InstrumentProperties(InstrumentPropertyType.DEFAULTGIROID.name(), instrumentId, String.valueOf(defaultGiroId), InstrumentPropertyType.DEFAULTGIROID.getValueType()));
     }
 
     @Override
