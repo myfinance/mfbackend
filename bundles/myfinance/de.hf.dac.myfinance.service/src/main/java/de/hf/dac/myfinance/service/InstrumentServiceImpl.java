@@ -27,6 +27,8 @@ import de.hf.dac.myfinance.api.exceptions.MFMsgKey;
 import de.hf.dac.myfinance.api.persistence.dao.*;
 import de.hf.dac.myfinance.api.service.InstrumentService;
 import de.hf.dac.myfinance.api.service.ValueCurveService;
+import de.hf.dac.myfinance.instrumentgraphhandler.InstrumentGraphHandler;
+import de.hf.dac.myfinance.instrumentgraphhandler.InstrumentGraphHandlerImpl;
 import lombok.Data;
 
 import javax.inject.Inject;
@@ -43,6 +45,7 @@ public class InstrumentServiceImpl implements InstrumentService {
     private RecurrentTransactionDao recurrentTransactionDao;
     private ValueCurveService service;
     private AuditService auditService;
+    private InstrumentGraphHandler instrumentGraphHandler;
     private static final String AUDIT_MSG_TYPE="InstrumentService_User_Event";
     private static final String DEFAULT_BUDGETGROUP_PREFIX = "budgetGroup_";
     private static final String DEFAULT_INCOMEBUDGET_PREFIX = "incomeBudget_";
@@ -55,6 +58,7 @@ public class InstrumentServiceImpl implements InstrumentService {
         this.auditService = auditService;
         this.recurrentTransactionDao = recurrentTransactionDao;
         this.service = service;
+        instrumentGraphHandler = new InstrumentGraphHandlerImpl(this.instrumentDao);
     }
 
     @Override
@@ -64,25 +68,17 @@ public class InstrumentServiceImpl implements InstrumentService {
 
     @Override
     public List<Instrument> listInstruments(int tenantId) {
-        return instrumentDao.getInstrumentChilds(tenantId, EdgeType.TENANTGRAPH);
+        return instrumentGraphHandler.getAllInstrumentChilds(tenantId);
     }
 
     @Override
     public List<Instrument> listInstruments(int tenantId, boolean onlyActive) {
-        List<Instrument> instruments = listInstruments(tenantId);
-        if ( instruments!= null && !instruments.isEmpty()) {
-            instruments = instruments.stream().filter(
-                    i->(!onlyActive || i.isIsactive())
-            ).collect(Collectors.toList());
-        }
-        return instruments;
+        return instrumentGraphHandler.getAllInstrumentChilds(tenantId, onlyActive);
     }
 
     @Override
     public List<Instrument> listInstruments(int tenantId, InstrumentType instrumentType, boolean onlyActive) {
-        return listInstruments(tenantId).stream().filter(
-                    i->i.getInstrumentType().equals(instrumentType) && (!onlyActive || i.isIsactive())
-                ).collect(Collectors.toList());
+        return instrumentGraphHandler.getAllInstrumentChilds(tenantId, instrumentType, onlyActive);
     }
 
     @Override
@@ -102,7 +98,7 @@ public class InstrumentServiceImpl implements InstrumentService {
 
     @Override
     public Optional<Integer> getRootInstrument(int instrumentId, EdgeType edgeType) {
-        return instrumentDao.getRootInstrument(instrumentId, edgeType);
+        return instrumentGraphHandler.getRootInstrument(instrumentId, edgeType);
     }
 
     @Override
@@ -266,31 +262,13 @@ public class InstrumentServiceImpl implements InstrumentService {
         Tenant tenant = new Tenant(description, true, ts);
         instrumentDao.saveInstrument(tenant);
         auditService.saveMessage("Tenant inserted:" + description, Severity.INFO, AUDIT_MSG_TYPE);
-        addInstrumentToGraph(tenant.getInstrumentid(),tenant.getInstrumentid(),EdgeType.TENANTGRAPH);
+        instrumentGraphHandler.addInstrumentToGraph(tenant.getInstrumentid(),tenant.getInstrumentid());
 
         int budgetPfId = newBudgetPortfolio(DEFAULT_BUDGETPF_PREFIX+description, ts);
-        addInstrumentToGraph(budgetPfId, tenant.getInstrumentid(), EdgeType.TENANTGRAPH);
+        instrumentGraphHandler.addInstrumentToGraph(budgetPfId, tenant.getInstrumentid());
         newBudgetGroup(description, budgetPfId, ts);
         int accPfId = newAccountPortfolio(DEFAULT_ACCPF_PREFIX+description, ts);
-        addInstrumentToGraph(accPfId, tenant.getInstrumentid(), EdgeType.TENANTGRAPH);
-    }
-
-    protected void addInstrumentToGraph(int instrumentId, int ancestorId, EdgeType edgeType){
-        List<InstrumentGraphEntry> ancestorGraphEntries = instrumentDao.getAncestorGraphEntries(ancestorId, edgeType);
-        if(instrumentId!=ancestorId && ancestorGraphEntries.isEmpty()){
-            InstrumentGraphEntry newEntry = new InstrumentGraphEntry(ancestorId, ancestorId, edgeType);
-            newEntry.setPathlength(0);
-            instrumentDao.saveGraphEntry(newEntry);
-            ancestorGraphEntries = instrumentDao.getAncestorGraphEntries(ancestorId, edgeType);
-        }
-        for (InstrumentGraphEntry entry : ancestorGraphEntries) {
-            InstrumentGraphEntry newEntry = new InstrumentGraphEntry(entry.getId().getAncestor(), instrumentId, edgeType);
-            newEntry.setPathlength(entry.getPathlength()+1);
-            instrumentDao.saveGraphEntry(newEntry);
-        }
-        InstrumentGraphEntry newEntry = new InstrumentGraphEntry(instrumentId, instrumentId, edgeType);
-        newEntry.setPathlength(0);
-        instrumentDao.saveGraphEntry(newEntry);
+        instrumentGraphHandler.addInstrumentToGraph(accPfId, tenant.getInstrumentid());
     }
 
     @Override
@@ -310,7 +288,7 @@ public class InstrumentServiceImpl implements InstrumentService {
         auditService.saveMessage("budget inserted:" + description, Severity.INFO, AUDIT_MSG_TYPE);
         instrumentDao.saveInstrument(budget);
         int budgetId = budget.getInstrumentid();
-        addInstrumentToGraph(budgetId, budgetGroupId, EdgeType.TENANTGRAPH);
+        instrumentGraphHandler.addInstrumentToGraph(budgetId, budgetGroupId);
         return budgetId;
     }
 
@@ -318,10 +296,10 @@ public class InstrumentServiceImpl implements InstrumentService {
         BudgetGroup budgetGroup = new BudgetGroup(DEFAULT_BUDGETGROUP_PREFIX+description, true, ts);
         instrumentDao.saveInstrument(budgetGroup);
         int budgetGroupId = budgetGroup.getInstrumentid();
-        addInstrumentToGraph(budgetGroupId, budgetPFId, EdgeType.TENANTGRAPH);
-        addInstrumentToGraph(budgetGroupId,budgetGroupId,EdgeType.INCOMEBUDGET);
+        instrumentGraphHandler.addInstrumentToGraph(budgetGroupId, budgetPFId);
+        instrumentGraphHandler.addInstrumentToGraph(budgetGroupId,budgetGroupId,EdgeType.INCOMEBUDGET);
         int incomeBudgetId = createBudget(DEFAULT_INCOMEBUDGET_PREFIX+description, budgetGroupId, ts);
-        addInstrumentToGraph(incomeBudgetId, budgetGroupId, EdgeType.INCOMEBUDGET);
+        instrumentGraphHandler.addInstrumentToGraph(incomeBudgetId, budgetGroupId, EdgeType.INCOMEBUDGET);
         return budgetGroupId;
     }
 
@@ -346,7 +324,7 @@ public class InstrumentServiceImpl implements InstrumentService {
         Giro giro = new Giro(description, true, ts);
         auditService.saveMessage("new giro inserted:" + description, Severity.INFO, AUDIT_MSG_TYPE);
         instrumentDao.saveInstrument(giro);
-        addInstrumentToGraph(giro.getInstrumentid(), accportfolio.get().getInstrumentid(), EdgeType.TENANTGRAPH);
+        instrumentGraphHandler.addInstrumentToGraph(giro.getInstrumentid(), accportfolio.get().getInstrumentid());
     }
 
     @Override
@@ -368,10 +346,10 @@ public class InstrumentServiceImpl implements InstrumentService {
         Depot depot = new Depot(description, true, ts);
         auditService.saveMessage("new depot inserted:" + description, Severity.INFO, AUDIT_MSG_TYPE);
         instrumentDao.saveInstrument(depot);
-        addInstrumentToGraph(depot.getInstrumentid(), accportfolio.get().getInstrumentid(), EdgeType.TENANTGRAPH);
+        instrumentGraphHandler.addInstrumentToGraph(depot.getInstrumentid(), accportfolio.get().getInstrumentid());
 
         instrumentDao.saveInstrumentProperty(new InstrumentProperties(InstrumentPropertyType.DEFAULTGIROID.name(), depot.getInstrumentid(), String.valueOf(defaultGiroId), InstrumentPropertyType.DEFAULTGIROID.getValueType()));
-        addInstrumentToGraph(depot.getInstrumentid(), valueBudgetId, EdgeType.VALUEBUDGET);
+        instrumentGraphHandler.addInstrumentToGraph(depot.getInstrumentid(), valueBudgetId, EdgeType.VALUEBUDGET);
     }
 
     @Override
@@ -394,13 +372,13 @@ public class InstrumentServiceImpl implements InstrumentService {
         RealEstate realEstate = new RealEstate(description, true, ts);
         auditService.saveMessage("new RealEstate inserted:" + description, Severity.INFO, AUDIT_MSG_TYPE);
         instrumentDao.saveInstrument(realEstate);
-        addInstrumentToGraph(realEstate.getInstrumentid(), accportfolio.get().getInstrumentid(), EdgeType.TENANTGRAPH);
+        instrumentGraphHandler.addInstrumentToGraph(realEstate.getInstrumentid(), accportfolio.get().getInstrumentid());
         saveYieldgoals(realEstate.getInstrumentid(), yieldgoals);
         saveRealestateProfits(realEstate.getInstrumentid(), realEstateProfits);
         var budgetGroupId = newBudgetGroup(description, budgetportfolio.get().getInstrumentid(), ts);
-        addInstrumentToGraph(realEstate.getInstrumentid(), realEstate.getInstrumentid(), EdgeType.REALESTATEBUDGETGROUP);
-        addInstrumentToGraph(budgetGroupId, realEstate.getInstrumentid(), EdgeType.REALESTATEBUDGETGROUP);
-        addInstrumentToGraph(realEstate.getInstrumentid(), valueBudgetId, EdgeType.VALUEBUDGET);
+        instrumentGraphHandler.addInstrumentToGraph(realEstate.getInstrumentid(), realEstate.getInstrumentid(), EdgeType.REALESTATEBUDGETGROUP);
+        instrumentGraphHandler.addInstrumentToGraph(budgetGroupId, realEstate.getInstrumentid(), EdgeType.REALESTATEBUDGETGROUP);
+        instrumentGraphHandler.addInstrumentToGraph(realEstate.getInstrumentid(), valueBudgetId, EdgeType.VALUEBUDGET);
     }
 
     @Override
@@ -435,15 +413,22 @@ public class InstrumentServiceImpl implements InstrumentService {
     @Override
     public void updateInstrument(int instrumentId, String description, boolean isActive) {
         var instrument = getInstrument(instrumentId, "Instrument not updated:");
-        validateInstrument4Inactivation(instrument.getInstrumentid(), instrument.getInstrumentType(), instrument.isIsactive(),  isActive);
+        validateInstrument4Inactivation(instrument.getInstrumentid(), instrument.getInstrumentType(), instrument.isIsactive(), isActive);
         String oldDesc = instrument.getDescription();
         instrumentDao.updateInstrument(instrumentId, description, isActive);
         if(instrument.getInstrumentType()==InstrumentType.TENANT) {
-            List<Instrument> instruments = instrumentDao.listInstruments();
+            List<Instrument> instruments = instrumentGraphHandler.getAllInstrumentChilds(instrumentId);
             renameDefaultTenantChild(instrumentId, description, oldDesc, DEFAULT_BUDGETGROUP_PREFIX, instruments);
             renameDefaultTenantChild(instrumentId, description, oldDesc, DEFAULT_ACCPF_PREFIX, instruments);
             renameDefaultTenantChild(instrumentId, description, oldDesc, DEFAULT_INCOMEBUDGET_PREFIX, instruments);
         }
+    }
+
+    private void renameDefaultTenantChild(int instrumentId, String newDesc, String oldDesc, String defaultDescPrefix, List<Instrument> instruments) {
+        //look by description for default instruments of the tenant to rename
+        instruments.stream().filter(i->i.getDescription().equals(defaultDescPrefix+oldDesc)).forEach(i->{
+                instrumentDao.updateInstrument(i.getInstrumentid(), defaultDescPrefix+newDesc, i.isIsactive());
+        });
     }
 
     private void validateInstrument4Inactivation(int instrumentId, InstrumentType instrumentType, boolean isActiveBeforeUpdate,  boolean isActiveAfterUpdate) {
@@ -490,16 +475,5 @@ public class InstrumentServiceImpl implements InstrumentService {
                 }
             }
         }
-    }
-
-    private void renameDefaultTenantChild(int instrumentId, String newDesc, String oldDesc, String defaultDescPrefix, List<Instrument> instruments) {
-        //look by description for default instruments of the tenant to rename
-        instruments.stream().filter(i->i.getDescription().equals(defaultDescPrefix+oldDesc)).forEach(i->{
-            //doublecheck if the instrument is part of the tenant
-            if(instrumentDao.getAncestorGraphEntries(i.getInstrumentid(), EdgeType.TENANTGRAPH).stream().anyMatch(j->j.getId().getAncestor()==instrumentId)){
-                i.setDescription(defaultDescPrefix+newDesc);
-                instrumentDao.updateInstrument(i.getInstrumentid(), defaultDescPrefix+newDesc, i.isIsactive());
-            }
-        });
     }
 }
