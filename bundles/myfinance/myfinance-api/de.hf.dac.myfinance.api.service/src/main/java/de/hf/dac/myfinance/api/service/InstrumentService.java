@@ -31,8 +31,8 @@ public interface InstrumentService {
     List<Instrument> listTenants();
     Instrument getInstrument(int instrumentId);
     Instrument getInstrument(int instrumentId, String errMsg);
-    Optional<Integer> getRootInstrument(int instrumentId, EdgeType edgeType);
-    List<InstrumentGraphEntry> getAncestorGraphEntries(int instrumentId, EdgeType edgeType);
+    Optional<Integer> getTenant(int instrumentId);
+    List<Integer> getParentIds(int instrumentId);
     List<Instrument> getInstrumentChilds(int instrumentId, EdgeType edgeType, int pathlength);
     Instrument getIncomeBudget(int tenantId);
     List<InstrumentProperties> getInstrumentProperties(int instrumentId);

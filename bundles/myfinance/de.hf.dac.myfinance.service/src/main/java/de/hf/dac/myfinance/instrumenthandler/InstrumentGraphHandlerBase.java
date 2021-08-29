@@ -1,4 +1,4 @@
-package de.hf.dac.myfinance.instrumentgraphhandler;
+package de.hf.dac.myfinance.instrumenthandler;
 
 import de.hf.dac.myfinance.api.persistence.dao.InstrumentDao;
 

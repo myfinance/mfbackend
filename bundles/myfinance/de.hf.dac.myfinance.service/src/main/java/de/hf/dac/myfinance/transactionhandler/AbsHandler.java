@@ -30,8 +30,8 @@ public abstract class AbsHandler {
     abstract void save();
     
     protected void validateTenant(Instrument firstInstrument, Instrument secondInstrument) {
-        Optional<Integer> tenantOfFirstInstrument = instrumentService.getRootInstrument(firstInstrument.getInstrumentid(), EdgeType.TENANTGRAPH);
-        Optional<Integer> tenantOfSecInstrument = instrumentService.getRootInstrument(secondInstrument.getInstrumentid(), EdgeType.TENANTGRAPH);
+        Optional<Integer> tenantOfFirstInstrument = instrumentService.getTenant(firstInstrument.getInstrumentid());
+        Optional<Integer> tenantOfSecInstrument = instrumentService.getTenant(secondInstrument.getInstrumentid());
 
         if(!tenantOfFirstInstrument.isPresent()
             || !tenantOfSecInstrument.isPresent()

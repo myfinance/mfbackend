@@ -27,8 +27,9 @@ import de.hf.dac.myfinance.api.exceptions.MFMsgKey;
 import de.hf.dac.myfinance.api.persistence.dao.*;
 import de.hf.dac.myfinance.api.service.InstrumentService;
 import de.hf.dac.myfinance.api.service.ValueCurveService;
-import de.hf.dac.myfinance.instrumentgraphhandler.InstrumentGraphHandler;
-import de.hf.dac.myfinance.instrumentgraphhandler.InstrumentGraphHandlerImpl;
+import de.hf.dac.myfinance.instrumenthandler.InstrumentFactory;
+import de.hf.dac.myfinance.instrumenthandler.InstrumentGraphHandler;
+import de.hf.dac.myfinance.instrumenthandler.InstrumentGraphHandlerImpl;
 import lombok.Data;
 
 import javax.inject.Inject;
@@ -45,7 +46,7 @@ public class InstrumentServiceImpl implements InstrumentService {
     private RecurrentTransactionDao recurrentTransactionDao;
     private ValueCurveService service;
     private AuditService auditService;
-    private InstrumentGraphHandler instrumentGraphHandler;
+    private InstrumentFactory instrumentFactory;
     private static final String AUDIT_MSG_TYPE="InstrumentService_User_Event";
     private static final String DEFAULT_BUDGETGROUP_PREFIX = "budgetGroup_";
     private static final String DEFAULT_INCOMEBUDGET_PREFIX = "incomeBudget_";
@@ -58,7 +59,7 @@ public class InstrumentServiceImpl implements InstrumentService {
         this.auditService = auditService;
         this.recurrentTransactionDao = recurrentTransactionDao;
         this.service = service;
-        instrumentGraphHandler = new InstrumentGraphHandlerImpl(this.instrumentDao);
+        this.instrumentFactory = new InstrumentFactory(this.instrumentDao);
     }
 
     @Override
@@ -68,44 +69,42 @@ public class InstrumentServiceImpl implements InstrumentService {
 
     @Override
     public List<Instrument> listInstruments(int tenantId) {
-        return instrumentGraphHandler.getAllInstrumentChilds(tenantId);
+        return instrumentFactory.getTenantHandler(tenantId, false).listInstruments();
     }
 
     @Override
     public List<Instrument> listInstruments(int tenantId, boolean onlyActive) {
-        return instrumentGraphHandler.getAllInstrumentChilds(tenantId, onlyActive);
+        return instrumentFactory.getTenantHandler(tenantId, false).listInstruments(onlyActive);
     }
 
     @Override
     public List<Instrument> listInstruments(int tenantId, InstrumentType instrumentType, boolean onlyActive) {
-        return instrumentGraphHandler.getAllInstrumentChilds(tenantId, instrumentType, onlyActive);
+        return instrumentFactory.getTenantHandler(tenantId, false).listInstruments(instrumentType, onlyActive);
     }
 
     @Override
     public Instrument getInstrument(int instrumentId) {
-        return getInstrument(instrumentId, "");
+        return instrumentFactory.getInstrument(instrumentId);
     }
 
     @Override
     public Instrument getInstrument(int instrumentId, String errMsg) {
-        var instrument = instrumentDao.getInstrument(instrumentId);
-        if(!instrument.isPresent()){
-            throw new MFException(MFMsgKey.UNKNOWN_INSTRUMENT_EXCEPTION, errMsg + " Instrument for id:"+instrumentId + " not found");
-        }
-        return instrument.get();
+        return instrumentFactory.getInstrument(instrumentId, errMsg);
     }
 
 
     @Override
-    public Optional<Integer> getRootInstrument(int instrumentId, EdgeType edgeType) {
-        return instrumentGraphHandler.getRootInstrument(instrumentId, edgeType);
+    public Optional<Integer> getTenant(int instrumentId) {
+        return instrumentFactory.getInstrumentHandler(instrumentId).getTenant();
     }
 
     @Override
-    public List<InstrumentGraphEntry> getAncestorGraphEntries(int instrumentId, EdgeType edgeType) {
-        return instrumentDao.getAncestorGraphEntries(instrumentId, edgeType);
-     }
+    public List<Integer> getParentIds(int instrumentId) {
+        return instrumentFactory.getI nstrumentHandler(instrumentId).getAncestorIds();
+    }
 
+
+    hier gehts weiter
     @Override
     public List<Instrument> getInstrumentChilds(int instrumentId, EdgeType edgeType, int pathlength){
         return instrumentDao.getInstrumentChilds(instrumentId, edgeType, pathlength);
@@ -337,7 +336,7 @@ public class InstrumentServiceImpl implements InstrumentService {
         if(giro.getInstrumentType()!=InstrumentType.GIRO){
             throw new MFException(MFMsgKey.WRONG_INSTRUMENTTYPE_EXCEPTION, "Depot not saved: default giro has wrong instrument type:");
         }
-        Optional<Integer> tenantOfGiro = getRootInstrument(giro.getInstrumentid(), EdgeType.TENANTGRAPH);
+        Optional<Integer> tenantOfGiro = getTenant(giro.getInstrumentid());
         if(!tenantOfGiro.isPresent()
             || !tenantOfGiro.get().equals(tenantId)){
             throw new MFException(MFMsgKey.WRONG_TENENT_EXCEPTION,  "Depot not saved: default giro has not the same tenant");

@@ -21,12 +21,12 @@ import de.hf.dac.myfinance.api.persistence.dao.TransactionDao;
 import de.hf.dac.myfinance.api.service.InstrumentService;
 import de.hf.dac.myfinance.api.service.TransactionService;
 import de.hf.dac.myfinance.api.service.ValueCurveService;
-import de.hf.dac.myfinance.service.transactionhandler.AbsTransactionHandler;
-import de.hf.dac.myfinance.service.transactionhandler.AbsTransferHandler;
-import de.hf.dac.myfinance.service.transactionhandler.IncomeExpensesHandler;
-import de.hf.dac.myfinance.service.transactionhandler.LinkedIncomeExpensesHandler;
-import de.hf.dac.myfinance.service.transactionhandler.RecurrentTransactionHandler;
-import de.hf.dac.myfinance.service.transactionhandler.TransactionHandlerFactory;
+import de.hf.dac.myfinance.transactionhandler.AbsTransactionHandler;
+import de.hf.dac.myfinance.transactionhandler.AbsTransferHandler;
+import de.hf.dac.myfinance.transactionhandler.IncomeExpensesHandler;
+import de.hf.dac.myfinance.transactionhandler.LinkedIncomeExpensesHandler;
+import de.hf.dac.myfinance.transactionhandler.RecurrentTransactionHandler;
+import de.hf.dac.myfinance.transactionhandler.TransactionHandlerFactory;
 
 public class TransactionServiceImpl implements TransactionService {
     private InstrumentService instrumentService;
