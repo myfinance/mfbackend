@@ -63,16 +63,16 @@ public abstract class InstrumentGraphHandlerBase implements InstrumentGraphHandl
         return childs;
     }
 
-    protected List<Instrument> getAllInstrumentChilds(final int instrumentId, final EdgeType edgeType, final boolean filterInstrumentType, final InstrumentType instrumentType, final boolean onlyActive){
-        List<Instrument> instruments = getAllInstrumentChilds(instrumentId, edgeType);
+    protected List<Instrument> filterInstruments(final List<Instrument> instruments, final boolean filterInstrumentType, final InstrumentType instrumentType, final boolean onlyActive){
+        List<Instrument> filteredInstruments = instruments;
         if ( instruments!= null && !instruments.isEmpty()) {
-            instruments = instruments.stream().filter(i->(
+            filteredInstruments = instruments.stream().filter(i->(
                     (!filterInstrumentType || i.getInstrumentType().equals(instrumentType))
                     && (!onlyActive || i.isIsactive())
                 )
             ).collect(Collectors.toList());
         }
-        return instruments;
+        return filteredInstruments;
     }
 
     @Override

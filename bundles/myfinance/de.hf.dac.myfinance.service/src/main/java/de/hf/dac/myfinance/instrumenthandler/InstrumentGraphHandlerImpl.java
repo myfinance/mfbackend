@@ -37,6 +37,11 @@ public class InstrumentGraphHandlerImpl extends InstrumentGraphHandlerBase{
     }
 
     @Override
+    public List<Instrument> getInstrumentFirstLevelChildsWithType(int instrumentId, final InstrumentType instrumentType, final boolean onlyActive){
+        return filterInstruments(getInstrumentChilds(instrumentId, EdgeType.TENANTGRAPH, 1), true, instrumentType, onlyActive);
+    }
+
+    @Override
     public List<Instrument> getInstrumentChilds(int instrumentId, int pathlength){
         return getInstrumentChilds(instrumentId, EdgeType.TENANTGRAPH, pathlength);
     }
@@ -48,17 +53,17 @@ public class InstrumentGraphHandlerImpl extends InstrumentGraphHandlerBase{
 
     @Override
     public List<Instrument> getAllInstrumentChilds(final int instrumentId, final EdgeType edgeType, final boolean onlyActive){
-        return getAllInstrumentChilds(instrumentId, edgeType, false, InstrumentType.UNKNOWN, onlyActive);
+        return filterInstruments(getAllInstrumentChilds(instrumentId, edgeType), false, InstrumentType.UNKNOWN, onlyActive);
     }
 
     @Override
     public List<Instrument> getAllInstrumentChilds(final int instrumentId, final InstrumentType instrumentType, final boolean onlyActive){
-        return getAllInstrumentChilds(instrumentId, EdgeType.TENANTGRAPH, false, instrumentType, onlyActive);
+        return filterInstruments(getAllInstrumentChilds(instrumentId, EdgeType.TENANTGRAPH), false, instrumentType, onlyActive);
     }
     
     @Override
     public List<Instrument> getAllInstrumentChildsWithType(final int instrumentId, final InstrumentType instrumentType){
-        return getAllInstrumentChilds(instrumentId, EdgeType.TENANTGRAPH, true, instrumentType, false);
+        return filterInstruments(getAllInstrumentChilds(instrumentId, EdgeType.TENANTGRAPH), true, instrumentType, false);
     }
 
     @Override
@@ -67,27 +72,10 @@ public class InstrumentGraphHandlerImpl extends InstrumentGraphHandlerBase{
     }
 
     @Override
-    public Stream<Instrument> getFirstLevelChildsPerType(final int instrumentId, final InstrumentType instrumentType) {
-        return getInstrumentFirstLevelChilds(instrumentId).stream().filter(i -> i.getInstrumentType().equals(instrumentType));
-    }
-
-    @Override
-    public Optional<Instrument> getFirstLevelChildsPerTypeFirstmatch(final int instrumentId, final InstrumentType instrumentType) {
-        return getFirstLevelChildsPerType(instrumentId, instrumentType).findFirst();
-    }
-
-    @Override
-    public Optional<Instrument> getAccountPortfolio(final int tenantId) {
-        return getFirstLevelChildsPerTypeFirstmatch(tenantId, InstrumentType.ACCOUNTPORTFOLIO);
-    }
-
-    @Override
-    public List<Instrument> getAccounts(final int tenantId) {
-        final Optional<Instrument> accPF = getAccountPortfolio(tenantId);
-        if(!accPF.isPresent()) {
-            return new ArrayList<>();
-        }
-        return getInstrumentFirstLevelChilds(accPF.get().getInstrumentid());
+    public Instrument getFirstLevelChildsPerTypeFirstmatch(final int instrumentId, final InstrumentType instrumentType) {
+        var instruments = getInstrumentFirstLevelChildsWithType(instrumentId, instrumentType, true);
+        if(instruments == null || instruments.isEmpty()) return null;
+        return instruments.get(0);
     }
     
     @Override

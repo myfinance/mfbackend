@@ -44,9 +44,9 @@ public interface InstrumentGraphHandler {
     /** calls getInstrumentChilds(int instrumentId, EdgeType edgeType, int pathlength) EdgeType =  TenantGraph*/
     List<Instrument> getInstrumentChilds(int instrumentId, int pathlength);
     /** calls getInstrumentChilds(int instrumentId, EdgeType edgeType, int pathlength) with pathlegth = 1 edgetype=TenantGraph and filters for the instrumenttype*/
-    Stream<Instrument> getFirstLevelChildsPerType(int instrumentId, InstrumentType instrumentType);
-    /** calls getFirstLevelChildsPerType and returns the first match*/
-    Optional<Instrument> getFirstLevelChildsPerTypeFirstmatch(int instrumentId, InstrumentType instrumentType);
+    List<Instrument> getInstrumentFirstLevelChildsWithType(int instrumentId, final InstrumentType instrumentType, final boolean onlyActive);
+    /** calls getInstrumentFirstLevelChildsWithType with onlyactive=true and returns the first match*/
+    Instrument getFirstLevelChildsPerTypeFirstmatch(int instrumentId, InstrumentType instrumentType);
 
     /**
      * get all childs of an instrument no matter the pathlegth in the graph
@@ -65,16 +65,7 @@ public interface InstrumentGraphHandler {
     List<Instrument> getAllInstrumentChilds(final int instrumentId, final InstrumentType instrumentType, final boolean onlyActive);
     /**  calls getAllInstrumentChilds(int instrumentId, EdgeType edgeType) with EdgeType = TenantGraph  and filters for instrument with type=instrumentType */
     List<Instrument> getAllInstrumentChildsWithType(int instrumentId, InstrumentType instrumentType);
-    
-    
-    /** calls getFirstLevelChildsPerTypeFirstmatch(int instrumentId, InstrumentType instrumentType) 
-     * with type AccountPortfolio  to get the Accountportfolio of the tenant*/
-    Optional<Instrument> getAccountPortfolio(int tenantId);
-    /** Returns all the Accounts of a tenant active and inactive
-     * the type of the accounts doesn't matter. All childinstruments of the Accountportfolio will be returned
-    */
-    List<Instrument> getAccounts(int tenantId);
-    
+        
     /**
      * 
      * @param instrumentId - the id of the instrument for which the childs are requested

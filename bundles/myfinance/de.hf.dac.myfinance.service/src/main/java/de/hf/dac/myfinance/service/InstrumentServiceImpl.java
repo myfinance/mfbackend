@@ -64,7 +64,7 @@ public class InstrumentServiceImpl implements InstrumentService {
 
     @Override
     public List<Instrument> listInstruments() {
-        return instrumentDao.listInstruments();
+        return instrumentFactory.listInstruments();
     }
 
     @Override
@@ -95,33 +95,75 @@ public class InstrumentServiceImpl implements InstrumentService {
 
     @Override
     public Optional<Integer> getTenant(int instrumentId) {
-        return instrumentFactory.getInstrumentHandler(instrumentId).getTenant();
+        return instrumentFactory.getSimpleInstrumentHandler(instrumentId).getTenant();
     }
 
     @Override
     public List<Integer> getParentIds(int instrumentId) {
-        return instrumentFactory.getI nstrumentHandler(instrumentId).getAncestorIds();
+        return instrumentFactory.getSimpleInstrumentHandler(instrumentId).getAncestorIds();
     }
 
-
-    hier gehts weiter
     @Override
     public List<Instrument> getInstrumentChilds(int instrumentId, EdgeType edgeType, int pathlength){
-        return instrumentDao.getInstrumentChilds(instrumentId, edgeType, pathlength);
+        return instrumentFactory.getSimpleInstrumentHandler(instrumentId).getInstrumentChilds(edgeType, pathlength);
     }
 
     @Override
     public List<Instrument> listAccounts(int tenantId) {
-        List<Instrument> accs = new ArrayList<>();
-        List<Instrument>  childs = instrumentDao.getInstrumentChilds(tenantId, EdgeType.TENANTGRAPH, 1);
-        if(childs==null || childs.isEmpty()) {
-            return accs;
+        return instrumentFactory.getTenantHandler(tenantId, false).getAccounts();
+    }
+
+    @Override
+    public List<Instrument> listTenants(){
+        return instrumentFactory.listTenants();
+    }
+
+    @Override
+    public Instrument getIncomeBudget(int budgetGroupId) {
+        return instrumentFactory.getBudgetGroupHandler(budgetGroupId, false).getIncomeBudget();
+    }
+
+    @Override
+    public List<InstrumentProperties> getInstrumentProperties(int instrumentId) {
+        return instrumentFactory.getSimpleInstrumentHandler(instrumentId).getInstrumentProperties();
+    }
+
+    @Override
+    public void newTenant(String description, LocalDateTime ts) {
+        Tenant tenant = new Tenant(description, true, ts);
+        instrumentDao.saveInstrument(tenant);
+        auditService.saveMessage("Tenant inserted:" + description, Severity.INFO, AUDIT_MSG_TYPE);
+        instrumentGraphHandler.addInstrumentToGraph(tenant.getInstrumentid(),tenant.getInstrumentid());
+
+        int budgetPfId = newBudgetPortfolio(DEFAULT_BUDGETPF_PREFIX+description, ts);
+        instrumentGraphHandler.addInstrumentToGraph(budgetPfId, tenant.getInstrumentid());
+        newBudgetGroup(description, budgetPfId, ts);
+        int accPfId = newAccountPortfolio(DEFAULT_ACCPF_PREFIX+description, ts);
+        instrumentGraphHandler.addInstrumentToGraph(accPfId, tenant.getInstrumentid());
+    }
+
+    @Override
+    public void saveEquity(String theisin, String description) {
+        String isin = theisin.toUpperCase();
+        Optional<Equity> existingSec = getEquity(isin);
+        if(!existingSec.isPresent()) {
+            Equity equity = new Equity(isin, description, true, LocalDateTime.now());
+            auditService.saveMessage("Equity inserted:" + theisin, Severity.INFO, AUDIT_MSG_TYPE);
+            instrumentDao.saveInstrument(equity);
+        } else {
+            existingSec.get().setDescription(description);
+            auditService.saveMessage("Equity " + theisin +" updated with new description: " + description, Severity.INFO, AUDIT_MSG_TYPE);
+            instrumentDao.updateInstrument(existingSec.get().getInstrumentid(), description, true);
         }
-        Optional<Instrument> accPF = childs.stream().filter(i -> i.getInstrumentType().equals(InstrumentType.ACCOUNTPORTFOLIO)).findFirst();
-        if(!accPF.isPresent()) {
-            return accs;
+    }
+
+    @Override
+    public void saveFullEquity(String theisin, String description, List<String[]> symbols) {
+        saveEquity(theisin, description);
+        deleteSymbols(theisin);
+        for (String[] symbol : symbols) {
+            saveSymbol(theisin, symbol[0], symbol[1]);
         }
-        return instrumentDao.getInstrumentChilds(accPF.get().getInstrumentid(), EdgeType.TENANTGRAPH, 1);
     }
 
     @Override
@@ -151,49 +193,6 @@ public class InstrumentServiceImpl implements InstrumentService {
     @Override
     public List<Instrument> getSecurities(){
         return instrumentDao.getSecurities();
-    }
-
-    @Override
-    public List<Instrument> listTenants(){
-        return instrumentDao.listInstruments().stream().filter(i->i.getInstrumentType().equals(InstrumentType.TENANT)).collect(Collectors.toList());
-    }
-
-    @Override
-    public Instrument getIncomeBudget(int budgetGroupId) {
-        List<Instrument> incomeBudgets = instrumentDao.getInstrumentChilds(budgetGroupId, EdgeType.INCOMEBUDGET);
-        if(incomeBudgets == null || incomeBudgets.isEmpty()) {
-            throw new MFException(MFMsgKey.NO_INCOMEBUDGET_DEFINED_EXCEPTION, "No IncomeBudget defined for budgetGroupId:"+budgetGroupId);
-        }
-        return incomeBudgets.get(0);
-    }
-
-    @Override
-    public List<InstrumentProperties> getInstrumentProperties(int instrumentId) {
-        return instrumentDao.getInstrumentProperties(instrumentId);
-    }
-
-    @Override
-    public void saveEquity(String theisin, String description) {
-        String isin = theisin.toUpperCase();
-        Optional<Equity> existingSec = getEquity(isin);
-        if(!existingSec.isPresent()) {
-            Equity equity = new Equity(isin, description, true, LocalDateTime.now());
-            auditService.saveMessage("Equity inserted:" + theisin, Severity.INFO, AUDIT_MSG_TYPE);
-            instrumentDao.saveInstrument(equity);
-        } else {
-            existingSec.get().setDescription(description);
-            auditService.saveMessage("Equity " + theisin +" updated with new description: " + description, Severity.INFO, AUDIT_MSG_TYPE);
-            instrumentDao.updateInstrument(existingSec.get().getInstrumentid(), description, true);
-        }
-    }
-
-    @Override
-    public void saveFullEquity(String theisin, String description, List<String[]> symbols) {
-        saveEquity(theisin, description);
-        deleteSymbols(theisin);
-        for (String[] symbol : symbols) {
-            saveSymbol(theisin, symbol[0], symbol[1]);
-        }
     }
 
     @Override
@@ -254,20 +253,6 @@ public class InstrumentServiceImpl implements InstrumentService {
             auditService.saveMessage("Currency " + currencyCode +" updated with new description: " + description, Severity.INFO, AUDIT_MSG_TYPE);
             existingCur.get().setDescription(description);
         }
-    }
-
-    @Override
-    public void newTenant(String description, LocalDateTime ts) {
-        Tenant tenant = new Tenant(description, true, ts);
-        instrumentDao.saveInstrument(tenant);
-        auditService.saveMessage("Tenant inserted:" + description, Severity.INFO, AUDIT_MSG_TYPE);
-        instrumentGraphHandler.addInstrumentToGraph(tenant.getInstrumentid(),tenant.getInstrumentid());
-
-        int budgetPfId = newBudgetPortfolio(DEFAULT_BUDGETPF_PREFIX+description, ts);
-        instrumentGraphHandler.addInstrumentToGraph(budgetPfId, tenant.getInstrumentid());
-        newBudgetGroup(description, budgetPfId, ts);
-        int accPfId = newAccountPortfolio(DEFAULT_ACCPF_PREFIX+description, ts);
-        instrumentGraphHandler.addInstrumentToGraph(accPfId, tenant.getInstrumentid());
     }
 
     @Override
