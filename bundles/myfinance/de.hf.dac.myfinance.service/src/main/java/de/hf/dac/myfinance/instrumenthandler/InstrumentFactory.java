@@ -1,8 +1,10 @@
 package de.hf.dac.myfinance.instrumenthandler;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import de.hf.dac.api.io.audit.AuditService;
 import de.hf.dac.myfinance.api.domain.Instrument;
 import de.hf.dac.myfinance.api.domain.InstrumentType;
 import de.hf.dac.myfinance.api.exceptions.MFException;
@@ -12,9 +14,11 @@ import de.hf.dac.myfinance.api.persistence.dao.InstrumentDao;
 public class InstrumentFactory {
 
     private final InstrumentDao instrumentDao;
+    private final AuditService auditService;
 
-    public InstrumentFactory(InstrumentDao instrumentDao) {
+    public InstrumentFactory(InstrumentDao instrumentDao, AuditService auditService) {
         this.instrumentDao = instrumentDao;
+        this.auditService = auditService;
     }
 
     public SimpleInstrumentHandler getSimpleInstrumentHandler(int instrumentId) {
@@ -25,11 +29,24 @@ public class InstrumentFactory {
         var instrument =  getInstrument(instrumentId, "");
         switch(instrument.getInstrumentType()){
             case TENANT: 
-                return new TenantHandler(instrumentDao, instrument);     
+                return new TenantHandler(instrumentDao, auditService, this, instrument);     
             case BUDGETGROUP: 
-                return new BudgetGroupHandler(instrumentDao, instrument);                                        
+                return new BudgetGroupHandler(instrumentDao, auditService, instrument);                                        
             default:
                 throw new MFException(MFMsgKey.UNKNOWN_INSTRUMENTTYPE_EXCEPTION, "can not create Instrumenthandler for instrumentType:"+instrument.getInstrumentType());
+        }
+    }
+
+    public AbsInstrumentHandler getInstrumentHandler(InstrumentType instrumentType, String description, int parentId) {
+        switch(instrumentType){
+            case TENANT: 
+                return new TenantHandler(instrumentDao, auditService, this, description);     
+            case BUDGETPORTFOLIO: 
+                return new BudgetPortfolioHandler(instrumentDao, auditService, description, parentId);                    
+            case BUDGETGROUP: 
+                return new BudgetGroupHandler(instrumentDao, auditService, description, parentId);                                        
+            default:
+                throw new MFException(MFMsgKey.UNKNOWN_INSTRUMENTTYPE_EXCEPTION, "can not create Instrumenthandler for instrumentType:"+instrumentType);
         }
     }
 
@@ -39,9 +56,9 @@ public class InstrumentFactory {
             if(!instrument.getInstrumentType().equals(InstrumentType.TENANT)) {
                 throw new MFException(MFMsgKey.WRONG_INSTRUMENTTYPE_EXCEPTION, "can not create tenantthandler for instrumentid:"+instrumentId);
             }
-            return new TenantHandler(instrumentDao, instrument);   
+            return new TenantHandler(instrumentDao, auditService, this, instrument);   
         } 
-        return new TenantHandler(instrumentDao, instrumentId);   
+        return new TenantHandler(instrumentDao, auditService, instrumentId);   
     }
 
     public BudgetGroupHandler getBudgetGroupHandler(int instrumentId, boolean validate) {
@@ -50,9 +67,9 @@ public class InstrumentFactory {
             if(!instrument.getInstrumentType().equals(InstrumentType.BUDGETGROUP)) {
                 throw new MFException(MFMsgKey.WRONG_INSTRUMENTTYPE_EXCEPTION, "can not create BudgetGroupHandler for instrumentid:"+instrumentId);
             }
-            return new BudgetGroupHandler(instrumentDao, instrument);   
+            return new BudgetGroupHandler(instrumentDao, auditService, instrument);   
         } 
-        return new BudgetGroupHandler(instrumentDao, instrumentId);   
+        return new BudgetGroupHandler(instrumentDao, auditService, instrumentId);   
     }
 
     public Instrument getInstrument(int instrumentId) {

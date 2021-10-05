@@ -9,6 +9,7 @@ import de.hf.dac.myfinance.api.persistence.dao.InstrumentDao;
 public class SimpleInstrumentHandler extends AbsInstrumentHandler{
 
     public SimpleInstrumentHandler(InstrumentDao instrumentDao, int instrumentId) {
-        super(instrumentDao, instrumentId);
+        super(instrumentDao);
+        setInstrumentId(instrumentId);
     }
 }

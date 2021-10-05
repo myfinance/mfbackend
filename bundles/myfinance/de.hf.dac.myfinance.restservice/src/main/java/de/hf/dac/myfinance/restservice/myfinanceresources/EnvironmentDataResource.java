@@ -355,7 +355,7 @@ public class EnvironmentDataResource extends BaseSecuredResource<OpType,OpLevel>
         @ApiResponse(code = HttpStatus.SC_INTERNAL_SERVER_ERROR, message = "Something wrong in Server")})
     public Response addTenant(@QueryParam("description") @ApiParam(value="description") String description) {
         checkOperationAllowed(OpType.WRITE);
-        marketDataEnvironment.getInstrumentService().newTenant(description, LocalDateTime.now());
+        marketDataEnvironment.getInstrumentService().newTenant(description);
         return Response.ok().build();
     }
 

@@ -30,6 +30,7 @@ import de.hf.dac.myfinance.api.service.ValueCurveService;
 import de.hf.dac.myfinance.instrumenthandler.InstrumentFactory;
 import de.hf.dac.myfinance.instrumenthandler.InstrumentGraphHandler;
 import de.hf.dac.myfinance.instrumenthandler.InstrumentGraphHandlerImpl;
+import de.hf.dac.myfinance.instrumenthandler.TenantHandler;
 import lombok.Data;
 
 import javax.inject.Inject;
@@ -50,8 +51,7 @@ public class InstrumentServiceImpl implements InstrumentService {
     private static final String AUDIT_MSG_TYPE="InstrumentService_User_Event";
     private static final String DEFAULT_BUDGETGROUP_PREFIX = "budgetGroup_";
     private static final String DEFAULT_INCOMEBUDGET_PREFIX = "incomeBudget_";
-    private static final String DEFAULT_ACCPF_PREFIX = "accountPf_";
-    private static final String DEFAULT_BUDGETPF_PREFIX = "budgetPf_";
+
 
     @Inject
     public InstrumentServiceImpl(InstrumentDao instrumentDao, RecurrentTransactionDao recurrentTransactionDao, WebRequestService webRequestService, AuditService auditService, ValueCurveService service ){
@@ -59,7 +59,7 @@ public class InstrumentServiceImpl implements InstrumentService {
         this.auditService = auditService;
         this.recurrentTransactionDao = recurrentTransactionDao;
         this.service = service;
-        this.instrumentFactory = new InstrumentFactory(this.instrumentDao);
+        this.instrumentFactory = new InstrumentFactory(this.instrumentDao, this.auditService);
     }
 
     @Override
@@ -129,11 +129,10 @@ public class InstrumentServiceImpl implements InstrumentService {
     }
 
     @Override
-    public void newTenant(String description, LocalDateTime ts) {
-        Tenant tenant = new Tenant(description, true, ts);
-        instrumentDao.saveInstrument(tenant);
-        auditService.saveMessage("Tenant inserted:" + description, Severity.INFO, AUDIT_MSG_TYPE);
-        instrumentGraphHandler.addInstrumentToGraph(tenant.getInstrumentid(),tenant.getInstrumentid());
+    public void newTenant(String description) {
+
+        var tenantHandler = instrumentFactory.getInstrumentHandler(InstrumentType.TENANT, description, -1);
+        tenantHandler.save();
 
         int budgetPfId = newBudgetPortfolio(DEFAULT_BUDGETPF_PREFIX+description, ts);
         instrumentGraphHandler.addInstrumentToGraph(budgetPfId, tenant.getInstrumentid());
@@ -291,12 +290,6 @@ public class InstrumentServiceImpl implements InstrumentService {
         AccountPortfolio accountPortfolio = new AccountPortfolio(description, true, ts);
         instrumentDao.saveInstrument(accountPortfolio);
         return accountPortfolio.getInstrumentid();
-    }
-
-    protected int newBudgetPortfolio(String description, LocalDateTime ts) {
-        var budgetPortfolio = new  BudgetPortfolio(description, true, ts);
-        instrumentDao.saveInstrument(budgetPortfolio);
-        return budgetPortfolio.getInstrumentid();
     }
 
     @Override

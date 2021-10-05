@@ -36,7 +36,7 @@ public interface InstrumentService {
     List<Instrument> getInstrumentChilds(int instrumentId, EdgeType edgeType, int pathlength);
     Instrument getIncomeBudget(int tenantId);
     List<InstrumentProperties> getInstrumentProperties(int instrumentId);
-    void newTenant(String description, LocalDateTime ts);
+    void newTenant(String description);
     void updateInstrument(int instrumentId, String description, boolean isActive);
     void newBudget(String description, int budgetGroupId, LocalDateTime ts);
     void newGiroAccount(String description, int tenantId, LocalDateTime ts);
