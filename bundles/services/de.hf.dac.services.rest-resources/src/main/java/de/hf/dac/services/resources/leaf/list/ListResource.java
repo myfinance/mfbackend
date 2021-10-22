@@ -19,14 +19,6 @@ package de.hf.dac.services.resources.leaf.list;
 
 import de.hf.dac.api.rest.model.data.ListModel;
 import de.hf.dac.services.resources.leaf.LeafResource;
-import org.apache.http.HttpStatus;
-
-
-import javax.ws.rs.core.Context;
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
-import javax.ws.rs.core.UriInfo;
-import java.net.URI;
 
 public abstract class ListResource<T> extends LeafResource {
     public ListResource(ListModel<T> listData) {

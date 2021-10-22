@@ -5,9 +5,9 @@ import de.hf.dac.myfinance.api.domain.BudgetPortfolio;
 import de.hf.dac.myfinance.api.domain.InstrumentType;
 import de.hf.dac.myfinance.api.persistence.dao.InstrumentDao;
 
-public class BudgetPortfolioHandler extends AbsSimpleInstrumentHandler {
+public class GiroHandler  extends AbsSimpleInstrumentHandler {
     
-    public BudgetPortfolioHandler(InstrumentDao instrumentDao, AuditService auditService, String description, int tenantId) {
+    public GiroHandler(InstrumentDao instrumentDao, AuditService auditService, String description, int tenantId) {
         super(instrumentDao, auditService, description, tenantId);
     }
 
@@ -28,6 +28,11 @@ public class BudgetPortfolioHandler extends AbsSimpleInstrumentHandler {
 
     @Override
     protected InstrumentType getInstrumentType() {
-        return InstrumentType.BUDGETPORTFOLIO;
+        return InstrumentType.GIRO;
+    }
+
+    @Override
+    protected void setParent(int parentId) {
+        this.parentId = parentId;
     }
 }

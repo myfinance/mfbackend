@@ -49,8 +49,6 @@ public class InstrumentServiceImpl implements InstrumentService {
     private AuditService auditService;
     private InstrumentFactory instrumentFactory;
     private static final String AUDIT_MSG_TYPE="InstrumentService_User_Event";
-    private static final String DEFAULT_BUDGETGROUP_PREFIX = "budgetGroup_";
-    private static final String DEFAULT_INCOMEBUDGET_PREFIX = "incomeBudget_";
 
 
     @Inject
@@ -95,17 +93,17 @@ public class InstrumentServiceImpl implements InstrumentService {
 
     @Override
     public Optional<Integer> getTenant(int instrumentId) {
-        return instrumentFactory.getSimpleInstrumentHandler(instrumentId).getTenant();
+        return instrumentFactory.getBaseInstrumentHandler(instrumentId).getTenant();
     }
 
     @Override
     public List<Integer> getParentIds(int instrumentId) {
-        return instrumentFactory.getSimpleInstrumentHandler(instrumentId).getAncestorIds();
+        return instrumentFactory.getBaseInstrumentHandler(instrumentId).getAncestorIds();
     }
 
     @Override
     public List<Instrument> getInstrumentChilds(int instrumentId, EdgeType edgeType, int pathlength){
-        return instrumentFactory.getSimpleInstrumentHandler(instrumentId).getInstrumentChilds(edgeType, pathlength);
+        return instrumentFactory.getBaseInstrumentHandler(instrumentId).getInstrumentChilds(edgeType, pathlength);
     }
 
     @Override
@@ -125,20 +123,13 @@ public class InstrumentServiceImpl implements InstrumentService {
 
     @Override
     public List<InstrumentProperties> getInstrumentProperties(int instrumentId) {
-        return instrumentFactory.getSimpleInstrumentHandler(instrumentId).getInstrumentProperties();
+        return instrumentFactory.getBaseInstrumentHandler(instrumentId).getInstrumentProperties();
     }
 
     @Override
     public void newTenant(String description) {
-
         var tenantHandler = instrumentFactory.getInstrumentHandler(InstrumentType.TENANT, description, -1);
         tenantHandler.save();
-
-        int budgetPfId = newBudgetPortfolio(DEFAULT_BUDGETPF_PREFIX+description, ts);
-        instrumentGraphHandler.addInstrumentToGraph(budgetPfId, tenant.getInstrumentid());
-        newBudgetGroup(description, budgetPfId, ts);
-        int accPfId = newAccountPortfolio(DEFAULT_ACCPF_PREFIX+description, ts);
-        instrumentGraphHandler.addInstrumentToGraph(accPfId, tenant.getInstrumentid());
     }
 
     @Override
@@ -256,41 +247,9 @@ public class InstrumentServiceImpl implements InstrumentService {
 
     @Override
     public void newBudget(String description, int budgetGroupId, LocalDateTime ts) {
-        Optional<Instrument> budgetGroup = instrumentDao.getInstrument(budgetGroupId);
-        if(!budgetGroup.isPresent()){
-            throw new MFException(MFMsgKey.UNKNOWN_BUDGETGROUP_EXCEPTION, "Budget not saved: unknown budgetGroupId:"+budgetGroupId);
-        }
-        if(budgetGroup.get().getInstrumentType() != InstrumentType.BUDGETGROUP){
-            throw new MFException(MFMsgKey.UNKNOWN_BUDGETGROUP_EXCEPTION,  "Budget not saved: Instrument with Id "+budgetGroupId + " is not a Budgetgroup");
-        }
-        createBudget(description, budgetGroupId, ts);
-    }
-
-    protected int createBudget(String description, int budgetGroupId, LocalDateTime ts) {
-        Budget budget = new Budget(description, true, ts);
-        auditService.saveMessage("budget inserted:" + description, Severity.INFO, AUDIT_MSG_TYPE);
-        instrumentDao.saveInstrument(budget);
-        int budgetId = budget.getInstrumentid();
-        instrumentGraphHandler.addInstrumentToGraph(budgetId, budgetGroupId);
-        return budgetId;
-    }
-
-    protected int newBudgetGroup(String description, int budgetPFId, LocalDateTime ts) {
-        BudgetGroup budgetGroup = new BudgetGroup(DEFAULT_BUDGETGROUP_PREFIX+description, true, ts);
-        instrumentDao.saveInstrument(budgetGroup);
-        int budgetGroupId = budgetGroup.getInstrumentid();
-        instrumentGraphHandler.addInstrumentToGraph(budgetGroupId, budgetPFId);
-        instrumentGraphHandler.addInstrumentToGraph(budgetGroupId,budgetGroupId,EdgeType.INCOMEBUDGET);
-        int incomeBudgetId = createBudget(DEFAULT_INCOMEBUDGET_PREFIX+description, budgetGroupId, ts);
-        instrumentGraphHandler.addInstrumentToGraph(incomeBudgetId, budgetGroupId, EdgeType.INCOMEBUDGET);
-        return budgetGroupId;
-    }
-
-    protected int newAccountPortfolio(String description, LocalDateTime ts) {
-        AccountPortfolio accountPortfolio = new AccountPortfolio(description, true, ts);
-        instrumentDao.saveInstrument(accountPortfolio);
-        return accountPortfolio.getInstrumentid();
-    }
+        var budgetHandler = instrumentFactory.getInstrumentHandler(InstrumentType.BUDGET, description, budgetGroupId);
+        budgetHandler.save();
+     }
 
     @Override
     public void newGiroAccount(String description, int tenantId, LocalDateTime ts) {

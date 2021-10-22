@@ -1,6 +1,5 @@
 package de.hf.dac.myfinance.instrumenthandler;
 
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,7 +19,6 @@ public class TenantHandler extends AbsInstrumentHandler {
     private static final String DEFAULT_ACCPF_PREFIX = "accountPf_";
     private static final String DEFAULT_BUDGETPF_PREFIX = "budgetPf_";
     private static final String DEFAULT_BUDGETGROUP_PREFIX = "budgetGroup_";
-    private static final String DEFAULT_INCOMEBUDGET_PREFIX = "incomeBudget_";
     private static final String AUDIT_MSG_TYPE="TenantHandler_User_Event";
     
 
@@ -54,13 +52,15 @@ public class TenantHandler extends AbsInstrumentHandler {
         instrumentGraphHandler.addInstrumentToGraph(tenant.getInstrumentid(),instrumentId);
 
         var budgetPortfolioHandler = instrumentFactory.getInstrumentHandler(InstrumentType.BUDGETPORTFOLIO, DEFAULT_BUDGETPF_PREFIX+tenant.getDescription(), instrumentId);
+        budgetPortfolioHandler.setTreeLastChanged(ts);
+        budgetPortfolioHandler.save();
         var budgetGroupHandler = instrumentFactory.getInstrumentHandler(InstrumentType.BUDGETGROUP, DEFAULT_BUDGETGROUP_PREFIX+tenant.getDescription(), budgetPortfolioHandler.getInstrumentId());
+        budgetGroupHandler.setTreeLastChanged(ts);
+        budgetGroupHandler.save();
 
-
-
-
-        int accPfId = newAccountPortfolio(DEFAULT_ACCPF_PREFIX+tenant.getDescription(), ts);
-        instrumentGraphHandler.addInstrumentToGraph(accPfId, tenant.getInstrumentid());
+        var accPortfolioHandler = instrumentFactory.getInstrumentHandler(InstrumentType.ACCOUNTPORTFOLIO, DEFAULT_ACCPF_PREFIX+tenant.getDescription(), instrumentId);
+        accPortfolioHandler.setTreeLastChanged(ts);
+        accPortfolioHandler.save();
     }
 
     public void load() {
