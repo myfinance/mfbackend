@@ -18,7 +18,6 @@
 package de.hf.dac.myfinance.api.service;
 
 import de.hf.dac.myfinance.api.domain.*;
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -38,11 +37,11 @@ public interface InstrumentService {
     List<InstrumentProperties> getInstrumentProperties(int instrumentId);
     void newTenant(String description);
     void updateInstrument(int instrumentId, String description, boolean isActive);
-    void newBudget(String description, int budgetGroupId, LocalDateTime ts);
-    void newGiroAccount(String description, int tenantId, LocalDateTime ts);
-    void newDepotAccount(String description, int tenantId, LocalDateTime ts, int defaultGiroId, int valueBudgetId);
+    void newBudget(String description, int budgetGroupId);
+    void newGiroAccount(String description, int tenantId);
+    void newDepotAccount(String description, int tenantId, int defaultGiroId, int valueBudgetId);
     void updateDepotAccount(int instrumentId, String description, boolean isActive, int defaultGiroId);
-    void newRealEstate(String description, int tenantId, int valueBudgetId, List<ValuePerDate> yieldgoals, List<ValuePerDate> realEstateProfits, LocalDateTime ts);
+    void newRealEstate(String description, int tenantId, int valueBudgetId, List<ValuePerDate> yieldgoals, List<ValuePerDate> realEstateProfits);
     void updateRealEstate(int instrumentId, String description, List<ValuePerDate> yieldgoals, List<ValuePerDate> realEstateProfits, boolean isActive);
     Optional<Instrument> getCurrency(String currencyCode);
     Optional<Equity> getEquity(String isin);

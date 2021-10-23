@@ -25,6 +25,11 @@ public abstract class AbsSimpleInstrumentHandler extends AbsInstrumentHandler {
         validateParent();
     }
 
+    public AbsSimpleInstrumentHandler(InstrumentDao instrumentDao, AuditService auditService, String description, int tenantId, boolean addToAccountPf) {
+        this(instrumentDao, auditService, description, tenantId);
+        setParentToAccountPf();
+    }
+
     public AbsSimpleInstrumentHandler(InstrumentDao instrumentDao, AuditService auditService, int instrumentId) {
         super(instrumentDao, auditService);
         setInstrumentId(instrumentId);
@@ -65,6 +70,30 @@ public abstract class AbsSimpleInstrumentHandler extends AbsInstrumentHandler {
 
     abstract protected void createDomainObject(String description);
     abstract protected void setDomainObjectName();
-    abstract protected InstrumentType getParentType();
     abstract protected InstrumentType getInstrumentType();
+
+    protected InstrumentType getParentType() {
+        return InstrumentType.TENANT;
+    }
+
+    private void setParentToAccountPf() {
+        Optional<Instrument> accportfolio = instrumentDao.getAccountPortfolio(parentId);
+        if(!accportfolio.isPresent()) {
+            throw new MFException(MFMsgKey.UNKNOWN_INSTRUMENT_EXCEPTION,  "Account not saved: account portfolio for the tenant:"+parentId+" does not exists");
+        }
+        this.parentId = accportfolio.get().getInstrumentid();
+    }
+
+    public void updateInstrument(String description, boolean isActive) {
+
+        validateInstrument4Inactivation(instrument.getInstrumentid(), instrument.getInstrumentType(), instrument.isIsactive(), isActive);
+        String oldDesc = instrument.getDescription();
+        instrumentDao.updateInstrument(instrumentId, description, isActive);
+        if(instrument.getInstrumentType()==InstrumentType.TENANT) {
+            List<Instrument> instruments = instrumentGraphHandler.getAllInstrumentChilds(instrumentId);
+            renameDefaultTenantChild(instrumentId, description, oldDesc, DEFAULT_BUDGETGROUP_PREFIX, instruments);
+            renameDefaultTenantChild(instrumentId, description, oldDesc, DEFAULT_ACCPF_PREFIX, instruments);
+            renameDefaultTenantChild(instrumentId, description, oldDesc, DEFAULT_INCOMEBUDGET_PREFIX, instruments);
+        }
+    }
 }

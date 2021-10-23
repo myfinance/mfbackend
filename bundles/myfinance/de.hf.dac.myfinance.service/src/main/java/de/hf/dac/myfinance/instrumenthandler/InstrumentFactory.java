@@ -24,15 +24,23 @@ public class InstrumentFactory {
         return new BaseInstrumentHandler(instrumentDao, instrumentId);
     }
 
-    public AbsInstrumentHandler getInstrumentHandler(int instrumentId) {
-        var instrument =  getInstrument(instrumentId, "");
+    public AbsSimpleInstrumentHandler getInstrumentHandler(int instrumentId) {
+        var instrument =  getBaseInstrumentHandler(instrumentId).getInstrument();
         switch(instrument.getInstrumentType()){
             case TENANT: 
-                return new TenantHandler(instrumentDao, auditService, this, instrument);     
+                return new TenantHandler(instrumentDao, auditService, this, instrument); 
+            case BUDGETPORTFOLIO: 
+                return new BudgetPortfolioHandler(instrumentDao, auditService, instrument);    
+            case ACCOUNTPORTFOLIO: 
+                return new AccountPortfolioHandler(instrumentDao, auditService, instrument);                      
             case BUDGETGROUP: 
-                return new BudgetGroupHandler(instrumentDao, auditService, this, instrument);         
+                return new BudgetGroupHandler(instrumentDao, auditService, this, instrument);                             
             case BUDGET: 
-                return new BudgetHandler(instrumentDao, auditService, instrument);                                    
+                return new BudgetHandler(instrumentDao, auditService, instrument);      
+            case GIRO: 
+                return new GiroHandler(instrumentDao, auditService, instrument);      
+            case DEPOT: 
+                return new DepotHandler(instrumentDao, auditService, instrument);                                                 
             default:
                 throw new MFException(MFMsgKey.UNKNOWN_INSTRUMENTTYPE_EXCEPTION, "can not create Instrumenthandler for instrumentType:"+instrument.getInstrumentType());
         }
@@ -49,7 +57,11 @@ public class InstrumentFactory {
             case BUDGETGROUP: 
                 return new BudgetGroupHandler(instrumentDao, auditService, this, description, parentId);  
             case BUDGET: 
-                return new BudgetHandler(instrumentDao, auditService, description, parentId);                                       
+                return new BudgetHandler(instrumentDao, auditService, description, parentId);          
+            case GIRO: 
+                return new GiroHandler(instrumentDao, auditService, description, parentId);      
+            case DEPOT: 
+                return new DepotHandler(instrumentDao, auditService, description, parentId);                                              
             default:
                 throw new MFException(MFMsgKey.UNKNOWN_INSTRUMENTTYPE_EXCEPTION, "can not create Instrumenthandler for instrumentType:"+instrumentType);
         }
@@ -75,18 +87,6 @@ public class InstrumentFactory {
             return new BudgetGroupHandler(instrumentDao, auditService, this, instrument);   
         } 
         return new BudgetGroupHandler(instrumentDao, auditService, this, instrumentId);   
-    }
-
-    public Instrument getInstrument(int instrumentId) {
-        return getInstrument(instrumentId, "");
-    }
-
-    public Instrument getInstrument(int instrumentId, String errMsg) {
-        var instrument = instrumentDao.getInstrument(instrumentId);
-        if(!instrument.isPresent()){
-            throw new MFException(MFMsgKey.UNKNOWN_INSTRUMENT_EXCEPTION, errMsg + " Instrument for id:"+instrumentId + " not found");
-        }
-        return instrument.get();
     }
 
     public List<Instrument> listInstruments() {

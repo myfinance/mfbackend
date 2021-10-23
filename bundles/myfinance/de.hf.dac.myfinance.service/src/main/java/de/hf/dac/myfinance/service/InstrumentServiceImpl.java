@@ -82,12 +82,12 @@ public class InstrumentServiceImpl implements InstrumentService {
 
     @Override
     public Instrument getInstrument(int instrumentId) {
-        return instrumentFactory.getInstrument(instrumentId);
+        return instrumentFactory.getBaseInstrumentHandler(instrumentId).getInstrument();
     }
 
     @Override
     public Instrument getInstrument(int instrumentId, String errMsg) {
-        return instrumentFactory.getInstrument(instrumentId, errMsg);
+        return instrumentFactory.getBaseInstrumentHandler(instrumentId).getInstrument(errMsg);
     }
 
 
@@ -246,46 +246,21 @@ public class InstrumentServiceImpl implements InstrumentService {
     }
 
     @Override
-    public void newBudget(String description, int budgetGroupId, LocalDateTime ts) {
+    public void newBudget(String description, int budgetGroupId) {
         var budgetHandler = instrumentFactory.getInstrumentHandler(InstrumentType.BUDGET, description, budgetGroupId);
         budgetHandler.save();
      }
 
     @Override
-    public void newGiroAccount(String description, int tenantId, LocalDateTime ts) {
-        Optional<Instrument> accportfolio = instrumentDao.getAccountPortfolio(tenantId);
-        if(!accportfolio.isPresent()) {
-            throw new MFException(MFMsgKey.UNKNOWN_INSTRUMENT_EXCEPTION,  "Giro not saved: tenant for the id:"+tenantId+" not exists or has no accountPortfolio");
-        }
-        Giro giro = new Giro(description, true, ts);
-        auditService.saveMessage("new giro inserted:" + description, Severity.INFO, AUDIT_MSG_TYPE);
-        instrumentDao.saveInstrument(giro);
-        instrumentGraphHandler.addInstrumentToGraph(giro.getInstrumentid(), accportfolio.get().getInstrumentid());
+    public void newGiroAccount(String description, int tenantId) {
+        var giroHandler = instrumentFactory.getInstrumentHandler(InstrumentType.GIRO, description, tenantId);
+        giroHandler.save();
     }
 
     @Override
-    public void newDepotAccount(String description, int tenantId, LocalDateTime ts, int defaultGiroId, int valueBudgetId) {
-        Optional<Instrument> accportfolio = instrumentDao.getAccountPortfolio(tenantId);
-        if(!accportfolio.isPresent()) {
-            throw new MFException(MFMsgKey.UNKNOWN_INSTRUMENT_EXCEPTION,  "Depot not saved: tenant for the id:"+tenantId+" not exists or has no accountPortfolio");
-        }
-        var giro = getInstrument(defaultGiroId, "Depot not saved: Unknown default giro account:");
-        if(giro.getInstrumentType()!=InstrumentType.GIRO){
-            throw new MFException(MFMsgKey.WRONG_INSTRUMENTTYPE_EXCEPTION, "Depot not saved: default giro has wrong instrument type:");
-        }
-        Optional<Integer> tenantOfGiro = getTenant(giro.getInstrumentid());
-        if(!tenantOfGiro.isPresent()
-            || !tenantOfGiro.get().equals(tenantId)){
-            throw new MFException(MFMsgKey.WRONG_TENENT_EXCEPTION,  "Depot not saved: default giro has not the same tenant");
-        }
-
-        Depot depot = new Depot(description, true, ts);
-        auditService.saveMessage("new depot inserted:" + description, Severity.INFO, AUDIT_MSG_TYPE);
-        instrumentDao.saveInstrument(depot);
-        instrumentGraphHandler.addInstrumentToGraph(depot.getInstrumentid(), accportfolio.get().getInstrumentid());
-
-        instrumentDao.saveInstrumentProperty(new InstrumentProperties(InstrumentPropertyType.DEFAULTGIROID.name(), depot.getInstrumentid(), String.valueOf(defaultGiroId), InstrumentPropertyType.DEFAULTGIROID.getValueType()));
-        instrumentGraphHandler.addInstrumentToGraph(depot.getInstrumentid(), valueBudgetId, EdgeType.VALUEBUDGET);
+    public void newDepotAccount(String description, int tenantId, int defaultGiroId, int valueBudgetId) {
+        var depotHandler = instrumentFactory.getInstrumentHandler(InstrumentType.DEPOT, description, tenantId);
+        depotHandler.save();
     }
 
     @Override
@@ -296,7 +271,7 @@ public class InstrumentServiceImpl implements InstrumentService {
     }
 
     @Override
-    public void newRealEstate(String description, int tenantId, int valueBudgetId, List<ValuePerDate> yieldgoals, List<ValuePerDate> realEstateProfits, LocalDateTime ts) {
+    public void newRealEstate(String description, int tenantId, int valueBudgetId, List<ValuePerDate> yieldgoals, List<ValuePerDate> realEstateProfits) {
         Optional<Instrument> accportfolio = instrumentDao.getAccountPortfolio(tenantId);
         if(!accportfolio.isPresent()) {
             throw new MFException(MFMsgKey.UNKNOWN_INSTRUMENT_EXCEPTION,  "RealEstate not saved: tenant for the id:"+tenantId+" not exists or has no accountPortfolio");
@@ -348,6 +323,8 @@ public class InstrumentServiceImpl implements InstrumentService {
 
     @Override
     public void updateInstrument(int instrumentId, String description, boolean isActive) {
+        var instrumentHandler = instrumentFactory.getInstrumentHandler(instrumentId);
+
         var instrument = getInstrument(instrumentId, "Instrument not updated:");
         validateInstrument4Inactivation(instrument.getInstrumentid(), instrument.getInstrumentType(), instrument.isIsactive(), isActive);
         String oldDesc = instrument.getDescription();

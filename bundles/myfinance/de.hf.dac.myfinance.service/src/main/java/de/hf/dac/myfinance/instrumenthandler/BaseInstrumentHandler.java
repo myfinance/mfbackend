@@ -8,6 +8,7 @@ import de.hf.dac.myfinance.api.domain.EdgeType;
 import de.hf.dac.myfinance.api.domain.Instrument;
 import de.hf.dac.myfinance.api.domain.InstrumentGraphEntry;
 import de.hf.dac.myfinance.api.domain.InstrumentProperties;
+import de.hf.dac.myfinance.api.domain.InstrumentType;
 import de.hf.dac.myfinance.api.exceptions.MFException;
 import de.hf.dac.myfinance.api.exceptions.MFMsgKey;
 import de.hf.dac.myfinance.api.persistence.dao.InstrumentDao;
@@ -66,6 +67,42 @@ public class BaseInstrumentHandler {
     protected void checkInitStatus() {
         if(!initialized) {
             throw new MFException(MFMsgKey.OBJECT_NOT_INITIALIZED_EXCEPTION, "instrumentId is not set:");
+        }
+    }
+
+    public Instrument getInstrument(String errMsg) {
+        return getInstrument(instrumentId, errMsg);
+    }
+
+    public Instrument getInstrument() {
+        return getInstrument(instrumentId, "");
+    }
+
+    /**
+     * get and validate an Instrument for another id. the instrumentId of the Instrumenthandler will not change
+     * @param instrumentId the id
+     * @return the instrument for the id
+     */
+    protected Instrument getInstrument(int instrumentId) {
+        return getInstrument(instrumentId, "");
+    }
+
+    protected Instrument getInstrument(int instrumentId, String errMsg) {
+        var instrument = instrumentDao.getInstrument(instrumentId);
+        if(!instrument.isPresent()){
+            throw new MFException(MFMsgKey.UNKNOWN_INSTRUMENT_EXCEPTION, errMsg + " Instrument for id:"+instrumentId + " not found");
+        }
+        return instrument.get();
+    }
+
+    protected void validateInstrument(Instrument instrument, InstrumentType instrumentType, String errMsg) {
+        if(instrument.getInstrumentType()!=instrumentType){
+            throw new MFException(MFMsgKey.WRONG_INSTRUMENTTYPE_EXCEPTION, errMsg+" instrument has wrong type:"+instrument.getInstrumentType());
+        }
+        Optional<Integer> tenantOfGiro = instrumentGraphHandler.getRootInstrument(instrument.getInstrumentid(), EdgeType.TENANTGRAPH);
+        if(!tenantOfGiro.isPresent()
+            || !tenantOfGiro.get().equals(getTenant().get())){
+            throw new MFException(MFMsgKey.WRONG_TENENT_EXCEPTION,  errMsg+" instrument has not the same tenant");
         }
     }
 }
