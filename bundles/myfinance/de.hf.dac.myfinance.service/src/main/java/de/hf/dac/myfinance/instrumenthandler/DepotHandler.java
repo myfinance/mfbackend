@@ -10,13 +10,17 @@ import de.hf.dac.myfinance.api.exceptions.MFException;
 import de.hf.dac.myfinance.api.exceptions.MFMsgKey;
 import de.hf.dac.myfinance.api.persistence.dao.InstrumentDao;
 
-public class DepotHandler extends AbsSimpleInstrumentHandler {
+public class DepotHandler extends AbsInstrumentHandler {
     private int defaultGiroId;
     private boolean isDepotInitialized = false;
     private int valueBudgetId;
 
     public DepotHandler(InstrumentDao instrumentDao, AuditService auditService, Instrument depot) {
         super(instrumentDao, auditService, depot);
+    }
+
+    public DepotHandler(InstrumentDao instrumentDao, AuditService auditService, String description, int tenantId) {
+        super(instrumentDao, auditService, description, tenantId, true);
     }
 
     @Override

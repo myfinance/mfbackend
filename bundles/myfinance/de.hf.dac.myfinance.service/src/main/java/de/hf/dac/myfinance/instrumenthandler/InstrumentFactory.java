@@ -24,7 +24,7 @@ public class InstrumentFactory {
         return new BaseInstrumentHandler(instrumentDao, instrumentId);
     }
 
-    public AbsSimpleInstrumentHandler getInstrumentHandler(int instrumentId) {
+    public AbsInstrumentHandler getInstrumentHandler(int instrumentId) {
         var instrument =  getBaseInstrumentHandler(instrumentId).getInstrument();
         switch(instrument.getInstrumentType()){
             case TENANT: 

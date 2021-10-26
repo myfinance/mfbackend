@@ -6,7 +6,7 @@ import de.hf.dac.myfinance.api.domain.Instrument;
 import de.hf.dac.myfinance.api.domain.InstrumentType;
 import de.hf.dac.myfinance.api.persistence.dao.InstrumentDao;
 
-public class BudgetHandler extends AbsSimpleInstrumentHandler {
+public class BudgetHandler extends AbsInstrumentHandler {
 
     public BudgetHandler(InstrumentDao instrumentDao, AuditService auditService, String description, int budgetGroupId) {
         super(instrumentDao, auditService, description, budgetGroupId);

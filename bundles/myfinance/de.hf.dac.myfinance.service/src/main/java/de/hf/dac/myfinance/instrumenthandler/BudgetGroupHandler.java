@@ -1,9 +1,11 @@
 package de.hf.dac.myfinance.instrumenthandler;
 
+import java.util.Optional;
+
 import de.hf.dac.api.io.audit.AuditService;
-import de.hf.dac.api.io.domain.Severity;
 import de.hf.dac.myfinance.api.domain.BudgetGroup;
 import de.hf.dac.myfinance.api.domain.Instrument;
+import de.hf.dac.myfinance.api.domain.InstrumentProperties;
 import de.hf.dac.myfinance.api.domain.InstrumentPropertyType;
 import de.hf.dac.myfinance.api.domain.InstrumentType;
 import de.hf.dac.myfinance.api.exceptions.MFException;
@@ -11,54 +13,60 @@ import de.hf.dac.myfinance.api.exceptions.MFMsgKey;
 import de.hf.dac.myfinance.api.persistence.dao.InstrumentDao;
 
 public class BudgetGroupHandler extends AbsInstrumentHandler {
-    protected BudgetGroup budgetGroup;
-    private int budgetPFId;
     private  final InstrumentFactory instrumentFactory;
     private static final String DEFAULT_INCOMEBUDGET_PREFIX = "incomeBudget_";
-    private static final String AUDIT_MSG_TYPE="BudgetGroupHandler_User_Event";
 
     public BudgetGroupHandler(InstrumentDao instrumentDao, AuditService auditService, InstrumentFactory instrumentFactory, int budgetGroupId) {
-        super(instrumentDao, auditService);
+        super(instrumentDao, auditService, budgetGroupId);
         this.instrumentFactory = instrumentFactory;
-        setInstrumentId(budgetGroupId);
     }
 
     public BudgetGroupHandler(InstrumentDao instrumentDao, AuditService auditService, InstrumentFactory instrumentFactory, Instrument budgetGroup) {
-        super(instrumentDao, auditService);
+        super(instrumentDao, auditService, budgetGroup);
         this.instrumentFactory = instrumentFactory;
-        setInstrumentId(budgetGroup.getInstrumentid());
-        if(!budgetGroup.getInstrumentType().equals(InstrumentType.BUDGETGROUP)) {
-            throw new MFException(MFMsgKey.WRONG_INSTRUMENTTYPE_EXCEPTION, "can not create BudgetGroupHandler for instrumentType:"+budgetGroup.getInstrumentType());
-        }
-        this.budgetGroup = (BudgetGroup)budgetGroup;
     }
 
     public BudgetGroupHandler(InstrumentDao instrumentDao, AuditService auditService, InstrumentFactory instrumentFactory, String description, int budgetPFId) {
-        super(instrumentDao, auditService);
+        super(instrumentDao, auditService, description, budgetPFId);
         this.instrumentFactory = instrumentFactory;
-        budgetGroup = new BudgetGroup(description, true, ts); 
-        this.budgetPFId = budgetPFId;
     }
 
     public Instrument getIncomeBudget() {
-        instrumentGraphHandler.getInstrumentFirstLevelChildsWithType(instrumentId, instrumentType, onlyActive)
-        List<Instrument> incomeBudgets = instrumentDao.getInstrumentChilds(budgetGroupId, EdgeType.INCOMEBUDGET);
-        if(incomeBudgets == null || incomeBudgets.isEmpty()) {
-            throw new MFException(MFMsgKey.NO_INCOMEBUDGET_DEFINED_EXCEPTION, "No IncomeBudget defined for budgetGroupId:"+budgetGroupId);
+        var properties = getInstrumentProperties();
+        Optional<InstrumentProperties> incomeBudgetIdProperty = properties.stream().filter(i->i.getPropertyname().equals(InstrumentPropertyType.INCOMEBUDGETID.getStringValue())).findFirst();
+        if(!incomeBudgetIdProperty.isPresent()) {
+            throw new MFException(MFMsgKey.NO_INCOMEBUDGET_DEFINED_EXCEPTION, "No IncomeBudget defined for budgetGroupId:"+instrumentId);
         }
-        return incomeBudgets.get(0);
-    }
+        int incomeBudgetId = Integer.parseInt(incomeBudgetIdProperty.get().getValue());
+        var incomeBudget = instrumentDao.getInstrument(incomeBudgetId);
+        if(!incomeBudget.isPresent()) {
+            throw new MFException(MFMsgKey.NO_INCOMEBUDGET_DEFINED_EXCEPTION, "the IncomeBudget with id:"+incomeBudgetId+" does not exists");
+        }
+        
+        return incomeBudget.get();
+    } 
 
     @Override
     public void save(){
-        instrumentDao.saveInstrument(budgetGroup);
-        instrumentId = budgetGroup.getInstrumentid();
-        instrumentGraphHandler.addInstrumentToGraph(instrumentId, budgetPFId);
-        var budgetHandler = instrumentFactory.getInstrumentHandler(InstrumentType.BUDGET, DEFAULT_INCOMEBUDGET_PREFIX+budgetGroup.getDescription(), instrumentId);
+        super.save();
+        var budgetHandler = instrumentFactory.getInstrumentHandler(InstrumentType.BUDGET, DEFAULT_INCOMEBUDGET_PREFIX + domainObject.getDescription(), instrumentId);
         budgetHandler.setTreeLastChanged(ts);
         budgetHandler.save();
         saveProperty(InstrumentPropertyType.INCOMEBUDGETID, budgetHandler.getInstrumentId());
-        auditService.saveMessage("budgetGroup inserted:" + budgetGroup.getDescription(), Severity.INFO, AUDIT_MSG_TYPE);
-        
+    }
+
+    @Override
+    protected void createDomainObject(String description) {
+        domainObject = new BudgetGroup(description, true, ts);
+    }
+
+    @Override
+    protected void setDomainObjectName() {
+        domainObjectName = "BudgetGroup";
+    }
+
+    @Override
+    protected InstrumentType getInstrumentType() {
+        return InstrumentType.BUDGETGROUP;
     }
 }
