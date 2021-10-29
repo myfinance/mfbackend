@@ -1,8 +1,7 @@
-package de.hf.dac.myfinance.service.transactionhandler;
+package de.hf.dac.myfinance.transactionhandler;
 
 import java.util.Optional;
 
-import de.hf.dac.myfinance.api.domain.EdgeType;
 import de.hf.dac.myfinance.api.domain.Instrument;
 import de.hf.dac.myfinance.api.exceptions.MFException;
 import de.hf.dac.myfinance.api.exceptions.MFMsgKey;

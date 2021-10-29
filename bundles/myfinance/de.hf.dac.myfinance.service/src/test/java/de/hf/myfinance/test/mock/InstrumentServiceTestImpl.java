@@ -9,7 +9,6 @@ import de.hf.dac.myfinance.api.domain.EdgeType;
 import de.hf.dac.myfinance.api.domain.Equity;
 import de.hf.dac.myfinance.api.domain.Giro;
 import de.hf.dac.myfinance.api.domain.Instrument;
-import de.hf.dac.myfinance.api.domain.InstrumentGraphEntry;
 import de.hf.dac.myfinance.api.domain.InstrumentProperties;
 import de.hf.dac.myfinance.api.domain.InstrumentType;
 import de.hf.dac.myfinance.api.domain.ValuePerDate;
@@ -52,19 +51,7 @@ public class InstrumentServiceTestImpl implements InstrumentService {
         // TODO Auto-generated method stub
         return null;
     }
-    
-    @Override
-    public Optional<Integer> getRootInstrument(int instrumentId, EdgeType edgeType) {
-
-        return Optional.of(0);
-    }
-
-    @Override
-    public List<InstrumentGraphEntry> getAncestorGraphEntries(int instrumentId, EdgeType edgeType) {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
+ 
     @Override
     public List<Instrument> getInstrumentChilds(int instrumentId, EdgeType edgeType, int pathlength) {
         // TODO Auto-generated method stub
@@ -78,9 +65,8 @@ public class InstrumentServiceTestImpl implements InstrumentService {
     }
 
     @Override
-    public void newTenant(String description, LocalDateTime ts) {
+    public void newTenant(String description) {
         // TODO Auto-generated method stub
-
     }
 
     @Override
@@ -90,13 +76,13 @@ public class InstrumentServiceTestImpl implements InstrumentService {
     }
 
     @Override
-    public void newBudget(String description, int budgetGroupId, LocalDateTime ts) {
+    public void newBudget(String description, int budgetGroupId) {
         // TODO Auto-generated method stub
 
     }
 
     @Override
-    public void newGiroAccount(String description, int tenantId, LocalDateTime ts) {
+    public void newGiroAccount(String description, int tenantId) {
         // TODO Auto-generated method stub
 
     }
@@ -171,7 +157,7 @@ public class InstrumentServiceTestImpl implements InstrumentService {
 
     @Override
     public void newRealEstate(String description, int tenantId, int valueBudgetId,
-            List<ValuePerDate> yieldgoals, List<ValuePerDate> realEstateProfits, LocalDateTime ts) {
+            List<ValuePerDate> yieldgoals, List<ValuePerDate> realEstateProfits) {
         // TODO Auto-generated method stub
         
     }
@@ -202,7 +188,7 @@ public class InstrumentServiceTestImpl implements InstrumentService {
     }
 
     @Override
-    public void newDepotAccount(String description, int tenantId, LocalDateTime ts, int defaultGiroId, int valueBudgetId) {
+    public void newDepotAccount(String description, int tenantId, int defaultGiroId, int valueBudgetId) {
         // TODO Auto-generated method stub
 
     }
@@ -223,6 +209,17 @@ public class InstrumentServiceTestImpl implements InstrumentService {
     public void updateDepotAccount(int instrumentId, String description, boolean isActive, int defaultGiroId) {
         // TODO Auto-generated method stub
 
+    }
+
+    @Override
+    public Optional<Integer> getTenant(int instrumentId) {
+        return Optional.of(1);
+    }
+
+    @Override
+    public List<Integer> getParentIds(int instrumentId) {
+        // TODO Auto-generated method stub
+        return null;
     }
     
 }

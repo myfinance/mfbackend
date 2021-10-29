@@ -1,4 +1,4 @@
-package de.hf.dac.myfinance.service.transactionhandler;
+package de.hf.dac.myfinance.transactionhandler;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;

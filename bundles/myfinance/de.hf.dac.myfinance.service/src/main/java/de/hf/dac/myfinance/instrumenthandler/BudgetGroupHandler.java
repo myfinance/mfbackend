@@ -4,6 +4,7 @@ import java.util.Optional;
 
 import de.hf.dac.api.io.audit.AuditService;
 import de.hf.dac.myfinance.api.domain.BudgetGroup;
+import de.hf.dac.myfinance.api.domain.EdgeType;
 import de.hf.dac.myfinance.api.domain.Instrument;
 import de.hf.dac.myfinance.api.domain.InstrumentProperties;
 import de.hf.dac.myfinance.api.domain.InstrumentPropertyType;
@@ -68,5 +69,22 @@ public class BudgetGroupHandler extends AbsInstrumentHandler {
     @Override
     protected InstrumentType getInstrumentType() {
         return InstrumentType.BUDGETGROUP;
+    }
+
+    @Override
+    public void updateInstrument(String description, boolean isActive) {
+        super.updateInstrument(description, isActive);
+        var incomeBudget = getIncomeBudget();
+        var handler = instrumentFactory.getInstrumentHandler(incomeBudget.getInstrumentid());
+        handler.updateInstrument(DEFAULT_INCOMEBUDGET_PREFIX + domainObject.getDescription(), true);
+    }
+
+    @Override
+    protected void validateInstrument4Inactivation() {
+        for(Instrument budget : getInstrumentChilds(EdgeType.TENANTGRAPH, 1)) {
+            var budgetHandler = instrumentFactory.getInstrumentHandler(budget.getInstrumentid());
+            budgetHandler.loadInstrument();
+            budgetHandler.updateInstrument(false);
+        }
     }
 }

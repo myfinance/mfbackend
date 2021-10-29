@@ -3,11 +3,13 @@ package de.hf.dac.myfinance.instrumenthandler;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import de.hf.dac.myfinance.api.domain.EdgeType;
 import de.hf.dac.myfinance.api.domain.Instrument;
 import de.hf.dac.myfinance.api.domain.InstrumentGraphEntry;
 import de.hf.dac.myfinance.api.domain.InstrumentProperties;
+import de.hf.dac.myfinance.api.domain.InstrumentPropertyType;
 import de.hf.dac.myfinance.api.domain.InstrumentType;
 import de.hf.dac.myfinance.api.exceptions.MFException;
 import de.hf.dac.myfinance.api.exceptions.MFMsgKey;
@@ -18,6 +20,9 @@ public class BaseInstrumentHandler {
     protected final InstrumentGraphHandler instrumentGraphHandler;
     protected int instrumentId;
     protected boolean initialized = false;
+    protected Instrument domainObject;
+    private List<InstrumentProperties> properties;
+    protected boolean isPropertyInit = false;
 
     public BaseInstrumentHandler(InstrumentDao instrumentDao, int instrumentId) {
         this(instrumentDao);
@@ -53,7 +58,14 @@ public class BaseInstrumentHandler {
 
     public List<InstrumentProperties> getInstrumentProperties() {
         checkInitStatus();
-        return instrumentDao.getInstrumentProperties(instrumentId);
+        if(!isPropertyInit) {
+            properties = instrumentDao.getInstrumentProperties(instrumentId);
+        }
+        return properties;
+    }
+
+    public List<InstrumentProperties> getInstrumentProperties(InstrumentPropertyType instrumentPropertyType) {
+        return getInstrumentProperties().stream().filter(i->i.getPropertyname().equals(instrumentPropertyType.name())).collect(Collectors.toList());
     }
     
     public void setInstrumentId(int instrumentId) {
@@ -70,12 +82,26 @@ public class BaseInstrumentHandler {
         }
     }
 
+    protected void checkDomainObjectInitStatus() {
+        checkInitStatus();
+        if(this.domainObject==null) {
+            throw new MFException(MFMsgKey.OBJECT_NOT_INITIALIZED_EXCEPTION, "instrument is not set:");
+        }
+    }
+
     public Instrument getInstrument(String errMsg) {
         return getInstrument(instrumentId, errMsg);
     }
 
     public Instrument getInstrument() {
         return getInstrument(instrumentId, "");
+    }
+
+    protected void loadInstrument() {
+        if(this.domainObject==null) {
+            checkInitStatus();
+            domainObject = getInstrument();
+        }
     }
 
     /**

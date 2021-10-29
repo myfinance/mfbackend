@@ -11,7 +11,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import de.hf.dac.myfinance.api.domain.Cashflow;
 import de.hf.dac.myfinance.api.domain.TransactionType;
-import de.hf.dac.myfinance.service.transactionhandler.IncomeExpensesHandler;
+import de.hf.dac.myfinance.transactionhandler.IncomeExpensesHandler;
 import de.hf.myfinance.test.mock.AuditServiceMockImpl;
 import de.hf.myfinance.test.mock.CashflowDaoMock;
 import de.hf.myfinance.test.mock.InstrumentServiceTestImpl;

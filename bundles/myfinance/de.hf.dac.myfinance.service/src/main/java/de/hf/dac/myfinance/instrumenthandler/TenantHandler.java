@@ -68,6 +68,10 @@ public class TenantHandler extends AbsInstrumentHandler {
         return instrumentGraphHandler.getFirstLevelChildsPerTypeFirstmatch(instrumentId, InstrumentType.ACCOUNTPORTFOLIO);
     }
 
+    public Instrument getBudgetPortfolio() {
+        return instrumentGraphHandler.getFirstLevelChildsPerTypeFirstmatch(instrumentId, InstrumentType.BUDGETPORTFOLIO);
+    }
+
     public List<Instrument> getAccounts() {
         Instrument accPF = getAccountPortfolio();
         if(accPF==null) {
@@ -91,4 +95,20 @@ public class TenantHandler extends AbsInstrumentHandler {
         return InstrumentType.TENANT;
     }
 
+    @Override
+    public void updateInstrument(String description, boolean isActive) {
+        super.updateInstrument(description, isActive);
+        List<Instrument> instruments = instrumentGraphHandler.getAllInstrumentChilds(instrumentId);
+        renameDefaultTenantChild(instrumentId, description, oldDesc, DEFAULT_BUDGETPF_PREFIX, instruments);
+        renameDefaultTenantChild(instrumentId, description, oldDesc, DEFAULT_BUDGETGROUP_PREFIX, instruments);
+        renameDefaultTenantChild(instrumentId, description, oldDesc, DEFAULT_ACCPF_PREFIX, instruments); 
+    }
+
+    private void renameDefaultTenantChild(int instrumentId, String newDesc, String oldDesc, String defaultDescPrefix, List<Instrument> instruments) {
+        //look by description for default instruments of the tenant to rename
+        instruments.stream().filter(i->i.getDescription().equals(defaultDescPrefix+oldDesc)).forEach(i->{
+            var handler = instrumentFactory.getInstrumentHandler(i.getInstrumentid());
+            handler.updateInstrument(newDesc, true);
+        });
+    }
 }

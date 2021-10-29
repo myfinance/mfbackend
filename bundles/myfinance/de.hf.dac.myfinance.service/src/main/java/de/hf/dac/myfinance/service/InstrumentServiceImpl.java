@@ -27,9 +27,11 @@ import de.hf.dac.myfinance.api.exceptions.MFMsgKey;
 import de.hf.dac.myfinance.api.persistence.dao.*;
 import de.hf.dac.myfinance.api.service.InstrumentService;
 import de.hf.dac.myfinance.api.service.ValueCurveService;
+import de.hf.dac.myfinance.instrumenthandler.DepotHandler;
 import de.hf.dac.myfinance.instrumenthandler.InstrumentFactory;
 import de.hf.dac.myfinance.instrumenthandler.InstrumentGraphHandler;
 import de.hf.dac.myfinance.instrumenthandler.InstrumentGraphHandlerImpl;
+import de.hf.dac.myfinance.instrumenthandler.RealEstateHandler;
 import de.hf.dac.myfinance.instrumenthandler.TenantHandler;
 import lombok.Data;
 
@@ -44,20 +46,16 @@ import java.util.stream.Collectors;
 public class InstrumentServiceImpl implements InstrumentService {
 
     private InstrumentDao instrumentDao;
-    private RecurrentTransactionDao recurrentTransactionDao;
-    private ValueCurveService service;
     private AuditService auditService;
     private InstrumentFactory instrumentFactory;
     private static final String AUDIT_MSG_TYPE="InstrumentService_User_Event";
 
 
     @Inject
-    public InstrumentServiceImpl(InstrumentDao instrumentDao, RecurrentTransactionDao recurrentTransactionDao, WebRequestService webRequestService, AuditService auditService, ValueCurveService service ){
+    public InstrumentServiceImpl(InstrumentDao instrumentDao, RecurrentTransactionDao recurrentTransactionDao, WebRequestService webRequestService, AuditService auditService, ValueCurveService valueService){
         this.instrumentDao = instrumentDao;
         this.auditService = auditService;
-        this.recurrentTransactionDao = recurrentTransactionDao;
-        this.service = service;
-        this.instrumentFactory = new InstrumentFactory(this.instrumentDao, this.auditService);
+        this.instrumentFactory = new InstrumentFactory(instrumentDao, auditService, valueService, recurrentTransactionDao);
     }
 
     @Override
@@ -259,134 +257,35 @@ public class InstrumentServiceImpl implements InstrumentService {
 
     @Override
     public void newDepotAccount(String description, int tenantId, int defaultGiroId, int valueBudgetId) {
-        var depotHandler = instrumentFactory.getInstrumentHandler(InstrumentType.DEPOT, description, tenantId);
+        DepotHandler depotHandler = (DepotHandler)instrumentFactory.getInstrumentHandler(InstrumentType.DEPOT, description, tenantId);
+        depotHandler.initAdditionalFields(defaultGiroId, valueBudgetId);
         depotHandler.save();
     }
 
     @Override
     public void updateDepotAccount(int instrumentId, String description, boolean isActive, int defaultGiroId) {
-        updateInstrument(instrumentId, description, isActive);
-        deleteInstrumentPropertyList(instrumentId);
-        instrumentDao.saveInstrumentProperty(new InstrumentProperties(InstrumentPropertyType.DEFAULTGIROID.name(), instrumentId, String.valueOf(defaultGiroId), InstrumentPropertyType.DEFAULTGIROID.getValueType()));
+        var depotHandler = (DepotHandler)instrumentFactory.getInstrumentHandler(instrumentId);
+        depotHandler.setDefaultGiroId(defaultGiroId);
+        depotHandler.updateInstrument(description, isActive);
     }
 
     @Override
     public void newRealEstate(String description, int tenantId, int valueBudgetId, List<ValuePerDate> yieldgoals, List<ValuePerDate> realEstateProfits) {
-        Optional<Instrument> accportfolio = instrumentDao.getAccountPortfolio(tenantId);
-        if(!accportfolio.isPresent()) {
-            throw new MFException(MFMsgKey.UNKNOWN_INSTRUMENT_EXCEPTION,  "RealEstate not saved: tenant for the id:"+tenantId+" not exists or has no accountPortfolio");
-        }
-        Optional<Instrument> budgetportfolio = instrumentDao.getBudgetPortfolio(tenantId);
-        if(!budgetportfolio.isPresent()) {
-            throw new MFException(MFMsgKey.UNKNOWN_INSTRUMENT_EXCEPTION,  "RealEstate not saved: tenant for the id:"+tenantId+" not exists or has no budgetPortfolio");
-        }
-        RealEstate realEstate = new RealEstate(description, true, ts);
-        auditService.saveMessage("new RealEstate inserted:" + description, Severity.INFO, AUDIT_MSG_TYPE);
-        instrumentDao.saveInstrument(realEstate);
-        instrumentGraphHandler.addInstrumentToGraph(realEstate.getInstrumentid(), accportfolio.get().getInstrumentid());
-        saveYieldgoals(realEstate.getInstrumentid(), yieldgoals);
-        saveRealestateProfits(realEstate.getInstrumentid(), realEstateProfits);
-        var budgetGroupId = newBudgetGroup(description, budgetportfolio.get().getInstrumentid(), ts);
-        instrumentGraphHandler.addInstrumentToGraph(realEstate.getInstrumentid(), realEstate.getInstrumentid(), EdgeType.REALESTATEBUDGETGROUP);
-        instrumentGraphHandler.addInstrumentToGraph(budgetGroupId, realEstate.getInstrumentid(), EdgeType.REALESTATEBUDGETGROUP);
-        instrumentGraphHandler.addInstrumentToGraph(realEstate.getInstrumentid(), valueBudgetId, EdgeType.VALUEBUDGET);
+        var realEstateHandler = (RealEstateHandler)instrumentFactory.getInstrumentHandler(InstrumentType.REALESTATE, description, tenantId);
+        realEstateHandler.initAdditionalFields(valueBudgetId, yieldgoals, realEstateProfits);
+        realEstateHandler.save();
     }
 
     @Override
     public void updateRealEstate(int instrumentId, String description, List<ValuePerDate> yieldgoals, List<ValuePerDate> realEstateProfits, boolean isActive) {
-        updateInstrument(instrumentId, description, isActive);
-        deleteInstrumentPropertyList(instrumentId);
-        saveYieldgoals(instrumentId, yieldgoals);
-        saveRealestateProfits(instrumentId, realEstateProfits);
-    }
-
-    private void deleteInstrumentPropertyList(int instrumentId) {
-        var instrumentProperties = instrumentDao.getInstrumentProperties(instrumentId);
-        for (InstrumentProperties instrumentProperty : instrumentProperties) {
-            auditService.saveMessage(instrumentDao.deleteInstrumentProperty(instrumentProperty.getPropertyid()),
-                Severity.INFO, AUDIT_MSG_TYPE);
-        }
-        
-    }
-
-    private void saveYieldgoals(int instrumentId, List<ValuePerDate> values) {
-        for(var value : values) {
-            instrumentDao.saveInstrumentProperty(new InstrumentProperties(InstrumentPropertyType.YIELDGOAL.name(), instrumentId, String.valueOf(value.getValue()), InstrumentPropertyType.YIELDGOAL.getValueType(), value.getDate(), null));
-        } 
-    }
-
-    private void saveRealestateProfits(int instrumentId, List<ValuePerDate> values) {
-        for(var value : values) {
-            instrumentDao.saveInstrumentProperty(new InstrumentProperties(InstrumentPropertyType.REALESTATEPROFITS.name(), instrumentId, String.valueOf(value.getValue()), InstrumentPropertyType.REALESTATEPROFITS.getValueType(), value.getDate(), null));
-        } 
+        var realEstateHandler = (RealEstateHandler)instrumentFactory.getInstrumentHandler(instrumentId);
+        realEstateHandler.initAdditionalFields(-1, yieldgoals, realEstateProfits);
+        realEstateHandler.updateInstrument(description, isActive);
     }
 
     @Override
     public void updateInstrument(int instrumentId, String description, boolean isActive) {
         var instrumentHandler = instrumentFactory.getInstrumentHandler(instrumentId);
-
-        var instrument = getInstrument(instrumentId, "Instrument not updated:");
-        validateInstrument4Inactivation(instrument.getInstrumentid(), instrument.getInstrumentType(), instrument.isIsactive(), isActive);
-        String oldDesc = instrument.getDescription();
-        instrumentDao.updateInstrument(instrumentId, description, isActive);
-        if(instrument.getInstrumentType()==InstrumentType.TENANT) {
-            List<Instrument> instruments = instrumentGraphHandler.getAllInstrumentChilds(instrumentId);
-            renameDefaultTenantChild(instrumentId, description, oldDesc, DEFAULT_BUDGETGROUP_PREFIX, instruments);
-            renameDefaultTenantChild(instrumentId, description, oldDesc, DEFAULT_ACCPF_PREFIX, instruments);
-            renameDefaultTenantChild(instrumentId, description, oldDesc, DEFAULT_INCOMEBUDGET_PREFIX, instruments);
-        }
-    }
-
-    private void renameDefaultTenantChild(int instrumentId, String newDesc, String oldDesc, String defaultDescPrefix, List<Instrument> instruments) {
-        //look by description for default instruments of the tenant to rename
-        instruments.stream().filter(i->i.getDescription().equals(defaultDescPrefix+oldDesc)).forEach(i->{
-                instrumentDao.updateInstrument(i.getInstrumentid(), defaultDescPrefix+newDesc, i.isIsactive());
-        });
-    }
-
-    private void validateInstrument4Inactivation(int instrumentId, InstrumentType instrumentType, boolean isActiveBeforeUpdate,  boolean isActiveAfterUpdate) {
-        // try to deactivate instrument ?
-        if(!isActiveAfterUpdate && isActiveBeforeUpdate) {
-            if( !(
-                instrumentType==InstrumentType.TENANT
-                || instrumentType==InstrumentType.GIRO
-                || instrumentType==InstrumentType.BUDGET
-                || instrumentType==InstrumentType.REALESTATE
-                )
-            ) {
-                throw new MFException(MFMsgKey.WRONG_INSTRUMENTTYPE_EXCEPTION, "instrument with id:"+instrumentId + " not deactivated. It is not allowed for type " + instrumentType);
-            }
-            validateInstrumentValue4Inactivation(instrumentId, instrumentType);
-            validateRecurrentTransactions4InstrumentInactivation(instrumentId, instrumentType);
-        }        
-    }
-
-    private void validateInstrumentValue4Inactivation(int instrumentId, InstrumentType instrumentType) {
-        if( (instrumentType==InstrumentType.GIRO || instrumentType==InstrumentType.BUDGET) 
-            && service.getValue(instrumentId, LocalDate.MAX)!=0.0 ){
-            throw new MFException(MFMsgKey.NO_VALID_INSTRUMENT_FOR_DEACTIVATION, "instrument with id:"+instrumentId + " not deactivated. The current value is not 0");
-        } else if(instrumentType==InstrumentType.REALESTATE) {
-            for(Instrument budgetGroup : getInstrumentChilds(instrumentId, EdgeType.REALESTATEBUDGETGROUP, 1)) {
-                validateInstrumentValue4Inactivation(budgetGroup.getInstrumentid(), budgetGroup.getInstrumentType());
-                instrumentDao.updateInstrument(budgetGroup.getInstrumentid(), budgetGroup.getDescription(), false);
-            }
-        } else if (instrumentType==InstrumentType.BUDGETGROUP) {
-            for(Instrument budget : getInstrumentChilds(instrumentId, EdgeType.TENANTGRAPH, 1)) {
-                updateInstrument(budget.getInstrumentid(), budget.getDescription(), false);
-            }
-        }
-    }
-
-    private void validateRecurrentTransactions4InstrumentInactivation(int instrumentId, InstrumentType instrumentType) {
-        if(instrumentType==InstrumentType.GIRO || instrumentType==InstrumentType.BUDGET) {
-            for (RecurrentTransaction r : recurrentTransactionDao.listRecurrentTransactions()) {
-
-                if( r.getInstrumentByInstrumentid1().getInstrumentid() == instrumentId ||
-                        r.getInstrumentByInstrumentid2().getInstrumentid() == instrumentId ) {
-                    throw new MFException(MFMsgKey.NO_VALID_INSTRUMENT_FOR_DEACTIVATION, "instrument with id:"+
-                            instrumentId + " not deactivated. There are still recurrent transactions for this instrument");
-                }
-            }
-        }
-    }
+        instrumentHandler.updateInstrument(description, isActive);
+    } 
 }

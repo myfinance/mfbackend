@@ -5,15 +5,17 @@ import de.hf.dac.myfinance.api.domain.Budget;
 import de.hf.dac.myfinance.api.domain.Instrument;
 import de.hf.dac.myfinance.api.domain.InstrumentType;
 import de.hf.dac.myfinance.api.persistence.dao.InstrumentDao;
+import de.hf.dac.myfinance.api.persistence.dao.RecurrentTransactionDao;
+import de.hf.dac.myfinance.api.service.ValueCurveService;
 
-public class BudgetHandler extends AbsInstrumentHandler {
+public class BudgetHandler extends AbsCashInstrumentHandler {
 
-    public BudgetHandler(InstrumentDao instrumentDao, AuditService auditService, String description, int budgetGroupId) {
-        super(instrumentDao, auditService, description, budgetGroupId);
+    public BudgetHandler(InstrumentDao instrumentDao, AuditService auditService, ValueCurveService valueService, RecurrentTransactionDao recurrentTransactionDao, String description, int budgetGroupId) {
+        super(instrumentDao, auditService, valueService, recurrentTransactionDao, description, budgetGroupId);
     }
 
-    public BudgetHandler(InstrumentDao instrumentDao, AuditService auditService, Instrument budget) {
-        super(instrumentDao, auditService, budget);
+    public BudgetHandler(InstrumentDao instrumentDao, AuditService auditService, ValueCurveService valueService, RecurrentTransactionDao recurrentTransactionDao, Instrument budget) {
+        super(instrumentDao, auditService, valueService, recurrentTransactionDao, budget);
     }
 
     @Override

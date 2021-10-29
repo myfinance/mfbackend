@@ -9,15 +9,21 @@ import de.hf.dac.myfinance.api.domain.InstrumentType;
 import de.hf.dac.myfinance.api.exceptions.MFException;
 import de.hf.dac.myfinance.api.exceptions.MFMsgKey;
 import de.hf.dac.myfinance.api.persistence.dao.InstrumentDao;
+import de.hf.dac.myfinance.api.persistence.dao.RecurrentTransactionDao;
+import de.hf.dac.myfinance.api.service.ValueCurveService;
 
 public class InstrumentFactory {
 
     private final InstrumentDao instrumentDao;
     private final AuditService auditService;
+    private final ValueCurveService valueService;
+    private final RecurrentTransactionDao recurrentTransactionDao;
 
-    public InstrumentFactory(InstrumentDao instrumentDao, AuditService auditService) {
+    public InstrumentFactory(InstrumentDao instrumentDao, AuditService auditService, ValueCurveService valueService, RecurrentTransactionDao recurrentTransactionDao) {
         this.instrumentDao = instrumentDao;
         this.auditService = auditService;
+        this.valueService = valueService;
+        this.recurrentTransactionDao = recurrentTransactionDao;
     }
 
     public BaseInstrumentHandler getBaseInstrumentHandler(int instrumentId) {
@@ -36,11 +42,13 @@ public class InstrumentFactory {
             case BUDGETGROUP: 
                 return new BudgetGroupHandler(instrumentDao, auditService, this, instrument);                             
             case BUDGET: 
-                return new BudgetHandler(instrumentDao, auditService, instrument);      
+                return new BudgetHandler(instrumentDao, auditService, valueService, recurrentTransactionDao, instrument);      
             case GIRO: 
-                return new GiroHandler(instrumentDao, auditService, instrument);      
+                return new GiroHandler(instrumentDao, auditService, valueService, recurrentTransactionDao, instrument);      
             case DEPOT: 
-                return new DepotHandler(instrumentDao, auditService, instrument);                                                 
+                return new DepotHandler(instrumentDao, auditService, instrument);     
+            case REALESTATE: 
+                return new RealEstateHandler(instrumentDao, auditService, this, instrument);                                                               
             default:
                 throw new MFException(MFMsgKey.UNKNOWN_INSTRUMENTTYPE_EXCEPTION, "can not create Instrumenthandler for instrumentType:"+instrument.getInstrumentType());
         }
@@ -57,36 +65,32 @@ public class InstrumentFactory {
             case BUDGETGROUP: 
                 return new BudgetGroupHandler(instrumentDao, auditService, this, description, parentId);  
             case BUDGET: 
-                return new BudgetHandler(instrumentDao, auditService, description, parentId);          
+                return new BudgetHandler(instrumentDao, auditService, valueService, recurrentTransactionDao, description, parentId);          
             case GIRO: 
-                return new GiroHandler(instrumentDao, auditService, description, parentId);      
+                return new GiroHandler(instrumentDao, auditService, valueService, recurrentTransactionDao, description, parentId);      
             case DEPOT: 
-                return new DepotHandler(instrumentDao, auditService, description, parentId);                                              
+                return new DepotHandler(instrumentDao, auditService, description, parentId);  
+            case REALESTATE: 
+                return new RealEstateHandler(instrumentDao, auditService, this, description, parentId);                                                                 
             default:
                 throw new MFException(MFMsgKey.UNKNOWN_INSTRUMENTTYPE_EXCEPTION, "can not create Instrumenthandler for instrumentType:"+instrumentType);
         }
     }
 
     public TenantHandler getTenantHandler(int instrumentId, boolean validate) {
+        var tenantHandler = new TenantHandler(instrumentDao, auditService, this, instrumentId); 
         if(validate) {
-            var instrument =  getInstrument(instrumentId, "");
-            if(!instrument.getInstrumentType().equals(InstrumentType.TENANT)) {
-                throw new MFException(MFMsgKey.WRONG_INSTRUMENTTYPE_EXCEPTION, "can not create tenantthandler for instrumentid:"+instrumentId);
-            }
-            return new TenantHandler(instrumentDao, auditService, this, instrument);   
+            tenantHandler.validateInstrument();  
         } 
-        return new TenantHandler(instrumentDao, auditService, this, instrumentId);   
+        return tenantHandler;   
     }
 
     public BudgetGroupHandler getBudgetGroupHandler(int instrumentId, boolean validate) {
+        var budgetGroupHandler = new BudgetGroupHandler(instrumentDao, auditService, this, instrumentId); 
         if(validate) {
-            var instrument =  getInstrument(instrumentId, "");
-            if(!instrument.getInstrumentType().equals(InstrumentType.BUDGETGROUP)) {
-                throw new MFException(MFMsgKey.WRONG_INSTRUMENTTYPE_EXCEPTION, "can not create BudgetGroupHandler for instrumentid:"+instrumentId);
-            }
-            return new BudgetGroupHandler(instrumentDao, auditService, this, instrument);   
+            budgetGroupHandler.validateInstrument();  
         } 
-        return new BudgetGroupHandler(instrumentDao, auditService, this, instrumentId);   
+        return budgetGroupHandler;   
     }
 
     public List<Instrument> listInstruments() {

@@ -4,7 +4,8 @@ public enum InstrumentPropertyType {
     YIELDGOAL(Integer.valueOf(1)),
     REALESTATEPROFITS(Integer.valueOf(2)),
     DEFAULTGIROID(Integer.valueOf(3)),
-    INCOMEBUDGETID(Integer.valueOf(4));
+    INCOMEBUDGETID(Integer.valueOf(4)),
+    REALESTATEBUDGETGROUPID(Integer.valueOf(5));
 
     
     private final Integer value;
@@ -21,6 +22,7 @@ public enum InstrumentPropertyType {
             case 2: return "double";
             case 3: return "int";
             case 4: return "int";
+            case 5: return "int";
             default: return "int";
         }
     }
@@ -31,6 +33,7 @@ public enum InstrumentPropertyType {
             case 2: return "REALESTATEPROFITS";
             case 3: return "DEFAULTGIROID";
             case 4: return "INCOMEBUDGETID";
+            case 5: return "REALESTATEBUDGETGROUPID";
             default: return "NA";
         }
     }

@@ -11,7 +11,7 @@ import de.hf.dac.myfinance.api.domain.BudgetPortfolio;
 import de.hf.dac.myfinance.api.domain.Giro;
 import de.hf.dac.myfinance.api.domain.Instrument;
 import de.hf.dac.myfinance.api.domain.Tenant;
-import de.hf.dac.myfinance.instrumentgraphhandler.InstrumentGraphHandlerImpl;
+import de.hf.dac.myfinance.instrumenthandler.InstrumentGraphHandlerImpl;
 import de.hf.myfinance.test.mock.InstrumentDaoMock;
 
 public class InstrumentGraphHandlerTest {

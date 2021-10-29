@@ -44,7 +44,7 @@ public class DepotHandler extends AbsInstrumentHandler {
         isDepotInitialized = true;
     }
 
-    private void setDefaultGiroId(int defaultGiroId){
+    public void setDefaultGiroId(int defaultGiroId){
         var giro = getInstrument(defaultGiroId, "Depot not saved: Unknown default giro account:");
         validateInstrument(giro, InstrumentType.GIRO, "Depot not saved: default giro account not valid:");
         defaultGiroId = giro.getInstrumentid();
@@ -64,5 +64,12 @@ public class DepotHandler extends AbsInstrumentHandler {
         super.save();
         saveProperty(InstrumentPropertyType.DEFAULTGIROID, defaultGiroId);
         instrumentGraphHandler.addInstrumentToGraph(instrumentId, valueBudgetId, EdgeType.VALUEBUDGET);
+    }
+
+    @Override
+    public void updateInstrument(String description, boolean isActive) {
+        super.updateInstrument(description, isActive);
+        deleteInstrumentPropertyList();
+        saveProperty(InstrumentPropertyType.DEFAULTGIROID, defaultGiroId);
     }
 }

@@ -19,10 +19,10 @@ import de.hf.dac.myfinance.api.persistence.dao.InstrumentDao;
 public abstract class AbsInstrumentHandler extends BaseInstrumentHandler{
     protected AuditService auditService;
     protected LocalDateTime ts;
-    protected Instrument domainObject;
     private int parentId;
     private static final String AUDIT_MSG_TYPE="AbsSimpleInstrument_User_Event";
     protected String domainObjectName;
+    String oldDesc;
 
     protected AbsInstrumentHandler(InstrumentDao instrumentDao, AuditService auditService, String description, int parentId) {
         super(instrumentDao);
@@ -58,10 +58,10 @@ public abstract class AbsInstrumentHandler extends BaseInstrumentHandler{
         ts = LocalDateTime.now();
     }
 
-    protected void checkDomainObjectInitStatus() {
-        checkInitStatus();
-        if(this.domainObject==null) {
-            throw new MFException(MFMsgKey.OBJECT_NOT_INITIALIZED_EXCEPTION, "instrument is not set:");
+    public void validateInstrument() {
+        loadInstrument();
+        if(!domainObject.getInstrumentType().equals(getInstrumentType())) {
+            throw new MFException(MFMsgKey.WRONG_INSTRUMENTTYPE_EXCEPTION, "can not create instrumenthandler for instrumentid:"+instrumentId);
         }
     }
 
@@ -91,6 +91,7 @@ public abstract class AbsInstrumentHandler extends BaseInstrumentHandler{
     }
 
     public void save() {
+        checkDomainObjectInitStatus();
         instrumentDao.saveInstrument(domainObject);
         instrumentId = domainObject.getInstrumentid();
         updateParent();
@@ -135,40 +136,35 @@ public abstract class AbsInstrumentHandler extends BaseInstrumentHandler{
         this.parentId = accportfolio.get().getInstrumentid();
     }
 
-    public void updateInstrument(String description, boolean isActive) {
-        checkDomainObjectInitStatus();
-        validateInstrument4Inactivation(instrumentId, domainObject.getInstrumentType(), domainObject.isIsactive(), isActive);
-        String oldDesc = domainObject.getDescription();
-        instrumentDao.updateInstrument(instrumentId, description, isActive);
-        if(domainObject.getInstrumentType()==InstrumentType.TENANT) {
-            List<Instrument> instruments = instrumentGraphHandler.getAllInstrumentChilds(instrumentId);
-            renameDefaultTenantChild(instrumentId, description, oldDesc, DEFAULT_BUDGETGROUP_PREFIX, instruments);
-            renameDefaultTenantChild(instrumentId, description, oldDesc, DEFAULT_ACCPF_PREFIX, instruments);
-            renameDefaultTenantChild(instrumentId, description, oldDesc, DEFAULT_INCOMEBUDGET_PREFIX, instruments);
-        }
+    public void updateInstrument(boolean isActive) {
+        loadInstrument();
+        updateInstrument(domainObject.getDescription(), isActive);
     }
 
-    protected void validateInstrument4Inactivation(int instrumentId, InstrumentType instrumentType, boolean isActiveBeforeUpdate,  boolean isActiveAfterUpdate) {
+    public void updateInstrument(String description, boolean isActive) {
+        loadInstrument();
+        checkInstrumentInactivation(instrumentId, domainObject.getInstrumentType(), domainObject.isIsactive(), isActive);
+        oldDesc = domainObject.getDescription();
+        instrumentDao.updateInstrument(instrumentId, description, isActive);
+    }
+
+    protected void checkInstrumentInactivation(int instrumentId, InstrumentType instrumentType, boolean isActiveBeforeUpdate,  boolean isActiveAfterUpdate) {
         // try to deactivate instrument ?
         if(!isActiveAfterUpdate && isActiveBeforeUpdate) {
-            validateInstrumentValue4Inactivation(instrumentId, instrumentType);
-            validateRecurrentTransactions4InstrumentInactivation(instrumentId, instrumentType);
+            validateInstrument4Inactivation();
         }        
+    } 
+
+    protected void validateInstrument4Inactivation() {
+        throw new MFException(MFMsgKey.NO_VALID_INSTRUMENT_FOR_DEACTIVATION, "instrument with id:"+instrumentId + " not deactivated. Instruments with type:"+ domainObject.getInstrumentType() + " can not deactivated");
     }
 
-    private void validateInstrumentValue4Inactivation(int instrumentId, InstrumentType instrumentType) {
-        if( (instrumentType==InstrumentType.GIRO || instrumentType==InstrumentType.BUDGET) 
-            && service.getValue(instrumentId, LocalDate.MAX)!=0.0 ){
-            throw new MFException(MFMsgKey.NO_VALID_INSTRUMENT_FOR_DEACTIVATION, "instrument with id:"+instrumentId + " not deactivated. The current value is not 0");
-        } else if(instrumentType==InstrumentType.REALESTATE) {
-            for(Instrument budgetGroup : getInstrumentChilds(instrumentId, EdgeType.REALESTATEBUDGETGROUP, 1)) {
-                validateInstrumentValue4Inactivation(budgetGroup.getInstrumentid(), budgetGroup.getInstrumentType());
-                instrumentDao.updateInstrument(budgetGroup.getInstrumentid(), budgetGroup.getDescription(), false);
-            }
-        } else if (instrumentType==InstrumentType.BUDGETGROUP) {
-            for(Instrument budget : getInstrumentChilds(instrumentId, EdgeType.TENANTGRAPH, 1)) {
-                updateInstrument(budget.getInstrumentid(), budget.getDescription(), false);
-            }
+    protected void deleteInstrumentPropertyList() {
+        var instrumentProperties = instrumentDao.getInstrumentProperties(instrumentId);
+        for (InstrumentProperties instrumentProperty : instrumentProperties) {
+            auditService.saveMessage(instrumentDao.deleteInstrumentProperty(instrumentProperty.getPropertyid()),
+                Severity.INFO, AUDIT_MSG_TYPE);
         }
+        
     }
 }
