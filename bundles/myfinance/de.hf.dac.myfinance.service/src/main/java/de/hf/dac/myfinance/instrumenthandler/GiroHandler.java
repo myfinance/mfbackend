@@ -18,6 +18,10 @@ public class GiroHandler extends AbsCashInstrumentHandler implements Accountable
         super(instrumentDao, auditService, valueService, recurrentTransactionDao, giro);
     }
 
+    public GiroHandler(InstrumentDao instrumentDao, AuditService auditService, ValueCurveService valueService, RecurrentTransactionDao recurrentTransactionDao, int instrumentId) {
+        super(instrumentDao, auditService, valueService, recurrentTransactionDao, instrumentId);
+    }
+
     @Override
     protected void createDomainObject(String description) {
         domainObject = new Giro(description, true, ts);

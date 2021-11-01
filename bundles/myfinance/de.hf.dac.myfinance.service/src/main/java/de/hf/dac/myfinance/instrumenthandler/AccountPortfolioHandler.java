@@ -17,6 +17,10 @@ public class AccountPortfolioHandler extends AbsAccountableInstrumentHandler imp
         super(instrumentDao, auditService, accountPortfolio);
     }
 
+    public AccountPortfolioHandler(InstrumentDao instrumentDao, AuditService auditService, int instrumentId) {
+        super(instrumentDao, auditService, instrumentId);
+    }
+
     @Override
     protected void createDomainObject(String description) {
         domainObject = new AccountPortfolio(description, true, ts);

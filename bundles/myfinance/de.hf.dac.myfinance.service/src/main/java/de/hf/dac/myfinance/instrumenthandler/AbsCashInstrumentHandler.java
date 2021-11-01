@@ -28,6 +28,12 @@ public abstract class AbsCashInstrumentHandler extends AbsAccountableInstrumentH
         this.recurrentTransactionDao = recurrentTransactionDao;
     }
 
+    public AbsCashInstrumentHandler(InstrumentDao instrumentDao, AuditService auditService, ValueCurveService valueService, RecurrentTransactionDao recurrentTransactionDao, int instrumentId) {
+        super(instrumentDao, auditService, instrumentId);
+        this.valueService = valueService;
+        this.recurrentTransactionDao = recurrentTransactionDao;
+    }
+
     protected AbsCashInstrumentHandler(InstrumentDao instrumentDao, AuditService auditService, ValueCurveService valueService, RecurrentTransactionDao recurrentTransactionDao, String description, int tenantId, boolean addToAccountPf) {
         super(instrumentDao, auditService, description, tenantId, addToAccountPf);
         this.valueService = valueService;

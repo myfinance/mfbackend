@@ -16,6 +16,10 @@ public class BudgetPortfolioHandler extends AbsAccountableInstrumentHandler impl
         super(instrumentDao, auditService, budgetPortfolio);
     }
 
+    public BudgetPortfolioHandler(InstrumentDao instrumentDao, AuditService auditService, int instrumentId) {
+        super(instrumentDao, auditService, instrumentId);
+    }
+
     @Override
     protected void createDomainObject(String description) {
         domainObject = new BudgetPortfolio(description, true, ts);

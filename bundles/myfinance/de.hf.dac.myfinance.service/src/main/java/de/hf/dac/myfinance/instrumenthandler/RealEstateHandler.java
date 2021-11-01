@@ -27,6 +27,11 @@ public class RealEstateHandler extends AbsAccountableInstrumentHandler implement
         this.instrumentFactory = instrumentFactory;
     }
 
+    public RealEstateHandler(InstrumentDao instrumentDao, AuditService auditService, InstrumentFactory instrumentFactory, int instrumentId) {
+        super(instrumentDao, auditService, instrumentId);
+        this.instrumentFactory = instrumentFactory;
+    }
+
     public RealEstateHandler(InstrumentDao instrumentDao, AuditService auditService, InstrumentFactory instrumentFactory, String description, int tenantId) {
         super(instrumentDao, auditService, description, tenantId, true);
         this.instrumentFactory = instrumentFactory;

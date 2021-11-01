@@ -26,10 +26,52 @@ public class InstrumentFactory {
         this.recurrentTransactionDao = recurrentTransactionDao;
     }
 
+    /**
+     * returns a baseinstrumenthandler with type indifferent functions like getTenant().
+     * use this if you do not know the type and it doesn't matter for your purpose
+     * @param instrumentId the id of the instrument
+     * @return the BaseAccountableInstrumentHandler
+     */
     public BaseAccountableInstrumentHandler getBaseInstrumentHandler(int instrumentId) {
         return new BaseAccountableInstrumentHandlerImpl(instrumentDao, auditService, instrumentId);
     }
 
+    /**
+     * creates an Instrumenthandler for a new Instrument
+     * @param instrumentType the type of the new instrument
+     * @param description the description
+     * @param parentId the id of the parent
+     * @return Instrumenthandler for the instrumenttype of the new instrument
+     */
+    public InstrumentHandler getInstrumentHandler(InstrumentType instrumentType, String description, int parentId) {
+        switch(instrumentType){
+            case TENANT: 
+                return new TenantHandler(instrumentDao, auditService, this, description);     
+            case BUDGETPORTFOLIO: 
+                return new BudgetPortfolioHandler(instrumentDao, auditService, description, parentId);    
+            case ACCOUNTPORTFOLIO: 
+                return new AccountPortfolioHandler(instrumentDao, auditService, description, parentId);                                   
+            case BUDGETGROUP: 
+                return new BudgetGroupHandler(instrumentDao, auditService, this, description, parentId);  
+            case BUDGET: 
+                return new BudgetHandler(instrumentDao, auditService, valueService, recurrentTransactionDao, description, parentId);          
+            case GIRO: 
+                return new GiroHandler(instrumentDao, auditService, valueService, recurrentTransactionDao, description, parentId);      
+            case DEPOT: 
+                return new DepotHandler(instrumentDao, auditService, description, parentId);  
+            case REALESTATE: 
+                return new RealEstateHandler(instrumentDao, auditService, this, description, parentId);                                                                 
+            default:
+                throw new MFException(MFMsgKey.UNKNOWN_INSTRUMENTTYPE_EXCEPTION, "can not create Instrumenthandler for instrumentType:"+instrumentType);
+        }
+    }
+
+    /**
+     * loads the instrument for the instrumentId and returns an InstrumentHandler for the type of the instrument.
+     * use this if you do not know the type of the instrument and the InstrumentHandler Interface is suffitioned for your purpose (so you do not need type spezific functions)
+     * @param instrumentId the id of the instrument
+     * @return Instrumenthandler for the instrumenttype of the new instrument
+     */
     public InstrumentHandler getInstrumentHandler(int instrumentId) {
         var instrument =  getBaseInstrumentHandler(instrumentId).getInstrument();
         switch(instrument.getInstrumentType()){
@@ -54,43 +96,36 @@ public class InstrumentFactory {
         }
     }
 
-    public InstrumentHandler getInstrumentHandler(InstrumentType instrumentType, String description, int parentId) {
-        switch(instrumentType){
-            case TENANT: 
-                return new TenantHandler(instrumentDao, auditService, this, description);     
-            case BUDGETPORTFOLIO: 
-                return new BudgetPortfolioHandler(instrumentDao, auditService, description, parentId);    
-            case ACCOUNTPORTFOLIO: 
-                return new AccountPortfolioHandler(instrumentDao, auditService, description, parentId);                                   
-            case BUDGETGROUP: 
-                return new BudgetGroupHandler(instrumentDao, auditService, this, description, parentId);  
-            case BUDGET: 
-                return new BudgetHandler(instrumentDao, auditService, valueService, recurrentTransactionDao, description, parentId);          
-            case GIRO: 
-                return new GiroHandler(instrumentDao, auditService, valueService, recurrentTransactionDao, description, parentId);      
-            case DEPOT: 
-                return new DepotHandler(instrumentDao, auditService, description, parentId);  
-            case REALESTATE: 
-                return new RealEstateHandler(instrumentDao, auditService, this, description, parentId);                                                                 
-            default:
-                throw new MFException(MFMsgKey.UNKNOWN_INSTRUMENTTYPE_EXCEPTION, "can not create Instrumenthandler for instrumentType:"+instrumentType);
-        }
-    }
-
+    /**
+     * returns an TenantHandler. 
+     * use this or the following InstrumentHandlerType-Spezific functions, if you know exactly what kind of instrumenthandler you want and if it matters. 
+     * E.G. The TenantHandler has spezific public functions. You can only use them if you know that the instrumentId is a Tenant and you get the handler for this
+     * @param instrumentId the instrument id
+     * @param validate true if you want to validate that the type of the instrument and the expected type fits together (should be true in case you plan write operations with this instrument. Otherwise it is faster without validation)
+     * @return TenantHandler
+     */
     public TenantHandler getTenantHandler(int instrumentId, boolean validate) {
-        var tenantHandler = new TenantHandler(instrumentDao, auditService, this, instrumentId); 
-        if(validate) {
-            tenantHandler.validateInstrument();  
-        } 
-        return tenantHandler;   
+        var handler = new TenantHandler(instrumentDao, auditService, this, instrumentId); 
+        if(validate) handler.validateInstrument();
+        return handler;
     }
 
     public BudgetGroupHandler getBudgetGroupHandler(int instrumentId, boolean validate) {
-        var budgetGroupHandler = new BudgetGroupHandler(instrumentDao, auditService, this, instrumentId); 
-        if(validate) {
-            budgetGroupHandler.validateInstrument();  
-        } 
-        return budgetGroupHandler;   
+        var handler = new BudgetGroupHandler(instrumentDao, auditService, this, instrumentId); 
+        if(validate) handler.validateInstrument();
+        return handler;
+    }
+
+    public DepotHandler getDepotHandler(int instrumentId, boolean validate) {
+        var handler = new DepotHandler(instrumentDao, auditService, instrumentId); 
+        if(validate) handler.validateInstrument();
+        return handler;
+    }
+
+    public RealEstateHandler getRealEstateHandler(int instrumentId, boolean validate) {
+        var handler = new RealEstateHandler(instrumentDao, auditService, this, instrumentId); 
+        if(validate) handler.validateInstrument();
+        return handler;
     }
 
     public List<Instrument> listInstruments() {

@@ -159,8 +159,8 @@ public class InstrumentServiceImpl implements InstrumentService {
     }
 
     @Override
-    public Instrument getSecurity(String isin){
-        return getSecurity(isin, "");
+    public Instrument getSecurity(String businesskey){
+        return getSecurity(businesskey, "");
     }
 
     @Override
@@ -258,7 +258,7 @@ public class InstrumentServiceImpl implements InstrumentService {
 
     @Override
     public void updateDepotAccount(int instrumentId, String description, boolean isActive, int defaultGiroId) {
-        var depotHandler = (DepotHandler)instrumentFactory.getInstrumentHandler(instrumentId);
+        var depotHandler = (DepotHandler)instrumentFactory.getDepotHandler(instrumentId, true);
         depotHandler.setDefaultGiroId(defaultGiroId);
         depotHandler.updateInstrument(description, isActive);
     }
@@ -271,8 +271,8 @@ public class InstrumentServiceImpl implements InstrumentService {
     }
 
     @Override
-    public void updateRealEstate(int instrumentId, String description, List<ValuePerDate> yieldgoals, List<ValuePerDate> realEstateProfits, boolean isActive) { 
-        var realEstateHandler = (RealEstateHandler)instrumentFactory.getInstrumentHandler(instrumentId);
+    public void updateRealEstate(int instrumentId, String description, List<ValuePerDate> yieldgoals, List<ValuePerDate> realEstateProfits, boolean isActive) {
+        var realEstateHandler = instrumentFactory.getRealEstateHandler(instrumentId, true);
         realEstateHandler.initAdditionalFields(-1, yieldgoals, realEstateProfits);
         realEstateHandler.updateInstrument(description, isActive);
     }

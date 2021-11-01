@@ -20,27 +20,31 @@ import de.hf.dac.myfinance.api.persistence.dao.InstrumentDao;
  * Base class for alle instrument handler
  */
 public abstract class AbsInstrumentHandler {
-    protected final InstrumentDao instrumentDao;
+    protected InstrumentDao instrumentDao;
     protected int instrumentId;
     protected boolean initialized = false;
     protected Instrument domainObject;
     private List<InstrumentProperties> properties;
     protected boolean isPropertyInit = false;
-    protected final AuditService auditService;
+    protected AuditService auditService;
     protected LocalDateTime ts;
     private static final String AUDIT_MSG_TYPE="InstrumentHandler_User_Event";
     protected String domainObjectName;
     protected String oldDesc;
 
     protected AbsInstrumentHandler(InstrumentDao instrumentDao, AuditService auditService) {
-        this.instrumentDao = instrumentDao;
-        this.auditService = auditService;
-        ts = LocalDateTime.now();
+        setBaseValues(instrumentDao, auditService);
     }
 
     protected AbsInstrumentHandler(InstrumentDao instrumentDao, AuditService auditService, int instrumentId) {
-        this(instrumentDao, auditService);
+        setBaseValues(instrumentDao, auditService);
         setInstrumentId(instrumentId);
+    }
+
+    private void setBaseValues(InstrumentDao instrumentDao, AuditService auditService) {
+        this.instrumentDao = instrumentDao;
+        this.auditService = auditService;
+        ts = LocalDateTime.now();
     }
 
     protected AbsInstrumentHandler(InstrumentDao instrumentDao, AuditService auditService, Instrument instrument) {

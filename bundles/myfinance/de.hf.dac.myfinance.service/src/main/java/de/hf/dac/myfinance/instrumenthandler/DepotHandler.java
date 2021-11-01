@@ -19,6 +19,10 @@ public class DepotHandler extends AbsAccountableInstrumentHandler implements Acc
         super(instrumentDao, auditService, depot);
     }
 
+    public DepotHandler(InstrumentDao instrumentDao, AuditService auditService, int instrumentId) {
+        super(instrumentDao, auditService, instrumentId);
+    }
+
     public DepotHandler(InstrumentDao instrumentDao, AuditService auditService, String description, int tenantId) {
         super(instrumentDao, auditService, description, tenantId, true);
     }

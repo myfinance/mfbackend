@@ -18,6 +18,10 @@ public class BudgetHandler extends AbsCashInstrumentHandler implements Accountab
         super(instrumentDao, auditService, valueService, recurrentTransactionDao, budget);
     }
 
+    public BudgetHandler(InstrumentDao instrumentDao, AuditService auditService, ValueCurveService valueService, RecurrentTransactionDao recurrentTransactionDao, int instrumentId) {
+        super(instrumentDao, auditService, valueService, recurrentTransactionDao, instrumentId);
+    }
+
     @Override
     protected void createDomainObject(String description) {
         domainObject = new Budget(description, true, ts);
