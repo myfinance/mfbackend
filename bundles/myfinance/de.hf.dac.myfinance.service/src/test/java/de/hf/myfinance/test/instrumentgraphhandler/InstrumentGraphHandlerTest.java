@@ -16,7 +16,7 @@ import de.hf.myfinance.test.mock.InstrumentDaoMock;
 
 public class InstrumentGraphHandlerTest {
     @Test
-    public void paddInstrumentToGraphTest(){
+    public void addInstrumentToGraphTest(){
 
         Instrument tenant = new Tenant("testtenant", true, LocalDateTime.now());
         tenant.setInstrumentid(1);

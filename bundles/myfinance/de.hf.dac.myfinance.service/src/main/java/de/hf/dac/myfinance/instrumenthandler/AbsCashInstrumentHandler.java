@@ -4,7 +4,6 @@ import java.time.LocalDate;
 
 import de.hf.dac.api.io.audit.AuditService;
 import de.hf.dac.myfinance.api.domain.Instrument;
-import de.hf.dac.myfinance.api.domain.InstrumentType;
 import de.hf.dac.myfinance.api.domain.RecurrentTransaction;
 import de.hf.dac.myfinance.api.exceptions.MFException;
 import de.hf.dac.myfinance.api.exceptions.MFMsgKey;
@@ -12,7 +11,7 @@ import de.hf.dac.myfinance.api.persistence.dao.InstrumentDao;
 import de.hf.dac.myfinance.api.persistence.dao.RecurrentTransactionDao;
 import de.hf.dac.myfinance.api.service.ValueCurveService;
 
-public abstract class AbsCashInstrumentHandler extends AbsInstrumentHandler {
+public abstract class AbsCashInstrumentHandler extends AbsAccountableInstrumentHandler {
 
     private ValueCurveService valueService;
     private RecurrentTransactionDao recurrentTransactionDao;

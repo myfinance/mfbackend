@@ -9,7 +9,7 @@ import de.hf.dac.myfinance.api.domain.InstrumentType;
 import de.hf.dac.myfinance.api.domain.Tenant;
 import de.hf.dac.myfinance.api.persistence.dao.InstrumentDao;
 
-public class TenantHandler extends AbsInstrumentHandler {
+public class TenantHandler extends AbsAccountableInstrumentHandler implements AccountableInstrumentHandler {
     private  InstrumentFactory instrumentFactory;
 
     private static final String DEFAULT_ACCPF_PREFIX = "accountPf_";

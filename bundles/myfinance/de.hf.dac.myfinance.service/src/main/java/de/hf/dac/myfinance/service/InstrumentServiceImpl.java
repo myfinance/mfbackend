@@ -29,18 +29,12 @@ import de.hf.dac.myfinance.api.service.InstrumentService;
 import de.hf.dac.myfinance.api.service.ValueCurveService;
 import de.hf.dac.myfinance.instrumenthandler.DepotHandler;
 import de.hf.dac.myfinance.instrumenthandler.InstrumentFactory;
-import de.hf.dac.myfinance.instrumenthandler.InstrumentGraphHandler;
-import de.hf.dac.myfinance.instrumenthandler.InstrumentGraphHandlerImpl;
 import de.hf.dac.myfinance.instrumenthandler.RealEstateHandler;
-import de.hf.dac.myfinance.instrumenthandler.TenantHandler;
 import lombok.Data;
 
 import javax.inject.Inject;
-
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.*;
-import java.util.stream.Collectors;
 
 @Data
 public class InstrumentServiceImpl implements InstrumentService {
@@ -277,7 +271,7 @@ public class InstrumentServiceImpl implements InstrumentService {
     }
 
     @Override
-    public void updateRealEstate(int instrumentId, String description, List<ValuePerDate> yieldgoals, List<ValuePerDate> realEstateProfits, boolean isActive) {
+    public void updateRealEstate(int instrumentId, String description, List<ValuePerDate> yieldgoals, List<ValuePerDate> realEstateProfits, boolean isActive) { 
         var realEstateHandler = (RealEstateHandler)instrumentFactory.getInstrumentHandler(instrumentId);
         realEstateHandler.initAdditionalFields(-1, yieldgoals, realEstateProfits);
         realEstateHandler.updateInstrument(description, isActive);

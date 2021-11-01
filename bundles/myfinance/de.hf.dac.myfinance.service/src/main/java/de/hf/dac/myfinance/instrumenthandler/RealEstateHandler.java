@@ -13,7 +13,7 @@ import de.hf.dac.myfinance.api.exceptions.MFException;
 import de.hf.dac.myfinance.api.exceptions.MFMsgKey;
 import de.hf.dac.myfinance.api.persistence.dao.InstrumentDao;
 
-public class RealEstateHandler extends AbsInstrumentHandler {
+public class RealEstateHandler extends AbsAccountableInstrumentHandler implements AccountableInstrumentHandler {
     int valueBudgetId;
     List<ValuePerDate> yieldgoals;
     List<ValuePerDate> realEstateProfits;

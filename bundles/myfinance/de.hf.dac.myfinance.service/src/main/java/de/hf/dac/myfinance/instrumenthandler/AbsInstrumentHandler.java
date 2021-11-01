@@ -3,7 +3,7 @@ package de.hf.dac.myfinance.instrumenthandler;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Optional;
+import java.util.stream.Collectors;
 
 import de.hf.dac.api.io.audit.AuditService;
 import de.hf.dac.api.io.domain.Severity;
@@ -16,52 +16,121 @@ import de.hf.dac.myfinance.api.exceptions.MFException;
 import de.hf.dac.myfinance.api.exceptions.MFMsgKey;
 import de.hf.dac.myfinance.api.persistence.dao.InstrumentDao;
 
-public abstract class AbsInstrumentHandler extends BaseInstrumentHandler{
-    protected AuditService auditService;
+/**
+ * Base class for alle instrument handler
+ */
+public abstract class AbsInstrumentHandler {
+    protected final InstrumentDao instrumentDao;
+    protected int instrumentId;
+    protected boolean initialized = false;
+    protected Instrument domainObject;
+    private List<InstrumentProperties> properties;
+    protected boolean isPropertyInit = false;
+    protected final AuditService auditService;
     protected LocalDateTime ts;
-    private int parentId;
-    private static final String AUDIT_MSG_TYPE="AbsSimpleInstrument_User_Event";
+    private static final String AUDIT_MSG_TYPE="InstrumentHandler_User_Event";
     protected String domainObjectName;
-    String oldDesc;
+    protected String oldDesc;
 
-    protected AbsInstrumentHandler(InstrumentDao instrumentDao, AuditService auditService, String description, int parentId) {
-        super(instrumentDao);
-        init(auditService);
-        createDomainObject(description);
-        setParent(parentId);
-        validateParent();
-    }
-
-    protected AbsInstrumentHandler(InstrumentDao instrumentDao, AuditService auditService, String description, int tenantId, boolean addToAccountPf) {
-        this(instrumentDao, auditService, description, tenantId);
-        setParentToAccountPf();
+    protected AbsInstrumentHandler(InstrumentDao instrumentDao, AuditService auditService) {
+        this.instrumentDao = instrumentDao;
+        this.auditService = auditService;
+        ts = LocalDateTime.now();
     }
 
     protected AbsInstrumentHandler(InstrumentDao instrumentDao, AuditService auditService, int instrumentId) {
-        super(instrumentDao);
-        init(auditService);
+        this(instrumentDao, auditService);
         setInstrumentId(instrumentId);
     }
 
     protected AbsInstrumentHandler(InstrumentDao instrumentDao, AuditService auditService, Instrument instrument) {
-        super(instrumentDao);
-        init(auditService);
-        setInstrumentId(instrument.getInstrumentid());
+        this(instrumentDao, auditService, instrument.getInstrumentid());
+
         if (!instrument.getInstrumentType().equals(getInstrumentType())) {
             throw new MFException(MFMsgKey.WRONG_INSTRUMENTTYPE_EXCEPTION, "can not create "+domainObjectName+" for instrumentType:"+instrument.getInstrumentType());
         }
         this.domainObject = instrument;
     }
 
-    protected void init(AuditService auditService) {
-        this.auditService = auditService;
-        ts = LocalDateTime.now();
-    }
-
     public void validateInstrument() {
         loadInstrument();
         if(!domainObject.getInstrumentType().equals(getInstrumentType())) {
             throw new MFException(MFMsgKey.WRONG_INSTRUMENTTYPE_EXCEPTION, "can not create instrumenthandler for instrumentid:"+instrumentId);
+        }
+    }
+
+    public void setTreeLastChanged(LocalDateTime ts){
+        this.ts = ts;
+    }
+
+    public List<InstrumentProperties> getInstrumentProperties() {
+        checkInitStatus();
+        if(!isPropertyInit) {
+            properties = instrumentDao.getInstrumentProperties(instrumentId);
+        }
+        return properties;
+    }
+
+    public List<InstrumentProperties> getInstrumentProperties(InstrumentPropertyType instrumentPropertyType) {
+        return getInstrumentProperties().stream().filter(i->i.getPropertyname().equals(instrumentPropertyType.name())).collect(Collectors.toList());
+    }
+    
+    public void setInstrumentId(int instrumentId) {
+        initialized = true;
+        this.instrumentId = instrumentId;
+    }
+    public int getInstrumentId() {
+        return this.instrumentId;
+    }
+
+    protected void checkInitStatus() {
+        if(!initialized) {
+            throw new MFException(MFMsgKey.OBJECT_NOT_INITIALIZED_EXCEPTION, "instrumentId is not set:");
+        }
+    }
+
+    protected void checkDomainObjectInitStatus() {
+        checkInitStatus();
+        if(this.domainObject==null) {
+            throw new MFException(MFMsgKey.OBJECT_NOT_INITIALIZED_EXCEPTION, "instrument is not set:");
+        }
+    }
+
+    public Instrument getInstrument(String errMsg) {
+        return getInstrument(instrumentId, errMsg);
+    }
+
+    public Instrument getInstrument() {
+        return getInstrument(instrumentId, "");
+    }
+
+    protected void loadInstrument() {
+        if(this.domainObject==null) {
+            checkInitStatus();
+            domainObject = getInstrument();
+        }
+    }
+
+    /**
+     * get and validate an Instrument for another id. the instrumentId of the Instrumenthandler will not change
+     * @param instrumentId the id
+     * @return the instrument for the id
+     */
+    protected Instrument getInstrument(int instrumentId) {
+        return getInstrument(instrumentId, "");
+    }
+
+    protected Instrument getInstrument(int instrumentId, String errMsg) {
+        var instrument = instrumentDao.getInstrument(instrumentId);
+        if(!instrument.isPresent()){
+            throw new MFException(MFMsgKey.UNKNOWN_INSTRUMENT_EXCEPTION, errMsg + " Instrument for id:"+instrumentId + " not found");
+        }
+        return instrument.get();
+    }
+
+    protected void validateInstrument(Instrument instrument, InstrumentType instrumentType, String errMsg) {
+        if(instrument.getInstrumentType()!=instrumentType){
+            throw new MFException(MFMsgKey.WRONG_INSTRUMENTTYPE_EXCEPTION, errMsg+" instrument has wrong type:"+instrument.getInstrumentType());
         }
     }
 
@@ -86,69 +155,7 @@ public abstract class AbsInstrumentHandler extends BaseInstrumentHandler{
         } 
     }
 
-    public void setTreeLastChanged(LocalDateTime ts){
-        this.ts = ts;
-    }
-
-    public void save() {
-        checkDomainObjectInitStatus();
-        instrumentDao.saveInstrument(domainObject);
-        instrumentId = domainObject.getInstrumentid();
-        updateParent();
-        instrumentGraphHandler.addInstrumentToGraph(instrumentId, parentId);
-        auditService.saveMessage(domainObjectName+" inserted:" + domainObject.getDescription(), Severity.INFO, AUDIT_MSG_TYPE);
-    }
-
-
-    private void validateParent() {
-        Optional<Instrument> parent = instrumentDao.getInstrument(parentId);
-        if(!parent.isPresent()){
-            throw new MFException(MFMsgKey.UNKNOWN_PARENT_EXCEPTION, domainObjectName+" not saved: unknown parent:"+parentId);
-        }
-        if(parent.get().getInstrumentType() != getParentType()){
-            throw new MFException(MFMsgKey.WRONG_INSTRUMENTTYPE_EXCEPTION,  domainObjectName+" not saved: Instrument with Id "+parentId + " has the wrong type");
-        }
-    }
-
-    protected void setParent(int parentId) {
-        this.parentId = parentId;
-    }
-
-    /**
-     * used to override the parent during the save function. E.G. Tentant sets the parent to himself 
-     */
-    protected void updateParent() {
-    } 
-
-    abstract protected void createDomainObject(String description);
-    abstract protected void setDomainObjectName();
-    abstract protected InstrumentType getInstrumentType();
-
-    protected InstrumentType getParentType() {
-        return InstrumentType.TENANT;
-    }
-
-    private void setParentToAccountPf() {
-        Optional<Instrument> accportfolio = instrumentDao.getAccountPortfolio(parentId);
-        if(!accportfolio.isPresent()) {
-            throw new MFException(MFMsgKey.UNKNOWN_INSTRUMENT_EXCEPTION,  "Account not saved: account portfolio for the tenant:"+parentId+" does not exists");
-        }
-        this.parentId = accportfolio.get().getInstrumentid();
-    }
-
-    public void updateInstrument(boolean isActive) {
-        loadInstrument();
-        updateInstrument(domainObject.getDescription(), isActive);
-    }
-
-    public void updateInstrument(String description, boolean isActive) {
-        loadInstrument();
-        checkInstrumentInactivation(instrumentId, domainObject.getInstrumentType(), domainObject.isIsactive(), isActive);
-        oldDesc = domainObject.getDescription();
-        instrumentDao.updateInstrument(instrumentId, description, isActive);
-    }
-
-    protected void checkInstrumentInactivation(int instrumentId, InstrumentType instrumentType, boolean isActiveBeforeUpdate,  boolean isActiveAfterUpdate) {
+    protected void checkInstrumentInactivation(boolean isActiveBeforeUpdate,  boolean isActiveAfterUpdate) {
         // try to deactivate instrument ?
         if(!isActiveAfterUpdate && isActiveBeforeUpdate) {
             validateInstrument4Inactivation();
@@ -164,7 +171,29 @@ public abstract class AbsInstrumentHandler extends BaseInstrumentHandler{
         for (InstrumentProperties instrumentProperty : instrumentProperties) {
             auditService.saveMessage(instrumentDao.deleteInstrumentProperty(instrumentProperty.getPropertyid()),
                 Severity.INFO, AUDIT_MSG_TYPE);
-        }
-        
+        }    
     }
+
+    public void save() {
+        checkDomainObjectInitStatus();
+        instrumentDao.saveInstrument(domainObject);
+        instrumentId = domainObject.getInstrumentid();
+        auditService.saveMessage(domainObjectName+" inserted:" + domainObject.getDescription(), Severity.INFO, AUDIT_MSG_TYPE);
+    }
+
+    public void updateInstrument(boolean isActive) {
+        loadInstrument();
+        updateInstrument(domainObject.getDescription(), isActive);
+    }
+
+    public void updateInstrument(String description, boolean isActive) {
+        loadInstrument();
+        checkInstrumentInactivation(domainObject.isIsactive(), isActive);
+        oldDesc = domainObject.getDescription();
+        instrumentDao.updateInstrument(instrumentId, description, isActive);
+    }
+
+    abstract protected void createDomainObject(String description);
+    abstract protected void setDomainObjectName();
+    abstract protected InstrumentType getInstrumentType();
 }

@@ -1,9 +1,7 @@
 package de.hf.dac.myfinance.instrumenthandler;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Stream;
 
 import de.hf.dac.myfinance.api.domain.EdgeType;
 import de.hf.dac.myfinance.api.domain.Instrument;

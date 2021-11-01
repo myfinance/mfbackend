@@ -26,11 +26,11 @@ public class InstrumentFactory {
         this.recurrentTransactionDao = recurrentTransactionDao;
     }
 
-    public BaseInstrumentHandler getBaseInstrumentHandler(int instrumentId) {
-        return new BaseInstrumentHandler(instrumentDao, instrumentId);
+    public BaseAccountableInstrumentHandler getBaseInstrumentHandler(int instrumentId) {
+        return new BaseAccountableInstrumentHandlerImpl(instrumentDao, auditService, instrumentId);
     }
 
-    public AbsInstrumentHandler getInstrumentHandler(int instrumentId) {
+    public InstrumentHandler getInstrumentHandler(int instrumentId) {
         var instrument =  getBaseInstrumentHandler(instrumentId).getInstrument();
         switch(instrument.getInstrumentType()){
             case TENANT: 
@@ -54,7 +54,7 @@ public class InstrumentFactory {
         }
     }
 
-    public AbsInstrumentHandler getInstrumentHandler(InstrumentType instrumentType, String description, int parentId) {
+    public InstrumentHandler getInstrumentHandler(InstrumentType instrumentType, String description, int parentId) {
         switch(instrumentType){
             case TENANT: 
                 return new TenantHandler(instrumentDao, auditService, this, description);     

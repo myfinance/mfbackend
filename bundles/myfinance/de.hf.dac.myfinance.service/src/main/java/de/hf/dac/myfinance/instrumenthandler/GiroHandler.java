@@ -8,7 +8,7 @@ import de.hf.dac.myfinance.api.persistence.dao.InstrumentDao;
 import de.hf.dac.myfinance.api.persistence.dao.RecurrentTransactionDao;
 import de.hf.dac.myfinance.api.service.ValueCurveService;
 
-public class GiroHandler extends AbsCashInstrumentHandler {
+public class GiroHandler extends AbsCashInstrumentHandler implements AccountableInstrumentHandler {
     
     public GiroHandler(InstrumentDao instrumentDao, AuditService auditService, ValueCurveService valueService, RecurrentTransactionDao recurrentTransactionDao, String description, int tenantId) {
         super(instrumentDao, auditService, valueService, recurrentTransactionDao, description, tenantId, true);

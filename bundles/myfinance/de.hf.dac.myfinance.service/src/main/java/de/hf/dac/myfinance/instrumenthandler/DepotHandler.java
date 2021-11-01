@@ -10,7 +10,7 @@ import de.hf.dac.myfinance.api.exceptions.MFException;
 import de.hf.dac.myfinance.api.exceptions.MFMsgKey;
 import de.hf.dac.myfinance.api.persistence.dao.InstrumentDao;
 
-public class DepotHandler extends AbsInstrumentHandler {
+public class DepotHandler extends AbsAccountableInstrumentHandler implements AccountableInstrumentHandler {
     private int defaultGiroId;
     private boolean isDepotInitialized = false;
     private int valueBudgetId;

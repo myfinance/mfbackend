@@ -13,7 +13,7 @@ import de.hf.dac.myfinance.api.exceptions.MFException;
 import de.hf.dac.myfinance.api.exceptions.MFMsgKey;
 import de.hf.dac.myfinance.api.persistence.dao.InstrumentDao;
 
-public class BudgetGroupHandler extends AbsInstrumentHandler {
+public class BudgetGroupHandler extends AbsAccountableInstrumentHandler implements AccountableInstrumentHandler {
     private  final InstrumentFactory instrumentFactory;
     private static final String DEFAULT_INCOMEBUDGET_PREFIX = "incomeBudget_";
 
