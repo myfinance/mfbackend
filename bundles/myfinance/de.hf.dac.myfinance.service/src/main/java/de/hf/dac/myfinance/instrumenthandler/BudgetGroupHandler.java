@@ -83,7 +83,6 @@ public class BudgetGroupHandler extends AbsAccountableInstrumentHandler implemen
     protected void validateInstrument4Inactivation() {
         for(Instrument budget : getInstrumentChilds(EdgeType.TENANTGRAPH, 1)) {
             var budgetHandler = instrumentFactory.getInstrumentHandler(budget.getInstrumentid());
-            budgetHandler.loadInstrument();
             budgetHandler.updateInstrument(false);
         }
     }

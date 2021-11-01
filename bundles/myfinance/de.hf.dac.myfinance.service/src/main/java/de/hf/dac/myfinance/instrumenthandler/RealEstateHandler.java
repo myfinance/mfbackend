@@ -98,7 +98,6 @@ public class RealEstateHandler extends AbsAccountableInstrumentHandler implement
     @Override
     protected void validateInstrument4Inactivation() {
         var budgetGroupHandler = instrumentFactory.getInstrumentHandler(getBudgetGroupId());
-        budgetGroupHandler.loadInstrument();
         budgetGroupHandler.updateInstrument(false);
     }
 
