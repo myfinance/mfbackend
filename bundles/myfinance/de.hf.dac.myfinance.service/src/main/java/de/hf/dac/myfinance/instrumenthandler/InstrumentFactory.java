@@ -43,7 +43,7 @@ public class InstrumentFactory {
      * @param parentId the id of the parent
      * @return Instrumenthandler for the instrumenttype of the new instrument
      */
-    public InstrumentHandler getInstrumentHandler(InstrumentType instrumentType, String description, int parentId) {
+    public InstrumentHandler getInstrumentHandler(InstrumentType instrumentType, String description, int parentId, String businesskey) {
         switch(instrumentType){
             case TENANT: 
                 return new TenantHandler(instrumentDao, auditService, this, description);     
@@ -56,11 +56,15 @@ public class InstrumentFactory {
             case BUDGET: 
                 return new BudgetHandler(instrumentDao, auditService, valueService, recurrentTransactionDao, description, parentId);          
             case GIRO: 
-                return new GiroHandler(instrumentDao, auditService, valueService, recurrentTransactionDao, description, parentId);      
+                return new GiroHandler(instrumentDao, auditService, valueService, recurrentTransactionDao, description, parentId, businesskey);      
             case DEPOT: 
                 return new DepotHandler(instrumentDao, auditService, description, parentId);  
             case REALESTATE: 
-                return new RealEstateHandler(instrumentDao, auditService, this, description, parentId);                                                                 
+                return new RealEstateHandler(instrumentDao, auditService, this, description, parentId);        
+            case CURRENCY: 
+                return new CurrencyHandler(instrumentDao, auditService, description, businesskey);        
+            case EQUITY: 
+                return new EquityHandler(instrumentDao, auditService, this, description, businesskey);                                                    
             default:
                 throw new MFException(MFMsgKey.UNKNOWN_INSTRUMENTTYPE_EXCEPTION, "can not create Instrumenthandler for instrumentType:"+instrumentType);
         }

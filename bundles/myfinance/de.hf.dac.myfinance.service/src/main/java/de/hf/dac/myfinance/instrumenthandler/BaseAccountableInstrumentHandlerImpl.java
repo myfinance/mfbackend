@@ -19,7 +19,7 @@ public final class BaseAccountableInstrumentHandlerImpl extends AbsAccountableIn
     }
 
     @Override
-    protected void createDomainObject(String description) {
+    protected void createDomainObject() {
         throw new MFException(MFMsgKey.WRONG_OPERATION_EXCEPTION,  " domainobject can not be spezified for BaseAccountableInstrumentHandler");
     }
 

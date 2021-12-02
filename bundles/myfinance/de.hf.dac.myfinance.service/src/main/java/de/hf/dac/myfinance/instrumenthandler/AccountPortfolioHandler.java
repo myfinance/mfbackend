@@ -10,7 +10,7 @@ public class AccountPortfolioHandler extends AbsAccountableInstrumentHandler imp
 
     public AccountPortfolioHandler(InstrumentDao instrumentDao, AuditService auditService, String description,
             int tenantId) {
-        super(instrumentDao, auditService, description, tenantId);
+        super(instrumentDao, auditService, description, tenantId, description);
     }
 
     public AccountPortfolioHandler(InstrumentDao instrumentDao, AuditService auditService, Instrument accountPortfolio) {
@@ -22,7 +22,7 @@ public class AccountPortfolioHandler extends AbsAccountableInstrumentHandler imp
     }
 
     @Override
-    protected void createDomainObject(String description) {
+    protected void createDomainObject() {
         domainObject = new AccountPortfolio(description, true, ts);
     }
 

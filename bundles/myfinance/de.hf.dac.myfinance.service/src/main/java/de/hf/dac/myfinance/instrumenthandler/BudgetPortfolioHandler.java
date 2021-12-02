@@ -9,7 +9,7 @@ import de.hf.dac.myfinance.api.persistence.dao.InstrumentDao;
 public class BudgetPortfolioHandler extends AbsAccountableInstrumentHandler implements AccountableInstrumentHandler {
     
     public BudgetPortfolioHandler(InstrumentDao instrumentDao, AuditService auditService, String description, int tenantId) {
-        super(instrumentDao, auditService, description, tenantId);
+        super(instrumentDao, auditService, description, tenantId, description);
     }
 
     public BudgetPortfolioHandler(InstrumentDao instrumentDao, AuditService auditService, Instrument budgetPortfolio) {
@@ -21,7 +21,7 @@ public class BudgetPortfolioHandler extends AbsAccountableInstrumentHandler impl
     }
 
     @Override
-    protected void createDomainObject(String description) {
+    protected void createDomainObject() {
         domainObject = new BudgetPortfolio(description, true, ts);
     }
 

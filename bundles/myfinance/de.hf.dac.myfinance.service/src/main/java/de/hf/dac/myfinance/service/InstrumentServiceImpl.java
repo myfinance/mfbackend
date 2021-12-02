@@ -18,37 +18,30 @@
 package de.hf.dac.myfinance.service;
 
 import de.hf.dac.api.io.audit.AuditService;
-import de.hf.dac.api.io.domain.Severity;
 import de.hf.dac.api.io.web.WebRequestService;
 import de.hf.dac.myfinance.api.domain.*;
-import de.hf.dac.myfinance.api.domain.Currency;
 import de.hf.dac.myfinance.api.exceptions.MFException;
 import de.hf.dac.myfinance.api.exceptions.MFMsgKey;
 import de.hf.dac.myfinance.api.persistence.dao.*;
 import de.hf.dac.myfinance.api.service.InstrumentService;
 import de.hf.dac.myfinance.api.service.ValueCurveService;
 import de.hf.dac.myfinance.instrumenthandler.DepotHandler;
+import de.hf.dac.myfinance.instrumenthandler.EquityHandler;
 import de.hf.dac.myfinance.instrumenthandler.InstrumentFactory;
 import de.hf.dac.myfinance.instrumenthandler.RealEstateHandler;
 import lombok.Data;
 
 import javax.inject.Inject;
-import java.time.LocalDateTime;
 import java.util.*;
 
 @Data
 public class InstrumentServiceImpl implements InstrumentService {
 
-    private InstrumentDao instrumentDao;
-    private AuditService auditService;
     private InstrumentFactory instrumentFactory;
-    private static final String AUDIT_MSG_TYPE="InstrumentService_User_Event";
 
 
     @Inject
     public InstrumentServiceImpl(InstrumentDao instrumentDao, RecurrentTransactionDao recurrentTransactionDao, WebRequestService webRequestService, AuditService auditService, ValueCurveService valueService){
-        this.instrumentDao = instrumentDao;
-        this.auditService = auditService;
         this.instrumentFactory = new InstrumentFactory(instrumentDao, auditService, valueService, recurrentTransactionDao);
     }
 
@@ -120,42 +113,32 @@ public class InstrumentServiceImpl implements InstrumentService {
 
     @Override
     public void newTenant(String description) {
-        var tenantHandler = instrumentFactory.getInstrumentHandler(InstrumentType.TENANT, description, -1);
+        var tenantHandler = instrumentFactory.getInstrumentHandler(InstrumentType.TENANT, description, -1, null);
         tenantHandler.save();
     }
 
     @Override
     public void saveEquity(String theisin, String description) {
-        String isin = theisin.toUpperCase();
-        Optional<Equity> existingSec = getEquity(isin);
-        if(!existingSec.isPresent()) {
-            Equity equity = new Equity(isin, description, true, LocalDateTime.now());
-            auditService.saveMessage("Equity inserted:" + theisin, Severity.INFO, AUDIT_MSG_TYPE);
-            instrumentDao.saveInstrument(equity);
-        } else {
-            existingSec.get().setDescription(description);
-            auditService.saveMessage("Equity " + theisin +" updated with new description: " + description, Severity.INFO, AUDIT_MSG_TYPE);
-            instrumentDao.updateInstrument(existingSec.get().getInstrumentid(), description, true);
-        }
+        var equityHandler = instrumentFactory.getInstrumentHandler(InstrumentType.EQUITY, description, -1, theisin);
+        equityHandler.save();
     }
 
     @Override
     public void saveFullEquity(String theisin, String description, List<String[]> symbols) {
-        saveEquity(theisin, description);
-        deleteSymbols(theisin);
-        for (String[] symbol : symbols) {
-            saveSymbol(theisin, symbol[0], symbol[1]);
-        }
+        var equityHandler = (EquityHandler)instrumentFactory.getInstrumentHandler(InstrumentType.EQUITY, description, -1, theisin);
+        equityHandler.saveFullEquity(symbols);
     }
 
     @Override
     public Optional<Instrument> getCurrency(String currencyCode){
-        return instrumentDao.getCurrency(currencyCode);
+        var currencyHandler = instrumentFactory.getInstrumentHandler(InstrumentType.CURRENCY, "", -1, currencyCode);
+        return currencyHandler.getSavedDomainObject();
     }
 
     @Override
-    public Optional<Equity> getEquity(String isin){
-        return instrumentDao.getEquity(isin);
+    public Optional<Instrument> getEquity(String isin){
+        var equityHandler = instrumentFactory.getInstrumentHandler(InstrumentType.EQUITY, "", -1, isin);
+        return equityHandler.getSavedDomainObject();
     }
 
     @Override
@@ -179,79 +162,37 @@ public class InstrumentServiceImpl implements InstrumentService {
 
     @Override
     public void saveSymbol(String theisin, String thesymbol, String thecurrencyCode){
-
-        String isin = theisin.toUpperCase();
-        String symbol = thesymbol.toUpperCase();
-        String currencyCode = thecurrencyCode.toUpperCase().trim();
-
-        Optional<Instrument> currency = getCurrency(currencyCode);
-        if(!currency.isPresent()) {
-            throw new MFException(MFMsgKey.UNKNOWN_CURRENCY_EXCEPTION, "Symbol not saved: unknown currency:"+currencyCode);
-        }
-        Optional<Equity> existingSec = getEquity(isin);
-        if(!existingSec.isPresent()){
-            throw new MFException(MFMsgKey.UNKNOWN_INSTRUMENT_EXCEPTION, "Symbol not saved: unknown security:"+isin);
-        }
-        Set<SecuritySymbols> symbols = existingSec.get().getSymbols();
-        SecuritySymbols newSymbol = new SecuritySymbols(currency.get(), existingSec.get().getInstrumentid(), symbol);
-        if(symbols!=null && !symbols.isEmpty()){
-            Optional<SecuritySymbols> existingSymbol = symbols.stream().filter(i->i.getSymbol().equals(symbol)).findFirst();
-            if(existingSymbol.isPresent()) {
-                newSymbol = existingSymbol.get();
-                newSymbol.setCurrency(currency.get());
-                auditService.saveMessage("Symbol " + thesymbol +" updated with new currency: " + thecurrencyCode, Severity.INFO, AUDIT_MSG_TYPE);
-            }
-            else {
-                auditService.saveMessage("Symbol with currency "+thecurrencyCode+" inserted:" + thesymbol, Severity.INFO, AUDIT_MSG_TYPE);
-            }
-        }
-        instrumentDao.saveSymbol(newSymbol);
+        var equityHandler = (EquityHandler)instrumentFactory.getInstrumentHandler(InstrumentType.EQUITY, "", -1, theisin);
+        equityHandler.saveSymbol(thesymbol, thecurrencyCode);
     }
 
     @Override
     public void deleteSymbols(String theisin){
-
-        String isin = theisin.toUpperCase();
-
-        Optional<Equity> existingSec = getEquity(isin);
-        if(!existingSec.isPresent()){
-            throw new MFException(MFMsgKey.UNKNOWN_INSTRUMENT_EXCEPTION, "Symbols not deleted: unknown security:"+isin);
-        }
-        Set<SecuritySymbols> symbols = existingSec.get().getSymbols();
-        for (SecuritySymbols securitySymbol : symbols) {
-            auditService.saveMessage(instrumentDao.deleteSymbols(securitySymbol.getSymbolid()), Severity.INFO, AUDIT_MSG_TYPE);
-        }
+        var equityHandler = (EquityHandler)instrumentFactory.getInstrumentHandler(InstrumentType.EQUITY, "", -1, theisin);
+        equityHandler.deleteSymbols();
     }
 
     @Override
     public void saveCurrency(String currencyCode, String description) {
-        String curCode = currencyCode.toUpperCase();
-        Optional<Instrument> existingCur = getCurrency(curCode);
-        if(!existingCur.isPresent()) {
-            Instrument currency = new Currency(currencyCode, description, true, LocalDateTime.now());
-            auditService.saveMessage("Currency inserted:" + currencyCode, Severity.INFO, AUDIT_MSG_TYPE);
-            instrumentDao.saveInstrument(currency);
-        } else {
-            auditService.saveMessage("Currency " + currencyCode +" updated with new description: " + description, Severity.INFO, AUDIT_MSG_TYPE);
-            existingCur.get().setDescription(description);
-        }
+        var currencyHandler = instrumentFactory.getInstrumentHandler(InstrumentType.CURRENCY, description, -1, currencyCode);
+        currencyHandler.save();
     }
 
     @Override
     public void newBudget(String description, int budgetGroupId) {
-        var budgetHandler = instrumentFactory.getInstrumentHandler(InstrumentType.BUDGET, description, budgetGroupId);
+        var budgetHandler = instrumentFactory.getInstrumentHandler(InstrumentType.BUDGET, description, budgetGroupId, null);
         budgetHandler.save();
      }
 
     @Override
     public void newGiroAccount(String description, int tenantId) {
-        var giroHandler = instrumentFactory.getInstrumentHandler(InstrumentType.GIRO, description, tenantId);
+        var giroHandler = instrumentFactory.getInstrumentHandler(InstrumentType.GIRO, description, tenantId, description);
         giroHandler.save();
     }
 
     @Override
     public void newDepotAccount(String description, int tenantId, int defaultGiroId, int valueBudgetId) {
-        DepotHandler depotHandler = (DepotHandler)instrumentFactory.getInstrumentHandler(InstrumentType.DEPOT, description, tenantId);
+        DepotHandler depotHandler = (DepotHandler)instrumentFactory.getInstrumentHandler(InstrumentType.DEPOT, description, tenantId, null);
         depotHandler.initAdditionalFields(defaultGiroId, valueBudgetId);
         depotHandler.save();
     }
@@ -260,12 +201,14 @@ public class InstrumentServiceImpl implements InstrumentService {
     public void updateDepotAccount(int instrumentId, String description, boolean isActive, int defaultGiroId) {
         var depotHandler = (DepotHandler)instrumentFactory.getDepotHandler(instrumentId, true);
         depotHandler.setDefaultGiroId(defaultGiroId);
-        depotHandler.updateInstrument(description, isActive);
+        depotHandler.setActive(isActive);
+        depotHandler.setDescription(description);
+        depotHandler.save();
     }
 
     @Override
     public void newRealEstate(String description, int tenantId, int valueBudgetId, List<ValuePerDate> yieldgoals, List<ValuePerDate> realEstateProfits) {
-        var realEstateHandler = (RealEstateHandler)instrumentFactory.getInstrumentHandler(InstrumentType.REALESTATE, description, tenantId);
+        var realEstateHandler = (RealEstateHandler)instrumentFactory.getInstrumentHandler(InstrumentType.REALESTATE, description, tenantId, null);
         realEstateHandler.initAdditionalFields(valueBudgetId, yieldgoals, realEstateProfits);
         realEstateHandler.save();
     }
@@ -274,12 +217,17 @@ public class InstrumentServiceImpl implements InstrumentService {
     public void updateRealEstate(int instrumentId, String description, List<ValuePerDate> yieldgoals, List<ValuePerDate> realEstateProfits, boolean isActive) {
         var realEstateHandler = instrumentFactory.getRealEstateHandler(instrumentId, true);
         realEstateHandler.initAdditionalFields(-1, yieldgoals, realEstateProfits);
-        realEstateHandler.updateInstrument(description, isActive);
+        realEstateHandler.setActive(isActive);
+        realEstateHandler.setDescription(description);
+        realEstateHandler.save();
     }
 
     @Override
     public void updateInstrument(int instrumentId, String description, boolean isActive) {
         var instrumentHandler = instrumentFactory.getInstrumentHandler(instrumentId);
-        instrumentHandler.updateInstrument(description, isActive);
+        instrumentHandler.setActive(isActive);
+        instrumentHandler.setDescription(description);
+        instrumentHandler.save();
     } 
 }
+ 

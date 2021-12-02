@@ -11,7 +11,7 @@ import de.hf.dac.myfinance.api.service.ValueCurveService;
 public class BudgetHandler extends AbsCashInstrumentHandler implements AccountableInstrumentHandler {
 
     public BudgetHandler(InstrumentDao instrumentDao, AuditService auditService, ValueCurveService valueService, RecurrentTransactionDao recurrentTransactionDao, String description, int budgetGroupId) {
-        super(instrumentDao, auditService, valueService, recurrentTransactionDao, description, budgetGroupId);
+        super(instrumentDao, auditService, valueService, recurrentTransactionDao, description, budgetGroupId, description);
     }
 
     public BudgetHandler(InstrumentDao instrumentDao, AuditService auditService, ValueCurveService valueService, RecurrentTransactionDao recurrentTransactionDao, Instrument budget) {
@@ -23,8 +23,9 @@ public class BudgetHandler extends AbsCashInstrumentHandler implements Accountab
     }
 
     @Override
-    protected void createDomainObject(String description) {
+    protected void createDomainObject() {
         domainObject = new Budget(description, true, ts);
+        domainObject.setBusinesskey(businesskey);
     }
 
     @Override

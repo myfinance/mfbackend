@@ -16,8 +16,8 @@ public abstract class AbsCashInstrumentHandler extends AbsAccountableInstrumentH
     private ValueCurveService valueService;
     private RecurrentTransactionDao recurrentTransactionDao;
 
-    public AbsCashInstrumentHandler(InstrumentDao instrumentDao, AuditService auditService, ValueCurveService valueService, RecurrentTransactionDao recurrentTransactionDao, String description, int tenantId) {
-        super(instrumentDao, auditService, description, tenantId);
+    public AbsCashInstrumentHandler(InstrumentDao instrumentDao, AuditService auditService, ValueCurveService valueService, RecurrentTransactionDao recurrentTransactionDao, String description, int tenantId, String businesskey) {
+        super(instrumentDao, auditService, description, tenantId, businesskey);
         this.valueService = valueService;
         this.recurrentTransactionDao = recurrentTransactionDao;
     }
@@ -34,8 +34,8 @@ public abstract class AbsCashInstrumentHandler extends AbsAccountableInstrumentH
         this.recurrentTransactionDao = recurrentTransactionDao;
     }
 
-    protected AbsCashInstrumentHandler(InstrumentDao instrumentDao, AuditService auditService, ValueCurveService valueService, RecurrentTransactionDao recurrentTransactionDao, String description, int tenantId, boolean addToAccountPf) {
-        super(instrumentDao, auditService, description, tenantId, addToAccountPf);
+    protected AbsCashInstrumentHandler(InstrumentDao instrumentDao, AuditService auditService, ValueCurveService valueService, RecurrentTransactionDao recurrentTransactionDao, String description, int tenantId, boolean addToAccountPf, String businesskey) {
+        super(instrumentDao, auditService, description, tenantId, addToAccountPf, businesskey);
         this.valueService = valueService;
         this.recurrentTransactionDao = recurrentTransactionDao;
     }

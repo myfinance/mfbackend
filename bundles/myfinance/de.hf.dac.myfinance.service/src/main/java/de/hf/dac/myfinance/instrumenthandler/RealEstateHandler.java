@@ -33,12 +33,12 @@ public class RealEstateHandler extends AbsAccountableInstrumentHandler implement
     }
 
     public RealEstateHandler(InstrumentDao instrumentDao, AuditService auditService, InstrumentFactory instrumentFactory, String description, int tenantId) {
-        super(instrumentDao, auditService, description, tenantId, true);
+        super(instrumentDao, auditService, description, tenantId, true, description);
         this.instrumentFactory = instrumentFactory;
     }
 
     @Override
-    protected void createDomainObject(String description) {
+    protected void createDomainObject() {
         domainObject = new RealEstate(description, true, ts);
     }
 
@@ -66,11 +66,11 @@ public class RealEstateHandler extends AbsAccountableInstrumentHandler implement
     }
 
     @Override
-    public void save() {
+    protected void saveNewInstrument() {
         if(!isRealEstateInitialized) {
             throw new MFException(MFMsgKey.OBJECT_NOT_INITIALIZED_EXCEPTION, "AdditionalFields for RealEstate are not set:");
         }
-        super.save();
+        super.saveNewInstrument();
         savePropertyList(InstrumentPropertyType.YIELDGOAL, yieldgoals);
         savePropertyList(InstrumentPropertyType.REALESTATEPROFITS, realEstateProfits);
 
@@ -85,8 +85,8 @@ public class RealEstateHandler extends AbsAccountableInstrumentHandler implement
     }
 
     @Override
-    public void updateInstrument(String description, boolean isActive) {
-        super.updateInstrument(description, isActive);
+    protected void updateInstrument() {
+        super.updateInstrument();
         deleteInstrumentPropertyList();
         savePropertyList(InstrumentPropertyType.YIELDGOAL, yieldgoals);
         savePropertyList(InstrumentPropertyType.REALESTATEPROFITS, realEstateProfits);
@@ -103,7 +103,8 @@ public class RealEstateHandler extends AbsAccountableInstrumentHandler implement
     @Override
     protected void validateInstrument4Inactivation() {
         var budgetGroupHandler = instrumentFactory.getInstrumentHandler(getBudgetGroupId());
-        budgetGroupHandler.updateInstrument(false);
+        budgetGroupHandler.setActive(false);
+        budgetGroupHandler.save();
     }
 
 }

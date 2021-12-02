@@ -24,11 +24,11 @@ public class DepotHandler extends AbsAccountableInstrumentHandler implements Acc
     }
 
     public DepotHandler(InstrumentDao instrumentDao, AuditService auditService, String description, int tenantId) {
-        super(instrumentDao, auditService, description, tenantId, true);
+        super(instrumentDao, auditService, description, tenantId, true, description);
     }
 
     @Override
-    protected void createDomainObject(String description) {
+    protected void createDomainObject() {
         domainObject = new Depot(description, true, ts);
     }
 
@@ -61,18 +61,18 @@ public class DepotHandler extends AbsAccountableInstrumentHandler implements Acc
     }
 
     @Override
-    public void save() {
+    protected void saveNewInstrument() {
         if(!isDepotInitialized) {
             throw new MFException(MFMsgKey.OBJECT_NOT_INITIALIZED_EXCEPTION, "AdditionalFields for depot are not set:");
         }
-        super.save();
+        super.saveNewInstrument();
         saveProperty(InstrumentPropertyType.DEFAULTGIROID, defaultGiroId);
         instrumentGraphHandler.addInstrumentToGraph(instrumentId, valueBudgetId, EdgeType.VALUEBUDGET);
     }
 
     @Override
-    public void updateInstrument(String description, boolean isActive) {
-        super.updateInstrument(description, isActive);
+    protected void updateInstrument() {
+        super.updateInstrument();
         deleteInstrumentPropertyList();
         saveProperty(InstrumentPropertyType.DEFAULTGIROID, defaultGiroId);
     }

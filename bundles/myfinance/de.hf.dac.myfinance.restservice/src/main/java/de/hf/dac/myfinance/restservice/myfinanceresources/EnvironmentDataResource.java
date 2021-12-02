@@ -25,6 +25,7 @@ import de.hf.dac.myfinance.api.application.OpLevel;
 import de.hf.dac.myfinance.api.application.OpType;
 import de.hf.dac.myfinance.api.application.servicecontext.MDEnvironmentContext;
 import de.hf.dac.myfinance.api.domain.Equity;
+import de.hf.dac.myfinance.api.domain.Instrument;
 import de.hf.dac.myfinance.api.domain.SecuritySymbols;
 import de.hf.dac.myfinance.api.domain.InstrumentType;
 import de.hf.dac.myfinance.api.domain.RecurrentFrequency;
@@ -205,8 +206,8 @@ public class EnvironmentDataResource extends BaseSecuredResource<OpType,OpLevel>
     @ApiOperation(value = "get Equity", response = InstrumentResource.class)
     public InstrumentResource getEquity(@QueryParam("isin") @ApiParam(value="the isin") String isin) {
         checkOperationAllowed(OpType.READ);
-        Optional<Equity> equity = marketDataEnvironment.getInstrumentService().getEquity(isin);
-        if(equity.isPresent()) return new InstrumentResource(new InstrumentModel(equity.get()));
+        Optional<Instrument> equity = marketDataEnvironment.getInstrumentService().getEquity(isin);
+        if(equity.isPresent()) return new InstrumentResource(new InstrumentModel((Equity)equity.get()));
         else
             throw new MFException(MFMsgKey.NO_INSTRUMENT_FOUND_EXCEPTION, "no Instrument found with ISIN "+isin);
 

@@ -10,8 +10,8 @@ import de.hf.dac.myfinance.api.service.ValueCurveService;
 
 public class GiroHandler extends AbsCashInstrumentHandler implements AccountableInstrumentHandler {
     
-    public GiroHandler(InstrumentDao instrumentDao, AuditService auditService, ValueCurveService valueService, RecurrentTransactionDao recurrentTransactionDao, String description, int tenantId) {
-        super(instrumentDao, auditService, valueService, recurrentTransactionDao, description, tenantId, true);
+    public GiroHandler(InstrumentDao instrumentDao, AuditService auditService, ValueCurveService valueService, RecurrentTransactionDao recurrentTransactionDao, String description, int tenantId, String businesskey) {
+        super(instrumentDao, auditService, valueService, recurrentTransactionDao, description, tenantId, true, businesskey);
     }
 
     public GiroHandler(InstrumentDao instrumentDao, AuditService auditService, ValueCurveService valueService, RecurrentTransactionDao recurrentTransactionDao, Instrument giro) {
@@ -23,7 +23,7 @@ public class GiroHandler extends AbsCashInstrumentHandler implements Accountable
     }
 
     @Override
-    protected void createDomainObject(String description) {
+    protected void createDomainObject() {
         domainObject = new Giro(description, true, ts);
     }
 

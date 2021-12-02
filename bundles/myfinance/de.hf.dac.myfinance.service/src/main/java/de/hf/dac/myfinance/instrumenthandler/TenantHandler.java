@@ -10,7 +10,7 @@ import de.hf.dac.myfinance.api.domain.Tenant;
 import de.hf.dac.myfinance.api.persistence.dao.InstrumentDao;
 
 public class TenantHandler extends AbsAccountableInstrumentHandler implements AccountableInstrumentHandler {
-    private  InstrumentFactory instrumentFactory;
+    private InstrumentFactory instrumentFactory;
 
     private static final String DEFAULT_ACCPF_PREFIX = "accountPf_";
     private static final String DEFAULT_BUDGETPF_PREFIX = "budgetPf_";
@@ -28,7 +28,7 @@ public class TenantHandler extends AbsAccountableInstrumentHandler implements Ac
     }
 
     public TenantHandler(InstrumentDao instrumentDao, AuditService auditService, InstrumentFactory instrumentFactory, String description) {
-        super(instrumentDao, auditService, description, -1);
+        super(instrumentDao, auditService, description, -1, description);
         this.instrumentFactory = instrumentFactory;
     }
 
@@ -37,8 +37,8 @@ public class TenantHandler extends AbsAccountableInstrumentHandler implements Ac
     } 
 
     @Override
-    public void save() {
-        super.save();
+    protected void saveNewInstrument() {
+        super.saveNewInstrument();
 
         var budgetPortfolioHandler = instrumentFactory.getInstrumentHandler(InstrumentType.BUDGETPORTFOLIO, DEFAULT_BUDGETPF_PREFIX+domainObject.getDescription(), instrumentId);
         budgetPortfolioHandler.setTreeLastChanged(ts);
@@ -81,7 +81,7 @@ public class TenantHandler extends AbsAccountableInstrumentHandler implements Ac
     }
 
     @Override
-    protected void createDomainObject(String description) {
+    protected void createDomainObject() {
         domainObject = new Tenant(description, true, ts);
     }
 
@@ -96,8 +96,8 @@ public class TenantHandler extends AbsAccountableInstrumentHandler implements Ac
     }
 
     @Override
-    public void updateInstrument(String description, boolean isActive) {
-        super.updateInstrument(description, isActive);
+    protected void updateInstrument() {
+        super.updateInstrument();
         List<Instrument> instruments = instrumentGraphHandler.getAllInstrumentChilds(instrumentId);
         renameDefaultTenantChild(instrumentId, description, oldDesc, DEFAULT_BUDGETPF_PREFIX, instruments);
         renameDefaultTenantChild(instrumentId, description, oldDesc, DEFAULT_BUDGETGROUP_PREFIX, instruments);

@@ -55,14 +55,14 @@ public class InstrumentDaoImpl extends BaseDao<Instrument> implements Instrument
     }
 
     @Override
-    public Optional<Equity> getEquity(String isin) {
-        Optional<Equity> result;
+    public Optional<Instrument> getEquity(String isin) {
+        Optional<Instrument> result;
         try{
             marketDataEm = this.marketDataEmf.createEntityManager();
             Query query = marketDataEm.createQuery("select a FROM Instrument a WHERE instrumentTypeId= :instrumentTypeId and businesskey = :isin");
             query.setParameter("instrumentTypeId", InstrumentType.EQUITY.getValue());
             query.setParameter("isin", isin);
-            result = getFirstEquityQueryResult(query);
+            result = getFirstQueryResult(query);
         } finally {
             marketDataEm.close();
         }
@@ -283,13 +283,6 @@ public class InstrumentDaoImpl extends BaseDao<Instrument> implements Instrument
     @Override
     public void saveGraphEntry(InstrumentGraphEntry instrumentGraphEntry) {
         save(instrumentGraphEntry);
-    }
-
-    private Optional<Equity> getFirstEquityQueryResult(Query query) {
-        Optional<Equity> result = Optional.empty();
-        Object object = getFirstQueryObjectResult(query);
-        if(object!=null) result = Optional.of((Equity) object);
-        return result;
     }
 
     private Optional<Source> getFirstSourceQueryResult(Query query) {

@@ -2,6 +2,7 @@ package de.hf.dac.myfinance.instrumenthandler;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 import de.hf.dac.myfinance.api.domain.Instrument;
 import de.hf.dac.myfinance.api.domain.InstrumentProperties;
@@ -16,7 +17,7 @@ public interface InstrumentHandler {
     void validateInstrument();
     void setTreeLastChanged(LocalDateTime ts);
     void save();
-    void updateInstrument(boolean isActive);
-    void updateInstrument(String description, boolean isActive);
-    
+    void setActive(boolean isActive);
+    void setDescription(String description);
+    Optional<Instrument> getSavedDomainObject() ;
 }

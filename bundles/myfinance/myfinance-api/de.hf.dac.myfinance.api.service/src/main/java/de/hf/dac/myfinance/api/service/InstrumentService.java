@@ -44,7 +44,7 @@ public interface InstrumentService {
     void newRealEstate(String description, int tenantId, int valueBudgetId, List<ValuePerDate> yieldgoals, List<ValuePerDate> realEstateProfits);
     void updateRealEstate(int instrumentId, String description, List<ValuePerDate> yieldgoals, List<ValuePerDate> realEstateProfits, boolean isActive);
     Optional<Instrument> getCurrency(String currencyCode);
-    Optional<Equity> getEquity(String isin);
+    Optional<Instrument> getEquity(String isin);
     Instrument getSecurity(String isin);
     Instrument getSecurity(String isin, String errMsg);
     List<Instrument> getSecurities();

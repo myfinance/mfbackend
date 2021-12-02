@@ -28,7 +28,7 @@ public class BudgetGroupHandler extends AbsAccountableInstrumentHandler implemen
     }
 
     public BudgetGroupHandler(InstrumentDao instrumentDao, AuditService auditService, InstrumentFactory instrumentFactory, String description, int budgetPFId) {
-        super(instrumentDao, auditService, description, budgetPFId);
+        super(instrumentDao, auditService, description, budgetPFId, description);
         this.instrumentFactory = instrumentFactory;
     }
 
@@ -48,8 +48,8 @@ public class BudgetGroupHandler extends AbsAccountableInstrumentHandler implemen
     } 
 
     @Override
-    public void save(){
-        super.save();
+    protected void saveNewInstrument(){
+        super.saveNewInstrument();
         var budgetHandler = instrumentFactory.getInstrumentHandler(InstrumentType.BUDGET, DEFAULT_INCOMEBUDGET_PREFIX + domainObject.getDescription(), instrumentId);
         budgetHandler.setTreeLastChanged(ts);
         budgetHandler.save();
@@ -57,7 +57,7 @@ public class BudgetGroupHandler extends AbsAccountableInstrumentHandler implemen
     }
 
     @Override
-    protected void createDomainObject(String description) {
+    protected void createDomainObject() {
         domainObject = new BudgetGroup(description, true, ts);
     }
 
@@ -72,18 +72,20 @@ public class BudgetGroupHandler extends AbsAccountableInstrumentHandler implemen
     }
 
     @Override
-    public void updateInstrument(String description, boolean isActive) {
-        super.updateInstrument(description, isActive);
+    protected void updateInstrument() {
+        super.updateInstrument();
         var incomeBudget = getIncomeBudget();
         var handler = instrumentFactory.getInstrumentHandler(incomeBudget.getInstrumentid());
-        handler.updateInstrument(DEFAULT_INCOMEBUDGET_PREFIX + domainObject.getDescription(), true);
+        handler.setDescription(DEFAULT_INCOMEBUDGET_PREFIX + domainObject.getDescription());
+        handler.save();
     }
 
     @Override
     protected void validateInstrument4Inactivation() {
         for(Instrument budget : getInstrumentChilds(EdgeType.TENANTGRAPH, 1)) {
             var budgetHandler = instrumentFactory.getInstrumentHandler(budget.getInstrumentid());
-            budgetHandler.updateInstrument(false);
+            budgetHandler.setActive(false);
+            budgetHandler.save();
         }
     }
-}
+} 

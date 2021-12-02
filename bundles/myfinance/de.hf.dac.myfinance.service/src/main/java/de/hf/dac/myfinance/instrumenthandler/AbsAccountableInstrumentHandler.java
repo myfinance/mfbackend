@@ -16,20 +16,19 @@ import de.hf.dac.myfinance.api.persistence.dao.InstrumentDao;
  * This abstract class is the base for all Instruments a Tenant can be directly connected with and the Tenant it self.
  * Securities like Equities  and Bonds are only connected via Trades and so use a different base class
  */
-public abstract class AbsAccountableInstrumentHandler extends AbsInstrumentHandler{
+public abstract class AbsAccountableInstrumentHandler extends AbsInstrumentHandlerWithProperty{
     protected final InstrumentGraphHandler instrumentGraphHandler;
     private int parentId;
 
-    protected AbsAccountableInstrumentHandler(InstrumentDao instrumentDao, AuditService auditService, String description, int parentId) {
-        super(instrumentDao, auditService);
+    protected AbsAccountableInstrumentHandler(InstrumentDao instrumentDao, AuditService auditService, String description, int parentId, String businesskey) {
+        super(instrumentDao, auditService, description, businesskey);
         this.instrumentGraphHandler = new InstrumentGraphHandlerImpl(this.instrumentDao);
-        createDomainObject(description);
         setParent(parentId);
         validateParent();
     }
 
-    protected AbsAccountableInstrumentHandler(InstrumentDao instrumentDao, AuditService auditService, String description, int tenantId, boolean addToAccountPf) {
-        this(instrumentDao, auditService, description, tenantId);
+    protected AbsAccountableInstrumentHandler(InstrumentDao instrumentDao, AuditService auditService, String description, int tenantId, boolean addToAccountPf, String businesskey) {
+        this(instrumentDao, auditService, description, tenantId, businesskey);
         setParentToAccountPf();
     }
 
@@ -43,8 +42,8 @@ public abstract class AbsAccountableInstrumentHandler extends AbsInstrumentHandl
         this.instrumentGraphHandler = new InstrumentGraphHandlerImpl(this.instrumentDao);
     }
 
-    public void save() {
-        super.save();
+    protected void saveNewInstrument() {
+        super.saveNewInstrument();
         updateParent();
         instrumentGraphHandler.addInstrumentToGraph(instrumentId, parentId);
     }
