@@ -117,33 +117,6 @@ public class InstrumentDaoImpl extends BaseDao<Instrument> implements Instrument
     }
 
     @Override
-    public Optional<Source> getSource(int sourceId) {
-        Optional<Source> result;
-        try {
-            marketDataEm = this.marketDataEmf.createEntityManager();
-            Query query = marketDataEm.createQuery("select a FROM Source a WHERE id = :id");
-            query.setParameter("id", sourceId);
-            result = getFirstSourceQueryResult(query);
-        } finally {
-            marketDataEm.close();
-        }
-        return result;
-    }
-
-    @Override
-    public List<Source> getActiveSources() {
-        List<Source> result;
-        try{
-            marketDataEm = this.marketDataEmf.createEntityManager();
-            Query query = marketDataEm.createQuery("select a FROM Source a WHERE isactive = true");
-            result = (List<Source>) query.getResultList();
-        } finally {
-            marketDataEm.close();
-        }
-        return result;
-    }
-
-    @Override
     public void saveInstrument(Instrument instrument) {
         save(instrument);
     }
@@ -283,13 +256,6 @@ public class InstrumentDaoImpl extends BaseDao<Instrument> implements Instrument
     @Override
     public void saveGraphEntry(InstrumentGraphEntry instrumentGraphEntry) {
         save(instrumentGraphEntry);
-    }
-
-    private Optional<Source> getFirstSourceQueryResult(Query query) {
-        Optional<Source> result = Optional.empty();
-        Object object = getFirstQueryObjectResult(query);
-        if(object!=null) result = Optional.of((Source) object);
-        return result;
     }
 
     @Override

@@ -37,6 +37,15 @@ public class InstrumentFactory {
     }
 
     /**
+     * returns a BaseSecurityHandler with type and Tenant indifferent functions like getSecurities().
+     * use this if you do not know the type and it doesn't matter for your purpose
+     * @return the getBaseSecurityHandler
+     */
+    public BaseSecurityHandler getBaseSecurityHandler() {
+        return new BaseSecurityHandler(instrumentDao, auditService);
+    }
+
+    /**
      * creates an Instrumenthandler for a new Instrument
      * @param instrumentType the type of the new instrument
      * @param description the description
@@ -62,7 +71,7 @@ public class InstrumentFactory {
             case REALESTATE: 
                 return new RealEstateHandler(instrumentDao, auditService, this, description, parentId);        
             case CURRENCY: 
-                return new CurrencyHandler(instrumentDao, auditService, description, businesskey);        
+                return new CurrencyHandler(instrumentDao, auditService, this, description, businesskey);        
             case EQUITY: 
                 return new EquityHandler(instrumentDao, auditService, this, description, businesskey);                                                    
             default:

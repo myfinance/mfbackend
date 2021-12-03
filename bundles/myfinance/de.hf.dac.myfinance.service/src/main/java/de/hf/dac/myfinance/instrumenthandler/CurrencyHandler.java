@@ -19,8 +19,8 @@ public class CurrencyHandler extends SecurityHandler {
     }
 
     @Override
-    protected Optional<Instrument> getSecurity(String businesskey){
-        return instrumentDao.getEquity(businesskey);
+    protected Optional<Instrument> getSecurity(){
+        return instrumentDao.getSecurity(businesskey);
     }
 
 

@@ -20,8 +20,6 @@ package de.hf.dac.myfinance.service;
 import de.hf.dac.api.io.audit.AuditService;
 import de.hf.dac.api.io.web.WebRequestService;
 import de.hf.dac.myfinance.api.domain.*;
-import de.hf.dac.myfinance.api.exceptions.MFException;
-import de.hf.dac.myfinance.api.exceptions.MFMsgKey;
 import de.hf.dac.myfinance.api.persistence.dao.*;
 import de.hf.dac.myfinance.api.service.InstrumentService;
 import de.hf.dac.myfinance.api.service.ValueCurveService;
@@ -148,16 +146,12 @@ public class InstrumentServiceImpl implements InstrumentService {
 
     @Override
     public Instrument getSecurity(String isin, String errMsg) {
-        var instrument = instrumentDao.getSecurity(isin);
-        if(!instrument.isPresent()){
-            throw new MFException(MFMsgKey.UNKNOWN_INSTRUMENT_EXCEPTION, errMsg + " Instrument for isin:"+isin + " not found");
-        }
-        return instrument.get();
+        return instrumentFactory.getBaseSecurityHandler().getSecurity(isin, errMsg);
     }
 
     @Override
     public List<Instrument> getSecurities(){
-        return instrumentDao.getSecurities();
+        return instrumentFactory.getBaseSecurityHandler().getSecurities();
     }
 
     @Override

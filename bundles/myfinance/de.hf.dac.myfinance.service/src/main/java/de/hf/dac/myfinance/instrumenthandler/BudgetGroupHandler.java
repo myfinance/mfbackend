@@ -50,7 +50,7 @@ public class BudgetGroupHandler extends AbsAccountableInstrumentHandler implemen
     @Override
     protected void saveNewInstrument(){
         super.saveNewInstrument();
-        var budgetHandler = instrumentFactory.getInstrumentHandler(InstrumentType.BUDGET, DEFAULT_INCOMEBUDGET_PREFIX + domainObject.getDescription(), instrumentId);
+        var budgetHandler = instrumentFactory.getInstrumentHandler(InstrumentType.BUDGET, DEFAULT_INCOMEBUDGET_PREFIX + domainObject.getDescription(), instrumentId, DEFAULT_INCOMEBUDGET_PREFIX + domainObject.getDescription());
         budgetHandler.setTreeLastChanged(ts);
         budgetHandler.save();
         saveProperty(InstrumentPropertyType.INCOMEBUDGETID, budgetHandler.getInstrumentId());

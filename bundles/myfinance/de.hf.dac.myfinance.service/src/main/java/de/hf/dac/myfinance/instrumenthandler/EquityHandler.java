@@ -33,7 +33,7 @@ public class EquityHandler extends SecurityHandler {
     }
 
     @Override
-    protected Optional<Instrument> getSecurity(String businesskey){
+    protected Optional<Instrument> getSecurity(){
         return instrumentDao.getEquity(businesskey);
     }
 

@@ -29,8 +29,6 @@ public interface InstrumentDao {
     List<Instrument> getSecurities();
     Optional<Instrument> getCurrency(String currencyCode);
     Optional<Instrument> getInstrument(int instrumentId);
-    Optional<Source> getSource(int sourceId);
-    List<Source> getActiveSources();
     void saveInstrument(Instrument instrument);
     void updateInstrument(int instrumentId, String description, boolean isActive);
     void saveSymbol(SecuritySymbols symbol);

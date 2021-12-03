@@ -6,7 +6,6 @@ import java.util.Optional;
 
 import de.hf.dac.myfinance.api.domain.Budget;
 import de.hf.dac.myfinance.api.domain.EdgeType;
-import de.hf.dac.myfinance.api.domain.Equity;
 import de.hf.dac.myfinance.api.domain.Giro;
 import de.hf.dac.myfinance.api.domain.Instrument;
 import de.hf.dac.myfinance.api.domain.InstrumentProperties;
@@ -94,7 +93,7 @@ public class InstrumentServiceTestImpl implements InstrumentService {
     }
 
     @Override
-    public Optional<Equity> getEquity(String isin) {
+    public Optional<Instrument> getEquity(String isin) {
         // TODO Auto-generated method stub
         return null;
     }

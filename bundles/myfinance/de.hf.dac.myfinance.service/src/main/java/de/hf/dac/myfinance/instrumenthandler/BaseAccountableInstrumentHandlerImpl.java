@@ -1,8 +1,10 @@
 package de.hf.dac.myfinance.instrumenthandler;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 import de.hf.dac.api.io.audit.AuditService;
+import de.hf.dac.myfinance.api.domain.Instrument;
 import de.hf.dac.myfinance.api.domain.InstrumentType;
 import de.hf.dac.myfinance.api.exceptions.MFException; 
 import de.hf.dac.myfinance.api.exceptions.MFMsgKey;

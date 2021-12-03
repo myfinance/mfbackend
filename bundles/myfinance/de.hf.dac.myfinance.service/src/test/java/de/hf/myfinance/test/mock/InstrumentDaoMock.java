@@ -6,12 +6,10 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 import de.hf.dac.myfinance.api.domain.EdgeType;
-import de.hf.dac.myfinance.api.domain.Equity;
 import de.hf.dac.myfinance.api.domain.Instrument;
 import de.hf.dac.myfinance.api.domain.InstrumentGraphEntry;
 import de.hf.dac.myfinance.api.domain.InstrumentProperties;
 import de.hf.dac.myfinance.api.domain.SecuritySymbols;
-import de.hf.dac.myfinance.api.domain.Source;
 import de.hf.dac.myfinance.api.persistence.dao.InstrumentDao;
 
 public class InstrumentDaoMock implements InstrumentDao {
@@ -30,7 +28,7 @@ public class InstrumentDaoMock implements InstrumentDao {
     }
 
     @Override
-    public Optional<Equity> getEquity(String isin) {
+    public Optional<Instrument> getEquity(String isin) {
         // TODO Auto-generated method stub
         return null;
     }
@@ -55,18 +53,6 @@ public class InstrumentDaoMock implements InstrumentDao {
 
     @Override
     public Optional<Instrument> getInstrument(int instrumentId) {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    @Override
-    public Optional<Source> getSource(int sourceId) {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    @Override
-    public List<Source> getActiveSources() {
         // TODO Auto-generated method stub
         return null;
     }

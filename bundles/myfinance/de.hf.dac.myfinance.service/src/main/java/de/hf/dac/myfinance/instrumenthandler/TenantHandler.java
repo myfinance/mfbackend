@@ -40,14 +40,14 @@ public class TenantHandler extends AbsAccountableInstrumentHandler implements Ac
     protected void saveNewInstrument() {
         super.saveNewInstrument();
 
-        var budgetPortfolioHandler = instrumentFactory.getInstrumentHandler(InstrumentType.BUDGETPORTFOLIO, DEFAULT_BUDGETPF_PREFIX+domainObject.getDescription(), instrumentId);
+        var budgetPortfolioHandler = instrumentFactory.getInstrumentHandler(InstrumentType.BUDGETPORTFOLIO, DEFAULT_BUDGETPF_PREFIX+domainObject.getDescription(), instrumentId, DEFAULT_BUDGETPF_PREFIX+domainObject.getDescription());
         budgetPortfolioHandler.setTreeLastChanged(ts);
         budgetPortfolioHandler.save();
-        var budgetGroupHandler = instrumentFactory.getInstrumentHandler(InstrumentType.BUDGETGROUP, DEFAULT_BUDGETGROUP_PREFIX+domainObject.getDescription(), budgetPortfolioHandler.getInstrumentId());
+        var budgetGroupHandler = instrumentFactory.getInstrumentHandler(InstrumentType.BUDGETGROUP, DEFAULT_BUDGETGROUP_PREFIX+domainObject.getDescription(), budgetPortfolioHandler.getInstrumentId(), DEFAULT_BUDGETGROUP_PREFIX+domainObject.getDescription());
         budgetGroupHandler.setTreeLastChanged(ts);
         budgetGroupHandler.save();
 
-        var accPortfolioHandler = instrumentFactory.getInstrumentHandler(InstrumentType.ACCOUNTPORTFOLIO, DEFAULT_ACCPF_PREFIX+domainObject.getDescription(), instrumentId);
+        var accPortfolioHandler = instrumentFactory.getInstrumentHandler(InstrumentType.ACCOUNTPORTFOLIO, DEFAULT_ACCPF_PREFIX+domainObject.getDescription(), instrumentId, DEFAULT_ACCPF_PREFIX+domainObject.getDescription());
         accPortfolioHandler.setTreeLastChanged(ts);
         accPortfolioHandler.save();
     }
@@ -108,7 +108,9 @@ public class TenantHandler extends AbsAccountableInstrumentHandler implements Ac
         //look by description for default instruments of the tenant to rename
         instruments.stream().filter(i->i.getDescription().equals(defaultDescPrefix+oldDesc)).forEach(i->{
             var handler = instrumentFactory.getInstrumentHandler(i.getInstrumentid());
-            handler.updateInstrument(newDesc, true);
+            handler.setDescription(newDesc);
+            handler.setActive(true);
+            handler.save();
         });
     }
 }

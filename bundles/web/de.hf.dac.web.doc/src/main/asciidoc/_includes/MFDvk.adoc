@@ -213,6 +213,51 @@ IncomeExpensesHandler --> TradeHandler
 @enduml
 ....
 
+[plantuml]
+....
+@startuml
+!pragma graphviz_dot jdot
+skinparam componentStyle uml2
+
+rectangle TenantHandler
+rectangle RealEstateHandler
+rectangle GiroHandler
+rectangle BudgetHandler
+rectangle EquityHandler
+rectangle DepotHandler
+rectangle CurrencyHandler
+rectangle BudgetPortfolioHandler
+rectangle BudgetGroupHandler
+rectangle AccountPortfolioHandler
+rectangle AbsCashInstrumentHandler
+rectangle AbsAccountableInstrumentHandler
+rectangle AbsCashInstrumentHandler
+rectangle BaseAccountableInstrumentHandlerImpl
+rectangle AbsInstrumentHandlerWithProperty
+rectangle SecurityHandler
+rectangle AbsInstrumentHandler
+rectangle BaseSecurityHandler
+
+AbsCashInstrumentHandler --> GiroHandler
+AbsCashInstrumentHandler --> BudgetHandler
+AbsAccountableInstrumentHandler --> AbsCashInstrumentHandler
+AbsAccountableInstrumentHandler --> AccountPortfolioHandler
+AbsAccountableInstrumentHandler --> BaseAccountableInstrumentHandlerImpl
+AbsAccountableInstrumentHandler --> BudgetGroupHandler
+AbsAccountableInstrumentHandler --> BudgetPortfolioHandler
+AbsAccountableInstrumentHandler --> DepotHandler
+AbsAccountableInstrumentHandler --> RealEstateHandler
+AbsAccountableInstrumentHandler --> TenantHandler
+AbsInstrumentHandlerWithProperty --> AbsAccountableInstrumentHandler
+AbsInstrumentHandlerWithProperty --> SecurityHandler
+SecurityHandler --> BaseSecurityHandler
+SecurityHandler --> EquityHandler
+SecurityHandler --> CurrencyHandler
+AbsInstrumentHandler --> AbsInstrumentHandlerWithProperty
+
+@enduml
+....
+
 = Instrument Relations
 
 == InstrumentProperty vs InstrumentGraph for InstrumentLinks

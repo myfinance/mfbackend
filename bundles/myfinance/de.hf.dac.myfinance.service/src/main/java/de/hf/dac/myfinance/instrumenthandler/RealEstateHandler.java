@@ -76,7 +76,7 @@ public class RealEstateHandler extends AbsAccountableInstrumentHandler implement
 
         var budgetPortfolio = instrumentFactory.getTenantHandler(getTenant().get(), false).getBudgetPortfolio();
 
-        var budgetGroupHandler = instrumentFactory.getInstrumentHandler(InstrumentType.BUDGETGROUP, DEFAULT_BUDGETGROUP_PREFIX+domainObject.getDescription(), budgetPortfolio.getInstrumentid());
+        var budgetGroupHandler = instrumentFactory.getInstrumentHandler(InstrumentType.BUDGETGROUP, DEFAULT_BUDGETGROUP_PREFIX+domainObject.getDescription(), budgetPortfolio.getInstrumentid(), DEFAULT_BUDGETGROUP_PREFIX+domainObject.getDescription());
         budgetGroupHandler.setTreeLastChanged(ts);
         budgetGroupHandler.save();
 
