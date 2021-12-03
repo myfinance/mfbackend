@@ -1,4 +1,4 @@
-package de.hf.dac.myfinance.instrumenthandler;
+package de.hf.dac.myfinance.instrumenthandler.instrumentgraphhandler;
 
 import java.util.List;
 import java.util.Optional;
@@ -15,32 +15,32 @@ public class InstrumentGraphHandlerImpl extends InstrumentGraphHandlerBase{
     }
 
     @Override
-    public void addInstrumentToGraph(int instrumentId, int ancestorId){
+    public void addInstrumentToGraph(final int instrumentId, final int ancestorId){
         addInstrumentToGraph(instrumentId, ancestorId, EdgeType.TENANTGRAPH);
     }
 
     @Override
-    public Optional<Integer> getRootInstrument(int instrumentId) {
+    public Optional<Integer> getRootInstrument(final int instrumentId) {
         return getRootInstrument(instrumentId, EdgeType.TENANTGRAPH);
     }
 
     @Override
-    public List<Instrument> getInstrumentFirstLevelChilds(int instrumentId){
+    public List<Instrument> getInstrumentFirstLevelChilds(final int instrumentId){
         return getInstrumentFirstLevelChilds(instrumentId, EdgeType.TENANTGRAPH);
     }
 
     @Override
-    public List<Instrument> getInstrumentFirstLevelChilds(int instrumentId, EdgeType edgeType){
+    public List<Instrument> getInstrumentFirstLevelChilds(final int instrumentId, final EdgeType edgeType){
         return getInstrumentChilds(instrumentId, edgeType, 1);
     }
 
     @Override
-    public List<Instrument> getInstrumentFirstLevelChildsWithType(int instrumentId, final InstrumentType instrumentType, final boolean onlyActive){
+    public List<Instrument> getInstrumentFirstLevelChildsWithType(final int instrumentId, final InstrumentType instrumentType, final boolean onlyActive){
         return filterInstruments(getInstrumentChilds(instrumentId, EdgeType.TENANTGRAPH, 1), true, instrumentType, onlyActive);
     }
 
     @Override
-    public List<Instrument> getInstrumentChilds(int instrumentId, int pathlength){
+    public List<Instrument> getInstrumentChilds(final int instrumentId, final int pathlength){
         return getInstrumentChilds(instrumentId, EdgeType.TENANTGRAPH, pathlength);
     }
 
@@ -71,7 +71,7 @@ public class InstrumentGraphHandlerImpl extends InstrumentGraphHandlerBase{
 
     @Override
     public Instrument getFirstLevelChildsPerTypeFirstmatch(final int instrumentId, final InstrumentType instrumentType) {
-        var instruments = getInstrumentFirstLevelChildsWithType(instrumentId, instrumentType, true);
+        final var instruments = getInstrumentFirstLevelChildsWithType(instrumentId, instrumentType, true);
         if(instruments == null || instruments.isEmpty()) return null;
         return instruments.get(0);
     }

@@ -1,4 +1,4 @@
-package de.hf.dac.myfinance.instrumenthandler;
+package de.hf.dac.myfinance.instrumenthandler.accountableinstrumenthandler;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -11,12 +11,15 @@ import de.hf.dac.myfinance.api.domain.InstrumentType;
 import de.hf.dac.myfinance.api.exceptions.MFException;
 import de.hf.dac.myfinance.api.exceptions.MFMsgKey;
 import de.hf.dac.myfinance.api.persistence.dao.InstrumentDao;
+import de.hf.dac.myfinance.instrumenthandler.AbsInstrumentHandlerWithProperty;
+import de.hf.dac.myfinance.instrumenthandler.instrumentgraphhandler.InstrumentGraphHandler;
+import de.hf.dac.myfinance.instrumenthandler.instrumentgraphhandler.InstrumentGraphHandlerImpl;
 
 /**
  * This abstract class is the base for all Instruments a Tenant can be directly connected with and the Tenant it self.
  * Securities like Equities  and Bonds are only connected via Trades and so use a different base class
  */
-public abstract class AbsAccountableInstrumentHandler extends AbsInstrumentHandlerWithProperty{
+public abstract class AbsAccountableInstrumentHandler extends AbsInstrumentHandlerWithProperty implements AccountableInstrumentHandler{
     protected final InstrumentGraphHandler instrumentGraphHandler;
     private int parentId;
 

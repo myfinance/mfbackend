@@ -23,10 +23,10 @@ import de.hf.dac.myfinance.api.domain.*;
 import de.hf.dac.myfinance.api.persistence.dao.*;
 import de.hf.dac.myfinance.api.service.InstrumentService;
 import de.hf.dac.myfinance.api.service.ValueCurveService;
-import de.hf.dac.myfinance.instrumenthandler.DepotHandler;
-import de.hf.dac.myfinance.instrumenthandler.EquityHandler;
 import de.hf.dac.myfinance.instrumenthandler.InstrumentFactory;
-import de.hf.dac.myfinance.instrumenthandler.RealEstateHandler;
+import de.hf.dac.myfinance.instrumenthandler.accountableinstrumenthandler.DepotHandler;
+import de.hf.dac.myfinance.instrumenthandler.accountableinstrumenthandler.RealEstateHandler;
+import de.hf.dac.myfinance.instrumenthandler.securityhandler.EquityHandler;
 import lombok.Data;
 
 import javax.inject.Inject;

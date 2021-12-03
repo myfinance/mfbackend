@@ -1,4 +1,4 @@
-package de.hf.dac.myfinance.instrumenthandler;
+package de.hf.dac.myfinance.instrumenthandler.accountableinstrumenthandler;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -8,8 +8,9 @@ import de.hf.dac.myfinance.api.domain.Instrument;
 import de.hf.dac.myfinance.api.domain.InstrumentType;
 import de.hf.dac.myfinance.api.domain.Tenant;
 import de.hf.dac.myfinance.api.persistence.dao.InstrumentDao;
+import de.hf.dac.myfinance.instrumenthandler.InstrumentFactory;
 
-public class TenantHandler extends AbsAccountableInstrumentHandler implements AccountableInstrumentHandler {
+public class TenantHandler extends AbsAccountableInstrumentHandler {
     private InstrumentFactory instrumentFactory;
 
     private static final String DEFAULT_ACCPF_PREFIX = "accountPf_";

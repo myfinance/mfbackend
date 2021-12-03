@@ -1,4 +1,4 @@
-package de.hf.dac.myfinance.instrumenthandler;
+package de.hf.dac.myfinance.instrumenthandler.accountableinstrumenthandler;
 
 import de.hf.dac.api.io.audit.AuditService;
 import de.hf.dac.myfinance.api.domain.Budget;
@@ -8,7 +8,7 @@ import de.hf.dac.myfinance.api.persistence.dao.InstrumentDao;
 import de.hf.dac.myfinance.api.persistence.dao.RecurrentTransactionDao;
 import de.hf.dac.myfinance.api.service.ValueCurveService;
 
-public class BudgetHandler extends AbsCashInstrumentHandler implements AccountableInstrumentHandler {
+public class BudgetHandler extends AbsCashInstrumentHandler {
 
     public BudgetHandler(InstrumentDao instrumentDao, AuditService auditService, ValueCurveService valueService, RecurrentTransactionDao recurrentTransactionDao, String description, int budgetGroupId) {
         super(instrumentDao, auditService, valueService, recurrentTransactionDao, description, budgetGroupId, description);

@@ -11,6 +11,19 @@ import de.hf.dac.myfinance.api.exceptions.MFMsgKey;
 import de.hf.dac.myfinance.api.persistence.dao.InstrumentDao;
 import de.hf.dac.myfinance.api.persistence.dao.RecurrentTransactionDao;
 import de.hf.dac.myfinance.api.service.ValueCurveService;
+import de.hf.dac.myfinance.instrumenthandler.accountableinstrumenthandler.AccountPortfolioHandler;
+import de.hf.dac.myfinance.instrumenthandler.accountableinstrumenthandler.BaseAccountableInstrumentHandler;
+import de.hf.dac.myfinance.instrumenthandler.accountableinstrumenthandler.BaseAccountableInstrumentHandlerImpl;
+import de.hf.dac.myfinance.instrumenthandler.accountableinstrumenthandler.BudgetGroupHandler;
+import de.hf.dac.myfinance.instrumenthandler.accountableinstrumenthandler.BudgetHandler;
+import de.hf.dac.myfinance.instrumenthandler.accountableinstrumenthandler.BudgetPortfolioHandler;
+import de.hf.dac.myfinance.instrumenthandler.accountableinstrumenthandler.DepotHandler;
+import de.hf.dac.myfinance.instrumenthandler.accountableinstrumenthandler.GiroHandler;
+import de.hf.dac.myfinance.instrumenthandler.accountableinstrumenthandler.RealEstateHandler;
+import de.hf.dac.myfinance.instrumenthandler.accountableinstrumenthandler.TenantHandler;
+import de.hf.dac.myfinance.instrumenthandler.securityhandler.BaseSecurityHandler;
+import de.hf.dac.myfinance.instrumenthandler.securityhandler.CurrencyHandler;
+import de.hf.dac.myfinance.instrumenthandler.securityhandler.EquityHandler;
 
 public class InstrumentFactory {
 

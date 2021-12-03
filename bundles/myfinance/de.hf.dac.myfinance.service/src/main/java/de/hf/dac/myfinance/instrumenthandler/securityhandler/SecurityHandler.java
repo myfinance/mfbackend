@@ -1,4 +1,4 @@
-package de.hf.dac.myfinance.instrumenthandler;
+package de.hf.dac.myfinance.instrumenthandler.securityhandler;
 
 import java.util.List;
 import java.util.Optional;
@@ -8,8 +8,9 @@ import de.hf.dac.myfinance.api.domain.Instrument;
 import de.hf.dac.myfinance.api.exceptions.MFException;
 import de.hf.dac.myfinance.api.exceptions.MFMsgKey;
 import de.hf.dac.myfinance.api.persistence.dao.InstrumentDao;
+import de.hf.dac.myfinance.instrumenthandler.AbsInstrumentHandlerWithProperty;
 
-public abstract class SecurityHandler extends AbsInstrumentHandlerWithProperty implements InstrumentHandler {
+public abstract class SecurityHandler extends AbsInstrumentHandlerWithProperty{
 
     public SecurityHandler(InstrumentDao instrumentDao, AuditService auditService, int instrumentId) {
         super(instrumentDao, auditService, instrumentId);

@@ -1,4 +1,4 @@
-package de.hf.dac.myfinance.instrumenthandler;
+package de.hf.dac.myfinance.instrumenthandler.securityhandler;
 
 import java.util.Optional;
 
@@ -7,6 +7,7 @@ import de.hf.dac.myfinance.api.domain.Currency;
 import de.hf.dac.myfinance.api.domain.Instrument;
 import de.hf.dac.myfinance.api.domain.InstrumentType;
 import de.hf.dac.myfinance.api.persistence.dao.InstrumentDao;
+import de.hf.dac.myfinance.instrumenthandler.InstrumentFactory;
 
 public class CurrencyHandler extends SecurityHandler {
 

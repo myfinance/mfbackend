@@ -1,4 +1,4 @@
-package de.hf.dac.myfinance.instrumenthandler;
+package de.hf.dac.myfinance.instrumenthandler.securityhandler;
 
 import java.util.List;
 import java.util.Optional;
@@ -13,6 +13,7 @@ import de.hf.dac.myfinance.api.domain.SecuritySymbols;
 import de.hf.dac.myfinance.api.exceptions.MFException;
 import de.hf.dac.myfinance.api.exceptions.MFMsgKey;
 import de.hf.dac.myfinance.api.persistence.dao.InstrumentDao;
+import de.hf.dac.myfinance.instrumenthandler.InstrumentFactory;
 
 public class EquityHandler extends SecurityHandler {
     List<String[]> symbols;

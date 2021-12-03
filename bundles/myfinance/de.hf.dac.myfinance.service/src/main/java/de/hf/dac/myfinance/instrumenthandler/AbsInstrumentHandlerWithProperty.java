@@ -12,7 +12,7 @@ import de.hf.dac.myfinance.api.domain.InstrumentPropertyType;
 import de.hf.dac.myfinance.api.domain.ValuePerDate;
 import de.hf.dac.myfinance.api.persistence.dao.InstrumentDao;
 
-public abstract class AbsInstrumentHandlerWithProperty extends AbsInstrumentHandler {
+public abstract class AbsInstrumentHandlerWithProperty extends AbsInstrumentHandler implements InstrumentHandler {
 
     protected AbsInstrumentHandlerWithProperty(InstrumentDao instrumentDao, AuditService auditService, String description, String businesskey) {
         super(instrumentDao, auditService, description, businesskey);

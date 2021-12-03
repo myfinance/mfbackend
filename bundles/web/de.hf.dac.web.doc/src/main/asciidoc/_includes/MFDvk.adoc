@@ -237,6 +237,8 @@ rectangle AbsInstrumentHandlerWithProperty
 rectangle SecurityHandler
 rectangle AbsInstrumentHandler
 rectangle BaseSecurityHandler
+rectangle InstrumentHandler
+rectangle AccountableInstrumentHandler
 
 AbsCashInstrumentHandler --> GiroHandler
 AbsCashInstrumentHandler --> BudgetHandler
@@ -254,6 +256,9 @@ SecurityHandler --> BaseSecurityHandler
 SecurityHandler --> EquityHandler
 SecurityHandler --> CurrencyHandler
 AbsInstrumentHandler --> AbsInstrumentHandlerWithProperty
+InstrumentHandler --> AbsInstrumentHandlerWithProperty
+AccountableInstrumentHandler --> AbsAccountableInstrumentHandler
+
 
 @enduml
 ....

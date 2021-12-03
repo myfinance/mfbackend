@@ -1,4 +1,4 @@
-package de.hf.dac.myfinance.instrumenthandler;
+package de.hf.dac.myfinance.instrumenthandler.accountableinstrumenthandler;
 
 import java.util.Optional;
 
@@ -12,8 +12,9 @@ import de.hf.dac.myfinance.api.domain.InstrumentType;
 import de.hf.dac.myfinance.api.exceptions.MFException;
 import de.hf.dac.myfinance.api.exceptions.MFMsgKey;
 import de.hf.dac.myfinance.api.persistence.dao.InstrumentDao;
+import de.hf.dac.myfinance.instrumenthandler.InstrumentFactory;
 
-public class BudgetGroupHandler extends AbsAccountableInstrumentHandler implements AccountableInstrumentHandler {
+public class BudgetGroupHandler extends AbsAccountableInstrumentHandler {
     private  final InstrumentFactory instrumentFactory;
     private static final String DEFAULT_INCOMEBUDGET_PREFIX = "incomeBudget_";
 

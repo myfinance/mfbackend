@@ -1,4 +1,4 @@
-package de.hf.dac.myfinance.instrumenthandler;
+package de.hf.dac.myfinance.instrumenthandler.instrumentgraphhandler;
 
 import java.util.List;
 import java.util.Optional;
