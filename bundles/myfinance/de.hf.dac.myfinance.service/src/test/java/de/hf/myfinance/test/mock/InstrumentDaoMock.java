@@ -1,7 +1,9 @@
 package de.hf.myfinance.test.mock;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -9,13 +11,15 @@ import de.hf.dac.myfinance.api.domain.EdgeType;
 import de.hf.dac.myfinance.api.domain.Instrument;
 import de.hf.dac.myfinance.api.domain.InstrumentGraphEntry;
 import de.hf.dac.myfinance.api.domain.InstrumentProperties;
+import de.hf.dac.myfinance.api.domain.InstrumentType;
 import de.hf.dac.myfinance.api.domain.SecuritySymbols;
 import de.hf.dac.myfinance.api.persistence.dao.InstrumentDao;
 
 public class InstrumentDaoMock implements InstrumentDao {
 
     List<InstrumentGraphEntry> instrumentGraphEntries = new ArrayList<InstrumentGraphEntry>();
-    List<Instrument> instruments = new ArrayList<Instrument>();
+    Map<Integer, Instrument>  instruments = new HashMap<Integer, Instrument>();
+    int maxId = 0;
 
     public InstrumentDaoMock() {
 
@@ -23,8 +27,7 @@ public class InstrumentDaoMock implements InstrumentDao {
 
     @Override
     public List<Instrument> listInstruments() {
-        // TODO Auto-generated method stub
-        return null;
+        return new ArrayList<Instrument>(instruments.values()); 
     }
 
     @Override
@@ -53,13 +56,16 @@ public class InstrumentDaoMock implements InstrumentDao {
 
     @Override
     public Optional<Instrument> getInstrument(int instrumentId) {
-        // TODO Auto-generated method stub
-        return null;
+        return Optional.of(instruments.get(instrumentId));
     }
 
     @Override
     public void saveInstrument(Instrument instrument) {
-        instruments.add(instrument);
+        if(instrument.getInstrumentid()==null ) {
+            maxId++;
+            instrument.setInstrumentid(maxId);
+        }
+        instruments.put(instrument.getInstrumentid(), instrument);
     }
 
     @Override
@@ -101,7 +107,7 @@ public class InstrumentDaoMock implements InstrumentDao {
         var childs = instrumentGraphEntries.stream().filter(i->i.getId().getAncestor()==instrumentId && i.getId().getEdgetype().equals(edgeType) && i.getPathlength()>0).collect(Collectors.toList());
         var childIds = new ArrayList<Integer>();
         childs.forEach(i->childIds.add(i.getId().getDescendant()));
-        return instruments.stream().filter(i->childIds.contains(i.getInstrumentid())).collect(Collectors.toList());
+        return instruments.values().stream().filter(i->childIds.contains(i.getInstrumentid())).collect(Collectors.toList());
     }
 
     @Override
@@ -109,13 +115,13 @@ public class InstrumentDaoMock implements InstrumentDao {
         var childs = instrumentGraphEntries.stream().filter(i->i.getId().getAncestor()==instrumentId && i.getId().getEdgetype().equals(edgeType) && i.getPathlength()==pathlength).collect(Collectors.toList());
         var childIds = new ArrayList<Integer>();
         childs.forEach(i->childIds.add(i.getId().getDescendant()));
-        return instruments.stream().filter(i->childIds.contains(i.getInstrumentid())).collect(Collectors.toList());
+        return instruments.values().stream().filter(i->childIds.contains(i.getInstrumentid())).collect(Collectors.toList());
     }
 
     @Override
     public Optional<Instrument> getAccountPortfolio(int tenantId) {
-        // TODO Auto-generated method stub
-        return null;
+        var  childs = getInstrumentChilds(tenantId, EdgeType.TENANTGRAPH, 1);
+        return childs.stream().filter(i->i.getInstrumentType().equals(InstrumentType.ACCOUNTPORTFOLIO)).findFirst();
     }
 
     @Override

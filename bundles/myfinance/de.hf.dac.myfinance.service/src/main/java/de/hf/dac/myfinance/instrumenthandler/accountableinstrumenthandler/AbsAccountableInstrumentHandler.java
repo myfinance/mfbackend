@@ -24,15 +24,14 @@ public abstract class AbsAccountableInstrumentHandler extends AbsInstrumentHandl
     private int parentId;
 
     protected AbsAccountableInstrumentHandler(InstrumentDao instrumentDao, AuditService auditService, String description, int parentId, String businesskey) {
-        super(instrumentDao, auditService, description, businesskey);
-        this.instrumentGraphHandler = new InstrumentGraphHandlerImpl(this.instrumentDao);
-        setParent(parentId);
-        validateParent();
+        this(instrumentDao, auditService, description, parentId, false, businesskey);
     }
 
-    protected AbsAccountableInstrumentHandler(InstrumentDao instrumentDao, AuditService auditService, String description, int tenantId, boolean addToAccountPf, String businesskey) {
-        this(instrumentDao, auditService, description, tenantId, businesskey);
-        setParentToAccountPf();
+    protected AbsAccountableInstrumentHandler(InstrumentDao instrumentDao, AuditService auditService, String description, int parentId, boolean addToAccountPf, String businesskey) {
+        super(instrumentDao, auditService, description, businesskey);
+        this.instrumentGraphHandler = new InstrumentGraphHandlerImpl(this.instrumentDao);
+        setParent(parentId, addToAccountPf);
+        validateParent();
     }
 
     protected AbsAccountableInstrumentHandler(InstrumentDao instrumentDao, AuditService auditService, int instrumentId) {
@@ -52,7 +51,7 @@ public abstract class AbsAccountableInstrumentHandler extends AbsInstrumentHandl
     }
 
 
-    private void validateParent() {
+    protected void validateParent() {
         Optional<Instrument> parent = instrumentDao.getInstrument(parentId);
         if(!parent.isPresent()){
             throw new MFException(MFMsgKey.UNKNOWN_PARENT_EXCEPTION, domainObjectName+" not saved: unknown parent:"+parentId);
@@ -62,8 +61,17 @@ public abstract class AbsAccountableInstrumentHandler extends AbsInstrumentHandl
         }
     }
 
-    protected void setParent(int parentId) {
+    protected void setParent(int parentId, boolean addToAccountPf) {
         this.parentId = parentId;
+        if(addToAccountPf) setParentToAccountPf();
+    }
+
+    private void setParentToAccountPf() {
+        Optional<Instrument> accportfolio = instrumentDao.getAccountPortfolio(parentId);
+        if(!accportfolio.isPresent()) {
+            throw new MFException(MFMsgKey.UNKNOWN_INSTRUMENT_EXCEPTION,  "Account not saved: account portfolio for the tenant:"+parentId+" does not exists");
+        }
+        this.parentId = accportfolio.get().getInstrumentid();
     }
 
     /**
@@ -76,13 +84,6 @@ public abstract class AbsAccountableInstrumentHandler extends AbsInstrumentHandl
         return InstrumentType.TENANT;
     }
 
-    private void setParentToAccountPf() {
-        Optional<Instrument> accportfolio = instrumentDao.getAccountPortfolio(parentId);
-        if(!accportfolio.isPresent()) {
-            throw new MFException(MFMsgKey.UNKNOWN_INSTRUMENT_EXCEPTION,  "Account not saved: account portfolio for the tenant:"+parentId+" does not exists");
-        }
-        this.parentId = accportfolio.get().getInstrumentid();
-    }
 
     public Optional<Integer> getTenant() {
         checkInitStatus();

@@ -76,4 +76,9 @@ public class DepotHandler extends AbsAccountableInstrumentHandler {
         deleteInstrumentPropertyList();
         saveProperty(InstrumentPropertyType.DEFAULTGIROID, defaultGiroId);
     }
+
+    @Override
+    protected InstrumentType getParentType() {
+        return InstrumentType.ACCOUNTPORTFOLIO;
+    }
 }

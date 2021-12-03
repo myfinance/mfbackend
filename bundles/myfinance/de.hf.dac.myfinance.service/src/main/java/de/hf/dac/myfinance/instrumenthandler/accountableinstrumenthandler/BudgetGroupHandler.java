@@ -89,4 +89,9 @@ public class BudgetGroupHandler extends AbsAccountableInstrumentHandler {
             budgetHandler.save();
         }
     }
+
+    @Override
+    protected InstrumentType getParentType() {
+        return InstrumentType.BUDGETPORTFOLIO;
+    }
 } 

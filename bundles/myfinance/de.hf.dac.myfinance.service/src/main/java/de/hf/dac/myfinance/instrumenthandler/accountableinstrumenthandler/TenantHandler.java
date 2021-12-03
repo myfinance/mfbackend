@@ -34,7 +34,7 @@ public class TenantHandler extends AbsAccountableInstrumentHandler {
     }
 
     protected void updateParent() {
-        setParent(instrumentId);
+        setParent(instrumentId, false);
     } 
 
     @Override
@@ -113,5 +113,10 @@ public class TenantHandler extends AbsAccountableInstrumentHandler {
             handler.setActive(true);
             handler.save();
         });
+    }
+
+    @Override
+    protected void validateParent() {
+        //Tenants have no parents
     }
 }

@@ -168,7 +168,7 @@ public abstract class AbsInstrumentHandler {
     protected void saveNewInstrument() {
         checkDomainObjectInitStatus(); 
         instrumentDao.saveInstrument(domainObject);
-        instrumentId = domainObject.getInstrumentid();
+        setInstrumentId(domainObject.getInstrumentid());
         auditService.saveMessage(domainObjectName+" inserted:" + domainObject.getDescription(), Severity.INFO, AUDIT_MSG_TYPE);
     }
 

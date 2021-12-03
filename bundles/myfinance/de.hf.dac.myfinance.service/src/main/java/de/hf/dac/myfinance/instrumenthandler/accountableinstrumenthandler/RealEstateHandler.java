@@ -108,4 +108,9 @@ public class RealEstateHandler extends AbsAccountableInstrumentHandler{
         budgetGroupHandler.save();
     }
 
+    @Override
+    protected InstrumentType getParentType() {
+        return InstrumentType.ACCOUNTPORTFOLIO;
+    }
+
 }

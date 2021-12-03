@@ -36,4 +36,9 @@ public class GiroHandler extends AbsCashInstrumentHandler {
     protected InstrumentType getInstrumentType() {
         return InstrumentType.GIRO;
     }
+
+    @Override
+    protected InstrumentType getParentType() {
+        return InstrumentType.ACCOUNTPORTFOLIO;
+    }
 }
