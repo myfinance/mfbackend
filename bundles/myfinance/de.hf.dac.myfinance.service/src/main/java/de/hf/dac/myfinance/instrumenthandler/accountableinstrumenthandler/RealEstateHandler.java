@@ -33,8 +33,8 @@ public class RealEstateHandler extends AbsAccountableInstrumentHandler{
         this.instrumentFactory = instrumentFactory;
     }
 
-    public RealEstateHandler(InstrumentDao instrumentDao, AuditService auditService, InstrumentFactory instrumentFactory, String description, int tenantId) {
-        super(instrumentDao, auditService, description, tenantId, true, description);
+    public RealEstateHandler(InstrumentDao instrumentDao, AuditService auditService, InstrumentFactory instrumentFactory, String description, int tenantId, String businesskey) {
+        super(instrumentDao, auditService, description, tenantId, true, businesskey);
         this.instrumentFactory = instrumentFactory;
     }
 

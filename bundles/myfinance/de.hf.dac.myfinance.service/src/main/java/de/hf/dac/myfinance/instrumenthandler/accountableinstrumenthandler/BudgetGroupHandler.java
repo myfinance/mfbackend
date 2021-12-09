@@ -28,8 +28,8 @@ public class BudgetGroupHandler extends AbsAccountableInstrumentHandler {
         this.instrumentFactory = instrumentFactory;
     }
 
-    public BudgetGroupHandler(InstrumentDao instrumentDao, AuditService auditService, InstrumentFactory instrumentFactory, String description, int budgetPFId) {
-        super(instrumentDao, auditService, description, budgetPFId, description);
+    public BudgetGroupHandler(InstrumentDao instrumentDao, AuditService auditService, InstrumentFactory instrumentFactory, String description, int budgetPFId, String businesskey) {
+        super(instrumentDao, auditService, description, budgetPFId, businesskey);
         this.instrumentFactory = instrumentFactory;
     }
 
@@ -51,7 +51,7 @@ public class BudgetGroupHandler extends AbsAccountableInstrumentHandler {
     @Override
     protected void saveNewInstrument(){
         super.saveNewInstrument();
-        var budgetHandler = instrumentFactory.getInstrumentHandler(InstrumentType.BUDGET, DEFAULT_INCOMEBUDGET_PREFIX + domainObject.getDescription(), instrumentId, DEFAULT_INCOMEBUDGET_PREFIX + domainObject.getDescription());
+        var budgetHandler = instrumentFactory.getInstrumentHandler(InstrumentType.BUDGET, DEFAULT_INCOMEBUDGET_PREFIX + domainObject.getDescription(), instrumentId, DEFAULT_INCOMEBUDGET_PREFIX + domainObject.getBusinesskey());
         budgetHandler.setTreeLastChanged(ts);
         budgetHandler.save();
         saveProperty(InstrumentPropertyType.INCOMEBUDGETID, budgetHandler.getInstrumentId());

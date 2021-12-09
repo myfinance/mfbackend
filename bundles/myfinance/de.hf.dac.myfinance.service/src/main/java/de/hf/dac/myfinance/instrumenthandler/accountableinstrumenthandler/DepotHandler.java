@@ -23,8 +23,8 @@ public class DepotHandler extends AbsAccountableInstrumentHandler {
         super(instrumentDao, auditService, instrumentId);
     }
 
-    public DepotHandler(InstrumentDao instrumentDao, AuditService auditService, String description, int tenantId) {
-        super(instrumentDao, auditService, description, tenantId, true, description);
+    public DepotHandler(InstrumentDao instrumentDao, AuditService auditService, String description, int tenantId, String businesskey) {
+        super(instrumentDao, auditService, description, tenantId, true, businesskey);
     }
 
     @Override

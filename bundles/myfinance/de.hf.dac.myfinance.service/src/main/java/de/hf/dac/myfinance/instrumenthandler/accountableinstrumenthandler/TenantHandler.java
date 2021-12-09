@@ -39,16 +39,20 @@ public class TenantHandler extends AbsAccountableInstrumentHandler {
 
     @Override
     protected void saveNewInstrument() {
+        if(this.businesskey.length()>6) {
+            this.businesskey = this.businesskey.substring(0, 6);
+            domainObject.setBusinesskey(this.businesskey);
+        }
         super.saveNewInstrument();
 
-        var budgetPortfolioHandler = instrumentFactory.getInstrumentHandler(InstrumentType.BUDGETPORTFOLIO, DEFAULT_BUDGETPF_PREFIX+domainObject.getDescription(), instrumentId, DEFAULT_BUDGETPF_PREFIX+domainObject.getDescription());
+        var budgetPortfolioHandler = instrumentFactory.getInstrumentHandler(InstrumentType.BUDGETPORTFOLIO, DEFAULT_BUDGETPF_PREFIX+domainObject.getDescription(), instrumentId, DEFAULT_BUDGETPF_PREFIX+domainObject.getBusinesskey());
         budgetPortfolioHandler.setTreeLastChanged(ts);
         budgetPortfolioHandler.save();
-        var budgetGroupHandler = instrumentFactory.getInstrumentHandler(InstrumentType.BUDGETGROUP, DEFAULT_BUDGETGROUP_PREFIX+domainObject.getDescription(), budgetPortfolioHandler.getInstrumentId(), DEFAULT_BUDGETGROUP_PREFIX+domainObject.getDescription());
+        var budgetGroupHandler = instrumentFactory.getInstrumentHandler(InstrumentType.BUDGETGROUP, DEFAULT_BUDGETGROUP_PREFIX+domainObject.getDescription(), budgetPortfolioHandler.getInstrumentId(), DEFAULT_BUDGETGROUP_PREFIX+domainObject.getBusinesskey());
         budgetGroupHandler.setTreeLastChanged(ts);
         budgetGroupHandler.save();
 
-        var accPortfolioHandler = instrumentFactory.getInstrumentHandler(InstrumentType.ACCOUNTPORTFOLIO, DEFAULT_ACCPF_PREFIX+domainObject.getDescription(), instrumentId, DEFAULT_ACCPF_PREFIX+domainObject.getDescription());
+        var accPortfolioHandler = instrumentFactory.getInstrumentHandler(InstrumentType.ACCOUNTPORTFOLIO, DEFAULT_ACCPF_PREFIX+domainObject.getDescription(), instrumentId, DEFAULT_ACCPF_PREFIX+domainObject.getBusinesskey());
         accPortfolioHandler.setTreeLastChanged(ts);
         accPortfolioHandler.save();
     }

@@ -9,8 +9,8 @@ import de.hf.dac.myfinance.api.persistence.dao.InstrumentDao;
 public class AccountPortfolioHandler extends AbsAccountableInstrumentHandler {
 
     public AccountPortfolioHandler(InstrumentDao instrumentDao, AuditService auditService, String description,
-            int tenantId) {
-        super(instrumentDao, auditService, description, tenantId, description);
+            int tenantId, String businesskey) {
+        super(instrumentDao, auditService, description, tenantId, businesskey);
     }
 
     public AccountPortfolioHandler(InstrumentDao instrumentDao, AuditService auditService, Instrument accountPortfolio) {

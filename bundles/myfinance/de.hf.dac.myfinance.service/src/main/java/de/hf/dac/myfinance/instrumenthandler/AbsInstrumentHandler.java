@@ -33,11 +33,17 @@ public abstract class AbsInstrumentHandler {
 
     protected AbsInstrumentHandler(InstrumentDao instrumentDao, AuditService auditService, String description, String businesskey) {
         this.description = description;
-        this.businesskey = businesskey;
+        if(businesskey==null) {
+            this.businesskey = description.trim();
+        } else {
+            this.businesskey = businesskey.trim();
+        }
+        if(this.businesskey.length()>31) this.businesskey = this.businesskey.substring(0, 31);
         setBaseValues(instrumentDao, auditService);
         domainObject = getExistingObject();
         if(!exists) {
             createDomainObject();
+            domainObject.setBusinesskey(this.businesskey);
         } else {
             validateInstrument();
         }

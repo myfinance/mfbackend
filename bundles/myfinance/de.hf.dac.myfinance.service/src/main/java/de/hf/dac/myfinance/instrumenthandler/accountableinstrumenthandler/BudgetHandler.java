@@ -10,8 +10,8 @@ import de.hf.dac.myfinance.api.service.ValueCurveService;
 
 public class BudgetHandler extends AbsCashInstrumentHandler {
 
-    public BudgetHandler(InstrumentDao instrumentDao, AuditService auditService, ValueCurveService valueService, RecurrentTransactionDao recurrentTransactionDao, String description, int budgetGroupId) {
-        super(instrumentDao, auditService, valueService, recurrentTransactionDao, description, budgetGroupId, description);
+    public BudgetHandler(InstrumentDao instrumentDao, AuditService auditService, ValueCurveService valueService, RecurrentTransactionDao recurrentTransactionDao, String description, int budgetGroupId, String businesskey) {
+        super(instrumentDao, auditService, valueService, recurrentTransactionDao, description, budgetGroupId, businesskey);
     }
 
     public BudgetHandler(InstrumentDao instrumentDao, AuditService auditService, ValueCurveService valueService, RecurrentTransactionDao recurrentTransactionDao, Instrument budget) {

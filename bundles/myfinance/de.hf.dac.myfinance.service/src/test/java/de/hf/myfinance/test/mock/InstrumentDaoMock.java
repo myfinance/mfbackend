@@ -1,6 +1,7 @@
 package de.hf.myfinance.test.mock;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -19,7 +20,9 @@ public class InstrumentDaoMock implements InstrumentDao {
 
     List<InstrumentGraphEntry> instrumentGraphEntries = new ArrayList<InstrumentGraphEntry>();
     Map<Integer, Instrument>  instruments = new HashMap<Integer, Instrument>();
+    Map<Integer, Map<Integer, InstrumentProperties>> instrumentProperties = new HashMap<Integer, Map<Integer, InstrumentProperties>>();
     int maxId = 0;
+    int maxPropertyId = 0;
 
     public InstrumentDaoMock() {
 
@@ -93,8 +96,8 @@ public class InstrumentDaoMock implements InstrumentDao {
 
     @Override
     public Optional<Integer> getRootInstrument(int instrumentId, EdgeType edgeType) {
-        // TODO Auto-generated method stub
-        return null;
+        var root = getAncestorGraphEntries(instrumentId, edgeType).stream().max(Comparator.comparing(InstrumentGraphEntry::getPathlength));
+        return Optional.of(root.get().getId().getAncestor());
     }
 
     @Override
@@ -132,20 +135,29 @@ public class InstrumentDaoMock implements InstrumentDao {
 
     @Override
     public void saveInstrumentProperty(InstrumentProperties instrumentProperty) {
-        // TODO Auto-generated method stub
+        Map<Integer, InstrumentProperties> propertyMap = new HashMap<Integer, InstrumentProperties>();
+        maxPropertyId++;
+        instrumentProperty.setPropertyid(maxPropertyId);
+        if(instrumentProperties.containsKey(instrumentProperty.getInstrumentid())) {
+            propertyMap = instrumentProperties.get(instrumentProperty.getInstrumentid());
+        }
+        propertyMap.put(maxPropertyId, instrumentProperty);
+        instrumentProperties.put(instrumentProperty.getInstrumentid(), propertyMap);
 
     }
 
     @Override
     public List<InstrumentProperties> getInstrumentProperties(int instrumentId) {
-        // TODO Auto-generated method stub
-        return null;
+        if(instrumentProperties.get(instrumentId)==null) {
+            return new ArrayList<InstrumentProperties>();
+        }
+        return instrumentProperties.get(instrumentId).values().stream().collect(Collectors.toList());
     }
 
     @Override
     public String deleteInstrumentProperty(int instrumentPropertyId) {
-        // TODO Auto-generated method stub
-        return null;
+        instrumentProperties.entrySet().forEach(i->i.getValue().remove(instrumentPropertyId));
+        return "";
     }
 
 }

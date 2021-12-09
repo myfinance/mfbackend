@@ -174,7 +174,7 @@ public class InstrumentServiceImpl implements InstrumentService {
 
     @Override
     public void newBudget(String description, int budgetGroupId) {
-        var budgetHandler = instrumentFactory.getInstrumentHandler(InstrumentType.BUDGET, description, budgetGroupId, null);
+        var budgetHandler = instrumentFactory.getInstrumentHandler(InstrumentType.BUDGET, description, budgetGroupId, description);
         budgetHandler.save();
      }
 
@@ -186,7 +186,7 @@ public class InstrumentServiceImpl implements InstrumentService {
 
     @Override
     public void newDepotAccount(String description, int tenantId, int defaultGiroId, int valueBudgetId) {
-        DepotHandler depotHandler = (DepotHandler)instrumentFactory.getInstrumentHandler(InstrumentType.DEPOT, description, tenantId, null);
+        DepotHandler depotHandler = (DepotHandler)instrumentFactory.getInstrumentHandler(InstrumentType.DEPOT, description, tenantId, description);
         depotHandler.initAdditionalFields(defaultGiroId, valueBudgetId);
         depotHandler.save();
     }
@@ -202,7 +202,7 @@ public class InstrumentServiceImpl implements InstrumentService {
 
     @Override
     public void newRealEstate(String description, int tenantId, int valueBudgetId, List<ValuePerDate> yieldgoals, List<ValuePerDate> realEstateProfits) {
-        var realEstateHandler = (RealEstateHandler)instrumentFactory.getInstrumentHandler(InstrumentType.REALESTATE, description, tenantId, null);
+        var realEstateHandler = (RealEstateHandler)instrumentFactory.getInstrumentHandler(InstrumentType.REALESTATE, description, tenantId, description);
         realEstateHandler.initAdditionalFields(valueBudgetId, yieldgoals, realEstateProfits);
         realEstateHandler.save();
     }
