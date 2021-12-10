@@ -1,4 +1,4 @@
-package de.hf.dac.myfinance.service.transactionhandler;
+package de.hf.dac.myfinance.transactionhandler;
 
 import java.util.Optional;
 

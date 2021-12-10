@@ -1,8 +1,7 @@
-package de.hf.dac.myfinance.service.transactionhandler;
+package de.hf.dac.myfinance.transactionhandler;
 
 import java.util.Optional;
 
-import de.hf.dac.myfinance.api.domain.EdgeType;
 import de.hf.dac.myfinance.api.domain.Instrument;
 import de.hf.dac.myfinance.api.exceptions.MFException;
 import de.hf.dac.myfinance.api.exceptions.MFMsgKey;
@@ -30,8 +29,8 @@ public abstract class AbsHandler {
     abstract void save();
     
     protected void validateTenant(Instrument firstInstrument, Instrument secondInstrument) {
-        Optional<Integer> tenantOfFirstInstrument = instrumentService.getRootInstrument(firstInstrument.getInstrumentid(), EdgeType.TENANTGRAPH);
-        Optional<Integer> tenantOfSecInstrument = instrumentService.getRootInstrument(secondInstrument.getInstrumentid(), EdgeType.TENANTGRAPH);
+        Optional<Integer> tenantOfFirstInstrument = instrumentService.getTenant(firstInstrument.getInstrumentid());
+        Optional<Integer> tenantOfSecInstrument = instrumentService.getTenant(secondInstrument.getInstrumentid());
 
         if(!tenantOfFirstInstrument.isPresent()
             || !tenantOfSecInstrument.isPresent()

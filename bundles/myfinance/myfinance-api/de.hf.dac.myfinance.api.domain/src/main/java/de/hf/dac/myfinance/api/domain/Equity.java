@@ -29,6 +29,10 @@ import io.swagger.annotations.ApiModelProperty;
 @DiscriminatorValue(InstrumentType.EQUITY_IDSTRING)
 public class Equity extends Instrument {
 
+    /**
+     *
+     */
+    private static final long serialVersionUID = 1L;
     private Set<SecuritySymbols> symbols = new HashSet<SecuritySymbols>(0);
 
     public Equity(){

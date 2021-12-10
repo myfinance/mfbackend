@@ -1,23 +1,30 @@
 package de.hf.myfinance.test.mock;
 
 import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
 import de.hf.dac.myfinance.api.domain.EdgeType;
-import de.hf.dac.myfinance.api.domain.Equity;
 import de.hf.dac.myfinance.api.domain.Instrument;
 import de.hf.dac.myfinance.api.domain.InstrumentGraphEntry;
 import de.hf.dac.myfinance.api.domain.InstrumentProperties;
+import de.hf.dac.myfinance.api.domain.InstrumentType;
+import de.hf.dac.myfinance.api.domain.InstrumentTypeGroup;
 import de.hf.dac.myfinance.api.domain.SecuritySymbols;
-import de.hf.dac.myfinance.api.domain.Source;
 import de.hf.dac.myfinance.api.persistence.dao.InstrumentDao;
 
 public class InstrumentDaoMock implements InstrumentDao {
 
     List<InstrumentGraphEntry> instrumentGraphEntries = new ArrayList<InstrumentGraphEntry>();
-    List<Instrument> instruments = new ArrayList<Instrument>();
+    Map<Integer, Instrument>  instruments = new HashMap<Integer, Instrument>();
+    Map<String, Instrument>  instrumentsPerBusinesskey = new HashMap<String, Instrument>();
+    Map<Integer, Map<Integer, InstrumentProperties>> instrumentProperties = new HashMap<Integer, Map<Integer, InstrumentProperties>>();
+    int maxId = 0;
+    int maxPropertyId = 0;
 
     public InstrumentDaoMock() {
 
@@ -25,55 +32,53 @@ public class InstrumentDaoMock implements InstrumentDao {
 
     @Override
     public List<Instrument> listInstruments() {
-        // TODO Auto-generated method stub
-        return null;
+        return new ArrayList<Instrument>(instruments.values()); 
     }
 
     @Override
-    public Optional<Equity> getEquity(String isin) {
-        // TODO Auto-generated method stub
-        return null;
+    public Optional<Instrument> getEquity(String isin) {
+        if(!instrumentsPerBusinesskey.containsKey(isin)) return Optional.empty();
+        var instrument = instrumentsPerBusinesskey.get(isin);
+        if(!instrument.getInstrumentType().equals(InstrumentType.EQUITY)) {
+            return Optional.empty();
+        }
+        return Optional.of(instrument);
     }
 
     @Override
     public Optional<Instrument> getSecurity(String businesskey) {
-        // TODO Auto-generated method stub
-        return null;
+        if(!instrumentsPerBusinesskey.containsKey(businesskey)) return Optional.empty();
+        return Optional.of(instrumentsPerBusinesskey.get(businesskey));
     }
 
     @Override
     public List<Instrument> getSecurities() {
-        // TODO Auto-generated method stub
-        return null;
+        return instrumentsPerBusinesskey.values().stream().filter(i->i.getInstrumentType().getTypeGroup().equals(InstrumentTypeGroup.SECURITY)).collect(Collectors.toList());
     }
 
     @Override
     public Optional<Instrument> getCurrency(String currencyCode) {
-        // TODO Auto-generated method stub
-        return null;
+        if(!instrumentsPerBusinesskey.containsKey(currencyCode)) return Optional.empty();
+        var instrument = instrumentsPerBusinesskey.get(currencyCode);
+        if(!instrument.getInstrumentType().equals(InstrumentType.CURRENCY)) {
+            return Optional.empty();
+        }
+        return Optional.of(instrument);
     }
 
     @Override
     public Optional<Instrument> getInstrument(int instrumentId) {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    @Override
-    public Optional<Source> getSource(int sourceId) {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    @Override
-    public List<Source> getActiveSources() {
-        // TODO Auto-generated method stub
-        return null;
+        return Optional.of(instruments.get(instrumentId));
     }
 
     @Override
     public void saveInstrument(Instrument instrument) {
-        instruments.add(instrument);
+        if(instrument.getInstrumentid()==null ) {
+            maxId++;
+            instrument.setInstrumentid(maxId);
+        }
+        instruments.put(instrument.getInstrumentid(), instrument);
+        instrumentsPerBusinesskey.put(instrument.getBusinesskey(), instrument);
     }
 
     @Override
@@ -101,8 +106,8 @@ public class InstrumentDaoMock implements InstrumentDao {
 
     @Override
     public Optional<Integer> getRootInstrument(int instrumentId, EdgeType edgeType) {
-        // TODO Auto-generated method stub
-        return null;
+        var root = getAncestorGraphEntries(instrumentId, edgeType).stream().max(Comparator.comparing(InstrumentGraphEntry::getPathlength));
+        return Optional.of(root.get().getId().getAncestor());
     }
 
     @Override
@@ -115,7 +120,7 @@ public class InstrumentDaoMock implements InstrumentDao {
         var childs = instrumentGraphEntries.stream().filter(i->i.getId().getAncestor()==instrumentId && i.getId().getEdgetype().equals(edgeType) && i.getPathlength()>0).collect(Collectors.toList());
         var childIds = new ArrayList<Integer>();
         childs.forEach(i->childIds.add(i.getId().getDescendant()));
-        return instruments.stream().filter(i->childIds.contains(i.getInstrumentid())).collect(Collectors.toList());
+        return instruments.values().stream().filter(i->childIds.contains(i.getInstrumentid())).collect(Collectors.toList());
     }
 
     @Override
@@ -123,13 +128,13 @@ public class InstrumentDaoMock implements InstrumentDao {
         var childs = instrumentGraphEntries.stream().filter(i->i.getId().getAncestor()==instrumentId && i.getId().getEdgetype().equals(edgeType) && i.getPathlength()==pathlength).collect(Collectors.toList());
         var childIds = new ArrayList<Integer>();
         childs.forEach(i->childIds.add(i.getId().getDescendant()));
-        return instruments.stream().filter(i->childIds.contains(i.getInstrumentid())).collect(Collectors.toList());
+        return instruments.values().stream().filter(i->childIds.contains(i.getInstrumentid())).collect(Collectors.toList());
     }
 
     @Override
     public Optional<Instrument> getAccountPortfolio(int tenantId) {
-        // TODO Auto-generated method stub
-        return null;
+        var  childs = getInstrumentChilds(tenantId, EdgeType.TENANTGRAPH, 1);
+        return childs.stream().filter(i->i.getInstrumentType().equals(InstrumentType.ACCOUNTPORTFOLIO)).findFirst();
     }
 
     @Override
@@ -140,20 +145,29 @@ public class InstrumentDaoMock implements InstrumentDao {
 
     @Override
     public void saveInstrumentProperty(InstrumentProperties instrumentProperty) {
-        // TODO Auto-generated method stub
+        Map<Integer, InstrumentProperties> propertyMap = new HashMap<Integer, InstrumentProperties>();
+        maxPropertyId++;
+        instrumentProperty.setPropertyid(maxPropertyId);
+        if(instrumentProperties.containsKey(instrumentProperty.getInstrumentid())) {
+            propertyMap = instrumentProperties.get(instrumentProperty.getInstrumentid());
+        }
+        propertyMap.put(maxPropertyId, instrumentProperty);
+        instrumentProperties.put(instrumentProperty.getInstrumentid(), propertyMap);
 
     }
 
     @Override
     public List<InstrumentProperties> getInstrumentProperties(int instrumentId) {
-        // TODO Auto-generated method stub
-        return null;
+        if(instrumentProperties.get(instrumentId)==null) {
+            return new ArrayList<InstrumentProperties>();
+        }
+        return instrumentProperties.get(instrumentId).values().stream().collect(Collectors.toList());
     }
 
     @Override
     public String deleteInstrumentProperty(int instrumentPropertyId) {
-        // TODO Auto-generated method stub
-        return null;
+        instrumentProperties.entrySet().forEach(i->i.getValue().remove(instrumentPropertyId));
+        return "";
     }
 
 }

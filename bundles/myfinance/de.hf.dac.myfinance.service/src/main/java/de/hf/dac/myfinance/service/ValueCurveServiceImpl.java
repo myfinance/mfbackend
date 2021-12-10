@@ -139,12 +139,9 @@ public class ValueCurveServiceImpl implements ValueCurveService {
     }
 
     public void invalidateCache(final int instrumentId) {
-        final List<InstrumentGraphEntry> ancestorGraphEntries = instrumentService.getAncestorGraphEntries(instrumentId,
-                EdgeType.TENANTGRAPH);
-        if (ancestorGraphEntries != null && !ancestorGraphEntries.isEmpty()) {
-            for (final InstrumentGraphEntry entry : ancestorGraphEntries) {
-                cache.removeCurve(entry.getId().getAncestor());
-            }
+        final var parentIds = instrumentService.getParentIds(instrumentId);
+        for (final Integer id : parentIds) {
+            cache.removeCurve(id);
         }
     }
 }

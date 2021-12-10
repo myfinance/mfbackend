@@ -16,10 +16,13 @@ import java.util.List;
 import java.util.Optional;
 
 import de.hf.dac.myfinance.api.domain.EndOfDayPrice;
+import de.hf.dac.myfinance.api.domain.Source;
 
 public interface EndOfDayPriceDao {
     Optional<EndOfDayPrice> getEndOfDayPrice(int instrumentid, LocalDate dayofprice);
     List<EndOfDayPrice> listEndOfDayPrices(int instrumentid);
     LocalDate getLastPricedDay(int instrumentid);
     void saveEndOfDayPrice(EndOfDayPrice price);
+    Optional<Source> getSource(int sourceId);
+    List<Source> getActiveSources();
 }

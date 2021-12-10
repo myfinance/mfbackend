@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Optional;
 
 import de.hf.dac.myfinance.api.domain.EndOfDayPrice;
+import de.hf.dac.myfinance.api.domain.Source;
 import de.hf.dac.myfinance.api.persistence.dao.EndOfDayPriceDao;
 
 public class EndOfDayPriceDaoTestImpl implements EndOfDayPriceDao {
@@ -31,6 +32,18 @@ public class EndOfDayPriceDaoTestImpl implements EndOfDayPriceDao {
     public void saveEndOfDayPrice(EndOfDayPrice price) {
         // TODO Auto-generated method stub
 
+    }
+
+    @Override
+    public Optional<Source> getSource(int sourceId) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public List<Source> getActiveSources() {
+        // TODO Auto-generated method stub
+        return null;
     }
     
 }

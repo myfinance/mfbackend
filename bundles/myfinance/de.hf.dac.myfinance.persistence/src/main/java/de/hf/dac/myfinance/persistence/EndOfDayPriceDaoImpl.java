@@ -22,6 +22,7 @@ import javax.persistence.Query;
 
 import de.hf.dac.myfinance.api.application.EnvTarget;
 import de.hf.dac.myfinance.api.domain.EndOfDayPrice;
+import de.hf.dac.myfinance.api.domain.Source;
 import de.hf.dac.myfinance.api.persistence.dao.EndOfDayPriceDao;
 
 public class EndOfDayPriceDaoImpl extends BaseDao<EndOfDayPrice> implements EndOfDayPriceDao {
@@ -81,6 +82,40 @@ public class EndOfDayPriceDaoImpl extends BaseDao<EndOfDayPrice> implements EndO
     @Override
     public void saveEndOfDayPrice(EndOfDayPrice price) {
         save(price);
+    }
+
+    @Override
+    public Optional<Source> getSource(int sourceId) {
+        Optional<Source> result;
+        try {
+            marketDataEm = this.marketDataEmf.createEntityManager();
+            Query query = marketDataEm.createQuery("select a FROM Source a WHERE id = :id");
+            query.setParameter("id", sourceId);
+            result = getFirstSourceQueryResult(query);
+        } finally {
+            marketDataEm.close();
+        }
+        return result;
+    }
+
+    private Optional<Source> getFirstSourceQueryResult(Query query) {
+        Optional<Source> result = Optional.empty();
+        Object object = getFirstQueryObjectResult(query);
+        if(object!=null) result = Optional.of((Source) object);
+        return result;
+    }
+
+    @Override
+    public List<Source> getActiveSources() {
+        List<Source> result;
+        try{
+            marketDataEm = this.marketDataEmf.createEntityManager();
+            Query query = marketDataEm.createQuery("select a FROM Source a WHERE isactive = true");
+            result = (List<Source>) query.getResultList();
+        } finally {
+            marketDataEm.close();
+        }
+        return result;
     }
 
 }

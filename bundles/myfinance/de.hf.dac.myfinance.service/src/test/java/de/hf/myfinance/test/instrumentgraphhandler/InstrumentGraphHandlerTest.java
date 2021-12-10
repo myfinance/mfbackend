@@ -11,12 +11,12 @@ import de.hf.dac.myfinance.api.domain.BudgetPortfolio;
 import de.hf.dac.myfinance.api.domain.Giro;
 import de.hf.dac.myfinance.api.domain.Instrument;
 import de.hf.dac.myfinance.api.domain.Tenant;
-import de.hf.dac.myfinance.instrumentgraphhandler.InstrumentGraphHandlerImpl;
+import de.hf.dac.myfinance.instrumenthandler.instrumentgraphhandler.InstrumentGraphHandlerImpl;
 import de.hf.myfinance.test.mock.InstrumentDaoMock;
 
 public class InstrumentGraphHandlerTest {
     @Test
-    public void paddInstrumentToGraphTest(){
+    public void addInstrumentToGraphTest(){
 
         Instrument tenant = new Tenant("testtenant", true, LocalDateTime.now());
         tenant.setInstrumentid(1);
