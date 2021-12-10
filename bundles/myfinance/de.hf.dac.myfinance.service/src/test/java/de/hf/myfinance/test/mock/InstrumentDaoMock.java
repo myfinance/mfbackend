@@ -13,6 +13,7 @@ import de.hf.dac.myfinance.api.domain.Instrument;
 import de.hf.dac.myfinance.api.domain.InstrumentGraphEntry;
 import de.hf.dac.myfinance.api.domain.InstrumentProperties;
 import de.hf.dac.myfinance.api.domain.InstrumentType;
+import de.hf.dac.myfinance.api.domain.InstrumentTypeGroup;
 import de.hf.dac.myfinance.api.domain.SecuritySymbols;
 import de.hf.dac.myfinance.api.persistence.dao.InstrumentDao;
 
@@ -20,6 +21,7 @@ public class InstrumentDaoMock implements InstrumentDao {
 
     List<InstrumentGraphEntry> instrumentGraphEntries = new ArrayList<InstrumentGraphEntry>();
     Map<Integer, Instrument>  instruments = new HashMap<Integer, Instrument>();
+    Map<String, Instrument>  instrumentsPerBusinesskey = new HashMap<String, Instrument>();
     Map<Integer, Map<Integer, InstrumentProperties>> instrumentProperties = new HashMap<Integer, Map<Integer, InstrumentProperties>>();
     int maxId = 0;
     int maxPropertyId = 0;
@@ -35,26 +37,33 @@ public class InstrumentDaoMock implements InstrumentDao {
 
     @Override
     public Optional<Instrument> getEquity(String isin) {
-        // TODO Auto-generated method stub
-        return null;
+        if(!instrumentsPerBusinesskey.containsKey(isin)) return Optional.empty();
+        var instrument = instrumentsPerBusinesskey.get(isin);
+        if(!instrument.getInstrumentType().equals(InstrumentType.EQUITY)) {
+            return Optional.empty();
+        }
+        return Optional.of(instrument);
     }
 
     @Override
     public Optional<Instrument> getSecurity(String businesskey) {
-        // TODO Auto-generated method stub
-        return null;
+        if(!instrumentsPerBusinesskey.containsKey(businesskey)) return Optional.empty();
+        return Optional.of(instrumentsPerBusinesskey.get(businesskey));
     }
 
     @Override
     public List<Instrument> getSecurities() {
-        // TODO Auto-generated method stub
-        return null;
+        return instrumentsPerBusinesskey.values().stream().filter(i->i.getInstrumentType().getTypeGroup().equals(InstrumentTypeGroup.SECURITY)).collect(Collectors.toList());
     }
 
     @Override
     public Optional<Instrument> getCurrency(String currencyCode) {
-        // TODO Auto-generated method stub
-        return null;
+        if(!instrumentsPerBusinesskey.containsKey(currencyCode)) return Optional.empty();
+        var instrument = instrumentsPerBusinesskey.get(currencyCode);
+        if(!instrument.getInstrumentType().equals(InstrumentType.CURRENCY)) {
+            return Optional.empty();
+        }
+        return Optional.of(instrument);
     }
 
     @Override
@@ -69,6 +78,7 @@ public class InstrumentDaoMock implements InstrumentDao {
             instrument.setInstrumentid(maxId);
         }
         instruments.put(instrument.getInstrumentid(), instrument);
+        instrumentsPerBusinesskey.put(instrument.getBusinesskey(), instrument);
     }
 
     @Override

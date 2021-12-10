@@ -111,8 +111,14 @@ public abstract class AbsAccountableInstrumentHandler extends AbsInstrumentHandl
     protected void validateInstrument(Instrument instrument, InstrumentType instrumentType, String errMsg) {
         super.validateInstrument(instrument, instrumentType, errMsg);
         Optional<Integer> tenantOfInstrument = instrumentGraphHandler.getRootInstrument(instrument.getInstrumentid(), EdgeType.TENANTGRAPH);
-        if(!tenantOfInstrument.isPresent()
-            || !tenantOfInstrument.get().equals(getTenant().get())){
+        if(!tenantOfInstrument.isPresent()){
+            throw new MFException(MFMsgKey.WRONG_TENENT_EXCEPTION,  errMsg+" instrument has not the same tenant");
+        }
+        if(initialized) {
+            if(!tenantOfInstrument.get().equals(getTenant().get())) {
+                throw new MFException(MFMsgKey.WRONG_TENENT_EXCEPTION,  errMsg+" instrument has not the same tenant");
+            }
+        } else if(tenantOfInstrument.get().equals(parentId)) {
             throw new MFException(MFMsgKey.WRONG_TENENT_EXCEPTION,  errMsg+" instrument has not the same tenant");
         }
     }
