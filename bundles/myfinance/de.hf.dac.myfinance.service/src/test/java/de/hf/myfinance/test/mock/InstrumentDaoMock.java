@@ -82,9 +82,12 @@ public class InstrumentDaoMock implements InstrumentDao {
     }
 
     @Override
-    public void updateInstrument(int instrumentId, String description, boolean isActive) {
-        // TODO Auto-generated method stub
-
+    public void updateInstrument(int instrumentId, String description, boolean isActive, String businesskey) {
+        var instrument = instruments.get(instrumentId);
+        instrument.setDescription(description);
+        instrument.setBusinesskey(businesskey);
+        instrument.setIsactive(isActive);
+        instruments.put(instrumentId, instrument);
     }
 
     @Override

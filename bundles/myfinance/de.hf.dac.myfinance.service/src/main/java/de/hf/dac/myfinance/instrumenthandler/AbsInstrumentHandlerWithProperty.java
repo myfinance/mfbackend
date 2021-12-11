@@ -69,4 +69,14 @@ public abstract class AbsInstrumentHandlerWithProperty extends AbsInstrumentHand
         }    
     }
 
+    protected void deleteInstrumentPropertyList(InstrumentPropertyType propertyType) {
+        var instrumentProperties = instrumentDao.getInstrumentProperties(instrumentId);
+        for (InstrumentProperties instrumentProperty : instrumentProperties) {
+            if(instrumentProperty.getPropertyname().equals(propertyType.name())) {
+                auditService.saveMessage(instrumentDao.deleteInstrumentProperty(instrumentProperty.getPropertyid()),
+                Severity.INFO, AUDIT_MSG_TYPE);
+            }
+        }    
+    }
+
 }

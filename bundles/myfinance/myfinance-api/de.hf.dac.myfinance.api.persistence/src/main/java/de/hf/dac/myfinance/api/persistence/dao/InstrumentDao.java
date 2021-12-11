@@ -30,7 +30,7 @@ public interface InstrumentDao {
     Optional<Instrument> getCurrency(String currencyCode);
     Optional<Instrument> getInstrument(int instrumentId);
     void saveInstrument(Instrument instrument);
-    void updateInstrument(int instrumentId, String description, boolean isActive);
+    void updateInstrument(int instrumentId, String description, boolean isActive, String businesskey);
     void saveSymbol(SecuritySymbols symbol);
     String deleteSymbols(int symbolId);
     List<InstrumentGraphEntry> getAncestorGraphEntries(int instrumentId, EdgeType edgeType);
