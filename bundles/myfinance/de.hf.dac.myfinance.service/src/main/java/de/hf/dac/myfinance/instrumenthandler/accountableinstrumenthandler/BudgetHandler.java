@@ -42,4 +42,10 @@ public class BudgetHandler extends AbsCashInstrumentHandler {
     protected InstrumentType getInstrumentType() {
         return InstrumentType.BUDGET;
     }
+
+    @Override
+    public void setDescription(String description) {
+        super.setDescription(description);
+        super.setBusinesskey(description);
+    }
 }

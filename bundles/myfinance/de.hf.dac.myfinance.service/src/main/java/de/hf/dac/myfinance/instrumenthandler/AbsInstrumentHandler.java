@@ -32,13 +32,8 @@ public abstract class AbsInstrumentHandler {
     protected boolean isActive = true;
 
     protected AbsInstrumentHandler(InstrumentDao instrumentDao, AuditService auditService, String description, String businesskey) {
-        this.description = description;
-        if(businesskey==null) {
-            this.businesskey = description.trim();
-        } else {
-            this.businesskey = businesskey.trim();
-        }
-        if(this.businesskey.length()>31) this.businesskey = this.businesskey.substring(0, 31);
+        setDescription(description);
+        setBusinesskey(businesskey);
         setBaseValues(instrumentDao, auditService);
         domainObject = getExistingObject();
         if(!exists) {
@@ -184,7 +179,10 @@ public abstract class AbsInstrumentHandler {
         if(description.equals("")) {
             description = domainObject.getDescription();
         }
-        instrumentDao.updateInstrument(instrumentId, description, isActive);
+        if(businesskey.equals("")) {
+            businesskey = domainObject.getBusinesskey();
+        }
+        instrumentDao.updateInstrument(instrumentId, description, isActive, businesskey);
         auditService.saveMessage(domainObjectName+" updated:" + domainObject.getDescription(), Severity.INFO, AUDIT_MSG_TYPE);
     }
 
@@ -194,6 +192,16 @@ public abstract class AbsInstrumentHandler {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public void setBusinesskey(String businesskey) {
+        if(businesskey==null) {
+            this.businesskey = description.trim();
+        } else {
+            this.businesskey = businesskey.trim();
+        }
+        this.businesskey = this.businesskey.replace(" ", "");
+        if(this.businesskey.length()>31) this.businesskey = this.businesskey.substring(0, 31);
     }
 
     public Optional<Instrument> getSavedDomainObject() {

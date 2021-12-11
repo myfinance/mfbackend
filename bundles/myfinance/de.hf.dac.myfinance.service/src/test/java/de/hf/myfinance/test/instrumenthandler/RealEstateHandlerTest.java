@@ -64,5 +64,31 @@ public class RealEstateHandlerTest {
         assertEquals(1, instrumentFactory.getTenantHandler(tenantId, false).getAccounts().size());
         var properties = instrumentFactory.getBaseInstrumentHandler(realEstateHandler.getInstrumentId()).getInstrumentProperties();
         assertEquals(3, properties.size());
+
+
+        // update
+
+        var newrealEstateHandler = instrumentFactory.getRealEstateHandler(realEstateHandler.getInstrumentId(), true);
+        List<ValuePerDate> newyieldgoals = new ArrayList<ValuePerDate>();
+        newyieldgoals.add(new ValuePerDate("4.5,2020-01-01"));
+        newyieldgoals.add(new ValuePerDate("5.5,2020-01-02"));
+        List<ValuePerDate> newrealEstateProfits = new ArrayList<ValuePerDate>();
+        newrealEstateProfits.add(new ValuePerDate("2001,2020-01-01"));
+        newrealEstateProfits.add(new ValuePerDate("2010,2020-01-02"));
+        newrealEstateHandler.initAdditionalFields(newyieldgoals, newrealEstateProfits);
+        newrealEstateHandler.setActive(true);
+        newrealEstateHandler.setDescription("a new desc");
+        newrealEstateHandler.save();
+
+
+
+
+        var updatedrealestateHandler = instrumentFactory.getRealEstateHandler(realEstateHandler.getInstrumentId(), true);
+        var updatedproperties = updatedrealestateHandler.getInstrumentProperties();
+        assertEquals(5, updatedproperties.size());
+        assertEquals(8, updatedrealestateHandler.getBudgetGroupId());
+        assertEquals("a new desc", updatedrealestateHandler.getInstrument().getDescription());
+        assertEquals("anewdesc", updatedrealestateHandler.getInstrument().getBusinesskey());
+        assertEquals(true, updatedrealestateHandler.getInstrument().isIsactive());
     }
 }

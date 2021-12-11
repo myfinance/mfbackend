@@ -8,6 +8,7 @@ import java.util.TreeMap;
 import de.hf.dac.myfinance.api.service.ValueCurveService;
 
 public class ValueCurveServiceMock implements ValueCurveService {
+    boolean returnsValue = true;
 
     Map<Integer, TreeMap<LocalDate, Double>> positionValueCurve;
 
@@ -19,6 +20,7 @@ public class ValueCurveServiceMock implements ValueCurveService {
 
     @Override
     public double getValue(int instrumentId, LocalDate date) {
+        if(!returnsValue) return 0.0;
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         LocalDate firstDate = LocalDate.parse("2019-01-01", formatter);
         LocalDate secondDate = LocalDate.parse("2020-01-02", formatter);
@@ -60,6 +62,10 @@ public class ValueCurveServiceMock implements ValueCurveService {
     public Map<Integer, TreeMap<LocalDate, Double>> getPositionValueCurve(int depotId) {
 
         return this.positionValueCurve;
+    }
+
+    public void setReturnsValue(Boolean returnsValue) {
+        this.returnsValue = returnsValue;
     }
     
 }

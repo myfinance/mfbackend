@@ -210,7 +210,7 @@ public class InstrumentServiceImpl implements InstrumentService {
     @Override
     public void updateRealEstate(int instrumentId, String description, List<ValuePerDate> yieldgoals, List<ValuePerDate> realEstateProfits, boolean isActive) {
         var realEstateHandler = instrumentFactory.getRealEstateHandler(instrumentId, true);
-        realEstateHandler.initAdditionalFields(-1, yieldgoals, realEstateProfits);
+        realEstateHandler.initAdditionalFields(yieldgoals, realEstateProfits);
         realEstateHandler.setActive(isActive);
         realEstateHandler.setDescription(description);
         realEstateHandler.save();

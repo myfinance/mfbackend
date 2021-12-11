@@ -51,7 +51,7 @@ public class DepotHandler extends AbsAccountableInstrumentHandler {
     public void setDefaultGiroId(int defaultGiroId){
         var giro = getInstrument(defaultGiroId, "Depot not saved: Unknown default giro account:");
         validateInstrument(giro, InstrumentType.GIRO, "Depot not saved: default giro account not valid:");
-        defaultGiroId = giro.getInstrumentid();
+        this.defaultGiroId = giro.getInstrumentid();
     }
 
     private void setValueBudgetId(int valueBudgetId){
@@ -80,5 +80,11 @@ public class DepotHandler extends AbsAccountableInstrumentHandler {
     @Override
     protected InstrumentType getParentType() {
         return InstrumentType.ACCOUNTPORTFOLIO;
+    }
+
+    @Override
+    public void setDescription(String description) {
+        super.setDescription(description);
+        super.setBusinesskey(description);
     }
 }

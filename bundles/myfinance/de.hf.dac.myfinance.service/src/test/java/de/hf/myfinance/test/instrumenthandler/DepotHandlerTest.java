@@ -3,17 +3,12 @@ package de.hf.myfinance.test.instrumenthandler;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import de.hf.dac.myfinance.api.domain.Instrument;
 import de.hf.dac.myfinance.api.domain.InstrumentType;
-import de.hf.dac.myfinance.api.domain.ValuePerDate;
 import de.hf.dac.myfinance.instrumenthandler.InstrumentFactory;
 import de.hf.dac.myfinance.instrumenthandler.accountableinstrumenthandler.BudgetHandler;
 import de.hf.dac.myfinance.instrumenthandler.accountableinstrumenthandler.DepotHandler;
 import de.hf.dac.myfinance.instrumenthandler.accountableinstrumenthandler.GiroHandler;
-import de.hf.dac.myfinance.instrumenthandler.accountableinstrumenthandler.RealEstateHandler;
 import de.hf.dac.myfinance.instrumenthandler.accountableinstrumenthandler.TenantHandler;
 import de.hf.myfinance.test.mock.AuditServiceMockImpl;
 import de.hf.myfinance.test.mock.InstrumentDaoMock;
@@ -68,5 +63,35 @@ public class DepotHandlerTest {
         assertEquals(2, instrumentFactory.getTenantHandler(tenantId, false).getAccounts().size());
         var properties = instrumentFactory.getBaseInstrumentHandler(depotHandler.getInstrumentId()).getInstrumentProperties();
         assertEquals(1, properties.size());
+        assertEquals("DEFAULTGIROID", properties.get(0).getPropertyname());
+        assertEquals("7", properties.get(0).getValue());
+
+
+        // update
+        var newgiroHandler = new GiroHandler(instrumentDao, auditService, valueService, recurrentTransactionDao, girodesc, tenantId, "newtestgiro");
+        newgiroHandler.save();
+        assertEquals(9, newgiroHandler.getInstrumentId());
+
+        var newdepotHandler = (DepotHandler)instrumentFactory.getDepotHandler(depotHandler.getInstrumentId(), true);
+        newdepotHandler.setDefaultGiroId(newgiroHandler.getInstrumentId());
+        newdepotHandler.setActive(true);
+        newdepotHandler.setDescription("a new desc");
+        newdepotHandler.save();
+
+
+        var updateddepotHandler = (DepotHandler)instrumentFactory.getDepotHandler(depotHandler.getInstrumentId(), true);
+        var updatedproperties = updateddepotHandler.getInstrumentProperties();
+        assertEquals(1, updatedproperties.size());
+        assertEquals("DEFAULTGIROID", updatedproperties.get(0).getPropertyname());
+        assertEquals("9", updatedproperties.get(0).getValue());
+        assertEquals("a new desc", updateddepotHandler.getInstrument().getDescription());
+        assertEquals("anewdesc", updateddepotHandler.getInstrument().getBusinesskey());
+        assertEquals(true, updateddepotHandler.getInstrument().isIsactive());
+
+        /*newdepotHandler.setActive(false);
+        newdepotHandler.save();
+
+        updateddepotHandler = (DepotHandler)instrumentFactory.getDepotHandler(depotHandler.getInstrumentId(), true);
+        assertEquals(false, updateddepotHandler.getInstrument().isIsactive());*/
     }
 }

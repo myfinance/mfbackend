@@ -53,11 +53,15 @@ public class RealEstateHandler extends AbsAccountableInstrumentHandler{
         return InstrumentType.REALESTATE;
     }
 
-    public void initAdditionalFields(int valueBudgetId, List<ValuePerDate> yieldgoals, List<ValuePerDate> realEstateProfits) {
-        setValueBudgetId(valueBudgetId);
+    public void initAdditionalFields(List<ValuePerDate> yieldgoals, List<ValuePerDate> realEstateProfits) {
         this.yieldgoals = yieldgoals;
         this.realEstateProfits = realEstateProfits;
         isRealEstateInitialized = true;
+    }
+
+    public void initAdditionalFields(int valueBudgetId, List<ValuePerDate> yieldgoals, List<ValuePerDate> realEstateProfits) {
+        setValueBudgetId(valueBudgetId);
+        initAdditionalFields(yieldgoals, realEstateProfits);
     }
 
     private void setValueBudgetId(int valueBudgetId){
@@ -88,7 +92,8 @@ public class RealEstateHandler extends AbsAccountableInstrumentHandler{
     @Override
     protected void updateInstrument() {
         super.updateInstrument();
-        deleteInstrumentPropertyList();
+        deleteInstrumentPropertyList(InstrumentPropertyType.YIELDGOAL);
+        deleteInstrumentPropertyList(InstrumentPropertyType.REALESTATEPROFITS);
         savePropertyList(InstrumentPropertyType.YIELDGOAL, yieldgoals);
         savePropertyList(InstrumentPropertyType.REALESTATEPROFITS, realEstateProfits);
     }
@@ -113,4 +118,9 @@ public class RealEstateHandler extends AbsAccountableInstrumentHandler{
         return InstrumentType.ACCOUNTPORTFOLIO;
     }
 
+    @Override
+    public void setDescription(String description) {
+        super.setDescription(description);
+        super.setBusinesskey(description);
+    }
 }
