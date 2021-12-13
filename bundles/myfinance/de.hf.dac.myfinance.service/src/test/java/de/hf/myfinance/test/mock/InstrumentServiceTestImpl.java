@@ -12,8 +12,18 @@ import de.hf.dac.myfinance.api.domain.InstrumentProperties;
 import de.hf.dac.myfinance.api.domain.InstrumentType;
 import de.hf.dac.myfinance.api.domain.ValuePerDate;
 import de.hf.dac.myfinance.api.service.InstrumentService;
+import de.hf.dac.myfinance.instrumenthandler.InstrumentFactory;
 
 public class InstrumentServiceTestImpl implements InstrumentService {
+    private InstrumentFactory instrumentFactory;
+
+    public InstrumentServiceTestImpl(){
+        var instrumentDao = new InstrumentDaoMock();
+        var auditService = new AuditServiceMockImpl();
+        var valueService = new ValueCurveServiceMock();
+        var recurrentTransactionDao = new RecurrentTransactionDaoMockImpl();
+        this.instrumentFactory = new InstrumentFactory(instrumentDao, auditService, valueService, recurrentTransactionDao);
+    }
 
     @Override
     public List<Instrument> listInstruments() {

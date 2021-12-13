@@ -32,6 +32,8 @@ public class RealEstateValueHandler extends AbsValueHandler{
                 profits.put(instrumentProperty.getValidfrom(), Double.parseDouble(instrumentProperty.getValue()));
             } else if(instrumentProperty.getPropertyname().equals(InstrumentPropertyType.YIELDGOAL.getStringValue())) {
                 yieldgoals.put(instrumentProperty.getValidfrom(), Double.parseDouble(instrumentProperty.getValue()));
+            } else {
+                continue;
             }
             dates.add(instrumentProperty.getValidfrom());
         }

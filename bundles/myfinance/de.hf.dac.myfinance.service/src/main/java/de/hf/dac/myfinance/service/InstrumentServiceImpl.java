@@ -18,7 +18,6 @@
 package de.hf.dac.myfinance.service;
 
 import de.hf.dac.api.io.audit.AuditService;
-import de.hf.dac.api.io.web.WebRequestService;
 import de.hf.dac.myfinance.api.domain.*;
 import de.hf.dac.myfinance.api.persistence.dao.*;
 import de.hf.dac.myfinance.api.service.InstrumentService;
@@ -39,7 +38,7 @@ public class InstrumentServiceImpl implements InstrumentService {
 
 
     @Inject
-    public InstrumentServiceImpl(InstrumentDao instrumentDao, RecurrentTransactionDao recurrentTransactionDao, WebRequestService webRequestService, AuditService auditService, ValueCurveService valueService){
+    public InstrumentServiceImpl(InstrumentDao instrumentDao, RecurrentTransactionDao recurrentTransactionDao, AuditService auditService, ValueCurveService valueService){
         this.instrumentFactory = new InstrumentFactory(instrumentDao, auditService, valueService, recurrentTransactionDao);
     }
 
