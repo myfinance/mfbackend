@@ -7,12 +7,12 @@ import java.util.TreeSet;
 import de.hf.dac.myfinance.api.domain.Instrument;
 import de.hf.dac.myfinance.api.domain.InstrumentPropertyType;
 import de.hf.dac.myfinance.api.service.InstrumentService;
-import de.hf.dac.myfinance.api.service.ValueCurveService;
+import de.hf.dac.myfinance.api.service.ValueCurveHandler;
 
 public class RealEstateValueHandler extends AbsValueHandler{
     private InstrumentService instrumentService;
 
-    public RealEstateValueHandler(InstrumentService instrumentService, ValueCurveService valueCurveService){
+    public RealEstateValueHandler(InstrumentService instrumentService, ValueCurveHandler valueCurveService){
         super(valueCurveService);
         this.instrumentService = instrumentService;
     }

@@ -21,7 +21,7 @@ import de.hf.dac.myfinance.api.domain.EndOfDayPrice;
 import de.hf.dac.myfinance.api.domain.Instrument;
 import de.hf.dac.myfinance.api.domain.InstrumentType;
 import de.hf.dac.myfinance.api.persistence.dao.EndOfDayPriceDao;
-import de.hf.dac.myfinance.api.service.ValueCurveService;
+import de.hf.dac.myfinance.api.service.ValueCurveHandler;
 
 import java.time.LocalDate;
 import java.util.Iterator;
@@ -37,10 +37,10 @@ import static java.time.temporal.ChronoUnit.DAYS;
 
 public class SecurityValueHandler implements ValueHandler{
     private EndOfDayPriceDao endOfDayPriceDao;
-    private ValueCurveService service;
+    private ValueCurveHandler service;
 
     @Inject
-    public SecurityValueHandler(ValueCurveService service, EndOfDayPriceDao endOfDayPriceDao){
+    public SecurityValueHandler(ValueCurveHandler service, EndOfDayPriceDao endOfDayPriceDao){
         this.endOfDayPriceDao = endOfDayPriceDao;
         this.service = service;
     }

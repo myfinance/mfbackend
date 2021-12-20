@@ -16,7 +16,7 @@ import de.hf.dac.myfinance.api.exceptions.MFMsgKey;
 import de.hf.dac.myfinance.api.persistence.dao.CashflowDao;
 import de.hf.dac.myfinance.api.persistence.dao.TransactionDao;
 import de.hf.dac.myfinance.api.service.InstrumentService;
-import de.hf.dac.myfinance.api.service.ValueCurveService;
+import de.hf.dac.myfinance.api.service.ValueCurveHandler;
 
 public abstract class AbsTransactionHandler extends AbsHandler{
 
@@ -27,7 +27,7 @@ public abstract class AbsTransactionHandler extends AbsHandler{
     protected TransactionType transactionType;
     protected TransactionDao transactionDao;
     protected AuditService auditService;
-    protected ValueCurveService valueCurveService;
+    protected ValueCurveHandler valueCurveService;
     protected CashflowDao cashflowDao;
 
     protected LocalDateTime ts;
@@ -40,7 +40,7 @@ public abstract class AbsTransactionHandler extends AbsHandler{
     protected AbsTransactionHandler(InstrumentService instrumentService,
             TransactionDao transactionDao, 
             AuditService auditService,
-            ValueCurveService valueCurveService,
+            ValueCurveHandler valueCurveService,
             CashflowDao cashflowDao) {
         super(instrumentService);
         this.auditService = auditService;  

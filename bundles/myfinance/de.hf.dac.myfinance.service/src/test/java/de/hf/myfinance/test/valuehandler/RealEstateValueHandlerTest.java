@@ -3,45 +3,25 @@ package de.hf.myfinance.test.valuehandler;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.TreeMap;
 
 import org.junit.jupiter.api.Test;
 
-import de.hf.dac.myfinance.api.domain.Depot;
 import de.hf.dac.myfinance.api.domain.Instrument;
 import de.hf.dac.myfinance.api.domain.InstrumentType;
-import de.hf.dac.myfinance.api.domain.RealEstate;
 import de.hf.dac.myfinance.api.domain.ValuePerDate;
-import de.hf.dac.myfinance.instrumenthandler.InstrumentFactory;
 import de.hf.dac.myfinance.instrumenthandler.accountableinstrumenthandler.BudgetHandler;
 import de.hf.dac.myfinance.instrumenthandler.accountableinstrumenthandler.RealEstateHandler;
 import de.hf.dac.myfinance.instrumenthandler.accountableinstrumenthandler.TenantHandler;
-import de.hf.dac.myfinance.service.InstrumentServiceImpl;
-import de.hf.dac.myfinance.valuehandler.DepotValueHandler;
 import de.hf.dac.myfinance.valuehandler.RealEstateValueHandler;
-import de.hf.myfinance.test.mock.AuditServiceMockImpl;
-import de.hf.myfinance.test.mock.InstrumentDaoMock;
-import de.hf.myfinance.test.mock.InstrumentServiceTestImpl;
-import de.hf.myfinance.test.mock.RecurrentTransactionDaoMockImpl;
-import de.hf.myfinance.test.mock.TransactionServiceMock;
-import de.hf.myfinance.test.mock.ValueCurveServiceMock;
-import de.hf.myfinance.test.testcasegenerator.TradeTestCaseGenerator;
+import de.hf.myfinance.test.AbsTest;
 
-public class RealEstateValueHandlerTest {
+public class RealEstateValueHandlerTest extends AbsTest{
     @Test
     public void realestateValueCalcTest(){
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-        var instrumentDao = new InstrumentDaoMock();
-        var auditService = new AuditServiceMockImpl();
-        var recurrentTransactionDao = new RecurrentTransactionDaoMockImpl();
-        var valueCurveService = new ValueCurveServiceMock();
-        var instrumentService = new InstrumentServiceImpl(instrumentDao, recurrentTransactionDao, auditService, valueCurveService);
-        var instrumentFactory = new InstrumentFactory(instrumentDao, auditService, valueCurveService, recurrentTransactionDao);
+        initTest();
 
         String tenantDesc = "testtenant";
         var tenantHandler = new TenantHandler(instrumentDao, auditService, instrumentFactory, tenantDesc);
@@ -58,7 +38,7 @@ public class RealEstateValueHandlerTest {
         }
 
         String budgetDesc = "testvaluebudget";
-        var budgetHandler = new BudgetHandler(instrumentDao, auditService, valueCurveService, recurrentTransactionDao, budgetDesc, budgetGroupId, budgetDesc);
+        var budgetHandler = new BudgetHandler(instrumentDao, auditService, valueService, recurrentTransactionDao, budgetDesc, budgetGroupId, budgetDesc);
         budgetHandler.save();
         var valueBudgetId = budgetHandler.getInstrumentId();
 
@@ -74,7 +54,7 @@ public class RealEstateValueHandlerTest {
         realEstateHandler.initAdditionalFields(valueBudgetId, yieldgoals, realEstateProfits);
         realEstateHandler.save();
         
-        var realEstateValueHandler = new RealEstateValueHandler(instrumentService, valueCurveService);
+        var realEstateValueHandler = new RealEstateValueHandler(instrumentService, valueCurveHandler);
 
 
         TreeMap<LocalDate, Double> calculatedValueCurve = realEstateValueHandler.calcValueCurve(realEstateHandler.getSavedDomainObject().get());

@@ -8,35 +8,48 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import de.hf.dac.myfinance.api.domain.Cashflow;
+import de.hf.dac.myfinance.api.domain.Instrument;
+import de.hf.dac.myfinance.api.domain.InstrumentType;
 import de.hf.dac.myfinance.api.domain.TransactionType;
-import de.hf.dac.myfinance.api.service.InstrumentService;
+import de.hf.dac.myfinance.instrumenthandler.accountableinstrumenthandler.BudgetHandler;
+import de.hf.dac.myfinance.instrumenthandler.accountableinstrumenthandler.TenantHandler;
 import de.hf.dac.myfinance.transactionhandler.AbsTransferHandler;
 import de.hf.dac.myfinance.transactionhandler.TransactionHandlerFactory;
-import de.hf.myfinance.test.mock.AuditServiceMockImpl;
-import de.hf.myfinance.test.mock.CashflowDaoMock;
-import de.hf.myfinance.test.mock.TradeDaoMock;
-import de.hf.myfinance.test.mock.InstrumentServiceTestImpl;
-import de.hf.myfinance.test.mock.TransactionDaoMock;
-import de.hf.myfinance.test.mock.ValueCurveServiceMock;
+import de.hf.myfinance.test.AbsTest;
 
-public class BudgetTransferHandlerTest {
+public class BudgetTransferHandlerTest extends AbsTest{
     @Test
     public void firstbudgettransfertest(){
-        TransactionDaoMock transactionDaoMock = new TransactionDaoMock();
-        InstrumentService instrumentService = new InstrumentServiceTestImpl();
-        var srcInstrument = instrumentService.getInstrument(2, "Can not add transfer: Unknown instrument:");
-        var trgInstrument = instrumentService.getInstrument(4, "Can not add transfer: Unknown instrument:");
+        initTest();
 
-        TransactionHandlerFactory transactionHandlerFactory = new TransactionHandlerFactory(instrumentService, transactionDaoMock, new AuditServiceMockImpl(), new ValueCurveServiceMock(), new CashflowDaoMock(), new TradeDaoMock());
+        var tenantHandler = new TenantHandler(instrumentDao, auditService, instrumentFactory, "tenant");
+        tenantHandler.save();
+        var tenantId = tenantHandler.getInstrumentId();
+        //Tenant, AccountPF, BudgetPF, BudgetGroup and IncomeBudget should be created
+        assertEquals(5, instrumentDao.listInstruments().size());
+        int budgetGroupId = 0;
+        var instruments = instrumentDao.listInstruments();
+        for (Instrument instrument : instruments) {
+            if(instrument.getInstrumentType().equals(InstrumentType.BUDGETGROUP)){
+                budgetGroupId = instrument.getInstrumentid();
+            }
+        }
+        var budgetHandler = new BudgetHandler(instrumentDao, auditService, valueService, recurrentTransactionDao, "testbudget", budgetGroupId, "testbudget");
+        budgetHandler.save();
+        var budgetHandler2 = new BudgetHandler(instrumentDao, auditService, valueService, recurrentTransactionDao, "testbudget2", budgetGroupId, "testbudget2");
+        budgetHandler2.save();
 
-        AbsTransferHandler transactionHandler = transactionHandlerFactory.createTransferOrBudgetTransferHandler(srcInstrument);
-        transactionHandler.init(srcInstrument, trgInstrument, LocalDateTime.now(), "testbudgettransfer", 100, LocalDate.now());
+        TransactionHandlerFactory transactionHandlerFactory = new TransactionHandlerFactory(instrumentService, transactionDaoMock, auditService, valueCurveHandler, cashflowDao, tradeDao);
+
+        AbsTransferHandler transactionHandler = transactionHandlerFactory.createTransferOrBudgetTransferHandler(budgetHandler.getInstrument());
+        transactionHandler.init(budgetHandler.getInstrument(), budgetHandler2.getInstrument(), ts, "testbudgettransfer", 100, LocalDate.now());
         transactionHandler.save();
-        assertEquals(2, transactionDaoMock.getTransaction().getCashflows().size());
+        int transactionId = 1;
+        assertEquals(2, transactionDaoMock.getTransaction(transactionId).get().getCashflows().size());
         ArrayList<Cashflow> cashflows = new ArrayList<Cashflow>();
-        cashflows.addAll(transactionDaoMock.getTransaction().getCashflows());
+        cashflows.addAll(transactionDaoMock.getTransaction(transactionId).get().getCashflows());
         assertEquals(true, cashflows.get(0).getValue()==(cashflows.get(1).getValue()*(-1)));
-        assertEquals(TransactionType.BUDGETTRANSFER, transactionDaoMock.getTransaction().getTransactionType());
+        assertEquals(TransactionType.BUDGETTRANSFER, transactionDaoMock.getTransaction(transactionId).get().getTransactionType());
 
     }
 }

@@ -13,20 +13,20 @@ import de.hf.dac.myfinance.api.persistence.dao.CashflowDao;
 import de.hf.dac.myfinance.api.persistence.dao.TradeDao;
 import de.hf.dac.myfinance.api.persistence.dao.TransactionDao;
 import de.hf.dac.myfinance.api.service.InstrumentService;
-import de.hf.dac.myfinance.api.service.ValueCurveService;
+import de.hf.dac.myfinance.api.service.ValueCurveHandler;
 
 public class TransactionHandlerFactory {
     private InstrumentService instrumentService;
     private TransactionDao transactionDao;
     private AuditService auditService;
-    private ValueCurveService valueCurveService;
+    private ValueCurveHandler valueCurveService;
     private CashflowDao cashflowDao;
     private TradeDao tradeDao;
 
     public TransactionHandlerFactory(InstrumentService instrumentService,
             TransactionDao transactionDao, 
             AuditService auditService,
-            ValueCurveService valueCurveService,
+            ValueCurveHandler valueCurveService,
             CashflowDao cashflowDao,
             TradeDao tradeDao) {
         this.instrumentService = instrumentService;

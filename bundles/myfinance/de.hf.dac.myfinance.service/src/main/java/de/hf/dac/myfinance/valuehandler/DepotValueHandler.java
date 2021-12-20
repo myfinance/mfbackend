@@ -7,13 +7,13 @@ import java.util.Map.Entry;
 import de.hf.dac.myfinance.api.domain.Instrument;
 import de.hf.dac.myfinance.api.domain.Transaction;
 import de.hf.dac.myfinance.api.service.TransactionService;
-import de.hf.dac.myfinance.api.service.ValueCurveService;
+import de.hf.dac.myfinance.api.service.ValueCurveHandler;
 
 public class DepotValueHandler extends AbsValueHandler {
     private final TransactionService transactionService;
     private LocalDate startDate = LocalDate.now();
 
-    public DepotValueHandler(final TransactionService transactionService, final ValueCurveService valueCurveService) {
+    public DepotValueHandler(final TransactionService transactionService, final ValueCurveHandler valueCurveService) {
         super(valueCurveService);
         this.transactionService = transactionService;
     }

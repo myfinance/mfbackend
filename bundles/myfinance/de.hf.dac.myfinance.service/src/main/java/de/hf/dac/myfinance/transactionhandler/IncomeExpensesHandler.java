@@ -14,7 +14,7 @@ import de.hf.dac.myfinance.api.domain.TransactionType;
 import de.hf.dac.myfinance.api.persistence.dao.CashflowDao;
 import de.hf.dac.myfinance.api.persistence.dao.TransactionDao;
 import de.hf.dac.myfinance.api.service.InstrumentService;
-import de.hf.dac.myfinance.api.service.ValueCurveService;
+import de.hf.dac.myfinance.api.service.ValueCurveHandler;
 
 public class IncomeExpensesHandler extends AbsTransactionHandler{
 
@@ -24,9 +24,9 @@ public class IncomeExpensesHandler extends AbsTransactionHandler{
     public IncomeExpensesHandler(InstrumentService instrumentService, 
             TransactionDao transactionDao, 
             AuditService auditService,
-            ValueCurveService valueCurveService,
+            ValueCurveHandler valueCurveHandler,
             CashflowDao cashflowDao) {
-        super(instrumentService, transactionDao, auditService, valueCurveService, cashflowDao);
+        super(instrumentService, transactionDao, auditService, valueCurveHandler, cashflowDao);
         transactionType = TransactionType.INCOMEEXPENSES;
     }
 

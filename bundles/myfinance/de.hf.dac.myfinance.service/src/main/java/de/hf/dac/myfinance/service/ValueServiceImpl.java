@@ -24,7 +24,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.TreeMap;
 
 import javax.inject.Inject;
 
@@ -33,62 +32,34 @@ import de.hf.dac.myfinance.api.domain.Instrument;
 import de.hf.dac.myfinance.api.domain.InstrumentDetails;
 import de.hf.dac.myfinance.api.domain.InstrumentType;
 import de.hf.dac.myfinance.api.service.TransactionService;
-import de.hf.dac.myfinance.api.service.ValueCurveService;
+import de.hf.dac.myfinance.api.service.ValueCurveHandler;
 import de.hf.dac.myfinance.api.service.ValueService;
 
 public class ValueServiceImpl implements ValueService {
 
-    private ValueCurveService service;
+    private ValueCurveHandler valueCurveService;
     private TransactionService transactionService;
 
     @Inject
-    public ValueServiceImpl(ValueCurveService service, TransactionService transactionService){
-        this.service = service;
+    public ValueServiceImpl(ValueCurveHandler valueCurveService, TransactionService transactionService){
+        this.valueCurveService = valueCurveService;
         this.transactionService = transactionService;
     }
 
     @Override
     public Map<LocalDate, Double> getValueCurve(final int instrumentId) {
-        return service.getValueCurve(instrumentId);
+        return valueCurveService.getValueCurve(instrumentId);
     }
 
     @Override
     public Map<LocalDate, Double> getValueCurve(final int instrumentId, final LocalDate startDate,
             final LocalDate endDate) {
-        final Map<LocalDate, Double> adjValueCurve = new TreeMap<>();
-        if (startDate.isAfter(endDate) || startDate.getYear() < 1970)
-            return adjValueCurve;
-        final Map<LocalDate, Double> valueCurve = getValueCurve(instrumentId);
-        var first = LocalDate.MIN;
-        var last = LocalDate.MAX;
-        for (final LocalDate date : valueCurve.keySet()) {
-            if(first==LocalDate.MIN) {
-                first = date;
-            }
-            if (!date.isBefore(startDate) && !date.isAfter(endDate)) {
-                adjValueCurve.put(date, valueCurve.get(date));
-            }
-            last = date;
-        }
-        if(!valueCurve.isEmpty()) {
-            if(first.isAfter(endDate)) {
-                adjValueCurve.put(startDate, valueCurve.get(first));
-                adjValueCurve.put(endDate, valueCurve.get(first));
-            } else if(last.isBefore(startDate)) {
-                adjValueCurve.put(startDate, valueCurve.get(last));
-                adjValueCurve.put(endDate, valueCurve.get(last));
-            } else if(first.isAfter(startDate)) {
-                adjValueCurve.put(startDate, valueCurve.get(first));
-            } else if(last.isBefore(endDate)) {
-                adjValueCurve.put(endDate, valueCurve.get(last));
-            }
-        }
-        return adjValueCurve;
+        return valueCurveService.getValueCurve(instrumentId, startDate, endDate);
     }
 
     @Override
     public double getValue(final int instrumentId, final LocalDate date) {
-        return service.getValue(instrumentId, date);
+        return valueCurveService.getValue(instrumentId, date);
     }
 
     @Override

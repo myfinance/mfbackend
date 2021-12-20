@@ -20,7 +20,7 @@ import de.hf.dac.myfinance.api.persistence.dao.TradeDao;
 import de.hf.dac.myfinance.api.persistence.dao.TransactionDao;
 import de.hf.dac.myfinance.api.service.InstrumentService;
 import de.hf.dac.myfinance.api.service.TransactionService;
-import de.hf.dac.myfinance.api.service.ValueCurveService;
+import de.hf.dac.myfinance.api.service.ValueCurveHandler;
 import de.hf.dac.myfinance.transactionhandler.AbsTransactionHandler;
 import de.hf.dac.myfinance.transactionhandler.AbsTransferHandler;
 import de.hf.dac.myfinance.transactionhandler.IncomeExpensesHandler;
@@ -30,7 +30,7 @@ import de.hf.dac.myfinance.transactionhandler.TransactionHandlerFactory;
 
 public class TransactionServiceImpl implements TransactionService {
     private InstrumentService instrumentService;
-    private ValueCurveService valueCurveService;
+    private ValueCurveHandler valueCurveService;
     private AuditService auditService;
     private TransactionDao transactionDao;
     private RecurrentTransactionDao recurrentTransactionDao;
@@ -43,7 +43,7 @@ public class TransactionServiceImpl implements TransactionService {
 
     @Inject
     public TransactionServiceImpl(InstrumentService instrumentService, TransactionDao transactionDao, RecurrentTransactionDao recurrentTransactionDao, CashflowDao cashflowDao, 
-        TradeDao tradeDao,AuditService auditService, ValueCurveService valueCurveService){
+        TradeDao tradeDao,AuditService auditService, ValueCurveHandler valueCurveService){
         this.instrumentService = instrumentService;
         this.transactionDao = transactionDao;
         this.recurrentTransactionDao = recurrentTransactionDao;

@@ -10,7 +10,8 @@ import de.hf.dac.myfinance.api.exceptions.MFException;
 import de.hf.dac.myfinance.api.exceptions.MFMsgKey;
 import de.hf.dac.myfinance.api.persistence.dao.InstrumentDao;
 import de.hf.dac.myfinance.api.persistence.dao.RecurrentTransactionDao;
-import de.hf.dac.myfinance.api.service.ValueCurveService;
+import de.hf.dac.myfinance.api.service.ValueCurveHandler;
+import de.hf.dac.myfinance.api.service.ValueService;
 import de.hf.dac.myfinance.instrumenthandler.accountableinstrumenthandler.AccountPortfolioHandler;
 import de.hf.dac.myfinance.instrumenthandler.accountableinstrumenthandler.BaseAccountableInstrumentHandler;
 import de.hf.dac.myfinance.instrumenthandler.accountableinstrumenthandler.BaseAccountableInstrumentHandlerImpl;
@@ -29,10 +30,10 @@ public class InstrumentFactory {
 
     private final InstrumentDao instrumentDao;
     private final AuditService auditService;
-    private final ValueCurveService valueService;
+    private final ValueService valueService;
     private final RecurrentTransactionDao recurrentTransactionDao;
 
-    public InstrumentFactory(InstrumentDao instrumentDao, AuditService auditService, ValueCurveService valueService, RecurrentTransactionDao recurrentTransactionDao) {
+    public InstrumentFactory(InstrumentDao instrumentDao, AuditService auditService, ValueService valueService, RecurrentTransactionDao recurrentTransactionDao) {
         this.instrumentDao = instrumentDao;
         this.auditService = auditService;
         this.valueService = valueService;

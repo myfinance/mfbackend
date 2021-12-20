@@ -21,7 +21,7 @@ import de.hf.dac.api.io.audit.AuditService;
 import de.hf.dac.myfinance.api.domain.*;
 import de.hf.dac.myfinance.api.persistence.dao.*;
 import de.hf.dac.myfinance.api.service.InstrumentService;
-import de.hf.dac.myfinance.api.service.ValueCurveService;
+import de.hf.dac.myfinance.api.service.ValueService;
 import de.hf.dac.myfinance.instrumenthandler.InstrumentFactory;
 import de.hf.dac.myfinance.instrumenthandler.accountableinstrumenthandler.DepotHandler;
 import de.hf.dac.myfinance.instrumenthandler.accountableinstrumenthandler.RealEstateHandler;
@@ -38,7 +38,7 @@ public class InstrumentServiceImpl implements InstrumentService {
 
 
     @Inject
-    public InstrumentServiceImpl(InstrumentDao instrumentDao, RecurrentTransactionDao recurrentTransactionDao, AuditService auditService, ValueCurveService valueService){
+    public InstrumentServiceImpl(InstrumentDao instrumentDao, RecurrentTransactionDao recurrentTransactionDao, AuditService auditService, ValueService valueService){
         this.instrumentFactory = new InstrumentFactory(instrumentDao, auditService, valueService, recurrentTransactionDao);
     }
 
