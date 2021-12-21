@@ -24,9 +24,9 @@ Given: Description and Tenant
 When: the user adds a Giro Account
 Then: The Instrument of Type Giro is saved
 
-=== Transactions
+== bounded Context Transactions
 
-=== Value Calculation
+== bounded Context Value Calculation
 
 
-=== MarketData Importer
+== bounded Context  MarketData Importer
