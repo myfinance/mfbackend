@@ -13,26 +13,22 @@ import de.hf.dac.myfinance.api.persistence.dao.CashflowDao;
 import de.hf.dac.myfinance.api.persistence.dao.TradeDao;
 import de.hf.dac.myfinance.api.persistence.dao.TransactionDao;
 import de.hf.dac.myfinance.api.service.InstrumentService;
-import de.hf.dac.myfinance.api.service.ValueCurveHandler;
 
 public class TransactionHandlerFactory {
     private InstrumentService instrumentService;
     private TransactionDao transactionDao;
     private AuditService auditService;
-    private ValueCurveHandler valueCurveService;
     private CashflowDao cashflowDao;
     private TradeDao tradeDao;
 
     public TransactionHandlerFactory(InstrumentService instrumentService,
             TransactionDao transactionDao, 
             AuditService auditService,
-            ValueCurveHandler valueCurveService,
             CashflowDao cashflowDao,
             TradeDao tradeDao) {
         this.instrumentService = instrumentService;
         this.transactionDao = transactionDao;
         this.auditService = auditService;
-        this.valueCurveService = valueCurveService;
         this.cashflowDao = cashflowDao;
         this.tradeDao = tradeDao;
     }
@@ -51,30 +47,30 @@ public class TransactionHandlerFactory {
     public AbsTransactionHandler createTransactionHandler(TransactionType transactionType) {
         switch(transactionType){
             case INCOMEEXPENSES: 
-                return new IncomeExpensesHandler(instrumentService, transactionDao, auditService, valueCurveService, cashflowDao);
+                return new IncomeExpensesHandler(instrumentService, transactionDao, auditService, cashflowDao);
             case LINKEDINCOMEEXPENSES: 
-                return new LinkedIncomeExpensesHandler(instrumentService, transactionDao, auditService, valueCurveService, cashflowDao);                
+                return new LinkedIncomeExpensesHandler(instrumentService, transactionDao, auditService, cashflowDao);                
             case TRADE: 
-                return new TradeHandler(instrumentService, transactionDao, auditService, valueCurveService, cashflowDao, tradeDao);
+                return new TradeHandler(instrumentService, transactionDao, auditService, cashflowDao, tradeDao);
             case TRANSFER: 
-                return new TransferHandler(instrumentService, transactionDao, auditService, valueCurveService, cashflowDao);       
+                return new TransferHandler(instrumentService, transactionDao, auditService, cashflowDao);       
             case BUDGETTRANSFER: 
-                return new BudgetTransferHandler(instrumentService, transactionDao, auditService, valueCurveService, cashflowDao);                            
+                return new BudgetTransferHandler(instrumentService, transactionDao, auditService, cashflowDao);                            
             default:
                 throw new MFException(MFMsgKey.UNKNOWN_TRNSACTIONTYPE_EXCEPTION, "can not create Transactionhandler for transactionType:"+transactionType);
         }
     }
 
     public IncomeExpensesHandler createIncomeExpensesHandler() {
-        return new IncomeExpensesHandler(instrumentService, transactionDao, auditService, valueCurveService, cashflowDao);
+        return new IncomeExpensesHandler(instrumentService, transactionDao, auditService, cashflowDao);
     }
 
     public LinkedIncomeExpensesHandler createLinkedIncomeExpensesHandler() {
-        return new LinkedIncomeExpensesHandler(instrumentService, transactionDao, auditService, valueCurveService, cashflowDao);    
+        return new LinkedIncomeExpensesHandler(instrumentService, transactionDao, auditService, cashflowDao);    
     }
 
     public TradeHandler createTradeHandler() {
-        return new TradeHandler(instrumentService, transactionDao, auditService, valueCurveService, cashflowDao, tradeDao);    
+        return new TradeHandler(instrumentService, transactionDao, auditService, cashflowDao, tradeDao);    
     }
 
     public TradeHandler createTradeHandler(int transactionId) {
@@ -86,16 +82,16 @@ public class TransactionHandlerFactory {
         if(!oldtransaction.getTransactionType().equals(TransactionType.TRADE)) {
             throw new MFException(MFMsgKey.WRONG_TRNSACTIONTYPE_EXCEPTION, "Transactiontype is " + oldtransaction.getTransactionType() + " but trade was expected, Transaction for id:"+transactionId + " not updated");
         }
-        TradeHandler transactionHandler = new TradeHandler(instrumentService, transactionDao, auditService, valueCurveService, cashflowDao, tradeDao);
+        TradeHandler transactionHandler = new TradeHandler(instrumentService, transactionDao, auditService, cashflowDao, tradeDao);
         transactionHandler.setTransaction(oldtransaction);
         return transactionHandler;
     }
 
     public AbsTransferHandler createTransferOrBudgetTransferHandler(Instrument instrument) {
         if(instrument.getInstrumentType() == InstrumentType.BUDGET){
-            return new BudgetTransferHandler(instrumentService, transactionDao, auditService, valueCurveService, cashflowDao);
+            return new BudgetTransferHandler(instrumentService, transactionDao, auditService, cashflowDao);
         } else {
-            return new TransferHandler(instrumentService, transactionDao, auditService, valueCurveService, cashflowDao);  
+            return new TransferHandler(instrumentService, transactionDao, auditService, cashflowDao);  
         }  
     }
     

@@ -24,9 +24,8 @@ public class IncomeExpensesHandler extends AbsTransactionHandler{
     public IncomeExpensesHandler(InstrumentService instrumentService, 
             TransactionDao transactionDao, 
             AuditService auditService,
-            ValueCurveHandler valueCurveHandler,
             CashflowDao cashflowDao) {
-        super(instrumentService, transactionDao, auditService, valueCurveHandler, cashflowDao);
+        super(instrumentService, transactionDao, auditService, cashflowDao);
         transactionType = TransactionType.INCOMEEXPENSES;
     }
 
@@ -45,8 +44,8 @@ public class IncomeExpensesHandler extends AbsTransactionHandler{
 
     @Override
     protected void updateCache() {
-        valueCurveService.invalidateCache(account.getInstrumentid());
-        valueCurveService.invalidateCache(budget.getInstrumentid());
+        //valueCurveHandler.invalidateCache(account.getInstrumentid());
+        //valueCurveHandler.invalidateCache(budget.getInstrumentid());
     }
 
     @Override
@@ -66,7 +65,7 @@ public class IncomeExpensesHandler extends AbsTransactionHandler{
         transaction.getCashflows().forEach(i-> {
                 if(i.getValue()!=value) {
                     cashflowDao.updateCashflow(i.getCashflowid(), value);
-                    valueCurveService.invalidateCache(i.getInstrument().getInstrumentid());
+                    //valueCurveHandler.invalidateCache(i.getInstrument().getInstrumentid());
         }});
     }
 }

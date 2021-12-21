@@ -11,12 +11,16 @@ import de.hf.dac.myfinance.api.persistence.dao.RecurrentTransactionDao;
 import de.hf.dac.myfinance.api.persistence.dao.TradeDao;
 import de.hf.dac.myfinance.api.persistence.dao.TransactionDao;
 import de.hf.dac.myfinance.api.service.InstrumentService;
+import de.hf.dac.myfinance.api.service.PriceService;
+import de.hf.dac.myfinance.api.service.TransactionService;
 import de.hf.dac.myfinance.api.service.ValueCurveCache;
 import de.hf.dac.myfinance.api.service.ValueCurveHandler;
 import de.hf.dac.myfinance.api.service.ValueService;
 import de.hf.dac.myfinance.instrumenthandler.InstrumentFactory;
 import de.hf.dac.myfinance.service.InstrumentServiceImpl;
+import de.hf.dac.myfinance.service.PriceServiceImpl;
 import de.hf.dac.myfinance.service.SimpleCurveCache;
+import de.hf.dac.myfinance.service.TransactionServiceImpl;
 import de.hf.dac.myfinance.valuehandler.ValueCurveHandlerImpl;
 import de.hf.myfinance.test.mock.AuditServiceMockImpl;
 import de.hf.myfinance.test.mock.CashflowDaoMock;
@@ -37,16 +41,20 @@ public abstract class AbsTest {
     protected ValueService valueService;
     protected RecurrentTransactionDao recurrentTransactionDao;
     protected InstrumentService instrumentService;
-    protected TransactionDao transactionDaoMock;
+    protected TransactionDao transactionDao;
     protected CashflowDao cashflowDao;
-    protected TransactionServiceMock transactionService;
+    protected TransactionService transactionService;
     protected TradeDao tradeDao;
     protected ValueCurveCache cache;
     protected EndOfDayPriceDao endOfDayPriceDao;
     protected LocalDateTime ts;
+    protected PriceService priceService;
 
     public void initTest() {
         ts = LocalDateTime.now();
+        transactionDao = new TransactionDaoMock();
+        cashflowDao = new CashflowDaoMock();
+        tradeDao = new TradeDaoMock();
         formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         instrumentDao = new InstrumentDaoMock();
         auditService = new AuditServiceMockImpl();
@@ -57,11 +65,10 @@ public abstract class AbsTest {
         endOfDayPriceDao = new EndOfDayPriceDaoTestImpl();
         cache = new SimpleCurveCache();
         cache.flush();
-        transactionService = new TransactionServiceMock();
-        valueCurveHandler = new ValueCurveHandlerImpl(instrumentService, endOfDayPriceDao, cache, transactionService);
-        transactionDaoMock = new TransactionDaoMock();
-        cashflowDao = new CashflowDaoMock();
-        tradeDao = new TradeDaoMock();
+        priceService = new PriceServiceImpl(endOfDayPriceDao, instrumentService, null, auditService);
+        transactionService = new TransactionServiceImpl(instrumentService, transactionDao, recurrentTransactionDao, cashflowDao, tradeDao, auditService);
+        valueCurveHandler = new ValueCurveHandlerImpl(instrumentService, priceService, cache, transactionService);
+        
     }
 
 }

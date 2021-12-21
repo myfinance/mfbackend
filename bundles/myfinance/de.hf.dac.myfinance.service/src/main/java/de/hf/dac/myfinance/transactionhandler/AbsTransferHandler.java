@@ -22,9 +22,8 @@ public abstract class AbsTransferHandler extends AbsTransactionHandler {
     protected AbsTransferHandler(InstrumentService instrumentService, 
             TransactionDao transactionDao, 
             AuditService auditService,
-            ValueCurveHandler valueCurveService,
             CashflowDao cashflowDao) {
-        super(instrumentService, transactionDao, auditService, valueCurveService, cashflowDao);
+        super(instrumentService, transactionDao, auditService, cashflowDao);
     }
 
     public void init(Instrument srcInstrument, 
@@ -45,8 +44,8 @@ public abstract class AbsTransferHandler extends AbsTransactionHandler {
 
     @Override
     void updateCache() {
-        valueCurveService.invalidateCache(srcInstrument.getInstrumentid());
-        valueCurveService.invalidateCache(trgInstrument.getInstrumentid());
+        //valueCurveHandler.invalidateCache(srcInstrument.getInstrumentid());
+        //valueCurveHandler.invalidateCache(trgInstrument.getInstrumentid());
     }
 
     @Override
@@ -69,7 +68,7 @@ public abstract class AbsTransferHandler extends AbsTransactionHandler {
             } else {
                 cashflowDao.updateCashflow(i.getCashflowid(), -1 * value);
             }
-            valueCurveService.invalidateCache(i.getInstrument().getInstrumentid());
+            //valueCurveHandler.invalidateCache(i.getInstrument().getInstrumentid());
         });
     }
 }

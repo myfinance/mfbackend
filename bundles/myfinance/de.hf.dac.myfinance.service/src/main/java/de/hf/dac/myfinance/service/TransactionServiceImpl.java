@@ -30,7 +30,6 @@ import de.hf.dac.myfinance.transactionhandler.TransactionHandlerFactory;
 
 public class TransactionServiceImpl implements TransactionService {
     private InstrumentService instrumentService;
-    private ValueCurveHandler valueCurveService;
     private AuditService auditService;
     private TransactionDao transactionDao;
     private RecurrentTransactionDao recurrentTransactionDao;
@@ -43,15 +42,14 @@ public class TransactionServiceImpl implements TransactionService {
 
     @Inject
     public TransactionServiceImpl(InstrumentService instrumentService, TransactionDao transactionDao, RecurrentTransactionDao recurrentTransactionDao, CashflowDao cashflowDao, 
-        TradeDao tradeDao,AuditService auditService, ValueCurveHandler valueCurveService){
+        TradeDao tradeDao,AuditService auditService){
         this.instrumentService = instrumentService;
         this.transactionDao = transactionDao;
         this.recurrentTransactionDao = recurrentTransactionDao;
         this.cashflowDao = cashflowDao;
         this.tradeDao = tradeDao;
-        this.valueCurveService = valueCurveService;
         this.auditService = auditService;
-        this.transactionHandlerFactory = new TransactionHandlerFactory(this.instrumentService, this.transactionDao, this.auditService, this.valueCurveService, this.cashflowDao, this.tradeDao);
+        this.transactionHandlerFactory = new TransactionHandlerFactory(this.instrumentService, this.transactionDao, this.auditService, this.cashflowDao, this.tradeDao);
         this.recurrentTransactionHandler = new RecurrentTransactionHandler(instrumentService, transactionDao, auditService, recurrentTransactionDao);
     }
 

@@ -39,17 +39,17 @@ public class BudgetTransferHandlerTest extends AbsTest{
         var budgetHandler2 = new BudgetHandler(instrumentDao, auditService, valueService, recurrentTransactionDao, "testbudget2", budgetGroupId, "testbudget2");
         budgetHandler2.save();
 
-        TransactionHandlerFactory transactionHandlerFactory = new TransactionHandlerFactory(instrumentService, transactionDaoMock, auditService, valueCurveHandler, cashflowDao, tradeDao);
+        TransactionHandlerFactory transactionHandlerFactory = new TransactionHandlerFactory(instrumentService, transactionDao, auditService, cashflowDao, tradeDao);
 
         AbsTransferHandler transactionHandler = transactionHandlerFactory.createTransferOrBudgetTransferHandler(budgetHandler.getInstrument());
         transactionHandler.init(budgetHandler.getInstrument(), budgetHandler2.getInstrument(), ts, "testbudgettransfer", 100, LocalDate.now());
         transactionHandler.save();
         int transactionId = 1;
-        assertEquals(2, transactionDaoMock.getTransaction(transactionId).get().getCashflows().size());
+        assertEquals(2, transactionDao.getTransaction(transactionId).get().getCashflows().size());
         ArrayList<Cashflow> cashflows = new ArrayList<Cashflow>();
-        cashflows.addAll(transactionDaoMock.getTransaction(transactionId).get().getCashflows());
+        cashflows.addAll(transactionDao.getTransaction(transactionId).get().getCashflows());
         assertEquals(true, cashflows.get(0).getValue()==(cashflows.get(1).getValue()*(-1)));
-        assertEquals(TransactionType.BUDGETTRANSFER, transactionDaoMock.getTransaction(transactionId).get().getTransactionType());
+        assertEquals(TransactionType.BUDGETTRANSFER, transactionDao.getTransaction(transactionId).get().getTransactionType());
 
     }
 }

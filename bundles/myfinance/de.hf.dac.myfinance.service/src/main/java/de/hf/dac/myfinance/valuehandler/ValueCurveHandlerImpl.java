@@ -21,8 +21,8 @@ import de.hf.dac.myfinance.api.domain.InstrumentType;
 import de.hf.dac.myfinance.api.domain.InstrumentTypeGroup;
 import de.hf.dac.myfinance.api.exceptions.MFException;
 import de.hf.dac.myfinance.api.exceptions.MFMsgKey;
-import de.hf.dac.myfinance.api.persistence.dao.EndOfDayPriceDao;
 import de.hf.dac.myfinance.api.service.InstrumentService;
+import de.hf.dac.myfinance.api.service.PriceService;
 import de.hf.dac.myfinance.api.service.TransactionService;
 import de.hf.dac.myfinance.api.service.ValueCurveCache;
 import de.hf.dac.myfinance.api.service.ValueCurveHandler;
@@ -40,14 +40,14 @@ public class ValueCurveHandlerImpl implements ValueCurveHandler {
 
     private final InstrumentService instrumentService;
     private final TransactionService transactionService;
-    private final EndOfDayPriceDao endOfDayPriceDao;
+    private final PriceService priceService;
     ValueCurveCache cache;
 
     @Inject
-    public ValueCurveHandlerImpl(final InstrumentService instrumentService, final EndOfDayPriceDao endOfDayPriceDao,
+    public ValueCurveHandlerImpl(final InstrumentService instrumentService, final PriceService priceService,
             final ValueCurveCache cache, final TransactionService transactionService) {
         this.instrumentService = instrumentService;
-        this.endOfDayPriceDao = endOfDayPriceDao;
+        this.priceService = priceService;
         this.transactionService = transactionService;
         this.cache = cache;
     }
@@ -124,7 +124,7 @@ public class ValueCurveHandlerImpl implements ValueCurveHandler {
         ValueHandler valueHandler;
         switch (instrumentType.getTypeGroup()) {
             case SECURITY:
-                valueHandler = new SecurityValueHandler(this, endOfDayPriceDao);
+                valueHandler = new SecurityValueHandler(this, priceService);
                 break;
             case CASHACCOUNT:
                 valueHandler = new CashAccValueHandler(transactionService, this);

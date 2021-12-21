@@ -25,9 +25,8 @@ public class IncomeExpensesHandlerTest extends AbsTest {
         initTest();
         IncomeExpensesHandler incomeExpensesHandler = new IncomeExpensesHandler(
             instrumentService,
-            transactionDaoMock, 
+            transactionDao, 
             auditService, 
-            valueCurveHandler,
             cashflowDao);
         String yearStr = "2020";
         Year year = Year.parse(yearStr);
@@ -52,11 +51,11 @@ public class IncomeExpensesHandlerTest extends AbsTest {
         incomeExpensesHandler.init(giroHandler.getInstrumentId(), budgetHandler.getInstrumentId(), ts, "testincome", 1000, date);
         incomeExpensesHandler.save();
         int transactionId = 1;
-        assertEquals(2, transactionDaoMock.getTransaction(transactionId).get().getCashflows().size());
+        assertEquals(2, transactionDao.getTransaction(transactionId).get().getCashflows().size());
         ArrayList<Cashflow> cashflows = new ArrayList<Cashflow>();
-        cashflows.addAll(transactionDaoMock.getTransaction(transactionId).get().getCashflows());
+        cashflows.addAll(transactionDao.getTransaction(transactionId).get().getCashflows());
         assertEquals(true, cashflows.get(0).getValue()==(cashflows.get(1).getValue()));
-        assertEquals(TransactionType.INCOMEEXPENSES, transactionDaoMock.getTransaction(transactionId).get().getTransactionType());
+        assertEquals(TransactionType.INCOMEEXPENSES, transactionDao.getTransaction(transactionId).get().getTransactionType());
 
     }
 }

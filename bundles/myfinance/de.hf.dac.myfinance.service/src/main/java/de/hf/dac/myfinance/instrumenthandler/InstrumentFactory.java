@@ -85,9 +85,9 @@ public class InstrumentFactory {
             case REALESTATE: 
                 return new RealEstateHandler(instrumentDao, auditService, this, description, parentId, businesskey);        
             case CURRENCY: 
-                return new CurrencyHandler(instrumentDao, auditService, this, description, businesskey);        
+                return new CurrencyHandler(instrumentDao, auditService, this, businesskey, description);        
             case EQUITY: 
-                return new EquityHandler(instrumentDao, auditService, this, description, businesskey);                                                    
+                return new EquityHandler(instrumentDao, auditService, this, businesskey, description);                                                    
             default:
                 throw new MFException(MFMsgKey.UNKNOWN_INSTRUMENTTYPE_EXCEPTION, "can not create Instrumenthandler for instrumentType:"+instrumentType);
         }

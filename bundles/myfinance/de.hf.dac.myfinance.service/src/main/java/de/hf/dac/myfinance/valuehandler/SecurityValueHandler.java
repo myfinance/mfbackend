@@ -21,6 +21,7 @@ import de.hf.dac.myfinance.api.domain.EndOfDayPrice;
 import de.hf.dac.myfinance.api.domain.Instrument;
 import de.hf.dac.myfinance.api.domain.InstrumentType;
 import de.hf.dac.myfinance.api.persistence.dao.EndOfDayPriceDao;
+import de.hf.dac.myfinance.api.service.PriceService;
 import de.hf.dac.myfinance.api.service.ValueCurveHandler;
 
 import java.time.LocalDate;
@@ -36,12 +37,12 @@ import javax.inject.Inject;
 import static java.time.temporal.ChronoUnit.DAYS;
 
 public class SecurityValueHandler implements ValueHandler{
-    private EndOfDayPriceDao endOfDayPriceDao;
+    private PriceService priceService;
     private ValueCurveHandler service;
 
     @Inject
-    public SecurityValueHandler(ValueCurveHandler service, EndOfDayPriceDao endOfDayPriceDao){
-        this.endOfDayPriceDao = endOfDayPriceDao;
+    public SecurityValueHandler(ValueCurveHandler service, PriceService priceService){
+        this.priceService = priceService;
         this.service = service;
     }
 
@@ -53,7 +54,7 @@ public class SecurityValueHandler implements ValueHandler{
             return valueCurve;
         }
 
-        Map<LocalDate, EndOfDayPrice> prices = endOfDayPriceDao.listEndOfDayPrices(instrument.getInstrumentid()).stream().collect(
+        Map<LocalDate, EndOfDayPrice> prices = priceService.listEodPrices(instrument.getInstrumentid()).stream().collect(
             Collectors.toMap(x->x.getDayofprice(), x->x));
 
         SortedSet<LocalDate> sortedDates = new TreeSet<>(prices.keySet());

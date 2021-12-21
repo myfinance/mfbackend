@@ -31,35 +31,39 @@ import de.hf.dac.myfinance.api.domain.Cashflow;
 import de.hf.dac.myfinance.api.domain.Instrument;
 import de.hf.dac.myfinance.api.domain.InstrumentDetails;
 import de.hf.dac.myfinance.api.domain.InstrumentType;
+import de.hf.dac.myfinance.api.service.InstrumentService;
+import de.hf.dac.myfinance.api.service.PriceService;
 import de.hf.dac.myfinance.api.service.TransactionService;
+import de.hf.dac.myfinance.api.service.ValueCurveCache;
 import de.hf.dac.myfinance.api.service.ValueCurveHandler;
 import de.hf.dac.myfinance.api.service.ValueService;
+import de.hf.dac.myfinance.valuehandler.ValueCurveHandlerImpl;
 
 public class ValueServiceImpl implements ValueService {
 
-    private ValueCurveHandler valueCurveService;
+    private ValueCurveHandler valueCurveHandler;
     private TransactionService transactionService;
 
     @Inject
-    public ValueServiceImpl(ValueCurveHandler valueCurveService, TransactionService transactionService){
-        this.valueCurveService = valueCurveService;
+    public ValueServiceImpl(InstrumentService instrumentService, TransactionService transactionService, ValueCurveCache cache, PriceService priceService){
+        this.valueCurveHandler = new ValueCurveHandlerImpl(instrumentService, priceService, cache, transactionService);
         this.transactionService = transactionService;
     }
 
     @Override
     public Map<LocalDate, Double> getValueCurve(final int instrumentId) {
-        return valueCurveService.getValueCurve(instrumentId);
+        return valueCurveHandler.getValueCurve(instrumentId);
     }
 
     @Override
     public Map<LocalDate, Double> getValueCurve(final int instrumentId, final LocalDate startDate,
             final LocalDate endDate) {
-        return valueCurveService.getValueCurve(instrumentId, startDate, endDate);
+        return valueCurveHandler.getValueCurve(instrumentId, startDate, endDate);
     }
 
     @Override
     public double getValue(final int instrumentId, final LocalDate date) {
-        return valueCurveService.getValue(instrumentId, date);
+        return valueCurveHandler.getValue(instrumentId, date);
     }
 
     @Override

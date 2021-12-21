@@ -15,6 +15,7 @@ import de.hf.dac.myfinance.api.domain.ValuePerDate;
 import de.hf.dac.myfinance.instrumenthandler.accountableinstrumenthandler.BudgetHandler;
 import de.hf.dac.myfinance.instrumenthandler.accountableinstrumenthandler.RealEstateHandler;
 import de.hf.dac.myfinance.instrumenthandler.accountableinstrumenthandler.TenantHandler;
+import de.hf.dac.myfinance.valuehandler.BudgetValueHandler;
 import de.hf.dac.myfinance.valuehandler.RealEstateValueHandler;
 import de.hf.myfinance.test.AbsTest;
 
@@ -60,5 +61,11 @@ public class RealEstateValueHandlerTest extends AbsTest{
         TreeMap<LocalDate, Double> calculatedValueCurve = realEstateValueHandler.calcValueCurve(realEstateHandler.getSavedDomainObject().get());
 
         assertEquals(120000.0, calculatedValueCurve.get(LocalDate.parse("2020-01-01", formatter)));
+
+        var budgetValueHandler = new BudgetValueHandler(transactionService, instrumentService, valueCurveHandler);
+
+        TreeMap<LocalDate, Double> calculatedBudgetValueCurve = budgetValueHandler.calcValueCurve(budgetHandler.getSavedDomainObject().get());
+
+        assertEquals(120000.0, calculatedBudgetValueCurve.get(LocalDate.parse("2020-01-01", formatter)));
     }
 }

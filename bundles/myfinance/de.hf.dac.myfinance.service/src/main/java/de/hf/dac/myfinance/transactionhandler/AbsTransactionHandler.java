@@ -16,7 +16,6 @@ import de.hf.dac.myfinance.api.exceptions.MFMsgKey;
 import de.hf.dac.myfinance.api.persistence.dao.CashflowDao;
 import de.hf.dac.myfinance.api.persistence.dao.TransactionDao;
 import de.hf.dac.myfinance.api.service.InstrumentService;
-import de.hf.dac.myfinance.api.service.ValueCurveHandler;
 
 public abstract class AbsTransactionHandler extends AbsHandler{
 
@@ -27,7 +26,6 @@ public abstract class AbsTransactionHandler extends AbsHandler{
     protected TransactionType transactionType;
     protected TransactionDao transactionDao;
     protected AuditService auditService;
-    protected ValueCurveHandler valueCurveService;
     protected CashflowDao cashflowDao;
 
     protected LocalDateTime ts;
@@ -40,12 +38,10 @@ public abstract class AbsTransactionHandler extends AbsHandler{
     protected AbsTransactionHandler(InstrumentService instrumentService,
             TransactionDao transactionDao, 
             AuditService auditService,
-            ValueCurveHandler valueCurveService,
             CashflowDao cashflowDao) {
         super(instrumentService);
         this.auditService = auditService;  
         this.transactionDao = transactionDao;   
-        this.valueCurveService = valueCurveService;
         this.cashflowDao = cashflowDao;
     }
 
@@ -117,7 +113,7 @@ public abstract class AbsTransactionHandler extends AbsHandler{
         if(transaction == null) {
             throw new MFException(MFMsgKey.OBJECT_NOT_INITIALIZED_EXCEPTION,"AbsTransactionHandler niot initialized. Trasnaction is null");
         }
-        transaction.getCashflows().forEach(i->valueCurveService.invalidateCache(i.getInstrument().getInstrumentid()));
+        //transaction.getCashflows().forEach(i->valueCurveHandler.invalidateCache(i.getInstrument().getInstrumentid()));
         auditService.saveMessage(transactionDao.deleteTransaction(transaction.getTransactionid()),Severity.INFO, AUDIT_MSG_TYPE);
     }
 
