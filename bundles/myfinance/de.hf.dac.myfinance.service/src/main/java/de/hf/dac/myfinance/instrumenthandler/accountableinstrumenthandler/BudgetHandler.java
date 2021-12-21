@@ -6,19 +6,19 @@ import de.hf.dac.myfinance.api.domain.Instrument;
 import de.hf.dac.myfinance.api.domain.InstrumentType;
 import de.hf.dac.myfinance.api.persistence.dao.InstrumentDao;
 import de.hf.dac.myfinance.api.persistence.dao.RecurrentTransactionDao;
-import de.hf.dac.myfinance.api.service.ValueCurveService;
+import de.hf.dac.myfinance.api.service.ValueService;
 
 public class BudgetHandler extends AbsCashInstrumentHandler {
 
-    public BudgetHandler(InstrumentDao instrumentDao, AuditService auditService, ValueCurveService valueService, RecurrentTransactionDao recurrentTransactionDao, String description, int budgetGroupId, String businesskey) {
+    public BudgetHandler(InstrumentDao instrumentDao, AuditService auditService, ValueService valueService, RecurrentTransactionDao recurrentTransactionDao, String description, int budgetGroupId, String businesskey) {
         super(instrumentDao, auditService, valueService, recurrentTransactionDao, description, budgetGroupId, businesskey);
     }
 
-    public BudgetHandler(InstrumentDao instrumentDao, AuditService auditService, ValueCurveService valueService, RecurrentTransactionDao recurrentTransactionDao, Instrument budget) {
+    public BudgetHandler(InstrumentDao instrumentDao, AuditService auditService, ValueService valueService, RecurrentTransactionDao recurrentTransactionDao, Instrument budget) {
         super(instrumentDao, auditService, valueService, recurrentTransactionDao, budget);
     }
 
-    public BudgetHandler(InstrumentDao instrumentDao, AuditService auditService, ValueCurveService valueService, RecurrentTransactionDao recurrentTransactionDao, int instrumentId) {
+    public BudgetHandler(InstrumentDao instrumentDao, AuditService auditService, ValueService valueService, RecurrentTransactionDao recurrentTransactionDao, int instrumentId) {
         super(instrumentDao, auditService, valueService, recurrentTransactionDao, instrumentId);
     }
 

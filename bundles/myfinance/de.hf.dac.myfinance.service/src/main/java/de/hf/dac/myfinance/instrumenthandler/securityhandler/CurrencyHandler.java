@@ -16,7 +16,7 @@ public class CurrencyHandler extends SecurityHandler {
     }
 
     public CurrencyHandler(InstrumentDao instrumentDao, AuditService auditService, InstrumentFactory instrumentFactory, String currencyCode, String description) {
-        super(instrumentDao, auditService, description, currencyCode);
+        super(instrumentDao, auditService, currencyCode, description);
     }
 
     @Override

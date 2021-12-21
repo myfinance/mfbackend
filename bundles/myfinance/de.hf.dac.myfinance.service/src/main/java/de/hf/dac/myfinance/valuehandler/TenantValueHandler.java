@@ -4,7 +4,7 @@
  * Copyright (c) 2014, ... All Rights Reserved
  * Project     : dac
  * File        : TenantValueHandler.java
- * Author(s)   : xn01598
+ * Author(s)   : hf
  * Created     : 21.03.2019
  * ----------------------------------------------------------------------------
  */
@@ -15,13 +15,13 @@ import java.time.LocalDate;
 import java.util.*;
 import de.hf.dac.myfinance.api.domain.Instrument;
 import de.hf.dac.myfinance.api.service.InstrumentService;
-import de.hf.dac.myfinance.api.service.ValueCurveService;
+import de.hf.dac.myfinance.api.service.ValueCurveHandler;
 
 
 public class TenantValueHandler  extends AbsValueHandler{
     private InstrumentService instrumentService;
 
-    public TenantValueHandler(InstrumentService instrumentService, ValueCurveService valueCurveService){
+    public TenantValueHandler(InstrumentService instrumentService, ValueCurveHandler valueCurveService){
         super(valueCurveService);
         this.instrumentService = instrumentService;
     }
@@ -32,15 +32,6 @@ public class TenantValueHandler  extends AbsValueHandler{
         if(accounts==null || accounts.isEmpty()) {
             return createZeroCurve(valueCurve);
         }
-        LocalDate startDate = LocalDate.now();
-        for (Instrument acc : accounts) {
-            TreeMap<LocalDate, Double> accValueCurve = this.valueCurveService.getValueCurve(acc.getInstrumentid());
-            LocalDate minDate = accValueCurve.firstKey();
-            if(minDate.isBefore(startDate)) {
-                startDate = minDate;
-            }
-        }
-
-        return getCombinedValueCurve(accounts, startDate);
+        return getCombinedValueCurve(getValueCurves(accounts));
     }
 }

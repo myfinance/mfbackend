@@ -68,6 +68,9 @@ public class InstrumentDaoMock implements InstrumentDao {
 
     @Override
     public Optional<Instrument> getInstrument(int instrumentId) {
+        if(instruments== null || !instruments.containsKey(instrumentId)) {
+            return Optional.empty();
+        }
         return Optional.of(instruments.get(instrumentId));
     }
 

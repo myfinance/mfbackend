@@ -25,7 +25,7 @@ public class EquityHandler extends SecurityHandler {
     }
 
     public EquityHandler(InstrumentDao instrumentDao, AuditService auditService, InstrumentFactory instrumentFactory, String isin, String description) {
-        super(instrumentDao, auditService, description, isin);
+        super(instrumentDao, auditService, isin, description);
         this.instrumentFactory = instrumentFactory;
     }
 

@@ -11,7 +11,7 @@ import de.hf.dac.myfinance.api.domain.Transaction;
 import de.hf.dac.myfinance.api.persistence.dao.CashflowDao;
 import de.hf.dac.myfinance.api.persistence.dao.TransactionDao;
 import de.hf.dac.myfinance.api.service.InstrumentService;
-import de.hf.dac.myfinance.api.service.ValueCurveService;
+import de.hf.dac.myfinance.api.service.ValueCurveHandler;
 import de.hf.dac.myfinance.api.domain.Cashflow;
 
 public abstract class AbsTransferHandler extends AbsTransactionHandler {
@@ -22,9 +22,8 @@ public abstract class AbsTransferHandler extends AbsTransactionHandler {
     protected AbsTransferHandler(InstrumentService instrumentService, 
             TransactionDao transactionDao, 
             AuditService auditService,
-            ValueCurveService valueCurveService,
             CashflowDao cashflowDao) {
-        super(instrumentService, transactionDao, auditService, valueCurveService, cashflowDao);
+        super(instrumentService, transactionDao, auditService, cashflowDao);
     }
 
     public void init(Instrument srcInstrument, 
@@ -45,8 +44,8 @@ public abstract class AbsTransferHandler extends AbsTransactionHandler {
 
     @Override
     void updateCache() {
-        valueCurveService.invalidateCache(srcInstrument.getInstrumentid());
-        valueCurveService.invalidateCache(trgInstrument.getInstrumentid());
+        //valueCurveHandler.invalidateCache(srcInstrument.getInstrumentid());
+        //valueCurveHandler.invalidateCache(trgInstrument.getInstrumentid());
     }
 
     @Override
@@ -69,7 +68,7 @@ public abstract class AbsTransferHandler extends AbsTransactionHandler {
             } else {
                 cashflowDao.updateCashflow(i.getCashflowid(), -1 * value);
             }
-            valueCurveService.invalidateCache(i.getInstrument().getInstrumentid());
+            //valueCurveHandler.invalidateCache(i.getInstrument().getInstrumentid());
         });
     }
 }

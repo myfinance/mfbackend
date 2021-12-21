@@ -14,7 +14,7 @@ import de.hf.dac.myfinance.api.domain.TransactionType;
 import de.hf.dac.myfinance.api.persistence.dao.CashflowDao;
 import de.hf.dac.myfinance.api.persistence.dao.TransactionDao;
 import de.hf.dac.myfinance.api.service.InstrumentService;
-import de.hf.dac.myfinance.api.service.ValueCurveService;
+import de.hf.dac.myfinance.api.service.ValueCurveHandler;
 
 public class IncomeExpensesHandler extends AbsTransactionHandler{
 
@@ -24,9 +24,8 @@ public class IncomeExpensesHandler extends AbsTransactionHandler{
     public IncomeExpensesHandler(InstrumentService instrumentService, 
             TransactionDao transactionDao, 
             AuditService auditService,
-            ValueCurveService valueCurveService,
             CashflowDao cashflowDao) {
-        super(instrumentService, transactionDao, auditService, valueCurveService, cashflowDao);
+        super(instrumentService, transactionDao, auditService, cashflowDao);
         transactionType = TransactionType.INCOMEEXPENSES;
     }
 
@@ -45,8 +44,8 @@ public class IncomeExpensesHandler extends AbsTransactionHandler{
 
     @Override
     protected void updateCache() {
-        valueCurveService.invalidateCache(account.getInstrumentid());
-        valueCurveService.invalidateCache(budget.getInstrumentid());
+        //valueCurveHandler.invalidateCache(account.getInstrumentid());
+        //valueCurveHandler.invalidateCache(budget.getInstrumentid());
     }
 
     @Override
@@ -66,7 +65,7 @@ public class IncomeExpensesHandler extends AbsTransactionHandler{
         transaction.getCashflows().forEach(i-> {
                 if(i.getValue()!=value) {
                     cashflowDao.updateCashflow(i.getCashflowid(), value);
-                    valueCurveService.invalidateCache(i.getInstrument().getInstrumentid());
+                    //valueCurveHandler.invalidateCache(i.getInstrument().getInstrumentid());
         }});
     }
 }

@@ -15,46 +15,39 @@
  * ----------------------------------------------------------------------------
  */
 
-package de.hf.dac.myfinance.service;
+package de.hf.dac.myfinance.valuehandler;
 
-import de.hf.dac.myfinance.api.domain.EdgeType;
-import de.hf.dac.myfinance.api.domain.InstrumentGraphEntry;
 import de.hf.dac.myfinance.api.domain.InstrumentType;
 import de.hf.dac.myfinance.api.domain.InstrumentTypeGroup;
 import de.hf.dac.myfinance.api.exceptions.MFException;
 import de.hf.dac.myfinance.api.exceptions.MFMsgKey;
-import de.hf.dac.myfinance.api.persistence.dao.EndOfDayPriceDao;
 import de.hf.dac.myfinance.api.service.InstrumentService;
+import de.hf.dac.myfinance.api.service.PriceService;
 import de.hf.dac.myfinance.api.service.TransactionService;
 import de.hf.dac.myfinance.api.service.ValueCurveCache;
-import de.hf.dac.myfinance.api.service.ValueCurveService;
-import de.hf.dac.myfinance.valuehandler.CashAccValueHandler;
-import de.hf.dac.myfinance.valuehandler.DepotValueHandler;
-import de.hf.dac.myfinance.valuehandler.PortfolioValueHandler;
-import de.hf.dac.myfinance.valuehandler.RealEstateValueHandler;
-import de.hf.dac.myfinance.valuehandler.SecurityValueHandler;
-import de.hf.dac.myfinance.valuehandler.TenantValueHandler;
-import de.hf.dac.myfinance.valuehandler.ValueHandler;
+import de.hf.dac.myfinance.api.service.ValueCurveHandler;
 
 import java.time.LocalDate;
-import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
 import javax.inject.Inject;
 
-public class ValueCurveServiceImpl implements ValueCurveService {
+/**
+ * holds the valuecache instance and choose the right valueHandle to calculate the valuecurve
+ */
+public class ValueCurveHandlerImpl implements ValueCurveHandler {
 
     private final InstrumentService instrumentService;
     private final TransactionService transactionService;
-    private final EndOfDayPriceDao endOfDayPriceDao;
+    private final PriceService priceService;
     ValueCurveCache cache;
 
     @Inject
-    public ValueCurveServiceImpl(final InstrumentService instrumentService, final EndOfDayPriceDao endOfDayPriceDao,
+    public ValueCurveHandlerImpl(final InstrumentService instrumentService, final PriceService priceService,
             final ValueCurveCache cache, final TransactionService transactionService) {
         this.instrumentService = instrumentService;
-        this.endOfDayPriceDao = endOfDayPriceDao;
+        this.priceService = priceService;
         this.transactionService = transactionService;
         this.cache = cache;
     }
@@ -67,6 +60,40 @@ public class ValueCurveServiceImpl implements ValueCurveService {
             cache.addValueCurve(instrumentId, valueCurve);
         }
         return valueCurve;
+    }
+
+    @Override
+    public Map<LocalDate, Double> getValueCurve(final int instrumentId, final LocalDate startDate,
+            final LocalDate endDate) {
+        final Map<LocalDate, Double> adjValueCurve = new TreeMap<>();
+        if (startDate.isAfter(endDate) || startDate.getYear() < 1970)
+            return adjValueCurve;
+        final Map<LocalDate, Double> valueCurve = getValueCurve(instrumentId);
+        var first = LocalDate.MIN;
+        var last = LocalDate.MAX;
+        for (final LocalDate date : valueCurve.keySet()) {
+            if(first==LocalDate.MIN) {
+                first = date;
+            }
+            if (!date.isBefore(startDate) && !date.isAfter(endDate)) {
+                adjValueCurve.put(date, valueCurve.get(date));
+            }
+            last = date;
+        }
+        if(!valueCurve.isEmpty()) {
+            if(first.isAfter(endDate)) {
+                adjValueCurve.put(startDate, valueCurve.get(first));
+                adjValueCurve.put(endDate, valueCurve.get(first));
+            } else if(last.isBefore(startDate)) {
+                adjValueCurve.put(startDate, valueCurve.get(last));
+                adjValueCurve.put(endDate, valueCurve.get(last));
+            } else if(first.isAfter(startDate)) {
+                adjValueCurve.put(startDate, valueCurve.get(first));
+            } else if(last.isBefore(endDate)) {
+                adjValueCurve.put(endDate, valueCurve.get(last));
+            }
+        }
+        return adjValueCurve;
     }
 
     @Override
@@ -97,10 +124,10 @@ public class ValueCurveServiceImpl implements ValueCurveService {
         ValueHandler valueHandler;
         switch (instrumentType.getTypeGroup()) {
             case SECURITY:
-                valueHandler = new SecurityValueHandler(this, endOfDayPriceDao);
+                valueHandler = new SecurityValueHandler(this, priceService);
                 break;
             case CASHACCOUNT:
-                valueHandler = new CashAccValueHandler(transactionService);
+                valueHandler = new CashAccValueHandler(transactionService, this);
                 break;
             case TENANT:
                 valueHandler = new TenantValueHandler(instrumentService, this);
@@ -126,8 +153,13 @@ public class ValueCurveServiceImpl implements ValueCurveService {
 
     @Override
     public double getValue(int instrumentId, LocalDate date) {
-        double value = 0.0;
         final TreeMap<LocalDate, Double> valueCurve = getValueCurve(instrumentId);
+        return getValue(valueCurve, date);
+    }
+
+    @Override
+    public double getValue(TreeMap<LocalDate, Double> valueCurve, LocalDate date) {
+        double value = 0.0;
         if (valueCurve.containsKey(date)) {
             value = valueCurve.get(date);
         } else if (valueCurve.firstKey().isAfter(date)) {

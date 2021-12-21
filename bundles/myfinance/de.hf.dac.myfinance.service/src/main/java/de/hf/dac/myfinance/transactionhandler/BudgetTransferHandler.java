@@ -12,7 +12,6 @@ import de.hf.dac.myfinance.api.exceptions.MFMsgKey;
 import de.hf.dac.myfinance.api.persistence.dao.CashflowDao;
 import de.hf.dac.myfinance.api.persistence.dao.TransactionDao;
 import de.hf.dac.myfinance.api.service.InstrumentService;
-import de.hf.dac.myfinance.api.service.ValueCurveService;
 
 public class BudgetTransferHandler extends AbsTransferHandler {
    
@@ -21,9 +20,8 @@ public class BudgetTransferHandler extends AbsTransferHandler {
     public BudgetTransferHandler(InstrumentService instrumentService, 
             TransactionDao transactionDao, 
             AuditService auditService,
-            ValueCurveService valueCurveService,
             CashflowDao cashflowDao) {
-        super(instrumentService, transactionDao, auditService, valueCurveService, cashflowDao);
+        super(instrumentService, transactionDao, auditService, cashflowDao);
         transactionType = TransactionType.BUDGETTRANSFER;
     }
 

@@ -9,32 +9,32 @@ import de.hf.dac.myfinance.api.exceptions.MFException;
 import de.hf.dac.myfinance.api.exceptions.MFMsgKey;
 import de.hf.dac.myfinance.api.persistence.dao.InstrumentDao;
 import de.hf.dac.myfinance.api.persistence.dao.RecurrentTransactionDao;
-import de.hf.dac.myfinance.api.service.ValueCurveService;
+import de.hf.dac.myfinance.api.service.ValueService;
 
 public abstract class AbsCashInstrumentHandler extends AbsAccountableInstrumentHandler {
 
-    private ValueCurveService valueService;
+    private ValueService valueService;
     private RecurrentTransactionDao recurrentTransactionDao;
 
-    public AbsCashInstrumentHandler(InstrumentDao instrumentDao, AuditService auditService, ValueCurveService valueService, RecurrentTransactionDao recurrentTransactionDao, String description, int tenantId, String businesskey) {
+    public AbsCashInstrumentHandler(InstrumentDao instrumentDao, AuditService auditService, ValueService valueService, RecurrentTransactionDao recurrentTransactionDao, String description, int tenantId, String businesskey) {
         super(instrumentDao, auditService, description, tenantId, businesskey);
         this.valueService = valueService;
         this.recurrentTransactionDao = recurrentTransactionDao;
     }
 
-    public AbsCashInstrumentHandler(InstrumentDao instrumentDao, AuditService auditService, ValueCurveService valueService, RecurrentTransactionDao recurrentTransactionDao, Instrument cashInstrument) {
+    public AbsCashInstrumentHandler(InstrumentDao instrumentDao, AuditService auditService, ValueService valueService, RecurrentTransactionDao recurrentTransactionDao, Instrument cashInstrument) {
         super(instrumentDao, auditService, cashInstrument);
         this.valueService = valueService;
         this.recurrentTransactionDao = recurrentTransactionDao;
     }
 
-    public AbsCashInstrumentHandler(InstrumentDao instrumentDao, AuditService auditService, ValueCurveService valueService, RecurrentTransactionDao recurrentTransactionDao, int instrumentId) {
+    public AbsCashInstrumentHandler(InstrumentDao instrumentDao, AuditService auditService, ValueService valueService, RecurrentTransactionDao recurrentTransactionDao, int instrumentId) {
         super(instrumentDao, auditService, instrumentId);
         this.valueService = valueService;
         this.recurrentTransactionDao = recurrentTransactionDao;
     }
 
-    protected AbsCashInstrumentHandler(InstrumentDao instrumentDao, AuditService auditService, ValueCurveService valueService, RecurrentTransactionDao recurrentTransactionDao, String description, int tenantId, boolean addToAccountPf, String businesskey) {
+    protected AbsCashInstrumentHandler(InstrumentDao instrumentDao, AuditService auditService, ValueService valueService, RecurrentTransactionDao recurrentTransactionDao, String description, int tenantId, boolean addToAccountPf, String businesskey) {
         super(instrumentDao, auditService, description, tenantId, addToAccountPf, businesskey);
         this.valueService = valueService;
         this.recurrentTransactionDao = recurrentTransactionDao;

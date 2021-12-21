@@ -17,12 +17,14 @@ import java.util.*;
 import de.hf.dac.myfinance.api.domain.Cashflow;
 import de.hf.dac.myfinance.api.domain.Instrument;
 import de.hf.dac.myfinance.api.service.TransactionService;
+import de.hf.dac.myfinance.api.service.ValueCurveHandler;
 
 
-public class CashAccValueHandler implements ValueHandler{
+public class CashAccValueHandler extends AbsValueHandler {
     private TransactionService transactionService;
 
-    public CashAccValueHandler(TransactionService transactionService){
+    public CashAccValueHandler(TransactionService transactionService, ValueCurveHandler valueCurveHandler){
+        super(valueCurveHandler);
         this.transactionService = transactionService;
     }
 
